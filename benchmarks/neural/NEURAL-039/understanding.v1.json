@@ -1,0 +1,200 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-039",
+  "title": "Natural-movie parcel-response encoding",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The task package contains a legacy producer/collection manifest for16 Movie10 transcript-development cases and explicitly no grader; its historical adapter paths are not delivered here. This is narrower than the full multimodal objective. Bind an executable source/target packet and independent scorer before using either scope.",
+  "scientific_target": {
+    "question": "Can a frozen stimulus-to-brain encoder predict measured parcel responses for complete unseen films/episodes in the four recorded people, beyond nuisance/time structure, under explicitly declared feature and hemodynamic context?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Measured BOLD time series for each source participant and ordered native parcel at each eligible held-out TR, not the published challenge score or output of another model.",
+    "answer_origin": "Organizer per-person HDF5 neural response arrays; source documentation specifies samples×1000 parcels at TR1.49s. Actual held target arrays and their packet hashes have not been inspected or delivered by this package.",
+    "case_unit": "A participant×whole held film/episode packet with all eligible time points and1000 native parcels. Manifest proposal covers four people×four films=16 development cases only.",
+    "independent_unit": "Four people(sub-01,sub-02,sub-03,sub-05); films/segments/TRs/parcels are repeated observations and not additional people.",
+    "inference_scope": "Participant-specific stimulus encoding on public development data, with generalization across whole stimulus identities. A trained encoder score does not establish direct human-like understanding of fMRI or unrestricted new-person transfer.",
+    "exclusions": [
+      "No claim that16 transcript-only Movie10 cases cover the complete Friends+Movie10 audiovisual objective.",
+      "No conflation of native ID and OOD scoring or hidden-test access.",
+      "No programme/native-understanding or causal stimulus mechanism conclusion from correlation."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Permitted frozen audio, visual and language feature families aligned to the source TR, with extractor/version/exposure and left/right context documented.",
+      "Training neural responses and native participant parcel order only; test sample count/shape may be public but held response values remain private.",
+      "A named narrower Movie10 transcript-input condition may be retained as development scope if its exact source and case roster are recovered."
+    ],
+    "forbidden_inputs": [
+      "Held-film neural response values, answer-bearing target files, source result tables or memorized challenge submissions.",
+      "Repeated viewings/chunks of a held film in training; transforms fit on held response data.",
+      "Undeclared feature lookahead or hemodynamic context crossing held boundaries."
+    ],
+    "case_identity": "Known source participants are sub-01,sub-02,sub-03,sub-05. Exact film/segment/run/TR and target parcel roster is not delivered; the legacy count16 is a proposal, not an authenticated emitted case list.",
+    "split": "Prospective whole-film/episode grouping, including repeated viewings across all people, with frozen HRF/feature-context guard bands and training-only fitting. The manifest supplies a transcript-development scope but not a verified current split.",
+    "coverage": "Legacy declaration:16 cases,four films,four people,1000 parcels,56 files per view and32 outputs. No payload, independently scored submission or complete multimodal source coverage is established. Conditions do not increase registration count."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Mean held-film parcel Pearson correlation under a frozen OOD-style estimator",
+      "direction": "higher",
+      "aggregation": "Proposed named OOD-style condition: concatenate eligible guarded segments within each film, correlate separately per native parcel, then equal means over films,parcels and people. Keep any ID Friends concatenation estimator separately named.",
+      "rationale": "Scores genuine withheld neural responses while respecting stimulus grouping and avoiding TR-rich film or participant domination; source manifest currently has no scorer."
+    },
+    "secondary": [
+      "Per-person and per-film correlation distributions with every native parcel retained.",
+      "Neural encoding gain over a fixed nuisance/time encoder and transcript-only reference on identical cases.",
+      "Complete coverage, alignment/lag sensitivity and constant/nonfinite prediction diagnostics."
+    ],
+    "comparators": [
+      {
+        "name": "Nuisance/time encoder",
+        "inputs": "Predeclared within-segment time and permitted nonsemantic nuisance features",
+        "procedure": "Prospective train-only regularized regression; freeze basis,lag and regularization before evaluation."
+      },
+      {
+        "name": "Transcript-only reference",
+        "inputs": "Same permitted transcript embeddings and training BOLD as the legacy narrow condition",
+        "procedure": "Prospective fixed reference, with explicit extractor exposure and whole-film split; no score is currently available."
+      },
+      {
+        "name": "Organizer multimodal encoding baseline",
+        "inputs": "Source-permitted audiovisual/language features and training BOLD",
+        "procedure": "Pinned organizer implementation is a reference route; authenticate native lags/trims and execute before claiming parity or competence."
+      }
+    ],
+    "nuisance_controls": [
+      "Group each entire film identity and repeat viewings across participants; enforce temporal/feature-context guards.",
+      "Fit scaling,feature compression,hyperparameters and parcel decisions on training data only.",
+      "Keep1000 native parcels and distinguish ID from OOD aggregation rather than choosing the more favorable score.",
+      "Disclose model/media exposure and public development labels; local target restriction does not make source material unseen."
+    ],
+    "uncertainty": "Report all four person values and descriptive paired person summaries; four people do not support precise population inference. Film/block dependence must be retained; no independent-TR or parcel bootstrap.",
+    "failure_policy": "Proposed scorer must require exact participant/film/TR/parcel joins and full predictions, reject nonfinite or undefined-correlation outputs, and retain missing cases as failed coverage. No score is issued by the current producer-only package."
+  },
+  "implementation": {
+    "scorer_target": "No target scorer is present. The only registered-runtime member is a manifest declaring complete16-case producer/collection without grading; its entrypoint and source interface use unavailable historical paths.",
+    "target_fidelity": "no_target_evaluator",
+    "delivered_scope": "Source registration metadata for a narrower transcript-input development programme, not an executable full multimodal encoder or independent evaluator.",
+    "missing": [
+      "Recover a present executable producer and exact protocol/case/source-target bindings for the named condition.",
+      "Implement/attach independent target scoring and fixed meaningful comparators, with ID/OOD scope explicit.",
+      "Verify authentic feature/target alignment, rights/exposure, participant boundary and complete scientific controls."
+    ],
+    "execution_evidence": "Manifest states installed false,execution_selected false,status not_run and no scorer. This revision performs source inspection only; no model or authentic encoding result exists here.",
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-039/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-039/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/source-provenance.json"
+    ]
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A future bounded numeric/visual stimulus-and-calibration packet could ask for neural-response predictions; the full1000-parcel encoding task is not already such an episode.",
+      "boundary": "Use the same held stimulus identities and private neural targets; specify representation loss before comparison.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "No direct observer presentation or response collector."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No typed stimulus/neural calibration viewer is present. A viewer must not expose the held BOLD answers.",
+      "boundary": "Typed actions and faithful permitted observations only; protect held labels and raw answers.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Task-specific viewer, action limits and endpoint-preserving case representation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Legacy manifest mentions programme production only, without delivered per-case investigation execution.",
+      "boundary": "Future tools must use the same observation and compute budget and no evaluator feedback.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Present callable task implementation and isolated per-case transport."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "The manifest declares one frozen Python candidate source for16 transcript cases; the referenced producer and grader are not delivered in this task package.",
+      "boundary": "Freeze candidate and adaptation recipe before query access; a declaration alone is not execution.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Recover current producer/collection path plus scorer and source bindings."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original-definition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-039/historical/task.pre-understanding.v1.json",
+      "sha256": "a0d167e76de2c9b75df5da0c9b799178c8927a810c88e318ee173f658d75ea58",
+      "supports": "Exact original registered scientific contract inspected before revision; binding preserves these bytes."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-039/implementations/registered-runtime/manifest.json",
+      "sha256": "b87d2deb9345a97e105ea7f3bf4f880705bebebe6d686c1ec2216a7d0089141a",
+      "supports": "Explicitly no scorer,not_run,uninstalled16-case transcript producer declaration."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-040/implementations/initial-evaluator-v1/source-provenance.json",
+      "sha256": "7a5dfaed0579cae7b34a35ae5ba2923e8309464ba6ba10ef5c9f988c6463a712",
+      "supports": "Verified organizer source facts distinguish biological extent,TR,ID/OOD estimators,repeat viewings and prospective deviations."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/courtois-neuromod/algonauts_2025.competitors/96750e7017b30cb02f011c11561a3df897695853/README.md",
+      "locator": "Pinned organizer README; verified source mapping retained in NEURAL-040 source-provenance.json",
+      "supports": "Four participants,1000 parcels,1.49s TR and repeated movie segments; public repository pointers are not loaded neural targets."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://algonautsproject.com/2025/challenge.html",
+      "locator": "Official ID/OOD evaluation documentation; retained verified source mapping",
+      "supports": "Native ID Friends estimator concatenates episodes, while OOD computes within-film correlations and equal film/parcel/person means. These estimators are not interchangeable."
+    },
+    {
+      "id": "primary-3",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.48550/arXiv.2501.00504",
+      "locator": "Gifford et al., Algonauts2025 challenge paper; source identity retained in existing audit",
+      "supports": "Defines multimodal natural-movie neural encoding and out-of-distribution generalization; not a direct observer or causal modality attribution result."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human result is established by the inspected task source. The repository historical neural pilot concerned NEURAL-007 and NEURAL-077 programmes, not this task.",
+    "excluded_claims": [
+      "No model/human score or empirical encoding improvement.",
+      "No full multimodal coverage from16 transcript cases or inference of direct observation understanding."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Corrected the apparent programme capability to a manifest-only producer proposal with no target evaluator.",
+      "Bound known answers to measured BOLD and separated narrower transcript development from full multimodal encoding.",
+      "Specified meaningful whole-film references, biological aggregation and distinct ID/OOD estimator semantics."
+    ],
+    "source_review": "Original task and sole registered-runtime manifest inspected; reused primary-source mappings from the independently inspected NEURAL-040 implementation provenance. No authentic neural/media payload or historical external adapter was read."
+  }
+}

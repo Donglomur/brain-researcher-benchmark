@@ -16,11 +16,11 @@
     ],
     "task_family": "reading_state"
   },
-  "scientific_question": "Can EEG add predictive information about the observed reading-condition label beyond text and gaze on held-out people and sentence items, within the source's text-condition support?",
+  "scientific_question": "How accurately can permitted EEG, gaze and text observations identify the recorded NR versus TSR condition on held-out people and held-out sentence groups, especially exact texts observed in both conditions?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Reading-condition probabilities and matched text/gaze baselines; if task and sentence sets are not identifiable, describe source-condition classification and defer task-specific neural attribution."
+    "The recorded source-condition label NR or TSR for each eligible sentence presentation; this is a genuine condition-decoding target, not reproduction of a paper accuracy."
   ],
   "input_assets": {
     "routes": [
@@ -46,17 +46,25 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: sentence/word-aligned EEG features and gaze/text covariates; raw-versus-derived scope and joins must be fixed.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "Condition-specific permitted EEG representation: released summaries, band-spatial values, cleaned waveforms or raw waveforms must be frozen separately; no representation interchange by name.",
+      "085 uses nine fixed information arms including text, gaze, EEG, nuisance masks and NTGE;086 uses COVARIATES, PLUS_EEG and a matched shuffled-EEG control.",
+      "Released N085 summary and band-spatial aliases both expose840 mean features; released N086 common covariates have46 columns and PLUS_EEG adds8 scalp band means. Other representations require an explicit different ABI."
+    ],
+    "forbidden_inputs": [
+      "Query NR/TSR labels; task-coded filenames, source blocks and administrative IDs in ranked candidate views.",
+      "Reference/query score feedback before all submissions are sealed; query-informed normalization, feature selection or regularization.",
+      "Raw/cleaned waveforms or metadata added only to one supposedly matched access-mode arm."
+    ],
+    "case_identity": "splits.token generates campaign-secret HMAC IDs from job identity, person, condition, source presentation index and word position. Exact public case IDs depend on a qualified original-source join and are not manufactured in this revision.",
+    "split": "Implemented source design leaves one of18 people and one of5 conservative text-group folds out jointly; training contains all 17 other people and excludes the query text group. Inner tuning is3 person-groups by3 text-groups and fits transforms on training only. These are source algorithms, not a completed authenticated split.",
+    "coverage": "Complete planned disposition of18 people,36 logical containers and13302 presentations; all contexts/arms/representations remain conditions. Primary J is the qualified exact shared-text set; paper63 duplicate obligations, legacy56 exact texts and58 occurrences are different counts that must be reconciled. No convenient matched subset replaces the full disposition census."
   },
-  "biological_unit": "participant; sessions/trials nested within participant",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "18 source participants; shared sentence items are crossed dependencies, while words, repeats, folds and files are not additional people.",
+  "case_definition": "Sentence presentation nested in person and exact text group.",
   "split": {
-    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Implemented source design leaves one of18 people and one of5 conservative text-group folds out jointly; training contains all 17 other people and excludes the query text group. Inner tuning is3 person-groups by3 text-groups and fits transforms on training only. These are source algorithms, not a completed authenticated split.",
+    "coverage": "Complete planned disposition of18 people,36 logical containers and13302 presentations; all contexts/arms/representations remain conditions. Primary J is the qualified exact shared-text set; paper63 duplicate obligations, legacy56 exact texts and58 occurrences are different counts that must be reconciled. No convenient matched subset replaces the full disposition census."
   },
   "reference": {
     "source_code_url": "https://github.com/norahollenstein/zuco-benchmark",
@@ -68,38 +76,111 @@
     "data_url": "https://osf.io/2urht/"
   },
   "controls": [
-    "Text-only and gaze-only baselines",
-    "sentence identity grouped",
-    "fixed duration policy",
-    "no task-coded files."
+    "Hold exact/conservative text groups across people and repeated presentations together; report exclusive-text scope separately.",
+    "Keep missingness/support features identical between EEG-added and covariate arms; test masks and duration/count alone.",
+    "Retain gaze/EOG, task-screen and chronology explanations; fixed chronology saturates source condition and is structurally unresolved.",
+    "Use training-only preprocessing; document source-native task-wide cleaning as an exposure limitation.",
+    "Audit ZuCo1/ZuCo2 and checkpoint training overlap before any unseen-data claim."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A frozen sentence EEG/gaze observation or fixed evidence panel could support direct responses; existing programme arrays and downstream analysis are not a no-tools presentation.",
+      "boundary": "A future no-tools condition must fix representation and context, match query support, disclose demonstrations and withhold source-condition metadata.",
+      "evidence_ids": [
+        "source_status"
+      ],
+      "missing": [
+        "No direct observation transport, complete response collection or matched empirical condition."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential EEG waveform/band-topography plus permitted gaze views for each case; no typed renderer is shipped for this task.",
+      "boundary": "Rendering must preserve declared information support and suppress task labels, raw-file identifiers and unrestricted array return.",
+      "evidence_ids": [
+        "source_status"
+      ],
+      "missing": [
+        "No task-specific typed actions, rendering provenance or isolated participant transport."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The source accepts a case_adaptive label and frozen bundled offline code, but executes the same FIT → immutable state → single INFER process chain. It does not deliver a separate interactive investigator or model/tool action loop.",
+      "boundary": "The current code may perform calculations inside a precommitted participant programme. That execution is counted as frozen-programme support; a future tool-assisted condition must define an actual adaptive actor, matching observations/tools/budget and case resets without evaluator feedback.",
+      "evidence_ids": [
+        "actor_engine",
+        "actor_policy",
+        "actor_oci"
+      ],
+      "missing": [
+        "No distinct adaptive actor/controller or model/tool request-response protocol is implemented.",
+        "Authentic source preparation, fixed-tool comparisons and execution/isolation qualification remain unresolved."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Concrete entry and campaign driver launch a captured FIT process, freeze its output state, then launch a single INFER process on the held-person/held-item case. Candidate code and bundled offline numerical tools are precommitted.",
+      "boundary": "Programme frozen before views; all selected cases/arms complete, training-only fitting and protected targets opened after global submission admission.",
+      "evidence_ids": [
+        "programme_entry",
+        "campaign_driver",
+        "actor_engine",
+        "actor_process",
+        "actor_oci"
+      ],
+      "missing": [
+        "Complete authenticated input/operator/runtime qualification and real fixed-reference runs."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro balanced accuracy and log loss.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "N085_MATCHED_NTGE_LOG_LOSS",
+      "direction": "lower",
+      "aggregation": "Average occurrence loss within person/text/condition, then each condition equally, exact matched items equally and all 18 people equally; restore IDs before averaging.",
+      "rationale": "Absolute same-information prediction loss cannot be improved by weakening the candidate control arm. The matched support addresses text differences but does not remove chronology confounding."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Participant-macro balanced accuracy, Brier score, class calibration and all per-person/item losses.",
+      "Matched, full and condition-exclusive text strata; first/later repeat, duration and source-block diagnostics.",
+      "Fixed reference same-information performance and its EEG-augmentation contrast; candidate self-contrast stays descriptive."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "R_LINEAR_NESTED_V1",
+        "inputs": "Exactly the selected candidate information arm and representation; training labels only.",
+        "procedure": "Implemented source: weighted ridge logistic regression; lambda grid .001,.01,.1,1,10,100 chosen by held-person/item inner folds with train-only encoder. No qualified fitted comparator result is supplied."
+      },
+      {
+        "name": "R_NONLINEAR_V1 or waveform temporal reference",
+        "inputs": "Same selected representation and training/query observations.",
+        "procedure": "Source supplies fixed histogram gradient-boosting companion for summaries and requires temporal-convolution reference for waveforms; dependencies, data and native qualification remain unresolved."
+      },
+      {
+        "name": "Independent nuisance and EEG-alignment controls",
+        "inputs": "Text/gaze and identical availability masks; duration/count, ocular channels and protected shuffled EEG where source-qualified.",
+        "procedure": "Source declares independent fixed controls. Source block/chronology is a trusted identifiability diagnostic only, not candidate input. A candidate cannot select a favorable control after scoring."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Hold exact/conservative text groups across people and repeated presentations together; report exclusive-text scope separately.",
+      "Keep missingness/support features identical between EEG-added and covariate arms; test masks and duration/count alone.",
+      "Retain gaze/EOG, task-screen and chronology explanations; fixed chronology saturates source condition and is structurally unresolved.",
+      "Use training-only preprocessing; document source-native task-wide cleaning as an exposure limitation.",
+      "Audit ZuCo1/ZuCo2 and checkpoint training overlap before any unseen-data claim."
+    ],
+    "uncertainty": "Source computes1000 crossed person/item resamples (seed 194086) of fixed paired predictions; no model refitting or population coverage claim. Report all 18 person values and item support, not word-level pseudoreplication.",
+    "failure_policy": "Reject missing/extra/duplicate IDs, nonfinite or outside[0,1] probabilities and misbound evidence. Preserve all source dispositions. Missing required matched cells yield null primary with reasons; unsupported contexts are not replaced by zero or dropped to create a favorable contrast.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "003610b63518b855533c109a59fc6f354da22ce10d293e771e4cb7ff923fedfe",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "2455b377f65720ca7ab4b798decb66e8f3fd0c78104a660321fa50d449b527b6"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -229,6 +310,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

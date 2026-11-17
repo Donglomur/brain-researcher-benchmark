@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-038",
   "track": "neural",
-  "title": "Sequence order and sensory-context interactions",
+  "title": "Sensory-context modulation of optogenetic calcium response investigation",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "circuit_perturbation"
   },
-  "scientific_question": "Does sequence order interact with visual context beyond independent visual and optogenetic effects?",
+  "scientific_question": "What measured incremental optogenetic response contrasts differ across visual contexts within each original source block, and does the evidence support an interaction beyond additive visual/opto responses?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Prespecified interaction contrasts and held-out additive-versus-interaction model predictions."
+    "Prespecified within-block differences of matched visual-plus-opto, visual-only and opto-only response summaries, plus available-context support and original-versus-revision-pool discrepancies, independently recomputed from measured traces."
   ],
   "input_assets": {
     "routes": [
@@ -75,19 +75,23 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "figure2_data.npz includes panelBC_F_abc and F_cba documented as 257 cells × 50 trials × 200 frames, plus six-experiment traces for other panels. Figure3 includes full traces and also cell × time condition summaries; those summaries are not independent trials.",
-    "allowed_context": "Stimulated/nonstimulated indices, spatial patterns, trial-order keys and ABC/CBA order. Figure3 sources distinguish visual-only, opto-only and matched/unmatched visual-plus-opto conditions.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Known frame indices and analysis windows in source; exact per-experiment frame-time/stimulation-onset contract has not been verified. Do not convert arbitrary frame indices into milliseconds or infer cross-experiment synchronization.",
-    "source_contract_evidence": "7.37 GB archive central directory (14 entries), full README, Figure2/3 notebook source and helper inspected by small ranges. Input arrays were not downloaded."
+    "inputs": [
+      "Complete permitted condition traces for each source block, with visual/opto condition metadata and native frame axes.",
+      "Original blocks contain9,13 and10 memberships, five conditions and300 frames each; separate revision_pool has108 memberships, three conditions and200 frames."
+    ],
+    "forbidden_inputs": [
+      "Trusted expected report, private answer operands or evaluator feedback.",
+      "Cross-pool merges, relabeling native frame windows as physical milliseconds, or post-hoc selection of favorable memberships."
+    ],
+    "case_identity": "Manifest declares25 public members,18 array members,140 memberships and866 numeric operands; source-block identity is preserved, but exact response/report schema and record IDs are absent from current code.",
+    "split": "This is an exposed public-data investigation, not hidden-target prediction. Compute within declared blocks and compare original/revision support explicitly; any train/query prediction extension needs a separate complete condition split.",
+    "coverage": "All140 declared source memberships (9+13+10+108) across four blocks; only structural public admission is described. Original and revision pools are not independent replicated datasets."
   },
-  "biological_unit": "Archive keys expose experiment IDs, including expt1–6, but inspected manifest/README/source did not establish a complete experiment→mouse→session map or whether panel examples repeat an acquisition. Neuron/cell and panel counts are not animal counts.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Unresolved animal/acquisition grouping.140 memberships are neither140 independent cells nor140 animals; revision_pool must remain separate.",
+  "case_definition": "One complete public investigation retaining original_expt1/2/3 and revision_pool as separate blocks; membership rows can repeat biological cells.",
   "split": {
-    "policy": "No valid biological split until experiment-to-mouse/session mapping closes; then group all panels from the same acquisition and hold out full conditions/trials.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "This is an exposed public-data investigation, not hidden-target prediction. Compute within declared blocks and compare original/revision support explicitly; any train/query prediction extension needs a separate complete condition split.",
+    "coverage": "All140 declared source memberships (9+13+10+108) across four blocks; only structural public admission is described. Original and revision pools are not independent replicated datasets."
   },
   "reference": {
     "source_code_url": "https://zenodo.org/api/records/18726362/files/sequenceFiltering.zip/content",
@@ -104,50 +108,102 @@
     "data_url": "https://zenodo.org/records/18726362"
   },
   "controls": [
-    "Visual-only/opto-only controls",
-    "matched power",
-    "optical artifacts",
-    "no panel-level pseudo-replication."
+    "Keep original source blocks and revision_pool separate, with every membership and condition documented.",
+    "Match optical power/timing and inspect optical artifacts before biological interpretation.",
+    "Distinguish condition-mean arrays from independent trial measurements.",
+    "Retain unavailable contrasts when required controls are absent; do not force a common full-factorial design."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present.",
+      "boundary": "Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
+      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget.",
+      "boundary": "Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout.",
+      "boundary": "Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "Recover the named source/dependency closure and exact public input contract before executing or scoring."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed interaction estimate and held-out loss difference with valid grouped intervals.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "within_block_interaction_report_numerical_error",
+      "direction": "lower",
+      "aggregation": "Compare every prespecified native-unit incremental-opto and interaction contrast, support count and undefined disposition with independent recomputation; retain separate source blocks and frozen tolerances.",
+      "rationale": "Scores correct extraction and inference from measured observations rather than agreement with a narrative or mere presence of866 numbers. Exact report arithmetic must be recovered before scoring."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Report additive-model residual contrasts with visual-only/opto-only controls wherever the required conditions exist.",
+      "Original-block versus revision-pool support and sensitivity; missing conditions remain unavailable.",
+      "Explicit source membership duplication, frame-window definitions and optical-artifact sensitivity."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Additive visual plus opto response",
+        "inputs": "Matched visual-only, opto-only and baseline conditions within each block.",
+        "procedure": "Compute additive expected response using fixed native-frame summaries; if a required condition is absent, mark interaction unavailable."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Context-dependent incremental opto response",
+        "inputs": "Matched visual-plus-opto and visual-only observations within source block.",
+        "procedure": "Estimate within-block difference and its contrast across contexts; do not pool revision/original arrays to inflate precision."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Artifact/window sensitivity",
+        "inputs": "Equivalent unstimulated/baseline windows and power/timing metadata where measured.",
+        "procedure": "Prespecify diagnostics in native frames until physical clocks are verified; do not invent120ms equivalence."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Keep original source blocks and revision_pool separate, with every membership and condition documented.",
+      "Match optical power/timing and inspect optical artifacts before biological interpretation.",
+      "Distinguish condition-mean arrays from independent trial measurements.",
+      "Retain unavailable contrasts when required controls are absent; do not force a common full-factorial design."
+    ],
+    "uncertainty": "No animal-level or independent-cell interval until source membership and acquisition→mouse mapping are resolved. Report descriptive within-block results; no pooled140 replicate count and no inference from report-operand quantity.",
+    "failure_policy": "Require the complete declared report and all source blocks; reject wrong/missing/duplicated terms and preserve unavailable contrasts. Structural admission must be followed by independent numerical grading; a scientifically wrong but well-shaped report cannot earn correctness.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "124d8bb3adc53bcfc98239407cb0ec0dbd6fdf8aeb305b5c0c18e32be90a8619",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "11ac268e8892ee0f804e5c9914aa7a5f7389afb2aeab04d594d86b3a201bd51c"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -235,6 +291,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

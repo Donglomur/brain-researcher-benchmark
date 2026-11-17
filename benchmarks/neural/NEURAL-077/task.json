@@ -16,11 +16,11 @@
     ],
     "task_family": "erp_target_detection"
   },
-  "scientific_question": "Can EEG distinguish rare visual targets from standards beyond event timing and repetition history?",
+  "scientific_question": "Can an observer infer whether a released-marker-locked human EEG epoch followed a target versus standard stimulus, and how do representation, demonstration budget and processing access affect this fixed development-panel result?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Target probability for fixed stimulus-locked EEG epochs after verified one-based event conversion and verified physical display timing. Establish from the selected input's provenance whether the 26 ms monitor offset is already applied; apply it only if absent, never twice. Withhold target/response event codes."
+    "The binary target/standard identity bound to each of the 400 public opaque trial IDs; answer is an experimental event label, not presence of an idealized P3 shape."
   ],
   "input_assets": {
     "routes": [
@@ -46,17 +46,24 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: active visual oddball or flankers EEG, event and response tables; paradigms are separate assignments within one collection, not new cohorts.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "Numerical direct and matched numerical-programme conditions: all 1,024 samples in Cz and Pz at 1,024 Hz, native offsets -256..767, rereferenced to (P9+P10)/2 and baseline-subtracted on offsets -256..-1; amplitude remains native EEGLAB units.",
+      "Exactly four balanced labeled training demonstrations for the numerical direct condition and the four_demo viewer condition; zero_shot viewer receives none. Their balance is not the source class prior.",
+      "The ordinary feature programme separately receives six training people/1,200 labeled trials and fixed EEG, ocular, gross-amplitude and history features; it is not information-matched to four demonstrations."
+    ],
+    "forbidden_inputs": [
+      "Query target/response event codes, private target arrays, training feature banks outside the declared condition, source identifiers beyond current opaque trial ID, other evaluation queries, evaluator feedback.",
+      "Raw arrays, arbitrary code, files, shell and retrieval in the typed viewer; tools/files/retrieval in direct-observation transport."
+    ],
+    "case_identity": "The existing public validator requires exactly development-001 and development-002 with 200 unique IDs each; the complete roster commitment is 82405f12a9e8f302a27a5641241378a4f2000bef2849fece555b8843ca92d2d4. Raw source identities remain operator-side.",
+    "split": "Existing six-person feature-training/two-person exposed-development separation is preserved. Every direct/viewer episode is a fresh single-query condition; no new held-out cohort or label exposure reset is claimed.",
+    "coverage": "All400 query waveforms and four training demonstrations were independently recomputed from pinned raw epochs. Viewer-source evidence first rendered selected authentic queries; the additive visual-transport-v1 subsequently dispatched all 400 authentic queries to fresh local sandboxed scripted clients and collected the unchanged complete NPZ. Each script consumed PNG bytes and returned fixed 0.5: this is authentic transport/collection engineering, not400model episodes or a decoding result."
   },
-  "biological_unit": "participant; sessions/trials nested within participant",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "Human participant; two previously exposed development people, with repeated trials nested within person.",
+  "case_definition": "One 1,024-sample Cz/Pz epoch; 200 trials within each of development-001 and development-002.",
   "split": {
-    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Existing six-person feature-training/two-person exposed-development separation is preserved. Every direct/viewer episode is a fresh single-query condition; no new held-out cohort or label exposure reset is claimed.",
+    "coverage": "All400 query waveforms and four training demonstrations were independently recomputed from pinned raw epochs. Viewer-source evidence first rendered selected authentic queries; the additive visual-transport-v1 subsequently dispatched all 400 authentic queries to fresh local sandboxed scripted clients and collected the unchanged complete NPZ. Each script consumed PNG bytes and returned fixed 0.5: this is authentic transport/collection engineering, not400model episodes or a decoding result."
   },
   "reference": {
     "source_code_url": "https://github.com/lucklab/ERP_CORE",
@@ -68,38 +75,114 @@
     "data_url": "https://www.nemar.org/dataset/nm000132?v=v1.0.0"
   },
   "controls": [
-    "Timing/repetition and stimulus-identity controls.",
-    "Declared response-period inclusion or exclusion.",
-    "Fixed artifact and epoch policies; raw marker counts are not trial counts.",
-    "Verify the selected raw/derivative representation and its event-transform history before applying any 26 ms display offset; unresolved timing provenance blocks epoch qualification."
+    "Retain ocular-site, gross-amplitude, history and EEG+history references; the packet includes post-marker activity that can include motor/ocular signals.",
+    "Bind the actual event-transform history before applying a physical 26-ms display correction; current frozen epochs add no new shift.",
+    "Record raster gain/clipping/window/action history; equal source epochs do not guarantee equal visual/numeric information.",
+    "Keep zero-shot, four-demo and sequential-feedback designs separate; feedback is not implemented."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "source_available",
+      "representation": "Complete numerical Cz/Pz waveforms and four labeled examples, one query per fresh no-tools context.",
+      "boundary": "Only the exact prompt and scalar response; no tools/retrieval/files or cross-query memory.",
+      "evidence_ids": [
+        "direct-source",
+        "direct-evidence"
+      ],
+      "missing": [
+        "Qualified no-tools transport and full-context model capacity; no direct model result."
+      ]
+    },
+    "typed_viewer": {
+      "status": "source_available",
+      "representation": "PNG traces with typed inspect/select/window/scroll/zoom/gain/channels/finalize, carried as raw PNG bytes through two framed anonymous pipes. zero_shot and four_demo remain separate; default transport bounds are128 actions,32 images,128 MiB outbound data and300 seconds.",
+      "boundary": "The actual local macOS route starts one fresh participant process/empty cwd per query, minimal environment and deny-default Seatbelt policy; tested denials cover operator packets/sessions, writes, network, process fork and parent argv/environment sysctl. Only declared viewer actions are accepted; first finalized response is immutable and all 400homogeneous sessions must audit before collection. protocol_only gives no host filesystem isolation; trusted runner/operator/macOS remain in the trust base.",
+      "evidence_ids": [
+        "viewer-source",
+        "viewer-evidence",
+        "visual-transport",
+        "transport-evidence",
+        "scripted-control",
+        "transport-controls"
+      ],
+      "missing": [
+        "Model/provider bridge and actual fresh remote model context, permitted-tool policy and image/context-capacity qualification.",
+        "No model or human trials, no adversarial OS-security attestation and no unseen-population evaluation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "The matched_waveform_programme source constructs the same four demonstrations and one-query prompt for a predeclared numerical programme. It does not implement an adaptive model investigator or a participant numerical-tool controller.",
+      "boundary": "A future adaptive episode must receive only this one-query information and accounted tools/compute, with fresh state and no evaluator feedback or richer feature bank.",
+      "evidence_ids": [
+        "direct-source"
+      ],
+      "missing": [
+        "An actual adaptive participant/controller/tool boundary, distinct from frozen-programme context export.",
+        "Executed per-case model/tool comparison and independently verified query isolation."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Precommitted feature programme with six-person training bank, or separately predeclared matched waveform method.",
+      "boundary": "Freeze code/fitting/adaptation recipe before queries; richer feature and waveform conditions must be reported separately.",
+      "evidence_ids": [
+        "worker",
+        "portable-grade",
+        "direct-source",
+        "programme-lifecycle",
+        "programme-child"
+      ],
+      "missing": [
+        "Prospective protected evaluation and independently verified complete execution for a new candidate."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro balanced accuracy and log loss.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "participant_macro_balanced_accuracy at target_probability >= 0.5",
+      "direction": "higher",
+      "aggregation": "Mean target/non-target recall within person, then equal mean across the two complete people; undefined if required class support is absent.",
+      "rationale": "Preserves the current operational target and prevents the majority standard class from dominating accuracy; no scientific pass threshold is defined."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Equal-person natural-log loss with metric-only clipping at 1e-15; retain raw submitted probabilities.",
+      "Per-person class support/confusion and signed candidate-minus-reference differences for all six fixed references.",
+      "Future condition comparisons must report identical-query paired differences separately for zero-shot, four-demo, numerical direct, numerical tool-assisted and richer feature-programme arms; do not pool their label budgets."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "Frozen six-arm feature references",
+        "inputs": "Existing 1,200 labeled feature-training trials; prior, EEG, EOG-site, gross amplitude, behavioral history and EEG+history arms.",
+        "procedure": "Use the existing frozen reference grade/commit and exact reference source lineage; no refit on development labels. These are implemented feature-route controls, not matched four-demo controls."
+      },
+      {
+        "name": "Matched numerical waveform programme",
+        "inputs": "Exactly the direct numerical prompt, four demonstrations and one query.",
+        "procedure": "Freeze per-query procedure and use a fresh isolated process; this source-delivered condition has no model/programme comparison result and needs executed isolation."
+      },
+      {
+        "name": "Prospective matched visual and human observations",
+        "inputs": "The identical zero-shot or four-demo viewer action/image interface, separately labeled conditions.",
+        "procedure": "Freeze participant/model protocol and navigation budget before a future study; human performance is unmeasured and no benchmark value is imputed."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Retain ocular-site, gross-amplitude, history and EEG+history references; the packet includes post-marker activity that can include motor/ocular signals.",
+      "Bind the actual event-transform history before applying a physical 26-ms display correction; current frozen epochs add no new shift.",
+      "Record raster gain/clipping/window/action history; equal source epochs do not guarantee equal visual/numeric information.",
+      "Keep zero-shot, four-demo and sequential-feedback designs separate; feedback is not implemented."
+    ],
+    "uncertainty": "Report two descriptive person scores and paired condition differences. Trials are nested and the two exposed people do not support a population confidence interval or reliable human-versus-model population claim.",
+    "failure_policy": "Require all 400 request-bound scalar responses/IDs before private scoring. Preserve failures and first finalized response; reject duplicates, swaps, NaN, booleans, prose, extras, missing cases and mixed modes without selective omission.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "1c3a9e3ba4b6a88e7e79563aab50e54b344ae9a01693897cb22afe66e513f376",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "94c0e586f28c199d7b1605ebc87b931ad2387d3c50958a4e15a527757f63f5b2"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -228,6 +311,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

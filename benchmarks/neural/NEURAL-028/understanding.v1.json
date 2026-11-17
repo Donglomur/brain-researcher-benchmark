@@ -1,0 +1,194 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-028",
+  "title": "Reward-free versus rewarded cortical learning",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "evidence": [
+    {
+      "id": "original-contract",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-028/historical/task.pre-understanding.v1.json",
+      "sha256": "d3c7673c371b01421467ac792f66dc14e0e345e7c6b8ce5496377d80cd576bb9",
+      "supports": "Original registered objective, verified source audit and unresolved acquisition/qualification boundaries; exact original bytes preserved by revision binder."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-028/docs/initial-evaluator-v1.md",
+      "sha256": "81afe9cfbd5dd03780ec0b7c08bb953029d73f8b9693eb70d188b0781b87c5c0",
+      "supports": "Inspected task-specific implementation, mathematical endpoint, input support or delivery boundary; source inspection does not establish authentic execution."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/README.md",
+      "sha256": "b76396a30ce9ccac1367d4909f7d2aa1f5bdaee5e2be4a0708c248fc794a0a82",
+      "supports": "Inspected task-specific implementation, mathematical endpoint, input support or delivery boundary; source inspection does not establish authentic execution."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/evaluator.py",
+      "sha256": "67777d97d6d00037efff66ff58774a49f4cd28b27b0ed018f79f77ae218e12d7",
+      "supports": "Inspected task-specific implementation, mathematical endpoint, input support or delivery boundary; source inspection does not establish authentic execution."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/source-provenance.json",
+      "sha256": "205d691f30f293bb66d1d197636070daf37ecdacf9826022446b66470631917c",
+      "supports": "Inspected task-specific implementation, mathematical endpoint, input support or delivery boundary; source inspection does not establish authentic execution."
+    },
+    {
+      "id": "primary-source",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1038/s41586-025-09180-y",
+      "locator": "Zhong et al.; pinned source utils.py selectivity/reward definitions and frame mapping",
+      "supports": "Source stimulus and reward-location selectivity use distinct definitions; source reward-location statistic is not evidence that water was delivered on every category2 trial."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Existing generated construction controls retain their original engineering scope. No authentic-data model result for this task was established by this inspection; the historical EEG077/sleep007 programme pilot is a separate scope.",
+    "excluded_claims": [
+      "Complete behavior-matched reward coding, causal learning, participant understanding results or authenticated native cohort coverage."
+    ]
+  },
+  "disposition": "partial_delivery",
+  "disposition_reason": "The evaluator computes real neural selectivity, behavioral-common-support contrasts and held-animal residuals from explicit array packets. It neither authenticates native cohorts nor grades participant investigation answers, and reward-location selectivity remains behavior-unmatched. Narrow the current claim to conditional stimulus-selectivity evidence; retain reward analysis as an unresolved companion.",
+  "scientific_target": {
+    "question": "Across paired before/after animals, how do reward-free and rewarded regimes differ in calcium stimulus selectivity on common observed movement-position support, and which reward-location changes remain unexplained by behavioral confounds?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "Recomputable per-cell d-prime, regional fractions and animal-level before/after contrasts from measured neural arrays; the estimated effect may be null, negative or undefined. Reward-location d-prime is a separate unmatched statistic, not a known reward-coding truth.",
+    "answer_origin": "Calcium-derived activity, experimental stimulus/cue identities and recorded position/movement; evaluator arithmetic is reproducible conditional on authenticated source alignment.",
+    "case_unit": "Complete session packet including neurons×frames and neuron×trial×60-position tensor; animal before/after contrast is the inferential case.",
+    "independent_unit": "Mouse mname grouped across all date/block sessions; regime comparisons resample animals independently within regime.",
+    "inference_scope": "Observational, behavior-standardized stimulus selectivity on common support. Before/after and supervised-minus-unsupervised changes do not establish causal learning or reward mechanisms.",
+    "exclusions": [
+      "No reward-specific inference from category2 alone or behavior-unmatched reward-location d-prime.",
+      "No cross-day tracked-cell identity, full source-figure reproduction or participant investigation grade.",
+      "No conditioning on unobserved arousal/licking/physical treadmill speed via ft_move alone."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Operator packet: calcium neurons×frames, cortical IDs, exact trial/stimulus identities, source position/movement, gray/corridor masks, source delayed-cue position and 60-bin position-interpolated activity.",
+      "For a future investigator, explicit permitted neural/behavioral observations and training reference data require separate packaging; current compound evaluator inputs include labels and are operator-only."
+    ],
+    "forbidden_inputs": [
+      "Held-out animal/after-phase neural observations in fitting of the explanatory reference.",
+      "Undeclared cell registration, interpolated values treated as original independent frames, or source full-packet access used as a participant private-target route."
+    ],
+    "case_identity": "session_manifest keys session_id,mname,datexp,blk,regime,phase must be unique and complete relative to supplied manifest; all declared mice require paired before/after phases. Actual native completeness remains unverified.",
+    "split": "For descriptive contrasts, use all predeclared paired sessions and common movement-position support. Explanatory prediction holds every session of one mouse out and fits only before-phase sessions of other mice. Transductive behavioral matching is evaluator-side and is not candidate adaptation permission.",
+    "coverage": "All supplied sessions, neurons and animals remain in denominators, with undefined support reported. Native figure-specific populations, safe interpolation identity and authentic full cohort have not been admitted."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Common-support stimulus-selectivity change and supervised-minus-unsupervised animal contrast",
+      "direction": "two_sided",
+      "aggregation": "Source arithmetic-SD d-prime for category2 versus0 on matched movement-position strata; fixed threshold regional fractions, session means within animal/phase, after−before per mouse and equal-mouse regime contrast.",
+      "rationale": "The endpoint is an estimated neural effect verified from observations, not agreement with a favored positive learning narrative. A future submission checker must verify numeric artifacts and stated uncertainty, without treating positive effects as answer correctness."
+    },
+    "secondary": [
+      "Source unmatched stimulus/reward-location d-prime fractions and moving-gray baseline activity, with matched coverage and undefined denominators.",
+      "Before-only leave-animal-out behavior-only versus stimulus-augmented ridge MSE, scaled MSE and complete held-out residuals.",
+      "Whole-trial stimulus null diagnostics within identical movement-position profiles, not calibrated p-values."
+    ],
+    "comparators": [
+      {
+        "name": "Behavior-only explanatory ridge",
+        "inputs": "Position and source framewise movement; before-phase other-animal data only.",
+        "procedure": "Implemented train-only standardization and fixed ridge; equal animals/sessions/frames in training loss."
+      },
+      {
+        "name": "Stimulus-augmented explanatory ridge",
+        "inputs": "Same features plus category2 indicator.",
+        "procedure": "Same held-animal and before-only fitting; retain all residuals, and treat amplitude calibration as unresolved."
+      },
+      {
+        "name": "Common-support and whole-trial null",
+        "inputs": "Frozen joint movement/position strata and complete trial labels.",
+        "procedure": "Implemented equal stratum weighting across every declared session/category; null permutes only exchangeable observed profiles, retaining fixed/nonexchangeable trials."
+      }
+    ],
+    "nuisance_controls": [
+      "Separate raw stimulus, matched stimulus and unmatched reward-location endpoints; no reward-match claim from stimulus matching.",
+      "Source ft_move is VR position increment, not physical running speed; cue category does not guarantee reward delivery.",
+      "Freeze threshold/binning and neural amplitude calibration; never pair cells across sessions without registration."
+    ],
+    "uncertainty": "Animal bootstrap within regime for paired changes and independently across regimes for their difference; singleton/undefined animals prevent population intervals or complete estimates. Record coverage and retained biological denominators.",
+    "failure_policy": "Reject inconsistent/missing sessions and arrays; zero dispersion d-prime and absent regions remain undefined without removing cells/animals. No common covariate support refuses the matched endpoint; no source narrative is substituted for missing truth."
+  },
+  "implementation": {
+    "scorer_target": "evaluator.evaluate computes measured neural statistics and leave-animal-out predictions/residuals. There is no candidate answer/prediction submission API or independent investigation grader; it is an operator analysis/evaluator backend.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Source-based numerical analysis and generated controls for mapped array packets; complete behavioral reward adjustment, authentic input bridge and participant evaluation are absent.",
+    "missing": [
+      "Native cohort/session/cell/frame and60-bin interpolation authentication; source amplitude comparability.",
+      "Behavior-matched reward analysis or explicit removal from qualified claim, plus participant response schema and independent numerical-claim grading."
+    ],
+    "execution_evidence": "Documented generated numerical/control tests only; no authentic cohort analysis, participant trial or empirical reproduction performed in this revision.",
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-028/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-028/docs/initial-evaluator-v1.md",
+      "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/README.md",
+      "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/evaluator.py",
+      "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/source-provenance.json"
+    ]
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed direct interpretation of complete precomputed neural effect tables plus uncertainty could test evidence reading, but that is a separately defined representation.",
+      "boundary": "Do not expose evaluator-computed answers while claiming inference from raw observations; freeze what is provided and what must be inferred.",
+      "evidence_ids": [],
+      "missing": [
+        "Non-answer-bearing direct observations and independently known response targets."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed cell/region/phase plots from permitted arrays; no viewer source exists.",
+      "boundary": "Keep observational selection fixed and avoid target-directed outcome filtering.",
+      "evidence_ids": [],
+      "missing": [
+        "Viewer, access limits and answer-grading contract."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Operator-only numerical source is present: Operator analysis backend computes selectivity, common-support contrasts, nulls and held-animal residuals. This does not deliver a participant-facing tool assisted mode.",
+      "boundary": "Current evaluator compound packets remain operator-only; a participant needs separate allowed views and no scoring feedback.",
+      "evidence_ids": [
+        "implementation-3"
+      ],
+      "missing": [
+        "Investigator transport, public/private split and submission-claim grader."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Operator-only numerical source is present: Deterministic numerical analysis and frozen before-only explanatory reference. This does not deliver a participant-facing frozen program mode.",
+      "boundary": "Fixed preprocessing/threshold/model choices before outcome access; no after-phase fitting or held-mouse leakage.",
+      "evidence_ids": [
+        "implementation-3"
+      ],
+      "missing": [
+        "External programme harness, authentic inputs and qualification."
+      ]
+    }
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Narrow behavior-adjusted claim to the implemented common-support stimulus endpoint and preserve unmatched reward statistic as a companion limitation.",
+      "Separate an operator neural-analysis backend from a delivered participant investigation scorer.",
+      "Define answer truth as reproducible estimates with null/undefined outcomes and mouse-level uncertainty, not paper-conclusion agreement.",
+      "Keep operator analysis/reference APIs separate from participant-facing access: no delivered mode without its actual participant interface."
+    ],
+    "source_review": "Read source provenance, full numerical protocol, session_metrics/evaluate and matching/explanatory function structure; reused pinned author definitions."
+  }
+}

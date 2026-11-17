@@ -1,0 +1,159 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-051",
+  "title": "Viewed-object identification from fMRI",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "design_only",
+  "disposition_reason": "The public implementation directory contains a manifest, not the named adapter or a numerical image-retrieval evaluator. Its six-case JPEG-RGB-1 scope is a prospective within-person retrieval condition; source recovery and authenticated query/target mapping are required before execution.",
+  "scientific_target": {
+    "question": "Can a response from a held-out THINGS-fMRI image identify that image among a frozen candidate set within each measured person and independently selected ROI?",
+    "target_kind": "observation_decoding",
+    "known_answer": "The actually presented image identity, joined to its source trial/response and the fixed candidate-image roster.",
+    "answer_origin": "THINGS-fMRI stimulus/event metadata and processed-response indexing; exact public task query mapping is not supplied.",
+    "case_unit": "One person × ROI panel, with image responses as nested scored queries.",
+    "independent_unit": "Three measured people; V1/IT and repeated images within a person are paired dependent observations.",
+    "inference_scope": "Image retrieval from released measured fMRI responses in three people; the declared six-case successor is not held-person population generalization.",
+    "exclusions": [
+      "No original-PNG fidelity claim for the JPEG-RGB-1 condition.",
+      "No hidden-data generalization, native LLM interpretation or successful numerical grading from a manifest."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Proposed selected within-person V1 or IT voxel responses and labeled training image-response pairs.",
+      "Frozen 3,700 candidate JPEG-RGB-1 images per declared case; candidate pixels are allowed while the query-image association is private."
+    ],
+    "forbidden_inputs": [
+      "Query stimulus/image identity, original event order and answer-bearing file names.",
+      "Held-out neural labels or ROI/voxel selection using query outcomes."
+    ],
+    "case_identity": "Manifest explicitly declares sub-01_V1, sub-01_IT, sub-02_V1, sub-02_IT, sub-03_V1, sub-03_IT; exact 1,540 query IDs per panel are absent.",
+    "split": "Manifest describes six within-person ROI cases, not leave-person-out. Recover exact image/repetition/concept grouping and train-only ROI selection before freezing a complete split.",
+    "coverage": "Declared six cases × 1,540 queries, score matrix [1540,3700], 8,740-image union. These are unexecuted source declarations, not authenticated available cases."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Image retrieval Top-1 accuracy",
+      "direction": "higher",
+      "aggregation": "Calculate query accuracy within ROI/person; report V1 and IT separately and equal-weight the three people within each ROI. A global mean, if used, must state equal ROI weights prospectively.",
+      "rationale": "Directly scores the measured stimulus identity without turning six dependent ROI panels into six independent people."
+    },
+    "secondary": [
+      "Mean reciprocal rank, Top-5 and full coverage by person/ROI.",
+      "Paired V1-versus-IT retrieval differences under the same candidate set."
+    ],
+    "comparators": [
+      {
+        "name": "Fixed training-only ridge image-response retrieval",
+        "inputs": "Same labeled training pairs, voxel view and candidate images",
+        "procedure": "Proposed: fit an encoding map on training images, then rank held-out responses against predicted candidate responses; freeze regularization on grouped training folds."
+      },
+      {
+        "name": "Candidate-prior and image-label permutation controls",
+        "inputs": "Candidate roster; shuffled training image-response association",
+        "procedure": "Proposed uniform/frequency priors and complete concept-grouped label permutation refits; no query target access."
+      }
+    ],
+    "nuisance_controls": [
+      "Group repeated images and their exemplars across fitting/evaluation according to the frozen claim.",
+      "Freeze ROI/voxel reliability selection on training data; match candidate support across ROI contrasts.",
+      "Do not infer neural contribution from image priors or stable query order."
+    ],
+    "uncertainty": "Report all three person estimates and paired ROI effects; image/concept resampling is conditional on these people and cannot create population replication.",
+    "failure_policy": "Require every expected query/candidate ID exactly once and finite score arrays of the frozen shape; missing panels remain failures, never silently removed."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-051/implementations/registered-runtime/manifest.json"
+    ],
+    "scorer_target": "No numerical scorer is delivered in this directory. The manifest describes complete_unscored outputs and explicitly requires separate future private grading.",
+    "target_fidelity": "no_target_evaluator",
+    "delivered_scope": "Manifest-only six-case JPEG-RGB-1 declaration with runtime/scientific qualification false.",
+    "missing": [
+      "Recover and publish the exact cited adapter and numerical scorer under current paths.",
+      "Authenticate response/image mapping, repetition aggregation, split and source versions.",
+      "Run matched signal-derived and nuisance references on the complete declared panel."
+    ],
+    "execution_evidence": "Manifest says not_run and execution_selected=false. No implementation execution was performed in this revision."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools voxel summary or independently frozen response-map display",
+      "boundary": "No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support.",
+      "evidence_ids": [],
+      "missing": [
+        "Define a faithful manageable response view and strict answer collector."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed ROI response-map and candidate-image viewer",
+      "boundary": "No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement typed image delivery without event/answer metadata."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-person retrieval investigation on permitted voxel arrays",
+      "boundary": "No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support.",
+      "evidence_ids": [],
+      "missing": [
+        "Publish actual inspection/decoder route with matched inputs and resources."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Manifest names one precommitted Python source across all six cases",
+      "boundary": "No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support.",
+      "evidence_ids": [],
+      "missing": [
+        "Recover the referenced executable and separately bound numerical grader."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "e1",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-051/historical/task.pre-understanding.v1.json",
+      "sha256": "8a660b196c5150e6be60cdd5636b977eadbf3ee9b88da4254cfda43e224865b2",
+      "supports": "Original registered scientific objective, source identity and limitations"
+    },
+    {
+      "id": "e2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-051/implementations/registered-runtime/manifest.json",
+      "sha256": "e9308c75ce4a38c82b274578a63074001b68e34c558443a84f0c4bbc3643f7f7",
+      "supports": "The only registered-runtime body is a source-only declaration: six person/ROI cases and unscored output; its referenced adapter/scorer is absent from this public task directory."
+    },
+    {
+      "id": "e3",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.7554/eLife.82580",
+      "locator": "Original source paper identified and pinned in the preserved registration",
+      "supports": "Source recording family and experimental measurement; prospective benchmark comparisons are specified separately."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human outcome for this task is established by this source review. The separate four historical EEG/sleep programme attempts are not evidence for this task or its direct/viewer modes.",
+    "excluded_claims": [
+      "No original-PNG fidelity claim for the JPEG-RGB-1 condition.",
+      "No hidden-data generalization, native LLM interpretation or successful numerical grading from a manifest."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Separate the absent public evaluator from the detailed six-case manifest.",
+      "Replace implicit six-case independence with three-person inference and separate paired ROIs.",
+      "Make image identity ground truth and JPEG-versus-original stimulus scope explicit."
+    ],
+    "source_review": "Read original task, task README and the exact implementation/contract files listed below. Source declarations are distinguished from observed execution; primary citations reuse the preserved source audit unless the receipt explicitly records a fresh check."
+  }
+}

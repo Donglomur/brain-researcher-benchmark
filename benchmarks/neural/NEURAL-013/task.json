@@ -16,11 +16,11 @@
     ],
     "task_family": "intracortical_speech"
   },
-  "scientific_question": "Can intracortical neural features recover attempted phoneme sequences on later recording days under a fixed calibration budget?",
+  "scientific_question": "How accurately can a precommitted neural decoder predict attempted-speech phoneme sequences in later T15 sessions without query labels or a query-time language-model correction?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Phoneme token sequence per trial; transcript decoding only as a separately specified LM postprocessor."
+    "The source phoneme sequence for each retained attempted-speech trial, including the declared word-boundary symbol and edit denominator policy."
   ],
   "input_assets": {
     "routes": [
@@ -740,19 +740,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Author loader opens each trial group/input_features: time by512 features, comprising two features on each of256 electrodes across four64-channel speech-motor arrays. The raw electrode voltage is outside this scope.",
-    "allowed_context": "Training/validation trial groups expose seq_class_ids, transcription, and sentence_label; attrs include n_time_steps, seq_len, session, block_num and trial_num. Test targets are omitted. Corpus is joined from the author Date/Block-number CSV.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Features binned at20ms per author README; sequence labels are phoneme/text targets, not observed phoneme-onset timestamps. Score sequence decoding without inventing per-phoneme timing truth.",
-    "source_contract_evidence": "Pinned author loader read and actual ZIP directory inspected:127session/split HDF5 files. HDF5 trial values/dimensions were not unpacked;512-feature schema is author-source documented, not independently observed from a trial payload."
+    "inputs": [
+      "Source-defined 512 ordered intracortical features per 20 ms step, with full trial length and fixed feature provenance; authentic feature-axis/calibration verification still required.",
+      "Permitted labels only for earlier training/development sessions; frozen decoder state for later inference."
+    ],
+    "forbidden_inputs": [
+      "Query transcriptions, phoneme sequences, sentence identifiers or answer-bearing source paths",
+      "Query-label calibration under the zero-calibration task",
+      "Undeclared pretrained language exposure or cross-split repeated sentence leakage"
+    ],
+    "case_identity": "Historical manifest declares all 45 sessions, split 27 training/9 development/9 query, with pointwise query semantics; no authenticated complete query-ID manifest or retained trial count is delivered.",
+    "split": "Chronological 27/9/9 session policy is declared. Repeated sentence identities must be grouped across partitions with a frozen precedence rule before use; do not borrow NEURAL-014 calibration permissions.",
+    "coverage": "One participant/all 45 declared sessions; delivered manifest says full prepared packet required and metric_computed=false. Published trial totals require reconciliation rather than selecting a convenient subset."
   },
-  "biological_unit": "One participant T15;45date-coded recording sessions, blocks and trials. Sessions are repeated measures of the same person.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "One biological participant T15; 45 date-coded sessions are repeated measures, not 45 people.",
+  "case_definition": "One complete attempted-speech trial feature time series from a later session.",
   "split": {
-    "policy": "One person T15; chronological days/blocks with sentence identity grouped; adaptation uses only a declared prefix or calibration partition.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Chronological 27/9/9 session policy is declared. Repeated sentence identities must be grouped across partitions with a frozen precedence rule before use; do not borrow NEURAL-014 calibration permissions.",
+    "coverage": "One participant/all 45 declared sessions; delivered manifest says full prepared packet required and metric_computed=false. Published trial totals require reconciliation rather than selecting a convenient subset."
   },
   "reference": {
     "source_code_url": "https://github.com/Neuroprosthetics-Lab/nejm-brain-to-text",
@@ -771,50 +776,95 @@
     "data_url": "https://doi.org/10.5061/dryad.dncjsxm85"
   },
   "controls": [
-    "Neural-shuffled and language-only references",
-    "chronological day split",
-    "held-out text sequences",
-    "no transcript fields in queries."
+    "Group identical normalized text across train/development/query, not only trial IDs.",
+    "Keep 512-feature ordering, source preprocessing and any normalization exposure explicit.",
+    "Separate duration/language priors from neural sequence information.",
+    "Use session-level summaries without claiming independent biological replications."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Direct numerical interpretation of a complete 512-feature trial would require learned mapping and a declared demonstration budget; no such observation-only condition is delivered.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A feature heatmap may aid inspection but has no delivered validated mapping to phoneme sequences. A viewer must preserve full observations and score the same sequence target to be comparable.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "A tool-assisted per-trial decoder investigation is possible with declared checkpoints and equal inputs; no active case broker or scorer is delivered here.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Historical manifest describes one frozen fit and every pointwise query, but referenced programme bodies/entrypoint are not delivered and results are explicitly unscored.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Session-macro phoneme error rate, with WER reported separately under a fixed LM.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "later_session_macro_phoneme_error_rate",
+      "direction": "lower",
+      "aggregation": "For each of nine later sessions, sum token edit distances and divide by that session reference token count; then equal-session mean. Freeze vocabulary and boundary-token denominator before execution.",
+      "rationale": "Measures a genuine withheld sequence target, with session weighting that avoids long sessions silently dominating."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Pooled edit counts and token denominators, insertions/deletions/substitutions",
+      "Per-session PER, sequence exact-match and complete trial coverage",
+      "Neural-shuffle and zero-feature degradation plus fixed language-only prior",
+      "Latency, fit cost and declared calibration-label exposure"
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Pinned author neural decoder",
+        "inputs": "Permitted earlier-session neural features and labels",
+        "procedure": "Proposed source-compatible baseline pinned to author revision; updated competition PyTorch baseline is not asserted identical to the 2024 deployed model."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "No-neural sequence prior",
+        "inputs": "Only permitted training phoneme sequences",
+        "procedure": "Proposed fixed unconditional prior, evaluated on exactly the same later queries."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Neural-shuffled frozen decoder",
+        "inputs": "Same model and durations; training-frozen corruption policy",
+        "procedure": "Proposed signal-dependence control; no refitting on query labels."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Group identical normalized text across train/development/query, not only trial IDs.",
+      "Keep 512-feature ordering, source preprocessing and any normalization exposure explicit.",
+      "Separate duration/language priors from neural sequence information.",
+      "Use session-level summaries without claiming independent biological replications."
+    ],
+    "uncertainty": "Report all nine later-session outcomes and descriptive paired session contrasts within T15. Session resampling, if added, is conditional repeated-measure uncertainty and cannot create a population confidence interval from one person.",
+    "failure_policy": "Missing or duplicate trial IDs prevent a complete score. Empty predicted sequences are valid deletions; nonfinite inputs, invalid vocabulary or unbounded outputs are malformed. Preserve all retained source trials and explicit exclusion reasons.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "c260dc44cc133fb1564fa65717545db4206f8073ffb1158e91981c02df5d9251",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "68bac3c77c96bd547c11e37b96f6b921de9df4752d673ee0d8832e7e91e81ac7"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -903,6 +953,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

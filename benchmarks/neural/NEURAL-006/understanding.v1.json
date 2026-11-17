@@ -1,0 +1,215 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-006",
+  "title": "Reward versus emotion prediction-error physiology",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical developer controls remain scoped engineering evidence; this revision runs no model and does not turn source inspection into a performance result.",
+    "excluded_claims": [
+      "No all-41 LOPO execution route.",
+      "No source-paper coefficient agreement as a reward for neuroscientific truth.",
+      "No calibrated uncertainty or PE-specific causal permutation test."
+    ]
+  },
+  "disposition_reason": "A concrete processed-ERP prediction/investigation source exists for 33 exposed people with an optional frozen-33/test-eight protocol. Its actual loss target differs from the original coefficient-reconstruction emphasis; current definition adopts the observed ERP prediction endpoint and keeps author coefficient reproduction separate.",
+  "scientific_target": {
+    "question": "How much do reward and valence prediction-error variables improve held-person FRN and P3b amplitude prediction over shared outcome/history covariates under a fixed predictive procedure?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Held-person author-processed FRN_N2_offer and P3b_offer amplitudes in the original exported units, paired on source rows where both targets and predictors are present. Free prose and favored coefficient signs are not known answers.",
+    "answer_origin": "Pinned author df_FRN_N2_offer.csv and df_P3b_offer.csv, positionally aligned to BEH_ug.csv. Independent raw-epoch identity remains unresolved.",
+    "case_unit": "A held participant with all behavior-complete query rows; predict both ERP amplitudes for every query before the private paired-target mask is applied.",
+    "independent_unit": "Participant; 180 original ordered trials are nested within each of 41 source people. LOPO folds share training sets.",
+    "inference_scope": "Conditional predictive association in processed summaries, not raw neural waveform interpretation or a causal decomposition of reward/emotion mechanisms. The predictive random-intercept ML models are not source-paper random-slope REML reproduction.",
+    "exclusions": [
+      "No all-41 LOPO execution route.",
+      "No source-paper coefficient agreement as a reward for neuroscientific truth.",
+      "No calibrated uncertainty or PE-specific causal permutation test."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Training-person processed ERP labels plus original outcome/expectation primitives offer, rp, exp_valence, ep_valence, exp_arousal, ep_arousal; trialLocal/trialGlobal and derived absolute R/V/A prediction errors.",
+      "Held-person behavior-complete rows carrying source_row identities, without FRN/P3b targets; target-specific missingness remains private."
+    ],
+    "forbidden_inputs": [
+      "Held-person FRN/P3b outcomes, missing-target eligibility masks or private numerical scores.",
+      "Query fitting or calibration; cross-case mutable state; reserved target access during development.",
+      "Administrative source_row/participant identities as predictive features; they identify/group observations only."
+    ],
+    "case_identity": "Original one-based source_row and participant identity; project() verifies three 7,380-row source files and all 41 people with 180 ordered trials. No public authentic case payload is included.",
+    "split": "Implemented design: development_lopo33 uses the old 26 training plus seven exposed development people, 32 training people per observed fold. Separate reserved_frozen33_test8 fits once on 33 then predicts all eight held people; no reserve execution or release is implied.",
+    "coverage": "All 33 development person episodes and both modes are required before aggregate scores; paired scored row counts depend on authenticated source missingness and are not fabricated here. Reserve scope is all eight people under a separate frozen protocol."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "equal_person_training_variance_normalized_MSE_for_each_ERP",
+      "direction": "lower",
+      "aggregation": "For FRN and P3b separately: per-person MSE divided by outer-training equal-person variance, then equal-person mean. Preserve both component endpoints; do not collapse unlike amplitudes without a declared rule.",
+      "rationale": "Grades prediction of measured neural summaries rather than reconstruction of source coefficients; training-only normalization permits explicit component comparisons without using held-target variance."
+    },
+    "secondary": [
+      "Raw MSE and MAE in original amplitude units, complete per-person paired target support.",
+      "R versus V, reward increment V−J, valence increment R−J and joint versus nuisance N−J normalized-loss contrasts.",
+      "P3b-minus-FRN difference of normalized predictive contrasts, with both constituent values.",
+      "Evidence-linked numeric-claim consistency and explicit limitations, separate from neural prediction performance."
+    ],
+    "comparators": [
+      {
+        "name": "mean",
+        "inputs": "Training ERP amplitudes.",
+        "procedure": "Existing equal-person mean reference."
+      },
+      {
+        "name": "N / R / V / J",
+        "inputs": "Common nuisance model; nuisance plus reward, valence, or joint prediction-error variables.",
+        "procedure": "Existing training-standardized ML models with common random intercept; all five arms and both ERP targets must complete. The original eight fits and independent design audit are retained."
+      }
+    ],
+    "nuisance_controls": [
+      "Joint reward/valence/arousal and outcome/expectation covariates; compare incremental held-person loss rather than unadjusted coefficient signs.",
+      "Keep paired FRN/P3b trajectories and missingness together; verify exact row identities, not only row counts.",
+      "If a trajectory-alignment diagnostic is selected, preserve explicit 26/7 exchangeability blocks; this is not a PE-specific conditional null.",
+      "Full covariance is needed for within-component coefficient differences; never subtract unnormalized FRN/P3b coefficients."
+    ],
+    "uncertainty": "Retain per-person losses and contrasts, their descriptive distribution and declared participant resampling sensitivity only. Every training transform/selection/model refits per replicate; overlapping LOPO training and previous development tuning prevent automatic calibrated intervals. No p-value supplied.",
+    "failure_policy": "Predict every behavior-complete query exactly once with finite FRN/P3b values. Missing/abstained output or incomplete reference/model/replicate prevents a complete aggregate; retain failures and do not drop unsuccessful people."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/protocol.py",
+      "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/projection.py",
+      "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/analysis.py",
+      "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/TASK.md",
+      "benchmarks/neural/NEURAL-006/implementations/row-eligibility/README.md",
+      "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/investigation.py",
+      "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/run_investigation.py"
+    ],
+    "scorer_target": "analysis.score_case scores held processed amplitudes with MSE/MAE/training-normalized MSE; aggregate retains mode/reference contrasts. Numeric evidence claims are checked against tool replies, not awarded free-prose truth credit. Separate row-eligibility checker validates supplied row records only.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Candidate packet projection, source-defined paired frozen/adaptive protocol, actual target-loss functions, immutable fit-state interface and failure-preserving source are present. Root selection, original-data admission and qualified runtime remain separate.",
+    "missing": [
+      "Authenticate independent ERP event alignment and original preprocessing/units beyond positional exports.",
+      "Qualify and bind actual source closure, bootstrap interpreter, image and finite execution plan.",
+      "Select adequately justified reference competence and resampling interpretation before any scientific study."
+    ],
+    "execution_evidence": "Source/engineering components are present; no fresh authentic evaluation or model trial was run in this revision. Row-eligibility tests use invented records and do not open original exports."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric behavior-to-ERP prediction with explicitly bounded training examples.",
+      "boundary": "Query ERP amplitudes remain hidden; an ERP waveform cannot be shown without revealing this target.",
+      "evidence_ids": [],
+      "missing": [
+        "No direct-response collector or fixed finite training-presentation condition."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "This endpoint predicts neural amplitude targets from behavioral covariates; exposing the query ERP waveform through a neural viewer would reveal the answer.",
+      "boundary": "A future viewer may visualize permitted behavioral covariates, but that is a different observation representation, not direct interpretation of hidden ERP targets.",
+      "evidence_ids": [],
+      "missing": [
+        "No valid neural-input viewer condition for the present encoding direction."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Per-person adaptive investigation with training_summary, reference_prediction and predictive_coefficients; numerical Python/R analysis allowed.",
+      "boundary": "Matched input projection, tool catalogue/call caps and process limits; no held-target feedback; fresh per-person state.",
+      "evidence_ids": [
+        "protocol",
+        "task",
+        "investigator_source",
+        "episode_source"
+      ],
+      "missing": [
+        "Qualified actual-root execution and candidate semantic feature-use review."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Precommitted prediction/investigation program; reserved protocol trains one immutable artifact on33 before any of eight query people.",
+      "boundary": "Same tool opportunities as adaptive comparator; no target-batch fitting, reserve adaptation or cross-person mutable state.",
+      "evidence_ids": [
+        "protocol",
+        "task",
+        "episode_source"
+      ],
+      "missing": [
+        "Actual source/runtime qualification and complete finite execution."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "protocol",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/protocol.py",
+      "sha256": "8832af8e4f52790979f3ed371d57ab986c453b84f9438b93c0eaa7b92ff24569",
+      "supports": "Exact source roster/splits, primitives, modes, finite plans and diagnostic restrictions."
+    },
+    {
+      "id": "projection",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/projection.py",
+      "sha256": "2bedd038b2a0b2f142029029d5e47c20be06f115f521b974f8a8aec0eaa183d3",
+      "supports": "Behavior-complete query production and separate paired-target masks."
+    },
+    {
+      "id": "analysis",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/analysis.py",
+      "sha256": "6d637d255708729b3b3422c4ff810bf2025c0d7d80caeacad323656f02c0ed3d",
+      "supports": "Genuine held-target losses, component/arm contrasts and complete cohort aggregation."
+    },
+    {
+      "id": "task",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/TASK.md",
+      "sha256": "ed12f52c808b5fcc2a018508cea97c2f7fe68ace084cedee8528eb14e2f1fd4c",
+      "supports": "Predictive versus paper-model scope, source-only reserve protocol and evidence-linked investigation boundary."
+    },
+    {
+      "id": "eligibility",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-006/implementations/row-eligibility/README.md",
+      "sha256": "ccd61267cad16209260892c83f1dce48c7f02cf8b48cc4cbd6a35c6caf2ecf34",
+      "supports": "Row consistency checker does not authenticate original exports or execute R."
+    },
+    {
+      "id": "author_analysis",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/jpheffne/2025_epe_eeg/4f5767df1516e0ec3c234d51ba36e4b741eb60e8/analysis/eeg_epe_ms.Rmd",
+      "locator": "Figure 3A, lines 204–299",
+      "supports": "Original positional concatenation and random-slope models differ from delivered predictive random-intercept source. Reopened 2026-11-16."
+    },
+    {
+      "id": "investigator_source",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/investigation.py",
+      "sha256": "164b4c8276fdc6f8566bb531da0e29410c68dfaa38d41778489095de097ee36b",
+      "supports": "Concrete bounded training-summary/reference-prediction/coefficient tool calls and evidence-linked numeric final claims."
+    },
+    {
+      "id": "episode_source",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-006/implementations/neural-006/broker-controls-v4/runtime/run_investigation.py",
+      "sha256": "876de6b7ae9e33bffd4f52dac8fa47a6b1c11b0b171f9d0246c4583068c6386e",
+      "supports": "Actual matched candidate episode orchestration and full output commitment before private scoring; reserved stage freezes models before eight held people."
+    }
+  ],
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Adopts the existing actual held-person ERP-amplitude prediction target as primary; source-paper coefficient reconstruction remains a distinct paper task.",
+      "Distinguishes exposed33 LOPO from frozen33/test8 reserve, and behavior-complete predictions from paired-target scoring.",
+      "Prevents a neural viewer from revealing this encoding task’s hidden targets and keeps numeric-report consistency separate from scientific reasoning."
+    ],
+    "source_review": "Read actual packet projection, score_case/aggregate, protocol and runtime scientific contract; reopened pinned author analysis to verify the model/endpoint distinction. No authentic labels read."
+  }
+}

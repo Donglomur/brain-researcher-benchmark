@@ -16,11 +16,11 @@
     ],
     "task_family": "mental_imagery"
   },
-  "scientific_question": "Which prespecified feature-layer/ROI associations with instructed imagery category remain after category-bank and perception-trained decoder controls?",
+  "scientific_question": "Does the difference in imagery feature recovery between cnn7 and cnn1 differ between high-level and low-level visual ROIs, after perception-trained decoding and matched feature-unit controls?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Signed per-person feature-level contrasts with matched unit counts and training-only voxel selection; conclusions are about decoded category-related features, not a recovered photograph or causal/temporal visual hierarchy."
+    "A signed per-participant ROI×feature-layer interaction recomputed from frozen decoded imagery features and held category feature targets; null/adverse interactions are valid. There is no known universal hierarchy label supplied by the paper."
   ],
   "input_assets": {
     "routes": [
@@ -44,17 +44,23 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: perceived/imagined-object fMRI samples and fixed candidate image features; actual processed array conventions and cue timing require inspection.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "Proposed full within-person processed perception/imagery fMRI:10 ROIs and13 feature families with1000 matched units per family.",
+      "1200 training rows,1750 perception rows and500 imagery rows per context; maximum316 training-selected voxels as stated in retained manifest."
+    ],
+    "forbidden_inputs": [
+      "Imagery target-category labels and target-informed voxel,ROI,layer/unit selection.",
+      "Private grader outputs or category-bank correlations used to choose a favorable hierarchy contrast after seeing results."
+    ],
+    "case_identity": "Retained manifest declares5 people × 10 ROIs × 13 families = 650 contexts. It supplies no executable local identity/array loader or scored authentic corpus; exact case bindings remain unresolved.",
+    "split": "Within-person perception-trained transfer to blinded imagery; category/run/repetition grouping and train-only voxel selection required. New-person and imagery-trained fitting are excluded. Concrete source split/row manifests require verification with recovered producer.",
+    "coverage": "All650 contexts retained, including cnn1..cnn8,hmax1..hmax3,gist,sift and V1,V2,V3,V4,LOC,FFA,PPA,LVC,HVC,VC. The four-cell prospective primary does not authorize dropping the other646 contexts or counting conditions as new benchmarks."
   },
-  "biological_unit": "participant; sessions/trials nested within participant",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "Five biological participants; ROI,feature family, units,categories and repeated trials are dependent within person.",
+  "case_definition": "Participant×ROI×feature-family context, containing all imagery and perception rows.",
   "split": {
-    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Within-person perception-trained transfer to blinded imagery; category/run/repetition grouping and train-only voxel selection required. New-person and imagery-trained fitting are excluded. Concrete source split/row manifests require verification with recovered producer.",
+    "coverage": "All650 contexts retained, including cnn1..cnn8,hmax1..hmax3,gist,sift and V1,V2,V3,V4,LOC,FFA,PPA,LVC,HVC,VC. The four-cell prospective primary does not authorize dropping the other646 contexts or counting conditions as new benchmarks."
   },
   "reference": {
     "source_code_url": "https://github.com/KamitaniLab/GenericObjectDecoding",
@@ -66,38 +72,96 @@
     "data_url": "https://github.com/KamitaniLab/GenericObjectDecoding"
   },
   "controls": [
-    "Matched feature dimension",
-    "category-only reference",
-    "independent ROI selection",
-    "no imagery-informed feature selection."
+    "Match feature units and training-only voxel selection across families/ROIs; no imagery-informed layer choice.",
+    "Hold category-name cues and category bank fixed; decoded category features do not establish subjective image contents.",
+    "Freeze every primary/secondary contrast before protected outcomes; full650 panel remains visible for coverage."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "Registered endpoint is a multi-ROI/layer numerical contrast over650 contexts.",
+      "boundary": "Single map/plot interpretation would be a different endpoint unless independently specified.",
+      "evidence_ids": [
+        "manifest"
+      ],
+      "missing": []
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "A viewer alone cannot evaluate the full held-out decoded-feature interaction.",
+      "boundary": "Rendered target-feature scores would leak the held answer; a separate interpretation question needs a different contract.",
+      "evidence_ids": [
+        "manifest"
+      ],
+      "missing": []
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Potential numerical hierarchy investigation on allowed source arrays.",
+      "boundary": "Must freeze effects and predictions before grader access; independent scorer verifies numerical claims.",
+      "evidence_ids": [
+        "manifest"
+      ],
+      "missing": [
+        "No executable participant/analysis/scorer source packaged"
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Manifest describes a frozen650-context programme but references absent historical source.",
+      "boundary": "Do not treat path metadata as an available runnable programme.",
+      "evidence_ids": [
+        "manifest"
+      ],
+      "missing": [
+        "Actual producer/source closure, loader and target-consuming grader"
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed held-out feature-correlation/rank gain and participant evidence agreement.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "Score verified numerical claims, declared estimands and held-out contrasts; null/inconclusive conclusions remain valid."
+    "primary": {
+      "name": "Prospective HVC-versus-LVC interaction of cnn7-minus-cnn1 signed imagery feature correlation",
+      "direction": "two_sided",
+      "aggregation": "For each participant D=[r(HVC,cnn7)-r(HVC,cnn1)]-[r(LVC,cnn7)-r(LVC,cnn1)]; report equal-five-participant mean and all five values. Freeze the source-compatible category/unit correlation aggregation before outputs; its absent implementation currently blocks scoring.",
+      "rationale": "Turns a broad hierarchy narrative into a falsifiable signed interaction while requiring matched units and preserving full-panel companions. The direction is not assumed from paper narrative."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Complete13-family×10-ROI feature-correlation/rank matrix and all participant values.",
+      "Perception-to-imagery transfer, category-only/no-neural and training-association-permuted controls.",
+      "Prespecified contrasts controlling category-bank similarity and matched 1000-unit representation; expose undefined constant correlations."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "Perception-trained decoder",
+        "inputs": "Same allowed perception support and1000-unit target family",
+        "procedure": "Required fixed train-only voxel/decoder recipe across ROIs; source controller/scorer must be recovered and inspected."
+      },
+      {
+        "name": "Category-bank/no-neural reference",
+        "inputs": "Candidate category feature bank without imagery neural observations",
+        "procedure": "Required control for priors and feature-bank geometry; proposed, no local grader implements it."
+      },
+      {
+        "name": "Training-permuted decoder",
+        "inputs": "Same feature dimensions and neural observations with frozen training-label permutation",
+        "procedure": "Required negative control to distinguish genuine learned mapping from feature/category structure; proposed pending source binding."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Match feature units and training-only voxel selection across families/ROIs; no imagery-informed layer choice.",
+      "Hold category-name cues and category bank fixed; decoded category features do not establish subjective image contents.",
+      "Freeze every primary/secondary contrast before protected outcomes; full650 panel remains visible for coverage."
+    ],
+    "uncertainty": "Five-participant paired effects with explicit category/ROI/family dependence; no unit-level pseudoreplication. Primary two-sided inference and multiplicity must be selected before execution; none is implemented or claimed here.",
+    "failure_policy": "No metric from an unscored completion. Future scorer must validate all 650 contexts and complete rows before target reads, retain failures/undefined correlations and refuse favorable subset aggregation.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "274ec6348acf8ba068a5e3c31d63bab4751b007d5ab0a2502175eb4a14842fa5",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "ffd570fd5f9e00c0c915f46d04387ac801599386032bbe89b4645243d2b1d10d"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -248,6 +312,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

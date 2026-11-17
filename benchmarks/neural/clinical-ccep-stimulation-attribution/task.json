@@ -4,7 +4,7 @@
   "title": "Anatomical stimulation-site attribution from complete VTC evoked responses",
   "registration_recommendation": "REGISTER_DRAFT_ONLY",
   "current_registration_status": "REGISTERED_CONSTRUCTION_DRAFT",
-  "scientific_question": "From a VTC evoked response, identify the documented anatomical compartment of the stimulated electrode pair.",
+  "scientific_question": "Can complete ventral-temporal evoked-response blocks identify the documented anatomical compartment of the stimulated pair in an unseen patient?",
   "participant_inputs": "Complete baseline-corrected waveform matrix over the original11–500 ms response interval for every repetition, timestamps/native sample grid, units, missing/artifact masks and target-free recording-location descriptors. Stimulating-contact IDs/anatomy, event codes that reveal the site and subject-identifying filenames are scorer-only.",
   "known_answer": "Stimulation-site anatomical compartment, derived from original stimulation/contact localization metadata. It is not a learned BPC category or a claim that a new causal connection was established.",
   "complete_scope": {
@@ -160,5 +160,129 @@
     "submission_ready": false,
     "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
     "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  },
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "Authenticated stimulation-pair anatomy in the frozen four-compartment order hippocampus, amygdala, lateral_temporal_cortex, other_mixed."
+  ],
+  "biological_unit": "Patient (five total); contact blocks and repetitions remain nested.",
+  "case_definition": "One stimulation-site by VTC recording-contact block containing every pulse repetition and all 11–500 ms samples.",
+  "allowed_inputs": {
+    "inputs": [
+      "Complete baseline-corrected all-repetition VTC waveform matrix over 11–500 ms, native relative grid, verified units, artifact/missingness masks and target-free recording-location descriptors."
+    ],
+    "forbidden_inputs": [
+      "Stimulating-contact ID/anatomy, site-revealing event codes, patient-identifying filenames, test-fitted BPC consensus curves and owner target maps."
+    ],
+    "case_identity": "Scorer requires unique opaque case_id and patient/session/site_block/VTC_contact joins plus packet digest for every declared block; authentic full census is not supplied.",
+    "split": "Declared leave-one-patient-out over all five people; all repetitions/sessions/contacts remain grouped. Policy checks training roster but cannot authenticate actual training access.",
+    "coverage": "All five patients, every released VTC contact, stimulation site and repetition must enter owner census. Current scorer verifies complete declared roster but not physical source completeness; any unresolved coverage blocks primary loss."
+  },
+  "split": {
+    "policy": "Declared leave-one-patient-out over all five people; all repetitions/sessions/contacts remain grouped. Policy checks training roster but cannot authenticate actual training access.",
+    "coverage": "All five patients, every released VTC contact, stimulation site and repetition must enter owner census. Current scorer verifies complete declared roster but not physical source completeness; any unresolved coverage blocks primary loss."
+  },
+  "controls": [
+    "Pre-stimulus-only and amplitude-only comparators; audit artifact-mask/channel-ID prediction.",
+    "Pairing moves whole repetition matrices among compatible distinct-site blocks within patient/session/contact and acquisition strata; labels/context fixed.",
+    "Freeze finite target-blind derangements and report unsupported strata rather than drawing until anatomical classes mix."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed complete all-repetition VTC waveform matrix or lossless plots.",
+      "boundary": "No tools; full packet must fit before declaring direct evidence.",
+      "evidence_ids": [
+        "ccep-scorer"
+      ],
+      "missing": [
+        "Authenticated input packet and capacity protocol."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential repetition-aware waveform display with typed channel/time/repetition views.",
+      "boundary": "No anatomy/event lookup, target-bearing titles or raw-owner data.",
+      "evidence_ids": [
+        "ccep-scorer"
+      ],
+      "missing": [
+        "Viewer implementation and rendering/response audit."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed same matrix plus train-only templates/numerical analysis.",
+      "boundary": "Case-fresh tool state and identical training evidence, no test BPC fitting.",
+      "evidence_ids": [
+        "ccep-scorer"
+      ],
+      "missing": [
+        "Protected tool runner and competent train-only template model."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Proposed precommitted waveform/template classifier.",
+      "boundary": "Freeze fitting policy on training patients; artifact scoring alone is not program execution.",
+      "evidence_ids": [
+        "ccep-scorer"
+      ],
+      "missing": [
+        "Frozen lifecycle and authentic reference qualification."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Patient-macro multiclass log loss",
+      "direction": "lower",
+      "aggregation": "Mean negative log true-compartment probability across blocks within patient, then equal mean across all five patients; probability floor frozen by owner policy.",
+      "rationale": "The declared probability-floor loss penalizes confident wrong compartments while retaining equal patient weight despite unequal block counts. Flooring the true-class log argument is an operational finite-loss convention; strict propriety is not claimed for the clipped score."
+    },
+    "secondary": [
+      "Per-patient confusion, class support, observed-class macro recall and fixed 10-bin classwise calibration.",
+      "All-four-class recall is null for missing classes; unsupported training classes remain explicit.",
+      "Paired original-minus-reassigned block performance only on exact shared support; primary full coverage remains separate."
+    ],
+    "comparators": [
+      {
+        "name": "Training-class prevalence",
+        "inputs": "Training patients anatomical labels only",
+        "procedure": "Proposed fixed prior under each LOPO fold."
+      },
+      {
+        "name": "Mean waveform/template correlation",
+        "inputs": "Same full training response blocks and labels",
+        "procedure": "Proposed train-class mean waveforms with train-only normalization and fixed deterministic matching."
+      },
+      {
+        "name": "Regularized temporal classifier",
+        "inputs": "Same full packets; train-only temporal coefficients or BPC extractor",
+        "procedure": "Proposed nested patient tuning; never compute BPC consensus on held patient."
+      }
+    ],
+    "nuisance_controls": [
+      "Pre-stimulus-only and amplitude-only comparators; audit artifact-mask/channel-ID prediction.",
+      "Pairing moves whole repetition matrices among compatible distinct-site blocks within patient/session/contact and acquisition strata; labels/context fixed.",
+      "Freeze finite target-blind derangements and report unsupported strata rather than drawing until anatomical classes mix."
+    ],
+    "uncertainty": "Show all five patient effects and paired support. Five patients limit precision; pulses/blocks are not independent replication. Authentic uncertainty protocol and references remain unfinished.",
+    "failure_policy": "Admit complete predictions before target access; four normalized finite probabilities per exact case. Missing/inconsistent coverage produces no primary score; unsupported classes never justify excluding a patient.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "3cdbe6add7cd493e7e0bdedd1cf312bda72f95fc31c9c7d6f068b04651ef99f2",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "9e7eb5527c1e3f26a68d9af43e3e54f2fd39082298a56ad348e14aae5176c28e"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
   }
 }

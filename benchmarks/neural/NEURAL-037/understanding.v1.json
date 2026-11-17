@@ -1,0 +1,186 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-037",
+  "title": "Acquisition-local held-condition calcium response prediction",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The historical full12 route predicts acquisition-local condition means over native frames, which is narrower than visual/opto-combination and animal-transfer generalization. Its source and grader are absent here; unknown mouse mapping and physical timing preclude the broader claim.",
+  "scientific_target": {
+    "question": "Within each of six source acquisitions, can the permitted eleven conditions predict the withheld ABC/CBA condition response profile better than additive/order-agnostic models?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Measured held-condition calcium response values on each acquisition’s native frame grid, aggregated only by the original declared target rule. The exact mean/trajectory reduction must be recovered from its absent scorer; test-condition means cannot be supplied as predictors.",
+    "answer_origin": "Source sequenceFiltering.zip record18726362 contains figure2/3 condition arrays and trial/summary forms. The historical finite task declares acquisition-local condition means, not all single-trial visual/opto response combinations.",
+    "case_unit": "One held condition for one acquisition, with ROI rows and native frames nested inside;12 contexts represent six acquisitions×two order conditions.",
+    "independent_unit": "Acquisition for descriptive finite results; independent animal/session mapping is unresolved, so six acquisitions cannot be asserted to be six mice.",
+    "inference_scope": "Retrospective within-acquisition condition generalization only. Full native-frame means may include baseline/artifact structure; physical stimulus onset and animal transfer are outside the delivered claim.",
+    "exclusions": [
+      "No cross-animal generalization or independent-animal uncertainty.",
+      "No full visual/opto catalogue completion.",
+      "No millisecond response-window or original-paper reproduction claim from native frame indices."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Training measurements from the eleven permitted conditions in the same acquisition, with condition/order/stimulation metadata allowed by the source task.",
+      "Acquisition-local ROI axes and native frame grids; permitted stimulus identity/history and optical power/timing descriptors."
+    ],
+    "forbidden_inputs": [
+      "Any withheld-condition response, trial average or summary computed from query observations.",
+      "Pooling different acquisition ROI indices as if they were the same cells.",
+      "Answer-bearing source-condition filenames outside the sanitized public mapping."
+    ],
+    "case_identity": "Historical declaration: six acquisitions,12 contexts,1132 original ROI rows,2264 query-ROI occurrences, native frame lengths240/240/240/240/200/200 and seven source-empty rows per order. Concrete query IDs and complete missing-row map are not distributed.",
+    "split": "Hold out the complete declared order/condition response within each acquisition; all duplicated panels from the same acquisition stay grouped. Biological train/test split awaits experiment→mouse/session map and cannot be inferred from expt1…6.",
+    "coverage": "Complete selected acquisition-local condition-means declaration only; broader single-trial visual/opto-combination and animal-transfer objective remains unimplemented. Two order conditions do not create two new cohorts."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "acquisition_macro_normalized_response_rmse",
+      "direction": "lower",
+      "aggregation": "Compute response RMSE on the frozen measured target support within each acquisition, normalize using training-only scale, and average acquisitions equally; retain ROI/frame support and native units.",
+      "rationale": "Measures held-condition neural prediction. Normalizer, target reduction and empty-row handling must be frozen from recovered source before use; do not reward copied published panel summaries."
+    },
+    "secondary": [
+      "Unnormalized native-unit RMSE and all per-acquisition/order errors.",
+      "Additive/order-agnostic versus sequence-aware matched model errors on identical support.",
+      "Post-onset versus baseline/artifact sensitivity only after physical timing is verified, not by relabeling arbitrary frame indices."
+    ],
+    "comparators": [
+      {
+        "name": "Training-condition mean",
+        "inputs": "Permitted same-acquisition training responses only.",
+        "procedure": "Fixed mean predictor establishes condition-independent response baseline; never average withheld condition."
+      },
+      {
+        "name": "Additive stimulus/history model",
+        "inputs": "Allowed stimulus components, order/history and optical-dose metadata plus training responses.",
+        "procedure": "Training-only fitted additive model with fixed regularization; same inputs/budget as richer candidate."
+      },
+      {
+        "name": "Sequence interaction model",
+        "inputs": "Same allowed inputs with declared sequence/order terms.",
+        "procedure": "Predict withheld order using training data only; evaluate all acquisition/order cells rather than favorable subsets."
+      }
+    ],
+    "nuisance_controls": [
+      "Keep optical power, timing and stimulated/nonstimulated support matched.",
+      "Freeze exact target mean/trajectory reduction and handling of seven empty rows per order.",
+      "Prevent leakage through averaged test responses or repeated panels of the same acquisition.",
+      "Separate source-summary prediction from trial variability and physical evoked-response claims."
+    ],
+    "uncertainty": "Descriptive acquisition-level differences only until mouse/session independence is established.1132 ROI rows and2264 occurrences are not biological replicate counts; unknown reused acquisitions prohibit pooled animal intervals.",
+    "failure_policy": "Require complete12-context identity and defined support before private grading; preserve empty source rows as declared invalid/undefined rather than silently dropping them. Reject shape/unit/frame mismatches and nonfinite outputs. No score from the unscored producer manifest alone."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-037/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-037/implementations/registered-runtime/manifest.json"
+    ],
+    "scorer_target": "No executable scorer is present. Retained metadata declares one_complete12_collection_unscored and a separate original private grader, so exact response reduction/normalization are unverified despite source scope counts.",
+    "target_fidelity": "unresolved",
+    "delivered_scope": "Manifest-only full12 acquisition-local condition-mean declaration. Original code/data audit supports source availability but does not provide the finite producer/grader in this checkout.",
+    "missing": [
+      "Recover finite response target, normalization/empty-row policy, exact IDs, producer and grader.",
+      "Resolve acquisition→mouse/session identity and source physical time axis.",
+      "Implement separate broader visual/opto-combination condition only if its actual observations and outcomes are available."
+    ],
+    "execution_evidence": "Exact full12 adapter is marked not_run; source controls do not establish native execution, measured scores or population uncertainty."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present.",
+      "boundary": "Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
+      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget.",
+      "boundary": "Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout.",
+      "boundary": "Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "Recover the named source/dependency closure and exact public input contract before executing or scoring."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "source_audit",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-037/historical/task.pre-understanding.v1.json",
+      "sha256": "22089e2d6622883a5cef93ea12fd21ea2038243211d846a259e074db73046588",
+      "supports": "Preserved original source audit: source measurements, provenance, units, biological identities, caveats and reference entrypoints. Reused as verified source evidence; not proof of current execution."
+    },
+    {
+      "id": "declaration",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-037/implementations/registered-runtime/manifest.json",
+      "sha256": "e2f12d8e3a3437a83b288ac86434b729e8e3e428132bddb82aae3ebcf938aa8e",
+      "supports": "Historical declared scope, score/run status and actual external-source prerequisites; current tree inspection confirms which executable paths are absent."
+    },
+    {
+      "id": "source_paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1016/j.neuron.2025.12.024",
+      "locator": "Source paper and original task’s retained source audit",
+      "supports": "Scientific measurement and paradigm provenance. The source paper is not treated as a correctness answer or proof of task execution."
+    },
+    {
+      "id": "source_data",
+      "kind": "primary_source",
+      "url": "https://zenodo.org/records/18726362",
+      "locator": "Versioned author archive metadata; record checked2026-11-16 without fetching biological payloads",
+      "supports": "Current primary author-data record and immutable archive identity; code/data content claims use preserved original audits and inspected local implementation."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Exact full12 adapter is marked not_run; source controls do not establish native execution, measured scores or population uncertainty.",
+    "excluded_claims": [
+      "No cross-animal generalization or independent-animal uncertainty.",
+      "No full visual/opto catalogue completion.",
+      "No millisecond response-window or original-paper reproduction claim from native frame indices.",
+      "Programme performance is not evidence of direct-observation or typed-viewer understanding."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Replace broad visual/opto/animal-transfer wording with the declared within-acquisition condition endpoint.",
+      "Separate native-frame response prediction from physical onset inference.",
+      "Retain full1132-row lineage and explicit empty-row uncertainty without pretending the absent scorer is delivered."
+    ],
+    "source_review": "Read original definition/source audit, assigned README and exact current registry-owned implementation inventory; inspected actual scorer/loader where delivered and searched task/shared source for missing declared paths. Rechecked primary author-data metadata only; no biological payload or model run."
+  }
+}

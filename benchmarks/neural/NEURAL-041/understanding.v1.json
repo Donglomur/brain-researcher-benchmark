@@ -1,0 +1,258 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-041",
+  "title": "Working-memory load decoding",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "delivered_named_scope",
+  "disposition_reason": "The source implements full held-patient load prediction,training-only adaptive investigation,matched references and independent scoring. Authentic roster,clinical/preprocessing decisions,provider/profile and complete qualification remain external and unissued; a source-complete predictor is not an executed or scientifically qualified benchmark.",
+  "scientific_target": {
+    "question": "Do equal-duration maintenance LFP and/or spike observations predict low versus high memory load in entirely held patients beyond modality availability,rate and power comparators?",
+    "target_kind": "observation_decoding",
+    "known_answer": "Original trial load:low=1 versus high=3; submit one p_high for every eligible original maintenance interval.",
+    "answer_origin": "Evaluator-only NWB trial load metadata,joined to the original interval and authenticated patient/session provenance. The labels are task conditions,not PAC significance or correctness labels.",
+    "case_unit": "One held-patient episode containing every eligible trial from all that patient sessions; predictions are per original2.5s maintenance interval.",
+    "independent_unit": "Patient; declared36 people with44 sessions,not channels,trials or sessions as independent participants.",
+    "inference_scope": "Cross-patient memory-load classification from a specified retrospective maintenance window. Source preprocessing can share spike/LFP information and may have acausal temporal support; crop timing alone does not prove online causal access.",
+    "exclusions": [
+      "No PAC/coupling result from decoder accuracy.",
+      "No clinical diagnostic or causal maintenance mechanism claim.",
+      "No native no-tools understanding from adaptive Python strategy hooks or programme scores."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Per-trial LFP arrays in volts with1000 samples at400Hz over[maintenance,maintenance+2.5s),plus area indices.",
+      "Relative spike times in[0,2.5s),ragged unit offsets and region indices; five source regions are hippocampus,amygdala,preSMA,dACC,vmPFC.",
+      "Training views add only training load labels and opaque patient groups; prediction views contain frozen model state and query epochs without targets."
+    ],
+    "forbidden_inputs": [
+      "Original patient/session identifiers,trial order,absolute clocks,load,correctness,PicIDs,probe/phase fields,encoding counts and source event files in query views.",
+      "PAC significance,category selectivity,correctness or firing-rate selection used to define decoder eligibility.",
+      "Query-based normalization/calibration/refitting or access to held labels; undeclared post-probe signal support."
+    ],
+    "case_identity": "Source-private identity binds patient/session/original trial. Public IDs are keyed32-hex tokens,with normalized timestamps and opaque-ID ordering. Exact authentic roster and emitted IDs are external and unissued.",
+    "split": "Implemented outer leave-one-patient-out and inner whole-patient tuning; all sessions of each patient stay grouped. Fit/investigation capsules access training patients only; frozen query prediction follows.",
+    "coverage": "Source declaration is44 sessions/36 patients/140 trials per session with70 per load before eligibility. Every asset/trial requires disposition; patients lacking eligible trials or both classes fail complete qualification. Six mode/arm cells and five references per patient are conditions,not additional benchmarks."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Patient-macro balanced accuracy at p_high>=0.5",
+      "direction": "higher",
+      "aggregation": "Pool eligible trials across sessions within each patient,compute two-class balanced accuracy,then equal mean over all expected patients. No unsupported patient/class is silently deleted.",
+      "rationale": "Measures recovery of withheld memory-load labels across people while avoiding large-session/patient dominance."
+    },
+    "secondary": [
+      "Patient-macro binary log loss with1e-15 clipping; report full per-patient class denominators.",
+      "Paired differences against availability-only,rate-only,power-only and combined references.",
+      "Independent scalar recomputation of aggregate metrics to1e-12 and complete actor/source/model/prediction lineage."
+    ],
+    "comparators": [
+      {
+        "name": "Patient-weighted class prior",
+        "inputs": "Outer-training patient load frequencies only",
+        "procedure": "Implemented equal-total-patient-weight prior; no neural signal."
+      },
+      {
+        "name": "Availability-only logistic reference",
+        "inputs": "Eligible LFP channel and spike-unit counts by region",
+        "procedure": "Implemented nuisance diagnostic with train-only missing indicators/imputation/scaling and nested whole-patient C selection; must not be called neural competence."
+      },
+      {
+        "name": "Rate-only,power-only and combined logistic references",
+        "inputs": "Per-area log1p spike rates and/or fixed Welch log-band-power summaries from allowed epochs",
+        "procedure": "Implemented train-only robust transforms,patient weights,inner equal-patient log-loss selection over C=.01,.1,1,10,100; convergence required,all folds retained."
+      }
+    ],
+    "nuisance_controls": [
+      "Keep all prospectively eligible regions/modalities; no hippocampus-only or PAC-derived selected cohort.",
+      "Modality-element artifacts may remove an element while retaining the trial if another allowed modality remains; availability-only comparison tests resulting clinical/missingness confounding.",
+      "Hide trial order and mapping cues,including the source-declared mapping reversal after trial70.",
+      "Authenticate upstream spike interpolation/filtering/clock support; LFP and spike combination is not independent-modality biological evidence.",
+      "Group patient sessions and fit every transform/calibration using outer-training people only."
+    ],
+    "uncertainty": "Prospective paired10000-resample patient bootstrap uses frozen cross-validated predictions and one draw bank. It omits refitting variation and has overlapping-training limitations; report patient differences and descriptive uncertainty without trial/channel pseudoreplication.",
+    "failure_policy": "Exact complete eligible trial-ID coverage and finite p_high in[0,1]required. Missing/single-class patients,missing source assets,nonconverged references or target barrier failures invalidate complete qualification; keep every exclusion and failed cell visible."
+  },
+  "implementation": {
+    "scorer_target": "score.score_cell scores authentic held-trial load labels as patient-macro balanced accuracy and log loss; this is a genuine neural-to-behavioral-condition prediction target,not the source paper PAC analysis.",
+    "target_fidelity": "full_target",
+    "delivered_scope": "Complete proposed preparation,training-only fit/adaptation,source-matched reference and target-last scoring source for the existing decoder endpoint; external authentic inputs and provider qualification are absent. Training-only investigative recipe construction is preserved as a programme condition; it does not supply per-query tool-assisted interpretation.",
+    "missing": [
+      "Authenticated full roster/identity key,per-element clinical/artifact/preprocessing decisions and observed eligible class support.",
+      "Whole-source source-clock/filter support qualification,provider/native profile and actual resource measurement.",
+      "Authentic reference competence,independent numerical verification and participant model trials."
+    ],
+    "execution_evidence": "Retained SCIENCE contract explicitly records no scientific run,acquired cohort,qualified reference or active execution. This revision adds no empirical result; schema/strategy code is not model reasoning evidence.",
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-041/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/contracts/SCIENCE.md",
+      "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/score.py",
+      "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/reference.py",
+      "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/actor_api.py",
+      "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/epoch_io.py",
+      "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/score_check.py",
+      "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/worker.py",
+      "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/campaign.py"
+    ]
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "No-tools interpretation could use faithfully rendered/summarized maintenance neural observations under a separately frozen representation. Existing epoch arrays are input data for numeric actors,not a delivered direct observer.",
+      "boundary": "Do not expose load/order/probe metadata; preserve the same complete query target and calibration allocation.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Direct representation and response collection have not been implemented."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No typed LFP/spike viewer exists for this task. Any future viewer must retain relevant timing and region information without leaking original trial labels.",
+      "boundary": "Typed actions only,no hidden labels/extra metadata/raw-array shortcuts; fixed action budget.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Task-specific rendering/transport and full answer coverage."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "No per-query tool-assisted investigation is delivered. Existing case-adaptive source investigates training-patient observations only and freezes its recipe before held-patient prediction.",
+      "boundary": "Worker investigate uses TrainingAPI without query access; held-patient queries execute only the sealed module.predict path. This is training-stage method construction, not held-observation investigation.",
+      "evidence_ids": [
+        "implementation-1",
+        "implementation-4",
+        "participant-route-1",
+        "participant-route-2"
+      ],
+      "missing": [
+        "Qualified provider/model identity/call accounting and authentic model execution remain absent.",
+        "A participant-facing investigation episode with permitted held-query observations and bounded tool actions is not implemented."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Source implements fixed candidate programmes and training-only adaptive recipe construction, followed by frozen held-patient prediction. Five fixed references are separate comparators.",
+      "boundary": "Method and adaptation recipe bound before study; target barrier closes all outputs before protected scoring.",
+      "evidence_ids": [
+        "implementation-2",
+        "implementation-3",
+        "participant-route-1",
+        "participant-route-2"
+      ],
+      "missing": [
+        "External roster/profile,authentic checks and active isolated execution remain unissued."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original-definition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-041/historical/task.pre-understanding.v1.json",
+      "sha256": "7e5cffea5c1b69be2e6c04256a662632ee459428a73f644d38ada2e5d4229353",
+      "supports": "Exact original registered scientific contract inspected before revision; binding preserves these bytes."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/contracts/SCIENCE.md",
+      "sha256": "e98b933799765272b500f49299a6c77029877dd9e82fbcec774d93e1b447f04c",
+      "supports": "Detailed verified source-to-decoder mapping,prospective source scope,44/36 declarations and all external qualification limitations."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/score.py",
+      "sha256": "5ef6889680db1569d4dd9fde8da523c0ebc14ebe7c8a1faf5542226e796afa60",
+      "supports": "Complete patient/trial load scoring and biological aggregation."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/reference.py",
+      "sha256": "553adb5c94ca973f0409300c084df8a6e9f2284abb364d87684d3f2cf554a18c",
+      "supports": "Five fixed prospective nuisance/neural references,nested training-patient fitting and no query transform fitting."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/actor_api.py",
+      "sha256": "91eaab0657e09927823080d64b04e8a17e53a92f4b36a46bfcd3d9bcfa872dc0",
+      "supports": "Source actor interface supporting training-only method operations and held-query prediction."
+    },
+    {
+      "id": "implementation-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/epoch_io.py",
+      "sha256": "6adbc42353bca185777c3f207385f24921fc4bf9b10ed53f5982a72ed4a4d6e0",
+      "supports": "Actor epoch waveform/spike format and protected semantic validation."
+    },
+    {
+      "id": "implementation-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/score_check.py",
+      "sha256": "50e8d7efe761654ae2f2b97088b1032c7744a0e4108622bb5d6f84fd470ebf2a",
+      "supports": "Independent scalar metric checker,not a measured authentic parity result."
+    },
+    {
+      "id": "primary-1",
+      "kind": "primary_source",
+      "url": "https://dandiarchive.org/dandiset/000673/0.240118.2135",
+      "locator": "Fixed SBCAT archive snapshot; retained source contracts",
+      "supports": "Human intracranial working-memory recordings,declared44 sessions/36 patients; exact eligible cohort is not established by archive counts."
+    },
+    {
+      "id": "primary-2",
+      "kind": "primary_source",
+      "url": "https://github.com/rutishauserlab/SBCAT-release-NWB/tree/a25e8cc3f61630a428f190381745257d4506f148",
+      "locator": "Pinned author MATLAB analysis tree; retained SCIENCE/source audit mapping",
+      "supports": "Provides maintenance/LFP/spike/PAC source semantics. Selected author PAC examples are not full-cohort decoder or prospective estimator gold."
+    },
+    {
+      "id": "primary-3",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1038/s41586-024-07309-z",
+      "locator": "Daume et al. source paper; retained detailed source review",
+      "supports": "Working-memory PAC biology motivates the acquisition; benchmark decoding and selected prospective correctness contrasts require their own declared estimands."
+    },
+    {
+      "id": "participant-route-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/worker.py",
+      "sha256": "e26301e3752d1883eda3e87050580936252fe828ef7bb8af2420fb73973114d7",
+      "supports": "Actual participant source execution exposes investigate/build,fit and predict stages; adaptive authored method freezes before query prediction."
+    },
+    {
+      "id": "participant-route-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-041/implementations/registered-runtime/runtime/source/campaign.py",
+      "sha256": "0dc4c2cebb6a5a4bea709580f6390dbc3fdc487cf7d789606d98d18a75ed71b7",
+      "supports": "Actual Engine/Transport/worker F/I schedule,training-only adaptive freeze and complete target-last barrier."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human result is established by the inspected task source. The repository historical neural pilot concerned NEURAL-007 and NEURAL-077 programmes, not this task.",
+    "excluded_claims": [
+      "No human or model score,clinical validity or scientific qualification.",
+      "No PAC biology from load decoding;no direct understanding from programme/adaptive hook source."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Distinguished actual load-prediction scorer from neighboring PAC reconstruction and retained all-region/all-modality eligibility.",
+      "Specified true target/units,complete patient grouping,availability-only nuisance comparison and upstream temporal-support limitation.",
+      "Made training-only adaptive investigation distinct from query-driven adaptation and absent direct/viewer delivery.",
+      "Pinned actual participant worker/controller source behind the declared fixed/adaptive mode; source availability still grants no execution qualification.",
+      "Classify training-only recipe investigation under programme construction; per-query tool-assisted mode is not delivered, consistently with NEURAL-053/056/057."
+    ],
+    "source_review": "Inspected original task,actual macro scorer/reference source and detailed primary-source science contract; independent read-only review covered schema,epoch IO,actor API and scalar checker. No authentic cohort values or labels read."
+  }
+}

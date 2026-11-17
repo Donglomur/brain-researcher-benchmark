@@ -1,0 +1,198 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-005",
+  "title": "ERP contribution to subsequent social choice",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical developer controls remain scoped engineering evidence; this revision runs no model and does not turn source inspection into a performance result.",
+    "excluded_claims": [
+      "Same-row source-paper regression reproduction is calibration for a different temporal endpoint.",
+      "No causal ERP contribution, prospective online availability, or independent ERP-trial identity claim.",
+      "Seven exposed development people do not establish population confirmation."
+    ]
+  },
+  "disposition_reason": "The source scores 816 next-round choices from seven exposed development people and retains descriptive matched-view assessment. This is a genuine behavioral prediction target, but the offline ERP join and historical prefix controller do not establish independently aligned online EEG or the original full-cohort question.",
+  "scientific_target": {
+    "question": "Do the provided offline ERP features improve prediction of the next recorded choice beyond the completed behavioral prefix under matched frozen procedures?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "Next consecutive round accept/reject in the same five-round partner episode: 0 accept, 1 reject. The target is the next round, not the published same-row choice association.",
+    "answer_origin": "Author BEH_ug.csv next-round choice after the frozen consecutive-round join; processed ERP columns are positionally joined and independently verified ERP event identity remains unresolved.",
+    "case_unit": "One current participant:episode:round prefix followed by its next-round binary choice; a person is the evaluation episode.",
+    "independent_unit": "Participant, with partner episodes and consecutive rounds dependent within person.",
+    "inference_scope": "Descriptive held-person predictive contribution of supplied processed features for specified procedures, conditional on the positional ERP join; no physiological or causal effect.",
+    "exclusions": [
+      "Same-row source-paper regression reproduction is calibration for a different temporal endpoint.",
+      "No causal ERP contribution, prospective online availability, or independent ERP-trial identity claim.",
+      "Seven exposed development people do not establish population confirmation."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Completed current-trial prefix: 50 history variables; optional three prestimulus ERP baselines (53 variables) and four offer ERP terms (57 variables total).",
+      "Training-only features and labels from 26 people / 3,254 training examples under the historical fixed panel; all views use common seven-ERP-complete support."
+    ],
+    "forbidden_inputs": [
+      "Next-round choice, later prefixes or future rounds before prediction commitment.",
+      "Complete development table, source outcomes, private predictions, held-person labels or reference scores."
+    ],
+    "case_identity": "Public cases.json fixes 816 participant:episode:round identities across seven people. The parser requires original episode 1..36 and current round 1..4; each identity appears once.",
+    "split": "Historical 26-person training / seven-person exposed development scope; training-only tuning. Wider 41-person source does not authorize merging reserved people or treating the seven as pristine.",
+    "coverage": "One task, three matched views, 2,448 predictions and 21 person/view protocols in the descriptive comparison. Static single-panel scorer accepts all 816 cases; it does not itself run all three candidate views or enforce chronology."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "equal_participant_all_erp_log_loss",
+      "direction": "lower",
+      "aggregation": "Binary log loss in nats averaged within each of the seven people, then equally across people; existing clipping epsilon 1e-15 retained.",
+      "rationale": "Rewards calibrated predictions of recorded behavior; a large ERP-minus-history difference alone could be created by weakening history and must not replace absolute performance."
+    },
+    "secondary": [
+      "Brier score, per-person support and mean-probability calibration error; AUROC remains undefined for one-class people while they remain in primary loss.",
+      "All three absolute history/prestimulus/all-ERP losses and training-person-macro prior.",
+      "Paired history minus all-ERP, history minus prestimulus, and prestimulus minus all-ERP loss differences, including negative results."
+    ],
+    "comparators": [
+      {
+        "name": "training_participant_macro_prior",
+        "inputs": "Training choice labels only.",
+        "procedure": "Existing contribution contract requires the equal-person training prior; no development prevalence fitting."
+      },
+      {
+        "name": "history / prestimulus / all_erp",
+        "inputs": "Same training rows, same prefixes and nested 50/53/57-variable views.",
+        "procedure": "Existing fixed references and matched-view adapter; candidate recipe/tuning must be held comparable across views, with each probability committed before next reveal."
+      }
+    ],
+    "nuisance_controls": [
+      "Keep partner episode and round chronology; no adjacent-round random split.",
+      "Use common support checked before view masking; differences in missingness must not explain a view gain.",
+      "Exact within-person full-history randomization is infeasible: episode and round make all 816 strata singletons. Do not label an unchanged permutation a null test or substitute arbitrary bins.",
+      "Any future conditional ERP null needs a justified joint conditional distribution and sequential model fitted on training data."
+    ],
+    "uncertainty": "Retain all seven person differences and seven leave-one-person-out descriptive means. Current assessment supplies no calibrated interval or p-value; trials are not independent participants.",
+    "failure_policy": "Require every exact public identity once and finite numeric probability in [0,1] before private target decoding. Reject duplicate/missing/extra rows and fields. Do not discard failed people or manufacture a zero scientific score for operator failure."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-005/implementations/registered-runtime/grader.py",
+      "benchmarks/neural/NEURAL-005/implementations/registered-runtime/probability_metrics.py",
+      "benchmarks/neural/NEURAL-005/implementations/registered-runtime/instruction.md",
+      "benchmarks/neural/NEURAL-005/implementations/predictive-contribution/scientific_contribution.py",
+      "benchmarks/neural/NEURAL-005/implementations/predictive-contribution/CONTRACT.json"
+    ],
+    "scorer_target": "grader.py validates the 816-case probability panel then scores actual next-round choices; scientific_contribution.assess checks a separately admitted complete matched-view report and computes descriptive loss differences. Neither validates the causal meaning of ERP features.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Public scorer, strict probability arithmetic, fixed public case IDs and matched-report arithmetic exist. Historical manifest declares prefix-program developer controls; exact local assets/runtime and prefix delivery must be re-established before a new run.",
+    "missing": [
+      "Authenticate ERP trial identity independently of positional concatenation.",
+      "Reconnect and qualify complete matched-view prefix execution, training provenance and source assets at the chosen operator environment.",
+      "Predeclare any broader cohort or genuine confirmation protocol without reusing exposed development labels."
+    ],
+    "execution_evidence": "Historical manifest reports developer controls and saved metric checks; this revision inspected source only. The report adapter itself accepts authenticated inputs by contract and cannot prove their provenance."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric current-prefix task using the same processed features, with each next-round probability committed before later prefix release.",
+      "boundary": "Only current prefix and declared demonstrations; no reference predictions or future rounds.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered isolated no-tools response collector or matched direct-model run."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed plots of exactly the permitted processed ERP amplitudes and completed behavioral history. This would be visual interpretation of neural summaries, not raw EEG waveform interpretation.",
+      "boundary": "Render only the lawful current prefix; no next-round outcomes, later prefixes or hidden ERP source metadata. Changing to raw EEG would require independently aligned source epochs and a declared observation condition.",
+      "evidence_ids": [],
+      "missing": [
+        "No typed summary renderer, restricted participant transport or complete paired response collector for this task."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-person sequential investigation of matched numeric prefixes with fixed numerical/model tools.",
+      "boundary": "Same view, training data and cumulative budget as the chosen comparator; no private feedback.",
+      "evidence_ids": [],
+      "missing": [
+        "Current static scorer and report adapter do not deliver a complete adaptive candidate episode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted prefix predictor, applied fresh per held person; the public static scorer is a separate output consumer.",
+      "boundary": "Historical source commitment and sequential reveal must be established by the separately bound runner; finished probability files do not establish this.",
+      "evidence_ids": [
+        "runtime_manifest",
+        "instruction"
+      ],
+      "missing": [
+        "Historical prefix programme is declared in manifest, but its complete runner/dependency closure is absent from the public task package; restore and qualify current execution."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "grader",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-005/implementations/registered-runtime/grader.py",
+      "sha256": "3d599283e1708d67aea006453543b75ba98caaa00468df3bae1cb00f0cd881d6",
+      "supports": "Exact 816-case target scoring and public validation before private decoding."
+    },
+    {
+      "id": "metrics",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-005/implementations/registered-runtime/probability_metrics.py",
+      "sha256": "6d073425605cc876f1220a60f24fc6ab60b910736b33d40f09c69e7ac9f570bc",
+      "supports": "Equal-person probability losses and signed comparisons."
+    },
+    {
+      "id": "instruction",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-005/implementations/registered-runtime/instruction.md",
+      "sha256": "a7f601e85f3a72356f6c192f8b8df96d89db2ec223d911a070fdc7d5dee9dae6",
+      "supports": "Next-round target, restricted current prefix and offline ERP limitations."
+    },
+    {
+      "id": "runtime_manifest",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-005/implementations/registered-runtime/manifest.json",
+      "sha256": "6021e99bb2b4dee2b832470a9d5ffed04ea15a25463ddf8419a96396b8cdfcb9",
+      "supports": "Historical programme controls and 26/7 scope; declarations are not new runtime qualification."
+    },
+    {
+      "id": "contribution",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-005/implementations/predictive-contribution/CONTRACT.json",
+      "sha256": "2fa2a546621972e95b925bb947a50035aa9739c7ae9c47ee4e32dc781d5d3bd2",
+      "supports": "Matched view support and infeasible exact-history randomization."
+    },
+    {
+      "id": "contribution_source",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-005/implementations/predictive-contribution/scientific_contribution.py",
+      "sha256": "79eb31aaee8ac3118e1fc53166088239c2dcc2d552b6d6d225b8c01d1ae122ea",
+      "supports": "Full-support report validation and descriptive estimand."
+    },
+    {
+      "id": "author_analysis",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/jpheffne/2025_epe_eeg/4f5767df1516e0ec3c234d51ba36e4b741eb60e8/analysis/eeg_epe_ms.Rmd",
+      "locator": "Figure 2B analysis, lines 381–418; Figure 3 construction, lines 204–212",
+      "supports": "Author same-row choice models and positional column concatenation; next-round prediction is an explicit extension. Reopened 2026-11-16."
+    }
+  ],
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Makes recorded next-round behavior the known answer and identifies the difference from the published same-row endpoint.",
+      "Retains absolute loss as primary and explicitly disallows singleton history permutation as evidence for a neural contribution.",
+      "Separates the usable target scorer from report arithmetic and historically declared programme delivery."
+    ],
+    "source_review": "Inspected public target grader, metric implementation, complete matched-contribution adapter and historical runtime declaration; reopened the pinned author R analysis without reading data labels."
+  }
+}

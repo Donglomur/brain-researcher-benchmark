@@ -1,0 +1,216 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-DISC-20261114-VOLTRON-SPIKES",
+  "title": "Optical voltage trace to independently recorded spike timing across complete cell recordings",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/historical/task.pre-understanding.v1.json",
+      "sha256": "ddc189697c3d5e9a4abe7dcfaad8506070fe34177dc4edeec2f7a4ae0a2f4a2f",
+      "supports": "Preserved older task bytes, including historical seven-mouse/six-title-token uncertainty and nominal-rate formulation."
+    },
+    {
+      "id": "census",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/docs/data-scope.md",
+      "sha256": "4f35ee70bf4be8b001d227e1cd9c40c817f69d7c40e4353891f1917af1c01c54",
+      "supports": "Complete metadata census establishes six declared subjects, twelve cells, 34 movies and native-time successor direction; physical signals remain undecoded."
+    },
+    {
+      "id": "evaluator",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-native-frame-events-v1/event_score.py",
+      "sha256": "781e3c625cd6d694392886ec94730314fe2d2fb98857ded7afa3a47a2cfcede2",
+      "supports": "Six-subject/12-cell/34-movie complete native-frame scoring with exact 5-ms one-to-one matching, grouped F1 and private representation ceiling."
+    },
+    {
+      "id": "interface",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-native-frame-events-v1/CONTRACT.md",
+      "sha256": "ff9866f0462a8e846f3c0dad874570858bdd7b18228a749bc78512bcbb41f104",
+      "supports": "Explicit current prospective endpoint, input/output contracts and generated-control limitations."
+    },
+    {
+      "id": "clock_review",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-complete-spike-events/clock_ephys/REPORT.md",
+      "sha256": "93d55f901ff29c0285672a564cfb6eede70ea9ab25f4442729b4342d9ef6b4d5",
+      "supports": "Retained notebook/source inspection: frame centers already use electrical time; deposited 10-kHz export differs from paper acquisition; no recovered electrical spike detector."
+    },
+    {
+      "id": "paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1016/j.celrep.2021.108954",
+      "locator": "Primary acquisition paper; inspected method passages retained in clock/electrical report",
+      "supports": "Optical/electrical voltage comparison; the historical five-cell smoothed waveform-RMS comparison differs from the prospective event-F1 endpoint."
+    },
+    {
+      "id": "collection",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.25378/janelia.c.5325254.v1",
+      "locator": "Versioned Janelia collection; complete metadata census retained in data-scope review",
+      "supports": "Deposited twelve-cell collection and original optical/electrical recordings."
+    },
+    {
+      "id": "loader",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.25378/janelia.14141609.v1",
+      "locator": "Author using_ground_truth_data.ipynb; complete 21-cell source inspection retained in clock/electrical report",
+      "supports": "Exposure-midpoint frame times relative to electrophysiology and time/voltage/stimulus sweep channels."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Existing source and generated engineering controls are preserved. No authentic model comparison, direct-observation trial, typed-viewer trial or human performance result is established for this registration.",
+    "excluded_claims": [
+      "Raw-video understanding, paper waveform reproduction, authentic spike detection or human-equivalent accuracy.",
+      "Six metadata subject groups treated as independently validated mice or electrical exactness treated as physical clock certainty."
+    ]
+  },
+  "disposition_reason": "The current six-subject native-frame event scorer is delivered as a source component. This revision adopts its explicit 12-cell/34-movie deposited scope and replaces the stale nominal-clock/seven-group assumptions. Authentic optical extraction, electrical reference events and participant access remain unqualified.",
+  "scientific_target": {
+    "question": "Across all 34 deposited movies from twelve cells in six declared subjects, can optical-only voltage traces identify independently adjudicated electrical spike events in a subject excluded from fitting?",
+    "target_kind": "measurement_reconstruction",
+    "known_answer": "Electrophysiological spike-event times at authentic electrical sample locations, adjudicated independently of optical predictions; the present repository has no complete qualified event reference.",
+    "answer_origin": "Original whole-cell voltage sweeps, with electrical-only event and valid-support annotation fixed before optical predictions. The author notebook supplies channel/time semantics but no recoverable spike detector; reference production is a prospective benchmark procedure.",
+    "case_unit": "One complete movie, partitioned into exhaustive nonoverlapping optical frame cores for submission and reassembled before event matching.",
+    "independent_unit": "Six deposited subject groups from the complete metadata census; verify the biological grouping before population inference. Twelve cells and 34 movies are nested, not independent subjects.",
+    "inference_scope": "Derived optical-trace spike reconstruction at native frame-center resolution, with at most one predicted event per frame. It neither evaluates raw-video understanding nor reproduces the paper’s waveform-RMS comparison.",
+    "exclusions": [
+      "No seven-animal score from the historical mathematical interface; paper seven-mouse discrepancy remains disclosed.",
+      "No subframe spike localization or same-frame multiplicity claim.",
+      "No physical clock validation from exact arithmetic or metadata alone."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Complete optical voltage trace from label-independent ROI/background/motion processing, native exposure-midpoint timestamps and optical-only quality support. Trace preparation is not yet qualified.",
+      "Known indicator polarity/exposure and identical training-cell calibration across all six held-subject folds. Native frame values must be preserved; nominal 400/1000 Hz are stratum labels only."
+    ],
+    "forbidden_inputs": [
+      "Patch voltage, injected-current channel, held spike annotations or electrically optimized ROI/denoising/templates/thresholds.",
+      "Electrical-derived support/representation-ceiling events, held-subject calibration outcomes or original answer-bearing source names."
+    ],
+    "case_identity": "Current scorer requires exactly 12 opaque cells, 34 opaque movies and exhaustive core_id frame partitions, joined privately to six subjects and six outer_folds. Authentic public packet/opaque map is not delivered; hashes identify supplied artifacts rather than establish biological provenance.",
+    "split": "The native-frame scorer requires one outer fold per declared subject with every other subject’s cells as training cells; all movies follow their cell’s subject. Calibrate optical comparators on training/development only. This verifies a supplied map, not independent animal identity or training behavior.",
+    "coverage": "All twelve deposited cells and all 34 movies, including extraction failures, partial validity and undefined cells. Metadata census replaces filename-only six-token observation; paper methods’ seven-mouse count remains an unresolved source discrepancy. Full signal decoding and optical/electrical support are not established."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Six subject-specific equal-cell event F1 values",
+      "direction": "higher",
+      "aggregation": "Match predicted native frame centers to electrical events at inclusive exact 5 ms with maximum-cardinality one-to-one matching inside each connected valid interval; sum TP/FP/FN over all movies of a cell, compute cell F1, then equally weight cells within each subject. No cross-subject primary scalar.",
+      "rationale": "Scores independent electrical event recovery without empty-window inflation, movie fragmentation or high-rate-cell dominance; all biological groups remain visible."
+    },
+    "secondary": [
+      "Precision, recall, false events per valid minute, deterministic matched latency and absolute latency.",
+      "Complete/valid duration, failed/partial/unscorable movies and predictions outside valid support at movie/cell/subject levels.",
+      "Nominal 400/1000-Hz metadata strata, observed-only subject means explicitly secondary.",
+      "Evaluator-private output-representation recall/F1 ceiling from matching every eligible native frame center after all predictions are frozen; this is not optical recoverability."
+    ],
+    "comparators": [
+      {
+        "name": "Optical MAD threshold",
+        "inputs": "Identical optical traces, native clocks and permitted training calibration.",
+        "procedure": "Required optical_mad prediction role; fit threshold/refractory policy only on training subjects. Scorer authenticates complete artifacts, not their producer or competence."
+      },
+      {
+        "name": "Optical matched filter",
+        "inputs": "Same trace-only substrate and training labels.",
+        "procedure": "Required optical_matched_filter role with train-only templates/thresholds; no electrical test template selection."
+      },
+      {
+        "name": "Metadata/rate prior",
+        "inputs": "Only permitted polarity/exposure/camera metadata and training event rate.",
+        "procedure": "Required metadata_rate role; controls gain available without the optical waveform. A full-video VolPy pipeline is richer-input auxiliary unless trace parity is proved."
+      }
+    ],
+    "nuisance_controls": [
+      "Within-movie optical-to-patch block reassignment preserving duration and nuisance strata; complete recording support required.",
+      "Keep actual stored exposure-midpoint clock; do not add movie/sweep start twice or replace it with a nominal grid.",
+      "Resolve deposited 10-kHz electrical export versus paper 100-kHz acquisition and acquisition-filter metadata; do not infer anti-aliasing or physical synchronization.",
+      "Electrical-only blinded reference/quality decisions precede optical predictions; keep source gaps and failed extraction rather than choose easy intervals."
+    ],
+    "uncertainty": "Primary is six individual subject-specific vectors and paired comparator differences, including negative/undefined values. Scorer supplies no significance or improvement threshold. Any later uncertainty must resample verified subjects and preserve nested cells/movies.",
+    "failure_policy": "Every role must submit every core with sorted unique literal frame indices, at most one event per frame; invalid submissions are rejected before private reference access. Empty/empty F1 is undefined, not perfect. Undefined cells keep the full subject mean undefined; extraction failures and unscorable coverage never disappear."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/docs/data-scope.md",
+      "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-native-frame-events-v1/event_score.py",
+      "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-native-frame-events-v1/CONTRACT.md",
+      "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-complete-spike-events/clock_ephys/REPORT.md"
+    ],
+    "scorer_target": "Prospective native-frame spike-event endpoint, not the historical seven-group integer-grid scorer or source-paper waveform RMS. grade captures all candidate/comparator predictions before one private callback and returns six subject F1 vectors plus coverage.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Exact arithmetic event-scoring library, complete metadata census and bounded structural clock/electrical decoder source. Generated tests cover matching, coverage, malformed input and undefined outcomes; no authentic optical/electrical inference is established.",
+    "missing": [
+      "Complete authentic optical trace producer with independently justified patched-cell ROI and motion/exposure history.",
+      "Native time/voltage/stimulus decoding and electrical-only spike/support annotation with physical alignment review.",
+      "Qualified train-only comparator producers and protected direct/viewer/tool/program participant transports."
+    ],
+    "execution_evidence": "Existing generated controls and metadata/source review are documented; no authentic signal model evaluation or new model/human experiment was performed in this revision."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed numeric or fixed waveform-image optical trace tiles retaining complete frame cores and declared context halos.",
+      "boundary": "No tools and no patch channel; outputs remain native frame indices with at most one event per frame. Full-frame coverage must match programme arms.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No authentic optical trace packets, direct image/numeric transport or full response collection."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed optical trace viewer with native time axis, polarity/exposure and bounded zoom.",
+      "boundary": "Only optical observations; electrical labels, private validity, raw hidden channels and representation ceiling stay evaluator-only.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No typed viewer/action protocol or image delivery for this registration."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-movie numerical optical event analysis with fixed permitted tools/checkpoints.",
+      "boundary": "Same trace/calibration/halo substrate as other arms; richer-video processing is a separately labelled condition; no score feedback during held inference.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No per-case investigation runner, authentic matched packets or resource logs."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted optical trace-to-frame-event programme plus train-only calibration recipe.",
+      "boundary": "Scorer requires programme/calibration digests and complete predictions but does not execute or verify the producer; freeze before held-subject access.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No qualified optical comparator/candidate producer or protected programme execution."
+      ]
+    }
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Adopts complete six-deposited-subject/twelve-cell/34-movie native-frame scope and preserves historical seven-mouse discrepancy.",
+      "Corrects known-answer status: electrical event annotations are not recovered author labels; their independent production remains required.",
+      "Makes one-event-per-native-frame output resolution, exact connected-interval matching and undefined-cell handling explicit.",
+      "Separates derived-trace interpretation from raw-video assistance and scorer-only programme digest fields from actual execution."
+    ],
+    "source_review": "Reviewed original definition, complete metadata scope report, native event source/contract and complete retained clock/electrical source review. Primary paper/collection/loader evidence reused from those verified records; no new payload acquisition."
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-088",
+  "title": "Functional similarity and measured synaptic anatomy",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "design_only",
+  "disposition_reason": "The current public task directory ships only a preserved runtime declaration; the referenced programme and native grader bodies are absent. The historical panel and endpoint are useful design constraints, but cannot establish delivered scoring or runnable access. Recover the exact programme/grader closure and versioned empirical mapping before execution.",
+  "scientific_target": {
+    "question": "How accurately can anatomical inputs plus measured functional correlation predict observed synapse counts on endpoint-disjoint directed neuron pairs, and does a fixed comparison support an incremental functional association?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "Observed nonnegative integer n_synapses for each directed pair, plus a signed held-out loss contrast for independently fixed anatomy-only versus anatomy-plus-functional procedures. This revision selects count rather than leaving count/conversion/cleft-volume outcomes interchangeable.",
+    "answer_origin": "Versioned EM synapse table joined to eligible presynaptic/postsynaptic cells and measured in-vivo functional correlation. The current declaration states the intended processed endpoint; its source data and mapping are not bundled or reverified.",
+    "case_unit": "One directed presynaptic-to-postsynaptic neuron pair; paired input views refer to the same target.",
+    "independent_unit": "One source mouse. Neuron endpoints and spatial blocks describe within-mouse dependence;6691 pairs and21 query presynaptic units are not independent animals.",
+    "inference_scope": "Historically exposed development-panel association within one source-selected mouse and observed reconstruction support. A processed functional correlation is neural-derived information, but cannot demonstrate direct interpretation of raw calcium or a causal wiring rule.",
+    "exclusions": [
+      "True absence of synapses from zero entries without reconstruction/coverage eligibility.",
+      "Physiological synaptic strength from anatomical counts, cleft volume or conversion rate.",
+      "Raw-neural understanding from processed correlation features.",
+      "Independent-animal replication, unseen-test performance or causal functional connectivity."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Prespecified anatomical geometry, cell type, axon-dendrite co-travel opportunity and reconstruction-quality variables; exact columns need recovered source verification.",
+      "Paired anatomy_plus_in_vivo view adds measured functional correlation only; functional feature calculation must be fixed without query anatomical targets."
+    ],
+    "forbidden_inputs": [
+      "Query synapse counts and binary labels, partner/root IDs as predictors, target-derived selection summaries and saved answer tables.",
+      "Different preprocessing, covariate support or query pair eligibility between paired views.",
+      "Unlabeled-target-batch adaptation or endpoint overlap not explicitly allowed by the frozen protocol."
+    ],
+    "case_identity": "Historical manifest declares a complete6691 query-pair panel,97717 fit rows and7429 validation rows, shared withNEURAL-087/088. Exact pair IDs, materialization version and mapping are absent from the public task package; counts remain declared historical scope, not reauthenticated data.",
+    "split": "Historical declaration requires endpoint-disjoint training/validation/query and two fresh contexts for one committed programme. The implementation bodies and ID membership needed to verify endpoint disjointness are absent. Future source recovery must preserve the historical partition or explicitly declare a new panel.",
+    "coverage": "One historical selected mouse and all 6691 query pairs per view;088 declaration identifies21 query presynaptic units. Two information views and two related targets do not establish new cohorts. Complete original raw-functional/structural contract remains unfulfilled."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Equal-presynaptic joint-view Poisson deviance (revised proposed endpoint)",
+      "direction": "lower",
+      "aggregation": "Average pair losses within each query presynaptic unit, then weight query presynaptic units equally; include the entire frozen pair universe with declared sampling weights.",
+      "rationale": "Use nonnegative finite predicted counts with a frozen positive rate floor to score counts including zeros; report absolute joint-view performance, not a manipulable candidate-vs-self gain. The historical declaration says joint loss but does not expose its formula, so Poisson deviance is a transparent proposed current target, not a claim about the absent grader."
+    },
+    "secondary": [
+      "Mean absolute count error, count-stratified residuals and zero/nonzero calibration; report overdispersion and sensitivity to a training-only negative-binomial reference.",
+      "Signed independent fixed anatomy-only minus anatomy-plus-functional loss contrast; retain negative and null results.",
+      "Candidate same-information performance versus independently fixed joint-view reference; candidate self-contrast descriptive only."
+    ],
+    "comparators": [
+      {
+        "name": "Fixed anatomy-only reference (proposed; not delivered)",
+        "inputs": "Geometry, cell types, co-travel opportunity, quality and identical eligibility/missingness support.",
+        "procedure": "Freeze regularized logistic regression for087 or count-link regression for088; select regularization/dispersion from training/validation only, then lock before query access."
+      },
+      {
+        "name": "Fixed anatomy-plus-functional reference (proposed; not delivered)",
+        "inputs": "All anatomy-only inputs plus measured in-vivo correlation from a versioned neural/structural join.",
+        "procedure": "Use the same model family and fitting budget as the anatomy reference; freeze both externally so an investigator cannot choose a weak baseline."
+      },
+      {
+        "name": "Matched functional shuffle diagnostic (proposed)",
+        "inputs": "Functional correlation reassigned only within preregistered geometry/type/quality strata while all anatomical covariates and support stay fixed.",
+        "procedure": "Report aligned-versus-shuffled difference as a diagnostic with neuron/spatial dependence, not as a guaranteed exchangeable causal null."
+      }
+    ],
+    "nuisance_controls": [
+      "Freeze materialization and root-ID correspondence across function, synapses and reconstruction-quality tables; repeated observations of an EM neuron stay grouped.",
+      "Define eligible negatives using observed neurite coverage, boundaries and quality; do not classify every unobserved pair as a true biological negative.",
+      "Separate somatic distance from axon-dendrite co-travel/contact opportunity.",
+      "Enforce endpoint-disjoint and spatially grouped evaluation; disallow root-ID memorization.",
+      "Audit functional selection and public historical label exposure; disclose the shared087/088cohort."
+    ],
+    "uncertainty": "Within-mouse endpoint-aware or spatial-block resampling and per-presynaptic-unit results are descriptive; use the same resamples for fixed paired comparisons. One animal cannot supply animal-population confidence. Resampling design and coverage sensitivity must be frozen before authentic evaluation.",
+    "failure_policy": "Require one finite valid prediction for every exact query-pair ID in each paired view; reject duplicate/extra/missing IDs and out-of-range probabilities or invalid count rates. Unverified eligibility/mapping yields no qualified score. Preserve failures rather than scoring a favorable subset."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-088/implementations/registered-runtime/manifest.json"
+    ],
+    "scorer_target": "Declared held-out anatomical synapse-count prediction, absolute joint loss primary and paired view contrast secondary. No actual scorer body is present, and exact historical loss formula is not established from the manifest.",
+    "target_fidelity": "unresolved",
+    "delivered_scope": "Only preserved registered-runtime/manifest.json is shipped for this task. It refers to historical programme/package locations and explicitly has empty score entrypoints and no standalone scoring adapter.",
+    "missing": [
+      "Recover and pin the complete referenced programme, scorer and input ABI; do not treat manifest command strings as runnable implementation.",
+      "Verify versioned functional/structural mapping, empirical pair IDs and negative eligibility against actual inputs.",
+      "Reproduce fixed comparator calculations and exact metric semantics on complete authenticated development support.",
+      "Provide matched case-adaptive/direct/viewer boundaries if those modes are later studied."
+    ],
+    "execution_evidence": "Manifest preserves historical evidence descriptors and nontransfer of qualification to the preferred central source. This revision did not read those external evidence bodies, run the programme or grade neural data."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A declared pair-level functional summary and anatomy table could support numeric probability/count judgments; raw tuning trace delivery would be a different observation condition.",
+      "boundary": "Future presentation must hide partner IDs and target tables, fix the finite paired support and disclose demonstration access.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "No participant observation packet or direct-response scorer."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential permitted functional-tuning/correlation and spatial-geometry views; no task renderer or typed interface is shipped.",
+      "boundary": "No query synapse anatomy or target-derived connectome overlay in participant images; rendered views must match allowed inputs.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "No typed action schema, authentic rendering or response collection."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Potential per-case numerical/model analysis of the identical functional/anatomical pair inputs; manifest only declares a frozen programme route.",
+      "boundary": "Same observations and tools/budget for matched comparisons, no evaluator feedback or unrestricted source lookup.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "No inspected case-adaptive implementation or verified supplied-model comparison."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Manifest describes one committed programme invoked afresh on anatomy and anatomy_plus_in_vivo with all 6691 pairs. Referenced programme bodies are not shipped.",
+      "boundary": "Freeze method and adaptation recipe before query; two fresh contexts and complete paired outputs precede separate native grading.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "Missing referenced programme closure, standalone native grader and qualified input/runtime bridge."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-088/historical/task.pre-understanding.v1.json",
+      "sha256": "6ad03e4e54bd4f227b6336c3a1fb30fc800ae9b0f9c7833d04da7d06ab054c0a",
+      "supports": "Preserved original target, source audit conclusions and limits; this revision does not retroactively replace prior evidence."
+    },
+    {
+      "id": "declaration",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-088/implementations/registered-runtime/manifest.json",
+      "sha256": "c0ec43b7a6bb9a8f4d81bb21644327708941b56ae0415a0b3d7d5fd9241c4ada",
+      "supports": "Historical declaration of endpoint-disjoint one-mouse panel and paired programme views; no standalone scorer or bundled referenced programme."
+    },
+    {
+      "id": "microns_paper",
+      "kind": "primary_source",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11981939/",
+      "locator": "Functional connectomics spanning multiple areas of mouse visual cortex; primary data paper",
+      "supports": "Functional measurements and EM anatomy in the MICrONS source; these observational measurements do not make synapse count physiological efficacy."
+    },
+    {
+      "id": "synapse_tutorial",
+      "kind": "primary_source",
+      "url": "https://tutorial.microns-explorer.org/quickstart_notebooks/04-cave-query-synapses.html",
+      "locator": "Official CAVE Query: Synaptic Connectivity tutorial",
+      "supports": "Directed neuron-pair synapse counts are obtained by grouping pre/post root IDs; version-consistent materialization and reconstruction quality matter."
+    },
+    {
+      "id": "functional_access",
+      "kind": "primary_source",
+      "url": "https://github.com/cajal/microns-nda-access",
+      "locator": "Official functional-data access README; inspected2026-11-16",
+      "supports": "Functional database and phase3 schema access are distinct from the absent benchmark programme/grader package."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical manifest may describe exposed-development construction and prior evidence, but its evidence bodies and preferred-source execution were not independently requalified here. No new model/direct/viewer trial or human result.",
+    "excluded_claims": [
+      "True absence of synapses from zero entries without reconstruction/coverage eligibility.",
+      "Physiological synaptic strength from anatomical counts, cleft volume or conversion rate.",
+      "Raw-neural understanding from processed correlation features.",
+      "Independent-animal replication, unseen-test performance or causal functional connectivity."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Distinguish a preserved runtime declaration from an actually bundled implementation; no source-body readiness from historical path names.",
+      "Anchor known answer to observed directed-pair connectivity/counts and keep negative eligibility and single-animal limitations explicit.",
+      "Use absolute independent-comparator performance rather than rewarding a weakenable candidate anatomy control.",
+      "Select synapse count as the declared anatomical endpoint; identify proposed loss explicitly because the historical scorer is absent."
+    ],
+    "source_review": "Original registration, installed source and primary source references reviewed; no authentic input or private target read."
+  }
+}

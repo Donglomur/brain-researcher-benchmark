@@ -1,0 +1,226 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-021",
+  "title": "Somatosensory hand-velocity decoding",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The full 92 trajectory producer source and deferred scorer exist, but no authentic complete producer/deferred-grade run or runtime qualification is established. The source targets retrospective velocity reconstruction with condition context, not prospective causal forecasting.",
+  "scientific_target": {
+    "question": "How accurately can the same frozen neural decoder reconstruct complete hand-velocity trajectories for active and perturbed trials in one held-trial session panel?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "Measured x/y hand-velocity trajectory in m/s:30 bins per query, all 92 queries.",
+    "answer_origin": "Area 2_Bump Han 2017-12-07 behavioral measurements joined to exact operator-bound query generation.",
+    "case_unit": "One complete 30×2 velocity trajectory for a held trial.",
+    "independent_unit": "One Han macaque/session;52 active and 40 perturbed queries are nested cases.",
+    "inference_scope": "Retrospective batch hand-velocity decoding with source movement-onset alignment; the onset detector uses future acceleration and does not establish online causality.",
+    "exclusions": [
+      "Online prospective movement prediction.",
+      "Between-animal or hidden-label generalization.",
+      "Neural-information gain without a competent matched condition/time comparator."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "272 training trials and all 92 query trials,65 neural units with sixhistory bins supporting each 30-bin output trajectory.",
+      "Public queries include opaque qNNNN identity andactive/passive condition; permitted training labels and observation bundles follow the fixed producer selection."
+    ],
+    "forbidden_inputs": [
+      "Query velocity targets, raw target-bearing acquisition data, previous private results and unrelated task packets.",
+      "Assessment labels or feedback in source selection, fit-state generation or per-case adaptation."
+    ],
+    "case_identity": "Exact 92 query roster with qNNNN IDs bound by cases_sha256; every query must provide 30 pairs in source x/y order. The generic interface accepts 2…826 rows, while the actual producer/deferred-grade selection must bind all 92.",
+    "split": "272 training to 92 held queries(52 active/40 perturbation) from one session; fit state is sealed before batch inference. This is not a new animal or condition-held-out experiment.",
+    "coverage": "All 92 queries×30 bins×2 axes required in the actual frozen scope; a generic smaller schema-valid roster is not a completed 92 case task. Public labels were historically exposed."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "equal_condition_mean_variance_weighted_trajectory_R2",
+      "direction": "higher",
+      "aggregation": "Within active/passive, pool 30 bins over all trials and combine axis SSE/SST; average the two condition R2 scores equally.",
+      "rationale": "Both conditions remain visible; variance-weighted two-axis R2 differs from 019 uniform-axis R2 and cannot be silently pooled with it."
+    },
+    "secondary": [
+      "Per-condition/per-axis R2 and squared Euclidean loss in(m/s)^2.",
+      "Condition/time-only, neural-shuffle and neural decoder signed differences are required proposed controls, not supplied competent baseline results."
+    ],
+    "comparators": [
+      {
+        "name": "condition_time_template",
+        "inputs": "Training velocity, active/passive condition and relative time only.",
+        "procedure": "Proposed training-only per-condition trajectory template frozen before query; essential nuisance comparator, currently not qualified by the deferred grader."
+      },
+      {
+        "name": "fixed_neural_decoder_and_shuffle",
+        "inputs": "Same training observations and six-bin neural history.",
+        "procedure": "Proposed fixed ridge/linear readout and same-condition whole-trial neural shuffle using identical fit/selection budget; qualify on actual packet before interpreting neural gain."
+      }
+    ],
+    "nuisance_controls": [
+      "Match condition/time context across all arms.",
+      "Prevent future-acceleration onset alignment from being described as online prediction.",
+      "Bind all 92 queries, complete trajectories and exact fit-state/prediction commitments before target access."
+    ],
+    "uncertainty": "Report whole-trial/condition paired descriptive uncertainty in one session;30 bins are not 30 independent biological replicates.",
+    "failure_policy": "Complete public validation before any private loader: exact ID coverage,30×2 finite nonboolean velocities and case hash. Preserve negative R2. Constant-target/numeric-range-undefined R2 remain null with squared loss retained; no subset score."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-021/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-021/implementations/neural021-deferred-grade/README.md",
+      "benchmarks/neural/NEURAL-021/implementations/neural021-deferred-grade/science/private/scorer.py",
+      "benchmarks/neural/NEURAL-021/implementations/neural021-deferred-grade/producer/policy.py",
+      "benchmarks/neural/NEURAL-021/implementations/neural021-deferred-grade/science/public/interface.py",
+      "benchmarks/neural/NEURAL-021/implementations/neural021-deferred-grade/grade_completed.py",
+      "benchmarks/neural/NEURAL-021/implementations/registered-runtime/manifest.json"
+    ],
+    "scorer_target": "Complete measured velocity trajectories; no reference-output copying or paper-number reproduction. Deferred grader does not refit or execute the candidate.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Self-contained producer source, observer admission, public interface, numerical scorer and deferred-grade adapter; actual arrays, roster and external qualified execution are not bundled.",
+    "missing": [
+      "Qualify original producer lifecycle and independently observed natural closure under the full 92 scope.",
+      "Authenticate exact input/target generation and execute a complete protected deferred grade.",
+      "Establish fixed condition/time and signal-derived comparators on the same accessible data."
+    ],
+    "execution_evidence": "Generated 92 case controls test actual validation/grading APIs without authentic inputs or native/model calls. They do not establish an authentic CLI grade, native isolation or scientific performance."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed per-trial numerical counts or fixed raster with all 30×2 signed velocity values; no no-tools participant transport is supplied.",
+      "boundary": "Any future direct arm must receive exactly the selected permitted observation and calibrated units, with no decoder, Python, source lookup, target or score access.",
+      "evidence_ids": [],
+      "missing": [
+        "Freeze a feasible complete per-case observation and response representation without silently changing the target.",
+        "Deliver and qualify a no-tools transport and complete answer collector before a direct-understanding claim."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed typed raster/time-window inspection of the same selected neural observations; no viewer is delivered for this registration.",
+      "boundary": "Only admitted rendered views; raw numerical/model operations would belong to the tool-assisted condition. Query targets and source identities remain inaccessible.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement task-specific renderer, restricted actions and complete responses.",
+        "Verify rendered observations preserve required time/unit information and run a separately identified viewer evaluation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Only an external numerical investigation could currently produce the submission; the artifact scorer does not supply a case-adaptive participant loop.",
+      "boundary": "Match observations, calibration, decoder access and cumulative compute against the fixed programme; freeze shared preparation, reset case state and prevent target/score feedback.",
+      "evidence_ids": [],
+      "missing": [
+        "Deliver a bounded per-case participant loop with authenticated observation and answer lineage."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Precommitted executable and fitting recipe; training precedes query prediction.",
+      "boundary": "Freeze source, fitting, selection and permitted query adaptation before assessment access; authentic target custody and runtime qualification remain external.",
+      "evidence_ids": [
+        "implementation-3"
+      ],
+      "missing": [
+        "Qualify the actual external data/runtime source closure and complete programme execution."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-021/historical/task.pre-understanding.v1.json",
+      "sha256": "bf3fa3c1363cbef80a283125f7417698b4bef7b5246eb0346bdf869bb060d6e4",
+      "supports": "Original source definition, verified source header identities and acquisition-versus-organizer distinction."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-021/implementations/neural021-deferred-grade/README.md",
+      "sha256": "f7cee2f1c07ae5295b3e3230356baaac66dc0d5c85fd4c583be1480c74e96a28",
+      "supports": "Complete 272 training/92 query trajectory scope, deferred grade and source-only execution limits."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-021/implementations/neural021-deferred-grade/science/private/scorer.py",
+      "sha256": "4438468f22511986c71fda03621b207cf82c523ee910e8bc6760c174cb16bcf4",
+      "supports": "Condition-specific variance-weighted trajectory R2, squared loss and equal-condition mean."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-021/implementations/neural021-deferred-grade/producer/policy.py",
+      "sha256": "400beaf4fd05354d3291cdb5caf264cf188847ba7ce25745f47579daf3bfa20c",
+      "supports": "Original frozen-programme selection, fit/infer scopes and externally bound review requirements."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-021/implementations/neural021-deferred-grade/science/public/interface.py",
+      "sha256": "c748bdb0386713d505e1d5d79bec51645263b859471011df81f205168a6e61e2",
+      "supports": "Complete 30×2 trajectory validation and qNNNNidentities before target callback."
+    },
+    {
+      "id": "implementation-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-021/implementations/neural021-deferred-grade/grade_completed.py",
+      "sha256": "c975aa5fe68f2db5fe172d8928c836a457c16b32608ccc11bffcda8e2823ff0d",
+      "supports": "Deferred committed-output grading preserves original observer, source and target-generation binding."
+    },
+    {
+      "id": "implementation-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-021/implementations/registered-runtime/manifest.json",
+      "sha256": "de2c5cfa7fa9907b1839574fa95e8e3c7b401472ee493798aa36c413bfe604b4",
+      "supports": "Historical unqualified frozen-programme registration and 272/92/65/30/6 scope."
+    },
+    {
+      "id": "acquisition-paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.7554/eLife.48198",
+      "locator": "Original source paper identified by verified task source audit",
+      "supports": "Primary acquisition study; source of measured neural and behavioral variables, not a native-understanding benchmark."
+    },
+    {
+      "id": "source-data",
+      "kind": "primary_source",
+      "url": "https://dandiarchive.org/dandiset/000127/0.220113.0359",
+      "locator": "Versioned DANDI acquisition record",
+      "supports": "Versioned dataset and biological-session identity."
+    },
+    {
+      "id": "organizer-metric",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/evaluation.py",
+      "locator": "evaluate, bits_per_spike and velocity_decoding; source pinned at 42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "supports": "Organizer code defines co-smoothing, forward-rate likelihood and train/readout velocity scoring."
+    },
+    {
+      "id": "public-exposure",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/main/README.md",
+      "locator": "README overview and other resources; checked 2026-11-16",
+      "supports": "Organizer README states former test ground truth was made public in January 2026."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical source declarations and software/reference controls retain their original scope; this revision inspects source and conducts no model or human trial.",
+    "excluded_claims": [
+      "No direct-observation or viewer model performance is established.",
+      "Public source labels and earlier exposed development scores do not constitute an untouched final test."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Bind full 92 trajectory scope rather than treating generic public schema acceptance as task completion.",
+      "Correct primary aggregation to condition-specific variance-weighted R2 with an equal-condition mean.",
+      "Declare retrospective onset alignment and missing nuisance comparators; distinguish available programme source from qualified execution."
+    ],
+    "source_review": "Original contract, named current implementation source, source-specific local documentation, and pinned organizer evaluation inspected. Official README checked 2026-11-16 for public target exposure."
+  }
+}

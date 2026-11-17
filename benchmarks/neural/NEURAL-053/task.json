@@ -16,11 +16,11 @@
     ],
     "task_family": "visual_identification"
   },
-  "scientific_question": "Can MEG distinguish object categories on unseen exemplars while controlling shared image identity?",
+  "scientific_question": "Do fixed 100–300 ms MEG summaries identify known THINGS concepts on held people and held images beyond ocular and missingness information?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Category scores in a fixed prespecified temporal summary."
+    "One of 1,854 source concept IDs for each experimental image/epoch, with exactly two held images per concept and held person."
   ],
   "input_assets": {
     "routes": [
@@ -65,19 +65,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "CTF MEG sensor recordings (.ds/.meg4) plus channel,head position and trigger metadata",
-    "allowed_context": "Actual events.tsv: onset,duration,trial_type,things_category_nr,value,sample; sample_attributes_P*.csv provides epoch metadata",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Pinned loader replaces trigger sample positions with optical-sensor-corrected event sample column; filters0.1–40Hz,epochs−0.1to1.3s,downsamples200Hz.",
-    "source_contract_evidence": "BIDS dataset_description/participants/events and S3 recording manifest inspected; pinned preprocessing source accesses those fields"
+    "inputs": [
+      "271 MEG means over 100≤t<300 ms plus 271 finite fractions (542 neural features).",
+      "Three eye-tracker means plus three finite fractions (6 ocular); joint548; neural_availability271 in current V4.",
+      "Training labels/classes and opaque group identifiers only within the isolated held-person view."
+    ],
+    "forbidden_inputs": [
+      "Query concept/image IDs, event sequence, session/run names, response keys or stimulus marker channels.",
+      "Other folds, query-label feedback, held-person fitting or query-batch transduction."
+    ],
+    "case_identity": "Current cohort creates HMAC-derived opaque aliases; source BIGMEG1–4 identities remain operator-side. Each fold requires 3,708 queries and 55,620 training rows.",
+    "split": "Hold one person and two globally grouped images per concept out; train on three people × ten other images per concept. Current training selection uses 15 crossed participant/image-group folds; all transformations fit within training only.",
+    "coverage": "88,992 experimental rows across four people, 48 sessions, 480 runs. V4 requires 96 candidate plus64 independent-reference prediction matrices across four arms. Full source/header joins are still unverified, including BIGMEG4 session02."
   },
-  "biological_unit": "participants.tsv explicitly lists BIGMEG1–4;12sessions per participant",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Four people BIGMEG1–4; classes, repeated source images and programme replications do not add biological people.",
+  "case_definition": "One held-person/feature-arm inference context; image epochs are nested queries.",
   "split": {
-    "policy": "Group repeated image identities/concepts; whole sessions and participant holdouts; preserve source-corrected trigger timing.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Hold one person and two globally grouped images per concept out; train on three people × ten other images per concept. Current training selection uses 15 crossed participant/image-group folds; all transformations fit within training only.",
+    "coverage": "88,992 experimental rows across four people, 48 sessions, 480 runs. V4 requires 96 candidate plus64 independent-reference prediction matrices across four arms. Full source/header joins are still unverified, including BIGMEG4 session02."
   },
   "reference": {
     "source_code_url": "https://github.com/ViCCo-Group/THINGS-data/tree/main/MEG",
@@ -93,50 +98,101 @@
     "data_url": "https://openneuro.org/datasets/ds004212"
   },
   "controls": [
-    "Image/concept grouping",
-    "eye-movement and image-prior references",
-    "corrected onset",
-    "no stimulus labels in queries."
+    "Use actual processed FIF headers for271 remaining sensors, not erroneous BIDS channel type fields.",
+    "Missing sensor/eye data are explicit finite fractions; preserve every query rather than deleting low-quality held cases.",
+    "Repeat/image identities globally grouped and query order opaque; disclose public source exposure."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A no-tools summary interpretation condition is conceivable but absent.",
+      "boundary": "Current model receives analysis tools/training summaries, not a direct query observation protocol.",
+      "evidence_ids": [],
+      "missing": [
+        "Define a separate source-faithful compact view and comparable answer key."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No rendered-MEG viewer is supplied.",
+      "boundary": "A future viewer must preserve exact summary/temporal information and hide source markers.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement typed render/answer transport."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "No per-query tool-assisted investigation is delivered. Current training_investigation uses permitted summary arrays and tools before query prediction.",
+      "boundary": "This is training-stage investigation; no arbitrary per-query analysis code or query-batch fitting.",
+      "evidence_ids": [
+        "e2",
+        "e3",
+        "e5"
+      ],
+      "missing": [
+        "Qualify actual provider/context execution and resources.",
+        "Implement a participant-facing held-query investigation condition if this capability is required; do not relabel training-only investigation as query interpretation."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Current fixed_program predicts full four-arm panels from frozen training state.",
+      "boundary": "Source and fit/selection recipe frozen before query; isolated folds and target-last complete scoring.",
+      "evidence_ids": [
+        "e2",
+        "e3",
+        "e7"
+      ],
+      "missing": [
+        "Authenticate full inputs and native execution."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro balanced accuracy; temporal curves remain secondary.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Equal-person class-balanced neural Top-1 accuracy",
+      "direction": "higher",
+      "aggregation": "Within each person average its two queries per concept, then 1,854 concepts equally, then four people equally; report each mode/replication separately.",
+      "rationale": "Scores authentic observed-image concept targets while preventing class/subject support imbalance."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Class-balanced Top-5 and natural-log loss, with zero true-class probability retained as infinity.",
+      "Neural-minus-ocular, joint-minus-ocular and neural-minus-availability paired contrasts.",
+      "Candidate-minus-training-selected reference and training-investigation-minus-fixed-program contrasts; three computational replications remain nonbiological."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Training-selected ridge/LDA/Fourier-ridge bank",
+        "inputs": "Exactly matching training-only arm features/labels",
+        "procedure": "Implemented source chooses among three competent-family candidates using inner folds; centroid also retained as a separate reference."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Ocular and neural-availability controls",
+        "inputs": "Matched queries with six eye features or271 finite-fraction features",
+        "procedure": "Implemented four-arm comparisons distinguish neural signal from eye activity and missingness."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Uniform and training-frequency priors",
+        "inputs": "Complete equal-class support",
+        "procedure": "Implemented closed-form priors after exact full-support admission; no extra fitting."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Use actual processed FIF headers for271 remaining sensors, not erroneous BIDS channel type fields.",
+      "Missing sensor/eye data are explicit finite fractions; preserve every query rather than deleting low-quality held cases.",
+      "Repeat/image identities globally grouped and query order opaque; disclose public source exposure."
+    ],
+    "uncertainty": "All four person differences and 256 enumerated person bootstrap resamples are descriptive; shared stimuli and n=4 limit population claims.",
+    "failure_policy": "All160 exact matrices and execution/method receipts must validate before target access; reject missing/extra IDs, invalid probabilities or absent classes. No clipping/renormalization or partial-panel promotion.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "73848f57b54d1e452c07b8d6a58545f6ea18e5016d7fac25105b238f1febe386",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "8625f4e54764a380276290291a4743eee578d5aaac7205e1dadf684a3c8f3347"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -217,6 +273,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

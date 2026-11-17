@@ -4,7 +4,7 @@
   "track": "neural",
   "title": "Patch-identified neuron localization under channel degradation",
   "registration_date": "2026-11-14",
-  "scientific_question": "Can a general agent localize an identified extracellular spike source from multichannel waveforms and assess how channel degradation changes accuracy and reliability?",
+  "scientific_question": "Can multichannel extracellular waveforms localize a patch-identified source near its approximate spatial reference under the complete fixed channel-degradation trajectory?",
   "skill_dimensions": {
     "tool_use": "Parse waveforms and geometry with correct units; execute fixed scientific analyses.",
     "neural_understanding": "Use spatial action-potential structure, probe geometry, noise and reference uncertainty.",
@@ -202,5 +202,131 @@
     "performance_or_SOTA_claim": false
   },
   "counting": "One dataset-family draft. Methods, cells, spikes, folds, conditions, controls and source versions do not add benchmarks.",
-  "evidence_scope": "Projection of accepted localization contract V3 and its independent source review at registration. Later notebook investigations are outside this frozen specification until independently reviewed."
+  "evidence_scope": "Projection of accepted localization contract V3 and its independent source review at registration. Later notebook investigations are outside this frozen specification until independently reviewed.",
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "Two-coordinate nearest-contact spatial proxy in verified probe-plane micrometres; strict Euclidean error < 50 µm is the registered accuracy convention, not known ground-truth precision."
+  ],
+  "biological_unit": "Verified animal with cells/recordings nested; 11 selected paired cells are not assumed 11 animals.",
+  "case_definition": "A selected cell×degradation condition×noise realization with every requested spike/template row.",
+  "allowed_inputs": {
+    "inputs": [
+      "Admitted complete multichannel waveforms/templates, probe geometry with ordered axes in µm, sampling/voltage units and permitted support masks.",
+      "Every requested spike/template across 11 cells×16 conditions×5 realizations; identical geometry and source support across methods."
+    ],
+    "forbidden_inputs": [
+      "Reference coordinates, patch/probe calibration that reveals them, answer-bearing source IDs or notebook outputs.",
+      "Private noise masks/seeds in the unknown-mask condition; target-conditioned retries."
+    ],
+    "case_identity": "Normalized manifest supplies opaque case_id/request_id/condition IDs and authenticated artifact hashes; 880 complete cases and all requested rows are validated. Actual original waveform/channel/animal joins remain external.",
+    "split": "Keep full cell degradation trajectory together; group repeated recordings and verified animal overlaps. Proposed grouped development/test split is not a random spike split and must be frozen after authentic animal joins.",
+    "coverage": "Delivered scorer/control enforce 880 logical cases and every spike/template request. This is selected 11-pair support; native payload and complete source-normalizer qualification are not established."
+  },
+  "split": {
+    "policy": "Keep full cell degradation trajectory together; group repeated recordings and verified animal overlaps. Proposed grouped development/test split is not a random spike split and must be frozen after authentic animal joins.",
+    "coverage": "Delivered scorer/control enforce 880 logical cases and every spike/template request. This is selected 11-pair support; native payload and complete source-normalizer qualification are not established."
+  },
+  "controls": [
+    "Absolute error alongside stability; constant centroid can have zero drift and poor localization.",
+    "Shared predeclared corruption masks/seeds,50 µV noise distinguished from biological failure.",
+    "Channel permutation with geometry fixed; destroyed waveforms retaining metadata; frozen development mean coordinate.",
+    "Coordinate-axis/voltage-unit consistency and complete nearest-contact proxy/index provenance."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential numeric or spatial waveform display for one identified source.",
+      "boundary": "Would need complete waveform/geometry representation; current native/program claim cannot be inferred from scoring outputs.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Complete direct observation packet and no-tools response interface."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A probe-geometry-linked multichannel waveform viewer is scientifically plausible.",
+      "boundary": "Restrict to permitted signals and geometry; never show nearest-contact target or private degradation mask.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Typed waveform/geometry actions and target-free renderer."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-case waveform localization with fixed scientific tools.",
+      "boundary": "Same inputs/compute; no target-conditioned retries or author cached answers.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Actual investigator transport, admitted waveform methods and runtime boundary."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Existing frozen-program hash submission ABI and executable geometry-centroid programme.",
+      "boundary": "The supplied centroid programme is a fixed geometry-only negative-control producer. It supplies no candidate module/callback or frozen participant lifecycle.",
+      "evidence_ids": [
+        "implementation-1",
+        "implementation-2"
+      ],
+      "missing": [
+        "Competent waveform programmes, authentic normalized inputs and qualified executor.",
+        "A genuine candidate executable/predictor lifecycle with frozen input scope and captured complete outputs. Fixed reference or negative-control source alone is insufficient."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Group-balanced spike localization accuracy at strict error < 50 µm",
+      "direction": "higher",
+      "aggregation": "All requested spikes per cell/condition, equal cells within recording, recordings within animal, animals within condition, then equal conditions. Templates scored separately.",
+      "rationale": "Prevents many spikes or cells from one animal dominating and separates approximate absolute accuracy from trivially stable estimates."
+    },
+    "secondary": [
+      "All 16 condition degradation curves and every independent group result.",
+      "Continuous cell/condition median error and hierarchical summary.",
+      "Template absolute accuracy/error separately and stability against own undegraded template.",
+      "Complete support/failure ledger and resource use."
+    ],
+    "comparators": [
+      {
+        "name": "Geometry centroid negative control",
+        "inputs": "All probe contact coordinates only; no waveforms, masks or target bodies.",
+        "procedure": "Delivered producer takes arithmetic mean of all contacts and emits same estimate for every request. A fixed, stable floor, explicitly not a competent waveform baseline."
+      },
+      {
+        "name": "COM, monopolar triangulation and grid convolution",
+        "inputs": "Identical waveform/template/geometry support.",
+        "procedure": "Proposed competent author-method comparison after dependency/callgraph, defaults, mean/median template and fixed target-independent attempts are qualified. Truth-conditioned retry behavior, if active, must be separate historical diagnostic."
+      }
+    ],
+    "nuisance_controls": [
+      "Absolute error alongside stability; constant centroid can have zero drift and poor localization.",
+      "Shared predeclared corruption masks/seeds,50 µV noise distinguished from biological failure.",
+      "Channel permutation with geometry fixed; destroyed waveforms retaining metadata; frozen development mean coordinate.",
+      "Coordinate-axis/voltage-unit consistency and complete nearest-contact proxy/index provenance."
+    ],
+    "uncertainty": "Paired verified independent group differences; report all small-cohort groups and use bootstrap only when group count supports it. No spike-level confidence inflation.",
+    "failure_policy": "Any missing/extra/duplicate/invalid required row or changed programme identity is a protocol failure with no headline score. Keep complete requested denominators and valid-row diagnostics; never score only the successful intersection.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "2b902940fe6d39bf41ec109adc3b386c70c94418770e5daa9693fe98eacecdea",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "0ac263619ad8daaba5eb074348bb6fb95f34a18207329467070cbcd380a147fe"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  }
 }

@@ -1,0 +1,272 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-072",
+  "track": "neural",
+  "title": "Contextual linguistic information beyond acoustics",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-H005"
+    ],
+    "titles": [
+      "Narratives"
+    ],
+    "overlap_groups": [
+      "ds002345"
+    ],
+    "task_family": "natural_language_fmri"
+  },
+  "scientific_question": "In the same frozen within-listener held-story-family cases as071, do contextual features improve prediction over matched acoustic and lexical predictors?",
+  "task_type": "investigation",
+  "neural_role": "target",
+  "primary_outputs": [
+    "Signed nuisance-only versus lexical versus contextual held-out prediction contrasts with listener and story-family uncertainty; separately label any later new-listener extension."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://openneuro.org/datasets/ds002345",
+      "https://www.nature.com/articles/s41597-021-01033-3",
+      "https://github.com/snastase/narratives"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-H005",
+        "ledger": "catalog/datasets_fmri_eeg.json",
+        "record_sha256": "b93ff499315114e9f16347d48c219d8219f617d0a3548d5cc91ed6cb608041b6",
+        "data_manifest": null,
+        "recording_contract": null,
+        "status": null
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "proposed_scope": "Expected source-specific input: listener BOLD time series with timed story transcripts/acoustic features. Actual parcel/voxel and transcript alignment remain an admission gate.",
+    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
+    "schema_verified": false
+  },
+  "biological_unit": "participant; sessions/trials nested within participant",
+  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "split": {
+    "policy": "Use the same frozen within-listener story-family cases as NEURAL-071. Group every variant/retelling and repeated passage in one partition; keep feature-context and hemodynamic-lag support from crossing partition boundaries. Fit transforms and select models only on allowed training/development partitions. Report listener-macro and story-stratified contrasts. Exact story/scan membership and clock alignment remain gates; zero-shot new-listener transfer requires a separate alignment and calibration contract.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/snastase/narratives",
+    "commit_or_archive_version": null,
+    "entrypoints": [],
+    "role": "Pinned author preprocessing, timing and reliability source. ISC is not an encoding baseline; a separate source-locked encoder and clock adapter are required.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": "https://www.nature.com/articles/s41597-021-01033-3",
+    "data_url": "https://openneuro.org/datasets/ds002345"
+  },
+  "controls": [
+    "Equal feature capacity",
+    "lexical frequency/word rate",
+    "whole-story holdout",
+    "autocorrelation-preserving nulls."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Recomputed incremental held-out variance and numerical evidence verification.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": "Score verified numerical claims, declared estimands and held-out contrasts; null/inconclusive conclusions remain valid."
+    },
+    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
+    "basis": "Unmeasured estimate. Use bounded existing derivatives/reference features; full-source procurement and model training are not implied."
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Pin contextual checkpoint exposure and transcript timing; define participant-by-story inference units."
+    },
+    {
+      "id": "catalog_limit",
+      "requirement": "Collection includes multiple experiments; keep one catalog source and map story/participant overlaps before assessment."
+    },
+    {
+      "id": "source_inventory",
+      "requirement": "Retrieve bounded versioned manifests/schema and verify actual recording inputs, labels, alignment and biological identity; catalog identity alone is insufficient."
+    },
+    {
+      "id": "code_lock",
+      "requirement": "Pin exact official code revision/entrypoint and license, inspect loader-to-data compatibility, and select a meaningful signal-derived reference."
+    },
+    {
+      "id": "terms",
+      "requirement": "Audit data, stimulus, code and checkpoint access/redistribution terms before packet distribution."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+    },
+    {
+      "id": "execution",
+      "requirement": "Implement and run data adapter/evaluator/reference, matched controls and malformed-output tests; independently reproduce results before any validation claim."
+    },
+    {
+      "source_id": "D-H005",
+      "construction_gates": {
+        "kind": "coherent_metadata_and_clock_freeze_before_real_intake",
+        "requirements": [
+          "Resolve superdataset/subdataset gitlinks and annex content identities, not just current branch refs",
+          "Reconcile raw scan/derivative/participant membership and select CC0 canonical stories before forming train/dev/evaluation units",
+          "Freeze audio playback origin vs story intervals vs scanner clock vs HRF; do not use stale Lucy event_meta or outcome-optimized lag",
+          "Pin compatible reader/runtime, target atlas and strong predictive reference/checkpoint/feature lineage",
+          "Review distinct recording storage/runtime/retention budget before any signals are fetched"
+        ],
+        "concrete_loader_only_candidate": {
+          "subject": "sub-075",
+          "task": "merlin",
+          "basis": "public metadata only; CC0 audio declaration; no participant selected as held-out evaluation",
+          "bilateral_clean_fsaverage6_bytes": 269205144,
+          "left_bytes": 134602572,
+          "right_bytes": 134602572,
+          "small_EAC_clean_bytes": [
+            5784,
+            5669
+          ],
+          "warning": "EAC can qualify auditory clock only; cannot establish contextual language benchmark",
+          "asset_metadata": "metadata_summary.json/prospective_merlin_asset_metadata"
+        },
+        "real_input_download_authorized": false
+      }
+    }
+  ],
+  "next_implementation_action": [
+    "Reconcile derivative identities, participant membership and story/scanner clock before linguistic modeling."
+  ],
+  "construction_review": {
+    "checked_on": "2026-10-30",
+    "disposition": "reframe",
+    "reason": "Other-listener and other-story generalization are separate axes with unequal support and dependencies.",
+    "remaining_gates": [
+      "Freeze context direction, checkpoint and equal selection budgets.",
+      "Do not use reliability or lag outcomes for hidden evaluation selection.",
+      "Keep temporal nulls within run/story boundaries."
+    ],
+    "proposal": "authoring/neural-source-audits/contract-corrections-v2.json",
+    "proposal_sha256": "fe743219d97e5b428f828918bd8be294766dfe8f679f74fd60399eef3028d247",
+    "source_evidence": [
+      {
+        "path": "authoring/neural-source-audits/narratives-v1/audit.md",
+        "sha256": "4c733e93f72daffab75e7084f10f04254db1d8878bd054d7e099f799623d9636"
+      }
+    ],
+    "readiness_promoted": false
+  },
+  "source_audit_overlays": [
+    {
+      "source_id": "D-H005",
+      "name": "Narratives",
+      "assignment_ids": [
+        "NEURAL-071",
+        "NEURAL-072"
+      ],
+      "checked_on": "2026-10-30",
+      "audit_path": "authoring/neural-source-audits/narratives-v1/audit.json",
+      "narrative_path": "authoring/neural-source-audits/narratives-v1/audit.md",
+      "audit_scope": "Source, archive metadata and code inspection only; no recording or model payload and no scientific execution.",
+      "construction_implication": "Reconcile derivative identities, participant membership and story/scanner clock before linguistic modeling.",
+      "remaining_gates": {
+        "kind": "coherent_metadata_and_clock_freeze_before_real_intake",
+        "requirements": [
+          "Resolve superdataset/subdataset gitlinks and annex content identities, not just current branch refs",
+          "Reconcile raw scan/derivative/participant membership and select CC0 canonical stories before forming train/dev/evaluation units",
+          "Freeze audio playback origin vs story intervals vs scanner clock vs HRF; do not use stale Lucy event_meta or outcome-optimized lag",
+          "Pin compatible reader/runtime, target atlas and strong predictive reference/checkpoint/feature lineage",
+          "Review distinct recording storage/runtime/retention budget before any signals are fetched"
+        ],
+        "concrete_loader_only_candidate": {
+          "subject": "sub-075",
+          "task": "merlin",
+          "basis": "public metadata only; CC0 audio declaration; no participant selected as held-out evaluation",
+          "bilateral_clean_fsaverage6_bytes": 269205144,
+          "left_bytes": 134602572,
+          "right_bytes": 134602572,
+          "small_EAC_clean_bytes": [
+            5784,
+            5669
+          ],
+          "warning": "EAC can qualify auditory clock only; cannot establish contextual language benchmark",
+          "asset_metadata": "metadata_summary.json/prospective_merlin_asset_metadata"
+        },
+        "real_input_download_authorized": false
+      },
+      "explicit_response_body_bytes": 1376298,
+      "request_attempts": 58,
+      "request_wall_seconds_sum": 14.636308703979012,
+      "independent_source_cap_bytes": 2000000,
+      "roster_status_changed": false,
+      "reference_executed": false,
+      "scientific_admission": false
+    }
+  ],
+  "provenance": {
+    "canonical_record_sha256": "8ba69433a643a8787c7c9c77aba352b10752091cfc38bcf60b2a608367a8d783",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/catalog/datasets_fmri_eeg.json",
+        "bytes": 51328,
+        "sha256": "a326738f2752b9ed44eb88d5e056725adf9a08a23a4e96ccb855c851c47a4dd9"
+      },
+      {
+        "path": "authoring/neural-source-audits/narratives-v1/audit.json",
+        "bytes": 10707,
+        "sha256": "0f3dd8a6307a50e5f674e8062d06ce77035b73e3e394577a0fdd556798b12dfd"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

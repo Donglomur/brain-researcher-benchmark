@@ -16,11 +16,11 @@
     ],
     "task_family": "reward_learning"
   },
-  "scientific_question": "Do measured ERP amplitudes improve next-choice prediction beyond partner, outcome and affect history?",
+  "scientific_question": "Do the provided offline ERP features improve prediction of the next recorded choice beyond the completed behavioral prefix under matched frozen procedures?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Probability of the next recorded choice, linked within participant and block."
+    "Next consecutive round accept/reject in the same five-round partner episode: 0 accept, 1 reject. The target is the next round, not the published same-row choice association."
   ],
   "input_assets": {
     "routes": [
@@ -183,19 +183,23 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "7380 actual trial-level ERP amplitude measurements from41 people, plus41 public .set/.fdt cleaned continuous EEG pairs. Initial source-supported task starts at measured ERP amplitudes, not raw-signal preprocessing.",
-    "allowed_context": "Behavior table provides sub,trialGlobal,trialLocal,block,partnerID,choice,RT,experienced/expected reward,valence/arousal; central errors can be recalculated.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Official analysis binds ERP tables by original row order to behavior. Maintain hashes and construct checked sub/trialGlobal IDs before any reorder. Continuous-event-to-ERP extraction is not yet closed.",
-    "source_contract_evidence": "Actual small CSV headers, row counts and subject IDs checked; continuous archive manifest supplies sizes/digests; official R source consumes matching CSVs."
+    "inputs": [
+      "Completed current-trial prefix: 50 history variables; optional three prestimulus ERP baselines (53 variables) and four offer ERP terms (57 variables total).",
+      "Training-only features and labels from 26 people / 3,254 training examples under the historical fixed panel; all views use common seven-ERP-complete support."
+    ],
+    "forbidden_inputs": [
+      "Next-round choice, later prefixes or future rounds before prediction commitment.",
+      "Complete development table, source outcomes, private predictions, held-person labels or reference scores."
+    ],
+    "case_identity": "Public cases.json fixes 816 participant:episode:round identities across seven people. The parser requires original episode 1..36 and current round 1..4; each identity appears once.",
+    "split": "Historical 26-person training / seven-person exposed development scope; training-only tuning. Wider 41-person source does not authorize merging reserved people or treating the seven as pristine.",
+    "coverage": "One task, three matched views, 2,448 predictions and 21 person/view protocols in the descriptive comparison. Static single-panel scorer accepts all 816 cases; it does not itself run all three candidate views or enforce chronology."
   },
-  "biological_unit": "41 distinct sub IDs and41 EEG file pairs; repeated trials/partners are nested observations.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Participant, with partner episodes and consecutive rounds dependent within person.",
+  "case_definition": "One current participant:episode:round prefix followed by its next-round binary choice; a person is the evaluation episode.",
   "split": {
-    "policy": "Outer held-out participants; preserve partner/block chronology and all next-trial transitions; never randomly split adjacent history examples.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Historical 26-person training / seven-person exposed development scope; training-only tuning. Wider 41-person source does not authorize merging reserved people or treating the seven as pristine.",
+    "coverage": "One task, three matched views, 2,448 predictions and 21 person/view protocols in the descriptive comparison. Static single-panel scorer accepts all 816 cases; it does not itself run all three candidate views or enforce chronology."
   },
   "reference": {
     "source_code_url": "https://github.com/jpheffne/2025_epe_eeg",
@@ -212,49 +216,92 @@
     "data_url": "https://github.com/jpheffne/2025_epe_eeg/tree/4f5767df1516e0ec3c234d51ba36e4b741eb60e8/data/clean"
   },
   "controls": [
-    "Do not expose later choice or outcome",
-    "preserve partner/block history",
-    "permute ERP within matched histories."
+    "Keep partner episode and round chronology; no adjacent-round random split.",
+    "Use common support checked before view masking; differences in missingness must not explain a view gain.",
+    "Exact within-person full-history randomization is infeasible: episode and round make all 816 strata singletons. Do not label an unchanged permutation a null test or substitute arbitrary bins.",
+    "Any future conditional ERP null needs a justified joint conditional distribution and sequential model fitted on training data."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric current-prefix task using the same processed features, with each next-round probability committed before later prefix release.",
+      "boundary": "Only current prefix and declared demonstrations; no reference predictions or future rounds.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered isolated no-tools response collector or matched direct-model run."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed plots of exactly the permitted processed ERP amplitudes and completed behavioral history. This would be visual interpretation of neural summaries, not raw EEG waveform interpretation.",
+      "boundary": "Render only the lawful current prefix; no next-round outcomes, later prefixes or hidden ERP source metadata. Changing to raw EEG would require independently aligned source epochs and a declared observation condition.",
+      "evidence_ids": [],
+      "missing": [
+        "No typed summary renderer, restricted participant transport or complete paired response collector for this task."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-person sequential investigation of matched numeric prefixes with fixed numerical/model tools.",
+      "boundary": "Same view, training data and cumulative budget as the chosen comparator; no private feedback.",
+      "evidence_ids": [],
+      "missing": [
+        "Current static scorer and report adapter do not deliver a complete adaptive candidate episode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted prefix predictor, applied fresh per held person; the public static scorer is a separate output consumer.",
+      "boundary": "Historical source commitment and sequential reveal must be established by the separately bound runner; finished probability files do not establish this.",
+      "evidence_ids": [
+        "runtime_manifest",
+        "instruction"
+      ],
+      "missing": [
+        "Historical prefix programme is declared in manifest, but its complete runner/dependency closure is absent from the public task package; restore and qualify current execution."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro log loss improvement over a behavioral-history model.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "equal_participant_all_erp_log_loss",
+      "direction": "lower",
+      "aggregation": "Binary log loss in nats averaged within each of the seven people, then equally across people; existing clipping epsilon 1e-15 retained.",
+      "rationale": "Rewards calibrated predictions of recorded behavior; a large ERP-minus-history difference alone could be created by weakening history and must not replace absolute performance."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Brier score, per-person support and mean-probability calibration error; AUROC remains undefined for one-class people while they remain in primary loss.",
+      "All three absolute history/prestimulus/all-ERP losses and training-person-macro prior.",
+      "Paired history minus all-ERP, history minus prestimulus, and prestimulus minus all-ERP loss differences, including negative results."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "training_participant_macro_prior",
+        "inputs": "Training choice labels only.",
+        "procedure": "Existing contribution contract requires the equal-person training prior; no development prevalence fitting."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
-      },
-      {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "history / prestimulus / all_erp",
+        "inputs": "Same training rows, same prefixes and nested 50/53/57-variable views.",
+        "procedure": "Existing fixed references and matched-view adapter; candidate recipe/tuning must be held comparable across views, with each probability committed before next reveal."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Keep partner episode and round chronology; no adjacent-round random split.",
+      "Use common support checked before view masking; differences in missingness must not explain a view gain.",
+      "Exact within-person full-history randomization is infeasible: episode and round make all 816 strata singletons. Do not label an unchanged permutation a null test or substitute arbitrary bins.",
+      "Any future conditional ERP null needs a justified joint conditional distribution and sequential model fitted on training data."
+    ],
+    "uncertainty": "Retain all seven person differences and seven leave-one-person-out descriptive means. Current assessment supplies no calibrated interval or p-value; trials are not independent participants.",
+    "failure_policy": "Require every exact public identity once and finite numeric probability in [0,1] before private target decoding. Reject duplicate/missing/extra rows and fields. Do not discard failed people or manufacture a zero scientific score for operator failure.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "b7f34ae347521449afb45a3a801b06871aa4e284c55a3af445169b4e0e0a0851",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "87008a6993db3adde9f5f62506bd7bb657f82eb7c4faf3cb04fa69255f295cec"
+    }
   },
   "resources": {
     "class": "CPU_workstation_bounded",
@@ -335,6 +382,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

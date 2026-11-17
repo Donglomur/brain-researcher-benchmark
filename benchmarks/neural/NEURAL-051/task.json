@@ -16,11 +16,11 @@
     ],
     "task_family": "visual_identification"
   },
-  "scientific_question": "Can voxel responses identify a held-out object image from a fixed candidate set without repeated-image leakage?",
+  "scientific_question": "Can a response from a held-out THINGS-fMRI image identify that image among a frozen candidate set within each measured person and independently selected ROI?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Candidate scores per single-trial response or frozen repeat mean."
+    "The actually presented image identity, joined to its source trial/response and the fixed candidate-image roster."
   ],
   "input_assets": {
     "routes": [
@@ -89,19 +89,23 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Single-trial voxel response tables: rows voxels, columns trials; raw BOLD NIfTI alternative",
-    "allowed_context": "Actual BIDS event table inspected: onset,duration,trial_type,category_nr,exemplar_nr,test_image_nr,things_category_nr,things_exemplar_nr,response_time,file_path. Response table stimulus metadata include concept,image filename,trial type,run,session.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "BIDS events onset in seconds; single-trial estimates aligned to stimulus metadata by trial index, which must be asserted when preparing packet.",
-    "source_contract_evidence": "Actual source manifest, first event-table rows, derivative sidecar, and pinned usage notebook. Figshare names match notebook; OpenNeuro derivative filenames differ."
+    "inputs": [
+      "Proposed selected within-person V1 or IT voxel responses and labeled training image-response pairs.",
+      "Frozen 3,700 candidate JPEG-RGB-1 images per declared case; candidate pixels are allowed while the query-image association is private."
+    ],
+    "forbidden_inputs": [
+      "Query stimulus/image identity, original event order and answer-bearing file names.",
+      "Held-out neural labels or ROI/voxel selection using query outcomes."
+    ],
+    "case_identity": "Manifest explicitly declares sub-01_V1, sub-01_IT, sub-02_V1, sub-02_IT, sub-03_V1, sub-03_IT; exact 1,540 query IDs per panel are absent.",
+    "split": "Manifest describes six within-person ROI cases, not leave-person-out. Recover exact image/repetition/concept grouping and train-only ROI selection before freezing a complete split.",
+    "coverage": "Declared six cases × 1,540 queries, score matrix [1540,3700], 8,740-image union. These are unexecuted source declarations, not authenticated available cases."
   },
-  "biological_unit": "3 participant IDs,12 sessions each per archive; within-person native voxel spaces",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Three measured people; V1/IT and repeated images within a person are paired dependent observations.",
+  "case_definition": "One person × ROI panel, with image responses as nested scored queries.",
   "split": {
-    "policy": "Group image identity/exemplars and repeated presentations; whole runs/sessions; participant-specific native voxel models with three-person descriptive aggregation.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Manifest describes six within-person ROI cases, not leave-person-out. Recover exact image/repetition/concept grouping and train-only ROI selection before freezing a complete split.",
+    "coverage": "Declared six cases × 1,540 queries, score matrix [1540,3700], 8,740-image union. These are unexecuted source declarations, not authenticated available cases."
   },
   "reference": {
     "source_code_url": "https://github.com/ViCCo-Group/THINGS-data",
@@ -116,50 +120,86 @@
     "data_url": "https://openneuro.org/datasets/ds004192"
   },
   "controls": [
-    "Group image exemplars/concepts",
-    "image-prior-only reference",
-    "ROI selected on training",
-    "opaque query order."
+    "Group repeated images and their exemplars across fitting/evaluation according to the frozen claim.",
+    "Freeze ROI/voxel reliability selection on training data; match candidate support across ROI contrasts.",
+    "Do not infer neural contribution from image priors or stable query order."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools voxel summary or independently frozen response-map display",
+      "boundary": "No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support.",
+      "evidence_ids": [],
+      "missing": [
+        "Define a faithful manageable response view and strict answer collector."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed ROI response-map and candidate-image viewer",
+      "boundary": "No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement typed image delivery without event/answer metadata."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-person retrieval investigation on permitted voxel arrays",
+      "boundary": "No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support.",
+      "evidence_ids": [],
+      "missing": [
+        "Publish actual inspection/decoder route with matched inputs and resources."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Manifest names one precommitted Python source across all six cases",
+      "boundary": "No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support.",
+      "evidence_ids": [],
+      "missing": [
+        "Recover the referenced executable and separately bound numerical grader."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro Top-1 and mean reciprocal rank.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Image retrieval Top-1 accuracy",
+      "direction": "higher",
+      "aggregation": "Calculate query accuracy within ROI/person; report V1 and IT separately and equal-weight the three people within each ROI. A global mean, if used, must state equal ROI weights prospectively.",
+      "rationale": "Directly scores the measured stimulus identity without turning six dependent ROI panels into six independent people."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Mean reciprocal rank, Top-5 and full coverage by person/ROI.",
+      "Paired V1-versus-IT retrieval differences under the same candidate set."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Fixed training-only ridge image-response retrieval",
+        "inputs": "Same labeled training pairs, voxel view and candidate images",
+        "procedure": "Proposed: fit an encoding map on training images, then rank held-out responses against predicted candidate responses; freeze regularization on grouped training folds."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
-      },
-      {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Candidate-prior and image-label permutation controls",
+        "inputs": "Candidate roster; shuffled training image-response association",
+        "procedure": "Proposed uniform/frequency priors and complete concept-grouped label permutation refits; no query target access."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Group repeated images and their exemplars across fitting/evaluation according to the frozen claim.",
+      "Freeze ROI/voxel reliability selection on training data; match candidate support across ROI contrasts.",
+      "Do not infer neural contribution from image priors or stable query order."
+    ],
+    "uncertainty": "Report all three person estimates and paired ROI effects; image/concept resampling is conditional on these people and cannot create population replication.",
+    "failure_policy": "Require every expected query/candidate ID exactly once and finite score arrays of the frozen shape; missing panels remain failures, never silently removed.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "e30b07a8e31fee2da9cd55e0838718f87b425c0ab921dc31b27a3dedfee719a1",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "8a660b196c5150e6be60cdd5636b977eadbf3ee9b88da4254cfda43e224865b2"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -240,6 +280,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

@@ -1,0 +1,244 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-017",
+  "title": "Motor population co-smoothing",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "Current source grades complete 574-trial co-smoothing predictions and contains full operator/programme and per-case investigation source. It needs externally authenticated inputs and qualified deployment; condition-assisted success alone does not identify incremental neural information.",
+  "scientific_target": {
+    "question": "How well do 137 observed motor-cortex units predict the 45 unobserved units on 574 held-out development trials, beyond permitted movement-condition and time context?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "Observed withheld-unit integer spike counts on the fixed 140-bin 5 ms support; predictions are positive expected counts, not recovered true latent firing rates.",
+    "answer_origin": "MC_Maze NWB spikes from Jenkins 2009-09-25; withheld unit axis and evaluation support are private scorer inputs.",
+    "case_unit": "One whole reach trial;574 nested prediction cases within one session.",
+    "independent_unit": "One macaque, Jenkins, in one session; trials/neurons/condition repetitions are not independent animals.",
+    "inference_scope": "Retrospective within-session, condition-assisted prediction of measured spikes; signed matched-condition controls can test incremental observation use.",
+    "exclusions": [
+      "Online forecasting or intervention effects.",
+      "Identification of biological latent states from prediction scores.",
+      "Generalization to new animals or contamination-resistant final evaluation."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "1721 training trials with 137 observed+45 withheld spike-count units;574 query trials with only 137 observed units.",
+      "Complete 140×5 ms neural window per trial, permitted condition IDs, explicit unit/trial axes and fixed valid-support mask."
+    ],
+    "forbidden_inputs": [
+      "Query withheld spike counts, raw target-bearing NWB, reference prediction arrays and private scores.",
+      "Kinematic targets or source identities usable for answer lookup."
+    ],
+    "case_identity": "Exact opaque eval_trial_ids and heldout_unit_ids from the authenticated public packet; scorer aligns permutations by IDs and checks panel_fingerprint. Actual identities are not distributed in this source checkout.",
+    "split": "Declared 1721 training/574 development whole-trial split of one Jenkins session; supervised selection stays inside whole training trials. Conditions have training support, so this is not held-out-condition transfer.",
+    "coverage": "Every 574×140×45 output cell required. Complete operator source retains 100 mode/context/code/seed groups and all 574 cases per group; these are conditions/repeats, not 100 new benchmarks. Public targets, including former NLB test targets, remain exposed development material."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "pooled_poisson_co_smoothing_bits_per_spike",
+      "direction": "higher",
+      "aggregation": "Sum Poisson log-likelihood improvement over all fixed valid trial/bin/withheld-unit cells, divided by observed spikes and ln 2.",
+      "rationale": "Scores held-out measured spikes; evaluation-target per-unit mean is a private normalization, distinct from a deployable comparator."
+    },
+    "secondary": [
+      "Signed co-bps difference versus frozen training-only condition/time predictor.",
+      "Condition-wise and whole-trial error summaries; intact versus within-condition-shuffled and context-only inputs."
+    ],
+    "comparators": [
+      {
+        "name": "training_condition_time",
+        "inputs": "Training withheld counts and permitted trial-condition/time context only.",
+        "procedure": "Implemented fixed training profiles shrunk by one pseudo-trial toward smoothed global rate;60-bin Gaussian sigma 10; no query-neural input."
+      },
+      {
+        "name": "matched_input_controls",
+        "inputs": "Same training source plus intact, within-condition-shuffled, context-only, training-rate-only or metadata-neutral query projection.",
+        "procedure": "Implemented source projections; freeze shuffle and fit/adaptation per condition before scores. Actual complete matched execution remains unqualified."
+      }
+    ],
+    "nuisance_controls": [
+      "Hold trial identity and conditions fixed when shuffling neural observations.",
+      "Whole trials stay together in selection; no target-dependent missingness.",
+      "Compare neural gain against condition/time structure, not only global rate."
+    ],
+    "uncertainty": "Report descriptive paired whole-trial/condition blocks within one session; no animal-population interval from 574 trials or 45 units.",
+    "failure_policy": "Require all expected IDs/units/time bins and finite strictly positive expected_spikes_per_bin. Invalid/missing responses receive failure with no favorable subset. All-zero target spike total is explicitly undefined; negative scores remain valid."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-017/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-017/implementations/registered-runtime/INSTRUCTIONS.md",
+      "benchmarks/neural/NEURAL-017/implementations/registered-runtime/engine/metrics.py",
+      "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/OPERATOR.md",
+      "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/nlb/investigation.py",
+      "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/nlb/views.py",
+      "benchmarks/neural/NEURAL-017/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/nlb/programme.py",
+      "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/nlb/controller.py"
+    ],
+    "scorer_target": "Strictly positive expected withheld-neuron spike counts against observed counts; arbitrary compliant predictions accepted, with no source-table or reference-equality requirement.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Complete numeric scorer and full operator/investigation source for the named exposed development panel; no bundled authentic arrays or qualified Linux deployment.",
+    "missing": [
+      "Authenticate exact public/private input packet and native conversion.",
+      "Qualify full operator runtime, model transport and external review/custody requirements.",
+      "Execute matched neural-dependence controls before interpreting co-bps as information beyond condition context."
+    ],
+    "execution_evidence": "Manifest preserves historical finite local prediction-scoring/fixed-programme checks but explicitly does not transfer qualification to current source. Source inspection here is not a new model trial."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed per-trial numerical counts or fixed raster with all 140×45 positive withheld-unit expected counts; no no-tools participant transport is supplied.",
+      "boundary": "Any future direct arm must receive exactly the selected permitted observation and calibrated units, with no decoder, Python, source lookup, target or score access.",
+      "evidence_ids": [],
+      "missing": [
+        "Freeze a feasible complete per-case observation and response representation without silently changing the target.",
+        "Deliver and qualify a no-tools transport and complete answer collector before a direct-understanding claim."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed typed raster/time-window inspection of the same selected neural observations; no viewer is delivered for this registration.",
+      "boundary": "Only admitted rendered views; raw numerical/model operations would belong to the tool-assisted condition. Query targets and source identities remain inaccessible.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement task-specific renderer, restricted actions and complete responses.",
+        "Verify rendered observations preserve required time/unit information and run a separately identified viewer evaluation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Per-case numerical/model investigation of the complete permitted neural packet.",
+      "boundary": "Match observations, calibration, decoder access and cumulative compute against the fixed programme; freeze shared preparation, reset case state and prevent target/score feedback.",
+      "evidence_ids": [
+        "implementation-4"
+      ],
+      "missing": []
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Precommitted executable and fitting recipe; training precedes query prediction.",
+      "boundary": "Freeze source, fitting, selection and permitted query adaptation before assessment access; authentic target custody and runtime qualification remain external.",
+      "evidence_ids": [
+        "implementation-3",
+        "frozen-programme-definition",
+        "frozen-programme-controller"
+      ],
+      "missing": [
+        "Qualify the actual external data/runtime source closure and complete programme execution."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-017/historical/task.pre-understanding.v1.json",
+      "sha256": "bcde2c70ee81027a94162cb12067dd4c3c314d1158bf93abd8c559f55110ac2b",
+      "supports": "Original source definition, verified source header identities and acquisition-versus-organizer distinction."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-017/implementations/registered-runtime/INSTRUCTIONS.md",
+      "sha256": "4568956c7bbcefab557991fffd88eefc78f91f0876312d09b36297ae99f9c754",
+      "supports": "Exact 574×140×45 output,137 observed units, condition context, training-only comparator and public-development limits."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-017/implementations/registered-runtime/engine/metrics.py",
+      "sha256": "f3552f46e7a684da0f9b7e49c0b28d22734c43a87d5f1151a305086c76c182b8",
+      "supports": "Expected-count Poisson score, fixed target support, identity joins and strict positivity."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/OPERATOR.md",
+      "sha256": "52089d5ef91e2d881b5b41de1ebf069285fe7741d07afdf38146e214ba3396d4",
+      "supports": "Full source compiler and frozen-programme lifecycle exist; native deployment and scientific qualification remain external."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/nlb/investigation.py",
+      "sha256": "68652a18768d40d8858b1023f6f1b476411408d1a6ffe7c083f47908611e2472",
+      "supports": "Fresh per-case tool loop commits only predictions produced by the current case chain."
+    },
+    {
+      "id": "implementation-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/nlb/views.py",
+      "sha256": "d08d34eb9cdd24050c82f8b478f534f881fe724cc2f55bbe5247bef193c80ca4",
+      "supports": "Context-only, training-rate, within-condition shuffle and metadata-neutral input projections."
+    },
+    {
+      "id": "implementation-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-017/implementations/registered-runtime/manifest.json",
+      "sha256": "066daa062f022163572ff1ba370139cbfec45e6c5a14e2858e4995badf99e180",
+      "supports": "Historical source-only status and 1721 training/574 development scope."
+    },
+    {
+      "id": "acquisition-paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1038/nature11129",
+      "locator": "Original source paper identified by verified task source audit",
+      "supports": "Primary acquisition study; source of measured neural and behavioral variables, not a native-understanding benchmark."
+    },
+    {
+      "id": "source-data",
+      "kind": "primary_source",
+      "url": "https://dandiarchive.org/dandiset/000128/0.220113.0400",
+      "locator": "Versioned DANDI acquisition record",
+      "supports": "Versioned dataset and biological-session identity."
+    },
+    {
+      "id": "organizer-metric",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/evaluation.py",
+      "locator": "evaluate, bits_per_spike and velocity_decoding; source pinned at 42f8410b88e12db136910fa2f888b025ea0aa2ae",
+      "supports": "Organizer code defines co-smoothing, forward-rate likelihood and train/readout velocity scoring."
+    },
+    {
+      "id": "public-exposure",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/neurallatents/nlb_tools/main/README.md",
+      "locator": "README overview and other resources; checked 2026-11-16",
+      "supports": "Organizer README states former test ground truth was made public in January 2026."
+    },
+    {
+      "id": "frozen-programme-definition",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/nlb/programme.py",
+      "sha256": "cb529df3cc31112823dd61cd05c4ca981b6b6fb2839c60b425f430649a175643",
+      "supports": "Executable pre-exposure programme schema validates complete100group roster, fixed permitted tool surface, source support and frozen identity."
+    },
+    {
+      "id": "frozen-programme-controller",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/nlb/controller.py",
+      "sha256": "4dbeda80ce51b8732eda8491434691ff18119e6ecad7dd9bd21fa9dbe6bc1189",
+      "supports": "Campaign joins all50original F authorings before exposure, enforces source-owned stage/mount ancestry, and dispatches submitted source only through declared participant_F execution with matched resources."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical source declarations and software/reference controls retain their original scope; this revision inspects source and conducts no model or human trial.",
+    "excluded_claims": [
+      "No direct-observation or viewer model performance is established.",
+      "Public source labels and earlier exposed development scores do not constitute an untouched final test."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Make condition-assisted scope explicit and separate scoring null from training-only comparator.",
+      "Bind all 574 trials and unit/time axes; isolate one-session retrospective target from forecasting, latent-state and native-understanding claims.",
+      "Distinguish existing per-case/programme source from absent direct/viewer modes and external runtime qualification."
+    ],
+    "source_review": "Original contract, named current implementation source, source-specific local documentation, and pinned organizer evaluation inspected. Official README checked 2026-11-16 for public target exposure."
+  }
+}

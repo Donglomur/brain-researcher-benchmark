@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-064",
+  "track": "neural",
+  "title": "Novelty effects beyond state and outcome",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-N060"
+    ],
+    "titles": [
+      "Allen Visual Behavior optical-physiology study"
+    ],
+    "overlap_groups": [
+      "allen-visual-behavior-family"
+    ],
+    "task_family": "learning_plasticity"
+  },
+  "scientific_question": "Does image novelty alter cell-type responses after locomotion, pupil, outcome and exposure history are matched?",
+  "task_type": "investigation",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Cell-type/novelty contrasts nested within mice and held-out predictions."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://allensdk.readthedocs.io/en/latest/visual_behavior_optical_physiology.html",
+      "https://github.com/AllenInstitute/AllenSDK",
+      "https://visual-behavior-ophys-data.s3.us-west-2.amazonaws.com/visual-behavior-ophys/manifests/visual-behavior-ophys_project_manifest_v1.1.0.json",
+      "https://alleninstitute.org/legal/terms-use/",
+      "https://raw.githubusercontent.com/AllenInstitute/AllenSDK/a56bd8ea7613a812334602b64746cdd30c325a96/LICENSE.txt",
+      "https://raw.githubusercontent.com/AllenInstitute/AllenSDK/a56bd8ea7613a812334602b64746cdd30c325a96/doc_template/examples_root/examples/nb/visual_behavior_load_ophys_data.ipynb"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-N060",
+        "ledger": "readiness/signals_readiness.json",
+        "record_sha256": "80ca61eccca70bad939a2c02ddaca682095dd50e068196552de345bfa5f701b8",
+        "data_manifest": {
+          "version": "visual-behavior-ophys_project_manifest_v1.1.0; data pipelineAllenSDK2.16.0",
+          "manifest_url": "https://visual-behavior-ophys-data.s3.us-west-2.amazonaws.com/visual-behavior-ophys/manifests/visual-behavior-ophys_project_manifest_v1.1.0.json",
+          "ophys_experiment_table_rows": 1936,
+          "unique_mouse_ids": 107,
+          "metadata_version_id": "eF5GLZ7pkfpxLPAf80fBw.u6XzIWULop",
+          "example_asset": {
+            "url": "https://visual-behavior-ophys-data.s3.us-west-2.amazonaws.com/visual-behavior-ophys/behavior_ophys_experiments/behavior_ophys_experiment_951980471.nwb",
+            "version_id": "QAlJJOXon0UdFR01LuP_xVvFP.8mEpzG",
+            "bytes": 248144826,
+            "file_hash": "afa5c1db45316232d3a645c15b7542d9d2b6c24b5d05666fd59e29117cba3a6bce518f03de52ef4260bd7cb7737c15850ee3f7a744876eefc87658d12d49404c"
+          }
+        },
+        "recording_contract": {
+          "neural": "NWB/SDK dff_traces,events,ophys_timestamps,cell_specimen_table with ROI identities",
+          "labels": "stimulus_presentations image_name,omitted,start_time,end_time; trials go/hit/reward_time/response_latency; running_speed,eye_tracking,licks",
+          "time_alignment": "ophys_timestamps for neural traces; stimulus/behavior tables in common seconds; preserve omissions and dropped frames",
+          "biological_ids": "Versioned metadata includes mouse_id,ophys_session_id,ophys_experiment_id,ophys_container_id,cell IDs;107unique mouse IDs in inspected1936experiment rows",
+          "evidence": "Full public manifest and metadata CSV parsed; one versioned neural NWB HEAD size; pinned notebook explicitly loads all streams"
+        },
+        "status": "artifact_ready"
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": "NWB/SDK dff_traces,events,ophys_timestamps,cell_specimen_table with ROI identities",
+    "allowed_context": "stimulus_presentations image_name,omitted,start_time,end_time; trials go/hit/reward_time/response_latency; running_speed,eye_tracking,licks",
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "ophys_timestamps for neural traces; stimulus/behavior tables in common seconds; preserve omissions and dropped frames",
+    "source_contract_evidence": "Full public manifest and metadata CSV parsed; one versioned neural NWB HEAD size; pinned notebook explicitly loads all streams"
+  },
+  "biological_unit": "Versioned metadata includes mouse_id,ophys_session_id,ophys_experiment_id,ophys_container_id,cell IDs;107unique mouse IDs in inspected1936experiment rows",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "Group mouse, container and registered cell lineage; separate familiar/novel sessions and all repeated images; cell selection uses training only.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/AllenInstitute/AllenSDK",
+    "commit_or_archive_version": "a56bd8ea7613a812334602b64746cdd30c325a96",
+    "entrypoints": [
+      "doc_template/examples_root/examples/nb/visual_behavior_load_ophys_data.ipynb",
+      "doc_template/examples_root/examples/nb/visual_behavior_compare_across_trial_types.ipynb",
+      "allensdk/brain_observatory/behavior/behavior_project_cache/behavior_project_cache.py"
+    ],
+    "role": "Official SDK data loaders and analysis notebooks; not a trained predictive baseline.",
+    "reference_executed_for_this_contract": false,
+    "source_paper": null,
+    "data_url": "https://allensdk.readthedocs.io/en/latest/visual_behavior_optical_physiology.html"
+  },
+  "controls": [
+    "Matched behavioral state",
+    "known exposure",
+    "cell-type label audit",
+    "no neuron-level pseudo-replication."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Recomputed mouse-level novelty contrast and held-out explanatory gain.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "workstation_or_single_GPU_after_bounded_intake",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": null
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Map containers/registered cells and familiar/novel sessions; select QC before outcomes."
+    },
+    {
+      "id": "source_1",
+      "requirement": "107mice/1936experiments are metadata scope, not all necessarily task-eligible; freeze selection/QC before outcomes."
+    },
+    {
+      "id": "source_2",
+      "requirement": "Reference notebook is an analysis/loader reference, not a trained predictive baseline; decoding baseline still needs qualification."
+    },
+    {
+      "id": "source_3",
+      "requirement": "Data terms permit research/noncommercial use with obligations; commercial use/redistribution needs separate clearance."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Map containers/registered cells and familiar/novel sessions; select QC before outcomes."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "008ca986ccc9d61cf503b24aa546105da5c3adb1cdcf9ee41ffdb57998ffda65",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_readiness.json",
+        "bytes": 67125,
+        "sha256": "a1f767fe5f088b27c6b80a2068699838becdbf96457d15530f77e4a89f7616b6"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

@@ -1,0 +1,196 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "clinical-sensefog-stn-state",
+  "title": "Participant-held gait-state inference from bilateral STN LFP",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "evidence": [
+    {
+      "id": "historical-definition",
+      "kind": "local_review",
+      "path": "benchmarks/neural/clinical-sensefog-stn-state/historical/task.pre-understanding.v1.json",
+      "sha256": "bed1ca6e62e74e05d80e93d5b62cc9477f4cddb8d99b56283c7af23391a6a8d3",
+      "supports": "Preserved original source registration, source citations and proposed complete scientific endpoint; later implementation corrections are distinguished below."
+    },
+    {
+      "id": "sensefog-mapper",
+      "kind": "local_source",
+      "path": "benchmarks/neural/clinical-sensefog-stn-state/implementations/recording-lag-controls/sensefog_pairing.py",
+      "sha256": "d833d2c7637d73ce047578788a75c0ab30a98cee89b694efde27b5f79fe8ef40",
+      "supports": "Complete recording-grid enumeration,20 fixed lag support, null primary score and no signal/target loading."
+    },
+    {
+      "id": "sensefog-scope",
+      "kind": "local_source",
+      "path": "benchmarks/neural/clinical-sensefog-stn-state/implementations/recording-lag-controls/README.md",
+      "sha256": "94057e1d11c24dda1e4a801eb46d75d536ee5a92d25d06c860f39b3ee4e863fc",
+      "supports": "Native/control limitations and generated fixtures versus actual clinical sampling."
+    },
+    {
+      "id": "sensefog-paper",
+      "kind": "primary_source",
+      "url": "https://academic.oup.com/brain/article/147/12/4056/7831184",
+      "locator": "Source experiment and data availability, preserved provenance",
+      "supports": "Freezing/voluntary-stop physiological question and original source route."
+    },
+    {
+      "id": "sensefog-data",
+      "kind": "primary_source",
+      "url": "https://data.mendeley.com/datasets/c9ckcvjxc7/1",
+      "locator": "Original dataset version 1",
+      "supports": "Original clinical/LFP recording source."
+    },
+    {
+      "id": "sensefog-author",
+      "kind": "primary_source",
+      "url": "https://github.com/PKlocke/SenseFOG-Documentation",
+      "locator": "Author README/source provenance",
+      "supports": "12 participants and author clinical analysis route, with hard-coded annotation exposure requiring audit."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human trial for this task is established by this source revision. Generated software checks are not participant performance.",
+    "excluded_claims": [
+      "Lag mapper is a gait-state evaluator",
+      "1 Hzfixture is native clinical sampling",
+      "Time shift establishes physiology or exchangeability",
+      "State prediction is clinical readiness"
+    ]
+  },
+  "disposition": "partial_delivery",
+  "disposition_reason": "Complete recording-grid lag-map source exists, but no primary gait-state scorer, authentic labels/signal packets or candidate runner is delivered. Target-free lag controls alone do not measure neural understanding.",
+  "scientific_target": {
+    "question": "Can bilateral STN local field potentials distinguish freezing, voluntary stopping and other authenticated gait/postural states in an unseen participant?",
+    "target_kind": "observation_decoding",
+    "known_answer": "Original behavioral/clinical interval annotations for freezing, voluntary stop, continuous walking, sitting and standing, subject to authentic dictionary and boundary validation.",
+    "answer_origin": "Clinical annotation and synchronized movement evidence, not labels inferred from the same LFP features being tested. Exact released categories and event clocks remain unqualified.",
+    "case_unit": "Every fixed 2 second all-channel LFP window on a frozen recording-wide stride/grid, including background and boundary coverage.",
+    "independent_unit": "Participant (12 reported); sessions, hemispheres, overlapping windows and gait cycles are nested.",
+    "inference_scope": "Neural discrimination of observed movement state under participant holdout; not a causal account of freezing or validated clinical detection.",
+    "exclusions": [
+      "Lag maps are not predictions or a primary score.",
+      "A large lag is not an exchangeability guarantee.",
+      "Movement channels cannot enter the neural-only classifier."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Every authenticated bilateral STN LFP channel on its native grid, physical units and all missing/artifact masks over complete 2 second windows. Actual channel count and rates require census."
+    ],
+    "forbidden_inputs": [
+      "IMU/EMG, gait-event annotations, hard-coded event times, protocol filenames, clinical-state timestamps and hidden assessment labels."
+    ],
+    "case_identity": "sensefog_pairing requires complete opaque participant/recording/segment/case identities and exact start_sample on a recording-owned grid; source clinical IDs are not delivered.",
+    "split": "Declared leave-one-person-out over 12 participants, all sessions/hemispheres/windows grouped; each training-dependence estimate uses the other 11 people only. Actual candidate fitting not implemented.",
+    "coverage": "Mapper retains every frozen original recording-grid case including gap/boundary/unobserved recordings and emits all 20 requested lags. Native all 12 participant census, event-state support and no-freezing cases remain to authenticate."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Ordinary participant-macro multiclass log loss on natural recording coverage",
+      "direction": "lower",
+      "aggregation": "Average -log true-state probability across all evaluable fixed-grid windows within each person, then equally across all 12 people. Finite-probability policy and authentic classes must be frozen.",
+      "rationale": "Preserves real background prevalence and prevents long recordings dominating; class-balanced loss is a separately named diagnostic."
+    },
+    "secondary": [
+      "Freezing sensitivity, voluntary-stop confusion, false alarms per recorded minute and onset timing with prespecified event-matching tolerance.",
+      "All 12 participant folds, state/condition/artifact coverage and people without freezing.",
+      "Original versus lagged loss on exactly shared supported cases, averaged within person then across supported people; retain unsupported people/lags."
+    ],
+    "comparators": [
+      {
+        "name": "Training-state prevalence",
+        "inputs": "Outer-training interval labels only",
+        "procedure": "Proposed fixed prior and no-signal reference on same natural grid."
+      },
+      {
+        "name": "Causal band-power/logistic",
+        "inputs": "Same all-channel 2 secondLFP, identical permitted lookback",
+        "procedure": "Proposed train-only scale/features and person-group tuning."
+      },
+      {
+        "name": "Random forest or compact temporal model",
+        "inputs": "Same permitted LFP/training examples and fixed compute",
+        "procedure": "Proposed competent nonlinear reference; no movement channels."
+      }
+    ],
+    "nuisance_controls": [
+      "Protocol/time-only auxiliary model and hard-coded event-time stripping from tools.",
+      "One common integer lag moves all channels and causal support within the same continuous acquisition segment, preserving exact observable mask sequence.",
+      "G=max(30 seconds,2 H, L_train); fixed±G...±10 G, no wrap or label-based lag choice. Unestablished H/L_train or invalid donor support remains unsupported."
+    ],
+    "uncertainty": "All 12 person results with participant-cluster paired descriptive summaries; overlapping windows/cycles are not independent samples. No permutation p-value or causal interpretation from lag diagnostic; native primary and paired uncertainty remain undelivered.",
+    "failure_policy": "Declare complete original recording grid and retain gaps/unsupported cases. A future scorer must reject missing eligible predictions and preserve nonfreezing people/background; current mapper refuses inconsistent census/whole-operation caps and never returns a primary score."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/clinical-sensefog-stn-state/implementations/recording-lag-controls/README.md",
+      "benchmarks/neural/clinical-sensefog-stn-state/implementations/recording-lag-controls/sensefog_pairing.py"
+    ],
+    "scorer_target": "build_maps constructs target-free support and common-channel lag mappings only. It reads no signals, annotations or model predictions and returns primary_score=null.",
+    "target_fidelity": "no_target_evaluator",
+    "delivered_scope": "Source for complete 12 person declared-grid enumeration and 20 lag support accounting, with generated boundary controls. It is an evaluator preparation component rather than gait-state grading.",
+    "missing": [
+      "Authentic LFP/clinical interval clocks, exact class dictionary, native channels/rates/montage and person/session census.",
+      "Full primary probability scorer, event metric/matching policy, physical transformed packets and paired-loss consumer.",
+      "Reference models, candidate input transport and protected evaluation."
+    ],
+    "execution_evidence": "Generated invented complete 12 person-grid controls only; fixture 1 Hz is explicitly not a clinical sampling rate. No neural model, authentic clinical score or native viewer result."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed complete all-channel 2 secondLFP numeric/waveform case.",
+      "boundary": "No tools and no movement/annotation context; full montage must be retained.",
+      "evidence_ids": [
+        "sensefog-mapper"
+      ],
+      "missing": [
+        "Authenticated signal packets, answer schema and no-tools transport."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential calibrated bilateral LFP trace/spectrum display.",
+      "boundary": "Typed action policy cannot expose state-labelled IMU/EMG or event overlays.",
+      "evidence_ids": [
+        "sensefog-mapper"
+      ],
+      "missing": [
+        "Viewer implementation and protected capture."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed same LFP with causal spectral/model tools.",
+      "boundary": "Fixed per-case evidence/compute; models fitted only in other 11 people.",
+      "evidence_ids": [
+        "sensefog-mapper"
+      ],
+      "missing": [
+        "Full participant inputs, scorer and qualified frozen decoder."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Proposed precommitted gait-state probability program.",
+      "boundary": "Freeze causal lookback and training recipe; mapper does not execute or grade predictions.",
+      "evidence_ids": [
+        "sensefog-mapper"
+      ],
+      "missing": [
+        "Primary scorer and frozen lifecycle."
+      ]
+    }
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Expose that delivered code has no target evaluator instead of counting lag controls as task execution.",
+      "Retain natural-coverage participant-macro loss and event false alarms as required endpoints.",
+      "Make actual common-channel recording-grid lag support limits and missing physical packets explicit."
+    ],
+    "source_review": "Reviewed preserved scientific registration and named implementation code/documentation; reused cited primary source evidence already verified in these records. No scientific arrays or evaluator labels were opened in this revision."
+  }
+}

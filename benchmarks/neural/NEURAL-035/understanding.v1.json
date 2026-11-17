@@ -1,0 +1,230 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-035",
+  "title": "Chronological astrocytic peak-order prediction within sessions",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "delivered_named_scope",
+  "disposition_reason": "Actual loading, programme and grading sources implement within-session peak-order prediction for28 fixed windows. This is a deliberate narrower endpoint than the original event-specific investigation; three exact external bindings are absent, so native grading is unavailable in this checkout.",
+  "scientific_target": {
+    "question": "How well does earlier processed astrocytic activity predict relative first-maximum order in later30-second blocks, and how do errors differ by recall context and phase-shift controls?",
+    "target_kind": "neural_response_prediction",
+    "known_answer": "For each nonconstant query cell, the sample of its first exact fluorescence maximum within the later300-sample block, reranked among that query’s target-active cells. Exact-constant cells have no ordering target; all-tied active peak times remain valid but unresolved order.",
+    "answer_origin": "Measured author-processed accepted calcium traces from Zenodo21780255; target extraction uses true timestamps interpolated to a10Hz grid without extrapolation. Query peak ranks are measured-data targets, not the source paper’s event-reconstruction statistic.",
+    "case_unit": "One later30-second query block containing all accepted session-local cells;28 blocks in14 sessions.",
+    "independent_unit": "Seven mice, each with two recall contexts;1012 session-local cells are nested measurements with no cross-context identity claim.",
+    "inference_scope": "Retrospective chronological within-session stability with inherited whole-session preprocessing and ROI selection. Publicly released whole traces preclude a globally unseen-data claim; this is neither new-mouse transfer nor event-selected sequence reproduction.",
+    "exclusions": [
+      "No source-selected event or causal-memory conclusion.",
+      "No cross-session/cross-context cell-registration claim.",
+      "99 circular shifts provide descriptive diagnostics, not a permutation p-value."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "All14 opaque sessions and1012 accepted session-local cells. Four calibration blocks0–30,30–60,60–90,90–120 seconds; one validation block150–180 seconds. Each block has300 samples on the10Hz grid.",
+      "Calibration supports method development, validation selection; a frozen final method may refit all five public blocks. No amplitude-based cell subset is introduced."
+    ],
+    "forbidden_inputs": [
+      "Query traces for210–240 and270–300 seconds, peak indices, query-flat masks, surrogate targets and mouse/context mapping.",
+      "Original whole traces, NEURAL-034 fold packets and related-paper inputs that expose query outcomes.",
+      "Private feedback or source revisions between the candidate and fixed-operator comparison."
+    ],
+    "case_identity": "Source public loader requires14 unique opaque session IDs and28 unique query IDs, with every public cell in listed order. The concrete public manifest/NPZ input bodies remain external; source geometry is exact but IDs are not invented here.",
+    "split": "Within each session, calibration and validation precede queries with30-second gaps; two query blocks are separated by30 seconds. There is no held-mouse transfer split. Both complete28-query role outputs must close before protected target access.",
+    "coverage": "All selected14 sessions, seven paired mice and1012 session-local cells; two query blocks per session and99 fixed phase shifts per block. Roles and shifts are conditions, not new benchmark tasks."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "mean_absolute_normalized_rank_error",
+      "direction": "lower",
+      "aggregation": "Rerank predicted scores and target peak indices on the identical private active-cell subset with average ties/(n_active−1); mean cells→two blocks→two contexts per mouse→seven equal mice.",
+      "rationale": "Grades held-window relative neural timing rather than paper-table reproduction. Active-subset reranking prevents a flat cell from changing another cell’s scored rank."
+    },
+    "secondary": [
+      "Fixed public-rank baseline error and signed candidate-minus-baseline error at every block/session/mouse.",
+      "Paired context-A-minus-B error for every mouse and equal-mouse mean.",
+      "99 fixed independent per-cell circular shifts (PCG64 seed35035), preserving each cyclic autocorrelation/value distribution; surrogate-mean minus observed error is descriptive.",
+      "Active/flat cell counts and distinct peak-time counts, including all-tied active targets."
+    ],
+    "comparators": [
+      {
+        "name": "Five-block mean peak-rank predictor",
+        "inputs": "Only the same four calibration blocks and one validation block.",
+        "procedure": "Existing baseline averages each cell’s normalized first-maximum rank over all five public blocks; calibration-flat/undefined blocks contribute0.5."
+      },
+      {
+        "name": "All-tied ordering",
+        "inputs": "No neural ordering information.",
+        "procedure": "Valid constant0.5 scores expose the no-order baseline under the same active-subset ranking; useful construction control, not a biological claim."
+      },
+      {
+        "name": "Independent cell circular shifts",
+        "inputs": "Private measured query traces in the trusted grader only.",
+        "procedure": "Existing99 fixed shifts preserve per-cell cyclic autocorrelation while disrupting relative phase; never return surrogate/target bodies to participant."
+      }
+    ],
+    "nuisance_controls": [
+      "No source activity-selected anchors: the original event pool was insufficient for the required train/query event split.",
+      "Keep all accepted cells and preserve session-local axes; do not pretend identical cell indices across contexts are registered neurons.",
+      "Prevent related-task whole-trace exposure and retain inherited whole-session preprocessing as a retrospective limitation.",
+      "Undefined blocks propagate to the complete primary; never renormalize over easier defined blocks."
+    ],
+    "uncertainty": "Seven paired mouse values support descriptive between-mouse variation; cells/windows/99 surrogates are not biological replication. The delivered scorer computes no p-value; any inferential extension must freeze a mouse-level rule and dependence assumptions separately.",
+    "failure_policy": "Require every28 query ID once and one finite nonboolean score in[0,1] per listed cell, ≤2MB, no duplicate fields/extra fields. Fewer than two active target cells makes the block and complete primary undefined; do not silently drop it. Complete candidate/operator closure precedes target loading."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-035/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-035/implementations/delivery-source/TASK.md",
+      "benchmarks/neural/NEURAL-035/implementations/delivery-source/load_public.py",
+      "benchmarks/neural/NEURAL-035/implementations/paired-grading/source_tree/authoring/delivery-20261105/neural035/order_core.py",
+      "benchmarks/neural/NEURAL-035/implementations/astrocyte-programme/DESIGN.json",
+      "benchmarks/neural/NEURAL-035/implementations/paired-grading/README.md",
+      "benchmarks/neural/NEURAL-035/implementations/paired-grading/closed_paired_grading/COMPLETION_STATE.json"
+    ],
+    "scorer_target": "Actual order_core.py validates all28 outputs before invoking private_loader, computes first-peak normalized-rank MAE on the active subset, unchanged fixed baseline and99-shift diagnostics with cell→block→session→mouse reduction. It is genuine measured neural prediction; event-specific original investigation is not implemented.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Public loader, all-session frozen programme, analytic comparator and paired-grading bridge source are present. The closed paired component documents three absent external delivery/binding records; source checks do not activate native grading.",
+    "missing": [
+      "Exact external delivery manifests and protected-input binding required by the source tree.",
+      "Authentic prepared public/target inputs and qualified native programme/grading runtime.",
+      "Direct/typed-viewer/interactive investigation conditions, which the frozen programme explicitly does not implement."
+    ],
+    "execution_evidence": "Published completion state is inactive construction with generated engineering witness only: native_qualified=false, scientific_qualified=false, public_profile_grading_complete=false. No authentic or model run is performed by this revision."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present.",
+      "boundary": "Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
+      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget.",
+      "boundary": "Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "One frozen Python programme over all14 sessions from calibration/validation traces, paired with a separately sealed fixed-rank operator.",
+      "boundary": "Commit source and allowed fitting recipe before query access; no target feedback or source updates; require complete case coverage before protected grading.",
+      "evidence_ids": [
+        "participant_contract",
+        "grader",
+        "programme"
+      ],
+      "missing": [
+        "Authentic external inputs and current runtime qualification remain required.",
+        "Three original delivery/binding records absent; native grading unavailable."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "source_audit",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-035/historical/task.pre-understanding.v1.json",
+      "sha256": "31e1c48c7da9407e83ebdddc5668615db5c7351fd13d6eb9ec95f69887b74056",
+      "supports": "Preserved original source audit: source measurements, provenance, units, biological identities, caveats and reference entrypoints. Reused as verified source evidence; not proof of current execution."
+    },
+    {
+      "id": "participant_contract",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-035/implementations/delivery-source/TASK.md",
+      "sha256": "56a375a990b8b0bc0676346bd479f89062c13f31fc4cba68bd418dd5e0a002da",
+      "supports": "Chronological blocks, measured peak target, source cohort and explicit narrowing from event-specific original task."
+    },
+    {
+      "id": "loader",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-035/implementations/delivery-source/load_public.py",
+      "sha256": "4edc0e7b6e40ae87a4f9c07ab612ceb05b8d1c9c674bc26bc00f584f121e4ba2",
+      "supports": "Exact14-session/28-query public geometry and no query-array loading."
+    },
+    {
+      "id": "grader",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-035/implementations/paired-grading/source_tree/authoring/delivery-20261105/neural035/order_core.py",
+      "sha256": "ce7863a26f9bfc9156b0297e66302e6682db43c52b742ae71d902227fbb453c7",
+      "supports": "Actual active-subset ranking, all28-output validation, fixed baseline, surrogate diagnostics and undefined propagation."
+    },
+    {
+      "id": "programme",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-035/implementations/astrocyte-programme/DESIGN.json",
+      "sha256": "2c87e9f67417acf31e6113a1269f575b9f409724db582cfa965905f3dc6b8013",
+      "supports": "Complete14-session frozen programme and shared-observation analytic comparator design."
+    },
+    {
+      "id": "paired_route",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-035/implementations/paired-grading/README.md",
+      "sha256": "011c05ecfaaca741f8180e3c0fbeb8949beb769aaa6dfd9259b1400f9c557653",
+      "supports": "Public paired source closure and three exact missing external prerequisites."
+    },
+    {
+      "id": "history",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-035/implementations/paired-grading/closed_paired_grading/COMPLETION_STATE.json",
+      "sha256": "d6325f9525c6f0dddc25dd40e58fab00c4f7a0c67c5984c6ff01b28a6c7bba64",
+      "supports": "Inactive source construction and generated engineering witness; no native/scientific qualification."
+    },
+    {
+      "id": "source_paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1038/s41593-026-02448-0",
+      "locator": "Source paper and original task’s retained source audit",
+      "supports": "Scientific measurement and paradigm provenance. The source paper is not treated as a correctness answer or proof of task execution."
+    },
+    {
+      "id": "source_data",
+      "kind": "primary_source",
+      "url": "https://zenodo.org/records/21780255",
+      "locator": "Versioned author archive metadata; record checked2026-11-16 without fetching biological payloads",
+      "supports": "Current primary author-data record and immutable archive identity; code/data content claims use preserved original audits and inspected local implementation."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Published completion state is inactive construction with generated engineering witness only: native_qualified=false, scientific_qualified=false, public_profile_grading_complete=false. No authentic or model run is performed by this revision.",
+    "excluded_claims": [
+      "No source-selected event or causal-memory conclusion.",
+      "No cross-session/cross-context cell-registration claim.",
+      "99 circular shifts provide descriptive diagnostics, not a permutation p-value.",
+      "Programme performance is not evidence of direct-observation or typed-viewer understanding."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Promote the actual fixed-window chronological endpoint as the named delivered scope while preserving original event-specific question historically.",
+      "Bind measured first-maximum ranks, active-cell handling and undefined propagation to inspected arithmetic.",
+      "Preserve all14 sessions and99 descriptive shifts; expose missing external grading prerequisites."
+    ],
+    "source_review": "Read original definition/source audit, assigned README and exact current registry-owned implementation inventory; inspected actual scorer/loader where delivered and searched task/shared source for missing declared paths. Rechecked primary author-data metadata only; no biological payload or model run."
+  }
+}

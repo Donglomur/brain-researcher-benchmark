@@ -16,11 +16,11 @@
     ],
     "task_family": "naturalistic_encoding"
   },
-  "scientific_question": "Do video features predict neural responses to unseen short naturalistic events?",
+  "scientific_question": "Can a frozen video-feature encoder predict prepared fMRI response estimates for held-out videos within each participant, beyond matched static/motion/time controls?",
   "task_type": "prediction",
   "neural_role": "target",
   "primary_outputs": [
-    "Predicted prepared trial-response betas in a fixed space/ROI for videos excluded from readout fitting; explicitly identify VersionA original-paper versus VersionB GLMsingle adaptation. This does not qualify raw fMRI time-series modeling."
+    "Private prepared trial/video response estimates in a frozen coordinate/ROI space and processing branch; not a published correlation number."
   ],
   "input_assets": {
     "routes": [
@@ -46,17 +46,23 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: BOLD event-response estimates and short-video identity/timing, with video features permitted only in encoding. Exact derivative/label joins not yet audited.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "Declared prepared training neural responses and six train/query feature pairs plus one motion-energy array.",
+      "Video identity/timing and fixed ROI/coordinate definition; query stimuli are permitted for encoding."
+    ],
+    "forbidden_inputs": [
+      "Held-video neural responses, query-derived response normalization/ROI selection, answer-bearing filenames.",
+      "Shared-video target lookup through EEGMoments or other exposed BOLDMoments analyses."
+    ],
+    "case_identity": "Manifest declares ten participants × eight ROIs =80 ordered prediction matrices and81 output files. Source actual row/coordinate IDs are not delivered here.",
+    "split": "Declared1000 training/102 query videos, keeping all repetitions of each video together. Freeze version/feature/ROI/readout choices using training only. Public query responses remain exposed development.",
+    "coverage": "Manifest declares101 public files/95 input files and full80 predictions; no actual packet or executable grader is packaged. This eight-ROI endpoint is distinct from070 complete46-ROI grouped-fold design."
   },
-  "biological_unit": "participant; sessions/trials nested within participant",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "Ten source participants, with repeated/shared video dependence across people and ROIs.",
+  "case_definition": "Participant × ROI complete held-video response matrix; video repetitions are nested repeated measurements.",
   "split": {
-    "policy": "Within-person encoding with all repeats of each video kept together; aggregate over the ten documented participants after real-file eligibility verification. Published102 test videos are reproduction/development cases, not a newly unseen final set; link their identities to EEGMoments and other BOLDMoments projects.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Declared1000 training/102 query videos, keeping all repetitions of each video together. Freeze version/feature/ROI/readout choices using training only. Public query responses remain exposed development.",
+    "coverage": "Manifest declares101 public files/95 input files and full80 predictions; no actual packet or executable grader is packaged. This eight-ROI endpoint is distinct from070 complete46-ROI grouped-fold design."
   },
   "reference": {
     "source_code_url": "https://github.com/blahner/BOLDMomentsDataset",
@@ -68,37 +74,95 @@
     "data_url": "https://openneuro.org/datasets/ds005165"
   },
   "controls": [
-    "Static-frame, low-level motion and run/time baselines",
-    "video-family holdout",
-    "equal encoder capacity."
+    "Keep video repeats/families together and record shared stimuli with EEGMoments.",
+    "Freeze Version A versus Version B; an organizer script is not a predictive reference.",
+    "Train-only normalization, feature layer/rank/readout and independent ROI choice."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A video/stimulus observation and training response examples with predicted held-out neural responses; the current high-dimensional encoding endpoint has no direct observation packet.",
+      "boundary": "No evaluator targets, source-label lookup, other-case memory or model/numerical tools; a direct response is evaluated separately from programme results.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Authentic complete observation presentation and no-tools response collection have not been delivered."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed typed navigation over the permitted stimulus and training-response representations.",
+      "boundary": "Only rendered allowed observations; no raw target arrays or unrestricted filesystem/code access. A plot alone does not establish viewer execution.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Task-specific renderer/action API, complete case collection and restrictive transport are absent."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Case-local numerical/model-assisted investigation under a fixed observation and compute entitlement.",
+      "boundary": "Current query inspection may inform an allowed proposal; fit/selection remains training-only and evaluator outcomes are inaccessible. Fresh case state is required.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "A legacy manifest or prediction scorer does not deliver the participant investigation runtime."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted source, fitting/adaptation recipe and complete prediction output contract.",
+      "boundary": "Freeze before query access; equal declared calibration and no post-query selection from evaluator feedback. Programme success does not measure unaided interpretation.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "No executable participant programme is present in the assigned package."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Participant-macro held-out response correlation.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Participant-macro held-video response correlation",
+      "direction": "higher",
+      "aggregation": "Prospective complete-participant/ROI coordinate-mean Pearson correlation using a frozen finite/constant-coordinate policy; mean ROIs within person then people. The current absent grader does not authenticate this formula.",
+      "rationale": "Matches the registered encoding target while making the missing implementation parity explicit; no source-transport success is substituted for prediction accuracy."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Raw unnormalized prediction error and coordinate-definedness counts.",
+      "Paired response-correlation difference to fixed static-frame/motion controls.",
+      "All80 cell scores and public-test exposure statement."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "Static-frame linear ridge",
+        "inputs": "Training/query static features with the same fitted readout capacity.",
+        "procedure": "Prospective evaluator-owned training-only hyperparameter selection; same video split and coordinate support."
+      },
+      {
+        "name": "Motion/time baseline",
+        "inputs": "Supplied motion-energy features and permitted run/time covariates.",
+        "procedure": "Prospective independent fixed baseline, no query neural response access."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Keep video repeats/families together and record shared stimuli with EEGMoments.",
+      "Freeze Version A versus Version B; an organizer script is not a predictive reference.",
+      "Train-only normalization, feature layer/rank/readout and independent ROI choice."
+    ],
+    "uncertainty": "Paired participant and shared video-family resampling is prospective; eight ROIs are repeated measures, not extra participants. Public-source exposure limits novelty regardless of local isolation.",
+    "failure_policy": "Require all80 ordered matrices with exact shape/coordinate/video IDs and finite values; missing or undefined required support blocks complete aggregate. The declared81-file transport does not validate numerical arrays.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "a273c83774297bea432dd26ee0e5e03c87eeeb3488112512417a1ffe632496a2",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "deb69df04962f53797ad1382397a6e706f60b8713495a2b49583b0a7c9a11f30"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -277,6 +341,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "id": "NEURAL-059",
   "track": "neural",
-  "title": "Brain-wide choice prediction",
+  "title": "Retrospective pre-movement left-choice probability from brain-wide spikes",
   "status": "specification_only",
   "source_identity": {
     "ids": [
@@ -16,11 +16,11 @@
     ],
     "task_family": "decision_readout"
   },
-  "scientific_question": "Can a fixed pre-choice neural window predict behavioral choice beyond presented stimulus and prior trial history?",
+  "scientific_question": "Within separately calibrated sessions, does neural activity in the one second before the known movement onset improve left-choice probabilities beyond signed stimulus and lawful preceding-trial history, with block-prior context tested separately?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Choice probabilities with no post-choice neural or outcome information."
+    "Binary recorded choice: right=0 and left=1; candidate returns P(left). No-response trials and source-invalid trials retain explicit source dispositions."
   ],
   "input_assets": {
     "routes": [
@@ -65,19 +65,25 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "brainsets HDF5 spike times/unit metadata; linear reference bins20ms then maps counts to targets",
-    "allowed_context": "TS1 choice,wheel and other behavior via published readout specifications; trial_id,values,timestamps,mask; anatomy and QC metadata",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Readout uses trailing fixed1second target; context up to20seconds backed by split gaps; target-specific timestamps and masks",
-    "source_contract_evidence": "S3 H5manifest + AWSregistry + pinned task loader/baseline source"
+    "inputs": [
+      "S: nine signed-contrast indicators; H: seven lawful original-predecessor/history indicators; optional B: three block-prior indicators.",
+      "N: all native units' spike counts during [movement_onset-1 second, movement_onset); condition arms are SH, SHN, SBH and SBHN.",
+      "Labeled same-session training and validation views; query inputs arrive under committed source/config/state artifacts."
+    ],
+    "forbidden_inputs": [
+      "Current choice, current reward/feedback, post-cutoff spikes, future-trial history, raw target-bearing HDF5 behavior groups and original target joins.",
+      "Inferring previous trial from the previous retained eligible row when an excluded original trial intervenes.",
+      "Cross-session/condition candidate state and target/evaluator feedback."
+    ],
+    "case_identity": "Full preparer computes case_ plus SHA256 of session_id, source identity and original ordinal. It preserves every original trial slot, sorted-to-raw mapping and predecessor relation; original session/animal/lab roster is fixed. No authentic full-cohort case manifest was produced here.",
+    "split": "Complete source uses each session's verified original TS1 train/validation/test domains, whole pre-movement-window containment and chronology. F source is frozen globally, but fitting is within session. The historical exposed route contains 211 training, 60 validation and 93 sequential query cases from 424 original slots.",
+    "coverage": "Full design requires all 29 sessions, 13 animals, seven labs and all eligible original trials; exact full counts are unresolved. Four information conditions and F/I arms are nested conditions. Historical 93-query software-route evidence remains separately scoped."
   },
-  "biological_unit": "Session UUID/eid, subject metadata; publisher reports disjoint126/13animals",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "13 animals across 29 sessions and seven laboratories in the complete design; the exposed historical 93-query route is one mouse/session.",
+  "case_definition": "An eligible original trial with complete [movement_onset-1 second, movement_onset) spike support.",
   "split": {
-    "policy": "Preserve official split gaps and animal boundaries; group sessions/probes/labs; any novel target window/calibration is separately frozen.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Complete source uses each session's verified original TS1 train/validation/test domains, whole pre-movement-window containment and chronology. F source is frozen globally, but fitting is within session. The historical exposed route contains 211 training, 60 validation and 93 sequential query cases from 424 original slots.",
+    "coverage": "Full design requires all 29 sessions, 13 animals, seven labs and all eligible original trials; exact full counts are unresolved. Four information conditions and F/I arms are nested conditions. Historical 93-query software-route evidence remains separately scoped."
   },
   "reference": {
     "source_code_url": "https://github.com/brainbench-org/ibl-bwb",
@@ -94,50 +100,110 @@
     "data_url": "https://registry.opendata.aws/ibl-brain-wide-bench/"
   },
   "controls": [
-    "Stimulus/history-only model",
-    "causal window",
-    "matched trial phase",
-    "balanced within-animal label permutation."
+    "Movement-onset alignment is an explicit retrospective privilege.",
+    "Block-prior access is isolated as B; do not credit its information to spikes.",
+    "History follows original trial chronology and availability, including source-excluded predecessors.",
+    "All four information conditions use exact same held-trial support and correct condition-specific feature schema."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Prospective probability response from the same fixed count/context vector without code or external model tools.",
+      "boundary": "Hold case observations, demonstrations and sequential history policy fixed; hide current choice and future cases.",
+      "evidence_ids": [
+        "source-4"
+      ],
+      "missing": [
+        "No direct no-tools participant transport or full support response collection."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Prospective spike raster/count plot with signed-stimulus/history context and captured P(left).",
+      "boundary": "Typed rendering and navigation only; target fields and raw array/tool execution unavailable.",
+      "evidence_ids": [
+        "source-4"
+      ],
+      "missing": [
+        "No rendered participant interface or image-equivalence control."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Full I policy fits on allowed calibration and can produce a session-specific committed predictor; source supports a bounded model tool.",
+      "boundary": "Same session and information condition; fresh predict process for each query; no protected targets or cross-case model conversation state.",
+      "evidence_ids": [
+        "source-2",
+        "source-3",
+        "participant-worker",
+        "participant-runner",
+        "participant-operator"
+      ],
+      "missing": [
+        "Authentic extractor, selected compatible model/runtime and qualified full process execution."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Full F source is captured before authentic input opening, fitted per session and retained unchanged as source with committed config/state.",
+      "boundary": "Training/validation only for fitting; query probability committed before protected grading. Historical prefix-adaptive single-session route remains explicitly different.",
+      "evidence_ids": [
+        "source-1",
+        "source-2",
+        "participant-worker",
+        "participant-runner",
+        "participant-operator"
+      ],
+      "missing": [
+        "Full-cohort data and native execution qualification; historical bridge locator must not be mistaken for a current public turnkey route."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Animal-macro balanced accuracy and log loss.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Animal-macro left-choice log loss",
+      "direction": "lower",
+      "aggregation": "Pool required held trials across sessions within each animal, calculate mean log loss, then equal-weight all 13 animals; the historical single-session route reports its own 93-query mean.",
+      "rationale": "A proper probability score rewards calibrated known-choice inference; balanced accuracy alone loses confidence information."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Brier score, balanced accuracy at p_left>=0.5, tie-correct AUC and class/support counts.",
+      "Paired SH versus SHN and SBH versus SBHN neural gains; SH versus SBH privileged-context gains.",
+      "Per-session and pooled-trial diagnostics, leave-one-animal and leave-one-lab summaries."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Shared fitted class prior",
+        "inputs": "Labeled same-session calibration only.",
+        "procedure": "Use identical prior fitting identity across the four information conditions; preserve its complete query predictions."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "L regularized logistic and H histogram-gradient-boosting references",
+        "inputs": "Exact same SH/SHN/SBH/SBHN inputs.",
+        "procedure": "Freeze source grids, fit preprocessing on train only, select on validation and retain original full refit policy; native competence remains unqualified."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Reference label/neural diagnostics",
+        "inputs": "Fixed reference data and already selected method families.",
+        "procedure": "20 D-label and 20 D-neural panels are association stress diagnostics; they cannot select primary methods or become null-distribution p-values."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Movement-onset alignment is an explicit retrospective privilege.",
+      "Block-prior access is isolated as B; do not credit its information to spikes.",
+      "History follows original trial chronology and availability, including source-excluded predecessors.",
+      "All four information conditions use exact same held-trial support and correct condition-specific feature schema."
+    ],
+    "uncertainty": "Retain all 13 paired animal effects and seven-lab dependence. Source uses 1,999 deterministic animal resamples, explicitly an unqualified conditional spread without refitting or exchangeability assurance; no binary success/p-value claim follows.",
+    "failure_policy": "Require one finite [0,1] probability and exact session/case/ordinal/unit/config/state identity for every expected held trial. Missing or duplicate rows, failed commitments and invalid probabilities make the complete session/animal endpoint unavailable; supported subsets remain descriptive only. One-class BA/AUC is undefined, not zero.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "43a72b10095e52d95859e48063f7761c9366dd1b971e8a603e74465793dcab97",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "45383cdfe51e0ab9d8295c370524faf62c95ecebaf4932ed64d9fc1ccfe4270b"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -218,6 +284,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

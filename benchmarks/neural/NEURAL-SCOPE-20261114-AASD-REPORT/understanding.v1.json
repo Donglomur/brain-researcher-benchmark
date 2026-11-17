@@ -1,0 +1,227 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-SCOPE-20261114-AASD-REPORT",
+  "title": "Offline reported-attention direction inference with motor and mixture controls",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "An independent evaluator implements report-label construction, complete nominal trial accounting, protected-split planning and probability scoring. No authentic MAT-to-inventory adapter, candidate input transport or fitted comparator has been delivered; published attention accuracy is not a threshold for this revised context.",
+  "scientific_target": {
+    "question": "Does identical offline EEG/audio information predict held-person, held-mixture left/right reports beyond motor/report timing, speech identity and trial-order alternatives?",
+    "target_kind": "observation_decoding",
+    "known_answer": "The left/right reported state occupying more than half of a non-overlapping one-second target interval, derived from initial state and timed key events. Undefined initial state and duration ties are explicit exclusions.",
+    "answer_origin": "Participant behavioral report markers aligned to stimuli; they are not independent measurements of internal attention. Passive control labels are alternating keys, not passive attention.",
+    "case_unit": "One eligible one-second target interval with a complete common two-second EEG context from one active or passive trial.",
+    "independent_unit": "18 participants; windows, trials and three mixture folds are dependent within person.",
+    "inference_scope": "Offline report-state decoding across held participants and mixture families. Motor, ocular and latency alternatives remain possible even with a two-second keypress guard.",
+    "exclusions": [
+      "Online or causally prospective decoding from the offline derivative.",
+      "Attention specificity inferred solely from accuracy, a keypress guard, or passive-control failure.",
+      "Unseen-speaker or sentence generalization before stimulus overlap graph is verified."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Identical EEG interval [t-0.5s,t+1.5s) for target [t,t+1s), fixed 128-Hz normalized sample grid, common channels and valid-sample mask.",
+      "Identical presented two-channel audio and declared offline envelope transform for every method; no method-specific additional context. Native retained channel identities and audio alignment remain unresolved."
+    ],
+    "forbidden_inputs": [
+      "Report labels, key-event times, initial-state truth, trial filenames/IDs, participant/mixture/block identities and evaluator-only exclusion/stratum annotations.",
+      "Prepared evaluator rows and full inventory: both contain target/report information and are not candidate packets.",
+      "Neighboring-trial padding or method-specific case deletion."
+    ],
+    "case_identity": "Evaluator case_id is SHA256 of [registered task ID, normalized trial_id, target start_ns]. It is a deterministic accounting key, not a secret or evidence of anonymization; participant transport needs separate opaque binding and sanitized observations.",
+    "split": "Implemented plan has 54 cells: 18 held participants x 3 mixture-family folds, excludes held participant and held mixture fold from all training trials. Native complete mixture/utterance overlap graph and freeze remain unverified.",
+    "coverage": "Accounts for all nominal 1,080 active and 180 passive trial slots. One-second windows enter only with defined majority state and entire valid aligned 2-second context; exclusions remain per-person/block counts. No authentic eligible case count established."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Participant-macro balanced accuracy of active reported direction",
+      "direction": "higher",
+      "aggregation": "Pool active confusion counts across all three mixture folds within each person, compute that person balanced accuracy, then average all 18 equally.",
+      "rationale": "Prevents one-class folds or unequal window support from changing the estimand. Any person lacking either class makes the all-18 primary unestimable."
+    },
+    "secondary": [
+      "All-18/eligible-denominator log loss, Brier and calibration; report each class count and coverage.",
+      "At-least-two-seconds-from-keypress and transition-distance/switch-density strata, with no attention-purity interpretation.",
+      "Passive key-report motor diagnostic plus block/order strata.",
+      "Paired participant bootstrap interval and sign-flip test only under its symmetric/exchangeable-null assumption."
+    ],
+    "comparators": [
+      {
+        "name": "Independent backward TRF reconstruction",
+        "inputs": "Same EEG interval/audio; 0–500 ms lag orientation and padding frozen to match other methods.",
+        "procedure": "Reimplement the described ridge TRF explicitly as an independent baseline (alpha=100 reference recipe), with any tuning grouped within training; official trainer absent."
+      },
+      {
+        "name": "Regularized covariance/log-bandpower EEG classifier",
+        "inputs": "Identical full two-second EEG context and permitted audio access.",
+        "procedure": "Train-only features, normalization and logistic or shrinkage-LDA tuning; prospective competent baseline, not yet run."
+      },
+      {
+        "name": "Compact EEG temporal decoder",
+        "inputs": "Same channels, masks and context as TRF/classifier.",
+        "procedure": "Prospective EEGNet/TCN-style reference with frozen compute and training seeds, grouped validation."
+      },
+      {
+        "name": "Time/audio/EOG/motor shortcut controls",
+        "inputs": "Class prior, time-within-trial, speaker-side/audio-only or available EOG inputs; passive key reports evaluator-only.",
+        "procedure": "Compare on identical primary cases; retain passive and key-distance diagnostics and phase-preserving shifted-EEG control. Controls are specified, not fitted."
+      }
+    ],
+    "nuisance_controls": [
+      "Reconcile 60 active plus 10 final passive trials and actual order before authentic use; final passive condition introduces distribution shift.",
+      "Audit source removing final four channels and trigger selection 11–70; neither proves passive absence or a 64-channel retained input.",
+      "Offline filtering may spread movement/future information across the nominal window; common sample support does not remove this.",
+      "Keep majority duration/tie policy, edge masks, lag orientation and audio transform common to every arm.",
+      "Never average per-fold balanced accuracies or silently discard one-class participants."
+    ],
+    "uncertainty": "Paired participant resampling over 18 participants; implementation default is 2,000 bootstrap draws, seed 1729, and exact 2^18 sign flips when all paired effects are estimable. Windows/folds are not independent participants.",
+    "failure_policy": "Require unique finite p_right in [0,1] for every eligible active and passive case. Missing/nonfinite predictions fail the contract rather than change eligibility. Undefined all-18 balanced accuracy remains null with the exact denominator; report eligible-subset secondary separately."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/README.md",
+      "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/aasd_evaluator.py",
+      "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/provenance.json",
+      "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/tests/test_aasd_evaluator.py",
+      "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/docs/initial-evaluator-v1.md"
+    ],
+    "scorer_target": "Behaviorally reported left/right majority-state labels, with active participant-macro scoring and separate passive key-report diagnostic; neither paper-result copying nor direct attention truth.",
+    "target_fidelity": "full_target",
+    "delivered_scope": "Normalized evaluator inventory validator, timing/label preparation, 54 split cells, full case prediction validation, metrics and grouped uncertainty; no neural sample packet or participant runtime.",
+    "missing": [
+      "Authentic processed MAT/audio/trigger/channel census and complete active/passive/mixture alignment.",
+      "Sanitized input packet/opaque participant IDs and protected mode-specific transport.",
+      "Independent competent baselines and frozen stimulus overlap graph.",
+      "Resolve code/stimulus/HRTF reuse terms relevant to delivery without dropping necessary audio."
+    ],
+    "execution_evidence": "Initial evaluator source and generated tests are retained. No authentic archive census, baseline model trial, direct/viewer trial or scientific qualification is established; publisher performance remains source-reported under a different protocol."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential no-tools numerical or waveform interpretation of the common 2-second EEG plus admitted audio representation.",
+      "boundary": "Represent every sufficient channel/sample without label-derived selection; evaluator rows must never be shown.",
+      "evidence_ids": [
+        "evaluator",
+        "delivery"
+      ],
+      "missing": [
+        "No candidate packet, validated compact representation or direct-model transport."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed EEG/audio inspection constrained to the same offline context.",
+      "boundary": "Typed actions return permitted renderings only; no report markers, target labels or neighboring trials.",
+      "evidence_ids": [
+        "evaluator"
+      ],
+      "missing": [
+        "No typed viewer implementation or rendering information-equivalence validation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-case investigation using fixed numerical/decoder tools on matched EEG/audio observations.",
+      "boundary": "No evaluator feedback; train-only fitted artifacts and equal tool/context budgets.",
+      "evidence_ids": [
+        "interface",
+        "delivery"
+      ],
+      "missing": [
+        "Evaluator-only prepare/split/score CLI does not provide participant investigation transport or admitted model tools."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Frozen classifier/TRF/decoder with grouped training and immutable preprocessing recipe.",
+      "boundary": "Hold person and mixture families, fit normalization/calibration only on training, retain every required case.",
+      "evidence_ids": [
+        "evaluator",
+        "interface"
+      ],
+      "missing": [
+        "No authentic loader, trained baseline or frozen-program participant runner."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/historical/task.pre-understanding.v1.json",
+      "sha256": "0ee94e7c532697065e3fe1797c512cf10a8ed08f27f2b63bec8a87150e6b80ba",
+      "supports": "Preserved source registration, earlier review findings, full target and historical evidence; revision does not relabel these as new execution."
+    },
+    {
+      "id": "evaluator",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/aasd_evaluator.py",
+      "sha256": "ff323a38b5070e8c891f6f13355ab5e404c968aaacab6740971941ca47ffa45a",
+      "supports": "Exact duration-based report labels, common 2-second context, all-18 pooled-mixture scoring and passive key-report diagnostic."
+    },
+    {
+      "id": "interface",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/README.md",
+      "sha256": "74bf227d4940828f63825889469c152aa0379431648fbf588ae36ce72f6c11de",
+      "supports": "Evaluator consumes normalized inventory only, with no MAT loading, models or protected execution."
+    },
+    {
+      "id": "provenance",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/provenance.json",
+      "sha256": "5be2d0a91e4f878b6efe6b8669a53d02e2541c903dbf784796f1bbf813eb155f",
+      "supports": "Retained source identity and design provenance for independent evaluator."
+    },
+    {
+      "id": "controls",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/initial-evaluator-v1/tests/test_aasd_evaluator.py",
+      "sha256": "f79d97685afd42f90ba3867e9d72b65264e794e85d307fb1cd158de35ce9849e",
+      "supports": "Generated tests exercise masks, duration labels, dependent aggregation, complete predictions and source-independent statistical arithmetic."
+    },
+    {
+      "id": "delivery",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/docs/initial-evaluator-v1.md",
+      "sha256": "448d9552abe31e1424e40806002c3852994341cc08071ac18553f26637d68948",
+      "supports": "Participant packet not supplied; prepared rows are evaluator-only and contain labels/metadata."
+    },
+    {
+      "id": "official-data",
+      "kind": "primary_source",
+      "url": "https://zenodo.org/records/17413336",
+      "locator": "Version v1 experimental design and files, metadata rechecked 2026-11-16",
+      "supports": "18 participants, 60 active trials plus final passive 10-trial control, two speech streams, report key events and released processed/audio archives."
+    },
+    {
+      "id": "author-processing",
+      "kind": "primary_source",
+      "url": "https://github.com/XXuefeii/AASD-Processing/tree/033856b3f4762b5fa33bc096b0de9f04bf0b5205",
+      "locator": "Retained official-source audit in original registration: README and src/AASD_processing.m only",
+      "supports": "Preprocessing source does not deliver the paper Transformer/TRF trainers; channel and passive-block accounting remain native-audit requirements."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Initial evaluator source and generated tests are retained. No authentic archive census, baseline model trial, direct/viewer trial or scientific qualification is established; publisher performance remains source-reported under a different protocol.",
+    "excluded_claims": [
+      "No attention-specific, online, SOTA or paper-performance reproduction claim.",
+      "No authentic participant-mode execution or model result.",
+      "Programme accuracy would not establish direct waveform interpretation."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Distinguish report-state targets from internal attention and keep motor/passive-control limits explicit.",
+      "Bind the metric to pooled mixture-fold confusion within all 18 people and retain undefined-class accounting.",
+      "Identify the existing CLI as evaluator-only: deterministic case hashes and prepared labels cannot serve as a participant input interface."
+    ],
+    "source_review": "Inspected retained registration and named implementation source; reused pinned source-specific review and checked available official dataset metadata. No authentic payload or held labels read."
+  }
+}

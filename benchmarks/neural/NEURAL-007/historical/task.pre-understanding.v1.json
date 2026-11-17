@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-007",
+  "track": "neural",
+  "title": "Whole-night five-stage sleep scoring",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-H026"
+    ],
+    "titles": [
+      "Sleep-EDF Expanded: Sleep Cassette development scope"
+    ],
+    "overlap_groups": [
+      "SleepEDF"
+    ],
+    "task_family": "sleep_staging"
+  },
+  "scientific_question": "Can EEG identify five sleep stages in people excluded from fitting without using their hypnograms to trim the recording?",
+  "task_type": "prediction",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Five probabilities for every eligible fixed 30-second epoch."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://physionet.org/content/sleep-edfx/1.0.0/",
+      "https://github.com/mne-tools/mne-python",
+      "https://physionet.org/files/sleep-edfx/1.0.0/RECORDS",
+      "https://physionet.org/files/sleep-edfx/1.0.0/SHA256SUMS.txt",
+      "https://physionet.org/files/sleep-edfx/1.0.0/sleep-cassette/SC4001E0-PSG.edf",
+      "https://physionet.org/files/sleep-edfx/1.0.0/sleep-cassette/SC4001EC-Hypnogram.edf",
+      "https://raw.githubusercontent.com/mne-tools/mne-python/0265fc9a575f125d95c5c92f672fd0bb85cfab2d/tutorials/clinical/60_sleep.py",
+      "https://raw.githubusercontent.com/mne-tools/mne-python/0265fc9a575f125d95c5c92f672fd0bb85cfab2d/mne/datasets/sleep_physionet/age_records.csv"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-H026",
+        "ledger": "readiness/signals_extension_a.json",
+        "record_sha256": "e254ff9d6c96d2da5fe78398dae86203b07685276a92c203ed97e77affde21ca",
+        "data_manifest": {
+          "url": "https://physionet.org/files/sleep-edfx/1.0.0/RECORDS",
+          "sha256": "444cb5be68f22dfcc1a4114e6b8b8f99319e28ce7cdd130750d75109b1408286",
+          "records_total": 197,
+          "sleep_cassette_recordings": 153,
+          "sleep_telemetry_recordings": 44,
+          "declared_subset": "153 Sleep Cassette recording nights from 78 participants, corroborated by the official MNE age_records.csv mapping; exclude the 44 Sleep Telemetry recordings from this first scope.",
+          "example_input": {
+            "url": "https://physionet.org/files/sleep-edfx/1.0.0/sleep-cassette/SC4001E0-PSG.edf",
+            "bytes": 48338048,
+            "publisher_sha256": "2b40a18adf76af69a42d6db1f30f31d26b369f6d27ca0050ef30147ef892b131"
+          },
+          "example_labels": {
+            "url": "https://physionet.org/files/sleep-edfx/1.0.0/sleep-cassette/SC4001EC-Hypnogram.edf",
+            "bytes": 4620,
+            "sha256": "a4cf67694ade1b52a0ddd06d5817fd45d2d3e8bac5302f640f3e9cfbbf12a996",
+            "validation": "Downloaded the 4,620-byte annotation file only; SHA256 matches publisher and EDF+ labels/onsets/durations are present."
+          },
+          "publisher_hashes": "https://physionet.org/files/sleep-edfx/1.0.0/SHA256SUMS.txt"
+        },
+        "recording_contract": {
+          "neural": "Representative EDF header: EEG Fpz-Cz and EEG Pz-Oz at 100 Hz; horizontal EOG 100 Hz. Respiration, submental EMG, temperature and Event marker are 1 Hz in this file; channel rates must be read per asset.",
+          "labels": "Actual EDF+ annotation file contains Sleep stage W,1,2,3,4,R,? with onset/duration. Merge 3+4 to N3 for a five-class task; mask unscored/movement intervals evaluator-side under an explicit policy.",
+          "time_alignment": "Signal and annotation header start date/time agree (24 April 1989,16:13:00); EDF+ onset/duration labels align to the signal clock. First wake annotation spans 0–30,630 seconds; fixed 30-second epochs must use the recording clock.",
+          "biological_ids": "78 Sleep Cassette people, multiple recording nights per person; MNE age_records.csv provides participant/night/asset mapping. Group all nights of one person in a split.",
+          "evidence": "Actual 2,048-byte EDF header and complete 4,620-byte hypnogram inspected; no EEG sample payload downloaded."
+        },
+        "status": "artifact_ready"
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "neural_measurements": "Representative EDF header: EEG Fpz-Cz and EEG Pz-Oz at 100 Hz; horizontal EOG 100 Hz. Respiration, submental EMG, temperature and Event marker are 1 Hz in this file; channel rates must be read per asset.",
+    "allowed_context": "Actual EDF+ annotation file contains Sleep stage W,1,2,3,4,R,? with onset/duration. Merge 3+4 to N3 for a five-class task; mask unscored/movement intervals evaluator-side under an explicit policy.",
+    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
+    "time_alignment": "Signal and annotation header start date/time agree (24 April 1989,16:13:00); EDF+ onset/duration labels align to the signal clock. First wake annotation spans 0–30,630 seconds; fixed 30-second epochs must use the recording clock.",
+    "source_contract_evidence": "Actual 2,048-byte EDF header and complete 4,620-byte hypnogram inspected; no EEG sample payload downloaded."
+  },
+  "biological_unit": "78 Sleep Cassette people, multiple recording nights per person; MNE age_records.csv provides participant/night/asset mapping. Group all nights of one person in a split.",
+  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "split": {
+    "policy": "All nights for one person in one outer partition; full-clock epochs and fixed context; fit frequency features/scalers/thresholds on training people only.",
+    "data_scope": "public_development_only",
+    "manifest_status": "not_created",
+    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/mne-tools/mne-python",
+    "commit_or_archive_version": "0265fc9a575f125d95c5c92f672fd0bb85cfab2d",
+    "entrypoints": [
+      "tutorials/clinical/60_sleep.py",
+      "mne/datasets/sleep_physionet/age.py",
+      "mne/datasets/sleep_physionet/age_records.csv"
+    ],
+    "role": "signal_based_reference_classifier_and_loader",
+    "reference_executed_for_this_contract": false,
+    "source_paper": null,
+    "data_url": "https://physionet.org/content/sleep-edfx/1.0.0/"
+  },
+  "controls": [
+    "Time-of-night and majority baselines",
+    "all nights grouped",
+    "label-independent window eligibility",
+    "fixed context budget."
+  ],
+  "access_conditions": {
+    "agent_modes": [
+      "frozen_program",
+      "case_adaptive_equal_inputs_tools_compute"
+    ],
+    "common_policy": {
+      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
+      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
+      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
+      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    }
+  },
+  "evaluation": {
+    "observable_endpoints": {
+      "definition": "Participant-macro macro-F1, with per-stage recall and full-night confusion matrices.",
+      "scoring_status": "not_implemented",
+      "investigation_rule": null
+    },
+    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
+    "unresolved_grading": [
+      {
+        "id": "protocol",
+        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+      },
+      {
+        "id": "reference",
+        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+      },
+      {
+        "id": "scorer",
+        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      },
+      {
+        "id": "replication",
+        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+      }
+    ],
+    "executor_ref": null,
+    "scorer_ref": null
+  },
+  "resources": {
+    "class": "CPU_workstation_bounded",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": {
+      "observed_total_archive_size": "8.1 GB uncompressed according to publisher; includes Sleep Telemetry outside the proposed first scope.",
+      "example_pair_bytes": 48342668,
+      "bounded_intake_plan": "Two participant nights for schema/loader checks, then a person-grouped development panel; do not select nights or people based on reference performance.",
+      "compute_estimate": "CPU-oriented bandpower plus random forest; runtime/RAM not measured, and entire archive need not be loaded simultaneously."
+    }
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Freeze R&K 3+4 to N3 mapping and movement/unscored policy; qualify full-night signal-derived reference."
+    },
+    {
+      "id": "source_1",
+      "requirement": "No reference or model has been run; classifier accuracy, memory budget, packet separation and scoring still need execution qualification."
+    },
+    {
+      "id": "source_2",
+      "requirement": "The historical tutorial split/window policy cannot be silently promoted to unseen-person, label-independent evaluation."
+    },
+    {
+      "id": "source_3",
+      "requirement": "Old public recordings can be exposed in model training; no contamination-free or final-test claim."
+    },
+    {
+      "id": "source_4",
+      "requirement": "R&K labels and limited scalp channels constrain interpretation; decoded stage is not a measure of general scientific reasoning."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Freeze R&K 3+4 to N3 mapping and movement/unscored policy; qualify full-night signal-derived reference."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "5735a003222d497bf9fb98d47d0c4b3d7791b82f416e7bb2db64355a305ea473",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_extension_a.json",
+        "bytes": 75510,
+        "sha256": "c8483ac7303756678974cca75dfb64a16064f68cec4a0ae407ae84d7976f41d6"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
+  }
+}

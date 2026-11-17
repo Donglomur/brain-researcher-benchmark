@@ -16,11 +16,11 @@
     ],
     "task_family": "intracortical_speech"
   },
-  "scientific_question": "Does adaptation to channel loss or recording drift improve neural decoding beyond an unchanged decoder and language prior?",
+  "scientific_question": "Within T15 later sessions, how do fixed permitted calibration and declared feature/time corruptions change held-query phoneme error, relative to an independently frozen neural reference and no-neural prior?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Paired phoneme/text outputs, drift/channel-loss contrasts and adaptation-cost accounting."
+    "Source phoneme sequences for every retained later-session suffix query and the paired seven-arm session PER contrasts, with reference minus candidate full-adapt PER separate from within-candidate ablations."
   ],
   "input_assets": {
     "routes": [
@@ -740,19 +740,26 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Author loader opens each trial group/input_features: time by512 features, comprising two features on each of256 electrodes across four64-channel speech-motor arrays. The raw electrode voltage is outside this scope.",
-    "allowed_context": "Training/validation trial groups expose seq_class_ids, transcription, and sentence_label; attrs include n_time_steps, seq_len, session, block_num and trial_num. Test targets are omitted. Corpus is joined from the author Date/Block-number CSV.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Features binned at20ms per author README; sequence labels are phoneme/text targets, not observed phoneme-onset timestamps. Score sequence decoding without inventing per-phoneme timing truth.",
-    "source_contract_evidence": "Pinned author loader read and actual ZIP directory inspected:127session/split HDF5 files. HDF5 trial values/dimensions were not unpacked;512-feature schema is author-source documented, not independently observed from a trial payload."
+    "inputs": [
+      "Complete source-defined 512-feature, 20 ms-step trial arrays in frozen order.",
+      "27 training and nine development sessions; at most the first 20 chronologically available later-session labeled trials before sentence grouping form calibration candidates.",
+      "Infer receives one opaque query and a sealed allowed model; prior receives training/current calibration token sequences only."
+    ],
+    "forbidden_inputs": [
+      "Suffix-query tokens, query-time fitting of normalization or hyperparameters",
+      "Query IDs/features during adaptation, private arm names or permutation indices in participant inputs",
+      "Mutable query state carried between fresh inference processes",
+      "Replacing excluded calibration prefix trials to refill a 20-example budget"
+    ],
+    "case_identity": "Source private identity is session/block_num/trial_num; opaque identities are HMAC-derived. Every later session has seven complete arm contexts; authentic retained Q remains unresolved.",
+    "split": "Full chronological45 roster:27 train/9 development/9 later. Global sentence priority is query then calibration then development then training; all suffix queries survive and excluded prefix trials are not replaced. Every required session/partition must retain support.",
+    "coverage": "86 labeled members, 63 session/arm contexts per panel and two independent panels; 38 sealed models and 56+12Q phases. The generated Q=9 fixture is not an authentic trial census."
   },
-  "biological_unit": "One participant T15;45date-coded recording sessions, blocks and trials. Sessions are repeated measures of the same person.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "One person T15, with nine later-session paired summaries; arms and trials are repeated observations.",
+  "case_definition": "One full 512-feature trial time series per isolated neural inference; a session/arm context collects every suffix trial.",
   "split": {
-    "policy": "One person T15; chronological days/blocks with sentence identity grouped; adaptation uses only a declared prefix or calibration partition.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Full chronological45 roster:27 train/9 development/9 later. Global sentence priority is query then calibration then development then training; all suffix queries survive and excluded prefix trials are not replaced. Every required session/partition must retain support.",
+    "coverage": "86 labeled members, 63 session/arm contexts per panel and two independent panels; 38 sealed models and 56+12Q phases. The generated Q=9 fixture is not an authentic trial census."
   },
   "reference": {
     "source_code_url": "https://github.com/Neuroprosthetics-Lab/nejm-brain-to-text",
@@ -771,50 +778,98 @@
     "data_url": "https://doi.org/10.5061/dryad.dncjsxm85"
   },
   "controls": [
-    "Same channel mask and calibration examples",
-    "neural shuffle",
-    "LM fixed across arms",
-    "session rather than person inference."
+    "Global sentence grouping prevents repeated-text memorization across labeled and query partitions.",
+    "Reuse exactly the same adapted artifact for full/shuffle/zero so refitting noise cannot masquerade as content dependence.",
+    "Time shuffle preserves multivariate rows/duration; raw zeros before model normalization can retain an identifiable treatment.",
+    "Physical electrode map and author preprocessing exposure remain unresolved; feature loss is a declared computational corruption."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "No no-tools phoneme interpretation condition is supplied. A new direct condition must declare how calibration observations fit the context and use the same withheld token target.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "No typed viewer is supplied; inspecting feature plots is not equivalent to the implemented full-array GRU/CTC observation condition.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Exploratory case-adaptive agent orchestration lies outside the delivered frozen programme; tools/checkpoints and calibration access need a separate matched condition.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Delivered fit/adapt/infer/prior ABI, one immutable candidate source and independent reference with fresh query processes; source design is not observed isolation qualification.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [
+        "implementation-2",
+        "implementation-3",
+        "implementation-4",
+        "implementation-6"
+      ],
+      "missing": []
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed session-level PER change and cost; numerical claims checked independently.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "adapted_full_session_macro_PER",
+      "direction": "lower",
+      "aggregation": "Sum token edit distances/reference tokens within each of nine later sessions, then equal-session average; literal | remains in edits and denominator and ratios are not clipped.",
+      "rationale": "Retains actual withheld sequence accuracy; independent reference-minus-candidate PER is an additional comparison, not a claim of author-baseline parity."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "All seven absolute arm PERs and paired adaptation/corruption contrasts",
+      "Independent_reference_minus_candidate_full_adapt_PER",
+      "Per-session edits/denominators and exact complete query coverage",
+      "Phase cost, label exposure and model lineage; optimizer-step count may be unobserved rather than fabricated zero"
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "Independent compact GRU/CTC reference",
+        "inputs": "Same training/development/calibration/full query observations",
+        "procedure": "Delivered fixed seed14014 compact two-layer128-unit GRU source, ten training epochs and input-layer-only 100-step calibration; not the author deployed or competition checkpoint, competence unqualified."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "Frozen base versus adapted model",
+        "inputs": "Same queries, same base initialization, declared calibration prefix",
+        "procedure": "Delivered full-feature and fixed-feature-loss paired arms; fixed arms never access calibration labels."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "Shuffle/zero and no-neural prior",
+        "inputs": "Same sealed full-adapt model; duration preserved for corruption, only allowed tokens for prior",
+        "procedure": "Delivered row-shuffle/raw-zero and unconditional sequence-mode prior; these do not eliminate duration information from neural arms."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Global sentence grouping prevents repeated-text memorization across labeled and query partitions.",
+      "Reuse exactly the same adapted artifact for full/shuffle/zero so refitting noise cannot masquerade as content dependence.",
+      "Time shuffle preserves multivariate rows/duration; raw zeros before model normalization can retain an identifiable treatment.",
+      "Physical electrode map and author preprocessing exposure remain unresolved; feature loss is a declared computational corruption."
+    ],
+    "uncertainty": "Source reports descriptive nine-session contrasts and no p-values/confidence intervals. Sessions are repeated measures in one person; any later uncertainty protocol must preserve this scope and serial dependence.",
+    "failure_policy": "Require every retained suffix query across all nine sessions and seven arms in both panels before private scoring. Empty token predictions are valid; invalid IDs/vocabulary or unsupported complexity remain failed/null results, never a clipped favorable PER.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "143950dd62502c22b5b5192f87a1020dd3ff0ad20e9d72fc9715a007aad0ce7a",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "e5bfe6c3cd23f788baf1391c520bf9e1a83456359444f24d3be33be00ec96ffe"
+    }
   },
   "resources": {
     "class": "workstation_or_single_GPU_after_bounded_intake",
@@ -903,6 +958,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

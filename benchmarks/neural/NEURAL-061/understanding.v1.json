@@ -1,0 +1,248 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-061",
+  "title": "Matched regional replacement effects in held-animal wheel decoding",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "Current source selects the complete A0 frozen-program slice: signed velocity, k=10, real anatomy, all regions/ten seeds/423 source sessions/29 evaluation sessions. It implements persistent participant state and complete-support scoring but retains authentic preparation, publication and late-target holds. Adaptive I, trained-tool T1 and the broader multi-head sensitivity catalogue are prospectively unselected.",
+  "scientific_target": {
+    "question": "On the same held-animal wheel targets, does replacing a matched non-region population C with region R improve predictive performance given identical background B, and can a frozen participant programme predict competently under both BR and BC?",
+    "target_kind": "conditional_investigation",
+    "known_answer": "Measured signed wheel velocity supplies the participant known answer. The operator also estimates the regional contrast loss(BC)-loss(BR) under outcome-independent matching; its sign is not a preordained answer, and no participant interpretation-accuracy scorer is delivered.",
+    "answer_origin": "Original masked wheel-velocity measurements on complete one-second emitted support. Region labels, QC/probe strata and training-domain rates define the matching; no published regional ranking is treated as ground truth.",
+    "case_unit": "Original target window within session × region × matching seed × selected arm; prediction and matching cases remain nested observations.",
+    "independent_unit": "Animal: up to 13 eligible evaluation animals per region. Ten seeds are repeated matched populations, and sessions/probes/units do not increase n.",
+    "inference_scope": "Conditional observational replacement contrast relative to co-recorded matched non-region units, with full support reported. Different regions can have different eligible animals, so their mean differences are not intrinsic anatomical rankings or causal necessity.",
+    "exclusions": [
+      "Do not reward a large BR/BC difference obtained by degrading BC prediction.",
+      "Do not claim F/I, T0/T1, direct interpretation or a whole nine-head study from the selected A0 source.",
+      "Do not count all atlas regions or ten matching seeds as independent biological replicates."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Source-trained model inputs on the full original one-second windows, exact timestamps, clipping/exposure and target masks.",
+      "Matched R/C/B triples require same actual probe, QC/label and rate-band strata plus rate ratio <=1.25; k=10 and seeds 0–9 are fixed.",
+      "Reference arms B, BR, BC, R, C and ZERO; participant arms are exactly BR and BC, fitted separately from the same frozen source under A0/T0."
+    ],
+    "forbidden_inputs": [
+      "Evaluation-animal wheel labels, protected target joins and omitted extra evaluation-animal sessions in source/checkpoint fitting.",
+      "Outcome-driven region selection, relaxed matching, successful-seed-only means or resampling until favorable support.",
+      "Cross-cell/arm fitted-state transfer and unselected trained-reference tools; original source declares all target and publication authorities separately."
+    ],
+    "case_identity": "Source catalogue binds full original cohort/atlas, opaque window identities, masks and every session/region/seed/arm disposition. Actual region count and eligible support must be admitted from authentic source; no invented case IDs or eligible counts are supplied.",
+    "split": "423 source sessions from 126 animals in five animal folds; 29 sessions from 13 disjoint evaluation animals, with seven extra evaluation-animal sessions excluded from source lineage. Train-domain unit rates and source folds define selection before evaluation targets.",
+    "coverage": "Every original grey-matter region and ten seeds remain in the selected signed-velocity/k10/anatomy domain. A0 selects one frozen authoring condition/repeat with BR/BC; optional A1/A2/A3 and wider head/budget/anatomy catalogue remain NOT_SELECTED_PROSPECTIVELY, not completed negative results."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Participant BR signed-wheel-velocity mean squared error, reported per region",
+      "direction": "lower",
+      "aggregation": "Within each region, equal target timestamps within window, equal windows, all ten matching seeds, equal eligible sessions within animal, then equal animals on the one complete required-operand common support. No outcome-selected region average.",
+      "rationale": "This is the operative participant-dependent output already computed as candidate_BR_loss. The reference-only regional Holm family is an operator scientific endpoint, not a score of submitted programme or interpretation accuracy."
+    },
+    "secondary": [
+      "Participant BC mean squared error and BR/BC paired reference improvement on exact common support; these accompany the BR primary so degrading BC cannot earn credit.",
+      "Operator reference-only scientific estimand loss(BC)-loss(BR), with full six-arm B/R/C/ZERO diagnostics and exact eligibility/failed/unstarted census; this calculation alone is not participant performance.",
+      "Per-animal reference replacement effects and source-defined sign test/median intervals/Holm family; candidate competence and regional effects remain descriptive. A participant-submitted numerical-estimand or interpretation response is not currently scored."
+    ],
+    "comparators": [
+      {
+        "name": "Matched BC versus BR",
+        "inputs": "BR=B+R and BC=B+C each contain 2k units with identical B; R,C,B disjoint.",
+        "procedure": "Use fixed probe/QC/rate strata, rate ratio caliper 1.25 and seeds 0–9 without replacement or outcome-driven relaxation."
+      },
+      {
+        "name": "Complete six-arm evaluator reference",
+        "inputs": "B, BR, BC, R, C and ZERO on original permitted source/query support.",
+        "procedure": "Preserve full source-defined six-configuration × five-source-fold selection plus final refits; actual competence remains unmeasured."
+      },
+      {
+        "name": "Participant competence against corresponding reference arm",
+        "inputs": "Exact BR or BC input and common support.",
+        "procedure": "Report arm-specific absolute loss and paired reference difference; do not turn a deliberately weak BC into an apparent understanding gain."
+      }
+    ],
+    "nuisance_controls": [
+      "Match population size, probe, QC category and training-rate stratum, retaining residual rate/quality balance diagnostics.",
+      "Preserve one shared complete-ten-seed support object across every compared operand.",
+      "Keep whole atlas multiplicity denominator; unavailable p-values retain conservative slots, while prospectively unselected studies are not fabricated tests.",
+      "Expose region-specific animal coverage; between-region mean differences with different support are not rankings."
+    ],
+    "uncertainty": "Source exact two-sided sign test concerns median directional animal effect, not the mean. Holm correction covers the complete original reference region family; candidate analyses remain descriptive. At 13 nonzero animals the smallest two-sided p is 2^(1-13), so first-step Holm at alpha .05 is impossible for 205 or more regions. Actual R and eligible n_r remain unknown; seeds never enlarge n.",
+    "failure_policy": "Every expected region/session/seed/arm gets a complete, scientific-unavailable, failed or unstarted disposition. Any one unavailable required seed removes the whole session from the common scientific estimator with reasons retained; missing/malformed output, failed fit or uncertain process exit is production failure and cannot become biological exclusion. All planned animals remain in coverage tables."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/README.md",
+      "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/API_SELECTED.md",
+      "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/contracts/adopted/DESIGN.md",
+      "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/contracts/adopted/SUPPORT_AND_INFERENCE.md",
+      "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/runtime/n061/scoring.py",
+      "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/runtime/n061/matching.py",
+      "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/producer/child.py",
+      "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/runtime/n061/grading.py",
+      "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/runtime/n061/models.py"
+    ],
+    "scorer_target": "scoring.py joins exact target masks and ordered identities, distinguishes six reference arms from two participant arms, reduces common complete-ten-seed support, calculates paired losses and retains the full Holm family. matching.py physically constructs outcome-independent disjoint unit triples. This targets real neural-behavior relationships, not source-paper table reconstruction. grading.py exposes candidate_BR_loss and candidate_BC_loss with paired reference competence; its primary_family is reference-only and invariant to candidate answers, so the revised participant primary selects the existing BR loss output prospectively.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Persistent participant source supports fit/infer with arbitrary Python fitted state retained in an isolated child across the evaluation roster. Generated 26-method verification and fixture output counts are source-engineering evidence; two fixture regions are not authentic region selection.",
+    "missing": [
+      "Authentic same-open original capture, complete atlas/eligibility and full support qualification.",
+      "Qualified runtime/image/dependencies, whole-study resources, outside completion and late-target issuer.",
+      "Complete fixed-reference numerical qualification and any participant model run; optional adaptive/tool tiers have not been selected.",
+      "A prospectively frozen scorer for participant-submitted regional estimands/interpretations; reference-only Holm calculations cannot serve as participant understanding performance."
+    ],
+    "execution_evidence": "Source inspection in this revision only; no authentic-data preparation, candidate execution or model trial was performed."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Prospective frozen no-tools encoding of complete neural windows and matched populations with responses scored against the same target.",
+      "boundary": "Must demonstrate full target/support equivalence and manageable encoding before calling it a direct observation condition.",
+      "evidence_ids": [
+        "source-3"
+      ],
+      "missing": [
+        "No direct input encoding or response harness; T0 still permits code and fitting."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Prospective typed raster/population viewer with matched arm-specific access and numerical prediction collection.",
+      "boundary": "Images must preserve declared observation scope; no query-union across regions/seeds/arms, labels or arbitrary compute.",
+      "evidence_ids": [
+        "source-2"
+      ],
+      "missing": [
+        "No typed image transport, rendering parity or complete response interface."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "A1 investigation and T1 supplied-reference tool designs are documented but unselected; A0 is frozen-program T0 only.",
+      "boundary": "Any future I context is animal × region × seed × arm, with a common matched-support object and equal whole-panel ceilings.",
+      "evidence_ids": [
+        "source-2",
+        "source-3"
+      ],
+      "missing": [
+        "Select and implement complete adaptive/tool study before outcomes; current A0 cannot stand in for an F/I comparison."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "A0 captures one global frozen method, fits BR and BC separately per cell/arm, and keeps arbitrary fitted state within the same participant child across the full evaluation roster.",
+      "boundary": "No pickled state extraction into a proxy model; no cross-cell/arm sharing; exact ordered finite scalar outputs before private grading.",
+      "evidence_ids": [
+        "source-1",
+        "source-2",
+        "participant-child",
+        "operative-grading",
+        "response-loss"
+      ],
+      "missing": [
+        "Authentic data/native execution, complete reference competence and outside target/publication authorities remain absent."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "historical-definition",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-061/historical/task.pre-understanding.v1.json",
+      "sha256": "eb8c653eeea3e72ef301e1b53c8f171b73f7277833a159f84bf051e82dfcec8f",
+      "supports": "Original registered question, source identity, public-development status and source-specified population; retained without changing historical claims."
+    },
+    {
+      "id": "source-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/README.md",
+      "sha256": "2bc9281f2c1e25f18b5e76ad5b1282c23db3b5020bce9d5ca5a0073f825e4bbd",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/API_SELECTED.md",
+      "sha256": "8ccca6889a8df09c29360884375cd12d5d4940bfef9d1a7eb3040b4424dd2c73",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/contracts/adopted/DESIGN.md",
+      "sha256": "58cd418a6e7c1b5b3bd2fd4c3b918da5c5874083baf7c82368833f25df83abf1",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/contracts/adopted/SUPPORT_AND_INFERENCE.md",
+      "sha256": "8f8f278afb99f0dac1b8f05d35ae5ce91eaa947a560c6951b1e16641c8c44c56",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/runtime/n061/scoring.py",
+      "sha256": "39e1295ad82703f72d4118b8d80b46bbdf06cc8cbf77c767ea18372439885839",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/runtime/n061/matching.py",
+      "sha256": "8c56a5976d28dd91c29e7bed42203d9429ab2f93ad2ab2a27c8e682e98caeb17",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "official-ts1-loader",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/brainbench-org/ibl-bwb/6fbd666fe8170a2165f5198c1f490911424a654d/src/ts1/ts1_dataset.py",
+      "locator": "IBLBrainWideBenchTS1 dataset_transform, _get_target and get_sampling_intervals at commit 6fbd666fe8170a2165f5198c1f490911424a654d",
+      "supports": "Official TS1 has task-specific target windows, masks and trial identity; all_units is the reference build. Its target extraction is distinct from the task-specific revised estimators."
+    },
+    {
+      "id": "participant-child",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/producer/child.py",
+      "sha256": "535c77ffeb4230b5174423fe2e0319940c9237fe3c54fe895cd65259bff8b1a8",
+      "supports": "Actual one-fit persistent in-child state, complete 423-source and 29-query binding, exact arm/cell identities and ordered unlabeled prediction protocol."
+    },
+    {
+      "id": "operative-grading",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/runtime/n061/grading.py",
+      "sha256": "4be092737d76360ad88453dd87a32b8f42761988e57579e53dce4a90746c5dd8",
+      "supports": "Reference-only primary Holm family is distinct from participant per-region BR/BC loss and paired-reference competence."
+    },
+    {
+      "id": "response-loss",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-061/implementations/neural061-persistent-state/science/runtime/n061/models.py",
+      "sha256": "1689be0b96f483ac7671e78de473631cf07cdffaeacee3e63a9384525f1ea14a",
+      "supports": "Signed wheel velocity regression uses squared error; other head losses remain outside selected scope."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical source-engineering controls retain their original limited scope. No direct-observation or typed-viewer model result is established for this task.",
+    "excluded_claims": [
+      "Generated complete-population fixtures do not establish actual atlas support or scientific inference.",
+      "Programme competence does not establish direct neural understanding.",
+      "One selected A0 arm does not constitute the documented optional F/I or trained-tool comparison."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Make selected signed-velocity/k10/anatomy A0 scope and unselected adaptive/tool tiers explicit.",
+      "Use existing participant BR prediction loss as the prospectively selected operative primary; retain BC competence and operator regional estimands separately, and disclose the absent participant interpretation scorer.",
+      "Require complete-ten-seed common support and expose region-dependent biological support and Holm resolution limits."
+    ],
+    "source_review": "Read original task, delivered implementation documentation and the pinned local scorer/preparer or support source. Reused verified source provenance and rechecked the pinned official TS1 loader; the documentation URL was inaccessible through the web tool."
+  }
+}

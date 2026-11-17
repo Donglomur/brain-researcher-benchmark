@@ -16,11 +16,11 @@
     ],
     "task_family": "sleep_staging"
   },
-  "scientific_question": "Does EOG add stage information beyond EEG and time-of-night, particularly for REM confusions?",
+  "scientific_question": "Under matched procedures and complete person/epoch support, does adding horizontal EOG to EEG plus clock improve held-person sleep-stage predictions, especially REM recall?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Paired EEG versus EEG+EOG predictions, stage-specific differences and uncertainty."
+    "Expert hypnogram stage labels for both observation arms and the deterministic paired differences from their independently committed prediction panels. The sign of the EOG contribution is unknown before evaluation and may be zero or negative."
   ],
   "input_assets": {
     "routes": [
@@ -75,19 +75,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Representative EDF header: EEG Fpz-Cz and EEG Pz-Oz at 100 Hz; horizontal EOG 100 Hz. Respiration, submental EMG, temperature and Event marker are 1 Hz in this file; channel rates must be read per asset.",
-    "allowed_context": "Actual EDF+ annotation file contains Sleep stage W,1,2,3,4,R,? with onset/duration. Merge 3+4 to N3 for a five-class task; mask unscored/movement intervals evaluator-side under an explicit policy.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Signal and annotation header start date/time agree (24 April 1989,16:13:00); EDF+ onset/duration labels align to the signal clock. First wake annotation spans 0–30,630 seconds; fixed 30-second epochs must use the recording clock.",
-    "source_contract_evidence": "Actual 2,048-byte EDF header and complete 4,620-byte hypnogram inspected; no EEG sample payload downloaded."
+    "inputs": [
+      "Historical finite arms:12 EEG engineered features +3 clock features versus those15 plus6 horizontal-EOG features; same six training people and same two held-development people.",
+      "Proposed full153 successor uses raw C/EC/OC/EOC views under the shared NEURAL007 whole-clock contract; it is not an adopted completed replacement for the finite engineered-feature task."
+    ],
+    "forbidden_inputs": [
+      "EOG or full-modality pretrained outputs in the EEG-only arm; shared YASA caches therefore cannot be blindly mounted.",
+      "Development stage labels, private masks, answer-bearing source annotations, or feedback before both full panels are committed.",
+      "Different training rows, hidden label-based crops or selectively dropped REM-poor people across arms."
+    ],
+    "case_identity": "Finite source fixes development-001 with2,780 epochs and development-002 with2,670, using canonical full-clock IDs in both arms. Full-source helper expects independently authenticated78-person/153-night support and never proves it from counts.",
+    "split": "Finite declared split is six training/two exposed development people with four reserved outside the package. Proposed full153 route shares six person-grouped folds with NEURAL007 and must be qualified separately.",
+    "coverage": "Finite:5,450 predictions per arm,10,900 total, both full panels plus optional claim file. Full153 helpers require all936 candidate and1,170 reference outputs before grading; those are planned delivery requirements, not observed completed predictions."
   },
-  "biological_unit": "78 Sleep Cassette people, multiple recording nights per person; MNE age_records.csv provides participant/night/asset mapping. Group all nights of one person in a split.",
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "Person; the finite two-person panel is shared with NEURAL007, not an independent cohort.",
+  "case_definition": "One person with paired full-clock EEG+clock and EEG+EOG+clock predictions; epoch identities must match exactly across arms.",
   "split": {
-    "policy": "All nights for one person in one outer partition; full-clock epochs and fixed context; fit frequency features/scalers/thresholds on training people only.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Finite declared split is six training/two exposed development people with four reserved outside the package. Proposed full153 route shares six person-grouped folds with NEURAL007 and must be qualified separately.",
+    "coverage": "Finite:5,450 predictions per arm,10,900 total, both full panels plus optional claim file. Full153 helpers require all936 candidate and1,170 reference outputs before grading; those are planned delivery requirements, not observed completed predictions."
   },
   "reference": {
     "source_code_url": "https://github.com/mne-tools/mne-python",
@@ -103,50 +108,101 @@
     "data_url": "https://physionet.org/content/sleep-edfx/1.0.0/"
   },
   "controls": [
-    "Identical epochs and fitting budgets",
-    "time-only reference",
-    "person bootstrap",
-    "no selection on evaluation REM results."
+    "Physically separate feature views and bind the same candidate source/recipe before either target score.",
+    "Verify same support and training/tuning semantics; finished probability files cannot prove these facts.",
+    "Keep both absolute metrics visible; no scientific success floor or reward based on a positive contrast.",
+    "Shared cohorts, preprocessing, folds and costs with NEURAL007 prohibit counting a replication or extra benchmark for each arm."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential direct matched EEG versus EEG+EOG waveform interpretation using identical epochs, scales and context.",
+      "boundary": "Separate model contexts for each arm; no pretrained probabilities or feedback, and no opportunity to see EOG before the EEG-only response.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered direct paired response collector, authentic waveform packet or model trial."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed multichannel waveform viewer with EOG disabled in EEG-only arm.",
+      "boundary": "The observation policy must be enforced by the viewer transport and paired response commitment, not a written instruction.",
+      "evidence_ids": [],
+      "missing": [
+        "No task-specific typed-viewer or paired transport implementation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Shared full153 investigation/report helper source, including matched signal contrasts and evidence-linked numerical claims.",
+      "boundary": "Requires separately admitted complete programme grade; helper arithmetic is not a standalone candidate episode.",
+      "evidence_ids": [
+        "comparison",
+        "comparison_source"
+      ],
+      "missing": [
+        "The supplied contribution helper computes report arithmetic, not a per-case investigator episode; current complete delivery and authenticated grade producer are absent."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Historical declared same-source programme executed independently in physically separated feature views.",
+      "boundary": "Both prediction panels must be committed before labels; existing manifests are lineage only.",
+      "evidence_ids": [
+        "finite_manifest",
+        "bridge"
+      ],
+      "missing": [
+        "Historical paired runner/scorer dependencies absent from this public closure; restore before claiming source-delivered execution."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed participant-macro change in macro-F1 and REM recall; claim verification rate.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "paired_equal_person_macro_F1_difference_EEG_EOG_clock_minus_EEG_clock",
+      "direction": "two_sided",
+      "aggregation": "Compute each person’s fixed-five-class macro-F1 in each complete arm, subtract EEG+clock from EEG+EOG+clock, then average people equally; retain both absolute arms.",
+      "rationale": "The scientific question is an incremental contrast with either sign valid, not a scalar maximization game. Report full-arm absolute quality to expose deliberately weak baselines."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Equal-person REM-recall difference with explicit support; aggregate is null if any required person lacks true REM, while the primary includes everyone.",
+      "Both arms’ per-person confusion matrices, fixed-stage F1 and recall, and matched comparator contrasts.",
+      "Numeric claim agreement for the exact registered aggregates/people, explicitly separate from scientific reasoning.",
+      "Probability calibration needs actual probabilities and a bound companion; confusion matrices alone are insufficient."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "matched RF EEG+clock / EEG+EOG+clock",
+        "inputs": "Same feature rows, labels, tuning policy and budget; only horizontal-EOG features added.",
+        "procedure": "Historical fixed RF comparator pair, to be rebound and authenticated before replay. Method differences require review."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+        "name": "clock-only / EEG-without-clock / EOG+clock / training-majority",
+        "inputs": "Prespecified nested signal and nuisance inputs.",
+        "procedure": "Historical comparator set; do not select a favorable subset after scoring."
       },
       {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "fixed within-person EOG displacement",
+        "inputs": "Same model state with prespecified displaced query EOG.",
+        "procedure": "Alignment sensitivity diagnostic only; not a null distribution or causal intervention."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Physically separate feature views and bind the same candidate source/recipe before either target score.",
+      "Verify same support and training/tuning semantics; finished probability files cannot prove these facts.",
+      "Keep both absolute metrics visible; no scientific success floor or reward based on a positive contrast.",
+      "Shared cohorts, preprocessing, folds and costs with NEURAL007 prohibit counting a replication or extra benchmark for each arm."
+    ],
+    "uncertainty": "Finite panel: two descriptive paired person values, no population interval/p-value. Full153 source offers person/fold sensitivity with shared-training dependence retained; any future population inference requires an explicit validated plan.",
+    "failure_policy": "Both exact full-clock probability panels must validate before private label access. Missing/duplicated/invalid epochs or inconsistent claim types are refused; undefined REM is null with full denominator, never silently reduced to supported people.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "33ccd058ceec2f840f48d06a060e4a764ed4b5242c661c5005f72d4ffd815647",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "fcb3621f14111bef9cab4ad6fb4565a4d5b7d334b5e71a8bbea74a7ff76580cc"
+    }
   },
   "resources": {
     "class": "CPU_workstation_bounded",
@@ -236,6 +292,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

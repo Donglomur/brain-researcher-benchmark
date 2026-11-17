@@ -16,11 +16,11 @@
     ],
     "task_family": "mental_imagery"
   },
-  "scientific_question": "Can a perception-trained decoder identify the instructed imagery category within the same participant for categories excluded from decoder training?",
+  "scientific_question": "Can a perception-trained within-person decoder rank the instructed imagery category among50 fixed candidate categories, and does access to neural observations improve over matched no-neural/permuted-training controls?",
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "Candidate category scores from imagery fMRI."
+    "The instructed category for each imagery trial, withheld until predictions freeze; this is not a recovered photograph or an independent verification of subjective imagery content."
   ],
   "input_assets": {
     "routes": [
@@ -44,17 +44,23 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: perceived/imagined-object fMRI samples and fixed candidate image features; actual processed array conventions and cue timing require inspection.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "Processed within-person ROI_VC fMRI with perception support and a fixed candidate category feature bank using all 1000 cnn7 units.",
+      "Source arms neural, no_neural and training_permuted; paired access conditions differ by selected official code-body access only."
+    ],
+    "forbidden_inputs": [
+      "Query category labels, cue-bearing filenames/trial ordering metadata and label-based imagery averaging before prediction freeze.",
+      "Imagery-informed voxel/feature selection and use of target categories in perception decoder fitting contrary to frozen category split."
+    ],
+    "case_identity": "Source protocol emits Subject1..Subject5/{neural,no_neural,training_permuted}/{imagery,perception}; paired grading adds two access conditions for60 required cases, each with fixed complete trial rows.",
+    "split": "Within-person perception support then blinded imagery/perception queries; preserve category/run/repetition groups. Trusted grader alone may average frozen score vectors by hidden category; new-person transfer is outside scope.",
+    "coverage": "Allfive people, three arms, two phases and two access conditions:60 cases. Each imagery case has500 trials (10 per50 categories); perception1750 trials (35 per category). Fixed ROI_VC and all 1000 cnn7 units are a declared feature/ROI scope, not the complete 13-family/10-ROI hierarchy task."
   },
-  "biological_unit": "participant; sessions/trials nested within participant",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "Five biological participants; categories and repeated trials remain nested/dependent.",
+  "case_definition": "One imagery or perception trial within person; grading contexts are person×arm×phase×access condition.",
   "split": {
-    "policy": "Per-person perception support followed by blinded imagery trials. Keep repeats/categories/runs grouped; perform any label-based averaging only in the trusted grader after prediction freeze. New-person transfer requires explicit support/alignment. Disclose category-name cue carryover and pretrained-feature exposure.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Within-person perception support then blinded imagery/perception queries; preserve category/run/repetition groups. Trusted grader alone may average frozen score vectors by hidden category; new-person transfer is outside scope.",
+    "coverage": "Allfive people, three arms, two phases and two access conditions:60 cases. Each imagery case has500 trials (10 per50 categories); perception1750 trials (35 per category). Fixed ROI_VC and all 1000 cnn7 units are a declared feature/ROI scope, not the complete 13-family/10-ROI hierarchy task."
   },
   "reference": {
     "source_code_url": "https://github.com/KamitaniLab/GenericObjectDecoding",
@@ -66,38 +72,104 @@
     "data_url": "https://github.com/KamitaniLab/GenericObjectDecoding"
   },
   "controls": [
-    "Language/category-prior baseline",
-    "no cue labels in query",
-    "unseen-category grouping",
-    "fixed candidate panel."
+    "Category-name cues and category priors remain alternative explanations even after hidden query label removal.",
+    "Use all 1000 units and train-only voxel selection; never select units based on imagery outcomes.",
+    "All60 admissions precede protected gold access; label-based aggregation is grader-only and after freeze."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A fixed numeric/visual fMRI observation with candidate bank could define a direct category-scoring condition.",
+      "boundary": "Preserve complete permitted evidence and hide cue labels; direct performance cannot be inferred from programme grades.",
+      "evidence_ids": [
+        "protocol"
+      ],
+      "missing": [
+        "No direct participant transport/representation/response collection"
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed ROI map or feature-view inspection for the same fixed category answer.",
+      "boundary": "Rendering must retain specified observations, avoid labels and prevent raw-array/file retrieval.",
+      "evidence_ids": [
+        "protocol"
+      ],
+      "missing": [
+        "No typed viewer or matched view budget"
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Paired access/code exposure is not an implemented case-adaptive investigation transport.",
+      "boundary": "A future matched tool-assisted condition must hold observations, reference tools and resource budget fixed.",
+      "evidence_ids": [
+        "package"
+      ],
+      "missing": [
+        "No separate case-adaptive participant runtime shown"
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Retained programme producer dependencies and paired grader accept frozen programme outputs.",
+      "boundary": "Both programmes and complete60 source-bound prediction cases committed before protected design/gold access.",
+      "evidence_ids": [
+        "producer_panel",
+        "producer_entry",
+        "producer_invoke",
+        "scorer"
+      ],
+      "missing": [
+        "Genuine producer records, native authority and qualified target preparation",
+        "Producer source is present, but its external transport/lifecycle/stager dependencies and native environment are not a complete admitted public execution closure."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Freeze one candidate panel and robust finite/tie policy; report participant-macro multiclass identification accuracy and rank separately from the historical pairwise/rank-fraction statistic.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": null
+    "primary": {
+      "name": "Equal-person imagery/neural trial fractional-tie Top-1 accuracy",
+      "direction": "higher",
+      "aggregation": "Each complete 500-trial imagery/neural case averages1/number-of-top-ties if the true class ties for maximum, otherwise0; mean equally acrossfive participants, with paired access effects reported separately.",
+      "rationale": "Measures unambiguous50-way trial identification and handles ties without rewarding flat scores as perfect rank-fraction performance."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "Mean midrank and pairwise-half-ties score, separate from historical strict-greater diagnostic.",
+      "Private category-mean score-vector metrics after freeze; distinguish from averaging neural features before correlation.",
+      "Paired access B-minus-A effects and neural-minus-no_neural/training_permuted control interactions; perception transfer diagnostic."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "No-neural arm",
+        "inputs": "Candidate bank and allowed non-neural/perception-training context",
+        "procedure": "Implemented matched information control; flat scores imply1/50 Top-1, not perfect recovery."
+      },
+      {
+        "name": "Training-permuted arm",
+        "inputs": "Same neural observations with frozen source-defined training association permutation",
+        "procedure": "Implemented negative control for learned perception-to-feature association; preserve valid adverse effects."
+      },
+      {
+        "name": "Perception-trained feature decoder",
+        "inputs": "Same allowed perception fMRI and fixed cnn7 bank",
+        "procedure": "Competent decoder recipe must be frozen and independently qualified; official Python demo defaults must not be equated with the paper recipe."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Category-name cues and category priors remain alternative explanations even after hidden query label removal.",
+      "Use all 1000 units and train-only voxel selection; never select units based on imagery outcomes.",
+      "All60 admissions precede protected gold access; label-based aggregation is grader-only and after freeze."
+    ],
+    "uncertainty": "Report all five participant effects and matched controls. Existing paired grading effects are descriptive; neither many trials nor access repetitions increase biological n, and no significance threshold is established.",
+    "failure_policy": "Require complete60 cases, exact50-category panels,500/1750 rows and finite bounded score arrays before gold reads. Preserve malformed/incomplete producer outcomes; no cherry-picked subset score.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "0c161ad744488d92b7113ec5b86ce1516b0a213315ef4c3c67c5ddc67f408bf4",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "9bd50deebeaab5cb54563cd706b449b31fc8a262e4b0764492208c4143bfc6f9"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -249,6 +321,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

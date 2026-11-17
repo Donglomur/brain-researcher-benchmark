@@ -16,11 +16,11 @@
     ],
     "task_family": "sensorimotor_readout"
   },
-  "scientific_question": "Does active-trained neural decoding transfer to passive perturbations after direction and kinematics are matched?",
+  "scientific_question": "How well does a decoder trained only on active reaches reconstruct nominal velocity on passive perturbations, and how does its transfer loss compare with same-information direction controls and a separately calibrated passive decoder?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Matched active/passive performance contrast and uncertainty over held-out blocks."
+    "Two measured nominal velocity components in m/s per query, at the declared retrospective 120 msmovement-onset target."
   ],
   "input_assets": {
     "routes": [
@@ -126,24 +126,23 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Actual NWB header confirms units/spike_times with ragged spike_times_index, heldout-unit flags and observation intervals;65units in the inspected training file. Unit labels are not persistent identities across other sessions.",
-    "allowed_context": "Actual training NWB contains826trial-table rows and columns bump_dir, bump_time, cond_dir, ctr_hold, ctr_hold_bump, go_cue_time, id, move_onset_time, result, split, start_time, stop_time, target_dir, target_on_time. Hand position/velocity are timestamped behavioral arrays. Additional labels must be masked when they are prediction targets.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Sorted spike timestamps and trial/event times are aligned in the NWB time base. Official NWBDataset bins spikes on a1ms grid and resamples for5ms/20ms benchmarks; MC_Maze behavior uses timestamps, Area2 uses starting_time/rate. Rate values and unit conversion still need acquisition qualification.",
-    "source_contract_evidence": "Direct published asset URL inspected with bounded HTTP ranges; HDF5 names/shapes and identity metadata only, not neural/behavior values."
+    "inputs": [
+      "141 active training trials with 65 unit spike counts over six 20 msbins, training velocity and commanded direction.",
+      "All 92 query counts plus opaque 24 hex IDs,active/passivemode and one ofeightcommanded directions; passive calibration labels stay unavailable to candidate."
+    ],
+    "forbidden_inputs": [
+      "Passive training data, query velocity, source-row/event coordinates and private support masks/target summaries.",
+      "Stored sevenreference predictions/private scores or evaluation-informed fitting."
+    ],
+    "case_identity": "Exactly 92 unique 24 lowercase hex IDs in public order:40 passive and 52 active, all 8 directions in each mode. Actual packet identities are external; reordered output is rejected.",
+    "split": "Fixed 141 active-only training to 40 passive primary+52 active secondaryqueries. Passive_neuralreference used extra passive labels and must remain separately identified; this is not matched-information candidate training.",
+    "coverage": "Complete 92 two-value outputs and 16 mode×directionstrata; no omitted direction or query. The registered broader kinematic-matching investigation is not supplied by artifact grading."
   },
-  "biological_unit": {
-    "session_start_time": "2017-12-07T17:06:09.727000-05:00",
-    "general/subject/subject_id": "Han",
-    "general/subject/species": "Macaca mulatta",
-    "session_description": "Data from monkey Han performing center-out active-passive task. This file contains several continuous segments of the full session on 2017-12-07 that can be used for training models for the Neural Latents Benchmark."
-  },
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "One Han macaque/session;40 passive primary and 52 active secondary trials.",
+  "case_definition": "One trial-level two-component nominal velocity response, not the 30-bin trajectory of 021.",
   "split": {
-    "policy": "One Han session; whole trial/continuous block split; active/passive conditions held out as specified; no between-animal generalization.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "Fixed 141 active-only training to 40 passive primary+52 active secondaryqueries. Passive_neuralreference used extra passive labels and must remain separately identified; this is not matched-information candidate training.",
+    "coverage": "Complete 92 two-value outputs and 16 mode×directionstrata; no omitted direction or query. The registered broader kinematic-matching investigation is not supplied by artifact grading."
   },
   "reference": {
     "source_code_url": "https://github.com/neurallatents/nlb_tools",
@@ -161,50 +160,90 @@
     "data_url": "https://dandiarchive.org/dandiset/000127/0.220113.0359"
   },
   "controls": [
-    "Direction/kinematic matching",
-    "equal training data",
-    "separate condition-specific reference",
-    "no causal claim from decoding alone."
+    "Preserve all 8 commanded directions in each mode and their trial counts.",
+    "Audit kinematic overlap explicitly; direction stratification is insufficient matching.",
+    "Validate active-only method provenance outside artifact scorer and prohibit outcome-based reference selection."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed per-trial numerical counts or fixed raster with one finite 2 component velocity prediction; no no-tools participant transport is supplied.",
+      "boundary": "Any future direct arm must receive exactly the selected permitted observation and calibrated units, with no decoder, Python, source lookup, target or score access.",
+      "evidence_ids": [],
+      "missing": [
+        "Freeze a feasible complete per-case observation and response representation without silently changing the target.",
+        "Deliver and qualify a no-tools transport and complete answer collector before a direct-understanding claim."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed typed raster/time-window inspection of the same selected neural observations; no viewer is delivered for this registration.",
+      "boundary": "Only admitted rendered views; raw numerical/model operations would belong to the tool-assisted condition. Query targets and source identities remain inaccessible.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement task-specific renderer, restricted actions and complete responses.",
+        "Verify rendered observations preserve required time/unit information and run a separately identified viewer evaluation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Only an external numerical investigation could currently produce the submission; the artifact scorer does not supply a case-adaptive participant loop.",
+      "boundary": "Match observations, calibration, decoder access and cumulative compute against the fixed programme; freeze shared preparation, reset case state and prevent target/score feedback.",
+      "evidence_ids": [],
+      "missing": [
+        "Deliver a bounded per-case participant loop with authenticated observation and answer lineage."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "The current package accepts prediction artifacts or provides reference routines; it does not deliver the candidate programme lifecycle.",
+      "boundary": "Freeze source, fitting, selection and permitted query adaptation before assessment access; authentic target custody and runtime qualification remain external.",
+      "evidence_ids": [],
+      "missing": [
+        "Recover or implement the candidate producer and fit/freeze/predict/close lifecycle before calling the artifact score a programme evaluation."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed held-out velocity-loss difference and control coverage.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "passive_mean_squared_euclidean_velocity_error",
+      "direction": "lower",
+      "aggregation": "Mean of squaredx+y error over all 40 passivequeries,in(m/s)^2; trials, not directions, receive equal weight.",
+      "rationale": "This is the implemented arbitrary-candidate target. Retain the original active-neural-minus-passive-neural reference contrast as a separate diagnostic rather than mislabeling it candidate performance."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Mean loss on 52 activequeries and all 16 mode/directionstrata.",
+      "Allseven candidate-minus-reference signed differences; negative means lower loss.",
+      "Recomputed historical active_neural-minus-passive_neural loss on 40 passivequeries.",
+      "Proposed overlap/kinematic balance diagnostics before any broader matched-coding interpretation."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "active_neural_active_mean_active_direction_zero",
+        "inputs": "Same 141 active training information plus permitted query direction;zero uses none.",
+        "procedure": "Existing fixed reference artifacts independently bound to the operator packet; same-information controls relevant to candidate neural gain."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
-      },
-      {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "passive_neural_passive_mean_passive_direction",
+        "inputs": "Additional passive calibration labels unavailable to the candidate.",
+        "procedure": "Existing fixed privileged references; preserve their calibration advantage and report allsigned gaps, not a single favorable comparator."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Preserve all 8 commanded directions in each mode and their trial counts.",
+      "Audit kinematic overlap explicitly; direction stratification is insufficient matching.",
+      "Validate active-only method provenance outside artifact scorer and prohibit outcome-based reference selection."
+    ],
+    "uncertainty": "Paired complete-trial losses with direction/block dependence within one session; no 40 animal inference or mechanistic significance from an arbitrary positive contrast.",
+    "failure_policy": "All 92 ordered IDs and finite nonboolean 2-vectors required before private load; no candidate-selected reference identity. Keep poor predictions scored. Unsupported finite-overflow arithmetic yields null explicitly; shell exit 0 alone does not establish a valid score.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "18415b035e75b399c54c3e89982c70354e01624bc93698758530813c8043845a",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "6dd49995163d6b272d9d708b78dc84e7a300985957caa1bcc4504d2c5f2e68a1"
+    }
   },
   "resources": {
     "class": "CPU_workstation_bounded",
@@ -292,6 +331,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

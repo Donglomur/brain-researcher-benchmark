@@ -16,11 +16,11 @@
     ],
     "task_family": "population_dynamics"
   },
-  "scientific_question": "Do inferred latent representations preserve velocity information for held-out reach conditions?",
+  "scientific_question": "How well does a representation fitted without assessment velocity preserve movement information on eight held-out maze groups under a matched ten-dimensional readout comparison?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Training-only readout predictions plus condition-stratified latent-versus-observed comparisons."
+    "Measured, filtered two-axis hand velocity in physical m/s for 126 assessment trials×140 bins."
   ],
   "input_assets": {
     "routes": [
@@ -126,24 +126,24 @@
     ]
   },
   "allowed_inputs": {
-    "neural_measurements": "Actual NWB header confirms units/spike_times with ragged spike_times_index, heldout-unit flags and observation intervals;182units in the inspected training file. Unit labels are not persistent identities across other sessions.",
-    "allowed_context": "Actual training NWB contains2295trial-table rows and columns active_target, barrier_pos, barrier_pos_index, delay, go_cue_time, id, maze_id, move_onset_time, num_barriers, num_targets, rt, split, start_time, stop_time, success, target_on_time, target_pos, target_pos_index, trial_type, trial_version. Hand position/velocity are timestamped behavioral arrays. Additional labels must be masked when they are prediction targets.",
-    "allowed_context_policy": "The listed source fields are available to the operator. Supply only question-permitted predictors; remove this task target, its proxies, future values and answer-bearing source metadata from agent queries. Encoding tasks receive stimuli/history and training neural targets; held-out neural targets stay private.",
-    "time_alignment": "Sorted spike timestamps and trial/event times are aligned in the NWB time base. Official NWBDataset bins spikes on a1ms grid and resamples for5ms/20ms benchmarks; MC_Maze behavior uses timestamps, Area2 uses starting_time/rate. Rate values and unit conversion still need acquisition qualification.",
-    "source_contract_evidence": "Direct published asset URL inspected with bounded HTTP ranges; HDF5 names/shapes and identity metadata only, not neural/behavior values."
+    "inputs": [
+      "1340 official-training trials from 28 maze groups: uint16[1340,140,137]counts per 5 ms and training float64 velocity[m/s].",
+      "126 official-validation assessment trials from 8 disjoint maze groups with 137 observed-unit counts.",
+      "Anonymous training group/fourfold IDs; neural clock[-250,450)ms and velocity clock[-150,550)ms; axesx,y."
+    ],
+    "forbidden_inputs": [
+      "Assessment velocity, held maze labels/source-trial identity, raw NWB or prior 017/018 packets.",
+      "Assessment labels in PCA, scaling, ridge tuning or phase-template fitting."
+    ],
+    "case_identity": "All 126 anonymous assessment_trial_ids, exact x/y order,140 velocity edges and panel_fingerprint. Identity-preserving reordering is accepted; literal source IDs are not distributed.",
+    "split": "1340 training trials/28 maze groups versus 126 assessment trials/8 different maze groups; all maze versions stay together. Four whole-maze training folds fit preprocessing and tune the readout without assessment targets.",
+    "coverage": "Full 126×140×2 velocity trajectory; all 8 maze groups included equally. This is a declared subset of the 2295 trial source with different role eligibility, not the full 017/018 panel or another cohort."
   },
-  "biological_unit": {
-    "session_start_time": "2009-09-25T00:00:00-07:00",
-    "general/subject/subject_id": "Jenkins",
-    "general/subject/species": "Macaca mulatta",
-    "session_description": "Data from monkey Jenkins performing center-out delayed reaching task. This file contains trials from the full session on 2009-09-25 that can be used for training models for the Neural Latents Benchmark."
-  },
-  "case_definition": "One isolated biological-unit/session packet under the split policy; multiple scored observations are nested items, not independent biological cases.",
+  "biological_unit": "One Jenkins macaque/session; eight maze groups assess condition transfer, not animal replication.",
+  "case_definition": "A complete reach trajectory, nested within maze group and single recording session.",
   "split": {
-    "policy": "One Jenkins session; group whole reach trials/maze conditions; use official unit masks; no between-animal generalization.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Biological-unit paired uncertainty where multiple units exist; single-animal/person tasks use descriptive session/trial blocks and do not imply population replication."
+    "policy": "1340 training trials/28 maze groups versus 126 assessment trials/8 different maze groups; all maze versions stay together. Four whole-maze training folds fit preprocessing and tune the readout without assessment targets.",
+    "coverage": "Full 126×140×2 velocity trajectory; all 8 maze groups included equally. This is a declared subset of the 2295 trial source with different role eligibility, not the full 017/018 panel or another cohort."
   },
   "reference": {
     "source_code_url": "https://github.com/neurallatents/nlb_tools",
@@ -161,50 +161,89 @@
     "data_url": "https://dandiarchive.org/dandiset/000128/0.220113.0400"
   },
   "controls": [
-    "Equal readout capacity",
-    "whole trajectory-condition holdout",
-    "no velocity in latent fitting",
-    "within-animal inference."
+    "Recompute every fitted transform inside training folds; no velocity in unsupervised representation fitting.",
+    "Keep all variants of each maze in one role/fold.",
+    "Report movement-phase-only performance and disclose symmetric neural/target filtering."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed per-trial numerical counts or fixed raster with all 140×2 signed velocity values; no no-tools participant transport is supplied.",
+      "boundary": "Any future direct arm must receive exactly the selected permitted observation and calibrated units, with no decoder, Python, source lookup, target or score access.",
+      "evidence_ids": [],
+      "missing": [
+        "Freeze a feasible complete per-case observation and response representation without silently changing the target.",
+        "Deliver and qualify a no-tools transport and complete answer collector before a direct-understanding claim."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Proposed typed raster/time-window inspection of the same selected neural observations; no viewer is delivered for this registration.",
+      "boundary": "Only admitted rendered views; raw numerical/model operations would belong to the tool-assisted condition. Query targets and source identities remain inaccessible.",
+      "evidence_ids": [],
+      "missing": [
+        "Implement task-specific renderer, restricted actions and complete responses.",
+        "Verify rendered observations preserve required time/unit information and run a separately identified viewer evaluation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Only an external numerical investigation could currently produce the submission; the artifact scorer does not supply a case-adaptive participant loop.",
+      "boundary": "Match observations, calibration, decoder access and cumulative compute against the fixed programme; freeze shared preparation, reset case state and prevent target/score feedback.",
+      "evidence_ids": [],
+      "missing": [
+        "Deliver a bounded per-case participant loop with authenticated observation and answer lineage."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "The current package accepts prediction artifacts or provides reference routines; it does not deliver the candidate programme lifecycle.",
+      "boundary": "Freeze source, fitting, selection and permitted query adaptation before assessment access; authentic target custody and runtime qualification remain external.",
+      "evidence_ids": [],
+      "missing": [
+        "Recover or implement the candidate producer and fit/freeze/predict/close lifecycle before calling the artifact score a programme evaluation."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Held-out velocity R-squared and recomputed matched-readout difference.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "For investigations, recompute numerical claims and frozen held-out contrasts; the correct conclusion may be null or inconclusive. Do not score agreement with a favored biological story."
+    "primary": {
+      "name": "equal_maze_group_macro_uniform_axis_R2",
+      "direction": "higher",
+      "aggregation": "Within each held maze group pool trial/time samples, compute x/y R2 against group-specific means, average the axes equally, then average all 8 groups equally.",
+      "rationale": "Prevents trial-rich maze groups or high-variance axes from defining the entire transfer result; negative R2 remains meaningful."
     },
-    "comparability": "Task variants and related outcomes share source/family evidence. Never sum task counts as independent cohorts or average unlike native metrics.",
-    "unresolved_grading": [
+    "secondary": [
+      "Pooled uniform-axis R2; per-group/per-axis SSE,SST,MAE,MSE.",
+      "Candidate-minus-phase_only/raw 137/pca 10/random 10 signed differences.",
+      "Matched PCA10-minus-random 10 contrast requires verified identical fitting and readout access."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+        "name": "pca10_vs_random10",
+        "inputs": "Identical 137 unit training counts and training velocity;10-dimensional representation each.",
+        "procedure": "Implemented symmetric 50 ms Gaussian smoothing, training-fold scaling, PCA or fixed seeded QRrandom projection, identical ridge grid[0.01,0.1,1,10] and four whole-group folds."
       },
       {
-        "id": "reference",
-        "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
-      },
-      {
-        "id": "scorer",
-        "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
-      },
-      {
-        "id": "replication",
-        "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+        "name": "phase_only_and_raw137",
+        "inputs": "Training movement phase alone or full 137 unit count representation.",
+        "procedure": "Fixed training-only phase template and 137 dimensional residual ridge are controls; raw 137 has greater feature capacity and is not the matched latent contrast."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Recompute every fitted transform inside training folds; no velocity in unsupervised representation fitting.",
+      "Keep all variants of each maze in one role/fold.",
+      "Report movement-phase-only performance and disclose symmetric neural/target filtering."
+    ],
+    "uncertainty": "Paired maze/trial-block uncertainty is descriptive within one animal; keep maze dependence and no bin/neuron pseudoreplication.",
+    "failure_policy": "Require all 126×140×2 finite signed predictions in m/s and exact identities/clock. No clipping/fill. Any constant target axis in a held group makes the primary undefined with that group retained.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "7cc245d58241c3bcbd381d462d71f296670c124d26301f26d2a09a8ec7769a11",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "b869a5ee66421b1a7f3e8f613564994fe6e29f1e341a48ce8b0123f3f8b05031"
+    }
   },
   "resources": {
     "class": "CPU_workstation_bounded",
@@ -292,6 +331,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

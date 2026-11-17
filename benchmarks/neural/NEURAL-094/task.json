@@ -16,11 +16,11 @@
     ],
     "task_family": "decision_readout"
   },
-  "scientific_question": "Which choice-related neural effects remain after stimulus strength and measured movements are controlled?",
+  "scientific_question": "Within the fixed first100ms stimulus window, does neural activity improve prediction of final right/NoGo/left choice beyond a competent common stimulus/history/wheel predictor, and how do equally sampled co-recorded regional populations differ?",
   "task_type": "investigation",
   "neural_role": "input",
   "primary_outputs": [
-    "Region-wise conditional choice-prediction contrasts over the same trials and matched unit budgets, with mouse-level uncertainty and a declared per-session/alignment policy."
+    "Recorded final response on every required query trial, with source -1,0,+1 mapped to right,NoGo,left probabilities. Region-wise predictive effects are recomputed from paired losses rather than scored against a preferred biological conclusion."
   ],
   "input_assets": {
     "routes": [
@@ -45,17 +45,25 @@
     ]
   },
   "allowed_inputs": {
-    "proposed_scope": "Expected source-specific input: spike times, stimulus contrasts, wheel/movement and choices from the independent Steinmetz study; causal window metadata requires audit.",
-    "allowed_context_policy": "Only target-permitted variables may enter the query; all this task targets, future variables, answer-bearing filenames and evaluation labels stay private. Encoding receives stimuli/history with training neural responses and hides query neural targets.",
-    "schema_verified": false
+    "inputs": [
+      "First100ms spikes from source-QC2/3 units, including silent units; no activity-dependent unit selection.",
+      "Common current stimulus, previous source stimulus, chronological clock and fixed wheel observations; current stimulus is allowed because the target is final choice.",
+      "Regional subsets use K=min(n_left,n_right), outcome/activity-independent nested hash ranks and fresh dense unit aliases."
+    ],
+    "forbidden_inputs": [
+      "Final choice labels, private SESSION mappings and future response observations outside the fixed window",
+      "Literal anatomy, source identities and source-unit mappings in candidate context when the declared blind regional protocol is used",
+      "Private targets or reference fitted states as investigator tools"
+    ],
+    "case_identity": "Source requires39 sessions,10 mice and opaque query tokens in authenticated roster. Whole keys are w-{ordinal:02d}-{context|joint}; regional keys bind pair0..2627, session ordinal1..39, one of seeds2026110700..2026110704 and left/right. Actual source token map remains operator-side.",
+    "split": "Declared6014 fit,1994 validation and2042 query rows across39 sessions, partitioned chronologically before eligibility filtering; per-session fitting with training/validation refit. These are source-declared counts, not data reauthenticated in this revision.",
+    "coverage": "All73 literal unmerged labels and2628 unordered pairs are represented; structural unsupported pair/session cells remain explicit. All original39 sessions and10 mouse positions remain in reporting. Conditions and seeds add no task IDs."
   },
-  "biological_unit": "mouse; recording sessions nested",
-  "case_definition": "Proposed biological-unit/session packet with nested scored observations; exact eligible cases unknown until source audit.",
+  "biological_unit": "Mouse with sessions nested; co-recorded unit subsets and five seeds are repeated technical conditions, not biological replicates.",
+  "case_definition": "One trial within a source session for the whole-population comparison; regional pair/session/seed is a nested analysis condition.",
   "split": {
-    "policy": "Group all recordings from one biological person/animal; for single-subject collections use labeled within-subject whole-trial/session/condition blocks. Also group repeated stimulus identities and apply temporal guard bands covering every feature lag. Task-specific held-out condition follows the scientific question. Exact IDs/manifests pending source audit.",
-    "data_scope": "public_development_only",
-    "manifest_status": "not_created",
-    "uncertainty": "Group at biological unit, with source-specific stimulus/block dependence; do not promote neuron/trial counts to independent animals."
+    "policy": "Declared6014 fit,1994 validation and2042 query rows across39 sessions, partitioned chronologically before eligibility filtering; per-session fitting with training/validation refit. These are source-declared counts, not data reauthenticated in this revision.",
+    "coverage": "All73 literal unmerged labels and2628 unordered pairs are represented; structural unsupported pair/session cells remain explicit. All original39 sessions and10 mouse positions remain in reporting. Conditions and seeds add no task IDs."
   },
   "reference": {
     "source_code_url": "https://github.com/nsteinme/steinmetz-et-al-2019",
@@ -67,38 +75,117 @@
     "data_url": "https://doi.org/10.6084/m9.figshare.9598406"
   },
   "controls": [
-    "Joint stimulus, measured-movement and history comparator.",
-    "Verified initial-wheel versus final-choice definitions.",
-    "Equal unit budgets and sensitivity to unmeasured movement and temporal windows.",
-    "No causal necessity claim."
+    "Confirm guarded one-based peak-channel/probe joins and preserve literal raw labels without atlas regrouping.",
+    "Control current stimulus, previous original-source stimulus and first100ms wheel jointly.",
+    "Same trials, shared nuisance bytes, equal unit counts and outcome-independent subset seeds within each regional pair.",
+    "Keep sparse mouse support, structural unavailability and failures visible; do not infer population coverage from73 labels.",
+    "Use independently checked loss arithmetic including sign/status disagreement, not a tolerance that erases zero/sign errors."
   ],
   "access_conditions": {
-    "agent_modes": [
-      "frozen_program",
-      "case_adaptive_equal_inputs_tools_compute"
-    ],
-    "common_policy": {
-      "fixed_program": "Freeze program and fitting/adaptation recipe before query access; any target-batch adaptation must be explicitly permitted.",
-      "case_adaptive": "Same allowed data, checkpoint tools, context batch and accounted compute; no evaluator labels/feedback; reset case state as specified.",
-      "model_tools": "Compare generic numerical tools, supplied decoder alone, and matched agent-plus-decoder arms. Record checkpoint training exposure and preparation cost.",
-      "investigation": "Require estimand, numeric artifacts, uncertainty, alternative explanations and executable evidence; independent scorer verifies them."
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "No-tools inference from a fixed per-trial raster/context representation is a possible separately specified view; complete regional contrasts require the full numerical panel.",
+      "boundary": "A few selected plots cannot substitute for all query probabilities and regional support.",
+      "evidence_ids": [
+        "regional-0"
+      ],
+      "missing": [
+        "No fixed direct-observation packet or response collector."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential raster/context inspection with restricted typed rendering, retaining fixed timing and blind regional aliases.",
+      "boundary": "Rendered views cannot expose protected choices, source mappings or future observations.",
+      "evidence_ids": [
+        "regional-0"
+      ],
+      "missing": [
+        "No typed viewer implementation; numerical transport is not an image viewer."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Concrete investigator_policy.py actor alternates fixed-broker model generation with bounded Python actions and captured output/error feedback, then emits sealed fit state or a complete query-probability table. The episode is a whole source-defined session/view or regional-pair/view bundle stage; all its query observations are visible together.",
+      "boundary": "The globally frozen prompt/action policy retains code state and conversation within one stage, resets at fresh stages, and permits within-arm unlabeled query adaptation. It is not fresh-trial investigation. Exact native adapter mounts no query during training and only readonly fitted state during query; no cross-bundle feedback or query labels. Equal aggregate model reservations include authoring and identical per-condition non-model ceilings remain.",
+      "evidence_ids": [
+        "regional-investigator",
+        "regional-native",
+        "regional-controller",
+        "regional-bootstrap",
+        "regional-broker",
+        "regional-3"
+      ],
+      "missing": [
+        "Authentic complete operator data/capsule staging and qualified native image, process/storage isolation and provider/token admission.",
+        "Executed investigator/model trial with complete matched references; source_available records actor/transport code only, not a callable qualified service.",
+        "A separate fresh-trial observation/response episode if per-trial adaptive understanding is to be measured."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "F strategy freezes globally authored numerical code and runs exact complete whole/regional fit/query bundles.",
+      "boundary": "No runtime model access; same observation support and resource rules, full outputs/reference closure before grading.",
+      "evidence_ids": [
+        "regional-2",
+        "regional-3",
+        "regional-frozen-actor",
+        "regional-native",
+        "regional-controller",
+        "regional-bootstrap"
+      ],
+      "missing": [
+        "Native complete execution, competent reference fits and authentic-data custody qualification."
+      ]
     }
   },
   "evaluation": {
-    "observable_endpoints": {
-      "definition": "Recomputed held-out choice-loss improvement over joint sensory/movement baseline.",
-      "scoring_status": "not_implemented",
-      "investigation_rule": "Score verified numerical claims, declared estimands and held-out contrasts; null/inconclusive conclusions remain valid."
+    "primary": {
+      "name": "competent nuisance-reference log loss minus candidate whole-joint log loss",
+      "direction": "higher",
+      "aggregation": "Per-trial paired difference, average within session, equal sessions within mouse, then equal weight over all10 mice.",
+      "rationale": "The source fixes an independently selected competent stimulus/history/wheel reference so deliberately weakening candidate nuisance fitting cannot inflate the primary neural contribution."
     },
-    "comparability": "Distinct assignment within a shared task family/source; no new dataset/cohort claimed for paradigms, modalities or file versions.",
-    "unresolved_grading": [
+    "secondary": [
+      "All-arm natural-log loss, sum-of-three Brier score and top1 accuracy.",
+      "Regional side gain over common nuisance and competent regional references; descriptive right-minus-left paired loss.",
+      "Regional hierarchy: trials then five seed results, supported sessions within mouse, supported mice; never average seed probabilities.",
+      "Matched investigator-minus-frozen contrasts and context-by-neural interaction are diagnostics, not replacements for the competent-reference primary."
+    ],
+    "comparators": [
       {
-        "id": "protocol",
-        "requirement": "Freeze exact sample eligibility, target definition, primary metric, split, access rules and resource budget before outcomes."
+        "name": "trusted whole nuisance reference",
+        "inputs": "Stimulus/history/wheel observations only",
+        "procedure": "Implemented source selection menu uses prior/logistic/HGB, validation selection and fresh fit+validation refit; reference fitting/custody must be executed and independently qualified."
+      },
+      {
+        "name": "competent region-specific joint reference",
+        "inputs": "Same context/wheel plus the exact equal-K regional spike subset",
+        "procedure": "Implemented source uses four-C joint-logistic selection and final refit; three sealed common nuisance states are reused, one regional joint fit is new."
+      },
+      {
+        "name": "uniform right/NoGo/left prior",
+        "inputs": "No observations",
+        "procedure": "Analytic1/3 probabilities retained as a diagnostic; cannot substitute for competent nuisance control."
       }
     ],
-    "executor_ref": null,
-    "scorer_ref": null
+    "nuisance_controls": [
+      "Confirm guarded one-based peak-channel/probe joins and preserve literal raw labels without atlas regrouping.",
+      "Control current stimulus, previous original-source stimulus and first100ms wheel jointly.",
+      "Same trials, shared nuisance bytes, equal unit counts and outcome-independent subset seeds within each regional pair.",
+      "Keep sparse mouse support, structural unavailability and failures visible; do not infer population coverage from73 labels.",
+      "Use independently checked loss arithmetic including sign/status disagreement, not a tolerance that erases zero/sign errors."
+    ],
+    "uncertainty": "Current source reports descriptive finite-cohort effects, explicit coverage and seed variability; it defines no bootstrap, p-value or population-valid regional interval. Any new inferential comparison must prespecify mouse-level dependence and multiplicity across2628 pairs before outcomes.",
+    "failure_policy": "Authenticate every candidate/reference probability table and complete producer closure before first protected choice read. Missing late outputs block whole grading. Zero true-class probability is infinite loss; inf-inf and mixed signed infinities remain undefined; no dropping or clipping.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "1b2fb9d15da4cb4630770b37d2fa9e2c875fbfc0ecc0e5f62ade801c78403422",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "864c46737c8f413df6c23d159b25820d551965dce16ad0785dba7fd9035058ec"
+    }
   },
   "resources": {
     "class": "CPU_workstation_first; GPU_or_large_storage_only_after_intake",
@@ -226,6 +313,7 @@
     "runnable": false,
     "research_qualified": false,
     "submission_ready": false,
-    "reason": "A source specification is not an executed benchmark; runtime adapters are registered separately."
-  }
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
 }

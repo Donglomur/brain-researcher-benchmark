@@ -1,0 +1,228 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-062",
+  "title": "Known-image identity from calcium population summaries in held-out mice",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The public archive implements a precise eight-class summary-feature decoder and probability scorer, but supplies no authenticated full-payload projection, fitted reference or qualified runner. Its I mode adapts a precommitted script during FIT; it is not a delivered per-case tool-using investigator. Complete the declared cohort projection and fixed-reference qualification before treating the source as an executable benchmark.",
+  "scientific_target": {
+    "question": "How accurately do fixed post-stimulus calcium population summaries identify one of eight previously known images in held-out mice on matched CHANGE presentations, and how much predictive information survives context and pre-stimulus controls?",
+    "target_kind": "observation_decoding",
+    "known_answer": "The source stimulus-presentation image_name mapped to one of eight fixed class indices within image set A/B/G/H, for every admitted query presentation. This is a measured stimulus identity, not an author-reported score.",
+    "answer_origin": "Allen Visual Behavior v1.1.0 NWB stimulus-presentation tables; labels remain evaluator-only on validation/test mice. The class dictionary is public, while per-event labels are not.",
+    "case_unit": "One held mouse × image set × CHANGE/REPEAT context; presentations and experiment planes are nested scored observations. CONTEXT/PRE/POST/PRE_POST are four conditions on the same case.",
+    "independent_unit": "Mouse; all sessions, containers, registered cell lineages and imaging planes of each mouse share its split.",
+    "inference_scope": "Offline closed-vocabulary image decoding across mice from published dF/F summaries. It does not align individual cells across mice or establish a unique visual mechanism.",
+    "exclusions": [
+      "Globally unseen image-class recognition: image identities are shared between training and query mice, and G/H contain shared familiar images.",
+      "Raw-movie, single-cell or native trace interpretation; participants receive fixed population features.",
+      "Causal response-onset or online decoding claims from historical source preprocessing and post-stimulus features."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Fixed published source-valid ROIs, no response-based cell selection; per 250 ms native-clock bin, ROI-averaged dF/F is summarized by mean, population SD and five percentiles. PRE windows [-0.50,-0.25),[-0.25,0); POST [0.05,0.30),[0.30,0.55) seconds.",
+      "Four panels: CONTEXT 32, PRE 46, POST 46 and PRE_POST 60 predictors. Context includes preceding running speed in cm/s, pupil summaries/coverage, shared PRE/POST availability flags and declared recording context.",
+      "FIT supplies features, labels, hierarchical positive weights and opaque training-mouse groups; fresh INFER supplies its feature matrix and opaque query IDs only."
+    ],
+    "forbidden_inputs": [
+      "Query image names, current/previous image markers, presentation clock/order and source paths.",
+      "Query mouse/session/cell identities, lick/reward/response outcomes, future behavior and raw NWBs.",
+      "Protected validation/test targets, cross-case state, network access or evaluator feedback."
+    ],
+    "case_identity": "Source scorer binds generation, opaque SHA-256 case token, arm and exact opaque row-ID set. The 136-case declared plan is held mouse × image set × CHANGE/REPEAT; actual supported presentation IDs are not included in the archive.",
+    "split": "Fixed within-Cre mouse hash assigns 73 FIT, 15 protected validation and 19 protected test mice. Validation/test are diagnostic/primary evaluation, never tuning sets in this implementation. Only training-mouse groups may support internal adaptation.",
+    "coverage": "Declared full v1.1.0 cohort: 107 mice, 703 sessions and 1,936 experiment planes; all source contexts retained in the census. Actual matched event counts and payload coverage are not established. Four panels and F/I conditions remain within one registration."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "test-mouse-macro matched-support CHANGE/POST balanced accuracy",
+      "direction": "higher",
+      "aggregation": "Equal image-class mean within experiment × CHANGE context × fixed pre-running bin, then equal supported bins, experiments, image sets within mouse, and test mice. Any required mouse/image-set case lacking support makes the full aggregate null.",
+      "rationale": "The endpoint tests held-mouse eight-way stimulus identity and prevents class/event-heavy mice dominating. It is conditional on observed eight-class common support."
+    },
+    "secondary": [
+      "Log loss with 1e-12 probability floor; full per-case/mouse support and exclusion census.",
+      "REPEAT-context results and all CONTEXT/PRE/PRE_POST results; paired differences against both independently executed fixed references.",
+      "POST log-loss reductions over CONTEXT/PRE are descriptive unless recipe/resource equality is independently enforced; candidate-controlled ablations cannot alone establish information gain."
+    ],
+    "comparators": [
+      {
+        "name": "fixed multinomial logistic",
+        "inputs": "Exactly the corresponding panel FIT features, source class labels and hierarchical weights.",
+        "procedure": "Implemented recipe: FIT-only median imputation/weighted scaling, C=1 lbfgs logistic, max_iter=2000, tol=1e-6; reject nonconvergence. No validation/test tuning; not yet fitted or qualified."
+      },
+      {
+        "name": "fixed histogram gradient boosting",
+        "inputs": "Same panel and FIT rows/weights as logistic and candidate.",
+        "procedure": "Implemented prospective scikit-learn 1.3.2 HGBClassifier, learning_rate=0.1, max_iter=100, max_leaf_nodes=31, min_samples_leaf=20, l2=0, early_stopping=False, random_state=0; no tuning."
+      },
+      {
+        "name": "context and PRE controls",
+        "inputs": "Shared recording/missingness/preceding state context; PRE additionally includes pre-stimulus neural summaries.",
+        "procedure": "Execute independently fixed reference recipes in each panel on the same row support and retain all results. PRE contains previous-flash carryover and is not a neural null."
+      }
+    ],
+    "nuisance_controls": [
+      "Match within experiment and CHANGE/REPEAT and pre-running bin with all eight classes; disclose unsupported strata instead of changing denominator.",
+      "Preserve context-only and PRE controls because missingness, recording context and carryover can encode image information.",
+      "Keep every mouse lineage together; distinguish known image vocabulary generalization from novel class transfer.",
+      "No retrospective target-selected ROI subset, query-driven preprocessing or hidden validation tuning."
+    ],
+    "uncertainty": "Report per-mouse paired errors and descriptive mouse SE conditional on this split/shared training set. A confirmatory interval accounting for repeated images, sessions and reference execution has not been qualified; planes and presentations cannot become independent animals.",
+    "failure_policy": "Require all expected case/arm files, exact generation and opaque IDs, and finite eight-probability simplex (sum tolerance 1e-6) before target access. Malformed or incomplete output invalidates the candidate; unsupported required contexts yield null full scores and retained support dispositions."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-062/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-062/implementations/registered-runtime/README.md",
+      "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/public/TASK.md",
+      "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/public/PHASE_API.md",
+      "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/private/extract.py",
+      "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/private/score.py",
+      "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/private/metrics.py",
+      "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/public/reference_phase.py"
+    ],
+    "scorer_target": "Probability-artifact correctness against actual withheld per-presentation image labels, with class/experiment/mouse aggregation. This is genuine stimulus decoding if authenticated labels and neural-derived features are supplied; it is not source-paper score reconstruction.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Complete source recipes for the population-summary condition and two-phase F/I orchestration; public README explicitly labels the archive inactive and incomplete. No authentic projection, fitted predictor, scorer result or sandbox qualification is supplied.",
+    "missing": [
+      "Authenticate full cohort identity and every NWB payload, reproduce event support and numerical features, and retain complete source census.",
+      "Execute and independently check both fixed references with exact dependencies and consistent fitting resources.",
+      "Qualify protected FIT/INFER execution; neither source pins nor signed admission syntax establish isolation.",
+      "Implement a separate direct/viewer or live per-case investigative transport before attributing performance to those modes."
+    ],
+    "execution_evidence": "Reviewed source and frozen recipes only in this revision. The archive expressly reports no authentic-data check, fit, prediction, scientific score or container execution."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential no-tools presentation of the fixed numeric features and permitted labeled examples; no such participant transport exists.",
+      "boundary": "Keep class-label context fixed, hide query labels and preserve every case; a reduced feature or image-only view would be a separately specified condition.",
+      "evidence_ids": [
+        "implementation-2"
+      ],
+      "missing": [
+        "Define finite direct observation/context and complete response collection; test authentic payload delivery."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential plots of the same population summaries through typed rendering actions; no renderer or restricted viewer is included.",
+      "boundary": "Any renderer must preserve the exact feature information and block raw target/source metadata; no single-cell trace claim.",
+      "evidence_ids": [
+        "implementation-2"
+      ],
+      "missing": [
+        "Implement matched rendering, typed action budget and response identity binding."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Existing I is a precommitted script that may adapt only during FIT using training mice; INFER is fixed sealed-state prediction.",
+      "boundary": "A live per-query investigator would require a new matched input/tool/compute contract; its scores cannot be inferred from I-script outcomes.",
+      "evidence_ids": [
+        "implementation-3"
+      ],
+      "missing": [
+        "Deliver an actual case-adaptive numerical/model tool interaction and auditable per-case state reset."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Precommitted FIT script writes sealed state; fresh INFER predicts all query rows from that state.",
+      "boundary": "Freeze both script and training/adaptation recipe before programme input; no protected validation/test labels, cross-case state, network or feedback.",
+      "evidence_ids": [
+        "implementation-3",
+        "implementation-7"
+      ],
+      "missing": [
+        "Authenticate data, environments and full resource envelope; demonstrate isolation and complete source-derived grading."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-062/historical/task.pre-understanding.v1.json",
+      "sha256": "fb8c79b188da288a19fa704333830d3742238d2984c3f3312970b8115aee56c5",
+      "supports": "Preserved registered scientific question and source provenance before this revision."
+    },
+    {
+      "id": "implementation-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-062/implementations/registered-runtime/README.md",
+      "sha256": "710cf544958452ae2e904a476db634ffc1b7ce0f1de4db84c6f0dc1e5beedd36",
+      "supports": "Inactive full source archive, declared population/split, no authentic-data, numerical or runtime qualification."
+    },
+    {
+      "id": "implementation-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/public/TASK.md",
+      "sha256": "d291c3415896d6bc65e75def112c59de1203c60885a1471f63ca34786594ff8c",
+      "supports": "Known-image class vocabulary, summary representation, matching hierarchy and scope limitations."
+    },
+    {
+      "id": "implementation-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/public/PHASE_API.md",
+      "sha256": "bb56e83117bfab54b0b28fa4c01fde2adc91175ea175c55c6e7688ac585fc3be",
+      "supports": "I adapts within FIT only; INFER has no training labels, live agent or feedback channel."
+    },
+    {
+      "id": "implementation-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/private/extract.py",
+      "sha256": "539ca9a054fb50ea4b6b8b2569c96f614eacf028b1857b16a3ef3c668aa976ae",
+      "supports": "Native-clock dF/F population summaries, running/pupil units, exclusion census and missingness."
+    },
+    {
+      "id": "implementation-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/private/score.py",
+      "sha256": "57855b058aafd00a5da6e747b28dfe4e9d8a38e3fa8a6e09b8558c59945c59a7",
+      "supports": "Complete identities/eight-way probabilities validated before target opening."
+    },
+    {
+      "id": "implementation-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/private/metrics.py",
+      "sha256": "1c7a519885a4dede15d2db658869f4bd73dcc3354ac0cf37342b84f0aaa30395",
+      "supports": "Mouse-macro CHANGE/POST balanced accuracy; null support, descriptive contrasts and no qualified gain ranking."
+    },
+    {
+      "id": "implementation-7",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-062/implementations/registered-runtime/source/public/reference_phase.py",
+      "sha256": "e2408f8c7035d86211ec414bbf5ecf546c441784dd79a98a958dc6170b2a5c1b",
+      "supports": "Fixed train-only logistic/HGB references, scikit-learn 1.3.2 and sealed FIT/INFER state."
+    },
+    {
+      "id": "allen-source",
+      "kind": "primary_source",
+      "url": "https://allensdk.readthedocs.io/en/latest/visual_behavior_optical_physiology.html",
+      "locator": "Visual Behavior Optical Physiology datasets, 2-photon imaging during behavior, and v1.1.0 changelog; checked 2026-11-16",
+      "supports": "Official source defines repeated mouse imaging, image changes and omissions, NWB dF/F, and aligned behavior. Published imaging planes and repeated cells are nested observations, not independent mice."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "These source archives do not report a neural solver pilot for this task. The four historical neural programme attempts concern NEURAL-007/077; they do not qualify this task or any direct/viewer condition.",
+    "excluded_claims": [
+      "Direct neural understanding or live investigation from F/I script scores.",
+      "Novel image-class generalization, unique visual information or causal image effects."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Bind the authoritative target to closed-vocabulary population-summary decoding instead of general optical-neural interpretation.",
+      "Correct the F/I access taxonomy: I adapts at FIT only and supplies no live per-case investigator.",
+      "Retain independently fixed references, matched-support denominators and descriptive rather than qualified neural-increment contrasts."
+    ],
+    "source_review": "Inspected the preserved task and the named current implementation, preparation and scoring source. Checked the official AllenSDK dataset documentation; did not open authentic neural/behavioral payloads or run scientific stages."
+  }
+}

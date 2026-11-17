@@ -9,7 +9,7 @@
   "publication_note": "Public scientific design only. This is not an agent input packet, executable benchmark, result or permission to acquire data.",
   "id": "marmoset-retinal-contrast-generalization",
   "title": "Marmoset retinal nonlinear contrast encoding and cross-stimulus generalization",
-  "scientific_question": "Can an agent use paired neural responses and stimulus structure to predict held-out retinal responses, identify when nonlinear spatial integration is needed, and distinguish failure of an encoding model from stimulus and reliability confounds?",
+  "scientific_question": "Can a condition-matched model predict held-out retinal ganglion-cell spike counts from white-noise/natural-movie stimuli, and does spatial contrast improve predictions over mean-intensity encoding?",
   "source_family_ids": [
     "doi:10.12751/g-node.t43ph1"
   ],
@@ -214,5 +214,134 @@
     "native_data_loaded": false,
     "models_run": false,
     "benchmarks_run": false
+  },
+  "status": "specification_only",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "Protected per-cell spike counts at each 85 Hzprojector update and repeat-averaged responses, with physical event/grid alignment authenticated."
+  ],
+  "biological_unit": "Two retinal preparations; mapping to animals and biological independence unresolved. Cells, bins and repeated stimuli are nested.",
+  "case_definition": "Full stimulus sequence/timebase and frozen cell identity; scoring at every protected update/repeat for all 170 selected cells.",
+  "allowed_inputs": {
+    "inputs": [
+      "Training/calibration spike counts only from condition-permittedWN/NMstreams, explicit immutable count dtype/units, selected cell/trial/frame identity and independently prepared matching stimuli/timebase.",
+      "Protected cases expose stimulus/timebase and opaque cell IDs only; no held-out response traces or derived summaries."
+    ],
+    "forbidden_inputs": [
+      "Protected test counts/rasters/repeat means and all response-derived target statistics.",
+      "Original WN STA and target-domain calibration in strict transfer; original get_data(responses=False) is unsafe because it opens test responses first."
+    ],
+    "case_identity": "Adapter requires two named original preparations and 170 opaque 32 hex cell IDs with authenticated external joins;51 off_midget, 69 off_parasol, 35 on_parasol, 15 large_off_pooled. Actual per-preparation roster/seed memberships remain external.",
+    "split": "Preserve original nonrepeating training versus frozen test stimulus split. Group original source frames with all jitter/flips/repeats and guard full temporal context. Strict source-only fitting and explicitlyWN-assisted conditions remain separate.",
+    "coverage": "Training adapter projects all 170 selected cells and every declared permitted training trial/frame/seed in both preparations across six information conditions. A policy can omit a native seed unnoticed without an authenticated census; six conditions remain one registration."
+  },
+  "split": {
+    "policy": "Preserve original nonrepeating training versus frozen test stimulus split. Group original source frames with all jitter/flips/repeats and guard full temporal context. Strict source-only fitting and explicitlyWN-assisted conditions remain separate.",
+    "coverage": "Training adapter projects all 170 selected cells and every declared permitted training trial/frame/seed in both preparations across six information conditions. A policy can omit a native seed unnoticed without an authenticated census; six conditions remain one registration."
+  },
+  "controls": [
+    "Historical 170 cell test-reliability ascertainment must accompany every score; no new quality filtering using protected targets.",
+    "NMmean light/contrast differ fromWN; transfer failure alone is not adaptation.",
+    "Verify stimulus/STA orientation, seed-specific repeat sequences and smoothing selection; no averaging nonmatching test repeats.",
+    "Choose predictive smoothing on permitted development only; historical test-selected optimum remains retrospective."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_suitable",
+      "representation": "Pure protected encoding cases contain stimuli rather than observed query neural activity; visible calibration traces would support a separately specified matched interpretation diagnostic.",
+      "boundary": "Exposing protected spikes to make a neural picture would disclose the scored target; current programme scores cannot establish direct understanding.",
+      "evidence_ids": [
+        "retina-adapter"
+      ],
+      "missing": [
+        "Define a nonleaking calibration-based or masked-observation interpretation estimand before enabling this mode."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_suitable",
+      "representation": "No target-preserving viewer interpretation task is currently defined for stimulus-to-protected-response encoding.",
+      "boundary": "A calibration-only viewer could be a future matched condition, but protected target rasters/means must never be rendered.",
+      "evidence_ids": [
+        "historical-definition",
+        "retina-adapter"
+      ],
+      "missing": [
+        "Separate observation/target mask and complete view policy, not a renamed programme score."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed train-only numerical/model investigation using prepared stimuli and permitted calibration counts.",
+      "boundary": "Source-only versusWN-assisted domains enforced at access; calibration_only labels alone do not enforce downstream fitting.",
+      "evidence_ids": [
+        "retina-adapter"
+      ],
+      "missing": [
+        "Complete stimuli/case packets, constrained fit tools and protected scorer."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Proposed frozen response predictor over every protected stimulus update.",
+      "boundary": "Freeze cell roster, fit/normalization/smoothing and calibration route before queries; current loader is only one preparation component.",
+      "evidence_ids": [
+        "retina-adapter"
+      ],
+      "missing": [
+        "Complete prediction/scoring lifecycle and competent reference qualification."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Per-cell held-out repeat-average Pearson correlation, equal-preparation descriptive summary",
+      "direction": "higher",
+      "aggregation": "Correlation over all eligible protected updates per cell; median within preparation/stimulus and equal-preparation descriptive summary. Report paired difference against a frozen condition-matched spatial-contrast baseline.",
+      "rationale": "Matches source response encoding while retaining both preparations and condition-specific calibration access; does not create independent-animal inference."
+    },
+    "secondary": [
+      "Mean Poisson negative log likelihood on individual held-out repeats in count units with predeclared positive rate floor.",
+      "In-domain versus cross-domain change, all-cell/preparation support and class-conditional paired descriptive effects.",
+      "Undefined constant-target/prediction correlations retained explicitly; primary decision requires a frozen coverage policy."
+    ],
+    "comparators": [
+      {
+        "name": "Constant rate",
+        "inputs": "Condition-permitted source training counts",
+        "procedure": "Proposed per-cell mean count baseline."
+      },
+      {
+        "name": "Regularized LN",
+        "inputs": "Identical condition-permitted stimuli/counts and source-onlyRF/STA calibration",
+        "procedure": "Train-only temporal/spatial filters and softplusPoisson fitting; paperNM route usingWN STA belongs to mixed calibration, not strictNM-only."
+      },
+      {
+        "name": "Spatial-contrast and competent CNN",
+        "inputs": "Same frozen cells/split/stimuli and identical permitted calibration evidence",
+        "procedure": "Proposed contrast versusLN and tunedCNN comparisons with fixed development-only selection; no authentic reference run is supplied."
+      }
+    ],
+    "nuisance_controls": [
+      "Historical 170 cell test-reliability ascertainment must accompany every score; no new quality filtering using protected targets.",
+      "NMmean light/contrast differ fromWN; transfer failure alone is not adaptation.",
+      "Verify stimulus/STA orientation, seed-specific repeat sequences and smoothing selection; no averaging nonmatching test repeats.",
+      "Choose predictive smoothing on permitted development only; historical test-selected optimum remains retrospective."
+    ],
+    "uncertainty": "Report each preparation and within-preparation distributions. Repeat-noise summaries condition on fixed preparations/models; do not bootstrap 170 cells as independent animals or claim two independent biological clusters before animal mapping.",
+    "failure_policy": "Training loader requires all declared permitted streams/cells/trials/frames and rejects missing or malformed counts without returning earlier partial success. Future complete scorer must refuse missing predictions and retain undefined-correlation coverage rather than silently remove cells.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "246c63d67af62b984cc0d5764574382348818b54a8efc34b96bbbe0c8735fabc",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "da0741900318cd5a95af5baf4adcbe78893a9ee8c26f856bc909f0da23d101e8"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
   }
 }

@@ -1,7 +1,7 @@
 {
   "schema": "public_neuroscience_sleep_construction_draft_v1",
   "frozen_on": "2026-11-14",
-  "status": "registered_construction_draft",
+  "status": "specification_only",
   "finished_benchmark_count": 0,
   "scientific_runs": 0,
   "biological_data_downloads": 0,
@@ -27,7 +27,7 @@
       "https://www.nature.com/articles/s41467-026-75792-1"
     ]
   },
-  "scientific_question": "How predictable are future state-conditioned calcium activity profiles of the same identified neurons, relative to stable population composition and each cell's own baseline, across seven days and sleep deprivation?",
+  "scientific_question": "After nine calibration sessions, how well can the future state-conditioned event rates of the same identified neurons be predicted through acute and chronic recovery, beyond stationary and slow-drift references?",
   "estimand": {
     "primary": "From the single held-mouse origin after session 9, predict log1p(calcium events per minute) for sessions 10–21. For each neuron/state, average squared errors equally over eligible future sessions; average eligible states within neuron, neurons within mouse, mice within each of five groups, then groups equally. Improvement is paired loss reduction against the strongest validated competent reference among stationary, context and slow-drift models, selected without held targets.",
     "reference": "A frozen evaluator event pipeline produces events/minute over valid stable-state duration. A state is observable only when at least 20 valid seconds remain in qualifying stable bouts of at least 20 seconds. Missing/underexposed states are masked, never encoded as zero activity. Report every session/state exposure duration and eligible count before any aggregation; source-threshold qualification including MCH remains required.",
@@ -141,5 +141,136 @@
   "scientifically_qualified": false,
   "submission_ready": false,
   "scientific_design_review": "The complete source-backed scientific construction contract has undergone independent review. Authentic native inputs, executable references, protected evaluation and scientific qualification remain separate unresolved stages.",
-  "publication_note": "Public design document, not a candidate input packet or a runnable benchmark. Publisher statements, historical results and proposed evaluation choices are distinguished. No code bodies, data, weights, private labels, actual model comparison or SOTA result are included. Data-record license statements do not settle code, dependency, stimulus or third-party rights."
+  "publication_note": "Public design document, not a candidate input packet or a runnable benchmark. Publisher statements, historical results and proposed evaluation choices are distinguished. No code bodies, data, weights, private labels, actual model comparison or SOTA result are included. Data-record license statements do not settle code, dependency, stimulus or third-party rights.",
+  "id": "HOLD-NEURAL-FRONTIER-HYPODRIFT-20261114",
+  "track": "neural",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "primary_outputs": [
+    "For each neuron and wake/NREM/REM state in sessions 10–21, log1p(60×event_count/valid_stable_seconds), defined only with at least 20 seconds qualified stable-state exposure."
+  ],
+  "biological_unit": "Mouse:31 mice across five groups; cells/sessions/states are nested. Group sizes are 6,6,6,7,6.",
+  "case_definition": "One held-mouse fixed-origin forecast containing all tracked cells, states and future sessions.",
+  "allowed_inputs": {
+    "inputs": [
+      "Held-mouse sessions 1–9 neural calibration and allowed acquisition-time/condition metadata, with train-only predictor scaling.",
+      "Other mice in the same predefined training split for model selection; whole longitudinal cell identity is disclosed retrospective side information."
+    ],
+    "forbidden_inputs": [
+      "Held-mouse sessions 10–21 fluorescence, events, state rates, future exposure values or all-trajectory normalization.",
+      "Maximum across allsessions/states used in triangular visualization.",
+      "Target updates between forecast sessions; evaluator-only label permutations or future target durations."
+    ],
+    "case_identity": "Scorer keys predictions by(mouse_id, neuron_id) and requires a full 36-slot future vector per cell. Actual authenticated cell/animal correspondence is not supplied by the schema.",
+    "split": "Proposed leave-one-mouse-out within group; held sessions 1–9 calibrate once, all 10–21 predicted open-loop. Internal selection mirrors the same origin on other mice.",
+    "coverage": "Numerical consumer requires all 1,661 cells,31 mice, fivegroups and 21 source sessions; 59,796 future state slots before exposure masking. These are declared cardinalities, not verified archive coverage."
+  },
+  "split": {
+    "policy": "Proposed leave-one-mouse-out within group; held sessions 1–9 calibrate once, all 10–21 predicted open-loop. Internal selection mirrors the same origin on other mice.",
+    "coverage": "Numerical consumer requires all 1,661 cells,31 mice, fivegroups and 21 source sessions; 59,796 future state slots before exposure masking. These are declared cardinalities, not verified archive coverage."
+  },
+  "controls": [
+    "Require genuine 20-second stable-bout exposures and explicit missing reasons; never convert missing to zero.",
+    "Qualify group-specific event thresholds including MCH and actual clocks/Zeitgeber context.",
+    "Compare retrospective ROI-identity mismatch and normalization sensitivity.",
+    "LH-Vgat active/quiet-wake validation cannot be assumed validated in other groups."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Potential direct numerical trajectory forecast from first 9 sessions and same state/context information.",
+      "boundary": "Would require explicit complete case serialization; a table of already computed targets cannot stand in for neural observation.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Bounded complete neural-history packet and no-tools response interface."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A longitudinal trace/state viewer could support inspection without changing the forecast target.",
+      "boundary": "Must stop at fixed origin and avoid future-normalized visualizations or all-session target panels.",
+      "evidence_ids": [
+        "registration"
+      ],
+      "missing": [
+        "Typed restricted history-only views and response collection."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Per-held-mouse numerical modelling of first 9-session histories.",
+      "boundary": "No target refresh; same calibrated history and training provenance as programme comparator.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Candidate episode interface; scorer alone does not deliver investigative tools."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Precommitted open-loop programme produces 36 future values per neuron.",
+      "boundary": "Fit/adapt only on declared training mice and held first 9 sessions, freeze all future forecasts together.",
+      "evidence_ids": [
+        "implementation-1"
+      ],
+      "missing": [
+        "Source input/target producers, programme runner and competent fitted references."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Equal-group fixed-origin squared log1p event-rate error",
+      "direction": "lower",
+      "aggregation": "Equal eligible future sessions per neuron/state, equal eligible states per neuron, neurons per mouse, mice per group, then all five groups equally.",
+      "rationale": "Avoids weighting by imaging frames, exposure duration or cell-rich groups; missing/underexposed states are not zero rates."
+    },
+    "secondary": [
+      "Paired reference-minus-candidate loss on identical masks.",
+      "Acute 10–12 and chronic 13–21 phase diagnostics.",
+      "Every exposure/missingness denominator, neuron/mouse/group result.",
+      "Preference-label persistence and occupancy-preserving shuffles only as separate retrospective diagnostics."
+    ],
+    "comparators": [
+      {
+        "name": "Stationary per-cell state-rate reference",
+        "inputs": "Held-cell sessions 1–9 plus shrinkage fitted on training mice.",
+        "procedure": "Freeze exposure-weighted calibration estimate and propagate unchanged."
+      },
+      {
+        "name": "Group/context reference",
+        "inputs": "Region/genotype and permitted acquisition context; training mice and first 9 sessions only.",
+        "procedure": "Fit hierarchical state-rate model with no future state-duration targets."
+      },
+      {
+        "name": "Slow-drift reference",
+        "inputs": "Same permitted history.",
+        "procedure": "Select regularized state-space/random-walk model on other mice, propagate open-loop from session 9; use strongest validation-selected member of complete baseline set."
+      }
+    ],
+    "nuisance_controls": [
+      "Require genuine 20-second stable-bout exposures and explicit missing reasons; never convert missing to zero.",
+      "Qualify group-specific event thresholds including MCH and actual clocks/Zeitgeber context.",
+      "Compare retrospective ROI-identity mismatch and normalization sensitivity.",
+      "LH-Vgat active/quiet-wake validation cannot be assumed validated in other groups."
+    ],
+    "uncertainty": "Paired mouse-level intervals or hierarchical resampling preserving full cell trajectories; 6–7 mice per group. Existing pure scorer does not implement uncertainty.",
+    "failure_policy": "Complete cell support and finite full future vectors required for candidate and comparator. Shared source exposure masks determine eligibility; all five groups need eligible data for primary. Malformed targets are intake errors, not candidate failures.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "a9b270c2943483ebaba558d0359fbc93a2f31a4c75e3274e1a0b1616c660494d",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "de8b871e464c105da6e4c9a3cd8ca9ad8f6ba10e6405d851a62268900e0e8e01"
+    }
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  }
 }

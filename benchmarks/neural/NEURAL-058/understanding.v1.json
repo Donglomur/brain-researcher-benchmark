@@ -1,0 +1,247 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-058",
+  "title": "Held-animal signed wheel-velocity decoding from brain-wide spikes",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "delivered_named_scope",
+  "disposition_reason": "Complete programme source implements the named 423-source-session/29-evaluation-session held-animal velocity endpoint, with full-unit and full-window support. It has source engineering controls only; original-input admission, installed runtime, reference competence and authentic execution remain unqualified. The historical single-session saved-oracle artifact is not this full programme.",
+  "scientific_target": {
+    "question": "How accurately can a source-trained method recover signed wheel velocity from simultaneous neural observations in 13 held animals, and how much does neural input add beyond the permitted experimental context?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "Original wheel_vel samples in the official emitted movement-window support; wheel_speed=abs(wheel_vel) is a separate companion target.",
+    "answer_origin": "Publisher wheel measurements projected from original all_units brainset objects with explicit physical units and sign. Exact authentic payload joins and admitted sign remain prerequisites, not newly verified measurements.",
+    "case_unit": "One emitted movement window with all original target timestamps, nested in session and animal.",
+    "independent_unit": "Animal: 13 evaluation animals; sessions, timestamps, model realizations and windows are nested.",
+    "inference_scope": "Retrospective held-animal behavioral decoding conditional on selected experimental context and fitted source models. The neural view is simultaneous with the response window; a positive score is not prospective motor prediction or direct model interpretation.",
+    "exclusions": [
+      "No current causal or online claim.",
+      "No conditional wheel-history claim: current preparation requires conditional_history=false.",
+      "No SOTA or direct-observation/viewer competence inferred from programme scores."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "All native spike times/unit identities within each original emitted window, with exact support and full anatomy/location metadata; no unit subsampling.",
+      "Permitted context and target timestamp offsets in matched C (context) and J (context plus neural) roles; source-session wheel labels for fitting only.",
+      "Signed velocity and speed are both predicted; the physical wheel-unit and sign convention must be independently admitted before data preparation."
+    ],
+    "forbidden_inputs": [
+      "Evaluation-animal wheel labels, original target joins, source filenames or original biological IDs usable to retrieve targets.",
+      "All seven extra sessions from evaluation animals in source fitting or checkpoint lineage.",
+      "Processed wheel history until its causal/preprocessing status is separately qualified; future values and evaluator feedback."
+    ],
+    "case_identity": "Preparation generates opaque 32-hex animal/session/window aliases and keeps original eid/trial/onset joins operator-private. Complete original roster is pinned; no authentic alias manifest was generated in this revision.",
+    "split": "423 sessions from 126 source animals with source-animal model-selection folds; 29 sessions from 13 disjoint evaluation animals. Every original supported emitted interval is retained. This is a custom held-animal estimator, not the official within-session TS1 aggregate.",
+    "coverage": "452 original session objects, all units, all emitted windows and all target timestamps required; actual counts depend on authentic preparation. The 24 workflow/input/tool/realization panels are conditions in this one task, not 24 benchmarks."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "Signed-velocity animal-macro R-squared",
+      "direction": "higher",
+      "aggregation": "Equal timestamp weight within each window, equal windows within each session, equal sessions within animal, then equal animals. Retain negative R-squared; any required constant-target animal leaves the primary aggregate undefined.",
+      "rationale": "Measures reconstruction of measured continuous signed behavior and prevents long sessions or many windows from masquerading as more animals."
+    },
+    "secondary": [
+      "Absolute-speed animal-macro R-squared reported separately.",
+      "MSE, MAE, per-animal support and signed paired neural-minus-context and workflow/tool differences.",
+      "Native-convention metric is a separate diagnostic and must not replace the canonical animal-macro estimator."
+    ],
+    "comparators": [
+      {
+        "name": "Context-only C",
+        "inputs": "Same admitted context, offsets and anatomy summaries; no spikes.",
+        "procedure": "Run matched C/J role policies with identical whole-panel budget and source folds; do not deliberately weaken C."
+      },
+      {
+        "name": "Normalized ridge, 512-tree ExtraTrees and set/context neural-network references",
+        "inputs": "Full selected source observations with training-only representation fitting.",
+        "procedure": "Use the fixed source reference families, full source-fold selection and full-source refits; empirical competence has not been measured."
+      },
+      {
+        "name": "T0 versus supplied source-trained tool T1",
+        "inputs": "Matched C/J view and frozen trained reference state when separately admitted.",
+        "procedure": "Keep generic tools, supplied decoder alone and agent-plus-decoder outcomes distinguishable; pretrained exposure and preparation cost remain declared."
+      }
+    ],
+    "nuisance_controls": [
+      "Separate signed velocity from absolute speed; speed-only success cannot resolve movement direction.",
+      "Retain complete source/evaluation animal separation and the excluded seven-session lineage rule.",
+      "Report timing/context-only prediction and native clipping/target conventions independently.",
+      "Do not activate a wheel-history control by guessing a lag after noncausal preprocessing."
+    ],
+    "uncertainty": "Use 13 paired animal effects. Source implements 10,000 fixed-seed animal bootstrap draws averaged over three realized policies; these are descriptive conditional on fitted references and realized policies, without refitting or a population/causal guarantee.",
+    "failure_policy": "Every original required animal, session, window, head and timestamp must be present exactly once and finite. Missing support, shape mismatch, nonfinite predictions or failed source admission cannot be scored by dropping cases; exact constant targets remain explicit undefined endpoints."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-058/docs/current-programme.md",
+      "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/README.md",
+      "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/scores.py",
+      "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/preparation.py",
+      "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/features.py",
+      "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/native_reader.py",
+      "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/views.py",
+      "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/controller.py",
+      "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/authors.py"
+    ],
+    "scorer_target": "scores.py computes two genuine wheel-target heads, complete per-animal weighted SSE/SST/MAE, macro R-squared and paired policy differences; it does not grade source-paper prose, saved tables or a direct-viewer response.",
+    "target_fidelity": "full_target",
+    "delivered_scope": "The current complete programme and source-resolution bridge are present. Earlier single-session artifact checks and the current full-source programme are distinct lineages. Existing generated/inert controls did not fit real reference models or call a model.",
+    "missing": [
+      "Authentic admitted 452-object corpus, exact source folds/units/sign and full support census.",
+      "Qualified numerical/runtime image, isolated participant execution, actual resource plan and outside observation.",
+      "Complete authentic reference qualification and matched model trials."
+    ],
+    "execution_evidence": "Source inspection in this revision only; no authentic-data preparation, candidate execution or model trial was performed."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Prospective no-tools response from a frozen complete numeric or raster representation of the same original neural window.",
+      "boundary": "No fitting, external computation or target lookup; representation must preserve complete permitted support before comparison.",
+      "evidence_ids": [
+        "historical-definition"
+      ],
+      "missing": [
+        "No complete no-tools transport, response format or lossless feasible representation is supplied."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Prospective spike-raster/behavior-independent context viewer with typed channel/time navigation.",
+      "boundary": "Rendered observations only; no raw arrays, target traces or arbitrary compute return.",
+      "evidence_ids": [
+        "source-4"
+      ],
+      "missing": [
+        "No typed renderer/action transport or matched target-coverage validation."
+      ]
+    },
+    "tool_assisted": {
+      "status": "source_available",
+      "representation": "Current I workflow may investigate one evaluation animal's permitted unlabeled observations with matched generic or supplied trained tools.",
+      "boundary": "Fresh animal/condition context, no evaluation labels or cross-condition state; comparison is workflow-level and tool-aware.",
+      "evidence_ids": [
+        "source-2",
+        "source-7",
+        "participant-controller",
+        "participant-authors"
+      ],
+      "missing": [
+        "Actual input provisioning, provider/tool isolation and full execution qualification."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Current F workflow commits general source and fitting/adaptation recipe before evaluation access.",
+      "boundary": "Source-only fitting and model selection; inference sees the exact allowed unlabeled evaluation observations and retained state.",
+      "evidence_ids": [
+        "source-2",
+        "source-4",
+        "participant-controller",
+        "participant-authors"
+      ],
+      "missing": [
+        "Complete source-data/reference execution and audited participant runtime."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "historical-definition",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-058/historical/task.pre-understanding.v1.json",
+      "sha256": "7052f384b5bcaf8e03289ced650844f145970647f30ea37cd4f1fd1fcf502f49",
+      "supports": "Original registered question, source identity, public-development status and source-specified population; retained without changing historical claims."
+    },
+    {
+      "id": "source-1",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-058/docs/current-programme.md",
+      "sha256": "3fa2d0eb406c7843247abe6922fffb584d54b169b3b2f1f2085b7349aba94d54",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-2",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/README.md",
+      "sha256": "7cdba6ae2834c15fcbdfc5e82233fa582e67a61b7b062a43bcea579f7e144b0d",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-3",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/scores.py",
+      "sha256": "12183086a3630fdeb0a3114cb675031bc98ac1887903af76f0d7d40803b8cd79",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-4",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/preparation.py",
+      "sha256": "a776d45eb4d05c523aff37f827f83be59759768a6226a7b63457b666b663e434",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-5",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/features.py",
+      "sha256": "59b062a03ae3b49088ccb9a314d9ab7648bf65d9f3613599d80cfce925a9e809",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-6",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/native_reader.py",
+      "sha256": "279d34ba60b93cdf6fc71e9691f746264210b94a00ebe5ae95104d1d668dc419",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "source-7",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/views.py",
+      "sha256": "06503e4f69e09912020e7bc1d0db195c02a5dfa7b654cae2f9491a1986d2a6ac",
+      "supports": "Inspected delivered scientific scope, exact target/metric or participant boundary as described in implementation review."
+    },
+    {
+      "id": "official-ts1-loader",
+      "kind": "primary_source",
+      "url": "https://raw.githubusercontent.com/brainbench-org/ibl-bwb/6fbd666fe8170a2165f5198c1f490911424a654d/src/ts1/ts1_dataset.py",
+      "locator": "IBLBrainWideBenchTS1 dataset_transform, _get_target and get_sampling_intervals at commit 6fbd666fe8170a2165f5198c1f490911424a654d",
+      "supports": "Official TS1 has task-specific target windows, masks and trial identity; all_units is the reference build. Its target extraction is distinct from the task-specific revised estimators."
+    },
+    {
+      "id": "participant-controller",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/controller.py",
+      "sha256": "75055bbc69553b0c1b33aa921ee516f61a274a0481a21b812cabac6999de19d5",
+      "supports": "Actual F global construction before evaluation and I per-animal construction; complete panel closure."
+    },
+    {
+      "id": "participant-authors",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program/authors.py",
+      "sha256": "980cd35d5b75a127bc6322cad72e0e8ecadd72a458b3d9587daf92e252c690e2",
+      "supports": "Actual provider action loop, numerical analyses, method seal, source-only F versus current-animal I exposure and fitted inference state."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Historical source-engineering controls retain their original limited scope. No direct-observation or typed-viewer model result is established for this task.",
+    "excluded_claims": [
+      "A full programme score is not a no-tools or viewer score.",
+      "Source engineering checks do not establish authentic held-animal prediction or competent references."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Replace the historical causal/history implication with the actual simultaneous held-animal signed-velocity endpoint.",
+      "Keep speed, native metric and unactivated wheel history separate.",
+      "Bind exact full source programme, all support and biological aggregation while preserving the historical single-session artifact lineage."
+    ],
+    "source_review": "Read original task, delivered implementation documentation and the pinned local scorer/preparer or support source. Reused verified source provenance and rechecked the pinned official TS1 loader; the documentation URL was inaccessible through the web tool."
+  }
+}

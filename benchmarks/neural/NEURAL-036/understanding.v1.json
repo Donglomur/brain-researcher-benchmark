@@ -1,0 +1,186 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-036",
+  "title": "Retrospective prediction of released glial-behavior state proxy",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "The current declaration targets a released freeze_vec proxy with unresolved raw movement/freezing polarity and clock provenance. It describes a full28-context unscored producer but delivers no executable producer or grader; interpreting its output as verified future freezing would overstate both target identity and causality.",
+  "scientific_target": {
+    "question": "Within the selected processed sessions, do preceding glial features improve prediction of the released behavior-state proxy over matched recent-state history, and do reverse/shift controls remove that gain?",
+    "target_kind": "behavioral_prediction",
+    "known_answer": "A bounded future-window fraction of the released freeze_vec proxy under the original finite-task window definition. Until polarity and clock mapping are verified, this is not asserted to equal the animal’s physical freezing fraction.",
+    "answer_origin": "Released processed behavior vector paired with astrocytic calcium in Zenodo21780255. The original task assumes a future freezing label; the historical runtime explicitly retains unresolved raw behavior convention and clock lineage.",
+    "case_unit": "One fixed query interval within a held session; historical declaration has70 unique query IDs repeated across four information/control arms.",
+    "independent_unit": "Seven mice, two selected sessions per mouse; query intervals and four arms are nested repeated measurements.",
+    "inference_scope": "Retrospective prediction of a deposited behavior proxy. Whole-session preprocessing and session-specific cell axes prevent a strictly causal online or neuron-transfer claim without further preparation.",
+    "exclusions": [
+      "No verified physical-freezing interpretation until behavior polarity/timing closes.",
+      "No assertion that astrocytes cause future freezing.",
+      "280 arm predictions are70 query identities, not280 independent biological cases."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Past glial features and permitted preceding proxy-state history from the source-defined window; session-local cell axes remain separate.",
+      "Matched joint/history/reverse/shift information arms; only training-session targets supplied to the participant."
+    ],
+    "forbidden_inputs": [
+      "Future proxy-state values, query target fractions and full-trace lookahead.",
+      "Raw behavior filenames or context/mouse identity fields that encode outcomes.",
+      "Other task packets exposing the same future trace interval or target labels."
+    ],
+    "case_identity": "Historical manifest specifies28 contexts=7 held-mouse pairs×4 arms; each has12 training sessions,2 held sessions,60 training targets and10 queries, yielding280 predictions over70 unique query IDs. Actual IDs, window lengths and horizons are not distributed.",
+    "split": "Declared held-mouse setup excludes both of a mouse’s sessions from its12-session training set. Exact time windows/horizon require original executable recovery; inherited whole-session preprocessing means retrospective, not strict online causal evaluation.",
+    "coverage": "Complete selected seven mice and14 sessions across four arms; does not cover the whole original release. The current checkout contains the registered declaration only."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "equal_mouse_history_mae_minus_joint_mae_on_released_proxy",
+      "direction": "higher",
+      "aggregation": "MAE within each session and mouse, then equal mean over seven mice; compare same70 query IDs in history and joint arms.",
+      "rationale": "Tests incremental signal about a measured deposited target while explicitly refusing to rename an unresolved proxy as physical freezing."
+    },
+    "secondary": [
+      "Report absolute proxy MAE for joint/history/reverse/shift arms and all per-mouse differences.",
+      "Validity/calibration for predicted fractions in[0,1], support per session and target-window prevalence.",
+      "Expose whether reverse/shift controls retain apparent gains, which would weaken temporal neural interpretation."
+    ],
+    "comparators": [
+      {
+        "name": "Recent proxy history",
+        "inputs": "Only permitted pre-query freeze_vec history.",
+        "procedure": "Fixed training-fold-only mean/persistence or regularized history model; exact original procedure must be recovered and kept matched."
+      },
+      {
+        "name": "Joint past glial and history",
+        "inputs": "Same history plus pre-query glial features.",
+        "procedure": "Same split, learner budget and target coverage as history-only."
+      },
+      {
+        "name": "Reverse and shifted glial",
+        "inputs": "Same history plus source-defined time-reversed or shifted neural features.",
+        "procedure": "Retain both historical control arms; recover shift/edge conventions before interpreting their null behavior."
+      }
+    ],
+    "nuisance_controls": [
+      "Verify timestamp units, interpolation, horizon and behavior polarity before using the word freezing as ground truth.",
+      "Keep both sessions of a mouse together and preserve session-local cell axes.",
+      "Use only causal feature windows for the prediction contract, while retaining whole-session preprocessing as a documented violation of strict online causality.",
+      "Compare all four arms on identical eligibility/support with matched compute and no query feedback."
+    ],
+    "uncertainty": "Seven paired mouse differences, with all70 identities retained. Do not count four arms or280 outputs as independent evidence; no population inference from missing/undefined units.",
+    "failure_policy": "Require all declared query×arm IDs and finite predictions in[0,1] before targets. Missing windows, invalid proxy alignment and unverified horizon block target interpretation; retain failure rather than silently replacing the proxy or scoring a subset."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-036/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-036/implementations/registered-runtime/manifest.json"
+    ],
+    "scorer_target": "No executable scorer in current source. Historical manifest states one_complete28_collection_unscored and private grade separate/unused; numerical MAE and real-freezing identity are not verified here.",
+    "target_fidelity": "unresolved",
+    "delivered_scope": "Manifest-only full28 proxy-forecasting declaration with explicit scientific limits and no current standalone scoring registration.",
+    "missing": [
+      "Recover producer/grader and exact query horizon/target aggregation.",
+      "Resolve raw behavior polarity and trace↔behavior time mapping against original data lineage.",
+      "Prepare authenticated complete14-session packets and qualify current execution."
+    ],
+    "execution_evidence": "Exact successor is marked not_run with no separate passing runtime qualification; no model, metric result or authentic new run is claimed."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present.",
+      "boundary": "Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
+      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget.",
+      "boundary": "Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout.",
+      "boundary": "Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode.",
+      "evidence_ids": [
+        "declaration"
+      ],
+      "missing": [
+        "Recover the named source/dependency closure and exact public input contract before executing or scoring."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "source_audit",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-036/historical/task.pre-understanding.v1.json",
+      "sha256": "3c84620ee6f2c2c3294d7f9d1c87396c4a8df80363befa2fb1dcf0e34eb0327b",
+      "supports": "Preserved original source audit: source measurements, provenance, units, biological identities, caveats and reference entrypoints. Reused as verified source evidence; not proof of current execution."
+    },
+    {
+      "id": "declaration",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-036/implementations/registered-runtime/manifest.json",
+      "sha256": "41ee5b418ad66d059f167a48618130ad20682ed03bb3c719ae81064729fa760e",
+      "supports": "Historical declared scope, score/run status and actual external-source prerequisites; current tree inspection confirms which executable paths are absent."
+    },
+    {
+      "id": "source_paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1038/s41593-026-02448-0",
+      "locator": "Source paper and original task’s retained source audit",
+      "supports": "Scientific measurement and paradigm provenance. The source paper is not treated as a correctness answer or proof of task execution."
+    },
+    {
+      "id": "source_data",
+      "kind": "primary_source",
+      "url": "https://zenodo.org/records/21780255",
+      "locator": "Versioned author archive metadata; record checked2026-11-16 without fetching biological payloads",
+      "supports": "Current primary author-data record and immutable archive identity; code/data content claims use preserved original audits and inspected local implementation."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Exact successor is marked not_run with no separate passing runtime qualification; no model, metric result or authentic new run is claimed.",
+    "excluded_claims": [
+      "No verified physical-freezing interpretation until behavior polarity/timing closes.",
+      "No assertion that astrocytes cause future freezing.",
+      "280 arm predictions are70 query identities, not280 independent biological cases.",
+      "Programme performance is not evidence of direct-observation or typed-viewer understanding."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Rename the delivered target honestly as released state proxy until raw-freezing provenance is resolved.",
+      "Disentangle70 identities from280 arm predictions and preserve four matched controls.",
+      "Expose missing scorer/source and retrospective preprocessing limits."
+    ],
+    "source_review": "Read original definition/source audit, assigned README and exact current registry-owned implementation inventory; inspected actual scorer/loader where delivered and searched task/shared source for missing declared paths. Rechecked primary author-data metadata only; no biological payload or model run."
+  }
+}

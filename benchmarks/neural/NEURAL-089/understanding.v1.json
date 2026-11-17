@@ -1,0 +1,224 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-089",
+  "title": "Event-aligned phoneme classification in the original LibriBrain participant",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "partial_delivery",
+  "disposition_reason": "A complete full 90 programme and genuine held-event scorer are present as source. They retain the native 88/1/1 run split, which does not implement the older proposed story-family-held-out split. Authentic full preparation, runtime qualification and reference competence remain unresolved.",
+  "scientific_target": {
+    "question": "Can a precommitted decoder infer the 39-class phoneme label from complete event-aligned MEG windows in the original held recording, beyond class-prior and altered-signal controls?",
+    "target_kind": "observation_decoding",
+    "known_answer": "Original annotated phoneme identity in the fixed 39-class vocabulary for each eligible held-recording event.",
+    "answer_origin": "Pinned 2025 source annotations: kind=phoneme; exclude exact sil and oov_S, strip suffix after first underscore. Annotation is a stimulus label, not an independently observed mental-state label.",
+    "case_unit": "One complete 306-channel by 125-sample event window; opaque query IDs join private annotations.",
+    "independent_unit": "One participant; native query is one recording, with overlapping windows and shared narrative material.",
+    "inference_scope": "Within-person, event-assisted classification under native recording partitions. A successful decoded label is a genuine observation-to-target result, but neither onset detection nor unseen-story generalization.",
+    "exclusions": [
+      "Across-person generalization",
+      "Unsegmented speech recognition or onset detection",
+      "Unseen-story transfer from native split alone",
+      "Programme accuracy as direct or viewer interpretation"
+    ]
+  },
+  "evidence": [
+    {
+      "id": "original",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-089/historical/task.pre-understanding.v1.json",
+      "sha256": "bf44ebc628b2f87d612b45db4f4da2e86a3c6ec71e188ae3bfb2275712fe1bf1",
+      "supports": "Exact prior registered definition and unresolved source audit boundaries preserved before this revision."
+    },
+    {
+      "id": "design",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-089/implementations/phoneme-programme/DESIGN.md",
+      "sha256": "c7ae5b112ae3f8e981db0a6f4d1d34312aede91321218839b60c737d3b30b049",
+      "supports": "Native full 90 88/1/1 split, privileged onsets, overlapping windows, four matched arms and reference recipe."
+    },
+    {
+      "id": "prepare",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-089/implementations/delivery-source/prepare.py",
+      "sha256": "28021b978f1f5d644d2c2ad084ce04a7cd7e03a7c30eb0a626a733668d10b8c9",
+      "supports": "Exact 250 Hz, 306-channel,125-sample windows; source event exclusion and train-only normalization."
+    },
+    {
+      "id": "score",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-089/implementations/delivery-source/scorer.py",
+      "sha256": "bab1616887725d302908fdc9b277d1b9a2bedb5e0d4dd608807d45f9b83759b4",
+      "supports": "Exact-ID 39-probability admission and fixed 39 macro-F1 with zero absent-class F1."
+    },
+    {
+      "id": "programme",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-089/implementations/phoneme-programme/README.md",
+      "sha256": "8164fbb1d63e3603a8ea9871cf8001689e4e9fcce06baa1c2d07adc321d8587d",
+      "supports": "Future complete-panel programme; authentic execution and native containment remain unqualified."
+    },
+    {
+      "id": "paper2025",
+      "kind": "primary_source",
+      "url": "https://arxiv.org/abs/2506.02098",
+      "locator": "Primary author abstract or official AllenSDK documentation, inspected 2026-11-16; narrower implementation details are supported by local source receipts.",
+      "supports": "Original LibriBrain is single-participant naturalistic listening MEG with phoneme-classification baseline; it is distinct from the Broad extension."
+    },
+    {
+      "id": "frozen_controller",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-089/implementations/phoneme-programme/program/controller.py",
+      "sha256": "5741335677de893f4067960cac6b7bdddd71bd9648b1dc9935e5976b677b463c",
+      "supports": "Concrete full90 controller captures candidate/reference before input exposure, freezes fitted models and executes each exact inference phase before target access."
+    },
+    {
+      "id": "frozen_transport",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-089/implementations/phoneme-programme/transport/run.py",
+      "sha256": "f2fc9575581ad1a27552ed0b34284b0f223e111009dd38b1df7e2932b7229378",
+      "supports": "Actual captured outer production route invokes worker, requires full native phase collection and preserves failure dispositions; generic adapter remains inspect-only."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "No model or human result for this task is established by the reviewed source. Source construction and generated engineering checks do not establish authentic performance.",
+    "excluded_claims": [
+      "Across-person generalization",
+      "Unsegmented speech recognition or onset detection",
+      "Unseen-story transfer from native split alone",
+      "Programme accuracy as direct or viewer interpretation"
+    ]
+  },
+  "revision": {
+    "date": "2026-11-16",
+    "summary": [
+      "Replaced unsupported native unseen-story claim with explicit event-assisted, one-person native-split classification.",
+      "Preserved real target-label scoring and four matched arms while distinguishing source implementation from execution.",
+      "Pin inspected executable participant controller/host route for frozen-programme capability; documentation or score source alone does not establish that route."
+    ],
+    "source_review": "Inspected historical registration and actual task-local preparation/scorer/protocol source. Primary dataset identities checked against author abstracts or official AllenSDK documentation. No authentic recordings, held labels, fitting or model campaign in this revision."
+  },
+  "observation_contract": {
+    "inputs": [
+      "All 306 channels in verified source order, 250 Hz; 125 samples beginning at int(timemeg*250), corresponding to 0–0.5 seconds after a supplied event onset.",
+      "Pooled population channel moments fitted on continuous samples from all 88 training recordings; normalized float32 windows clipped to ±10.",
+      "Labeled training observations; development labels for method selection only, not estimator or normalizer fitting."
+    ],
+    "forbidden_inputs": [
+      "Query phoneme labels; original source_rows provenance carrying query truth; source/run identity and target-derived event fields in query views.",
+      "Transcript/audio or public-label lookup during protected MEG inference; these are not the declared query observation.",
+      "Cross-query mutable state and target-batch normalization."
+    ],
+    "case_identity": "Source manifest freezes all 90 run keys; validation 0/11/Sherlock1/2 and query 0/12/Sherlock1/2. Runtime uses 24-hex opaque query IDs. Actual Q is derived from complete authentic preparation, not the historical example count 6862.",
+    "split": "Delivered source preserves exact native 88 training/1 development/1 query recordings. Sessions, chapters and repeated narratives may overlap across partitions. A new story-family split would be a separately named adapted condition requiring new membership and guards.",
+    "coverage": "All eligible source events in all 90 runs, all 306 channels and 125 samples are required; no missing-run or shortened-window subset. Candidate and independent reference each complete MEG, ZERO_MEG, PERMUTED_LABELS and PRIOR on every Q query, with 6Q+8 total native phases."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "macro_f1_39",
+      "direction": "higher",
+      "aggregation": "All query predictions form a 39-class confusion matrix; F1 is averaged across all 39 classes including zero F1 for absent classes. Lowest class index wins argmax ties.",
+      "rationale": "Preserves the implemented class-balanced phoneme-label endpoint without replacing it with 2026 word accuracy."
+    },
+    "secondary": [
+      "Accuracy; fixed 39 precision/recall; per-class support and full confusion matrix.",
+      "Report MEG minus each altered-signal/prior arm and candidate minus independent reference separately; no combined reward.",
+      "Probability log loss/calibration is a useful prospective secondary metric but is not implemented by this scorer."
+    ],
+    "comparators": [
+      {
+        "name": "Fixed five-pass linear reference",
+        "inputs": "Five 25-sample means per each 306 channels (1530 features); training observations only.",
+        "procedure": "Implemented prospective StandardScaler plus SGDClassifier(log_loss, L2, alpha=1e-4, random_state=89), five passes, batch 128, fixed row order; not the author CNN and not empirically qualified."
+      },
+      {
+        "name": "Matched zero-input and label-permutation controls",
+        "inputs": "Same full query IDs; normalized zero windows reuse the sealed MEG model; within-run permuted training/development labels use a fresh model.",
+        "procedure": "Both candidate/reference complete each arm. Zero is a training-mean contrast; permutation is one fixed descriptive control, not a permutation significance test."
+      },
+      {
+        "name": "Labels-only prior",
+        "inputs": "Aggregated training class counts only, no query count/identity/timing.",
+        "procedure": "Independent reference emits Laplace-smoothed prior; trusted assembler broadcasts one probability vector over fullQ."
+      }
+    ],
+    "nuisance_controls": [
+      "Privileged event onsets and overlapping 0–0.5-second windows are explicit assistance.",
+      "Train-only normalization; development labels cannot fit transforms.",
+      "Narrative/session overlap and historically public source labels limit contamination and transfer claims.",
+      "Keep source/native split distinct from any future chapter-family grouping."
+    ],
+    "uncertainty": "One query recording from one participant does not support independent-recording or participant-level confidence intervals. Retain exact finite-panel class distributions; phoneme windows are dependent.",
+    "failure_policy": "Reject nonfinite, boolean, negative, non-simplex or probability vectors without exactly 39 entries and missing/extra/duplicate IDs before private targets. Unknown source labels/short windows fail full preparation. Incomplete panels remain unscored with all failure dispositions."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-089/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-089/implementations/phoneme-programme/DESIGN.md",
+      "benchmarks/neural/NEURAL-089/implementations/delivery-source/prepare.py",
+      "benchmarks/neural/NEURAL-089/implementations/delivery-source/scorer.py",
+      "benchmarks/neural/NEURAL-089/implementations/phoneme-programme/README.md",
+      "benchmarks/neural/NEURAL-089/implementations/phoneme-programme/program/controller.py",
+      "benchmarks/neural/NEURAL-089/implementations/phoneme-programme/transport/run.py"
+    ],
+    "scorer_target": "Actual phoneme-label classification against protected annotated targets. It does not score copied paper tables or subjective explanations.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Source preparation, full 90 fixed programme, four-arm protocol and strict exact-ID scorer; authentic complete input admission and native production not demonstrated.",
+    "missing": [
+      "Authentic complete 90 source/clock/channel/normalization verification and retained query coverage.",
+      "Qualified numerical/container/native custody and measured full-panel resources.",
+      "Empirical competence of the fixed reference; separately designed direct/viewer/tool-assisted modes."
+    ],
+    "execution_evidence": "Reviewed source explicitly reports no full empirical preparation/reference execution. Existing generated controls are engineering evidence only."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A complete event-aligned multichannel numerical window could define direct classification, but no direct presentation/answer harness is supplied.",
+      "boundary": "Any future no-tools condition must expose only the allowed observation and a fixed calibration context; participant code, source lookup and evaluator feedback are excluded.",
+      "evidence_ids": [
+        "prepare",
+        "score"
+      ],
+      "missing": [
+        "No bounded direct-response representation, participant transport or complete response collection is delivered."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "A task-specific rendered observation with typed navigation would be a separate access condition, not evidence supplied by the programme.",
+      "boundary": "No current image-only action API; future views must preserve eligible channels/time/support without returning raw arrays or answer-bearing metadata.",
+      "evidence_ids": [
+        "prepare",
+        "score"
+      ],
+      "missing": [
+        "No typed viewer or viewer-model evaluation for this task."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "A future per-event investigator could use the same 306x125 observation and a frozen decoder tool.",
+      "boundary": "Equal calibration and tool budget, case-state reset and no private feedback must be specified; current pointwise executable inference is not an adaptive investigator.",
+      "evidence_ids": [
+        "design"
+      ],
+      "missing": [
+        "No separately implemented case-adaptive investigator and matched tool ablations."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "Full 90 fit/seal/pointwise-inference programme with four matched arms and independent reference.",
+      "boundary": "Source frozen before numerical exposure; models sealed before query; complete candidate/reference closures precede target access.",
+      "evidence_ids": [
+        "frozen_controller",
+        "frozen_transport"
+      ],
+      "missing": [
+        "Authentic preparation and execution qualification; measured complete-panel feasibility."
+      ]
+    }
+  }
+}
