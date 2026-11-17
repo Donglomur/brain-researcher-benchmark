@@ -26,8 +26,14 @@ Unresolved facts are explicit nulls and blockers, never fabricated scores.
 
 ## Scientific comparison
 
-The original target, dataset version, cohort, split, allowed inputs, preprocessing,
-metric formula, direction and aggregation must match. A new split, smaller cohort,
+The original target, dataset version, cohort, split, allowed inputs, metric
+formula, direction and aggregation must match. The `same_task.preprocessing`
+anchor preserves comparability-critical data preparation, quality control and
+observation constraints, and records the author baseline recipe. It does not
+require candidates to copy the author feature extractor, normalizer or model.
+Train-only feature engineering and learned representations are allowed within
+the same permitted inputs; dropping test rows, target-informed normalization or
+adding observations changes the comparison. A new split, smaller cohort,
 changed endpoint or easier information condition is an extension and cannot count
 as a source-paper victory. Published paper scores and rerun author baselines are
 distinct; an agent-written local baseline cannot replace either. A current-SOTA
