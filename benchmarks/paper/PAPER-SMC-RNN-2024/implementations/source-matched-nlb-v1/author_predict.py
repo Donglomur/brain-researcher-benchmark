@@ -69,6 +69,8 @@ def run(args):
     verify_source(source)
     panel_path = inputs / 'mc_maze/test/panel.json'
     panel = json.loads(panel_path.read_text())
+    from scorer import validate_panel
+    validate_panel(panel)
     if (panel['dataset'], panel['phase'], panel['n_bins'], panel['condition_count']) != ('mc_maze_20','test',35,108):
         raise ValueError('Not the complete original test panel')
     for name, expected in panel['inputs_sha256'].items():
@@ -87,6 +89,8 @@ def run(args):
     dc = dict(config.dataset)
     dc['phase'] = 'test'
     tr, ev, ut, ue = load_nlb_dataset(inputs, **dc)
+    if (tuple(tr.shape), tuple(ev.shape)) != ((panel['n_train'], 45, 182), (panel['n_eval'], 35, 137)):
+        raise ValueError('Loaded author tensors differ from the complete admitted panel')
     train = NLBDataset(tr, {'name':'mc_maze'}, inputs=ut)
     test = NLBDataset(ev, {'name':'mc_maze'}, inputs=ue)
     report = {'schema':'smc_native_attempt_v1','mode':args.mode,'arm':args.arm,'seed':seed,
@@ -147,7 +151,7 @@ if __name__ == '__main__':
     p.add_argument('--output',type=Path)
     p.add_argument('--cpu-seconds-remaining',type=int,required=True)
     a=p.parse_args()
-    if not 0 < a.cpu_seconds_remaining <= 7200:
-        raise ValueError('Remaining CPU budget must be1..7200seconds')
+    if not 0 < a.cpu_seconds_remaining <= 75000:
+        raise ValueError('Remaining CPU budget must be1..75000seconds and covered by the approved operator protocol')
     resource.setrlimit(resource.RLIMIT_CPU,(a.cpu_seconds_remaining,a.cpu_seconds_remaining))
     run(a)

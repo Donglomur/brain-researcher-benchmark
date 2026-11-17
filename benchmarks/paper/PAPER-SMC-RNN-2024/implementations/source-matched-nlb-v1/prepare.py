@@ -25,8 +25,11 @@ def ensure_external(path):
 
 
 def sha(path):
+    digest=hashlib.sha256()
     with Path(path).open('rb') as f:
-        return hashlib.file_digest(f, 'sha256').hexdigest()
+        for chunk in iter(lambda:f.read(1024*1024),b''):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def digest_json(value):
@@ -37,18 +40,22 @@ def write_json(path, value):
     Path(path).write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
 
 
-def versions():
-    return {p: importlib.metadata.version(p) for p in
-            ('numpy', 'scipy', 'scikit-learn', 'pandas', 'pynwb', 'hdmf', 'h5py', 'torch', 'nlb-tools', 'omegaconf')}
+def versions(role='inference'):
+    packages=['numpy','scipy','pandas','pynwb','hdmf','h5py','nlb-tools']
+    if role=='inference':packages+=['scikit-learn','torch','omegaconf']
+    return {p:importlib.metadata.version(p) for p in packages}
 
 
 def prepare(nwb_dir, output):
+    environment_versions=versions('preparation')
+    if environment_versions['pandas']!='1.3.4':
+        raise ValueError('Original preprocessing requires pandas1.3.4; later versions can omit the final trial (official NLB issue3).')
     import h5py
     import numpy as np
     from nlb_tools.nwb_interface import NWBDataset
     from nlb_tools.make_tensors import (make_train_input_tensors, make_eval_input_tensors,
                                         make_eval_target_tensors)
-    from memory_prepare import install_memory_preparation
+    from memory_prepare import install_memory_preparation, bounded_dataset
     install_memory_preparation()
     import nlb_tools.nwb_interface as nwb_module
     import nlb_tools.make_tensors as tensor_module
@@ -75,8 +82,7 @@ def prepare(nwb_dir, output):
             raise ValueError('NWB content differs from immutable source: ' + name)
         nwbs.append({'name': name, 'bytes': size, 'sha256': digest})
     # Retain ALL original fields: native trial dropout checks NaNs across fields.
-    dataset = NWBDataset(str(nwb_dir))
-    dataset.resample(20)
+    dataset = bounded_dataset(str(nwb_dir),bin_width=20)
     info = dataset.trial_info
     ordered_trials = {s: info.loc[info.split == s, 'trial_id'].astype(int).tolist()
                       for s in ('train', 'val', 'test')}
@@ -140,11 +146,12 @@ def prepare(nwb_dir, output):
             tensor_trial_indices_sha256=digest_json(tensor_ids),
             condition_membership_sha256=digest_json(membership),
             implementation_sha256={name:sha(Path(__file__).parent/name) for name in ['prepare.py','memory_prepare.py','preparation_memory.patch']},
+            memory_blocks=dataset.smc_memory_blocks,
             nlb_tensor_source_sha256=sha(tensor_module.__file__),
             nlb_nwb_source_sha256=sha(nwb_module.__file__),
             scheduling_patch='Sequential map replaces host-wide pool only for original validation PSTH smoothing.',
-            memory_patch='Release unused constructor references; retain ALL source fields; full-time original Gaussian smoothing then20msresample per neuron before full PSTH condition aggregation.',
-            expected_shapes=expected, nwb_sources=nwbs, versions=versions(),
+            memory_patch='Complete16-neuron allocation blocks with original group representatives, full original timebounds, ALL source fields; original Gaussian smoothing then20msresample before all-neuron trial/condition aggregation.',
+            expected_shapes=expected, nwb_sources=nwbs, versions=environment_versions,
             split_counts={s:len(ids) for s,ids in ordered_trials.items()},
             source_excluded_split_rows=int(len(info)-len(relevant)),
             exposure='Original test targets publicly exposed January2026; never untouched.',

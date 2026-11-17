@@ -11,7 +11,7 @@ from pathlib import Path
 import tempfile
 import urllib.request
 
-from prepare import ensure_external
+from prepare import ensure_external, sha
 
 HERE = Path(__file__).resolve().parent
 
@@ -21,8 +21,7 @@ def fetch(url, destination, expected_bytes, expected_sha256):
     if destination.is_symlink():
         raise ValueError('Refuse symbolic-link destination')
     if destination.exists():
-        with destination.open('rb') as f:
-            digest = hashlib.file_digest(f, 'sha256').hexdigest()
+        digest=sha(destination)
         if destination.stat().st_size == expected_bytes and digest == expected_sha256:
             return
         raise ValueError('Existing destination differs: ' + str(destination))

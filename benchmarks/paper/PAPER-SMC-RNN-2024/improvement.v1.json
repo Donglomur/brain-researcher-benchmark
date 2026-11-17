@@ -1,0 +1,185 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-SMC-RNN-2024",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The complete original endpoint, author code/checkpoints and original scorer are recovered. Source preparation and qualification have executable routes; no full author score match, candidate superiority or final admission policy is established.",
+  "source_paper": {
+    "title": "Inferring stochastic low-rank recurrent neural networks from neural data",
+    "url": "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf",
+      "locator": "Supplement B.5, Table2; D.7",
+      "supports": "Complete MC_Maze20ms causal/noncausal SMC-RNN results; selected models and192-particle,32-repeat inference."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/smc_rnns/tree/c808c76ad940491b0a14d2671e3884140aa61258",
+      "locator": "evaluation/eval_nlb.py; vi_rnn/vae.py; selected36D model configurations and checkpoints",
+      "supports": "Source-native prediction and selected36D configurations; both arms use filtered output smooth=False."
+    },
+    {
+      "id": "nlb-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/abs/2109.04463",
+      "locator": "Neural Latents Benchmark, Table4 and evaluation definitions",
+      "supports": "Original MC_Maze cohort, split and observation access;137held-in/45held-out units,2295provided training/validation and574test trials,108conditions."
+    },
+    {
+      "id": "archive",
+      "kind": "author_data",
+      "url": "https://doi.org/10.48324/dandi.000128/0.220113.0400",
+      "locator": "Both full Jenkins NWB assets; data_manifest.json content hashes",
+      "supports": "Complete official source input archive, immutable asset identities, CC-BY-4.0 attribution."
+    },
+    {
+      "id": "scorer",
+      "kind": "author_code",
+      "url": "https://github.com/neurallatents/nlb_tools/blob/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/evaluation.py",
+      "locator": "evaluate, bits_per_spike, eval_psth, fit_and_eval_decoder",
+      "supports": "Original evaluator byte-identical to nlb-tools0.0.3. Target release publicly exposed January2026; exact target LFS digest recorded."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict held-out neural activity and future activity on the complete standard MC_Maze20ms test panel; preserve both Table2 SMC-RNN proposal arms.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "DANDI000128/0.220113.0400 provides both complete authentic NWBs and matches the original NLB cohort. The2024paper did not pin a DANDI revision; historical score/checkpoint-to-version calibration remains required.",
+      "evidence_ids": [
+        "archive",
+        "nlb-paper"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Jenkins MC_Maze recording;182neurons (137held-in,45held-out),2295training/validation and574test trials,108source task conditions. Preserve all original rows;108does not mean108nonempty scored PSTHs.",
+      "evidence_ids": [
+        "paper",
+        "nlb-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Use original NWB train/val/test labels and order. Validation training tensors use train; final test decoder training tensors use train+val. No random split or straight-reach subset.",
+      "evidence_ids": [
+        "code",
+        "archive"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original training/validation spikes and permitted behavior, test held-in spikes. Original test held-out spikes/behavior remain evaluator-only locally and are publicly exposed sinceJanuary2026. With a fixed method fitted only on permitted training/validation information and fixed data-independent randomness, test observation-bin t (zero-based0..34) may depend only on the same trial held-in prefix0..max(t,13) for the causal-proposal arm and0..min(t+17,34) for the source-matched noncausal-proposal arm. Forward bins35..44 may use all35observed bins, never future spikes or test behavior. No test-wide fitting, normalization, adaptation or other test-trial information may bypass these bounds. Any architecture is allowed; the causal reflect-padding startup is not strictly online.",
+      "evidence_ids": [
+        "code",
+        "nlb-paper",
+        "scorer"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Original NLB1ms timestamps then20ms resampling;35observation and10forward bins. All original fields retained before native NaN-based row support. Memory-only complete-column scheduling preserves source timebounds, representative masks, Gaussian smoothing and trial/condition aggregation.",
+      "evidence_ids": [
+        "code",
+        "scorer"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original co-smoothing Poisson log-likelihood improvement over per-neuron mean on evaluated counts, divided by total spikes and ln2; higher is better. Required companions: velocityR2,PSTHR2,forwardbps.",
+      "evidence_ids": [
+        "paper",
+        "scorer"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Original scorer over the complete test panel, not a mean of selected trial/condition scores. Report causal and noncausal strata separately and retain all companion metrics; no scalar averaging hides an arm.",
+      "evidence_ids": [
+        "paper",
+        "scorer"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original co-bps for both matching causal-proposal and noncausal-proposal strata",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "description": "Complete published co-bps vector: causal0.3225, noncausal0.3407. Companion vectors (velocityR2,PSTHR2,forwardbps): causal(0.8479,0.5927,0.2184), noncausal(0.8902,0.5963,0.2417). No single scalar replaces the complete two-arm anchor.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "Both selected36D checkpoints load with exact key/shape compatibility. Full192\u00d732original-panel predictions and numerical printed-score calibration have not been established.",
+      "evidence_ids": [
+        "code"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "No candidate campaign or effect threshold has been admitted. The diagnostic0.01calibration tolerance is not an improvement margin.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Freeze a paired comparison and companion non-regression rule accounting for finite test trials, shared neurons and stochastic source/candidate inference before any candidate final score.",
+      "independent_unit": "Original recording/trials with dependent neurons and conditions;32particle repetitions are Monte Carlo inference repetitions, not32independent biological subjects.",
+      "rationale": "Published point scores do not supply an independent replicate variance. No confirmatory superiority test has been qualified.",
+      "evidence_ids": []
+    },
+    "paper_win_requires": [
+      "Complete both original causal-proposal and noncausal-proposal source rows and report co-bps, velocityR2, PSTHR2 and forwardbps for each; no favorable arm or condition subset.",
+      "Calibrate the released author checkpoints on the entire original test panel, preserving192particles and32repeats, before candidate comparison; directory names alone do not prove printed-score linkage.",
+      "Freeze candidate code, selection history, exposure, allowed observations, complete prediction hashes and equal paired delivery budgets before final target access.",
+      "Beat the stronger of the matching published and qualified reproduced author arm on primary co-bps under a prospectively justified effect and uncertainty rule; all companion non-regression criteria must be fixed before candidate scoring.",
+      "Each of both causal-proposal and noncausal-proposal arms must independently pass the frozen improvement and companion non-regression criteria against the stronger matching published or qualified reproduced author baseline. No overall paper win if either arm fails.",
+      "Disclose publicly exposed original targets and exact causal access semantics; noncausal predictions cannot establish improvement of the causal arm or strictly online performance.",
+      "Reproduction, successful software controls, faster inference alone and exceeding only a local weak comparator do not satisfy paper improvement."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The paper already reports stronger LFADSco-bps0.3554 and NDT0.3597. Exceeding SMC-RNN does not establish superiority to these or current SOTA.",
+      "evidence_ids": [
+        "paper"
+      ]
+    }
+  },
+  "episode": {
+    "improvement_loop": "Develop candidates using declared permitted training/validation access. Paper+data and paper+data+official-code exports share all complete admitted inputs, paper, task interface and metadata; official code is the only information difference. No new solver run is authorized in this engineering wave.",
+    "candidate_freeze": "Freeze method, selection and exposure history, allowed timing access, complete predictions, source/panel hashes and paired budgets before final scoring. Freeze and enforce each arm temporal-access boundary; full H5 possession alone is not an eligible execution contract.",
+    "final_evaluation": "A separate operator scorer validates frozen predictions and canonical released target digest, then executes original NLB scoring for both complete arms and every companion metric.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Operator construction has a separate initial7200CPU-second budget. Equal participant budgets and joint two-arm admission require a prospective freeze; exported materials alone are not a runnable episode or a sandbox."
+  },
+  "blocking_issues": [
+    "No complete author192\u00d732test-score calibration or printed-score linkage yet.",
+    "No justified improvement effect, uncertainty or companion non-regression policy.",
+    "Original targets are publicly exposed; local isolation does not create an untouched holdout.",
+    "Generic scalar result admission must not silently discard either original arm; joint two-arm admission remains unqualified.",
+    "Paired materials and source software controls do not establish participant/model performance.",
+    "Temporal-access enforcement is unqualified: complete-array H5 delivery and an arm label do not enforce the source information bounds. Both-arm admission requires a reviewed execution boundary exposing only permitted prefixes, or an equivalent enforceable boundary with fixed model/randomness and audit evidence. Unrestricted full-window output cannot qualify the causal arm; broadening noncausal access is a distinct offline-access policy."
+  ],
+  "legacy": {
+    "role": "no_predecessor",
+    "original_task": null,
+    "notes": "Initial source-paper task; no previous benchmark definition."
+  }
+}

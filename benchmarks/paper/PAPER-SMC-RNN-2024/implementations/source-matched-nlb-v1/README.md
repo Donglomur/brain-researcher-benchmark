@@ -1,6 +1,6 @@
 # SMC-RNN: complete original MC_Maze 20-ms comparison
 
-This package prepares the original MC_Maze panel and runs the released 36-dimensional SMC-RNN checkpoints through the paper-era inference implementation. Its intended research endpoint is **improvement over the matching original Table 2 SMC-RNN arm**, with all companion metrics retained. Reproduction is calibration. This package alone does not establish either result.
+This package prepares the original MC_Maze panel and runs the released 36-dimensional SMC-RNN checkpoints through the paper-era inference implementation. Its intended research endpoint is **improvement in both matching original Table 2 SMC-RNN arms**, with all companion metrics retained. Each arm must independently pass the frozen improvement rule; one passing arm cannot establish overall success. Reproduction is calibration. This package alone does not establish either result.
 
 The two arms are the paper's causal-proposal and noncausal-proposal models. Both call `eval_nlb(..., smooth=False)` with 192 particles and 32 repeats. The noncausal arm uses an acausal proposal encoder; the source routine's separate smoothed posterior is not the published output. The causal encoder uses reflect padding near the start, so this source comparison does not establish strictly online operation.
 
@@ -15,21 +15,27 @@ Exceeding SMC-RNN would not establish current SOTA. See the [original paper](htt
 
 ## Run the real input path
 
-Create an external staging directory and reserve resources before acquisition. `acquire.py` fetches only the manifest's required code, selected checkpoint files and two NWBs; no released test target is acquired. Payloads must stay outside public Git. `requirements-cpu.txt` records the qualification environment, including its pandas compatibility substitution. A task-local virtual environment is sufficient; no global installation is required.
+Create an external staging directory and reserve resources before acquisition. `acquire.py` fetches only the manifest's required code, selected checkpoint files and two NWBs; no released test target is acquired. Payloads must stay outside public Git. `requirements-preparation.txt` pins the original pandas 1.3.4 preparation path on Python 3.9; `requirements-cpu.txt` records the separate CPU inference environment. Pandas 1.4+ is unsupported: our 1.5.3 attempt truncated the original final trial through a changed TimedeltaIndex union order, reproducing [NLB issue 3](https://github.com/neurallatents/nlb_tools/issues/3). The wrapper rejects that version before input reads. No global installation is required.
 
 ```sh
+python3.9 -m venv "$SMC_STAGE/prep-venv"
+"$SMC_STAGE/prep-venv/bin/python" -m pip install -r requirements-preparation.txt
 python3 -m venv "$SMC_STAGE/venv"
 "$SMC_STAGE/venv/bin/python" -m pip install -r requirements-cpu.txt
 "$SMC_STAGE/venv/bin/python" acquire.py --destination "$SMC_STAGE" --assets both
-"$SMC_STAGE/venv/bin/python" prepare.py \
+"$SMC_STAGE/prep-venv/bin/python" prepare.py \
   --nwb-dir "$SMC_STAGE/nwb/sub-Jenkins" --output "$SMC_STAGE/inputs" --cpu-seconds-remaining 7200
 ```
 
+On the qualification Mac, the existing universal Python 3.9 executable ran the preparation environment with `arch -x86_64` and official Intel wheels under Rosetta because pandas 1.3.4 has no Apple Silicon wheel. This is recorded separately from native ARM inference.
+
 Preparation must run under the operator's native execution lease and memory/CPU budget. It uses the unchanged NLB tensor functions, 20-ms resampling and NWB-defined trial splits. Test inference uses train+validation inputs for the decoder and all test trials. Validation preparation uses only training trials for training tensors. Validation targets are generated locally, with a sequential scheduling wrapper around the original PSTH smoothing function to avoid host-wide multiprocessing; **test targets are never generated or staged in the author input tree**.
 
-Loading keeps every original signal field, since native missing-value handling can affect trial inclusion. Memory-only patches release unused frame references and schedule the original full-time Gaussian smoothing followed by original resampling one neuron at a time before the unchanged PSTH condition calculation. `preparation_memory.patch` records the exact changes; authenticated generated and authentic-input controls compare bytes, indices, trial metadata and dtypes.
+Loading keeps every original signal field, since native missing-value handling can affect trial inclusion. Memory-only patches release unused frame references and allocate complete neuron columns in bounded groups, retaining the original observation-mask representatives, full source time bounds, every behavior field and exact original indexing. All 182 neural columns are reassembled before trial filtering. The PSTH path keeps its original neural-only selection and performs full-time original Gaussian smoothing followed by original resampling before the unchanged condition calculation. `preparation_memory.patch` records the exact changes; authenticated generated and authentic-input controls compare bytes, indices, trial metadata and dtypes.
 
 The observation interval is 35 bins around movement onset, followed by 10 forward-prediction bins. There are 137 held-in and 45 held-out neurons and 108 task conditions in the complete source cohort. Not every condition necessarily has a nonempty scored test PSTH. Preparation records ordered trial/neuron/condition hashes and exact input hashes in each `panel.json`.
+
+Complete source preparation has passed: validation uses 1,721 training and 574 evaluation trials; test uses 2,295 training and 574 evaluation trials. The immutable metadata references bind all 2,869 original trials and 182 neurons. The authentic paired export contains identical admitted observations, paper and task interface; only its code condition adds the pinned official source. See [source preparation evidence](../../docs/source-preparation-evidence.json) and [delivery details](DELIVERY.md). These are source engineering results, not a completed participant episode or an author score calibration.
 
 ## Run the exact author arm
 
@@ -64,6 +70,8 @@ Only after this freeze may a separate evaluator stage the original public target
 The original targets became public in January 2026. This remains a **publicly exposed original test panel**, even with local access isolation. Keep target files outside candidate environments, never mount them into author training, and never publish authentic arrays, predictions or checkpoint payloads. The separate processes and path checks here are an auditable cooperative interface, not a hostile-code sandbox. Production candidate execution requires an operator-enforced filesystem/container boundary.
 
 Future improvement admission requires completed source calibration, frozen candidate selection and exposure disclosure, and a prespecified uncertainty/companion non-regression decision. Neither a generated scorer fixture nor native chunk timing establishes model quality.
+
+Matching information access is also required. With zero-based test observation bins 0–34, the selected source causal-proposal filtered rate at bin `t` can use the same trial's held-in prefix through `max(t,13)` because startup reflection admits future bins. The noncausal proposal can use the prefix through `min(t+17,34)`. Both arms' forward rates can use all 35 observed bins. These source dependency bounds were checked against the selected checkpoint configurations and generated encoder gradients. They impose no architecture restriction. Full-array delivery does not enforce these bounds; candidate execution and causal/joint improvement admission remain blocked until an enforceable temporal-access boundary is qualified. Source training-rate access is separate and uses all 182 neurons across 45 bins.
 
 ## Provenance and licenses
 
