@@ -1,0 +1,41 @@
+{
+  "schema": "smc_scientific_contract_v1",
+  "id": "PAPER-SMC-RNN-2024",
+  "title": "Inferring stochastic low-rank recurrent neural networks from neural data",
+  "publication_year": 2024,
+  "venue": "NeurIPS",
+  "paper_url": "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf",
+  "goal": "Surpass the matching original SMC-RNN Table2 arm on the complete standard MC_Maze20ms test endpoint. Reproduction is calibration, never success.",
+  "panel": "Complete MC_Maze standard source-defined test split,137held-in/45held-out neurons,35observation bins+10forward bins;108source condition universe, all original scored groups preserved.",
+  "arms": [
+    "paper_causal_proposal",
+    "paper_noncausal_proposal"
+  ],
+  "primary_metric": "co-bps",
+  "companion_metrics": [
+    "vel R2",
+    "psth R2",
+    "fp-bps"
+  ],
+  "source_selection": "Original selected30models using validationco-bps. Qualification uses supplied selected36D checkpoints only; no newtraining/search.",
+  "source_inference": "192particles,32averagedrepeats,smoothFalse,botharms,originaltrain/all182neuronlikelihood vs test137held-inlikelihood.",
+  "allowed_candidate_methods": "Any algorithm using permitted source training/validation observations and matching test observation access. No author architecture requirement. Complete rates in source order. Causal claims require a separately declared timing-access contract acknowledging original reflect-paddingboundary.",
+  "success_requirements": [
+    "Qualify originalsource baseline and dataset/checkpoint linkage first.",
+    "Freeze candidate method/selection and exact exposure before final scoring.",
+    "Improve sourceprimary endpoint under prespecified replicateduncertainty policy, preserving all companionmetrics and prespecifiednon-regressioncriteria.",
+    "Report completecausal/noncausal strata; no winningarm cherry-pick, andno noncausal result credited to causalclaim.",
+    "Publish aggregate evidence only; originaltestpanelpubliclyexposedJan2026 cannotbe calleduntouched."
+  ],
+  "not_claimed": [
+    "Numerical reproduction",
+    "Scientific improvement",
+    "Current SOTA",
+    "All paperfiguresreproduced",
+    "Strict online inference",
+    "Independent heldoutgeneralization"
+  ],
+  "status": "source_engineering_in_progress",
+  "admission_scope": "New independent paperidentity, no overwrittenhistoricaltask. Integrationowner controlsregistration andreadiness; usablecode doesnot implyimprovement_ready.",
+  "implementation": "implementations/source-matched-nlb-v1"
+}
