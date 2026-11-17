@@ -47,7 +47,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction beyond baseline morphology | 4 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
 | [NEURAL-032](NEURAL-032/README.md) | Coactivity and compartment investigation from measured spine plasticity | 2 | [manifest](NEURAL-032/implementations/registered-runtime/manifest.json) |
 | [NEURAL-033](NEURAL-033/README.md) | Kir and compartment interaction investigation with measured-data checks | 2 | [manifest](NEURAL-033/implementations/registered-runtime/manifest.json) |
-| [NEURAL-034](NEURAL-034/README.md) | Held-mouse recall-context decoding from processed astrocytic calcium | 7 | [manifest](NEURAL-034/implementations/registered-runtime/manifest.json) |
+| [NEURAL-034](NEURAL-034/README.md) | Held-mouse recall-context decoding from processed astrocytic calcium | 8 | [manifest](NEURAL-034/implementations/registered-runtime/manifest.json) |
 | [NEURAL-035](NEURAL-035/README.md) | Chronological astrocytic peak-order prediction within sessions | 4 | not linked |
 | [NEURAL-036](NEURAL-036/README.md) | Retrospective prediction of released glial-behavior state proxy | 2 | [manifest](NEURAL-036/implementations/registered-runtime/manifest.json) |
 | [NEURAL-037](NEURAL-037/README.md) | Acquisition-local held-condition calcium response prediction | 3 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
@@ -90,7 +90,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-074](NEURAL-074/README.md) | Shared cognitive components across tasks | 2 | not linked |
 | [NEURAL-075](NEURAL-075/README.md) | Perception-to-imagery object decoding | 3 | [manifest](NEURAL-075/implementations/registered-runtime/manifest.json) |
 | [NEURAL-076](NEURAL-076/README.md) | Visual-feature hierarchy in mental imagery | 3 | [manifest](NEURAL-076/implementations/registered-runtime/manifest.json) |
-| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 11 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
+| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 12 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
 | [NEURAL-078](NEURAL-078/README.md) | Error-related negativity beyond response timing | 4 | [manifest](NEURAL-078/implementations/registered-runtime/manifest.json) |
 | [NEURAL-079](NEURAL-079/README.md) | Natural-video EEG response encoding | 1 | not linked |
 | [NEURAL-080](NEURAL-080/README.md) | Video dynamics versus eye movements in EEG | 2 | not linked |
@@ -133,7 +133,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-SCOPE-20261114-STROOP](NEURAL-SCOPE-20261114-STROOP/README.md) | Cross-person, unseen-session Stroop condition inference from frontal fNIRS | 3 | not linked |
 | [apcx-odor-pulse-evidence](apcx-odor-pulse-evidence/README.md) | Recover odor-pulse quantity and temporal sensory evidence from anterior piriform spike trains | 2 | not linked |
 | [clinical-ccep-stimulation-attribution](clinical-ccep-stimulation-attribution/README.md) | Anatomical stimulation-site attribution from complete VTC evoked responses | 4 | not linked |
-| [clinical-dosei-responsiveness](clinical-dosei-responsiveness/README.md) | Recorded bedside responsiveness from native marker-relative EEG | 8 | not linked |
+| [clinical-dosei-responsiveness](clinical-dosei-responsiveness/README.md) | Recorded bedside responsiveness from native marker-relative EEG | 12 | not linked |
 | [clinical-sensefog-stn-state](clinical-sensefog-stn-state/README.md) | Participant-held gait-state inference from bilateral STN LFP | 2 | not linked |
 | [marmoset-retinal-contrast-generalization](marmoset-retinal-contrast-generalization/README.md) | Marmoset retinal nonlinear contrast encoding and cross-stimulus generalization | 2 | not linked |
 
