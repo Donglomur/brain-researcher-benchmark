@@ -3118,7 +3118,7 @@ jobs:
           historical_lock_pin = {"path": prefix + "SOURCE_LOCK.json", "bytes": 10437,
                                  "sha256": "fd0c305c66052a38ef76a42f874b9d798703753b3c12b85db861152c225907e9"}
           descriptor_pin = {"path": "benchmarks/integrity/current-closures/numeric-reward/SOURCE_BINDINGS.json",
-                            "bytes": 21467, "sha256": "8bbe57470737f099e40799b08c288f8efc5f9cf9bef13f12cf5a031120d80584"}
+                            "bytes": 23195, "sha256": "621eaee63332a7a04513515e8127da10b9e90717ff58a306529f23b45020eccc"}
           distribution = json.loads(read_pin(distribution_pin))
           historical_lock = json.loads(read_pin(historical_lock_pin))
           descriptor = json.loads(read_pin(descriptor_pin))
@@ -5579,6 +5579,11 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-FIND-032/implementations/paper-find-032/full-participant-executor-v2/tests/test_numerical_agreement.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/shared/four-programmes/_four_programmes_source_v1/tests/test_numeric_dmd.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-017/implementations/registered-runtime/complete-operator/test_metric_core.py -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-026/implementations/understanding-metrics-v1/test_score.py -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-026/implementations/understanding-metrics-v1/review_test.py -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-078/implementations/understanding-metrics-v1/test_score.py -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B tests/benchmarks/test_reve_original_metrics.py -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B tests/benchmarks/test_reve_original_panel.py -v
 
   neural042-candidate-validation-source:
     needs: source-preflight

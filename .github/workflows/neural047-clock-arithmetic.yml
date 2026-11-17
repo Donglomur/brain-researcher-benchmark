@@ -47,8 +47,8 @@ jobs:
           rows = [
               {
                   "path": "benchmarks/integrity/current-closures/numeric-neural047/SOURCE.json",
-                  "bytes": 6110,
-                  "sha256": "8ee3ab81908b3dff44fead81e4d426af415f3fdfead7b0cbf13126b2eea51426"
+                  "bytes": 6995,
+                  "sha256": "30d20c62884f03d630566b6c9731eefe256ba191f4841e8664d707a2c059a785"
               },
               {
                   "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/CURRENT_RUNTIME_SOURCE_MANIFEST.json",
@@ -221,7 +221,7 @@ jobs:
                   "sha256": "07c8ea453fc70ed09285086adb550452adb3f1be2301e843e96ce912f47f724e"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-047/task.json",
+                  "path": "benchmarks/neural/NEURAL-047/historical/task.pre-understanding.v1.json",
                   "bytes": 10439,
                   "sha256": "860e5f137bc2e2d1b73decdd75414264d2526dd3b09e66d301bbe22c6db077ef"
               },
@@ -235,7 +235,7 @@ jobs:
               "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3"
           ]
           assert len(rows) == 37 > 0
-          assert sum(row['bytes'] for row in rows) == 201513 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 202398 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -278,7 +278,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 201513,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 202398,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

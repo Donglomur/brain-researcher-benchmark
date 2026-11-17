@@ -5,12 +5,18 @@ on:
   pull_request:
     paths:
       - 'benchmarks/neural/NEURAL-077/implementations/registered-runtime/**'
+      - 'benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/**'
+      - 'benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/**'
+      - 'benchmarks/neural/NEURAL-077/implementations/direct-response/**'
       - 'benchmarks/integrity/source-ownership.json'
       - 'tests/benchmarks/test_neural077_source_integrity.py'
       - '.github/workflows/neural077-source-integrity.yml'
   push:
     paths:
       - 'benchmarks/neural/NEURAL-077/implementations/registered-runtime/**'
+      - 'benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/**'
+      - 'benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/**'
+      - 'benchmarks/neural/NEURAL-077/implementations/direct-response/**'
       - 'benchmarks/integrity/source-ownership.json'
       - 'tests/benchmarks/test_neural077_source_integrity.py'
       - '.github/workflows/neural077-source-integrity.yml'
@@ -67,6 +73,11 @@ jobs:
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s tests/benchmarks -p test_neural077_source_integrity.py -v 2>&1 | tee "$RUNNER_TEMP/neural077-source-integrity.log"
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B scripts/check_repository.py 2>&1 | tee -a "$RUNNER_TEMP/neural077-source-integrity.log"
+      - name: Check generated image transport controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/test_transport.py -v 2>&1 | tee -a "$RUNNER_TEMP/neural077-source-integrity.log"
       - name: Preserve source control evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
