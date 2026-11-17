@@ -1,0 +1,191 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-ADD-003",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original Fig. 4 time-decoding protocol and author baseline route are identifiable, but its exact published numeric panel has not been recovered and independently reproduced. The existing combined prospective score and alternate preprocessing are extensions, not the original source-paper score; the descriptive sequence and behavior findings cannot be optimized into a paper win.",
+  "source_paper": {
+    "title": "Hippocampal sequences represent working memory and implicit timing",
+    "url": "https://doi.org/10.1016/j.celrep.2025.116383"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12588557/",
+      "locator": "Results, Fig. 4C–D; STAR Methods, Time decoding",
+      "supports": "Paper time-bin prediction is an ordered endpoint; behavioral and sequence findings remain separate scientific outputs."
+    },
+    {
+      "id": "time-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ccdorian/dDNMS2025/5e74479bbf97d47c14133cab5fea40a496ec7d94/Main%20Scripts/TimeDecoding.m",
+      "locator": "Parameters; animal/day loops; ConortimeSVM; plotdualpanel",
+      "supports": "Author code fixes seven bins, standard-trial strata, trial-level leave-one-out, default fitcecoc, correlation and separate short/long panels."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://datadryad.org/dataset/doi:10.5061/dryad.vdncjsz7p",
+      "locator": "October 7 2025 release; File descriptions 1,2,3,8",
+      "supports": "Original processed signals, no-smoothing/no-flooring variant and saved answer MAT files are distinct; confirms complete imaging cohort and answer fields."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-ADD-003/implementations/hippocampal-programme/native-source-audit/AUDIT.md",
+      "locator": "Complete selected scope; Native scientific conventions; Projection fidelity and disposition gates",
+      "supports": "Existing full reconstruction covers eight output families; authentic original joins and native execution are not established."
+    },
+    {
+      "id": "grader",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-ADD-003/implementations/hippocampal-programme/grade.py",
+      "locator": "prospective; native",
+      "supports": "Native lane scores reference agreement; prospective lane combines outputs with alternate input/selection conventions and reports descriptive contrasts."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original time decoding predicts one of seven elapsed-time bins during the short-delay window, separately for standard-short and standard-long cues. Retain the original behavior, sequence and odor analyses as required context, without turning their biological contrast into a decoder score.",
+      "evidence_ids": [
+        "paper",
+        "time-code"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Dryad vdncjsz7p, October 7 2025 release: rawtrialsstand2torev2_n11.mat supplies source processed observations. timedecodeforpanels_onlystandards_binsize10justallcells.mat is a published answer artifact, never candidate input.",
+      "evidence_ids": [
+        "data"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All 11 imaging mice, last two standard days and first two reverse days: 44 sessions; standard short/long trials in each. The 23 behavioral mice form a separate descriptive family.",
+      "evidence_ids": [
+        "data",
+        "time-code"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "ConortimeSVM leaves one complete trial out across all seven bins per fold within each cue/session; source rng Default and one training-label shuffle per helper are retained for baseline reconstruction.",
+      "evidence_ids": [
+        "time-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source spks from the original processed release, restricted to roistats iscell >0.3; standard cue/trial membership is fixed by beh. Saved decoding, significant-cell and sequence-index answer files are excluded from candidate predictors.",
+      "evidence_ids": [
+        "time-code",
+        "data"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Ten-frame means over source frame edges 97:10:167 yield seven bins; source cap is 10,000 eligible ROIs. Original smoothed/floored signal and the unsmoothed/unfloored release are separately identified conditions.",
+      "evidence_ids": [
+        "time-code",
+        "data"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Pearson correlation corr(allrealbin,allpredbin), not fraction-correct accuracy, measures predicted versus actual bin indices across held-out trials. Higher correlation is the ordered decoder direction.",
+      "evidence_ids": [
+        "time-code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Author keeps each animal x day-type x day x cue correlation and plots separate short/long summaries; an exact published numerical panel and a source-faithful headline comparison rule are not yet bound. Do not substitute the local combined prospective macro.",
+      "evidence_ids": [
+        "time-code",
+        "data",
+        "grader"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Fig. 4D Pearson time-bin decoding correlation, preserving standard-short and standard-long panels",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "description": "No exact paper correlation array has been inspected; the public saved time-decoding output is identified by author metadata but has not been authenticated as this baseline. Fig. 4 p=0.0035 is not a decoder score.",
+      "evidence_ids": [
+        "paper",
+        "time-code",
+        "data",
+        "registration"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "Pinned TimeDecoding.m provides the author rerun route; MATLAB 2021a defaults, full original joins and independent complete outputs remain unqualified.",
+      "evidence_ids": [
+        "paper",
+        "time-code",
+        "data",
+        "registration"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A task-specific correlation gain must be calibrated to author replay variation and practical improvement across the complete panel, not to the short-minus-long biological contrast.",
+      "evidence_ids": [
+        "paper",
+        "time-code",
+        "data",
+        "registration"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Specify a paired animal-level procedure across all source sessions, preserving cue panels and correcting any selected panel comparison; no folds/bins/cells as independent replications.",
+      "independent_unit": "Mouse (11); four sessions per animal and both cue panels remain paired",
+      "rationale": "The independent biological units must be preserved; source significance tests and repeated folds are not a predeclared method-superiority rule.",
+      "evidence_ids": [
+        "paper",
+        "time-code",
+        "data",
+        "registration"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate the published per-session time-decoding results and independently rerun the original native baseline on the complete 11-animal, 44-session cohort.",
+      "Use original seven-bin labels, standard-trial membership, full-trial leave-one-out support, eligibility, source processed inputs and correlation aggregation for both methods.",
+      "Predeclare a meaningful gain and valid animal-level uncertainty without selecting favorable cues, days or mice; retain all original output families as contextual controls.",
+      "Changing to the no-smoothing/no-flooring input, a prospective split or combined score defines an extension and cannot establish the original paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison has been independently verified; surpassing an author rerun and surpassing the published result remain separate claims.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Baseline recovery blocks activation. Thereafter iterate on declared training/validation feedback while preserving the original trial-LOO scientific endpoint and source input condition.",
+    "candidate_freeze": "Freeze algorithm, all native split/input joins, original panel aggregation, development visibility, baseline runtime, effect/inference rule and finite budgets before final evaluation.",
+    "final_evaluation": "Obtain predictions for every original test trial from the frozen candidate and author method, score correlation independently, and preserve all undefined/failed sessions without denominator shrinkage.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published output files are historical score evidence only. Fresh native author results are a separate comparator; local reconstruction MAE and prospective combined scores remain calibration/extension results."
+  },
+  "blocking_issues": [
+    "Exact published numeric Fig. 4D panel is identified but uninspected and unbound.",
+    "Complete original ROI/trial/session joins, MATLAB defaults and native rerun provenance are not authenticated.",
+    "No source-faithful aggregate superiority rule, meaningful effect, uncertainty procedure or concrete episode budgets is admitted.",
+    "Current prospective grader changes endpoint/input conditions and cannot certify a source-paper win."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve eight-family reconstruction and both preprocessing variants. Native reference agreement measures reproduction; prospective combined contrasts and unsmoothed inputs remain explicitly labelled extensions."
+  }
+}

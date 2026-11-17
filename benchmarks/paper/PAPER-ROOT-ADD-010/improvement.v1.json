@@ -1,0 +1,159 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-010",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The paper has a legitimate same-task oddball AUROC endpoint with explicit run-held-out folds, but the exact published numeric baseline and source-matched summary have not been recovered. The current evaluator computes RSA only, so its reconstruction cannot establish a decoding improvement.",
+  "source_paper": {
+    "title": "A geometric shape regularity effect in the human brain",
+    "url": "https://doi.org/10.7554/eLife.106464.3"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12795501/",
+      "locator": "Experiment 4 (MEG): Participants; Preprocessing of MEG signals; Decoding; RSA in sensor space; Fig. 4",
+      "supports": "Original run-held-out reference-versus-oddball AUROC and descriptive regularity/RSA analyses, including six directional run splits and participant-wise results."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/POGS_MEG_config.py",
+      "locator": "Configuration: channels, Maxwell filter, l_freq, h_freq, resample_sfreq",
+      "supports": "Source configuration uses MEG channels, Maxwell filtering, 0.1\u201340 Hz filtering and 250-Hz resampling."
+    },
+    {
+      "id": "legacy_component",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/README.md",
+      "locator": "Sensor RSA construction component scope and holds",
+      "supports": "Existing implementation covers sensor RSA, not the historical oddball decoder or an authenticated numeric reference."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original ordered component: decode reference versus oddball MEG epochs, train jointly across all eleven shapes and report AUROC separately by shape/time. Regularity correlations and symbolic-versus-CNN RSA remain descriptive companion results, not scores to inflate.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Paper releases the POGS MEG study; registration selects OpenNeuro ds006012 v1.0.1. Exact version-to-published-decoding artifacts and all 158 run identities still need primary data reconciliation.",
+      "evidence_ids": [
+        "paper",
+        "legacy_component"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Twenty healthy adult MEG participants (13 female, ages 21\u201342); sensor analyses use all twenty. The nineteen-participant source-reconstruction subset is not the sensor-decoding cohort.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Six directional run folds: even versus odd; first half versus second half; runs 1,2,5,6 versus 3,4,7,8, each in both directions. This is not a new held-out-shape or participant split.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "MEG epochs from the passive reference/oddball paradigm; original shapes and rotations/scalings, all-shape training and shape-specific test evaluation.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source preprocessing uses bad-channel detection, Maxwell/SSS, 0.1\u201340-Hz filtering, 250 Hz, epochs \u2212150 to 1150 ms, SSP and autoreject. Decoding excludes the first six trials of each block and normalizes each epoch; smoothed and unsmoothed branches must remain identifiable.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Shape-specific ROC AUROC avoids bias from the approximately 4:20 oddball/reference imbalance. Larger out-of-run AUROC is ordered predictive improvement; a larger correlation with regularity is a different descriptive claim.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Source reports participant-wise time courses and shape-specific AUROCs, then cluster-selected temporal summaries. Exact numeric baseline arrays, fold averaging, selected cluster and an admissible single primary comparison summary are not yet recovered.",
+      "evidence_ids": [
+        "paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original shape-specific run-held-out oddball ROC AUROC, with source time/shape aggregation still unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Fig. 4 supplies AUROC time courses, but the reviewed text does not supply the exact numeric comparator and summary required for admission. The reported 428-ms peak latency is not an AUROC baseline.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authentic author rerun is established by this source and static implementation review.",
+      "evidence_ids": []
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful oddball-decoding gain requires a recovered exact author comparator and an endpoint-specific justification; no arbitrary AUROC increment is supplied.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired participant-level comparison retaining all run folds and shapes after recovering the source endpoint; its confidence procedure and decision rule are not yet specified.",
+      "independent_unit": "Task-specific biological units described in same_task.aggregation; repeated observations are not independent subjects.",
+      "rationale": "The six overlapping run contrasts and repeated time points are dependent; participants, not folds or epochs, supply biological replication.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and surpass the original decoder under the same twenty-subject cohort, all-shape training, shape-specific test targets, six run-fold directions and input/preprocessing condition.",
+      "Preserve both descriptive RSA and geometric-regularity results as separate outputs; do not call a larger biological correlation an algorithm win.",
+      "A held-out-shape/participant split or reduced shape set is an extension, even if both methods are rerun on it.",
+      "Require a predeclared meaningful AUROC improvement and valid participant-level uncertainty after baseline recovery; reconstruction alone is insufficient."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; source results, any future author rerun, and current SOTA are separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked until exact source baseline and summary endpoint are recovered. Then expose only declared original training folds and development feedback; keep final source-test access evaluator-owned.",
+    "candidate_freeze": "Freeze preprocessing, model, hyperparameters, source-fold handling and summary rule before final original-task evaluation.",
+    "final_evaluation": "Not executable as a paper-win evaluation yet; retain all original participants, shapes, run partitions and published input conditions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Do not turn agreement with the existing reconstruction evaluator, stronger statistical significance, a new split, or a local implementation baseline into a source-paper win."
+  },
+  "blocking_issues": [
+    "Recover exact author oddball AUROC arrays and source script/commit that generated the Version-of-Record result.",
+    "Reconcile all twenty subjects, original run inventory, source data version and both smoothing branches.",
+    "Freeze an original-task summary without selecting favorable time points/shapes; preserve the six original directional run folds.",
+    "Implement and validate the historical decoder comparison; justify meaningful effect and paired participant uncertainty; fix concrete access/resource budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain sensor RSA numerical construction as calibration. Its whitened model correlations, temporal significance and reconstructed figure agreement do not establish higher held-out oddball AUROC."
+  }
+}

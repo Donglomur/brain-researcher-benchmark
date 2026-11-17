@@ -1,0 +1,187 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-EXP-20261113-004",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original Fig. 3 reward-relative decoder has an ordered score, but its exact published score vector, historical folds, cell-selection privileges and author revision are not recovered. The current chronological post-switch-calibration evaluator changes the original protocol and cannot establish a same-task paper win.",
+  "source_paper": {
+    "title": "A flexible hippocampal population code for experience relative to reward",
+    "url": "https://www.nature.com/articles/s41593-025-01985-4"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-025-01985-4",
+      "locator": "Fig. 3a\u2013c; Methods, Decoding of RR position",
+      "supports": "Original RR decoding target, source cross-validation, occupancy matching and cosine metric; Fig. 3 effect sizes are not raw decoding accuracies."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GiocomoLab/Sosa_et_al_2024/main/README.md",
+      "locator": "Data organization; preprocessing and stochasticity notes",
+      "supports": "Author data classes include computed cell classifications and depend on stochastic processing; current main is not a historical publication pin."
+    },
+    {
+      "id": "data-route",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GiocomoLab/Sosa_et_al_2024/adf0f9ed3defa22275d92fa0ed996f47008e05b3/docs/data_download.md",
+      "locator": "Data download instructions",
+      "supports": "Distinct preprocessed and postprocessed releases; postprocessed data already contain RR cell identities; switch days 3,5,7,8,10,12,14."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-EXP-20261113-004/task.json",
+      "locator": "reproduction; improvement; code; data",
+      "supports": "Historical Fig. 2/3 scope, proposed chronological extension and unresolved author revision."
+    },
+    {
+      "id": "evaluator",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-EXP-20261113-004/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "split_session; prepare; score; HOLDS",
+      "supports": "Current executable scorer uses a prospective chronological split and animal-level summaries, not the published Fig. 3 split."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode circular position relative to reward from CA1 activity, retaining Fig. 3 before-switch and after-switch conditions and RR, TR and non-RR cell panels; Fig. 2 remapping outputs remain calibration.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author preprocessed Figshare 27098065 and postprocessed 27138633 are identified, but exact immutable files and Fig. 3 sample mapping remain unadmitted. The registered DANDI version differs from the current author download route.",
+      "evidence_ids": [
+        "data-route",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Fig. 3 includes 11 switching mice over seven switch days, 77 sessions; smaller animal/session subsets cannot substitute.",
+      "evidence_ids": [
+        "paper",
+        "data-route"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper specifies tenfold 90/10 fitting before the switch, testing before or after, and last 30 post-switch trials for matched support. Exact realized folds and occupancy sample indices remain absent; chronological half-session calibration is an extension.",
+      "evidence_ids": [
+        "paper",
+        "evaluator"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Deconvolved calcium event time series for each original cell subpopulation. Historical retrospective RR classification must be reproduced and disclosed; any train-only classification changes need a separately labelled comparison.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source speed threshold is >2 cm/s and occupancy matching uses 45 circular bins. Exact position/reward alignment, teleport treatment, stochastic classifications and downsampling realization still need binding.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Per-sample score cos(theta_RR - theta_hat_RR), higher is better; Fig. 3b compares session means with shuffle means. Effect size 2.7 for post-switch RR is not a cosine score.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Fig. 3b averages time samples and cross-validation folds within session; Fig. 3c uses session-shuffle z-scores and animal averages. These remain distinct endpoints.",
+      "evidence_ids": [
+        "paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Fig. 3b session-level mean cosine RR decoding score, retaining every source condition",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "description": "No exact published session score vector or declared headline aggregation has been recovered; do not use the reported standardized effect sizes as scores.",
+      "evidence_ids": [
+        "paper",
+        "data-route",
+        "registration"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "The author circular-linear route exists, but no authenticated historical rerun or fold/data receipt exists.",
+      "evidence_ids": [
+        "paper",
+        "data-route",
+        "registration"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful gain in cosine units must be justified from the original score distribution and stochastic replay variation; no numeric margin is inferred from significance.",
+      "evidence_ids": [
+        "paper",
+        "data-route",
+        "registration"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Resolve paired mouse-level inference and multiplicity across the original before/after and cell-population panels before any final evaluation.",
+      "independent_unit": "Mouse (11), with all seven sessions retained together",
+      "rationale": "The independent biological units must be preserved; source significance tests and repeated folds are not a predeclared method-superiority rule.",
+      "evidence_ids": [
+        "paper",
+        "data-route",
+        "registration"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the exact Fig. 3 source scores and source-authorized rerun, including original 11 mice and seven switch days.",
+      "Match original targets, retrospective cell memberships, occupancy samples, folds, inputs and preprocessing privileges for candidate and author comparator.",
+      "Beat the published result and the verified author rerun on the same admitted endpoint with a task-specific meaningful-effect and uncertainty rule.",
+      "Report every original condition; no larger standardized effect against shuffle, chronological split score, or reduced cohort is a paper win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison has been independently verified; surpassing an author rerun and surpassing the published result remain separate claims.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Admission is blocked. After source recovery, allow iteration using only declared source training/validation feedback; the existing chronological episode remains an explicitly separate extension.",
+    "candidate_freeze": "Before final scoring, freeze method, original fold/sample mapping, cell memberships, preprocessing access, comparison panel, effect rule, uncertainty procedure and concrete resource/access ceilings.",
+    "final_evaluation": "Evaluate the frozen candidate and independently rerun author method on the original Fig. 3 support without adaptive final-score feedback. Current evaluator cannot certify this.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published Fig. 3 scores, independently rerun author scores and the local chronological comparator are distinct; none may stand in for another. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Exact published Fig. 3 score artifacts and source historical code revision are not bound.",
+    "Original cross-validation/downsampling realization and classification access privileges remain unresolved.",
+    "Current scorer implements a new split and cannot emit a same-task victory.",
+    "Meaningful effect, valid uncertainty, finite access/resource budgets and a source-protocol evaluator remain unadmitted."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve full Fig. 2/3 reconstruction and chronological extension artifacts as calibration or labelled extension only; cosine arithmetic alone does not establish stronger-than-paper performance."
+  }
+}

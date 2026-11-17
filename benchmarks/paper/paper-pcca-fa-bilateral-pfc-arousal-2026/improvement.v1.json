@@ -1,0 +1,187 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "paper-pcca-fa-bilateral-pfc-arousal-2026",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original paper contains an ordered estimator-validation route: Fig. 3e/f recovery of known across/within shared variance and dimensionality on simulated data, with pCCA comparison, plus Supplementary Fig. 4 method comparisons on neural recordings. The authorized overhaul can select this original source task. Exact original simulation draws/trial-count grid, baseline arrays, loss aggregation and matched evaluation protocol remain unrecovered; in-sample pupil R\u00b2 is retained only as descriptive calibration.",
+  "source_paper": {
+    "title": "Interactions across hemispheres in prefrontal cortex reflect global cognitive processing",
+    "url": "https://doi.org/10.1038/s41467-026-71725-0"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13247044/",
+      "locator": "Fig. 3e/f and Results: pCCA-FA partitions across- and within-area shared variance; Methods: Fitting pCCA-FA, Simulated data generation, Fitting pCCA-FA and pCCA to simulated data; Supplementary Fig. 4 as referenced; Fig. 6c for descriptive context",
+      "supports": "Fig. 3 compares recovery against known ground truth over thirty simulated datasets per trial-count condition. Methods specify Gaussian loading draws, thirty neurons per area, five across/three within dimensions, target variance ratios, EM and crossvalidated dimension selection. Fig. 6 pupil R\u00b2=.25 is a separate descriptive result."
+    },
+    {
+      "id": "author_data",
+      "kind": "author_data",
+      "url": "https://api.figshare.com/v2/articles/31431415",
+      "locator": "Version 1 metadata, title, file inventory",
+      "supports": "Published data record contains original neural/pupil session and geometry files; metadata review does not verify native payload joins."
+    },
+    {
+      "id": "author_code",
+      "kind": "author_code",
+      "url": "https://github.com/SmithLabNeuro/pcca_fa",
+      "locator": "README: model terminology, methods, fitting procedures and release route",
+      "supports": "Official pCCA-FA model decomposes across- and within-population interactions; no benchmark improvement result follows from source availability."
+    },
+    {
+      "id": "legacy_component",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/paper-pcca-fa-bilateral-pfc-arousal-2026/implementations/descriptive-outputs/METHOD.md",
+      "locator": "P01\u2013P05 mapping; compute_pupil_pred.py CROSSVAL=False; final qualification limits",
+      "supports": "Existing full descriptive evaluator reports covariance, dimensions, in-sample pupil regressions and dependent session-shuffle controls; protected neural-to-pupil remains separate."
+    },
+    {
+      "id": "fig3_code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/meganmcd13/figures-dual-pfc/main/main_analyses/create_fig3_dataset_varyN.py",
+      "locator": "Lines17,22\u201325,39\u201360; moving main inspected, paper-release binding unresolved",
+      "supports": "Visible generator uses thirty draws, trial counts100/150/300/600/1000/1500, five-fold CV, dimension candidates0\u201314 and no warmstart. Seed j*30+i is passed to crossvalidation, not explicitly to the simulator; source-paper 1\u201310 dimensionality policy requires reconciliation."
+    },
+    {
+      "id": "s4_code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/meganmcd13/figures-dual-pfc/main/main_analyses/fit_alt_models.py",
+      "locator": "Lines23\u201375; moving main inspected, paper-release binding unresolved",
+      "supports": "S4 alternative-model driver evaluates joint FA, individual FA and pCCA on the same left/right fast-component session data and saves CV likelihood arrays; exact comparison normalization and published numeric results are unresolved."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Recover known across-area and within-area percentage shared variance (%sv) and shared dimensionality (d_shared) from the paper simulated two-population datasets, matching Fig. 3e/f. Original pCCA and pCCA-FA fitting comparisons are retained. Supplementary Fig. 4 neural method comparisons are a separately identified source validation route, not pooled into the recovery score.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original Fig. 3 simulated datasets from the source pCCA-FA Gaussian model. Inspected author driver saves simdataset_varyN_noWS.pkl and sim/estimated/pCCA parameters; exact historical artifact binding and generator random state are not recovered. New simulations cannot silently substitute.",
+      "evidence_ids": [
+        "paper",
+        "fig3_code"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper defines thirty neurons per area, five across-area and three within-area dimensions, thirty ground-truth draws per trial-count setting. Inspected author driver lists100,150,300,600,1000,1500 trials and thirty draws each; exact historical draw identity and release-to-paper binding remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "fig3_code"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper simulation Methods gives dimension candidates1\u201310 with crossvalidation and all-trial refit; empirical fitting uses ten folds and1\u201315. Inspected Fig3 driver instead uses five folds and candidates0\u201314, with no warmstart and seed j*30+i for CV. The source-version/dimensionality discrepancy and historical fold identities must be resolved, not silently chosen.",
+      "evidence_ids": [
+        "paper",
+        "fig3_code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Observed activity x from both simulated populations generated by the source model. Candidate estimation must use the same observations and neuron/trial support as pCCA-FA/pCCA; ground-truth parameters supply evaluator comparison targets, not candidate inputs.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source generator draws across/within loading entries from standard normals, rescales singular values to approximately15% across-area and10% within-area shared variance, and scales independent variance to75%. Model fitting uses exact EM and SVD ordering; source d_shared definitions and loading-to-variance normalization must be preserved.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Fig. 3 reports estimated versus true across/within %sv and d_shared; closeness to known truth is ordered, but an exact source-defined scalar recovery loss and its units/combination have not been recovered. Do not invent an average over these different endpoints. Source crossvalidated likelihood is an additional ordered fitting/comparison measure with separate normalization still unresolved.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Fig. 3e/f shows mean and one standard deviation across thirty generated datasets per trial-count setting, keeping across/within and %sv/d_shared separate. Exact numeric baseline curves, hemisphere aggregation and any primary recovery summary remain unrecovered; random draws, not simulated neurons or folds, are the replication units.",
+      "evidence_ids": [
+        "paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Source Fig. 3 ground-truth recovery error for across/within %sv and d_shared; exact source loss and summary unresolved",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Fig. 3e/f provides recovery curves for pCCA-FA and pCCA but exact numeric arrays and a source-matched recovery loss/summary remain unrecovered. The empirical pupil mean R\u00b2=.25 is descriptive context and is not the estimator-performance baseline. Supplementary Fig. 4 numeric likelihood/comparison results also remain unrecovered.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author route is main_analyses/create_fig3_dataset_varyN.py plus official pCCA-FA/pCCA libraries; empirical S4 uses main_analyses/fit_alt_models.py. Source drivers were inspected, but release binding, original simulation RNG/artifacts, full fits and baseline arrays were not authenticated or rerun. Existing descriptive evaluator cannot replace this route.",
+      "evidence_ids": [
+        "fig3_code",
+        "s4_code",
+        "legacy_component"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Choose a meaningful source-specific reduction in recovery error only after exact original errors, trial-count conditions and estimator variability are recovered; do not invent a common margin across variance percentages and integer dimensions.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired recovery-error comparisons across the same independently generated ground-truth datasets at each source trial-count setting; preserve separate endpoints and account for multiple conditions. Exact decision rule awaits source-array and loss recovery.",
+      "independent_unit": "Independently drawn ground-truth parameter set plus its generated dataset (thirty per source trial-count setting); neural-recording validation uses sessions nested within three animals.",
+      "rationale": "Neurons, latent dimensions, overlapping folds and two areas are not independent simulation replicates; the paper mean\u00b1SD is descriptive variability, not an improvement confidence rule.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the original Fig. 3 parameter draws/datasets, trial-count grid, dimension search, crossvalidation and final fitting protocol, exact ground-truth metrics and numeric pCCA-FA comparator.",
+      "Surpass the source pCCA-FA estimator on the same original recovery task and all original conditions with a justified loss and uncertainty rule; beating only the weaker pCCA control is insufficient.",
+      "Preserve %sv and d_shared endpoints separately unless the source supports an exact combined summary; no cherry-picked trial counts, altered generator or favorable seed subset.",
+      "A fresh simulation draw set, changed variance ratio/dimensionality, new empirical split or protected pupil prediction is an extension, even if both methods are rerun.",
+      "Higher in-sample pupil R\u00b2, larger covariance components, stronger significance or closer descriptive reconstruction is not an estimator-recovery win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; source results, any future author rerun, and current SOTA are separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked until the original source simulation artifacts, baseline and endpoint aggregation are recovered. After admission, permit estimator development only on declared source development inputs; keep assessment ground truth and original comparison artifacts evaluator-owned.",
+    "candidate_freeze": "Freeze estimation method, hyperparameters, dimension-selection policy, source condition coverage and scoring summary before final comparison on the recovered original Fig. 3 assessment datasets.",
+    "final_evaluation": "Compare candidate recovery with published and authenticated rerun pCCA-FA on identical original datasets and all source trial-count conditions. Any original Supplementary Fig. 4 likelihood comparison must retain its own exact empirical splits/normalization and be reported separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source pCCA-FA is the performance comparator; pCCA/FA are source controls. Published results, author reruns and current SOTA remain distinct. Existing covariance/pupil reconstruction is calibration; new protected prediction or newly generated simulations cannot silently replace original paper assessment. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed.",
+    "Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark.",
+    "Reconcile paper simulation dimensions1\u201310 with inspected driver0\u201314, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy.",
+    "Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim.",
+    "Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve all existing P01\u2013P05 covariance/pupil outputs, fixed examples and historical empirical assay. Published pupil mean R\u00b2=.25 and its within-area comparators are descriptive calibration only. The authorized overhaul selects the paper original Fig. 3 estimator-recovery task; no simulation, model fit or improvement has been run."
+  }
+}

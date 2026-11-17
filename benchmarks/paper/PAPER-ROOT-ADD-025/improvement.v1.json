@@ -1,0 +1,184 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-025",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The source paper explicitly defines ten-fold prediction of stimulus angles and behavioral estimates from neural PCs, with held-out Pearson correlation. This ordered source-native decoder is a valid overhaul route even though the main MI/II findings are descriptive. Exact original decoding baseline arrays, source participant/parcel aggregation and fold membership remain unrecovered, so no same-task win is currently admitted.",
+  "source_paper": {
+    "title": "Confirmation bias through selective readout of information encoded in human parietal cortex",
+    "url": "https://doi.org/10.1038/s41467-025-61010-x"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12198416/",
+      "locator": "Figs. 4\u20135; Methods: Participants, Dimensionality reduction, Information-theoretic analyses, Trial selection, Regression analyses, Statistical analyses",
+      "supports": "Central comparison is consistent-versus-inconsistent neural information and behavioral association. Supplementary linear decoding is an analog of the descriptive information analysis."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/DonnerLab/2025_Park_ConfirmationBias-through-Selective-Readout-of-Information-Encoded-in-Human-Parietal-Cortex/blob/8b79caa5b95fadce826ea39bf6c69828991a4b28/confbias_regress_sample_int12_cic.m",
+      "locator": "Lines 24\u201343, 133\u2013163, 179\u2013245",
+      "supports": "Author linear companion analysis pools pairs of stimulus positions, uses released PCA, resamples 200 to 160 Hz, subsamples consistency classes and performs ten-fold univariate regression."
+    },
+    {
+      "id": "legacy_component",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-025/docs/initial-evaluator-v1.md",
+      "locator": "Primary provenance; Numerical contract; Verification and remaining gates",
+      "supports": "Existing evaluator is supplementary linear encoding/readout, has declared prospective repairs, and does not implement the main MI/II endpoint or protected participant evaluation."
+    },
+    {
+      "id": "figure_code",
+      "kind": "author_code",
+      "url": "https://github.com/DonnerLab/2025_Park_ConfirmationBias-through-Selective-Readout-of-Information-Encoded-in-Human-Parietal-Cortex/blob/8b79caa5b95fadce826ea39bf6c69828991a4b28/Figures/FigureS11_PK_Decoding_int12_cic_tc.m",
+      "locator": "Lines 5, 20, 34\u201344, 60\u2013124 and 213\u2013225",
+      "supports": "The source figure route selects 30 subject ordinals excluding12/14/19/21, uses fgmu=0, displays signed stimulus/estimate decoding correlations by pair and consistency, and separately computes absolute readout contrasts. It loads precomputed gCORR/gSCR arrays; exact upstream aggregation and numeric values remain unresolved."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Source-native prediction of presented stimulus-sample angle S from each regional neural principal component, assessed by held-out corr(S,S_hat) under the paper ten-fold decoder; retain behavioral-estimate prediction corr(E,E_hat) as a source companion metric. MI/II and consistency/readout contrasts remain descriptive companions, not quantities to maximize.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Released regional component and behavior arrays from the source human MEG study; exact published S11 input-file version, trial alignment and precomputed-result-to-paper binding remain unverified.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "S11 author script selects get_sinfo(setdiff(1:34,[12,14,19,21]),2), i.e. thirty requested source participants. Recover actual included subject/parcel identities and missing-value handling; do not silently substitute the twenty-nine-participant main MI/II cohort.",
+      "evidence_ids": [
+        "paper",
+        "figure_code"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The author regression script uses cvpartition(Ntr,KFold,10) on subsampled rows pooled from adjacent sample positions. Exact historical random state and fold memberships are unknown. A trial can contribute two rows; grouped-trial or participant-held-out splitting is an extension, not the original evaluation.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original regional neural PCA time courses predict stimulus angles and final estimates separately in Cue and Choice conditions, keeping source sample-pair and consistency identities. Source all-trial PCA is part of the historical representation condition and must be disclosed.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Author route loads all-trial PCA, resamples200 to160Hz, baseline-corrects, epochs \u22120.1 to0.7s, pools adjacent samples and draws five count-matched subsamples per class. Exact native array/resampling and published source-path equivalence remain unverified. S11 fgmu=0 uses all finite generative means, unlike the main near-zero MI analysis.",
+      "evidence_ids": [
+        "code",
+        "figure_code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Source predictive endpoint is signed Pearson correlation between held-out predicted and actual stimulus, averaged over ten folds; the companion estimate predictor uses corr(E,E_hat). Readout corr(S_hat,E), absolute consistency differences and MI/II are distinct and cannot substitute for decoding accuracy.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "The paper averages fold correlations and PC results, while S11 loads gCORR/gSCR, averages parcels and plots participant means by condition/sample pair/consistency. Exact upstream PC/subsample handling, source missing-value behavior and a published primary summary/numeric array must be recovered before comparison.",
+      "evidence_ids": [
+        "paper",
+        "figure_code"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original ten-fold mean held-out signed Pearson stimulus-decoding correlation corr(S,S_hat); exact S11 aggregation unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Original decoding correlations are displayed in supplementary source results, but exact numeric arrays, cohort/condition coverage and primary summary were not recovered. Main MI/II biological effect sizes or p-values cannot supply this baseline.",
+      "evidence_ids": [
+        "paper",
+        "figure_code"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author route is pinned confbias_regress_sample_int12_cic.m followed by FigureS11_PK_Decoding_int12_cic_tc.m and its upstream gCORR/gSCR aggregation. An exact source rerun has not been performed; the local evaluator includes declared prospective repairs and is not an authenticated author score.",
+      "evidence_ids": [
+        "code",
+        "figure_code",
+        "legacy_component"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful signed-correlation gain must be justified against exact original baseline variability and the source region/time/condition summary; no generic delta is assigned.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired participant-level decoding difference, preserving all source conditions, nested folds and sample-pair dependencies; the decision rule remains unresolved until exact source support and baseline are recovered.",
+      "independent_unit": "Participant; PCs, parcels, ten folds, sample pairs and repeated subsamples are dependent observations within participant.",
+      "rationale": "The original biological consistency permutation tests do not by themselves provide uncertainty for a new-method predictive gain.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "figure_code"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and surpass the original ten-fold neural-to-stimulus decoder on the same source PCA representation, participants, parcels, sample pairs, consistency conditions, folds and data-selection rules.",
+      "Freeze exact signed-correlation aggregation and full source condition coverage before candidate evaluation; do not select favorable PCs, participants, time points or regions.",
+      "Require meaningful improvement and valid paired participant uncertainty under fixed concrete access/resource budgets; use an authenticated author baseline rather than only the constructed local evaluator.",
+      "Retain all-trial PCA and row-fold exposure as properties of the original task. Grouped-trial or participant-held-out results are separate extensions, even if methodologically stronger.",
+      "A larger MI/II contrast, larger absolute readout effect, smaller p-value or better numerical reconstruction is not a decoding win."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; source results, any future author rerun, and current SOTA are separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked until exact source decoder baselines and fold/aggregation identities are recovered. After admission, use declared source training folds and development feedback with final original-fold predictions owned by the evaluator.",
+    "candidate_freeze": "Freeze model, feature use, preprocessing, signed score calculation, all source conditions and source-fold handling before final assessment.",
+    "final_evaluation": "Compare source-matched stimulus predictions against exact published and rerun author decoder results. Preserve original all-trial PCA disclosure; do not claim globally unseen or participant-held-out generalization.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published decoder, authenticated author rerun and current SOTA separate. The existing linear evaluator is calibration until native equivalence is established; main MI/II descriptions are not predictive baselines. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Recover exact supplementary decoding score arrays and an unambiguous source primary time/region/condition aggregation.",
+    "Resolve S11 thirty-subject source selection, native participant/parcel identities and its all-finite-mean population without importing main MI/II eligibility.",
+    "Recover native sample/trial alignment, original subsampling/fold random state and precomputed gCORR/gSCR generation.",
+    "Audit MATLAB/Python correlation equivalence, resampling, missing-value and scaling behavior against the author path; preserve any corrected branch as separately labeled.",
+    "Specify paired participant uncertainty, meaningful effect and concrete episode budgets; authenticate author baseline before admitting same-task success."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the supplementary linear evaluator, main MI/II reconstruction context and all declared sensitivity branches as calibration. The authorized overhaul selects the original ten-fold predictive decoder for the active improvement route; no rerun or improvement has been demonstrated."
+  }
+}

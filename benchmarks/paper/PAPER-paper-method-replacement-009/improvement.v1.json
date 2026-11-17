@@ -1,0 +1,213 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-replacement-009",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The selected original task is the complete Figure 5A-D decoding comparison: four behaviors, five brain regions and ten IBL sessions, with every applicable source author-model condition and baseline. This is an ordered performance task, but exact panel cohort identities, preprocessing/metric provenance and numeric published results remain unrecovered. A new cohort or the separate prospective40 condition cannot establish this same-task paper win.",
+  "source_paper": {
+    "title": "Exploiting correlations across trials and behavioral sessions to improve neural decoding",
+    "url": "https://doi.org/10.1016/j.neuron.2025.10.026"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695064/",
+      "locator": "Results: Figure 5 caption and benchmarking section; Figure 8; STAR Methods: Data processing, Hyperparameter selection, bootstrap resampling; Data and code availability",
+      "supports": "Identifies original decoding targets, panel-specific cohorts, performance measures, temporal inputs and final training recipe; links the author release. No exact numeric Figure 5 baseline was recovered from the reviewed text."
+    },
+    {
+      "id": "release",
+      "kind": "author_code",
+      "url": "https://zenodo.org/records/17317498",
+      "locator": "Version NEURON; file listing; related GitHub release",
+      "supports": "Author software release dated 2025-10-11, archive md5 380c2bc37681e80741ab4b3f85a1fc14; this is code, not the complete empirical input dataset or a numeric performance report."
+    },
+    {
+      "id": "cache",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/0_data_caching.py",
+      "locator": "SEED; cohort selection; params; Partition dataset block",
+      "supports": "Example source uses seed 42, release tables and randomized 70/10/20 trial partitions, with a fixed 20 ms stimulus-aligned input recipe. It does not authenticate every final-paper cohort and fold."
+    },
+    {
+      "id": "loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/utils/data_loader_utils.py",
+      "locator": "standardize_spike_data; SingleSessionDataset; multi-session DataLoader construction",
+      "supports": "Normalization recomputes statistics despite supplied training statistics; missing behavior filling and drop_last test loading require historical recipe and exact scored-row reconciliation."
+    },
+    {
+      "id": "metrics",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/utils/eval_utils.py",
+      "locator": "eval_model; eval_multi_session_model; eval_multi_region_model",
+      "supports": "Example scorer returns flattened R2 for regression and argmax accuracy for classification, retaining per-session and per-region outputs. It does not implement the complete final-paper AUC/Pearson panel."
+    },
+    {
+      "id": "training",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/2_decode_multi_session.py",
+      "locator": "search_space and decoding/evaluation blocks",
+      "supports": "Example source sweeps learning rate, weight decay and rank, with 500 sweep epochs and 800 final epochs; it excludes prior from the listed target choices. This must be reconciled to the final-paper recipe before a baseline is admitted."
+    },
+    {
+      "id": "neuron_metrics",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/neural_decoding/NEURON/src/utils/eval_utils.py",
+      "locator": "eval_model evaluation block",
+      "supports": "The paper-linked NEURON release also exposes the example accuracy/R2 evaluator, so changing the source label alone does not resolve metric provenance."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-replacement-009/implementations/registered-runtime/contracts/FULL_PROGRAMME_V5.md",
+      "locator": "Unchanged scope and outstanding inputs; behavior-PC and matched observed/imposter sections",
+      "supports": "The full historical F1-F8/S1-S8 programme and prospective40 remain preserved and inactive. The Figure 5 comparison has ten sessions and five regions, but authentic original cohort/recipe and competent references remain unqualified; unrelated historical panels are not prerequisites for this selected original task."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Complete original Figure 5A-D comparison: decode choice, prior, wheel speed and whisker motion energy with all applicable single-session, multi-session, multi-region and combined author-model conditions and reported baselines.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "IBL Reproducible Electrophysiology data used for Figure 5A-D. Exact immutable release objects and panel input manifest remain unauthenticated; the Zenodo item is software.",
+      "evidence_ids": [
+        "paper",
+        "release",
+        "registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Figure 5A-D uses ten IBL sessions and region-specific decoding for PO, LP, DG, CA1 and VISa. Recover exact session/animal/unit identities and all original supported cases; neither the 10-session example selection nor prospective40 authenticates this cohort.",
+      "evidence_ids": [
+        "paper",
+        "cache",
+        "registration"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The released example uses randomized 70/10/20 within-session trial partitions. Establish whether this is the original panel protocol and preserve its support and state-space sequence semantics. A provenance-controlled rerun of the original stochastic protocol is valid; historical seed identity is not intrinsically required. New animal-held-out or chronological protocols are extensions.",
+      "evidence_ids": [
+        "cache",
+        "registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Use each Figure 5A-D condition\u2019s original neural and behavioral context. BMM-HMM/LG-AR1 may use sequence decoder outputs and permitted training-session behavior; target-session oracle behavior is excluded. Do not reinterpret this retrospective decoding task as online prediction.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Final Methods distinguish stimulus-aligned static targets and movement-aligned dynamic targets. The example cache applies one common 20 ms window; its loader recomputes normalization and fills missing behaviors. Resolve the selected panel\u2019s original windows, masks, prior construction, scaling and row coverage without silently substituting prospective repairs.",
+      "evidence_ids": [
+        "paper",
+        "cache",
+        "loader"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Figure 5A-D uses choice AUC, prior Pearson correlation and dynamic-behavior R2. The released example evaluator instead returns argmax accuracy and flattened R2. Recover panel-specific score implementation, units and undefined-value handling; do not substitute accuracy for AUC or R2 for correlation.",
+      "evidence_ids": [
+        "paper",
+        "metrics",
+        "neuron_metrics"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain the complete original Figure 5A-D per-region, per-behavior and author-condition results across ten sessions. Recover score vectors, exact plotted summaries and full denominators; no favorable composite or available-case reduction substitutes for the original panel.",
+      "evidence_ids": [
+        "paper",
+        "metrics"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Complete Figure 5A-D endpoint vector: choice AUC, prior Pearson correlation, wheel-speed R2 and whisker-motion-energy R2, each across the five original regions",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The exact numeric Figure 5A-D author-model results were not recovered. Identify the relevant source-model comparator for every target/region under its original access condition; a gain over only the weaker linear baseline is insufficient. No values are estimated from plotted bars.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authenticated Figure 5A-D author rerun is established. The NEURON examples require metric/preprocessing/training reconciliation. A rerun of the source stochastic protocol with documented provenance, prespecified calibration tolerance and paired candidate comparison is admissible without requiring the identical historical random seed.",
+      "evidence_ids": [
+        "release",
+        "metrics",
+        "training",
+        "registration"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Prespecify scientifically meaningful AUC, correlation and R2 effects for the selected panel, informed by author-rerun variability. A lower p-value, source reconstruction or a local weaker-baseline gain is not sufficient.",
+      "evidence_ids": [
+        "registration"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired candidate-versus-author inference for the complete Figure 5A-D comparison after recovering animal/session identities and original stochastic protocol. Include rerun randomness and endpoint/region multiplicity, retaining paired cases and dependent trials.",
+      "independent_unit": "Biological animal for generalization inference, with repeated sessions and multiple regions nested; trials and time bins are not independent animals. Recover original ten-session animal mapping before selecting the resampling or hierarchical rule.",
+      "rationale": "The source figure-level uncertainty does not define a confirmatory panel win rule. Paired replicates, repeated-session clustering, multiplicity and the decision criterion remain to be fixed before final scoring.",
+      "evidence_ids": [
+        "paper",
+        "registration"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate the complete original Figure 5A-D cohort, preprocessing, protocol and all four targets across PO, LP, DG, CA1 and VISa, preserving all applicable author conditions and controls.",
+      "Recover the published panel endpoint vector and calibrate independent runs of the appropriate source author models, keeping published scores and rerun scores separate. Preserve source stochastic protocol semantics; document rerun seeds and a prespecified calibration tolerance instead of demanding identical historical randomness.",
+      "Compare the candidate and relevant source-paper models on paired common evaluation cases under matched allowed inputs and budgets. Require predeclared meaningful improvement and valid dependence-aware uncertainty while preventing selective region/target omission or unreported regression.",
+      "Freeze candidate source, hyperparameters, reference versions, selection rules, calibration tolerance and statistical criterion before protected final scoring; retain every required case and undefined score explicitly.",
+      "Keep prospective40, changed cohorts/splits and unvalidated preprocessing repairs as extensions. Do not require unrelated F1-F8/S1-S8 figures to claim a fully supported improvement on this complete original Figure 5A-D task.",
+      "Preserve original single-session linear/MLP/RRR and applicable state-space, multi-session, multi-region and combined comparisons. The combined state-space decoder is not an original condition for wheel speed or whisker motion energy; do not invent it."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparator has been independently source-verified. A future source-paper win would not automatically establish current SOTA.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source recovery. Then iterate using approved original-panel training/validation feedback, with source-permitted state-space priors and matched author-model information access. No final-test feedback is available for selection.",
+    "candidate_freeze": "Hash candidate, preprocessing, selected models and author release; fix panel cohort/protocol, training schedule, paired evaluation design, calibration tolerance, meaningful effects and uncertainty rule before final evaluation.",
+    "final_evaluation": "Capture candidate and admitted author-model outputs before protected scoring on the complete Figure 5A-D panel. Preserve all original targets, regions, conditions and controls. Report altered-cohort or prospective40 results separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Require independent source-author reference runs for the selected panel with authenticated provenance and a prespecified reproduction/calibration tolerance. Match candidate/reference evaluation cases and declare stochastic replication, data access and measured compute allowances. Local references, generated diagnostics and oracle behavior cannot establish the paper comparator."
+  },
+  "blocking_issues": [
+    "Exact immutable RE data release and Figure 5A-D session/animal/region/unit identities are not authenticated.",
+    "Published numeric Figure 5A-D results, original score-producing metric implementations and panel aggregation remain unrecovered.",
+    "Final-paper preprocessing and training recipe differ from the example cache/loader/training path; selected-panel source equivalence is unestablished.",
+    "Original prior identity, state-space sequence support, empirical BMM prior, LG readout and author model-selection settings remain unqualified for the selected panel.",
+    "The original stochastic split protocol must be identified and a calibrated, provenance-controlled rerun route established; exact historical seed replay is not a universal prerequisite.",
+    "No complete admitted evaluator, competent author-reference execution, fixed access/resource budget or prespecified meaningful-effect/uncertainty policy is established for Figure 5A-D."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the full accepted inactive V5 implementation, all historical F1-F8/S1-S8 panels, author contexts and generated diagnostics. Their reconstruction/source-composition checks are calibration only. The active design selects the complete original Figure 5A-D decoding task; unrelated legacy panels and prospective40 are neither substituted for it nor mandatory gates for that task."
+  }
+}

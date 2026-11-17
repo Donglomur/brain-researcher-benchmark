@@ -1,0 +1,189 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-DPAD",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Figure 6h-i supplies an ordered neural/behavior prediction task, but this review did not recover its numeric author results or exact random electrode subset. The local candidate session roster and independently implemented scorer do not establish an identical source-paper comparison. The registered held-session and causal-filter proposals are extensions, not paper victory.",
+  "source_paper": {
+    "title": "Dissociative and prioritized modeling of behaviorally relevant neural dynamics using recurrent neural networks",
+    "url": "https://www.nature.com/articles/s41593-024-01731-2"
+  },
+  "evidence": [
+    {
+      "id": "dpad_paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11452342/",
+      "locator": "Figure 6h-i; Methods: Fourth dataset; Cross-validation; Selection of the latent state dimension; Automatic selection of nonlinearity settings",
+      "supports": "Original joint decoding/self-prediction experiment, cohort definition, temporal folds and training-only model selection."
+    },
+    {
+      "id": "dpad_metric_code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ShanechiLab/DPAD/41f108bc90252ced19fe3c8eda7eaff2e87c57b3/source/DPAD/tools/evaluation.py",
+      "locator": "evaluateDecoding; evalPrediction(CC); getCVedPerf; computePairwiseStatsTests; findPerformanceFrontier; sanitize_perfs",
+      "supports": "Pearson correlation and channel means, filtering of invalid predictions, model-selection helpers and frontier implementation; historical Figure 6 caller is not established."
+    },
+    {
+      "id": "dpad_author_readme",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/DPAD",
+      "locator": "README: Publication; Usage examples",
+      "supports": "Author implementation identity and example/model documentation routes, not a publication-era Figure 6 rerun receipt."
+    },
+    {
+      "id": "sabes_record",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/3854034",
+      "locator": "Version v2; Description; Variable names; Decoder Results; Supplements",
+      "supports": "Raw spike/kinematic release, sessions from Indy and Loco, wideband links; refh_results.csv belongs to Makin decoder results, not DPAD Figure 6."
+    },
+    {
+      "id": "registered_dpad",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/task.json",
+      "locator": "complete_scope; prospective_improvement; remaining_gates; scoring",
+      "supports": "Historical registration scopes Figure 6h-i and proposes a separate held-session improvement extension."
+    },
+    {
+      "id": "local_dpad_evaluator",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "SESSIONS; GATES; channel_cc; choose_dimension; protocol; select; companion docs/initial-evaluator-v1.md",
+      "supports": "Existing scorer is prediction-evaluation plumbing with unverified session/electrode and source-runtime equivalence; generated controls do not establish author performance."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Joint one-step-ahead prediction of neural activity and 2D cursor position/velocity in Figure 6h-i, comparing nonlinear mapping locations.",
+      "evidence_ids": [
+        "dpad_paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Sabes grid-reaching release, exact Zenodo record 3854034 (v2); source spike timestamps and kinematics, not its precomputed Makin decoder-result CSV.",
+      "evidence_ids": [
+        "sabes_record",
+        "dpad_paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper: monkey I, seven wideband-available sessions from 20160622/01 through 20160921/01, random 32 of 96 M1 electrodes with 77-99 units. Exact electrode identities and session crosswalk remain unverified.",
+      "evidence_ids": [
+        "dpad_paper",
+        "local_dpad_evaluator"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Five equal continuous temporal test segments per session; models fit remaining segments. Architecture search uses two inner training folds. State dimensions and architecture are selected from training data.",
+      "evidence_ids": [
+        "dpad_paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Training uses neural and behavior observations; test inference uses past neural observations, without test behavior.",
+      "evidence_ids": [
+        "dpad_paper",
+        "dpad_metric_code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Recover original binning, Gaussian smoothing, alignment and boundary handling for the exact channels. The existing historical_symmetric/prospective_causal profiles are declarations, not verified native preparation. Changing filter causality changes the input condition.",
+      "evidence_ids": [
+        "local_dpad_evaluator"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Pearson CC separately for each behavior/neural channel: covariance divided by the product of standard deviations; arithmetic channel mean gives each fold score. Higher is better in both coordinates.",
+      "evidence_ids": [
+        "dpad_metric_code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure reporting averages 35 session-fold outcomes. Author code has invalid-row filtering and later channel sanitization; the original caller and resulting inclusion masks must be recovered before the strict local full-coverage scorer is equivalent.",
+      "evidence_ids": [
+        "dpad_paper",
+        "dpad_metric_code",
+        "local_dpad_evaluator"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Behavior decoding mean CC jointly assessed with neural self-prediction mean CC on the Figure 6i frontier",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "description": "No exact numeric Figure 6i coordinate or complete method/session/fold result array was recovered. Reported qualitative frontier membership is not a numeric baseline. Zenodo refh_results.csv reports another paper and cannot supply DPAD scores.",
+      "evidence_ids": [
+        "dpad_paper",
+        "sabes_record"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "No authentic DPAD Figure 6h-i rerun is established. The official repository supplies model/tutorial routes; exact historical configurations, selected electrodes and prediction artifacts remain missing.",
+      "evidence_ids": [
+        "dpad_author_readme",
+        "local_dpad_evaluator"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Joint improvement requires a justified behavior effect and neural-preservation rule fixed before evaluation. The frontier helper accepts a relative-difference parameter; neither its default nor a generic local margin establishes a meaningful effect for this assay.",
+      "evidence_ids": [
+        "dpad_metric_code"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired uncertainty for candidate-minus-author results after recovering the complete source comparison; account for overlapping training folds and dependence between sessions.",
+      "independent_unit": "Temporal folds are repeated evaluations within seven sessions from one monkey; neither 35 folds nor channels are 35 independent animals.",
+      "rationale": "Paper-style frontier testing can be reconstructed for calibration, but scientific admission needs a defensible dependence model and a scope limited to the recorded animal. No confidence level or independent-sample count is invented.",
+      "evidence_ids": [
+        "dpad_paper",
+        "dpad_metric_code"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and pin numeric published Figure 6i results plus exact seven-session, 32-electrode, preprocessing and original temporal-fold identity.",
+      "Reproduce the author comparison with both neural and behavior predictions, original nonlinear-location alternatives, the complete latent-dimension search and training-only selection; reconcile local scorer deviations.",
+      "Freeze a candidate and predeclared meaningful joint-performance and uncertainty rules before final predictions; improve over the recovered paper comparator, not merely the fully linear/local baseline.",
+      "Retain complete source cases and both coordinates. A smaller subset, held-session split, causal-filter profile, improved p-value or matching the original nonlinear-locus conclusion is not same-task superiority."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA source comparison was reviewed; author-paper performance and an author rerun remain separate quantities.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source recovery. Once admitted, iterate using only the original training folds and permitted inner validation feedback; retain the complete predeclared nonlinear-location and state-dimension comparisons.",
+    "candidate_freeze": "Freeze code, preprocessing, channel/session manifest, training-only selection, dependencies and resource accounting before any final test evaluation.",
+    "final_evaluation": "Owner evaluates frozen predictions on exactly the original temporal test folds with the recovered author evaluator semantics and complete joint-performance comparison. New sessions or corrected filtering are separately named extensions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published Figure 6i numbers, verified native-author rerun numbers and any local calibration outputs must be labeled separately. Existing engineering controls cannot become the scientific baseline. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Numeric Figure 6i results and complete source method/session/fold scores not recovered.",
+    "Exact random 32-electrode identities and source wideband-to-session mapping unresolved.",
+    "Historical preparation, full architecture/dimension caller, environment and sanitization behavior unresolved.",
+    "No authentic author rerun or protected data/prediction evaluation established.",
+    "Meaningful joint-effect rule, valid uncertainty and concrete access/compute budgets not frozen."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain initial-evaluator-v1, generated controls and prior source audits as calibration components. Their complete local grid coverage does not certify source identity or performance; the held-session proposal remains a separate extension."
+  }
+}

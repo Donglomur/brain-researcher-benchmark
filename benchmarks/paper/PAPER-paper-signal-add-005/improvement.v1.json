@@ -1,0 +1,161 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-005",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Appendix2 evaluates an original ordered geometric comparison: participant sensor-to-scalp distances with actual adaptable helmets versus a virtually rigid-registered single largest helmet. This source-native comparison merits source recovery rather than blanket exclusion based on the descriptive age\u2013beta endpoint. Exact distance vectors/head-model bindings and a physically feasible, source-comparable computational candidate domain are unresolved; no hardware redesign or free sensor placement is authorized or benchmark-ready.",
+  "source_paper": {
+    "title": "Tracking the neurodevelopmental trajectory of beta band oscillations with optically pumped magnetometer-based magnetoencephalography",
+    "url": "https://doi.org/10.7554/eLife.94561.3"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://raw.githubusercontent.com/elifesciences/elife-article-xml/master/articles/elife-94561-v2.xml",
+      "locator": "Version-of-Record DOI10.7554/eLife.94561.3; Appendix2 sections s9/s9-1/s9-2 and app2fig1; Methods Data collection and co-registration; Fig3B descriptive context",
+      "supports": "Appendix2 compares measured adaptable-helmet and virtual single-size-helmet sensor-to-scalp geometry on the same participants. It defines vapor-cell-center nearest-scalp Euclidean distance, per-person sensor averaging and rigid registration to the largest-head example; it does not define a candidate optimizer or physical design budget."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/LukasRier/RierRhodes_2024_Neurodevelopmental_OPMMEG/blob/0eb3a56af3d0e3a44b0f65c364e999f69cd4563f/RESULTS_Plots_Beta_modulation_diff.m",
+      "locator": "Adult good_subs and child good_subs_kids; D1/D4 13_30_Hz envelopes; active/control-window handling",
+      "supports": "Source plotting retains all 27 children and adults excluding ordinals 20/23, and treats fingers separately."
+    },
+    {
+      "id": "legacy_component",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-005/docs/initial-evaluator-v1.md",
+      "locator": "Frozen scientific boundary; Population and analyses",
+      "supports": "Existing downstream construction exposes paper-versus-code normalization disagreement, a pinky-script repair, and prospective participant-fold/covariate policies."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Appendix2 comparison of scalp-to-sensor proximity for actual adaptable helmets versus a virtual non-adaptable largest helmet on the same participant heads. Recover this exact geometric comparison; age\u2013beta association is descriptive calibration and not the ordered performance target.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original co-registered OPM locations, participant scalp surfaces/head models and largest-head reference used for Appendix2. Exact geometry files, revisions, coordinate frames and publication-result binding have not been recovered from the public study release.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Appendix2 says all participants. Study recruited27 children and26 adults, with51 retained for neural analyses; exact geometry-analysis participant inclusion, sensor availability per person and largest-head example identity require recovery rather than assuming neural exclusions apply.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The source makes paired actual-versus-virtual geometry comparisons on the original participants, not learned prediction with train/test folds. A new cohort, head sample or held-out-design split is an extension.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original sensor sensitive-volume centers, scalp surfaces, head sizes and rigid brain registration into the largest-helmet reference. Acquisition used at most64 triaxial OPMs, four physical helmet sizes and an aerogel cap, with sensor availability varying across people. These fixed source conditions are not permission to optimize arbitrary sensor coordinates.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source computes nearest-scalp Euclidean distances after co-registration. For the virtual fixed helmet it rigidly registers each other participant brain to the largest-head example; head circumference uses the largest-area axial slice of binarized whole-head MRI. Exact transforms, surface discretization, registration settings and physical sensor/head compatibility remain unrecovered.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "For sensor s and participant i, distance is the minimum Euclidean distance from its vapor-cell center to that participant scalp surface; the source averages sensor distances within each participant. Lower distance is ordered only under the same valid physical geometry/support. Age/head-circumference correlations and slopes are separate source panels, not substitute improvement rewards.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Appendix2 first averages distances equally over available sensors for each participant and plots those values against age/head circumference, separately for actual and virtual helmets. Original per-person distance vectors, slope values and a source-supported primary improvement summary are not yet recovered; do not invent a cohort composite or count triaxial channels as independent sensors.",
+      "evidence_ids": [
+        "paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Appendix2 per-participant mean sensor-to-scalp Euclidean distance; source-compatible primary panel/summary unresolved",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Exact actual-adaptable and virtual-single-helmet distance vectors and their primary comparison summary have not been recovered. Appendix2 reported age/head-size correlations and slope-test significance are contextual geometry results, not numeric distance baselines to maximize or minimize in isolation. Fig3B age\u2013beta R\u00b2=.29 remains descriptive calibration only.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authentic Appendix2 geometry reconstruction or exact author geometry-code/file route is established. Existing beta-amplitude evaluator computes a different descriptive neural endpoint and cannot supply the helmet-distance comparator.",
+      "evidence_ids": [
+        "paper",
+        "legacy_component"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful proximity change requires recovered distance units/distribution, registration precision and physically feasible source-comparable candidate constraints; no invented millimeter margin or arbitrary sensor-placement objective.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Only after feasibility and source results are recovered, predeclare a paired participant-level comparison retaining actual/virtual pairing and source head-size support, with registration and sensor-position uncertainty addressed. No confidence threshold is assigned yet.",
+      "independent_unit": "Participant head; multiple sensors and three measurement axes are dependent within participant.",
+      "rationale": "Original correlation/slope significance does not establish uncertainty for a new feasible-method proximity gain, and equalized distance can be gamed by moving all sensors farther away unless the original ordered panel and constraints are retained.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover the original participant head models, sensor positions/counts, largest-head reference, rigid transforms, distance vectors and complete actual-versus-virtual Appendix2 comparison.",
+      "Establish that a feasible computational candidate domain exists under the same source physical/acquisition conditions before defining an improvement episode; no free coordinate movement, new hardware, altered head cohort or unconstrained closer placement is admitted.",
+      "Compare against the source adaptable system, not only the weaker simulated fixed-size helmet; preserve all original proximity and head-size conditions with a justified primary summary and meaningful uncertainty rule.",
+      "A higher age\u2013beta R\u00b2, lower biological p-value, different neural predictor, novel helmet acquisition or invented aggregate does not surpass the original geometric comparison."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; source results, any future author rerun, and current SOTA are separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "No active improvement episode: exact source geometry artifacts, feasible candidate domain and computational comparability must first be recovered. This contract authorizes no hardware redesign, acquisition or coordinate optimization.",
+    "candidate_freeze": "Blocked until original physical constraints and permissible computational decisions are explicit. Any eventual candidate must freeze those decisions, input geometry and full original participant/sensor coverage before comparison.",
+    "final_evaluation": "Not executable: would require an authenticated source Appendix2 geometric comparator and physically valid source-comparable candidate, scored on identical original heads/conditions. Existing beta evaluator is not this evaluator.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep original actual-adaptable and virtual-fixed geometry baselines distinct, with exact published vectors separate from any author rerun. New physical designs or new head datasets are extensions; descriptive age\u2013beta outcomes remain calibration."
+  },
+  "blocking_issues": [
+    "Recover exact Appendix2 geometry participant roster, sensor availability, scalp/head surfaces, coordinate frames and largest-head exemplar identity.",
+    "Recover source registration transforms, distance vectors, head-circumference values, slope estimates and source geometry code/version.",
+    "Determine whether any physically feasible computational candidate domain exists under the original acquisition: source does not define an optimizer, permissible sensor changes, fit/clearance/thermal constraints or design budget.",
+    "Freeze a source-supported ordered panel and comparison summary that cannot be won by invalid geometry, dropped sensors/participants or altered head-size support.",
+    "Only after scientific comparability is resolved, implement source evaluator/author reconstruction, justify effect and uncertainty, and fix concrete access/resource budgets."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve beta-amplitude evaluator, full cohort ledger and normalization/robustness branches as descriptive calibration. Published index-finger age\u2013beta R\u00b2=.29 is not an improvement target. Source recovery now includes the original Appendix2 helmet-distance comparison; no geometry optimization, hardware design, scientific fit or superiority claim has been made."
+  }
+}
