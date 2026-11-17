@@ -22,7 +22,9 @@ VIEWER = 'benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE
 NATIVE = 'docs/status/operator-controls-20261116.json'
 TRANSPORT = 'benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/EVIDENCE.json'
 NATIVE_REPAIR = 'docs/status/operator-controls-rename-20261116.json'
-PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR)
+REVE_PREPARATION = 'docs/status/reve-source-preparation-20261116.json'
+DEEP_PREPARATION = 'docs/status/deepcaimx-source-preparation-20261116.json'
+PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR, REVE_PREPARATION, DEEP_PREPARATION)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -531,6 +533,138 @@ def native_operator_records(doc, source):
     return result
 
 
+def revision(value):
+    require(type(value) is str and len(value) == 40 and all(c in '0123456789abcdef' for c in value),
+            'invalid recorded source revision')
+    return value
+
+
+def source_snapshot(value, expected_paths, *, execution=False):
+    """Validate published source descriptors, without opening their paths."""
+    value = obj(value)
+    pins = value['files']
+    require(type(pins) is list and len(pins) == len(expected_paths), 'source snapshot file count differs')
+    seen, selected = set(), []
+    for pin in pins:
+        obj(pin)
+        require(set(pin) == {'path', 'bytes', 'sha256'} and pin['path'] in expected_paths
+                and pin['path'] not in seen, 'source snapshot path differs or repeats')
+        seen.add(pin['path'])
+        selected.append({'path': pin['path'], 'bytes': integer(pin['bytes'], 1), 'sha256': digest(pin['sha256'])})
+    result = {'commit': None if execution and value['commit'] is None else revision(value['commit']),
+              'files': selected}
+    for key in ('publication_commit', 'verified_in_checkout_commit'):
+        if key in value:
+            result[key] = revision(value[key])
+    for key in ('binding_status', 'identity_basis', 'relationship_to_execution', 'comparison_to_execution_source'):
+        if key in value:
+            result[key] = text(value[key])
+    if 'executed_members' in value:
+        members = texts(value['executed_members'])
+        require(len(members) == len(set(members)) and set(members) <= expected_paths,
+                'executed source member escapes the published snapshot')
+        result['executed_members'] = members
+    return result
+
+
+def paper_preparation_records(doc, source):
+    require(type(doc.get('schema_version')) is int and doc['schema_version'] == 1
+            and doc.get('kind') == 'paper_source_preparation'
+            and doc.get('author_baseline_qualified') is False and doc.get('scientific_result') is False
+            and integer(doc['model_trials']) == 0 and integer(doc['solver_attempts']) == 0,
+            'source preparation cannot assert model or scientific qualification')
+    expected_task = 'PAPER-paper-method-003' if source['path'] == REVE_PREPARATION else 'PAPER-paper-method-013'
+    require(doc.get('task_id') == expected_task, 'paper preparation report belongs to another task')
+    for key in ('fits', 'new_benchmark_ids'):
+        if key in doc:
+            require(integer(doc[key]) == 0, 'paper preparation cannot claim fitting or additional tasks')
+    home = 'benchmarks/paper/' + expected_task + '/implementations/'
+    is_reve = expected_task == 'PAPER-paper-method-003'
+    paths = {home + 'original-physionet/' + name for name in ('README.md', 'author_adapter.py', 'metrics.py', 'panel.py')} if is_reve else {
+        home + 'source-panel-v1/' + name for name in ('source_panel.py', 'roi_sources.json', 'range_source.py', 'checkpoint.py')
+    } | {home + 'initial-evaluator-v1/evaluator.py'}
+    executed = source_snapshot(doc['source_execution'], paths, execution=True)
+    current = source_snapshot(doc['current_source'], paths)
+    before, after = ({pin['path']: pin for pin in snapshot['files']} for snapshot in (executed, current))
+    require(text(executed['identity_basis']) and doc['limits'], 'source lineage and interpretation limits required')
+    coverage, controls = obj(doc['coverage']), obj(doc['software_controls'])
+    if is_reve:
+        require(executed['commit'] is not None and executed.get('binding_status') == 'recorded_execution_source_revision'
+                and set(executed.get('executed_members', [])) == {home + 'original-physionet/panel.py', home + 'original-physionet/metrics.py'},
+                'REVE execution source binding differs')
+        require(all(before[path] == after[path] for path in paths if not path.endswith('/README.md')),
+                'REVE current executable source differs from reported execution snapshot')
+        require(all(integer(coverage[key]) == expected for key, expected in
+                    (('edf_files', 654), ('participants', 109), ('epochs', 9837), ('native_boundary_dropped_annotations', 1)))
+                and coverage['imagery_runs'] == [4, 6, 8, 10, 12, 14]
+                and all(type(item) is int for item in coverage['imagery_runs']), 'REVE source population differs')
+        for key, expected in (('split_epochs', {'train': 6300, 'validation': 1734, 'test': 1803}),
+                              ('split_participants', {'train': 70, 'validation': 19, 'test': 20}),
+                              ('raw_sampling_hz_file_counts', {'160': 636, '128': 18})):
+            require(set(obj(coverage[key])) == set(expected)
+                    and all(integer(coverage[key][name]) == count for name, count in expected.items()),
+                    'REVE split or recording census differs')
+        coverage = {key: coverage[key] for key in ('edf_files', 'participants', 'imagery_runs', 'epochs', 'split_epochs',
+                                                  'split_participants', 'raw_sampling_hz_file_counts', 'native_boundary_dropped_annotations')}
+        require(controls['kind'] == 'fixed_output_full_original_test_panel'
+                and integer(controls['test_events']) == 1803 and integer(controls['test_participants']) == 20
+                and controls['targets_used_for_control_selection'] is False and controls['trained_model_execution'] is False
+                and all(controls[key] is True for key in ('event_identity_join_exercised', 'original_metric_path_exercised',
+                    'paired_comparator_path_exercised', 'expected_metric_and_paired_difference_checks_passed', 'scoring_performed')),
+                'REVE software control scope or outcome differs')
+        controls = {key: controls[key] for key in ('kind', 'test_events', 'test_participants', 'targets_used_for_control_selection',
+                    'trained_model_execution', 'event_identity_join_exercised', 'original_metric_path_exercised',
+                    'paired_comparator_path_exercised', 'expected_metric_and_paired_difference_checks_passed', 'scoring_performed')}
+        controls['prediction_policy'] = text(doc['software_controls']['prediction_policy'])
+        condition = 'released-code full-panel preparation and fixed-output full-test scorer control'
+    else:
+        require(executed['commit'] is None and 'publication_commit' in executed
+                and executed.get('binding_status') == 'reviewed_post_execution_source_identity',
+                'DeepCaImX must preserve its unrecorded execution revision')
+        require(before == after, 'DeepCaImX current source differs from reviewed publication snapshot')
+        require(all(integer(coverage[key]) == expected for key, expected in
+                    (('manual_roi_files', 10), ('recordings', 10), ('manual_rois', 1563), ('donors', 8),
+                     ('movie_headers_inspected', 10), ('source_movie_intervals_acquired', 0), ('model_inference_tiles', 0)))
+                and coverage['image_shape'] == [488, 488] and all(type(item) is int for item in coverage['image_shape'])
+                and coverage['complete_original_roi_panel'] is True, 'DeepCaImX source population or execution scope differs')
+        coverage = {key: coverage[key] for key in ('manual_roi_files', 'recordings', 'manual_rois', 'donors', 'image_shape',
+                    'complete_original_roi_panel', 'movie_headers_inspected', 'source_movie_intervals_acquired', 'model_inference_tiles')}
+        require(integer(controls['authentic_target_controls_passed']) == 2
+                and controls['conditions'] == ['identity_software_control', 'empty_software_control']
+                and integer(controls['generated_source_controls_passed']) == 30
+                and integer(controls['retained_evaluator_controls_passed']) == 18,
+                'DeepCaImX source control coverage differs')
+        controls = {key: controls[key] for key in ('authentic_target_controls_passed', 'conditions',
+                                                  'generated_source_controls_passed', 'retained_evaluator_controls_passed')}
+        controls.update(population=text(doc['software_controls']['population']),
+                        interpretation=text(doc['software_controls']['interpretation']))
+        condition = 'manual ROI conversion and complete-panel identity/empty scorer controls'
+    retained, identifiers = [], set()
+    require(type(doc['retained_evidence']) is list and 0 < len(doc['retained_evidence']) <= 100,
+            'bounded retained evidence identities required')
+    for pin in doc['retained_evidence']:
+        obj(pin)
+        identifier = text(pin['id'])
+        require(set(pin) == {'id', 'bytes', 'sha256'} and identifier not in identifiers
+                and all(c.isascii() and (c.isalnum() or c in '_-') for c in identifier),
+                'retained evidence identity repeats or carries a locator')
+        identifiers.add(identifier)
+        retained.append({'id': identifier, 'bytes': integer(pin['bytes'], 1), 'sha256': digest(pin['sha256'])})
+    row = record(Path(source['path']).stem, expected_task, 'paper_source_preparation', source, '',
+                 doc['scope'], condition, doc['limits'])
+    row.update(coverage=coverage, preparation_controls=controls, source_execution=executed,
+               current_source=current, input_exposure=text(doc['input_exposure']), retained_evidence=retained,
+               model_attempts_recorded=0, solver_attempts_recorded=0, author_baseline_qualified=False,
+               scientific_result=False, original_records_in_publication=False)
+    if not is_reve:
+        row['source_parity'] = {key: text(obj(doc['source_parity'])[key]) for key in
+                              ('checkpoint_architecture', 'crop_mapping', 'frame_mapping', 'tiling_assembly_trace')}
+    for key in ('report_date', 'execution_utc_date'):
+        if key in doc:
+            row[key] = text(doc[key])
+    return [row]
+
+
 def load(root, task_ids=None):
     """Read optional known reports; reject malformed present reports.
 
@@ -548,7 +682,8 @@ def load(root, task_ids=None):
     for relative, project in ((PILOT, pilot_records), (HISTORY, historical_records),
                               (DIRECT, engineering_records), (VIEWER, lambda doc, source: engineering_records(doc, source, True)),
                               (NATIVE, native_operator_records), (TRANSPORT, viewer_transport_records),
-                              (NATIVE_REPAIR, native_operator_records)):
+                              (NATIVE_REPAIR, native_operator_records),
+                              (REVE_PREPARATION, paper_preparation_records), (DEEP_PREPARATION, paper_preparation_records)):
         try:
             captured = read(root, relative)
             if captured is None:
@@ -574,6 +709,9 @@ def load(root, task_ids=None):
         'direct_interpretation_attempts': 0, 'viewer_interpretation_attempts': 0,
         'authentic_engineering_reports': categories['authentic_input_materialization'] + categories['authentic_viewer_rendering'] + categories['authentic_viewer_transport'],
         'authentic_viewer_transport_reports': categories['authentic_viewer_transport'],
+        'paper_source_preparation_reports': categories['paper_source_preparation'],
+        'paper_source_preparation_tasks': sum(any(row['category'] == 'paper_source_preparation' for row in items)
+                                             for items in records.values()),
         'scripted_viewer_sessions': sum(row['coverage']['valid_unscored_sessions'] for items in records.values() for row in items
                                         if row['category'] == 'authentic_viewer_transport'),
         'historical_profiles': categories['historical_paper_calibration'] + categories['historical_programme_control'],

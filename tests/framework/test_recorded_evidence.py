@@ -42,7 +42,7 @@ class EvidenceTests(unittest.TestCase):
 
     def test_current_public_evidence_is_scoped_and_overlapping(self):
         result = evidence.load(ROOT)
-        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 5)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 7)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
         self.assertEqual(result['counts']['paper_calibration_attempts'], 4)
         self.assertEqual(result['counts']['neural_programme_attempts'], 4)
@@ -302,8 +302,8 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result['counts']['native_operator_control_reports'], 2)
         self.assertEqual(result['counts']['native_control_tasks'], 2)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
-        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 5)
-        self.assertEqual(result['counts']['public_reports'], 7)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 7)
+        self.assertEqual(result['counts']['public_reports'], 9)
         rows = [row for items in result['records'].values() for row in items
                 if row['category'] == 'native_operator_control']
         self.assertEqual(len({row['id'] for row in rows}), 4)
@@ -359,6 +359,101 @@ class EvidenceTests(unittest.TestCase):
                 self.install(evidence.NATIVE_REPAIR, document)
                 with self.assertRaises(ValueError):
                     evidence.load(self.root)
+
+    def test_preparation_reports_add_source_facts_without_model_or_native_trial_counts(self):
+        for name in evidence.PUBLIC_REPORTS:
+            self.install(name)
+        result = evidence.load(self.root)
+        self.assertEqual(result['counts']['public_reports'], 9)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 7)
+        self.assertEqual(result['counts']['paper_source_preparation_reports'], 2)
+        self.assertEqual(result['counts']['paper_source_preparation_tasks'], 2)
+        self.assertEqual(result['counts']['authentic_engineering_reports'], 3)
+        self.assertEqual(result['counts']['native_operator_controls'], 16)
+        self.assertEqual(result['counts']['pilot_attempts'], 8)
+        reve = result['records']['PAPER-paper-method-003'][0]
+        deep = result['records']['PAPER-paper-method-013'][0]
+        self.assertEqual(reve['coverage']['edf_files'], 654)
+        self.assertEqual(reve['coverage']['participants'], 109)
+        self.assertEqual(reve['coverage']['epochs'], sum(reve['coverage']['split_epochs'].values()))
+        self.assertEqual(reve['preparation_controls']['test_events'], 1803)
+        self.assertEqual(deep['coverage']['manual_roi_files'], 10)
+        self.assertEqual(deep['coverage']['manual_rois'], 1563)
+        self.assertEqual(deep['coverage']['donors'], 8)
+        self.assertIsNone(deep['source_execution']['commit'])
+        self.assertEqual(deep['source_execution']['binding_status'], 'reviewed_post_execution_source_identity')
+        self.assertIn('publication_commit', deep['source_execution'])
+        for row in (reve, deep):
+            self.assertEqual(row['category'], 'paper_source_preparation')
+            self.assertEqual(row['qualification_effect'], 'none')
+            self.assertEqual(row['model_attempts_recorded'], 0)
+            self.assertFalse(row['author_baseline_qualified'])
+            self.assertFalse(row['scientific_result'])
+            self.assertTrue(row['input_exposure'])
+            self.assertTrue(row['retained_evidence'])
+
+    def test_preparation_parser_reads_only_reports_and_preserves_snapshot_differences(self):
+        document = self.document(evidence.REVE_PREPARATION)
+        document['private_receipt_path'] = '/private-ledger-sentinel/receipt.json'
+        self.install(evidence.REVE_PREPARATION, document)
+        self.install(evidence.DEEP_PREPARATION)
+        original = Path.open
+        def guarded(path, *args, **kwargs):
+            self.assertIn(path.relative_to(self.root).as_posix(), (evidence.REVE_PREPARATION, evidence.DEEP_PREPARATION))
+            return original(path, *args, **kwargs)
+        with patch.object(Path, 'open', guarded):
+            result = evidence.load(self.root, {'PAPER-paper-method-003', 'PAPER-paper-method-013'})
+        self.assertNotIn('private-ledger-sentinel', json.dumps(result))
+        row = result['records']['PAPER-paper-method-003'][0]
+        before = {pin['path']: pin for pin in row['source_execution']['files']}
+        after = {pin['path']: pin for pin in row['current_source']['files']}
+        changed = [path for path in before if before[path] != after[path]]
+        self.assertEqual(len(changed), 1)
+        self.assertTrue(changed[0].endswith('/README.md'))
+        self.assertEqual(result['counts']['native_operator_controls'], 0)
+        self.assertEqual(result['counts']['pilot_attempts'], 0)
+
+    def test_preparation_report_identity_scope_and_provenance_contradictions_refuse(self):
+        shared = {
+            'model-trial': lambda d: d.update(model_trials=1),
+            'solver-trial': lambda d: d.update(solver_attempts=1),
+            'qualified-author': lambda d: d.update(author_baseline_qualified=True),
+            'scientific-result': lambda d: d.update(scientific_result=True),
+            'unknown-task': lambda d: d.update(task_id='PAPER-UNKNOWN'),
+            'source-path': lambda d: d['source_execution']['files'][0].update(path='/private/source.py'),
+            'duplicate-source-pin': lambda d: d['source_execution']['files'].__setitem__(0, copy.deepcopy(d['source_execution']['files'][1])),
+            'private-receipt-path': lambda d: d['retained_evidence'][0].update(path='/private/receipt.json'),
+            'no-receipts': lambda d: d.update(retained_evidence=[]),
+        }
+        specific = {
+            evidence.REVE_PREPARATION: {
+                'missing-person': lambda d: d['coverage'].update(participants=108),
+                'missing-edf': lambda d: d['coverage'].update(edf_files=653),
+                'changed-split': lambda d: d['coverage']['split_epochs'].update(test=1802),
+                'sampled-scorer': lambda d: d['software_controls'].update(test_events=10),
+                'label-selection': lambda d: d['software_controls'].update(targets_used_for_control_selection=True),
+                'lost-execution-revision': lambda d: d['source_execution'].update(commit=None),
+                'current-code-changed': lambda d: d['current_source']['files'][-1].update(sha256='a' * 64),
+            },
+            evidence.DEEP_PREPARATION: {
+                'missing-roi': lambda d: d['coverage'].update(manual_rois=1562),
+                'ten-independent-donors': lambda d: d['coverage'].update(donors=10),
+                'inference-claim': lambda d: d['coverage'].update(model_inference_tiles=1),
+                'fabricated-execution-revision': lambda d: d['source_execution'].update(commit=d['source_execution']['publication_commit']),
+                'lost-publication-revision': lambda d: d['source_execution'].pop('publication_commit'),
+                'model-control': lambda d: d['software_controls'].update(conditions=['trained_model', 'empty_software_control']),
+                'missing-source-parity': lambda d: d['source_parity'].pop('crop_mapping'),
+            },
+        }
+        for name, cases in specific.items():
+            for label, mutate in {**shared, **cases}.items():
+                with self.subTest(report=name, label=label):
+                    document = self.document(name)
+                    mutate(document)
+                    self.install(name, document)
+                    with self.assertRaises(ValueError):
+                        evidence.load(self.root)
+                    (self.root / name).unlink()
 
     def test_malformed_duplicate_and_nonfinite_json_refuse(self):
         path = self.install(evidence.PILOT)
