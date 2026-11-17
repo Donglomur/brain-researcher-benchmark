@@ -17,6 +17,8 @@ Time axes derive from original source windows. Authentic trial/unit counts and o
 
 The guard does not clip, impute, reorder, rescale or apply global finite-value rejection. Original DMFC set-to-go NaNs, behavior-invalid bins, condition memberships, jitter and Area2's two decoder masks remain unchanged. Value-level validity and every metric computation belong to the original evaluator. Its thirty aggregate values must be finite to produce a complete report. Additional official target groups are permitted; submitted and returned groups must be exactly the selected eight.
 
+The freeze does not validate prediction values, and this component is not end-to-end submission admission. The original evaluator rejects candidate NaNs in retained likelihood, decoder and PSTH bins after applying source target masks. Those source checks and finite aggregate scores do not establish complete authentic tensor or valid-mask coverage; that remains an unmet qualification requirement, including the DMFC speed path.
+
 ## Source identities and unresolved original recipe
 
 - [Author source](https://github.com/KingJamesSong/LangevinFlow_CCN/tree/68dcbfaa78b2371851842333ae933eea1f961832): `68dcbfaa78b2371851842333ae933eea1f961832`.
