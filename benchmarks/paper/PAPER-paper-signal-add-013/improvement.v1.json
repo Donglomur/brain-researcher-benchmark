@@ -2,8 +2,8 @@
   "schema_version": "paper-improvement/v1",
   "task_id": "PAPER-paper-signal-add-013",
   "objective": "surpass_source_paper_same_task",
-  "disposition": "ineligible",
-  "disposition_reason": "The source estimates physiological BOLD/metabolism relationships and tests whether response signs agree. More discordant voxels, larger metabolic contrasts or stronger significance do not constitute better method performance. Its existing CALC–CTRL reconstruction has no ordered source-paper accuracy endpoint to surpass.",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Source Figure 5 contains an ordered regression-estimation route: CMRO2 and its task changes are fitted from source hemodynamic inputs with reported stratum-specific R-squared values. This source-native subtask can be investigated independently of the legacy descriptive CALC–CTRL endpoint. Exact native row/mask/model binding and a scientifically valid improvement criterion remain unresolved: CMRO2 is itself derived from these inputs through Fick’s principle, so increasing fitted R-squared may only reconstruct a known identity and cannot by itself establish better physiological estimation.",
   "source_paper": {
     "title": "BOLD signal changes can oppose oxygen metabolism across the human cortex",
     "url": "https://www.nature.com/articles/s41593-025-02132-9"
@@ -14,7 +14,7 @@
       "kind": "paper",
       "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13156032/",
       "locator": "Results, Figs. 1–4; Methods: Participants, quantitative parameter maps and Davis model",
-      "supports": "Defines descriptive within-person hemodynamic contrasts, the main/control/replication cohorts and physiological model comparison; not an accuracy leaderboard."
+      "supports": "Defines original descriptive hemodynamic findings, physiological cohorts, quantitative parameter maps and Fick-derived CMRO2; these materials remain calibration while the Figure5 estimation route is investigated."
     },
     {
       "id": "bold-code",
@@ -36,132 +36,162 @@
       "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-013/implementations/initial-evaluator-v1/README.md",
       "locator": "Component scope and limitations",
       "supports": "The local map-array calculation and descriptive participant bootstrap are calibration only; every result retains null reward and false scientific qualification."
+    },
+    {
+      "id": "bold-figure5",
+      "kind": "paper",
+      "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC13156032/unicode",
+      "locator": "Results, Baseline OEF predicts different hemodynamic response types; Figure5a–d caption and accompanying multiple-regression paragraphs",
+      "supports": "Original baseline CMRO2 regressions use mean-centered OEF/CBF/CBV and report R2=.91 separately in concordant and discordant voxels. Task-change regressions use mean-centered deltaOEF/deltaCBF and report R2=.86/.84. Figure5 specifies voxel medians and original subject/task populations."
+    },
+    {
+      "id": "bold-fick",
+      "kind": "paper",
+      "url": "https://www.ncbi.nlm.nih.gov/research/bionlp/RESTful/pmcoa.cgi/BioC_xml/PMC13156032/unicode",
+      "locator": "Methods, Quantitative parameter maps (CMRO2 maps), Artifact correction and GM masking, Estimation of a realistic surrogate for CBV during CALC; equation3",
+      "supports": "CMRO2 is calculated by combining source OEF/CBF maps and arterial oxygen content through Fick’s principle. Masking, source-space map calculation, 25% CBF scaling and the ten-subject CBV surrogate introduce specific source dependencies; Fig5 fit quality is not independent metabolic ground truth."
     }
   ],
   "same_task": {
     "target": {
       "status": "verified",
-      "description": "Estimate agreement and sign disagreement between task-related BOLD and oxygen-metabolism changes across cortex; interpret hemodynamic mechanisms.",
+      "description": "Investigate the original Figure5 estimation subtask: fit baseline CMRO2 from OEF, CBF and CBV, and task-related deltaCMRO2 from deltaOEF and deltaCBF, separately for concordant and discordant voxels. This is a source-native fitted-estimation task; preserve descriptive findings separately and do not reinterpret fitted agreement as external physiological accuracy.",
       "evidence_ids": [
-        "bold-paper"
+        "bold-figure5",
+        "bold-fick"
       ]
     },
     "dataset": {
-      "status": "verified",
-      "description": "Author repository identifies OpenNeuro ds004873 version 2.0.6; map-based reproduction starts from processed mqBOLD NIfTI derivatives. Authentic local artifact qualification is separate.",
+      "status": "unresolved",
+      "description": "Author repository identifies OpenNeuro ds004873 version2.0.6 and processed mqBOLD NIfTI derivatives. Exact Figure5 source arrays, regression script/version, corrected CMRO2 lineage and original mask identities remain unbound; existing primary40 CALC–CTRL arrays alone do not authenticate this route.",
       "evidence_ids": [
-        "bold-code"
+        "bold-code",
+        "bold-local",
+        "bold-figure5"
       ]
     },
     "cohort": {
-      "status": "verified",
-      "description": "Main analysis: 40 adults, with 30 completing CALC/MEM/CTRL/REST and ten CALC/CTRL only; distinct control n=18 and replication n=10. Dataset metadata counts cannot replace these cohorts.",
+      "status": "unresolved",
+      "description": "Source Figure5 baseline plots use voxel medians across40 main-study participants; task changes combine CALC–CTRL medians across40 and MEM–CTRL medians across30. DeltaCBV is available only for ten subjects/CALC–CTRL and is excluded from the task-change regressions. Exact participant/voxel inclusion and stratum membership must be recovered, not replaced by the control18 or replication10 cohorts.",
       "evidence_ids": [
-        "bold-paper"
+        "bold-figure5",
+        "bold-fick"
       ]
     },
     "split": {
-      "status": "not_applicable",
-      "description": "The original comparison is within-person experimental contrasts, with separate control/replication studies, not a train/validation/test prediction split. Creating held-out-person prediction would be a new task.",
+      "status": "unresolved",
+      "description": "The reviewed source presents regression fits on the original selected voxel summaries and reports no held-out prediction split for Figure5. Recover exact fitted-row support and selection exposure. A new participant or voxel train/test split is a separate extension and cannot be compared directly to the source fitted R-squared.",
       "evidence_ids": [
-        "bold-paper"
+        "bold-figure5",
+        "bold-fick"
       ]
     },
     "inputs": {
       "status": "verified",
-      "description": "BOLD and quantitative CBF/OEF/CMRO2 maps plus physiological calibration; the code begins after mqBOLD processing.",
+      "description": "Original baseline predictors are mean-centered OEF, CBF and CBV; task-change predictors are mean-centered deltaOEF and deltaCBF, separated by source concordance strata. These variables also contribute to construction of the CMRO2 target, with subject arterial oxygen content; this dependency must be disclosed and cannot be treated as independent target measurement.",
       "evidence_ids": [
-        "bold-code"
+        "bold-figure5",
+        "bold-fick"
       ]
     },
     "preprocessing": {
-      "status": "verified",
-      "description": "Source uses physiological parameter-map reconstruction and ordered notebooks before PLS/figure analysis. Preserve corrected/original CMRO2 lineage, masks and spatial geometry for calibration; exact native replay remains unqualified.",
+      "status": "unresolved",
+      "description": "Retain source quantitative-map reconstruction, corrected/original CMRO2 lineage, registration to MNI, gray-matter/artifact masks, significant-task-voxel selection and source concordance definitions. Source reports mean-centered regression predictors, subject-median voxel summaries,25% CBF upscaling and a ten-subject CALC CBV surrogate; exact Figure5 implementation/array joins remain unresolved.",
       "evidence_ids": [
-        "bold-code",
-        "bold-local"
+        "bold-figure5",
+        "bold-fick",
+        "bold-code"
       ]
     },
     "metric": {
-      "status": "not_applicable",
-      "description": "Task contrasts and fractions of concordant/discordant voxels are scientific estimates. Neither a higher nor lower value is a method-quality ordering.",
+      "status": "verified",
+      "description": "Source Figure5 reports regression R-squared for each baseline/task-change and concordance stratum. Preserve the exact source R2 convention and fit support when recovered; it is fitted variance explanation, not held-out prediction or error against independently measured oxygen metabolism.",
       "evidence_ids": [
-        "bold-paper"
+        "bold-figure5"
       ]
     },
     "aggregation": {
-      "status": "verified",
-      "description": "Source reports participant and voxel summaries within fixed task contrasts and masks. Main40, full-condition30 and replication cohorts must remain separate.",
+      "status": "unresolved",
+      "description": "Four reported model results remain separate: baseline concordant/discordant and task-change concordant/discordant. Figure5 uses voxel medians across the original40/30-participant task groups and separate stratum regressions. No paper-defined combined score or valid whole-family superiority rule has been recovered.",
       "evidence_ids": [
-        "bold-paper"
+        "bold-figure5"
       ]
     }
   },
   "comparison": {
-    "primary_metric": "No source-defined ordered prediction or estimation-performance endpoint",
-    "direction": "unresolved",
+    "primary_metric": "Source Figure5 stratum-specific regression R-squared for baseline and task-related CMRO2 estimation; scientific improvement validity unresolved",
+    "direction": "higher",
     "published_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "Published discordance fractions and metabolic/BOLD contrast amplitudes are findings, not performance baselines. Matching them is reproduction; increasing them is not success.",
+      "description": "The primary source reports the four native fitted R2 values: baseline concordant=.91, baseline discordant=.91; task-change concordant=.86, task-change discordant=.84. These are verified named source results, not a single aggregate. No primary scalar/family rule or independently meaningful physiological estimation comparison is admitted, so the contract does not select or fabricate one numeric success target.",
       "evidence_ids": [
-        "bold-paper"
+        "bold-figure5",
+        "bold-fick"
       ]
     },
     "reproduced_author_baseline": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "description": "No comparative performance baseline exists for this descriptive task. Any authenticated figure reconstruction would remain calibration.",
+      "description": "No original Figure5 regression rerun or exact script/array/mask binding is established. Existing CALC–CTRL map reductions and descriptive bootstrap components are not this source estimation baseline.",
       "evidence_ids": [
         "bold-code",
-        "bold-local-scope"
+        "bold-local",
+        "bold-local-scope",
+        "bold-figure5"
       ]
     },
     "minimum_effect": {
-      "status": "not_applicable",
+      "status": "unresolved",
       "value": null,
-      "rationale": "The magnitude of a physiological effect is not an optimization target; no legitimate bigger-is-better margin follows.",
+      "rationale": "First establish whether the source-native estimation route admits a meaningful improvement beyond closer approximation of Fick-derived targets. Neither any positive fitted-R2 increment nor stronger physiological significance is sufficient. Do not invent a universal margin or a new independent ground-truth task.",
       "evidence_ids": [
-        "bold-paper"
+        "bold-figure5",
+        "bold-fick"
       ]
     },
     "uncertainty": {
-      "status": "not_applicable",
-      "method": "No improvement hypothesis is admitted. Source physiological uncertainty and spatial nulls remain requirements for reproduction, not a paper-win test.",
-      "independent_unit": "participant for paired physiological contrasts; spatial dependence must be handled for voxel claims",
-      "rationale": "Stronger significance does not improve a descriptive finding, and voxels cannot be treated as independent biological samples.",
+      "status": "unresolved",
+      "method": "Resolve target construction and model/support identity before specifying a paired source-native comparison with participant and spatial dependence. Any later uncertainty rule must address voxel selection, shared derived targets and all four model cells; source fit degrees of freedom are not independent biological replication.",
+      "independent_unit": "Participant for population inference, with spatially dependent voxels and shared subject-median summaries; exact original dependence structure must be recovered.",
+      "rationale": "The response is derived using the predictors, and observations are selected spatial summaries. A nominal R2 or voxel-level p-value does not establish out-of-sample performance or valid physiological superiority.",
       "evidence_ids": [
-        "bold-paper",
-        "bold-local"
+        "bold-figure5",
+        "bold-fick"
       ]
     },
     "paper_win_requires": [
-      "No paper win can be awarded for this descriptive original task. Preserve its reproduction materials under calibration_only.",
-      "Do not promote larger discordance, favorable mask selection, greater significance or tighter figure matching to improvement.",
-      "A predictive or ground-truth estimation benchmark would require an explicitly separate task and source provenance; it cannot replace this paper’s original physiology endpoint."
+      "Recover and authenticate the original Figure5 scripts, source map lineage, all original participants, voxel masks/strata, fitted rows and R2 conventions for all four regression cells.",
+      "Resolve scientific admissibility of improving this source-native fitted-estimation route: the target is calculated through Fick’s principle from related inputs. Directly evaluating that known identity or increasing fitted R2 through extra flexibility must not earn physiological improvement credit.",
+      "Reproduce the original named source regressions as calibration and freeze a justified effect, model-complexity/access policy and dependence-aware family decision rule before any candidate comparison.",
+      "Keep baseline .91/.91 and task-change .86/.84 results separate; no favorable stratum, invented average or changed masking/population substitutes for the original source task.",
+      "No current paper win is admitted. If meaningful superiority cannot be justified for the original derived-target task, keep it inactive; external ground-truth oxygen-metabolism prediction, new participants or new validation splits require separately identified extensions.",
+      "Preserve the original BOLD/metabolism physiological findings as calibration and safeguards. Larger discordance, stronger significance or tighter legacy map reconstruction never establishes the required improvement."
     ],
     "current_sota": {
       "status": "not_claimed",
-      "description": "No ordered source performance task exists here and no current-SOTA claim is made.",
+      "description": "No current-SOTA comparison is verified. The source Fig5 fit statistics, any future author rerun and external predictive benchmarks remain distinct.",
       "evidence_ids": []
     }
   },
   "episode": {
-    "improvement_loop": "Inactive for the same-task improvement suite. Historical physiological reconstruction and robustness analyses remain separately labelled research/calibration work.",
-    "candidate_freeze": "Not applicable to an active improvement episode; any future calibration freezes subject eligibility, map lineage and masks before inspecting agreement.",
-    "final_evaluation": "No improvement reward. Retain descriptive comparisons and their scientific limitations without converting them into success scores.",
+    "improvement_loop": "Inactive pending source recovery and resolution of the derived-target validity problem. A future source-native episode must declare the original information/exposure and model-selection conditions; no new split may silently replace the fitted-estimation task.",
+    "candidate_freeze": "Before any admitted comparison, freeze the estimator family, complexity, source masks/strata, map lineage, original fit support, effect rule and uncertainty. Do not select a favorable Figure5 model after seeing scores.",
+    "final_evaluation": "No paper-win evaluation is currently available. A future evaluator must reproduce all original named R2 cells and apply a separately justified source-native superiority rule; improved fit to the known CMRO2 identity alone receives no scientific credit.",
     "access_budget": null,
     "resource_budget": null,
-    "baseline_policy": "Physiological estimates are not model-performance baselines. Existing map reductions and source figure values remain calibration evidence."
+    "baseline_policy": "Original .91/.91/.86/.84 source results are fitted model statistics, not external validation. Authenticate the native author baseline rather than replacing it with the legacy CALC–CTRL array evaluator or newly authored predictive task."
   },
   "blocking_issues": [
-    "Scientific incompatibility: the original endpoint has no defensible ordered performance objective.",
-    "A new prediction/ground-truth task would be a separate replacement, requiring explicit provenance and review.",
-    "Historical full physiological replay remains unqualified for authentic maps, mask derivation, spatial inference and independent replication."
+    "Exact Figure5 source script/version, participant and voxel support, mask/stratum construction and regression-array lineage are not authenticated.",
+    "CMRO2 is Fick-derived from related predictor inputs; a meaningful source-native performance improvement distinct from reproducing a known mathematical identity remains scientifically unresolved.",
+    "The source reports fitted R2 rather than a protected prediction split; original fitting/selection access and a valid comparison policy are unbound.",
+    "Four named R2 values are available but no source-defined aggregate or justified family superiority rule is recovered.",
+    "Author-baseline reproduction, paired participant/spatial uncertainty, meaningful effect, concrete access/resource budgets and a working evaluator are absent."
   ],
   "legacy": {
     "role": "calibration_only",
     "original_task": "historical/task.pre-improvement.v1.json",
-    "notes": "Preserve initial-evaluator-v1 and all source-contrast evidence. The fixed primary40 map calculations reconstruct physiological results; they do not demonstrate stronger-than-paper performance."
+    "notes": "Preserve initial-evaluator-v1 and all original physiological source-contrast evidence as calibration. The source-native Figure5 estimation route is a proposed current rebinding, not an executed replacement; the fixed primary40 map calculations neither implement that regression baseline nor establish stronger-than-paper performance."
   }
 }
