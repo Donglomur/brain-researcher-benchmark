@@ -47,6 +47,18 @@ not a normal paired bundle, a scientific failure or evidence of ineligibility.
 All four primary scientific cells remain unknown, and primary receipt admission
 is refused. Secondary source work retains its own scope.
 
+The public scope artifact separately records `same_primary_corrections`. These
+retain normal paired declarations and the unchanged same-paper and scientific
+anchor checks. Their reviewed goal, source scope and outstanding limits appear
+in the current definition and navigation; they are not scope-mismatch markers.
+This reviewed adoption requires unresolved reproduction source eligibility and
+an improvement contract that is not improvement-ready. Partial source components
+cannot qualify the complete primary family. Removing these source and criterion
+holds requires separately reviewed evidence and an explicit adoption revision.
+Source-gap confirmations use the separate passive `source_gap_confirmations`
+map with `projection_action: "none"`. They cannot also appear in an active
+correction map, and do not change a task's accepted projection or eligibility.
+
 `paper-outcomes TASK_ID` exposes both outcomes and their access conditions.
 `paper-contract TASK_ID --outcome reproduction` exposes an adopted reproduction
 contract or proposal. The default improvement contract route remains compatible

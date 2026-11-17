@@ -104,7 +104,8 @@ def engine(reproduction=None):
     return sys.modules[result_name]
 
 
-def project_task(previous, row, improvement, scope_entry=None, *, reproduction_version="paper-reproduction/v1"):
+def project_task(previous, row, improvement, scope_entry=None, *, reproduction_version="paper-reproduction/v1",
+                 primary_correction=None):
     """Return the reviewed dual-outcome wording, preserving scientific inputs.
 
     This projection intentionally does not depend on the reproduction contract or
@@ -172,6 +173,26 @@ def project_task(previous, row, improvement, scope_entry=None, *, reproduction_v
     if type(result.get("admission")) is dict:
         result["admission"]["delivery_unit"] = "one_registered_paper_task_two_independent_outcomes"
         result["admission"]["reason"] = "Source definitions and binding metadata do not establish execution or either scientific outcome."
+    need(scope_entry is None or primary_correction is None, "A task cannot have both scope correction routes")
+    if primary_correction is not None:
+        need(primary_correction["task_id"] == identifier
+             and primary_correction["disposition"] == "same_primary_unqualified", "Unexpected same-primary correction")
+        result["goal"] = primary_correction["primary_goal"]
+        result["primary_scope"] = primary_correction["primary_scope"]
+        result["scope_decision"] = {"path": SCOPE_PATH, "task_entry_id": identifier}
+        result["source_scope_correction"] = {
+            "disposition": "same_primary_unqualified",
+            "retained_scope_notes": primary_correction.get("retained_secondary_scope"),
+            "retained_source_roles": copy.deepcopy(primary_correction.get("retained_source_roles")),
+            "remaining_source_limits": copy.deepcopy(primary_correction["remaining_source_limits"]),
+            "scientific_outcome": "unknown",
+        }
+        result["success_criteria"].append(
+            "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply.")
+        result["evaluation"]["scope_disposition"] = "same_primary_unqualified"
+        if type(result.get("holds")) is dict:
+            result["holds"]["current_primary_source_limits"] = copy.deepcopy(primary_correction["remaining_source_limits"])
+            result["holds"]["scope_correction_limit"] = "This scope correction grants no new observation access and changes no improvement metric, criterion or tolerance."
     if scope_entry is not None:
         need(scope_entry["task_id"] == identifier, "Unexpected primary scope correction")
         result["goal"] = scope_entry["primary_goal"]
@@ -187,7 +208,7 @@ def project_task(previous, row, improvement, scope_entry=None, *, reproduction_v
         result["success_criteria"] = [
             "Recreate the corrected primary empirical findings with their source-defined populations, complete required panels and controls.",
             "Use an explicitly bound reproduction proposal only within its declared eligibility, comparison and execution limits; copying published findings is insufficient.",
-            "The preserved improvement.v1.json defines a distinct secondary endpoint and cannot establish reproduction or superiority for the corrected primary findings.",
+            "The preserved improvement.v1.json retains its declared comparison and coverage. Use retained_secondary_scope for its relationship to the corrected primary findings; satisfying a secondary or partial-component criterion alone does not establish complete primary reproduction or improvement.",
             "The primary same-target outcome bundle is unavailable. Any primary improvement requires an independently justified source-grounded comparison; no replacement metric, direction or tolerance is invented.",
             "Keep the paper+data and paper+data+author-code outcomes separate. All scientific outcomes remain unknown until qualifying original-data execution and independent verification.",
             "Preserve prior task definitions, improvement criteria and useful secondary implementations with their original scopes. Historical attempts and source metadata do not become qualified AI results.",
@@ -208,7 +229,7 @@ def project_task(previous, row, improvement, scope_entry=None, *, reproduction_v
             }
         if "holds" in previous:
             result["holds"] = {"preserved_predecessor_limits": copy.deepcopy(previous["holds"]),
-                               "interpretation": "Preserved source, observation, exposure and execution restrictions remain in force. Secondary endpoint criteria cannot qualify or redefine the corrected primary findings.",
+                               "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
                                "primary_source_limits": copy.deepcopy(scope_entry["remaining_source_limits"])}
     return result
 
@@ -242,12 +263,48 @@ def scope_decisions(value):
          "Scope decision must retain the adjudicated tasks and explicit bounded paper identities")
     for identifier, entry in entries.items():
         need(type(entry) is dict and entry.get("task_id") == identifier, "Invalid scope-decision task identity")
+        need(entry.get("projection_action", "revise_primary_scope") == "revise_primary_scope",
+             "A passive scope confirmation cannot be an active correction")
+        need(entry.get("adoption_route", "full_primary_pairing_unavailable") == "full_primary_pairing_unavailable",
+             "Scope decision adoption route differs from its unavailable map")
         for field in ("primary_goal", "primary_scope", "retained_secondary_scope"):
             need(type(entry.get(field)) is str and bool(entry[field].strip()), "Missing source-grounded scope field: " + field)
         need(type(entry.get("remaining_source_limits")) is list and all(type(item) is str and item.strip() for item in entry["remaining_source_limits"]), "Invalid remaining source limits")
         need(entry.get("primary_same_task_improvement") == "unavailable_until_independently_justified"
              and entry.get("paired_bundle_status") == "unavailable_primary_secondary_scope_mismatch"
              and entry.get("scientific_outcome") == "unknown", "Scope decisions cannot qualify a primary outcome")
+    corrections = value.get("same_primary_corrections", {})
+    need(type(corrections) is dict and len(entries) + len(corrections) <= 1000
+         and not (set(entries) & set(corrections)), "Primary correction routes must be bounded and disjoint")
+    for identifier, entry in corrections.items():
+        need(type(identifier) is str and re.fullmatch(r"PAPER-[A-Za-z0-9_-]{1,121}", identifier)
+             and type(entry) is dict and entry.get("task_id") == identifier, "Invalid same-primary correction identity")
+        need(entry.get("projection_action", "revise_primary_scope") == "revise_primary_scope",
+             "A passive scope confirmation cannot be an active correction")
+        need(entry.get("adoption_route", "normal_same_primary_unqualified") == "normal_same_primary_unqualified",
+             "Scope decision adoption route differs from its normal correction map")
+        for field in ("primary_goal", "primary_scope"):
+            need(type(entry.get(field)) is str and bool(entry[field].strip()), "Missing same-primary source field: " + field)
+        need(type(entry.get("remaining_source_limits")) is list
+             and all(type(item) is str and item.strip() for item in entry["remaining_source_limits"]),
+             "Invalid same-primary source limits")
+        need(entry.get("disposition") == "same_primary_unqualified"
+             and entry.get("paired_bundle_status") == "same_primary_unqualified"
+             and entry.get("scientific_outcome") == "unknown", "Same-primary correction cannot qualify an outcome")
+        notes, roles = entry.get("retained_secondary_scope"), entry.get("retained_source_roles")
+        need(notes is None or type(notes) is str and bool(notes.strip()), "Invalid retained source scope notes")
+        need(roles is None or type(roles) in (dict, list), "Invalid retained source roles")
+    confirmations = value.get("source_gap_confirmations", {})
+    need(type(confirmations) is dict and len(entries) + len(corrections) + len(confirmations) <= 1000
+         and not ((set(entries) | set(corrections)) & set(confirmations)),
+         "Passive confirmations must be bounded and separate from scope corrections")
+    for identifier, entry in confirmations.items():
+        need(type(identifier) is str and re.fullmatch(r"PAPER-[A-Za-z0-9_-]{1,121}", identifier)
+             and type(entry) is dict and entry.get("task_id") == identifier
+             and entry.get("projection_action") == "none"
+             and entry.get("adoption_route", "source_gap_confirmation") == "source_gap_confirmation"
+             and entry.get("scientific_outcome", "unknown") == "unknown",
+             "Invalid passive source-gap confirmation")
     return value
 
 
@@ -291,7 +348,9 @@ def coverage(registry, read_pin):
         require_pin(meta["scope_decisions"], SCOPE_PATH, "scope decisions")
         old.scope_decisions = scope_decisions(read_pin(meta["scope_decisions"], "Paper scope decisions"))
         old.scope_pin = meta["scope_decisions"]
-        need(bool(set(old.scope_decisions["entries"]) & old_paper), "Scope decisions must apply to registered paper tasks")
+        referenced = (set(old.scope_decisions["entries"]) | set(old.scope_decisions.get("same_primary_corrections", {}))
+                      | set(old.scope_decisions.get("source_gap_confirmations", {})))
+        need(bool(referenced & old_paper), "Scope decisions must apply to registered paper tasks")
     need(all("paper_outcomes" in row for row in papers)
          and all("paper_outcomes" not in row for row in rows if row.get("track") != "paper"),
          "Paper outcome binding requires exactly every registered paper task")
@@ -299,7 +358,8 @@ def coverage(registry, read_pin):
         prior = old[row["id"]]
         need("paper_outcomes" not in prior, "Pre-outcomes row must precede outcome adoption")
         for field in PRESERVED_ROW_FIELDS:
-            need(row.get(field) == prior.get(field), "Paper outcome binding changed prior " + field + ": " + row["id"])
+            need((field in row) == (field in prior) and encode(row.get(field)) == encode(prior.get(field)),
+                 "Paper outcome binding changed prior " + field + ": " + row["id"])
     return old
 
 
@@ -385,9 +445,11 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     improvement = improvement_contract if improvement_contract is not None else read_pin(improvement_pin, "Improvement contract")
     scope = getattr(previous_rows, "scope_decisions", None)
     scope_entry = scope["entries"].get(identifier) if scope else None
+    primary_correction = scope.get("same_primary_corrections", {}).get(identifier) if scope else None
     reproduction = read_reproduction(binding["reproduction_contract"], home, read_pin) if "reproduction_contract" in binding else None
     projected = project_task(previous_document, prior, improvement, scope_entry,
-                             reproduction_version=reproduction["schema_version"] if reproduction is not None else "paper-reproduction/v1")
+                             reproduction_version=reproduction["schema_version"] if reproduction is not None else "paper-reproduction/v1",
+                             primary_correction=primary_correction)
     expected_current = pin(home + "/task.json", encode(projected))
     need(document == projected and row.get("specification") == expected_current,
          "Current paper definition differs from the deterministic dual-outcome projection")
@@ -408,13 +470,33 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
         need(not errors, "Invalid paper outcome contracts for " + identifier + ": " + "; ".join(errors))
         need(outcomes["task_id"] == identifier and outcomes["original_task_sha256"] == expected_current["sha256"],
              "Paper outcomes must bind the raw current task identity")
+        if primary_correction is not None:
+            need(reproduction["eligibility"] == "source_unresolved"
+                 and improvement["disposition"] != "improvement_ready",
+                 "Reviewed same-primary correction retains unresolved source eligibility")
         result = module.summary(outcomes, reproduction, improvement)
     need(not result["errors"] and result["task_count"] == 1,
          "Invalid independent paper outcome summary")
     return {"previous_row": prior, "previous_document": previous_document, "previous_pin": previous_pin,
             "improvement_contract": improvement, "reproduction_contract": reproduction,
             "outcomes": outcomes, "summary": result, "availability": "unavailable" if unavailable else "available",
+            "primary_scope_correction": primary_correction,
+            "scope_decision_pin": getattr(previous_rows, "scope_pin", None),
             "members": members}
+
+
+def public_primary_scope_correction(entry, scope_pin, task_id):
+    """Project an authenticated scope entry without adding scientific claims."""
+    return {
+        "disposition": "same_primary_unqualified", "primary_goal": entry["primary_goal"],
+        "primary_scope": entry["primary_scope"],
+        "remaining_source_limits": copy.deepcopy(entry["remaining_source_limits"]),
+        "retained_scope_notes": entry.get("retained_secondary_scope"),
+        "retained_source_roles": copy.deepcopy(entry.get("retained_source_roles")),
+        "root_scope_decision": {"path": SCOPE_PATH, "raw_sha256": scope_pin["sha256"],
+                                "task_entry_id": task_id},
+        "scientific_outcome": "unknown",
+    }
 
 
 def public_summary(row, bound):
@@ -435,4 +517,8 @@ def public_summary(row, bound):
     if bound["availability"] == "unavailable":
         for field in ("reason_code", "reason", "primary_scope", "retained_secondary_improvement", "root_scope_decision"):
             result[field] = copy.deepcopy(bound["outcomes"][field])
+    correction = bound.get("primary_scope_correction")
+    if correction is not None:
+        result["primary_scope_correction"] = public_primary_scope_correction(
+            correction, bound["scope_decision_pin"], row["id"])
     return result

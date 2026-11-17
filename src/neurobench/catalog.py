@@ -604,7 +604,7 @@ def discover(root=ROOT):
               'registry_chain': historical, 'shared_contracts': shared, 'tasks': tasks,
               'unmapped_runtime_sources': [], 'components': components,
               'implementations': sorted(implementations, key=lambda record: record['id'])}
-    validate(result, root)
+    validate(result, root, _reader=reader)
     return result
 
 
@@ -631,6 +631,9 @@ def source_links(catalog):
             decision = row['paper_outcomes'].get('root_scope_decision')
             if decision is not None:
                 yield decision['path']
+            correction = row['paper_outcomes'].get('primary_scope_correction')
+            if correction is not None:
+                yield correction['root_scope_decision']['path']
         if row.get('neural_understanding'):
             yield row['neural_understanding']['contract']['path']
             yield row['neural_understanding']['historical_specification']['path']
@@ -645,7 +648,7 @@ def source_links(catalog):
         yield row['manifest']['path']
 
 
-def validate(catalog, root=ROOT):
+def validate(catalog, root=ROOT, *, _reader=None):
     need(catalog.get('schema_version') == 1 and catalog.get('kind') == 'public_neuroscience_source_catalog',
          'Unsupported public catalog')
     tasks = catalog['tasks']
@@ -656,6 +659,12 @@ def validate(catalog, root=ROOT):
     need(catalog.get('neural_understanding_counts') == understanding_counts(tasks), 'Neural understanding counts disagree')
     need(catalog['scientific_readiness'] == catalog['submission_readiness'] == 'unknown',
          'Catalog must not manufacture readiness')
+    # Reuse discovery's cumulative accounting, but never its source claims.
+    # Public supplied views get a fresh bounded reader. Source authentication is
+    # local to this invocation and cannot be replaced by supplied view metadata.
+    reader = _reader if _reader is not None else Reader(Path(root))
+    need(reader.root == Path(root).resolve(), 'Catalog reader must use the selected repository root')
+    primary_source = None
     directories = set()
     for row in tasks:
         directory = task_directory(row['id'], row['track'])
@@ -684,6 +693,53 @@ def validate(catalog, root=ROOT):
                 need(all(cell.get('eligibility') == cell.get('pairing_status') == 'unavailable'
                          and cell.get('endpoint_eligible') is False and cell.get('condition_available') is False
                          for cell in cells), 'Unavailable primary outcomes cannot gain eligibility or paired access')
+            correction = outcomes.get('primary_scope_correction')
+            if correction is not None:
+                need(type(correction) is dict and outcomes.get('availability') == 'available'
+                     and correction.get('disposition') == 'same_primary_unqualified'
+                     and correction.get('scientific_outcome') == 'unknown'
+                     and outcomes.get('reproduction_eligibility') == 'source_unresolved'
+                     and row.get('paper_improvement', {}).get('disposition') != 'improvement_ready'
+                     and type(correction.get('root_scope_decision')) is dict
+                     and correction.get('root_scope_decision', {}).get('task_entry_id') == row['id'],
+                     'Primary scope correction cannot qualify an outcome or change its availability')
+                if primary_source is None:
+                    module = companion_module('paper_outcomes_binding')
+                    module.require_pin(catalog.get('registry'), REGISTRY, 'current registry')
+                    source_registry = checked_pin(reader, catalog['registry'], 'Current correction registry')
+                    need(source_registry.get('schema_version') == 1
+                         and source_registry.get('kind') == 'neuroscience_benchmark_registry',
+                         'Primary scope correction requires the current registry')
+                    source_rows = source_registry.get('tasks')
+                    need(type(source_rows) is list and all(type(item) is dict and type(item.get('id')) is str for item in source_rows),
+                         'Primary scope correction requires current registered identities')
+                    source_by_id = {item['id']: item for item in source_rows}
+                    need(len(source_by_id) == len(source_rows), 'Primary scope correction registry has duplicate identities')
+                    metadata = source_registry.get('paper_outcomes')
+                    need(type(metadata) is dict and metadata.get('schema_version') == module.VERSION
+                         and metadata.get('coverage_required') is True,
+                         'Primary scope correction requires adopted outcome metadata')
+                    scope_pin = metadata.get('scope_decisions')
+                    module.require_pin(scope_pin, module.SCOPE_PATH, 'scope decisions')
+                    scope = module.scope_decisions(checked_pin(reader, scope_pin, 'Primary scope decision'))
+                    primary_source = module, source_by_id, scope_pin, scope.get('same_primary_corrections', {})
+                module, source_by_id, scope_pin, source_corrections = primary_source
+                registered = source_by_id.get(row['id'])
+                need(type(registered) is dict and registered.get('track') == 'paper'
+                     and registered.get('specification') == row.get('specification')
+                     and type(registered.get('paper_outcomes')) is dict,
+                     'Primary scope correction differs from the current registered task')
+                registered_binding = registered['paper_outcomes']
+                need(registered_binding.get('schema_version') == module.VERSION
+                     and type(registered.get('specification_revision')) is dict
+                     and outcomes.get('improvement_contract') == registered['specification_revision'].get('improvement_contract')
+                     and all(outcomes.get(field) == registered_binding.get(field)
+                             for field in ('previous_specification', 'reproduction_contract', 'outcomes')),
+                     'Primary scope correction differs from current outcome bindings')
+                entry = source_corrections.get(row['id'])
+                need(type(entry) is dict
+                     and module.encode(correction) == module.encode(module.public_primary_scope_correction(entry, scope_pin, row['id'])),
+                     'Primary scope correction differs from authenticated source')
     implementations = checked_implementations(catalog['implementations'], {row['id']: row for row in tasks}, Path(root))
     owners = {row['id']: [] for row in tasks}
     related_tasks = {row['id']: [] for row in tasks}
@@ -1021,6 +1077,26 @@ def render_tracks(catalog):
                     text += ('The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. '
                              'Each uses matched paper+data and paper+data+author-code conditions. '
                              'Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.\n\n')
+                correction = outcomes.get('primary_scope_correction')
+                if correction is not None:
+                    text += ('**Corrected primary scope; outcomes remain unqualified.** '
+                             'Both outcome contracts retain the same primary scientific task. '
+                             'Unresolved source criteria still limit receipt admission.\n\n'
+                             '**Primary goal:** ' + markdown_text(correction['primary_goal']) + '\n\n'
+                             '**Primary scientific scope:** ' + markdown_text(correction['primary_scope']) + '\n\n')
+                    if correction['remaining_source_limits']:
+                        text += ('**Remaining source limits:**\n\n'
+                                 + ''.join('- ' + markdown_text(limit) + '\n' for limit in correction['remaining_source_limits'])
+                                 + '\n')
+                    if correction.get('retained_scope_notes'):
+                        text += '**Retained source scope:** ' + markdown_text(correction['retained_scope_notes']) + '\n\n'
+                    if correction.get('retained_source_roles'):
+                        text += ('**Retained source roles:**\n\n| Source field | Declared role |\n| --- | --- |\n'
+                                 + ''.join('| ' + markdown_text(field) + ' | ' + markdown_text(value) + ' |\n'
+                                           for field, value in declared_status_fields(correction['retained_source_roles']))
+                                 + '\n')
+                    text += ('- ' + markdown_link('Reviewed primary scope correction',
+                                                 correction['root_scope_decision']['path'], task) + '\n')
                 if outcomes.get('reproduction_contract') is not None:
                     text += ('- ' + markdown_link('Reproduction proposal (inspection only)' if unavailable else
                                                  'Original-finding reproduction contract',

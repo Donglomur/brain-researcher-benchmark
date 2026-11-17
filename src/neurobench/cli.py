@@ -472,6 +472,8 @@ def paper_outcomes(task_id, root=ROOT):
     summary = ({'task_id': task_id, 'task_count': 1, **binding}
                if binding.get('availability') == 'unavailable' else
                engine.summary(documents['outcomes'], documents['reproduction'], documents['improvement']))
+    if 'primary_scope_correction' in binding:
+        summary['primary_scope_correction'] = binding['primary_scope_correction']
     return {'task_id': task_id, 'specification': task['specification'],
             'binding': {key: binding[key] for key in
                         ('previous_specification', 'reproduction_contract', 'improvement_contract', 'outcomes')},

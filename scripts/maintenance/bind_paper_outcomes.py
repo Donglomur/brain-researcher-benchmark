@@ -192,7 +192,8 @@ def build_outputs(root=ROOT):
                          "An existing reproduction proposal must be explicitly bound")
         projected = binding.project_task(previous_document, prior, improvement,
                                          scopes["entries"].get(identifier) if scopes else None,
-                                         reproduction_version=reproduction["schema_version"] if reproduction is not None else "paper-reproduction/v1")
+                                         reproduction_version=reproduction["schema_version"] if reproduction is not None else "paper-reproduction/v1",
+                                         primary_correction=scopes.get("same_primary_corrections", {}).get(identifier) if scopes else None)
         current_body = binding.encode(projected)
         current_pin = binding.pin(home + "/task.json", current_body)
         updated_rows[identifier]["specification"] = current_pin
