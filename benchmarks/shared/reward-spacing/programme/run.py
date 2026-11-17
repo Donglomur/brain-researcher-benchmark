@@ -24,7 +24,7 @@ def main():
         if len(b)!=size or hashlib.sha256(b).hexdigest()!=expected:raise ValueError('source bytes changed')
         return b
     try:
-        raw=capture('SOURCE_LOCK.json',a.source_bytes,a.source_sha256)
+        raw=capture('CURRENT_SOURCE_LOCK.json',a.source_bytes,a.source_sha256)
         def pairs(items):
             out={}
             for k,v in items:
@@ -32,8 +32,15 @@ def main():
                 out[k]=v
             return out
         lock=json.loads(raw,object_pairs_hook=pairs)
+        if lock.get('schema')!='reward_complete_central_current_source_lock_v1':raise ValueError('current source-lock schema')
         if len(lock['files'])>256 or len({p['path'] for p in lock['files']})!=len(lock['files']):raise ValueError('source closure size/duplicates')
         for p in lock['files']:capture(p['path'],p['bytes'],p['sha256'])
+        members={p['path']:p for p in lock['files']}
+        for name,field in (('SOURCE_LOCK.json','predecessor_source_lock'),('SOURCE.json','predecessor_distribution')):
+            if members.get(name)!=lock[field]:raise ValueError('historical source binding')
+        prior=lock['predecessor_distribution']
+        distribution=json.loads(capture(prior['path'],prior['bytes'],prior['sha256']),object_pairs_hook=pairs)
+        if set(members)!=({p['path'] for p in distribution['files']}|{'SOURCE.json'})-{'README.md'}:raise ValueError('current source closure membership')
         # No current working directory, user site hooks, or PYTHONPATH entry is
         # used for local modules. The installed interpreter/stdlib is separately
         # unqualified; no claimed hostile sandbox is created by this bootstrap.

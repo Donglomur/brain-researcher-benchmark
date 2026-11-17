@@ -12,7 +12,7 @@ import time
 PACKAGE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PACKAGE))
 from central.io import encode, digest, pin
-from central.source import configuration, paper, neural
+from central.source import SOURCE_LOCK, configuration, paper, neural
 from central.plan import construct
 from central.exposure import create
 from central.comparisons import REFERENCE_FAMILIES
@@ -115,7 +115,7 @@ def build(directory):
     request = {"task": "NEURAL-045", "mode": "engineering", "registry": registry,
                "binding": binding, "jobs": jobs}
     request_pin = write(directory / "request.json", request)
-    lock = pin(PACKAGE / "SOURCE_LOCK.json")
+    lock = pin(PACKAGE / SOURCE_LOCK)
     ledger_identity = digest(["invented-example-ledger", str(directory)])
     ledger_path = directory / "exposure.json"
     create(ledger_path, ledger_identity)

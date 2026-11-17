@@ -3,6 +3,7 @@ from pathlib import Path
 import sys,importlib
 from .io import need,capture,decode,sha,digest
 ROOT=Path(__file__).resolve().parents[1]
+SOURCE_LOCK='CURRENT_SOURCE_LOCK.json'
 TASKS=('PAPER-FIND-044','NEURAL-045','NEURAL-046')
 FULL='complete_reward_programme_v1'
 def paper(name):
@@ -20,7 +21,14 @@ def neural(name):
 def configuration():return paper('pipeline').load_config(ROOT/'paper/config')
 def inspect(expected,budget=None):
     read=capture if budget is None else budget.read
-    body=read(ROOT/'SOURCE_LOCK.json',expected);lock=decode(body)
+    body=read(ROOT/SOURCE_LOCK,expected);lock=decode(body)
+    need(lock.get('schema')=='reward_complete_central_current_source_lock_v1','current source-lock schema')
+    members={p['path']:p for p in lock['files']}
+    need(len(members)==len(lock['files'])<=256,'source closure size/duplicates')
+    for name,field in (('SOURCE_LOCK.json','predecessor_source_lock'),('SOURCE.json','predecessor_distribution')):
+        need(members.get(name)==lock[field],'historical source binding')
+    distribution=decode(read(ROOT/'SOURCE.json',lock['predecessor_distribution']))
+    need(set(members)==({p['path'] for p in distribution['files']}|{'SOURCE.json'})-{'README.md'},'current source closure membership')
     for p in lock['files']:
         from .io import relative
         read(relative(ROOT,p['path']),p)
