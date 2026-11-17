@@ -1,0 +1,72 @@
+{
+  "task_id": "PAPER-paper-method-020",
+  "implementation": "source-scoring-v2",
+  "source_code_revision": "8071fb42c3ddac0355f2c0b5977baa32e33f6e14",
+  "data_revision": "36c60313218c0fbf7c381294b81469f8d085ff46",
+  "implementation_role": "Complete-trace source scoring and denominator reconciliation component",
+  "source_evidence": [
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/train_bold5000.py",
+      "locator": "lines 121-128, 169-211",
+      "supports": "Per-question weighted monitor, unseen-concept exclusion, uncaught model exceptions, best-test checkpoint and final posthoc calls."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/models/left/models/losses.py",
+      "locator": "QALoss lines 130-198",
+      "supports": "Null execution incorrect with absent pred_answer; typed decoding, target loss requirements and count-weighted monitors."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/utils/plot_utils.py",
+      "locator": "lines 295-419, 521-665 and 927-938",
+      "supports": "Posthoc hop/concept eligibility, caught exceptions, non-yes coercion, exact vocabulary accuracy and combined question-weighted aggregate."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/models/left/domain.py",
+      "locator": "lines 28-59",
+      "supports": "Ordered three built-in functions and parser returning a possibly partial domain after catching parse exceptions."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/data/bold5000_pred_cls.json",
+      "locator": "complete 39-line category mapping",
+      "supports": "Movement, Position, Thing and YesNo exact token membership; repeated under preserved."
+    }
+  ],
+  "source_retrieval": {
+    "raw_content_sha256": null,
+    "method": "Pinned official source rendered by connected search service after terminal TLS EOF",
+    "rendered_receipts": [
+      {
+        "path": "native_sources.rendered.json",
+        "bytes": 31108,
+        "sha256": "a50ed67f5b5eb8e3053e81602ef07be073e88393d960dd92f2519d2b42d732ee"
+      },
+      {
+        "path": "native_scoring.rendered.json",
+        "bytes": 32828,
+        "sha256": "cb7dc5035903f9d10d26c7607c811b455fc657cc9862f18205d434c93c03540d"
+      },
+      {
+        "path": "native_details.rendered.json",
+        "bytes": 31484,
+        "sha256": "8a8a3e11f8961dcc3ad0f7fc0f82737a66e855d9441300b6c06531cf341a6f84"
+      }
+    ],
+    "rendered_receipt_bytes": 95420,
+    "note": "Rendered evidence is not a raw-byte source archive; external handoff carries exact receipt hashes."
+  },
+  "inherited_implementation": {
+    "path": "../initial-evaluator-v1/evaluator.py",
+    "sha256": "9d7ddf27151465693feb9346f906e3ad583194b022135a5c0cbfbfa1782b21a6",
+    "reused": "Strict JSON loader, source inventory hashes, constants and structured QALoss correctness; source remains unchanged."
+  },
+  "paper_pdf_sha256": "f54ef0f11df3d28d1c37a06d189dd985624478437a9cedd050812ba328cd03b7",
+  "existing_improvement_contract_sha256": "cac39eb7f940993c55d80457d2c6c41c2977f4808b60d41e870ee26a59a70a02",
+  "scope": "Original CSI1 Table 1 all-hop source setting; native source semantics, not publication-parity authentication",
+  "reproduction_established": false,
+  "improvement_established": false,
+  "scientifically_qualified": false,
+  "authentic_data_processed": false,
+  "native_reference_executed": false,
+  "generated_controls_only": true,
+  "dependencies": "Python 3.10+ standard library and unchanged task-local predecessor"
+}
