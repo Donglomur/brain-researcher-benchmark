@@ -173,6 +173,12 @@ python -I -B benchmarks/neural/NEURAL-038/implementations/full140-programme-v1/t
 Controls use complete invented arrays and original producer/preparation,
 retirement and admission code with scripted native boundaries. They preserve
 all 140 memberships, 25 public files and original geometry. The existing
+producer controls also script only their fixture's free-space observation and
+4 KiB filesystem fragment size, so small generated fixtures do not require a
+real 20 GiB free-space margin. Original floor/retention arithmetic, actual file
+inventory, copy/retirement and write limits remain active. These controls still
+require POSIX file operations and interval timers; the scripted capacity values
+are not measured host properties or native qualification. The existing
 closed-form numerical fixture is reused without replaying the unchanged
 evaluator's full suite. The new seam tests stopped-report custody, complete
 source-to-array binding, numerical authority, root separation, clocks and

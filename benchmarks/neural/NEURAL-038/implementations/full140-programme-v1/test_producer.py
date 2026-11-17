@@ -1,8 +1,9 @@
-"""Generated full140 controller controls with a scripted native boundary only.
+"""Generated full140 controls with scripted native and capacity observations.
 
 Production controller.run, preparation, view retirement and observe.admit are
 executed unchanged. Native processes/containers are never launched. All source
-and export pin substitutions exist only in invented test objects/files.
+and export pin substitutions exist only in invented test objects/files. Real
+POSIX file operations and interval timers remain required by these controls.
 """
 import copy
 from contextlib import nullcontext
@@ -34,11 +35,19 @@ def run_controls(fixtures=None, *, _base=None, _build_only=False):
     policy = common.module(bodies, 'policy.py', HERE / 'runtime', c=common)
     observer = common.module(bodies, 'observe.py', HERE / 'runtime')
     original_save = common.save
+    original_os, original_shutil = common.os, common.shutil
 
     def tracked_save(path, raw, cap, tick=lambda: None, charge=lambda n: None):
         return fixtures.publication(raw, lambda: original_save(path, raw, cap, tick, charge))
 
     common.save = tracked_save
+    # Replace only this fixture module's physical-capacity observations. Do not
+    # mutate process-global os/shutil, bypass Budget.capacity, or reduce the
+    # original floor/retention arithmetic and real allocation/write checks.
+    common.os = types.SimpleNamespace(**{**vars(original_os),
+        'statvfs': lambda _: types.SimpleNamespace(f_frsize=4096)})
+    common.shutil = types.SimpleNamespace(**{**vars(original_shutil),
+        'disk_usage': lambda _: types.SimpleNamespace(free=common.FLOOR + common.RETAIN)})
     results = []
     calls = []
     attempt_details = {}
@@ -278,9 +287,14 @@ def run_controls(fixtures=None, *, _base=None, _build_only=False):
             mark('Well-shaped wrong numeric report remains structural-only and does not fabricate numerical correctness')
     finally:
         common.save = original_save
+        common.os, common.shutil = original_os, original_shutil
     after_writes = fixtures.snapshot()
     return {'schema': 'neural038_generated_full140_producer_controls_v1', 'passed': True,
             'groups': len(results), 'results': results, 'native_boundary': 'scripted native.phase, no process/container execution',
+            'physical_capacity_observations': {'scripted_fixture_only': True,
+                'free_bytes': common.FLOOR + common.RETAIN, 'fragment_size_bytes': 4096,
+                'production_capacity_arithmetic_unchanged': True,
+                'real_inventory_copy_retirement_and_posix_timers': True},
             'production_functions_exercised': ['controller.run', 'controller.prepare', 'controller.retire', 'observe.admit', 'scorer_core.admit'],
             'scope': {'public_files': 25, 'public_bytes': 938607, 'array_files': 18,
                       'memberships': 140, 'blocks': [9, 13, 10, 108], 'frames': [300, 300, 300, 200]},
