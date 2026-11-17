@@ -32,6 +32,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Paper paper method 003](implementations/paper-paper-method-003) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original physionet](implementations/original-physionet) — Original panel preparation and scoring.
+  Scope: Original 109-participant PhysioNet acquisition/preparation, full-panel pooled balanced-accuracy/kappa/weighted-F1 scoring and strict author checkpoint adapter. Preparation and fixed software controls do not establish source classifier, historical seed roster, filter/checkpoint parity, paired candidate execution, same-task superiority or current SOTA.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
