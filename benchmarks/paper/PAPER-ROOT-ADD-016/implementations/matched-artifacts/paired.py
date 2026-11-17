@@ -171,8 +171,12 @@ class Packet:
                     count += len(block); need(count <= item['bytes'], 'Source grew')
                     digest.update(block); out.write(block)
                 F.stable(before, os.fstat(stream.fileno()))
-                out.flush(); os.fsync(out.fileno())
-        need({'bytes': count, 'sha256': digest.hexdigest()} == {k: item[k] for k in ('bytes', 'sha256')}, 'Exact complete copied source')
+                need({'bytes': count, 'sha256': digest.hexdigest()} == {k: item[k] for k in ('bytes', 'sha256')}, 'Exact complete copied source')
+                out.flush()
+                # Individual files are mounted for a different UID; umask must
+                # not narrow the public mode. Keep host-only parents private.
+                os.fchmod(out.fileno(), 0o444)
+                os.fsync(out.fileno())
 
     def bounded_pin(self, source, cap):
         stream, before = F.stream(source, cap)

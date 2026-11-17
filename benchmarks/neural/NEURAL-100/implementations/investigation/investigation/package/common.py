@@ -138,3 +138,23 @@ def readable(p,tick):
     try:os.fchmod(fd,0o444);os.fsync(fd);tick()
     finally:os.close(fd)
     sync_dir(Path(p).parent,tick)
+
+
+def public_directory(directory, tick):
+    """Finalize a newly owned public directory without changing private ancestors."""
+    tick(); directory = path(directory)
+    fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    try:
+        before = os.fstat(fd)
+        need(stat.S_ISDIR(before.st_mode) and before.st_uid == os.geteuid(),
+             'Owned public directory')
+        need(stamp(before) == stamp(directory.lstat()), 'Stable public directory')
+        os.fchmod(fd, 0o755)
+        os.fsync(fd)
+        after = os.fstat(fd)
+        need(stat.S_IMODE(after.st_mode) == 0o755 and
+             stamp(after) == stamp(directory.lstat()), 'Published public directory')
+        tick()
+    finally:
+        os.close(fd)
+    sync_dir(directory.parent, tick)

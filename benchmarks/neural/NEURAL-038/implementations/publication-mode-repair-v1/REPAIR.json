@@ -1,0 +1,79 @@
+{
+  "schema": "neural_publication_directory_repair_v1",
+  "task_id": "NEURAL-038",
+  "predecessor_commit": "2500644353cfff396784e611cfaf420b09da4feb",
+  "purpose": "Explicit public directory modes under umask077 for fixed nonroot readers",
+  "normalization": {
+    "public_directories": "0755",
+    "public_files": "0444 (existing behavior)",
+    "private_host_roots": "0700 (preserved)",
+    "private_metadata": "0400 (preserved)"
+  },
+  "changed_members": [
+    {
+      "path": "benchmarks/neural/NEURAL-038/implementations/full140-programme-v1/library.py",
+      "predecessor": {
+        "bytes": 7865,
+        "sha256": "75542ca737ea4c85cc8140dfd80c6f2c3719d7f1953e23061771a3675823c89b"
+      },
+      "current": {
+        "bytes": 7865,
+        "sha256": "930134f56454d158ae77395ab837efb0320b87eb40f09f470c6cfa486f8791f2"
+      }
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-038/implementations/full140-programme-v1/runtime/SOURCE_MANIFEST.json",
+      "predecessor": {
+        "bytes": 2070,
+        "sha256": "fe11a6c975d01f14882ff087e324f7e276fc4969bf165d8c0687ba25cbac17e6"
+      },
+      "current": {
+        "bytes": 2070,
+        "sha256": "d40d9c4c5d0cd10c3e286ae4e8f3019ba7f7865a015569f140ccf48a6f07cb61"
+      }
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-038/implementations/full140-programme-v1/runtime/common.py",
+      "predecessor": {
+        "bytes": 6958,
+        "sha256": "0d00653ea981ba38795c2bd51c3fe1bae3d7e893eff0abba2925770b29571e43"
+      },
+      "current": {
+        "bytes": 7741,
+        "sha256": "ef6ee62bb65182b2c48cb6a785a021f7fa10df53ef9a6a4b86236701b4117498"
+      }
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-038/implementations/full140-programme-v1/runtime/controller.py",
+      "predecessor": {
+        "bytes": 12574,
+        "sha256": "9d7c1f2bc4c5af375b750250b9f2b1d114640d7072de864c5b0b3eb107968c17"
+      },
+      "current": {
+        "bytes": 12582,
+        "sha256": "c1d53cda5cd6abd4b29c9bd6ef0964e1392aeb10f0b7c2f09ce075e01c801e71"
+      }
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-038/implementations/publication-mode-repair-v1/test_publication_modes.py",
+      "predecessor": null,
+      "current": {
+        "bytes": 7165,
+        "sha256": "89f7f60fd06e6fea7e412944c8c5bad2a4db1c549e705af59da2eac29268ed83"
+      }
+    }
+  ],
+  "historical_provenance_preserved": true,
+  "central_integrity_updated": false,
+  "integration_followup": [
+    "Repin selected registered-runtime/release consumers and source-ownership inventory in the later integration batch."
+  ],
+  "generated_controls": {
+    "tests": 4,
+    "authentic_data_reads": 0,
+    "native_executions": 0,
+    "scope": "Real POSIX prepare/retire and publication guards; N100 additionally stages its source capsule with inert dependencies and stops before preparing data."
+  },
+  "runtime_qualified": false,
+  "scientific_qualified": false
+}

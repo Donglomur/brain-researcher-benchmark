@@ -692,6 +692,27 @@ class RepositoryChecksTests(unittest.TestCase):
         (self.root / ".neurobench/result.bin").write_bytes(b"generated runtime output")
         self.assertEqual(self.check()["source_check"], "passed")
 
+    def test_source_count_limit_is_inclusive_and_overflow_preserves_inventory(self):
+        count = self.build()["source_files"]
+        inventory = (self.root / checks.INVENTORY).read_bytes()
+        artifacts = self.registry["implementations"]
+        artifact_count = len(checks.artifact_members(self.root, artifacts))
+        with patch.object(checks, "MAX_FILES", count):
+            self.assertEqual(self.check()["source_files"], count)
+        with patch.object(checks, "MAX_FILES", artifact_count):
+            self.assertEqual(len(checks.artifact_members(self.root, artifacts)), artifact_count)
+
+        extra = self.root / artifacts[0]["path"] / "extra.py"
+        extra.write_text("raise AssertionError('This source must never execute')\n")
+        with patch.object(checks, "MAX_FILES", count):
+            with self.assertRaisesRegex(ValueError, "Source file count limit exceeded"):
+                self.build()
+        self.assertEqual((self.root / checks.INVENTORY).read_bytes(), inventory)
+        with patch.object(checks, "MAX_FILES", artifact_count):
+            with self.assertRaisesRegex(ValueError, "Source file count limit exceeded"):
+                checks.artifact_members(self.root, artifacts)
+        self.assertEqual((self.root / checks.INVENTORY).read_bytes(), inventory)
+
     def test_cumulative_reader_limit_is_inclusive_and_cache_preserves_budget(self):
         for name, raw in (("first.py", b"abc"), ("second.py", b"de"), ("third.py", b"f")):
             (self.root / name).write_bytes(raw)

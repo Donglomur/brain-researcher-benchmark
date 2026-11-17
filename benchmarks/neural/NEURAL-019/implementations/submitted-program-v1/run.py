@@ -89,6 +89,10 @@ def publish(path, raw, mode=0o400):
     with os.fdopen(fd, "wb") as stream:
         stream.write(raw)
         stream.flush()
+        # Public mount operands must remain readable by container UID 65534
+        # even when the trusted operator uses a restrictive umask.
+        if mode == 0o444:
+            os.fchmod(stream.fileno(), 0o444)
         os.fsync(stream.fileno())
     return pin(raw)
 

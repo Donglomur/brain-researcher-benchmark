@@ -34,7 +34,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-018](NEURAL-018/README.md) | Causal motor-population forecasting | 3 | [manifest](NEURAL-018/implementations/registered-runtime/manifest.json) |
 | [NEURAL-019](NEURAL-019/README.md) | Movement information in neural latent representations | 3 | [manifest](NEURAL-019/implementations/registered-runtime/manifest.json) |
 | [NEURAL-020](NEURAL-020/README.md) | Somatosensory population co-smoothing | 2 | not linked |
-| [NEURAL-021](NEURAL-021/README.md) | Somatosensory hand-velocity decoding | 4 | [manifest](NEURAL-021/implementations/registered-runtime/manifest.json) |
+| [NEURAL-021](NEURAL-021/README.md) | Somatosensory hand-velocity decoding | 5 | [manifest](NEURAL-021/implementations/registered-runtime/manifest.json) |
 | [NEURAL-022](NEURAL-022/README.md) | Active-versus-passive sensory coding | 4 | not linked |
 | [NEURAL-023](NEURAL-023/README.md) | Continuous reaching across recording days | 4 | [manifest](NEURAL-023/implementations/registered-runtime/manifest.json) |
 | [NEURAL-024](NEURAL-024/README.md) | Stable population dynamics across days | 4 | [manifest](NEURAL-024/implementations/registered-runtime/manifest.json) |
@@ -51,7 +51,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-035](NEURAL-035/README.md) | Chronological astrocytic peak-order prediction within sessions | 4 | not linked |
 | [NEURAL-036](NEURAL-036/README.md) | Retrospective prediction of released glial-behavior state proxy | 2 | [manifest](NEURAL-036/implementations/registered-runtime/manifest.json) |
 | [NEURAL-037](NEURAL-037/README.md) | Acquisition-local held-condition calcium response prediction | 3 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
-| [NEURAL-038](NEURAL-038/README.md) | Sensory-context modulation of optogenetic calcium response investigation | 3 | [manifest](NEURAL-038/implementations/registered-runtime/manifest.json) |
+| [NEURAL-038](NEURAL-038/README.md) | Sensory-context modulation of optogenetic calcium response investigation | 4 | [manifest](NEURAL-038/implementations/registered-runtime/manifest.json) |
 | [NEURAL-039](NEURAL-039/README.md) | Natural-movie parcel-response encoding | 2 | [manifest](NEURAL-039/implementations/registered-runtime/manifest.json) |
 | [NEURAL-040](NEURAL-040/README.md) | Audio, visual and language contributions to fMRI | 2 | not linked |
 | [NEURAL-041](NEURAL-041/README.md) | Working-memory load decoding | 2 | [manifest](NEURAL-041/implementations/registered-runtime/manifest.json) |
@@ -65,7 +65,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-049](NEURAL-049/README.md) | Event-cued retrospective reach-parameter decoding from ECoG | 3 | [manifest](NEURAL-049/implementations/registered-runtime/manifest.json) |
 | [NEURAL-050](NEURAL-050/README.md) | Incremental contemporaneous movement information in motor gamma | 2 | not linked |
 | [NEURAL-051](NEURAL-051/README.md) | Viewed-object identification from fMRI | 2 | [manifest](NEURAL-051/implementations/registered-runtime/manifest.json) |
-| [NEURAL-052](NEURAL-052/README.md) | Object-property organization across visual ROIs | 3 | [manifest](NEURAL-052/implementations/registered-runtime/manifest.json) |
+| [NEURAL-052](NEURAL-052/README.md) | Object-property organization across visual ROIs | 4 | [manifest](NEURAL-052/implementations/registered-runtime/manifest.json) |
 | [NEURAL-053](NEURAL-053/README.md) | Object category decoding from MEG | 2 | not linked |
 | [NEURAL-054](NEURAL-054/README.md) | Early category information versus visual and ocular cues | 2 | [manifest](NEURAL-054/implementations/registered-runtime/manifest.json) |
 | [NEURAL-055](NEURAL-055/README.md) | Repeated-image EEG identification | 2 | [manifest](NEURAL-055/implementations/registered-runtime/manifest.json) |
@@ -91,7 +91,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-075](NEURAL-075/README.md) | Perception-to-imagery object decoding | 3 | [manifest](NEURAL-075/implementations/registered-runtime/manifest.json) |
 | [NEURAL-076](NEURAL-076/README.md) | Visual-feature hierarchy in mental imagery | 3 | [manifest](NEURAL-076/implementations/registered-runtime/manifest.json) |
 | [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 12 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
-| [NEURAL-078](NEURAL-078/README.md) | Error-related negativity beyond response timing | 4 | [manifest](NEURAL-078/implementations/registered-runtime/manifest.json) |
+| [NEURAL-078](NEURAL-078/README.md) | Error-related negativity beyond response timing | 5 | [manifest](NEURAL-078/implementations/registered-runtime/manifest.json) |
 | [NEURAL-079](NEURAL-079/README.md) | Natural-video EEG response encoding | 1 | not linked |
 | [NEURAL-080](NEURAL-080/README.md) | Video dynamics versus eye movements in EEG | 2 | not linked |
 | [NEURAL-081](NEURAL-081/README.md) | Imagined melody identification | 3 | not linked |
@@ -113,7 +113,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-097](NEURAL-097/README.md) | Task-irrelevant stimulus-content decoding | 2 | [manifest](NEURAL-097/implementations/registered-runtime/manifest.json) |
 | [NEURAL-098](NEURAL-098/README.md) | Sustained versus transient content information | 3 | [manifest](NEURAL-098/implementations/registered-runtime/manifest.json) |
 | [NEURAL-099](NEURAL-099/README.md) | Auditory-evoked spike or declared CSD response prediction | 2 | [manifest](NEURAL-099/implementations/registered-runtime/manifest.json) |
-| [NEURAL-100](NEURAL-100/README.md) | Early deep-layer auditory response evidence | 3 | [manifest](NEURAL-100/implementations/registered-runtime/manifest.json) |
+| [NEURAL-100](NEURAL-100/README.md) | Early deep-layer auditory response evidence | 4 | [manifest](NEURAL-100/implementations/registered-runtime/manifest.json) |
 ## Expansion drafts (18)
 
 | Task | Scientific question / title | Implementation artifacts | Legacy runtime declaration |

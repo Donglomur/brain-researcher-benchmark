@@ -45,6 +45,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Observation grade v1](implementations/observation-grade-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Publication mode repair v1](implementations/publication-mode-repair-v1) — Reviewed source component.
+  Scope: Explicit public directory modes and bounded generated permission controls under restrictive umask; historical source manifests and private defaults remain preserved. Source/control enrollment does not establish Docker behavior, authentic-data correctness, native runtime qualification, model outcomes or scientific qualification.
 - [Paired count delivery v1](implementations/paired-count-delivery-v1) — Reviewed source component.
   Scope: NEURAL-021 exact-count visual delivery. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

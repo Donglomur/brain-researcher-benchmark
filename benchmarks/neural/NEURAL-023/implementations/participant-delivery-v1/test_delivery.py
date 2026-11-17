@@ -4,6 +4,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import stat
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -15,6 +16,8 @@ spec.loader.exec_module(delivery)
 
 
 class DeliveryTests(unittest.TestCase):
+    fixture_bytes_before_cleanup = 0
+
     def setUp(self):
         self.root = Path(tempfile.mkdtemp(prefix="neural023-public-control-")).resolve()
         self.inputs = self.root / "inputs"
@@ -30,9 +33,55 @@ class DeliveryTests(unittest.TestCase):
 
     def tearDown(self):
         self.patcher.stop()
+        type(self).fixture_bytes_before_cleanup += sum(
+            path.lstat().st_size for path in self.root.rglob("*")
+            if stat.S_ISREG(path.lstat().st_mode))
         for directory, _, _ in os.walk(self.root):
             Path(directory).chmod(0o700)
         shutil.rmtree(self.root)
+
+    @classmethod
+    def tearDownClass(cls):
+        print(json.dumps({"fixture_bytes_before_cleanup": cls.fixture_bytes_before_cleanup,
+                          "counter_scope": "Sum of generated regular-file lengths before each fixture cleanup",
+                          "authentic_payload_reads": 0, "native_or_container_runs": 0,
+                          "candidate_executions": 0}))
+
+    def test_public_files_survive_umask_and_private_root_stays_private(self):
+        previous = os.umask(0o077)
+        try:
+            receipt = delivery.export_public(self.inputs, self.output)
+        finally:
+            os.umask(previous)
+        self.assertEqual(stat.S_IMODE(self.output.stat().st_mode), 0o700)
+        self.assertEqual(stat.S_IMODE((self.output / "public").stat().st_mode), 0o555)
+        for name, identity in receipt["files"].items():
+            path = self.output / "public" / name
+            self.assertEqual(stat.S_IMODE(path.stat().st_mode), 0o444)
+            self.assertEqual(delivery.pin(path.read_bytes()), identity)
+        self.assertEqual(json.loads((self.output / "receipt.json").read_text()), receipt)
+
+    def test_failed_permission_publication_closes_fd_without_receipt(self):
+        descriptors = []
+        def fail(fd, mode):
+            descriptors.append(fd)
+            raise PermissionError("generated fchmod failure")
+        previous = os.umask(0o077)
+        try:
+            with patch.object(delivery.os, "fchmod", side_effect=fail):
+                with self.assertRaisesRegex(PermissionError, "generated fchmod failure"):
+                    delivery.export_public(self.inputs, self.output)
+        finally:
+            os.umask(previous)
+        self.assertEqual(len(descriptors), 1)
+        with self.assertRaises(OSError):
+            os.fstat(descriptors[0])
+        self.assertFalse((self.output / "receipt.json").exists())
+        self.assertEqual(stat.S_IMODE(self.output.stat().st_mode), 0o700)
+        self.assertEqual(stat.S_IMODE((self.output / "public").stat().st_mode), 0o700)
+        partial = list((self.output / "public").iterdir())
+        self.assertEqual(len(partial), 1)
+        self.assertEqual(stat.S_IMODE(partial[0].stat().st_mode), 0o400)
 
     def test_only_four_public_inputs_are_opened_and_sources_are_complete(self):
         # Extra assessment target / saved prediction files must never be inspected.

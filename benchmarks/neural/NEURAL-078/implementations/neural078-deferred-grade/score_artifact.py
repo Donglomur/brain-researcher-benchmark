@@ -6,8 +6,8 @@ from pathlib import Path
 HERE=Path(__file__).resolve().parent
 SOURCE_SCHEMA='neural078_deferred_grade_source_v1'
 CURRENT_SOURCE_SCHEMA='neural078_deferred_grade_current_source_v1'
-PROGRAM_PIN={'bytes':1801,'sha256':'8a1b62ca449c5d3c089407fbe76345910fcc4684a3cbaf2811f6e043adb9dc6d'}
-ADAPTER_PIN={'bytes':472,'sha256':'a5912bbdb00ed898e67cd15e6e9f1fe75ddf1eb29c5807e78ef5ad8a50845e8f'}
+PROGRAM_PIN = {'bytes': 1801, 'sha256': 'f3837e62b90d13f71616a153013053fc4d43bc2da844822d0f63f23be91e7672'}
+ADAPTER_PIN = {'bytes': 472, 'sha256': '847c6a1eb7cb5254025ea69df8f34c167600892f66d35d946db9d1c87543884a'}
 SECONDS=180
 
 def bootstrap(expected,here=HERE,*,manifest_path=None):
