@@ -24,7 +24,7 @@ Existing reproduction graders and pilot scores remain calibration evidence. They
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 29956 bytes; SHA-256 `c3c8562f67792ae1a173fe74fc72640b3d8583eb4611a7385f42577567f9fe2f`.
+- Specification identity: 30478 bytes; SHA-256 `027c71400c6c49138a71928071b494a0530361da4b6876f07586d79e0c21445b`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -36,6 +36,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Post-assembly mask and trace evaluation across ten fixed recordings using strict IoU greater than 0.5 segmentation metrics, common-detected-neuron trace correlations and paired runtime summaries, plus a tile geometry planner. Native frame/crop mapping, patch assembly, checkpoint/reference identity, donor/tuning partitions, rights and operational protected-reference isolation remain held. Scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Source panel v1](implementations/source-panel-v1) — Original panel source preparation and scoring.
+  Scope: Original ten-video Allen ROI conversion and full named-panel scoring with 1563 source ROIs and eight unique donors. Repeated recordings from the same donor remain clustered for uncertainty. Source inspection exposes the available checkpoint architecture mismatch and unresolved crop/frame origin; conversion and fixed software controls do not establish the original author baseline, model inference or same-task paper superiority.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

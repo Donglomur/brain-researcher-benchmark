@@ -71,7 +71,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-method-010](PAPER-paper-method-010/README.md) | Rastermap: a discovery method for neural population recordings | source_unresolved | 1 | not linked |
 | [PAPER-paper-method-011](PAPER-paper-method-011/README.md) | An emerging view of neural geometry in motor cortex supports high-performance decoding | source_unresolved | 1 | not linked |
 | [PAPER-paper-method-012](PAPER-paper-method-012/README.md) | MINT: A toolbox for the analysis of multivariate neural information coding and transmission | source_unresolved | 1 | not linked |
-| [PAPER-paper-method-013](PAPER-paper-method-013/README.md) | An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data | design_ready | 1 | not linked |
+| [PAPER-paper-method-013](PAPER-paper-method-013/README.md) | An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data | design_ready | 2 | not linked |
 | [PAPER-paper-method-018](PAPER-paper-method-018/README.md) | Identifying interactions across brain areas while accounting for individual-neuron dynamics with a Transformer-based variational autoencoder | source_unresolved | 1 | not linked |
 | [PAPER-paper-method-020](PAPER-paper-method-020/README.md) | Neuro-Symbolic Decoding of Neural Activity | source_unresolved | 1 | not linked |
 | [PAPER-paper-method-023](PAPER-paper-method-023/README.md) | EEGPT: Pretrained Transformer for Universal and Reliable Representation of EEG Signals | source_unresolved | 1 | not linked |
