@@ -369,10 +369,16 @@ class PaperOutcomesIntegrityTests(unittest.TestCase):
         for registry in (self.registry, self.prior_registry):
             registry["paper_improvement"]["pre_improvement_registry"] = original_pin
         raw = self.put(binding.SNAPSHOT, self.prior_registry)
-        self.registry["paper_outcomes"]["pre_outcomes_registry"] = binding.pin(binding.SNAPSHOT, raw)
+        snapshot_pin = binding.pin(binding.SNAPSHOT, raw)
+        self.registry["paper_outcomes"]["pre_outcomes_registry"] = snapshot_pin
+        enrolled = [index for index, item in enumerate(self.registry["historical_registries"])
+                    if item["path"] == binding.SNAPSHOT]
+        self.assertEqual(len(enrolled), 1)
+        self.registry["historical_registries"][enrolled[0]] = copy.deepcopy(snapshot_pin)
         self.save_registry()
         before = self.read(self.task_path)
-        with self.assertRaisesRegex(ValueError, "identity|historical"):
+        with self.assertRaisesRegex(ValueError,
+                "historical registry identity/pin changed: " + self.identifier + "/specification_id$"):
             old_binder.write_or_check(self.root, expected_count=1)
         self.assertEqual(self.read(self.task_path), before)
 
