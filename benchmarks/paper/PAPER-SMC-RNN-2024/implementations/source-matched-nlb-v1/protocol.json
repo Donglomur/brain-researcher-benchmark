@@ -1,0 +1,115 @@
+{
+  "schema": "smc_native_protocol_v1",
+  "objective": "Qualify the source-native complete MC_Maze20ms Table2 panel; future success means improvement over the original SMC source arm. No candidate search is authorized in this wave.",
+  "source": {
+    "repository": "https://github.com/mackelab/smc_rnns",
+    "commit": "c808c76ad940491b0a14d2671e3884140aa61258",
+    "arms": {
+      "causal": "models/reach_nlb_filtering_proposal_36d",
+      "noncausal": "models/reach_nlb_smoothing_proposal_36d"
+    },
+    "checkpoint": "checkpoints/best",
+    "dimensions": {
+      "latent": 36,
+      "units": 512,
+      "heldin": 137,
+      "heldout": 45
+    }
+  },
+  "data": {
+    "dandiset": "000128",
+    "version": "0.220113.0400",
+    "bin_ms": 20,
+    "train_split": [
+      "train",
+      "val"
+    ],
+    "eval_split": "test",
+    "validation_training_split": [
+      "train"
+    ],
+    "validation_eval_split": "val",
+    "conditions": 108,
+    "nwb_bytes": 694004935,
+    "inference_inputs": "Original nlb_tools make_train_input_tensors(include_forward_pred=True,include_behavior=True) and make_eval_input_tensors. Preserve original trial and neuron order; record index/file hashes. No straight-reach subset, no MC_Maze Small.",
+    "version_reconciliation": "Metadata and complete prepared panel identities plus source checkpoint metadata and subsequent full score calibration; paper did not pin DANDI revision. Numerical calibration remains necessary."
+  },
+  "prediction": {
+    "routine": "evaluation.eval_nlb.eval_nlb",
+    "particles": 192,
+    "repeats": 32,
+    "smooth": false,
+    "seeds": {
+      "causal": 20261117,
+      "noncausal": 20261118
+    },
+    "chunk_rule": "len(dataset)//config.training_params.batch_size//2, batch_size16, unchanged source routine including backward sampling",
+    "device": "cpu",
+    "dtype": "source float32",
+    "selection": "Use released selected36D checkpoints only; no training or checkpoint search. Original paper selected30models on validation; supplied checkpoint linkage to exact published row still to be checked."
+  },
+  "metrics": {
+    "primary": "co-bps",
+    "companions": [
+      "vel R2",
+      "psth R2",
+      "fp-bps"
+    ],
+    "published": {
+      "causal": [
+        0.3225,
+        0.8479,
+        0.5927,
+        0.2184
+      ],
+      "noncausal": [
+        0.3407,
+        0.8902,
+        0.5963,
+        0.2417
+      ]
+    },
+    "scorer": "nlb-tools0.0.3 evaluation.py; verify hash equivalence with42f8410b88e12db136910fa2f888b025ea0aa2ae",
+    "calibration_policy": "Report all signed score deltas. Provisional tolerance 0.01 absolute per metric is diagnostic only and is not a claim of numerical reproduction or improvement. No resampling on final targets and no iterative target-driven fitting.",
+    "uncertainty_scope": "Published values are point estimates without supplied seed variance. A single32repeat averaged inference is numerical calibration, not a confidence interval. Future improvement requires independent frozen replicate/uncertainty and companion non-regression policy before candidate scoring.",
+    "sota_limit": "Paper LFADS and NDT co-bps exceed SMC. Exceeding SMC does not imply SOTA."
+  },
+  "exposure": {
+    "targets": "Original test targets publicly exposedJanuary2026; never untouched.",
+    "target_commit": "42f8410b88e12db136910fa2f888b025ea0aa2ae",
+    "target_sha256": "f2f434d30193251b58e6a693381fdd185c8fbc0e47d38f8810e65295bc42c865",
+    "target_bytes": 105927616,
+    "boundary": "No target download needed before frozen author predictions. Predictions receive only prepared input H5 and selected source checkpoint. Operator scorer separately reads targets after submission SHA256 freeze. Process separation and explicit mount contract, not an OS sandbox claim. Target arrays, weights, predictions and raw data never committed.",
+    "training": "Author training auto-selects on local targets; do not call author training and do not place test targets in author tree or public input tree."
+  },
+  "native_stages": [
+    "Prepare complete train/val/test source tensors and verify all shapes/index hashes.",
+    "Load both exact checkpoints, capture metadata and state-dict key/shape compatibility.",
+    "Measure original192particle routine on first complete original chunk per arm; this is runtime characterization only, never paper performance.",
+    "Estimate full192x32 complete-panel cost. Proceed within cumulative budget only, or request justified extension.",
+    "Freeze full predictions then score original public targets with original scorer. If full panel infeasible, deliver real prepared inputs/checkpoint validation/runtime estimate and executable full path without claiming baseline score."
+  ],
+  "budget": {
+    "initial_acquisition_bytes": 3221225472,
+    "minimum_free_disk_bytes": 64424509440,
+    "max_threads": 6,
+    "max_ram_bytes": 8589934592,
+    "exclusive_native_job": true,
+    "cumulative_cpu_seconds": 7200,
+    "include_failed_and_interactive_attempts": true,
+    "no_paid_apis": true,
+    "no_new_model_training_or_search": true
+  },
+  "packaging_only_changes": [
+    "Explicit source/model/input/output paths",
+    "Pass actual CPU device instead of hardcoded CUDA at entrypoint",
+    "Select test split explicitly, not config default val",
+    "Import compatible SciPy Gaussian alias if needed; exact nlb_tools tensor/scorer functions preserved",
+    "Record current local dependency versions; no claim original CUDA environment equivalence."
+  ],
+  "known_source_limits": [
+    "Both arms use smooth=False; noncausal denotes proposal encoder.",
+    "Paper causal proposal uses reflect padding near initial boundary, so it is not a strict zero-lookahead deployment claim.",
+    "Original load_model silently discards extra checkpoint keys; preflight must detect and report extras/missing/shapes."
+  ]
+}

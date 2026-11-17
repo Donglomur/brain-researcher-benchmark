@@ -1,0 +1,44 @@
+{
+  "schema": "smc_scientific_contract_v1",
+  "id": "PAPER-SMC-RNN-2024",
+  "title": "Inferring stochastic low-rank recurrent neural networks from neural data",
+  "publication_year": 2024,
+  "venue": "NeurIPS",
+  "paper_url": "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf",
+  "goal": "Surpass both matching original SMC-RNN Table 2 arms on the complete standard MC_Maze 20ms test endpoint. Reproduction is calibration, never success.",
+  "panel": "Complete MC_Maze standard source-defined test split,137held-in/45held-out neurons,35observation bins+10forward bins;108source condition universe, all original scored groups preserved.",
+  "arms": [
+    "paper_causal_proposal",
+    "paper_noncausal_proposal"
+  ],
+  "primary_metric": "co-bps",
+  "companion_metrics": [
+    "vel R2",
+    "psth R2",
+    "fp-bps"
+  ],
+  "source_selection": "Original selected30models using validationco-bps. Qualification uses supplied selected36D checkpoints only; no newtraining/search.",
+  "source_inference": "192particles,32averagedrepeats,smoothFalse,botharms,originaltrain/all182neuronlikelihood vs test137held-inlikelihood.",
+  "allowed_candidate_methods": "With a fixed method fitted only on permitted training/validation information and fixed data-independent randomness, test observation-bin t (zero-based0..34) may depend only on the same trial held-in prefix0..max(t,13) for the causal-proposal arm and0..min(t+17,34) for the source-matched noncausal-proposal arm. Forward bins35..44 may use all35observed bins, never future spikes or test behavior. No test-wide fitting, normalization, adaptation or other test-trial information may bypass these bounds. Any architecture is allowed; the causal reflect-padding startup is not strictly online.",
+  "success_requirements": [
+    "Qualify originalsource baseline and dataset/checkpoint linkage first.",
+    "Freeze candidate method/selection and exact exposure before final scoring.",
+    "Qualify and enforce matching per-output temporal observation access for each arm before any candidate final evaluation.",
+    "Improve sourceprimary endpoint under prespecified replicateduncertainty policy, preserving all companionmetrics and prespecifiednon-regressioncriteria.",
+    "Each causal-proposal and noncausal-proposal arm must independently exceed the stronger matching published or qualified reproduced author baseline under the frozen effect and uncertainty rule. No overall paper win if either arm fails.",
+    "Report completecausal/noncausal strata; no winningarm cherry-pick, andno noncausal result credited to causalclaim.",
+    "Publish aggregate evidence only; originaltestpanelpubliclyexposedJan2026 cannotbe calleduntouched."
+  ],
+  "not_claimed": [
+    "Numerical reproduction",
+    "Scientific improvement",
+    "Current SOTA",
+    "All paperfiguresreproduced",
+    "Strict online inference",
+    "Independent heldoutgeneralization"
+  ],
+  "status": "source_engineering_in_progress",
+  "admission_scope": "New independent paperidentity, no overwrittenhistoricaltask. Integrationowner controlsregistration andreadiness; usablecode doesnot implyimprovement_ready.",
+  "implementation": "implementations/source-matched-nlb-v1",
+  "temporal_access_enforcement": "Temporal-access enforcement is unqualified: complete-array H5 delivery and an arm label do not enforce the source information bounds. Both-arm admission requires a reviewed execution boundary exposing only permitted prefixes, or an equivalent enforceable boundary with fixed model/randomness and audit evidence. Unrestricted full-window output cannot qualify the causal arm; broadening noncausal access is a distinct offline-access policy."
+}

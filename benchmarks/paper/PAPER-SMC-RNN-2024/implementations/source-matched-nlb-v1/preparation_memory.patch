@@ -1,0 +1,62 @@
+--- original/nwb_interface.py::__init__
++++ memory-bounded/nwb_interface.py::__init__
+@@ -53,6 +53,7 @@
+                 datas, trial_infos, descriptions, bin_widths = [
+                     list(out) for out in zip(*loaded)
+                 ]
++                del loaded
+                 assert np.all(
+                     np.array(bin_widths) == bin_widths[0]
+                 ), "Bin widths of loaded datasets must be the same"
+@@ -89,6 +90,7 @@
+                 ).reset_index(drop=True)
+                 self.descriptions = descriptions_full
+                 self.bin_width = bin_widths[0]
++                del datas
+                 new_index = pd.to_timedelta(
+                     (
+                         np.arange(
+--- original/nwb_interface.py::load
++++ memory-bounded/nwb_interface.py::load
+@@ -132,6 +132,9 @@
+             else [np.full(len(units), True)]
+         )
+ 
++        if _smc_selection['ids'] is not None:
++            masks = [mask & np.isin(units.index, _smc_selection['ids']) for mask in masks]
++
+         for mask, name in zip(masks, ["spikes", "heldout_spikes"]):
+             # Check if there are any units
+             if not np.any(mask):
+@@ -171,6 +174,7 @@
+ 
+         # Assign time-varying data to `self.data`
+         data = pd.concat(data_list, axis=1)
++        del data_list, data_dict, spike_arr, val
+         data.index.name = "clock_time"
+         data.sort_index(axis=1, inplace=True)
+ 
+--- original/make_tensors.py::_make_psth
++++ memory-bounded/make_tensors.py::_make_psth
+@@ -42,16 +42,14 @@
+     tuple
+         Tuple containing PSTHs and various related information
+     """
+-    # Reload dataset and smooth spikes
+-    bin_width = dataset.bin_width
++    # Complete columns, full original time axis, same native smoothing/resampling.
+     ti = dataset.trial_info
+     neur = dataset.data[['spikes', 'heldout_spikes']].columns
+-    dataset = NWBDataset(dataset.fpath, dataset.prefix, skip_fields=['force', 'hand_pos', 'hand_vel', 'finger_pos', 'finger_vel', 'eye_pos', 'cursor_pos', 'muscle_len', 'muscle_vel', 'joint_ang', 'joint_vel'])
++    dataset = _smc_bounded_dataset(dataset.fpath, dataset.prefix,
++        skip_fields=['force', 'hand_pos', 'hand_vel', 'finger_pos', 'finger_vel', 'eye_pos', 'cursor_pos', 'muscle_len', 'muscle_vel', 'joint_ang', 'joint_vel'],
++        bin_width=dataset.bin_width, kern_sd=kern_sd)
+     dataset.trial_info = ti
+-    dataset.data = dataset.data.loc[:, neur]
+-    dataset.smooth_spk(kern_sd, signal_type=['spikes', 'heldout_spikes'], overwrite=True, ignore_nans=True)
+-    if bin_width != 1:
+-        dataset.resample(bin_width)
++    dataset.data = dataset.data.loc[:, neur].sort_index(axis=1)
+ 
+     # Make mask for valid trials to skip for PSTH calculation
+     if skip_mask is not None:
