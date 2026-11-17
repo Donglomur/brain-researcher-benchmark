@@ -21,7 +21,9 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 spec = importlib.util.spec_from_file_location("_paper_source_integrity", ROOT / "src/neurobench/source_integrity.py")
 integrity = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(integrity)
+integrity_source = ROOT / "src/neurobench/source_integrity.py"
+# A freshness check must not create bytecode files even without Python's -B flag.
+exec(compile(integrity_source.read_bytes(), str(integrity_source), "exec"), integrity.__dict__)
 CURRENT = "benchmarks/integrity/current.json"
 CLOSURES = "benchmarks/integrity/current-closures"
 WORKFLOWS = (".github/workflows/construction-benchmark-components.yml",

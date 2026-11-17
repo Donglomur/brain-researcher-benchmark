@@ -5,7 +5,9 @@ import importlib.util
 import json
 import os
 from pathlib import Path
+import runpy
 import shutil
+import sys
 import tempfile
 import unittest
 from unittest import mock
@@ -276,6 +278,19 @@ class SourceIntegrityTests(unittest.TestCase):
             (self.root / name).write_bytes(body)
         self.assertEqual(refresh.build_outputs(self.root), ({}, []))
         self.assertEqual(checker.check(self.root)["status"], "source_integrity_passed")
+
+    def test_refresh_import_writes_no_bytecode_without_interpreter_flag(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            helper = root / "scripts/maintenance/refresh_paper_integrity.py"
+            source = root / "src/neurobench/source_integrity.py"
+            helper.parent.mkdir(parents=True)
+            source.parent.mkdir(parents=True)
+            helper.write_bytes(REFRESH.read_bytes())
+            source.write_bytes(CHECKER.read_bytes())
+            with mock.patch.object(sys, "dont_write_bytecode", False):
+                runpy.run_path(str(helper), run_name="read_only_helper_import")
+            self.assertFalse(list(root.rglob("__pycache__")))
 
     def test_refresh_refuses_stale_closure_and_workflow_pins(self):
         self.make_paper_revision()
