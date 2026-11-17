@@ -9,7 +9,7 @@ not a leaderboard of completed scientific evaluations.
 | Original specifications | 200 | 100 paper and 100 neural |
 | Expansion drafts | 34 | 16 paper and 18 neural |
 | Registered task entries | 234 | 116 paper and 118 neural; explicit specification aliases remain visible |
-| Implementation/source relationships | 286 | Ownership records for retained task and shared source, not runnable-task counts |
+| Implementation/source relationships | 290 | Ownership records for task and shared source, not runnable-task counts |
 | Qualified across complete scientific contracts | Unknown | No complete verified total has been established |
 
 The [registry](../../benchmarks/registry.json) is authoritative for current physical
@@ -17,6 +17,27 @@ locations and task relationships. Its source-base counters also retain 95 histor
 runtime declarations and 73 component-lineage entries. Those are different,
 overlapping inventories and must not be added to the task count or treated as
 current execution qualification.
+
+## Current construction work
+
+Four new components extend existing tasks: complete-support Helsinki EEG scoring
+and causal packets, vestibular condition scoring, matched laser-EEG evidence
+packets, and empirical iSTTC four-estimator fit production. The
+[construction component guide](../usage/construction-components.md) gives their
+interfaces, generated test commands and required external inputs.
+
+These are implemented source capabilities with generated-data checks and
+independent source review. They add no task IDs or qualified scientific results.
+Authentic source normalization, reference competence, controlled execution and
+empirical agreement still require evidence specific to each task. A small iSTTC
+check called the pinned author helpers on invented spikes; it establishes limited
+interface compatibility, not paper reproduction.
+
+The same update repairs malformed-input handling in the cardiac scorer, enforces
+the existing EEG trial-ID length limit, and restores REP012's exact public scoring
+dependency. REP012's protected reference remains unavailable. The CLI's
+`implementations TASK_ID` command now resolves package paths and scope limits
+without executing them.
 
 ## What the reorganization establishes
 
@@ -37,7 +58,7 @@ or qualification follows from a directory move.
 ## Evidence and limits
 
 The [repository checker](../development/source-integrity.md) covers the declared
-ownership and layout of 286 artifacts; the separate source-integrity checker
+ownership and layout of 290 artifacts; the separate source-integrity checker
 verifies 222 files against recorded pins in four enrolled bundles. These are software/source
 coverage counts. They are not completed scientific evaluations.
 

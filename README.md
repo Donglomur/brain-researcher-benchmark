@@ -34,6 +34,7 @@ cd brain-researcher-benchmark
 python3 -I -S -B scripts/neurobench.py list --track paper
 python3 -I -S -B scripts/neurobench.py list --track neural
 python3 -I -S -B scripts/neurobench.py show PAPER-FIND-050
+python3 -I -S -B scripts/neurobench.py implementations PAPER-FIND-050
 python3 -I -S -B scripts/neurobench.py status
 ```
 

@@ -49,7 +49,7 @@ def evaluate(core, submission, reference, expected_reference):
         core.validate(candidate)
         core.need(candidate["input_sha256"] == INPUT_SHA256,
                   "original Salzburg CSV fingerprint required")
-    except (ValueError, UnicodeError, OSError) as error:
+    except (ValueError, UnicodeError, OSError, RecursionError) as error:
         return {"status": "invalid_submission", "submission_valid": False,
                 "reason": str(error), "metrics": None,
                 "private_numeric_reference_loads": 0,

@@ -60,6 +60,30 @@ def public_summary(catalog):
             'counting_note': catalog['counting_note']}
 
 
+def public_implementations(catalog, task):
+    """Resolve declared source relationships without importing implementations."""
+    artifacts = {record['id']: record for record in catalog['implementations']}
+
+    def sources(identifiers):
+        return [
+            {**{key: artifacts[identifier][key] for key in
+                ('id', 'path', 'role', 'scope', 'owner_ids', 'scope_notes')},
+             'related_task_ids': artifacts[identifier].get('related_task_ids', []),
+             'declared_source_status': artifacts[identifier].get('status'),
+             'scientific_readiness': 'unknown'}
+            for identifier in identifiers
+        ]
+
+    return {**{key: task[key] for key in ('id', 'title', 'track', 'task_directory',
+                                         'scientific_readiness', 'submission_readiness')},
+            'implementations': sources(task['implementation_ids']),
+            'related_sources': sources(task['related_implementation_ids']),
+            'documentation': task.get('documentation', []),
+            'interpretation': 'Explicit source assignments and related scientific sources. '
+                              'Presence does not establish complete task coverage or execution readiness. '
+                              'No implementation code, data or verification receipts were opened.'}
+
+
 def public_metadata_command(action, root, *, track=None, task_id=None):
     builder = public_catalog_module()
     catalog = builder.generate(root, check=True) if action == 'check' else builder.load(root)
@@ -78,10 +102,13 @@ def public_metadata_command(action, root, *, track=None, task_id=None):
     row = next((row for row in catalog['tasks'] if row['id'] == task_id), None)
     if row is None:
         raise ValueError('Specification not yet built for ' + str(task_id))
+    source_view = public_implementations(catalog, row)
+    if action == 'implementations':
+        return source_view
     return {'specification': read(builder.public_path(Path(root), row['specification']['path'])),
             'runtime': read(builder.public_path(Path(root), row['runtime_manifest']['path']))
                        if row['runtime_manifest'] else None,
-            'catalog_entry': row}
+            'catalog_entry': row, 'sources': source_view}
 
 
 def read(path):
@@ -360,7 +387,8 @@ def score_command(task_id, submission, output, root=ROOT, *, review=None, other_
         raise ValueError('Unknown canonical task')
     runtime = runtime_manifests(root)
     if task_id not in runtime:
-        raise ValueError('No local scoring adapter is implemented for ' + task_id)
+        raise ValueError('No local scoring adapter is registered for this command and task: ' + task_id
+                         + '. Use implementations ' + task_id + ' to inspect available source.')
     path, doc = runtime[task_id]
     if not verified_runtime(path, doc, root):
         raise ValueError('Scoring adapter has not passed its reference/negative checks')
@@ -415,7 +443,8 @@ def run_command(task_id, program, output, root=ROOT, *, review=None, other_reser
         raise ValueError('Unknown canonical task')
     runtime = runtime_manifests(root)
     if task_id not in runtime:
-        raise ValueError('No local program runner is implemented for ' + task_id)
+        raise ValueError('No local program runner is registered for this command and task: ' + task_id
+                         + '. Use implementations ' + task_id + ' to inspect available source.')
     path, doc = runtime[task_id]
     if not verified_program_runtime(path, doc, root):
         raise ValueError('Program runner has no separate passing qualification; score verification is insufficient')
@@ -458,6 +487,8 @@ def main(argv=None, root=None):
     subs.add_parser('check')
     p = subs.add_parser('list'); p.add_argument('--track', choices=['paper', 'neural'])
     p = subs.add_parser('show'); p.add_argument('id')
+    p = subs.add_parser('implementations', help='Show current source paths, roles and limits for a task')
+    p.add_argument('id')
     p = subs.add_parser('score'); p.add_argument('id'); p.add_argument('--submission', required=True)
     p.add_argument('--output', required=True); p.add_argument('--dry-run', action='store_true')
     p.add_argument('--review'); p.add_argument('--other-reserve-bytes', type=int)
@@ -465,7 +496,7 @@ def main(argv=None, root=None):
     p.add_argument('--output', required=True); p.add_argument('--dry-run', action='store_true')
     p.add_argument('--review'); p.add_argument('--other-reserve-bytes', type=int)
     args = parser.parse_args(argv)
-    if args.action in ('status', 'check', 'list', 'show') and public_metadata_mode(root):
+    if args.action in ('status', 'check', 'list', 'show', 'implementations') and public_metadata_mode(root):
         result = public_metadata_command(args.action, root, track=getattr(args, 'track', None),
                                          task_id=getattr(args, 'id', None))
     else:

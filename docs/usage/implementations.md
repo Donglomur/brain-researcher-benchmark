@@ -9,10 +9,16 @@ relationships; it is not a claim that every registered source package is ready t
 ```sh
 python3 -I -S -B scripts/neurobench.py show NEURAL-030
 python3 -I -S -B scripts/neurobench.py show PAPER-FIND-050
+python3 -I -S -B scripts/neurobench.py implementations PAPER-FIND-050
 ```
 
 Run these metadata commands from the repository root. A task may have retained
 predecessors, alternate scientific scopes or several implementation components.
+The compact `implementations` view resolves current package paths, roles and scope
+limits, including programmes without a legacy runtime registration. Assigned
+implementations and related scientific sources are listed separately. `show`
+includes the same view alongside the task definition. These commands inspect
+metadata without importing implementation code or opening datasets or receipts.
 Use the package matching the selected task contract and access condition; ownership
 alone does not select a new scientifically preferred route. The
 [shared-source index](../../benchmarks/shared/README.md) distinguishes multi-task

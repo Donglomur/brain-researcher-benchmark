@@ -22,6 +22,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Full assay scorer](implementations/full-assay-scorer) — Full assay scorer.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Condition packets](implementations/condition-packets) — Condition packet producer.
+  Scope: Complete normalized 678-person/nine-experiment evidence-packet producer, target-blind support selection, transitive person/alias purging and matched A/B/C packet bytes. Native source normalization, identity linkage, real tokenizer capacity and execution isolation remain unqualified; no scientific result.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

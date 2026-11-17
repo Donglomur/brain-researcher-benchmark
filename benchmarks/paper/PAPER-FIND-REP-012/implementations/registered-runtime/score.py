@@ -21,7 +21,7 @@ import stat
 import types
 
 INSTALLED = 'benchmarks/paper/PAPER-FIND-REP-012/implementations/registered-runtime/score.py'
-FACADE = 'authoring/compartment-plasticity-v1/bounded-task-v1/score.py'
+FACADE = 'benchmarks/paper/PAPER-FIND-REP-012/implementations/pooled-associations/artifact_io.py'
 FACADE_PIN = (5699, 'a8cad32aeb96b319dbe360c913aea8433840a65d72c8667d48aa52f94269270a')
 REFERENCE = 'artifacts-build/compartment-bounded-preparation-001/scientific/private_expected.json'
 REFERENCE_PIN = {'bytes':1976, 'sha256':'1f3c61c9286b0e3df7825a10eb878d8711d974a70d38e4a2d0a6dad90004b898'}

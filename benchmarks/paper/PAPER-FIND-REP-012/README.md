@@ -22,7 +22,7 @@ This preserved declaration is lineage, not current execution qualification. Its 
 ## Implementation artifacts
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
-  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. This retained scoring facade requires 2 source or input dependencies absent from the public baseline. Correcting its repository locator does not make it runnable from this checkout alone. This limit does not apply automatically to sibling implementations of the task.
+  Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Its scoring bridge now resolves the exact pinned public facade and sibling numerical core. The fixed protected reference remains absent from this checkout, so the restored source dependency does not make this route independently runnable. This limit does not apply automatically to sibling implementations of the task.
 - [Rep012 portable](implementations/rep012-portable) — Task implementation source.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Matched paper packets](implementations/matched-paper-packets) — Matched paper packets.

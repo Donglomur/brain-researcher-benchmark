@@ -20,7 +20,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-No implementation artifact is explicitly assigned to this task in the current registry.
+- [Condition evaluator](implementations/condition-evaluator) — Condition evaluator.
+  Scope: Complete normalized animal-by-condition evaluator with equal-repeat then equal-group MSE, frozen training-only prior comparison and separate singleton diagnostics. Authentic identities, clocks, masks, prior provenance/competence and protected execution remain external requirements; no scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
