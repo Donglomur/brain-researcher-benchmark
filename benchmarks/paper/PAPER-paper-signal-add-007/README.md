@@ -51,6 +51,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Calibration only.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original inputs v1](implementations/original-inputs-v1) — Reviewed source component.
+  Scope: Original four-sound/two-trial MAT input and probability-to-count bridge retains the authenticated 3476-unit CF mask and existing equations 3–5 scorer. Complete source files were authenticated separately; authentic numerical preparation, sound/context alignment, author inference, reference competence and protected paper-condition execution remain unestablished.
 - [Source equations v1](implementations/source-equations-v1) — Reviewed source component.
   Scope: ICNet original Fig. 4 source-equation scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

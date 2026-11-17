@@ -34,7 +34,9 @@ source versions, dataset and cohort, split, permitted inputs, preprocessing,
 evaluation and aggregation. A convenient subset or changed endpoint cannot be
 reported as reproduction of the larger result.
 
-The agreement rule must be justified for that source result before evaluating
+Reproduction may report original metrics, reference values and discrepancies
+continuously, without a binary pass or equivalence claim. Any binary agreement or
+equivalence rule must be justified for that source result before evaluating
 submissions. Numerical precision, stochastic variation, independent experimental
 units and the paper's aggregation may matter; no universal tolerance or success
 threshold is introduced here. The source result and its uncertainty must be
@@ -155,6 +157,9 @@ execution paths; unsupported modes must remain visible.
 reproduction declaration where one is bound; `paper-outcomes TASK_ID` reports the
 current paired-outcome metadata and remaining limits. `paper-contract TASK_ID`
 inspects the selected current improvement contract where available.
+SMC-RNN selects a continuous policy for both outcomes: complete original metrics
+and reference discrepancies are reported without binary reproduction or improvement
+decisions. Its historical policies and calibration evidence remain preserved.
 These commands do not establish a reproduced finding or candidate improvement.
 Historical paper `score` and `run` adapters still require `--calibration`; their
 results do not automatically become qualified reproductions or improvements.

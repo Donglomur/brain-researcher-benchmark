@@ -96,11 +96,15 @@ def primary_paper_disposition(row, outcome):
     binding = row.get('paper_outcomes', {})
     if binding.get('availability') == 'unavailable':
         return 'unavailable'
+    if binding.get('continuous_outcomes_v1') is not None:
+        return 'continuous_measurement'
     if source_declaration_gap(binding):
         return ('source_declaration_unavailable' if outcome == 'reproduction'
                 else binding['improvement_disposition'])
     if outcome == 'reproduction':
-        return binding.get('reproduction_eligibility', 'not bound')
+        disposition = binding.get('reproduction_eligibility', 'not bound')
+        need(type(disposition) is str, 'Reproduction eligibility requires an explicit assessment mode')
+        return disposition
     if binding.get('primary_policy_revision') is not None:
         need(type(binding.get('improvement_disposition')) is str, 'Selected primary policy requires its current disposition')
         return binding['improvement_disposition']
@@ -587,6 +591,9 @@ def discover(root=ROOT):
             if bound_outcomes.get('primary_policy_revision') is not None:
                 task['paper_improvement']['role'] = RETAINED_POLICY_ROLE
                 task['runtime_lineage_note'] = (
+                    'The current source interface measures both outcomes continuously; retained policies and author-source routes '
+                    'preserve their original scopes. Participant results are not attempted.'
+                    if bound_outcomes.get('continuous_outcomes_v1') is not None else
                     'The selected offline candidate and retained author-source routes are separate source interfaces; '
                     'their metadata does not establish execution or scientific qualification.'
                     if bound_outcomes['candidate_interface'] is not None else
@@ -684,6 +691,12 @@ def source_links(catalog):
             if correction is not None:
                 yield correction['root_scope_decision']['path']
             outcomes = row['paper_outcomes']
+            continuous = outcomes.get('continuous_outcomes_v1')
+            if continuous is not None:
+                for field in ('policy', 'entrypoint', 'revision'):
+                    yield continuous[field]['path']
+                for field in ('task', 'reproduction', 'improvement', 'outcomes', 'revision'):
+                    yield continuous['retained_temporal'][field]['path']
             if outcomes.get('primary_policy_revision') is not None:
                 for field in ('improvement_contract', 'retained_improvement_contract', 'primary_policy_revision'):
                     yield outcomes[field]['path']
@@ -794,7 +807,8 @@ def validate(catalog, root=ROOT, *, _reader=None):
              and row['local_scoring_adapter_verified'] is None
              and row['local_program_runner_verified'] is None, 'Catalog must not manufacture task qualification')
         outcomes = row.get('paper_outcomes')
-        successor_fields = set(PRIMARY_SUCCESSOR_PUBLIC_FIELDS) & set(outcomes) if type(outcomes) is dict else set()
+        successor_fields = ((set(PRIMARY_SUCCESSOR_PUBLIC_FIELDS) | {'continuous_outcomes_v1'}) & set(outcomes)
+                            if type(outcomes) is dict else set())
         if row['id'] in gap_ids:
             successor_fields.discard('improvement_disposition')
         gap_claim = type(outcomes) is dict and (source_declaration_gap(outcomes)
@@ -967,6 +981,9 @@ def paper_count_text(catalog):
     successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None for row in catalog['tasks'])
     scope_successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
                                 and row['paper_outcomes']['candidate_interface'] is None for row in catalog['tasks'])
+    continuous_count = sum(row.get('paper_outcomes', {}).get('continuous_outcomes_v1') is not None
+                           for row in catalog['tasks'])
+    temporal_successor_count = successor_count - scope_successor_count - continuous_count
     dual_text = ''
     if outcomes['covered']:
         eligibility = ', '.join(f"{count} {status.replace('_', ' ')}"
@@ -989,17 +1006,25 @@ def paper_count_text(catalog):
             dual_text += (f"Source-grounded reproduction declarations and matched paired protocols are not adopted for **{outcomes['source_declaration_unavailable']} tasks**. "
                           'Their existing improvement contracts remain independently inspectable under their original criteria. '
                           'Missing declarations do not imply scientific ineligibility, paired access, or completed outcomes.\n\n')
+        if continuous_count:
+            dual_text += (f"**{continuous_count} task** declares continuous measurements for both paper outcomes, without binary eligibility or pass thresholds. "
+                          'Matched episode protocols remain uninstantiated and participant results are not attempted; '
+                          'an AI attempt is not required for benchmark construction.\n\n')
         if successor_count:
             dispositions = ', '.join(f"{count} {status.replace('_', ' ')}"
                                       for status, count in outcomes['improvement_disposition'].items())
             dual_text += 'Current primary improvement dispositions: ' + dispositions + '. '
-            if successor_count > scope_successor_count:
+            if temporal_successor_count:
                 dual_text += ('For the revised SMC task, the old contract remains an author-source policy; '
                               'the selected contract defines the candidate interface.')
             if scope_successor_count:
-                dual_text += (' ' if successor_count > scope_successor_count else '')
+                dual_text += (' ' if temporal_successor_count else '')
                 dual_text += ('For the reviewed scope-policy selections, the current primary policy governs improvement; '
                               'predecessor policies remain preserved with their original source scope. Runtime routes are not declared by those policy records.')
+            if continuous_count:
+                dual_text += (' ' if temporal_successor_count or scope_successor_count else '')
+                dual_text += ('For SMC, the shared continuous policy governs both current outcomes; '
+                              'the original and temporal policies remain retained source history.')
             dual_text += '\n\n'
     audit_label = 'Retained registration-policy audit' if successor_count else 'Current paper-improvement contract audit'
     return dual_text + (f"{audit_label}: **{counts['covered']}/{counts['registered']} covered**; "
@@ -1281,8 +1306,15 @@ def render_tracks(catalog):
                 outcomes = row['paper_outcomes']
                 unavailable = outcomes.get('availability') == 'unavailable'
                 gap = source_declaration_gap(outcomes)
+                continuous = outcomes.get('continuous_outcomes_v1')
                 text += '## Separate paper outcomes\n\n'
-                if gap:
+                if continuous is not None:
+                    text += ('Both first-class outcomes use continuous fixed-panel measurements under the same typed policy. '
+                             'Reproduction reports both original source methods and all eight findings; improvement reports one complete offline four-metric vector '
+                             'with separate reference differences. No binary reproduction or improvement pass is assigned.\n\n'
+                             '**Matched episode protocol:** Not instantiated. **Participant results:** Not attempted. '
+                             'An AI attempt is not required for benchmark construction; actual bound materials and matched episode settings remain separate requirements.\n\n')
+                elif gap:
                     text += ('Reproduction is a first-class goal, but its source-grounded declaration and matched paired protocols have not been adopted. '
                              'The unchanged improvement contract remains independently inspectable under its original criteria. '
                              'All scientific outcomes remain unknown.\n\n'
@@ -1325,9 +1357,31 @@ def render_tracks(catalog):
                 if outcomes.get('primary_policy_revision') is not None:
                     candidate = outcomes['candidate_interface']
                     author = outcomes['author_reproduction_routes']
-                    text += ('### Current primary improvement policy\n\n'
-                             '**Disposition:** ' + markdown_text(outcomes['improvement_disposition']) + '.\n\n')
-                    if candidate is None:
+                    text += ('### Current continuous measurement policy\n\n' if continuous is not None else
+                             '### Current primary improvement policy\n\n')
+                    text += '**Disposition:** ' + markdown_text(outcomes['improvement_disposition']) + '.\n\n'
+                    if continuous is not None:
+                        text += ('- ' + markdown_link('Shared reproduction and improvement policy', continuous['policy']['path'], task) + '\n'
+                                 '- ' + markdown_link('Authenticated continuous revision', continuous['revision']['path'], task) + '\n'
+                                 '- ' + markdown_link('Reviewed task amendment', outcomes['primary_policy_provenance']['amendment']['path'], task) + '\n'
+                                 '- ' + markdown_link('Continuous operator entrypoint', continuous['entrypoint']['path'], task)
+                                 + ': ' + ', '.join('`' + command + '`' for command in continuous['operator_entrypoint']['commands']) + '.\n\n'
+                                 + markdown_text(candidate['selection_limit']) + '\n\n'
+                                 '### Retained pre-continuous policies\n\n'
+                                 'These policies and the archived task preserve their prior scope; they do not impose binary thresholds on current continuous measurements.\n\n')
+                        retained = continuous['retained_temporal']
+                        for field, label in (('task', 'Pre-continuous task'), ('reproduction', 'Retained reproduction policy'),
+                                             ('improvement', 'Retained temporal improvement policy'),
+                                             ('outcomes', 'Retained outcome binding'), ('revision', 'Retained temporal revision')):
+                            text += '- ' + markdown_link(label, retained[field]['path'], task) + '\n'
+                        text += ('\n### Retained author-source reproduction routes\n\n'
+                                 + ', '.join(markdown_text(recipe) for recipe in author['recipes']) + '. '
+                                 + markdown_text(author['selection_limit']) + '\n\n'
+                                 '| Author source | Selector |\n| --- | --- |\n')
+                        for field in ('delivery', 'scorer', 'protocol'):
+                            text += '| ' + readable_label(field) + ' | ' + markdown_link(author[field]['path'].split('/')[-1], author[field]['path'], task) + ' |\n'
+                        text += '\n'
+                    elif candidate is None:
                         text += ('The reviewed current policy selects the primary scientific scope. '
                                  'Runtime routes are not declared by this policy metadata.\n\n'
                                  '- ' + markdown_link('Selected current improvement contract', outcomes['improvement_contract']['path'], task) + '\n'
@@ -1351,7 +1405,7 @@ def render_tracks(catalog):
                         for field in ('delivery', 'scorer', 'protocol'):
                             text += '| ' + readable_label(field) + ' | ' + markdown_link(author[field]['path'].split('/')[-1], author[field]['path'], task) + ' |\n'
                         text += '\nBoth source routes remain scientifically unknown; these selectors do not authorize execution.\n\n'
-                if outcomes.get('reproduction_contract') is not None:
+                if outcomes.get('reproduction_contract') is not None and continuous is None:
                     text += ('- ' + markdown_link('Reproduction proposal (inspection only)' if unavailable else
                                                  'Original-finding reproduction contract',
                                                  outcomes['reproduction_contract']['path'], task) + '\n')
@@ -1361,11 +1415,18 @@ def render_tracks(catalog):
                                                  outcomes['root_scope_decision']['path'], task) + '\n')
                 if gap:
                     text += '- ' + markdown_link('Source declaration gap record', outcomes['source_declaration_gap']['path'], task) + '\n'
-                else:
+                elif continuous is None:
                     text += ('- ' + markdown_link('Primary-outcome unavailability record' if unavailable else
                                                   'Paired outcome protocols', outcomes['outcomes']['path'], task) + '\n')
                 text += '- ' + markdown_link('Preserved definition before dual outcomes', outcomes['previous_specification']['path'], task) + '\n\n'
-                if gap:
+                if continuous is not None:
+                    text += ('| Outcome | Information condition | Assessment | Episode protocol | Participant result |\n'
+                             '| --- | --- | --- | --- | --- |\n')
+                    for cell in outcomes['cells']:
+                        text += ('| ' + markdown_text(readable_label(cell['outcome'])) + ' | '
+                                 + markdown_text(readable_label(cell['condition']))
+                                 + ' | Continuous measurement | Not instantiated | Not attempted |\n')
+                elif gap:
                     text += ('| Outcome | Information condition | Paired protocol | Scientific outcome |\n'
                              '| --- | --- | --- | --- |\n')
                     for cell in outcomes['cells']:
@@ -1386,7 +1447,11 @@ def render_tracks(catalog):
             if row.get('paper_improvement'):
                 improvement = row['paper_improvement']
                 if improvement.get('role') == RETAINED_POLICY_ROLE:
-                    if row['paper_outcomes']['candidate_interface'] is None:
+                    if row['paper_outcomes'].get('continuous_outcomes_v1') is not None:
+                        text += ('## Retained original registration policy\n\n'
+                                 'This original contract preserves its registration scope. The shared continuous policy above governs both current outcomes; '
+                                 'this retained audit does not set current measurement thresholds.\n\n')
+                    elif row['paper_outcomes']['candidate_interface'] is None:
                         text += ('## Retained predecessor improvement policy\n\n'
                                  'This original contract preserves the predecessor scientific instructions and source scope. '
                                  'The selected primary policy above governs current improvement.\n\n')

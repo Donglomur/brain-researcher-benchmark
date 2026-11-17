@@ -72,6 +72,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Original endpoint metrics v1](implementations/original-endpoint-metrics-v1) — Reviewed source component.
   Scope: Original spinal-calcium endpoint metrics. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
+- [Source condition primitives v1](implementations/source-condition-primitives-v1) — Reviewed source component.
+  Scope: Complete 44-neuron/132-recording source admission and the root-adopted current-source bank have one authenticated preparation:116 recordings prepared and16 explicitly unavailable because native noise exceeds the requested level. No model or scientific scoring ran. The existing full132-record metric route still refuses this incomplete condition; historical alignment/noise scope, cortical scope, qualified comparisons and protected participant delivery remain separate.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

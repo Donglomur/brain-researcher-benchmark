@@ -98,6 +98,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Nested connectivity v1](implementations/nested-connectivity-v1) — Calibration only.
   Scope: Conditional 246-feature nested participant-held-out classifier with training-only standardization and complete supplied-protocol support. Canonical feature eligibility, source/cohort/correction joins, upstream functional-connectivity extraction, the matched nuisance comparison, competent references, protected execution and whole-task scientific qualification remain held. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original feature producer v1](implementations/original-feature-producer-v1) — Reviewed source component.
+  Scope: Complete original 94-person input producer has authenticated preparation of94 files,376 windows and1,504,000 finite values. The source four-ROI normalization, six-pair DBA route and ten-fold classifier connect the retained scorer; generated controls use an analytic DBA seam. No native DBA, feature extraction, classifier fit or scientific score ran. Historical release/order/folds and full-precision reference calibration remain unresolved.
 - [Original fold score v1](implementations/original-fold-score-v1) — Reviewed source component.
   Scope: Original MEG stimulus-decoding accuracy. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

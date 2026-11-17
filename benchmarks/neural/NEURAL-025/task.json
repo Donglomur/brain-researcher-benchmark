@@ -383,13 +383,14 @@
     "inputs": [
       "Primary delivered recipe: 100 training-variance-selected session-local ROI features from smoothed deconvolved events (source neurons.data, 35 ms smoothing SD), 51 samples at 10 ms spacing, no added predictor lags.",
       "Public lift-time grid and left/right reach target are shared with comparators; all fits, cell ranking, centering and 90-component PCA use declared training trials only.",
-      "RADICaL is a separately declared feature track with upstream temporal support at least [-200,+900] ms; it is not silently exchanged with primary features."
+      "RADICaL is a separately declared neurons.radical_rates track with the exact101sample locked output grid -200:10:800 and the same51sample decoder membership. Direct rate selection is not35ms Gaussian smoothing. Actual preprocessing/model input and fitted-trial exposure are separately unknown; the paper/code context discrepancy is preserved. No +900 exported row or +800 full-exposure bound is assumed.",
+      "Each session binds the canonical body of calcium_processed_input_source_condition_v2 in dataset and protocol via upstream_exposure_sha256: locked grids, event resampling request -270:10:870 where applicable, unknown raw dependency, unknown model context and unknown fitted-trial exposure are distinct."
     ],
     "forbidden_inputs": [
       "Held-out kinematic trajectories, evaluation-derived cell selection/PCA/normalization, full-session ZETA selection, answer-bearing filenames and private scorer compound request.",
-      "Any undeclared extra upstream observation window or cross-session ROI correspondence."
+      "Unrecorded feature/source-condition changes, invented model-exposure or upstream-fold-safety receipts, the ambiguous v1 upstream_temporal_support_ms field, or assumed cross-session ROI correspondence. Known unknown upstream exposure is explicitly disclosed, not silently rewritten as the locked output interval."
     ],
-    "case_identity": "Exact normalized session IDs are the ten identities enumerated in SCHEMA.md; original trial IDs must match neural_trial_id and target_trial_id. Native admitted trial census is not yet available.",
+    "case_identity": "Exact ten normalized session IDs remain those enumerated in the preserved v1 schema and v2 source. Original positive trialNumber/order must match neural/kinematic identities and complete raw eligibility with both lock masks; RADICaL additionally requires source R(trialNumber) one-based-position identity. No authentic full native trial census has yet been provisioned.",
     "split": "Implemented prospective within-session split is whole-trial target-stratified SHA256 ranking with seed 240926, 90/10 train/evaluation and upward-rounded evaluation counts; no timepoint split. Five separately declared local-calibration outer cases are optional and are not parameter transfer.",
     "coverage": "All five mice, both named areas/sessions, every selected trial, all 51 time points and all 24 joints required. Exact native eligibility/exclusion counts remain unverified; selected windows do not imply complete reaching behavior ends by +400 ms."
   },
@@ -417,46 +418,56 @@
   },
   "controls": [
     "Train-only cell selection/PCA; original trial-identity equality instead of positional neural/kinematic pairing.",
-    "Fixed same cell and window budgets in M1/S1; source eligibility and upstream exposure must be frozen and disclosed.",
+    "Fixed same cell and decoder-window budgets in M1/S1; exact source eligibility and representation are frozen. Upstream source-condition unknowns remain disclosed separately from known output grids; prospective decoder training does not establish upstream fold safety.",
     "Session-local feature spaces; never infer matched neurons or cross-animal transfer from equal array widths."
   ],
   "access_conditions": {
     "direct_observation": {
-      "status": "not_delivered",
-      "representation": "Proposed numeric calcium matrices and fixed lift grid could support direct complete-trajectory answers; no no-tools context/collector is supplied.",
+      "status": "source_available",
+      "representation": "Source for complete participant numeric calcium/context packets and complete-trajectory numeric responses exists; no no-tools model session or context-budget qualification is supplied.",
       "boundary": "Only public calibration labels and query neural/context values; hold all evaluation kinematics private.",
-      "evidence_ids": [],
+      "evidence_ids": [
+        "v2-participant-delivery",
+        "v2-pipeline"
+      ],
       "missing": [
-        "Complete no-tools observation and response protocol."
+        "Protected no-tools presentation, explicit full-context budget and authentic execution qualification."
       ]
     },
     "typed_viewer": {
-      "status": "not_delivered",
-      "representation": "A source-faithful trace/raster viewer could expose 100-ROI calcium windows; none is supplied.",
+      "status": "source_available",
+      "representation": "Source for typed complete-grid trace selection and SVG rendering exists, with query-target refusal; actual raster/display precision, action budgets and isolated viewer transport remain unqualified.",
       "boundary": "Typed trace selection/rendering must preserve fixed observations without returning target trajectories.",
-      "evidence_ids": [],
+      "evidence_ids": [
+        "v2-participant-delivery",
+        "v2-pipeline"
+      ],
       "missing": [
-        "Renderer, restricted action schema and matched numerical observation budget."
+        "Isolated image-only transport, action/time/display budget and authentic execution qualification."
       ]
     },
     "tool_assisted": {
-      "status": "not_delivered",
-      "representation": "Numerical fit/score functions are operator APIs; a case-adaptive investigator transport is not supplied.",
+      "status": "source_available",
+      "representation": "Source for the same participant packet, typed numerical trace observations and mode-labeled complete responses exists; external investigator tool/checkpoint/compute transport remains unqualified.",
       "boundary": "Proposed equal data, tool/checkpoint and compute access with no private compound scoring request.",
-      "evidence_ids": [],
+      "evidence_ids": [
+        "v2-participant-delivery",
+        "v2-pipeline"
+      ],
       "missing": [
-        "Per-case tool transport and independently protected scorer."
+        "Enforced per-case external tool/checkpoint/compute transport and authentic execution qualification."
       ]
     },
     "frozen_program": {
-      "status": "not_delivered",
-      "representation": "Operator-only numerical source is present: Training-only numerical decoder and complete external-prediction scoring API. This does not deliver a participant-facing frozen program mode.",
+      "status": "source_available",
+      "representation": "Participant-only reference program and complete private response scorer source exist, bound to v2 schemas; no authentic candidate run or process-identity attestation is established.",
       "boundary": "Freeze recipe, eligibility and observation support before evaluation; candidate receives training labels and query neural values only.",
       "evidence_ids": [
-        "implementation-3"
+        "v2-participant-delivery",
+        "v2-pipeline"
       ],
       "missing": [
-        "Candidate runner and authentic-input/protected-execution qualification."
+        "Isolated candidate runner without private labels, executed code/dependency identity and authentic execution qualification."
       ]
     }
   },
@@ -490,7 +501,7 @@
     ],
     "nuisance_controls": [
       "Train-only cell selection/PCA; original trial-identity equality instead of positional neural/kinematic pairing.",
-      "Fixed same cell and window budgets in M1/S1; source eligibility and upstream exposure must be frozen and disclosed.",
+      "Fixed same cell and decoder-window budgets in M1/S1; exact source eligibility and representation are frozen. Upstream source-condition unknowns remain disclosed separately from known output grids; prospective decoder training does not establish upstream fold safety.",
       "Session-local feature spaces; never infer matched neurons or cross-animal transfer from equal array widths."
     ],
     "uncertainty": "Retain five mouse differences and descriptive paired enumeration of all 5^5 ordered mouse bootstrap resamples; five animals do not establish population coverage or a significance threshold.",
@@ -499,7 +510,7 @@
       "schema_version": "neural-understanding/v1",
       "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
       "contract_path": "understanding.v1.json",
-      "contract_sha256": "28293739902cc28de887f092dd2b259ba28e63c79bab4674111d0404f81553a8",
+      "contract_sha256": "c81bdd09ad3a7f95ddf0e3f414cf742ac86cdc8198e51402c1138fe759665bb3",
       "original_definition_path": "historical/task.pre-understanding.v1.json",
       "original_definition_sha256": "4791d12573c04b19cac2f29b849771b363cc0b5463172d6c88af16e747471b33"
     }
@@ -515,11 +526,11 @@
   "holds": [
     {
       "id": "task_specific",
-      "requirement": "Repair author PCA-before-CV; verify syncTime/ROI lag correction and calcium-derived feature provenance."
+      "requirement": "Qualify supplied native clock/ROI correction and calcium-derived feature provenance; the separately named prospective decoder already fits variance selection and PCA on declared training trials only. Authentic reference/control competence remains unverified."
     },
     {
       "id": "source_1",
-      "requirement": "Author decoder PCA precedes CV; do not report it as a valid held-out baseline before repair and qualification."
+      "requirement": "Historical author decoder PCA precedes CV; retain this restriction for any author-parity baseline. The separately named prospective v2 decoder uses train-only fitting and still requires authentic competence qualification; it does not establish author Figure5 reproduction."
     },
     {
       "id": "source_2",
@@ -543,7 +554,7 @@
     },
     {
       "id": "scorer",
-      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      "requirement": "The measured-target evaluator and generated negative/control source exist. Independently qualify scoring, complete-support failure handling and controls on authentic inputs under a protected target boundary and externally frozen protocol."
     },
     {
       "id": "replication",
@@ -551,7 +562,7 @@
     }
   ],
   "next_implementation_action": [
-    "Repair author PCA-before-CV; verify syncTime/ROI lag correction and calcium-derived feature provenance."
+    "Provision and authenticate supported original/locked inputs, verify native grid/trial/ROI and separately recorded exposure provenance, then qualify complete-cohort reference/control execution under the adopted v2 processed-input condition."
   ],
   "construction_review": null,
   "source_audit_overlays": [],

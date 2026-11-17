@@ -248,6 +248,40 @@ class UnderstandingBindingTests(unittest.TestCase):
         unrelated = engine._current(original, other_contract, {}, "NEURAL-UNRELATED")
         self.assertEqual(unrelated["participant_inputs"], original["participant_inputs"])
 
+    def test_calcium_source_successor_keeps_original_holds_and_exposure_unknown(self):
+        home = ROOT / "benchmarks/neural/NEURAL-025"
+        original_body = (home / engine.HISTORY).read_bytes()
+        original = json.loads(original_body)
+        saved = copy.deepcopy(original)
+        prior = home / "docs/understanding-pre-source-condition-v2"
+        old_contract_body = (prior / engine.CONTRACT).read_bytes()
+        old_contract = json.loads(old_contract_body)
+        old_projection = engine._current(original, old_contract,
+            engine._binding(old_contract_body, original_body), "NEURAL-025")
+        self.assertEqual(engine._bytes(old_projection), (prior / "task.json").read_bytes())
+        contract_body = (home / engine.CONTRACT).read_bytes()
+        contract = json.loads(contract_body)
+        projected = engine._current(original, contract,
+            engine._binding(contract_body, original_body), "NEURAL-025")
+        self.assertEqual(len(projected["holds"]), len(old_projection["holds"]))
+        for index, hold in enumerate(old_projection["holds"]):
+            self.assertEqual(projected["holds"][index]["id"], hold["id"])
+            if index not in (0, 1, 7):
+                self.assertEqual(projected["holds"][index], hold)
+        self.assertIn("Historical author decoder PCA precedes CV", projected["holds"][1]["requirement"])
+        self.assertIn("authentic inputs", projected["holds"][7]["requirement"])
+        self.assertEqual(projected["reference"], old_projection["reference"])
+        self.assertFalse(projected["reference"]["reference_executed_for_this_contract"])
+        self.assertEqual(projected["admission"], old_projection["admission"])
+        self.assertEqual(contract["scientific_target"], old_contract["scientific_target"])
+        self.assertEqual(contract["evaluation"]["primary"], old_contract["evaluation"]["primary"])
+        self.assertIn("Actual preprocessing/model input and fitted-trial exposure are separately unknown",
+                      projected["allowed_inputs"]["inputs"][2])
+        self.assertEqual(original, saved)
+        unrelated = copy.deepcopy(contract)
+        unrelated["task_id"] = "NEURAL-UNRELATED"
+        self.assertEqual(engine._current(original, unrelated, {}, "NEURAL-UNRELATED")["holds"], original["holds"])
+
     def test_current_admission_cannot_be_promoted(self):
         self.apply()
         path = self.root / self.home / "task.json"

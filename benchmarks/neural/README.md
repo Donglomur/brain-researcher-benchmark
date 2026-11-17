@@ -38,7 +38,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-022](NEURAL-022/README.md) | Active-versus-passive sensory coding | 4 | not linked |
 | [NEURAL-023](NEURAL-023/README.md) | Continuous reaching across recording days | 4 | [manifest](NEURAL-023/implementations/registered-runtime/manifest.json) |
 | [NEURAL-024](NEURAL-024/README.md) | Stable population dynamics across days | 4 | [manifest](NEURAL-024/implementations/registered-runtime/manifest.json) |
-| [NEURAL-025](NEURAL-025/README.md) | Fine reach-kinematics decoding from calcium | 2 | not linked |
+| [NEURAL-025](NEURAL-025/README.md) | Fine reach-kinematics decoding from calcium | 6 | not linked |
 | [NEURAL-026](NEURAL-026/README.md) | Fine-joint information beyond reach phase | 4 | not linked |
 | [NEURAL-027](NEURAL-027/README.md) | Visual stimulus decoding across learning phases | 2 | not linked |
 | [NEURAL-028](NEURAL-028/README.md) | Reward-free versus rewarded cortical learning | 2 | not linked |
