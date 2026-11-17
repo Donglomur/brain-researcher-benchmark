@@ -3,7 +3,7 @@
   "task_id": "PAPER-paper-method-003",
   "objective": "surpass_source_paper_same_task",
   "disposition": "design_ready",
-  "disposition_reason": "The original four-class PhysioNet-MI endpoint, participant split and numeric REVE-Base result are recoverable. A same-task design is defensible, but historical preprocessing, run aggregation and checkpoint/recipe parity remain unresolved; the extensive local source proposal is not an executed author baseline.",
+  "disposition_reason": "The complete original PhysioNet-MI panel is authenticated and prepared: 654 imagery EDFs from all 109 participants yield 9,837 epochs on the original split, and the full-test numerical scorer/comparator has passed an authentic-data software control. This establishes source preparation and scoring, not an author baseline. Historical preprocessing, Table 12 classifier/checkpoint parity and seed/run aggregation remain unresolved.",
   "source_paper": {
     "title": "REVE: A Foundation Model for EEG \u2013 Adapting to Any Setup with Large-Scale Pretraining on 25,000 Subjects",
     "url": "https://proceedings.neurips.cc/paper_files/paper/2025/file/20a917f77773ac0fa8bea2bdd6606b66-Paper-Conference.pdf"
@@ -36,6 +36,41 @@
       "url": "https://raw.githubusercontent.com/elouayas/reve_eeg/06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7/README.md",
       "locator": "Downstream training, Optuna search and saved checkpoint evaluation; src/dt.py and src/eval_dt.py routes",
       "supports": "Author route exists for preprocessing, linear-probe/full fine-tuning and evaluation; exact historical run/checkpoint identities are not supplied by these commands."
+    },
+    {
+      "id": "reve-full-panel-preparation",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/e8397886d8c7281335c5a43f4816bc8896a0f439/benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md",
+      "locator": "Observed complete-panel preparation; Acquire and prepare; Frozen prediction interface; Score and compare",
+      "supports": "Reviewed benchmark-owned report of official checksum authentication for all 654 EDFs, all 109 participants, 9,837 prepared epochs and complete 1,803-event test scoring software control. Identifies the actual released-code preparation profile, source-rate exceptions, boundary drop and strict classifier adapter; no model inference, fitting or scientific improvement is claimed."
+    },
+    {
+      "id": "reve-pooled-evaluation",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/elouayas/reve_eeg/06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7/src/dt.py",
+      "locator": "test: concatenate y_targets/y_decisions before balanced_accuracy_score, cohen_kappa_score and weighted f1_score",
+      "supports": "Establishes pooled test-epoch metric reduction in the pinned released evaluation code; does not identify the historical Table 12 repeat roster or standard-deviation convention."
+    },
+    {
+      "id": "reve-input-loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/elouayas/reve_eeg/06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7/src/downstream_tasks/dataloaders.py",
+      "locator": "LMDBDataset __getitem__ and collate; task configuration src/configs/task/physio.yaml",
+      "supports": "The released loader divides source microvolt arrays by scale_factor 100 before float32 conversion, with the exact task electrode order and no additional z-score or clipping in that path."
+    },
+    {
+      "id": "reve-position-bank",
+      "kind": "author_data",
+      "url": "https://huggingface.co/brain-bzh/reve-positions/tree/befa5b57a455b77cf302daf610c2e9ed8140bace",
+      "locator": "positions.json and model.safetensors; bank SHA-256 4b793820b9df0998667deb6c8ce2dbb86b38221d5165c1844bc4971941b13f13",
+      "supports": "Pins the released electrode geometry. The source preparation report records exact agreement between all 543 official bank positions and pinned source JSON, including the 64 PhysioNet task channels and their legacy aliases."
+    },
+    {
+      "id": "reve-pretrained-identity",
+      "kind": "author_data",
+      "url": "https://huggingface.co/brain-bzh/reve-base/tree/33841986f6cc1438d9dcdbca5a2137d60f6007d9",
+      "locator": "model.safetensors: 276,773,456 bytes; SHA-256 8ecc650619598748286c2457f81f5c6bd12e8bb59db44f7b02af1955c44de8fe",
+      "supports": "Pins the official released REVE-Base pretrained encoder identity; it is not the trained four-class PhysioNet downstream classifier or an authenticated Table 12 checkpoint."
     }
   ],
   "same_task": {
@@ -49,56 +84,68 @@
     },
     "dataset": {
       "status": "verified",
-      "description": "PhysioNet EEG Motor Movement/Imagery Dataset v1.0.0; paper reports 9,837 four-second examples. Raw/derived content manifests still need admission.",
+      "description": "PhysioNet EEG Motor Movement/Imagery Dataset v1.0.0. All 654 official imagery EDFs were authenticated against the official SHA-256 manifest, and the released-code profile produced the paper-reported 9,837 four-second examples. Raw/derived manifests and arrays remain external operator artifacts; this authentic preparation does not establish historical filtering or model parity.",
       "evidence_ids": [
         "reve-paper",
-        "reve-data"
+        "reve-data",
+        "reve-full-panel-preparation"
       ]
     },
     "cohort": {
       "status": "verified",
-      "description": "All 109 source participants, with no extra subject exclusions or smaller cohort; imagery runs 04, 06, 08, 10, 12 and 14.",
+      "description": "All 109 source participants, with no extra subject exclusions or smaller cohort; imagery runs 04, 06, 08, 10, 12 and 14. The actual preparation retained this complete 109-by-six recording roster.",
       "evidence_ids": [
         "reve-paper",
-        "reve-preprocess"
+        "reve-preprocess",
+        "reve-full-panel-preparation"
       ]
     },
     "split": {
       "status": "verified",
-      "description": "Source participants 1\u201370 train, 71\u201389 validation and 90\u2013109 test. Retain this complete participant partition; a new subject/montage split is an extension.",
+      "description": "Source participants 1\u201370 train, 71\u201389 validation and 90\u2013109 test. The complete released-code preparation yielded 6,300 training, 1,734 validation and 1,803 test epochs on that fixed partition. A new subject/montage split is an extension.",
       "evidence_ids": [
         "reve-paper",
-        "reve-preprocess"
+        "reve-preprocess",
+        "reve-full-panel-preparation"
       ]
     },
     "inputs": {
       "status": "verified",
-      "description": "The same 64-channel four-second EEG windows and electrode positions. Match the released REVE-Base pretrained access and original downstream label availability; no additional target-person calibration may enter this comparison.",
+      "description": "The same 64-channel four-second EEG windows and electrode positions. The concrete route preserves float64 microvolts until division by 100 and float32 conversion, and the exact source geometry agrees with the official position bank. Match the released REVE-Base pretrained access and original downstream label availability; no additional target-person calibration may enter this comparison. The released encoder identity does not establish the missing Table 12 trained classifier or exposure parity.",
       "evidence_ids": [
         "reve-paper",
-        "reve-preprocess"
+        "reve-preprocess",
+        "reve-input-loader",
+        "reve-position-bank",
+        "reve-pretrained-identity",
+        "reve-full-panel-preparation"
       ]
     },
     "preprocessing": {
       "status": "unresolved",
-      "description": "Paper C.5 specifies loading at 128 Hz after a 64 Hz low-pass then resampling to 200 Hz. Pinned released script instead average-references, high-passes at 0.3 Hz, notches 60 Hz and resamples directly to 200 Hz. Resolve which historical recipe produced Table 12, including bad-channel interpolation, event/window completeness and geometry.",
+      "description": "Paper C.5 specifies loading at 128 Hz after a 64 Hz low-pass then resampling to 200 Hz. Pinned released code average-references, high-passes at 0.3 Hz, notches 60 Hz and resamples directly to 200 Hz; that profile was actually run on the complete panel and yielded 9,837 epochs. All 18 native-128-Hz recordings from participants 88, 92 and 100 were retained; one final imagery event in S104R08 was dropped by the unchanged four-second boundary rule. Current source geometry and event accounting are established, but matching the count does not identify the historical Table 12 filter/interpolation recipe, environment or numerical parity.",
       "evidence_ids": [
         "reve-paper",
-        "reve-preprocess"
+        "reve-preprocess",
+        "reve-full-panel-preparation"
       ]
     },
     "metric": {
       "status": "verified",
-      "description": "Balanced accuracy is mean class recall, (1/4) sum_c TP_c/(TP_c+FN_c), higher is better. Cohen kappa and weighted F1 are separately reported supporting metrics, not substitute winning endpoints.",
+      "description": "Balanced accuracy is mean class recall, (1/4) sum_c TP_c/(TP_c+FN_c), higher is better. Cohen kappa and support-weighted F1 are required supporting metrics, not substitute winning endpoints. The concrete scorer and paired comparator were exercised on all 1,803 original test events using frozen constant-output software controls; those controls are not author or candidate model performance.",
       "evidence_ids": [
-        "reve-paper"
+        "reve-paper",
+        "reve-pooled-evaluation",
+        "reve-full-panel-preparation"
       ]
     },
     "aggregation": {
       "status": "unresolved",
-      "description": "Table 12 reports REVE-Base 0.6480 \u00b1 0.0140 as mean \u00b1 standard deviation. Original seed/run roster and exact pooled-test versus participant reduction must be bound; the registration\u2019s participant-level wording alone cannot establish paper parity.",
+      "description": "Table 12 reports REVE-Base 0.6480 \u00b1 0.0140 as mean \u00b1 standard deviation. Pinned released dt.test concatenates all test events before calculating balanced accuracy, kappa and weighted F1; its primary reduction is pooled epochs rather than a participant mean. Historical Table 12 provenance must still bind that reduction to the original seed/run roster, repeat count and SD denominator. Participant-cluster summaries cannot replace the original primary aggregation.",
       "evidence_ids": [
-        "reve-paper"
+        "reve-paper",
+        "reve-pooled-evaluation",
+        "reve-full-panel-preparation"
       ]
     }
   },
@@ -116,9 +163,11 @@
     "reproduced_author_baseline": {
       "status": "unresolved",
       "value": null,
-      "description": "Author preprocessing/training/evaluation routes are identified, but no authenticated same-protocol downstream checkpoint or rerun result is established. Local spectral/ridge/NCM helpers cannot replace REVE-Base.",
+      "description": "Complete authentic source preparation and a numerical evaluator are now exercised, and a strict full-classifier prediction adapter is implemented. No authenticated same-protocol Table 12 downstream checkpoint or author rerun result is established; no model inference or fitting ran. The pinned official pretrained release supplies an encoder, not the required trained four-class head. Local spectral/ridge/NCM helpers or constant-output software controls cannot replace REVE-Base.",
       "evidence_ids": [
-        "reve-code"
+        "reve-code",
+        "reve-pretrained-identity",
+        "reve-full-panel-preparation"
       ]
     },
     "minimum_effect": {
@@ -129,11 +178,12 @@
     },
     "uncertainty": {
       "status": "unresolved",
-      "method": "Before admission, freeze paired candidate/author evaluation over the original test participants and matched training seeds; retain original paper score aggregation and report participant-cluster uncertainty. Exact confidence rule and replication remain unresolved.",
+      "method": "Before admission, freeze paired candidate/author evaluation over the original test participants and matched training seeds; retain original paper score aggregation and report participant-cluster uncertainty. The implemented paired participant bootstrap is descriptive and excludes training-seed variation. Exact confidence rule, historical replication and a justified paper-win decision remain unresolved.",
       "independent_unit": "Participant for generalization; training seed is a separate algorithmic-variation axis.",
       "rationale": "Epochs within a participant are dependent; source aggregate standard deviation does not establish independent participant uncertainty.",
       "evidence_ids": [
-        "reve-paper"
+        "reve-paper",
+        "reve-full-panel-preparation"
       ]
     },
     "paper_win_requires": [
@@ -157,14 +207,14 @@
     "baseline_policy": "Calibrate against the original REVE-Base Table 12 recipe; distinguish published 0.6480, the author rerun and other models. A successful numerical reconstruction is calibration only. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
   },
   "blocking_issues": [
-    "Paper versus released PhysioNet preprocessing discrepancy is unresolved.",
-    "Original Table 12 seed/run roster, exact score aggregation and downstream checkpoint/recipe binding are absent.",
-    "No authentic author reproduction, admitted working evaluator, fixed access/resource budgets, justified effect or uncertainty decision rule.",
-    "Released-model identity, original data completeness and pretraining/downstream exposure require manifests; the retained REVE source package has external dependencies and disabled execution."
+    "Historical Table 12 preprocessing and numerical parity remain unresolved: the exercised released direct-200-Hz profile matches the original epoch count but does not resolve the paper's intermediate-128-Hz description or historical filter/interpolation environment.",
+    "Original Table 12 trained downstream classifier/checkpoint identity, seed/run roster, repeat count and SD convention remain unbound. Released-code pooled-epoch reduction and pretrained encoder identity are established separately.",
+    "No authentic author-model reproduction or candidate comparison has run. A calibrated author baseline, fixed scientific access/resource budgets, justified effect and predeclared uncertainty decision rule are still required; preparation resource receipts do not authorize or define a model campaign.",
+    "Original pretraining/downstream exposure and checkpoint lineage still require qualification. The concrete operator path has complete authenticated data and an exercised scorer, but it is trusted-operator execution; protected untrusted-candidate transport is not established."
   ],
   "legacy": {
     "role": "calibration_only",
     "original_task": "historical/task.pre-improvement.v1.json",
-    "notes": "Preserve all REVE S8 reconstruction and engineering materials. The local package covers many tasks and explicitly disables execution; its authored fixed references and prospective endpoints are calibration/development components and do not demonstrate a PhysioNet-MI paper win."
+    "notes": "Preserve all REVE S8 reconstruction and engineering materials. The local package covers many tasks and explicitly disables execution; its authored fixed references and prospective endpoints are calibration/development components and do not demonstrate a PhysioNet-MI paper win. The separate additive original-physionet route now provides authenticated full-panel preparation, scoring and a strict classifier adapter; it neither activates the preserved S8 execution entrypoint nor establishes author-model reproduction or improvement."
   }
 }
