@@ -10,6 +10,14 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Recorded public evidence
+
+Each record keeps the scope of its original report. It is not current runtime qualification.
+
+- [Historical programme control](../../../docs/provenance/execution/historical-evidence-v1/profiles.json): One animal and two exposed recording days; 18,691 training, 2,991 calibration and 22,091 assessment rows; 96 channels and 20 ms bins.
+
+Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence NEURAL-023`. Programme evidence does not establish direct interpretation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)

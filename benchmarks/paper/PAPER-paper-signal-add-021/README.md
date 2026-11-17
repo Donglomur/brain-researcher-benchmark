@@ -21,6 +21,16 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
 
+## Recorded public evidence
+
+Each record keeps the scope of its original report. It is not current runtime qualification.
+
+- [Paper calibration attempt](../../../docs/science/difficulty-pilot-20261117.json): Complete accepted fixed-region derivative: 12 regions, 36 effects and 540 leave-one-out summaries; not the original primary cluster analysis.
+- [Paper calibration attempt](../../../docs/science/difficulty-pilot-20261117.json): Complete accepted fixed-region derivative: 12 regions, 36 effects and 540 leave-one-out summaries; not the original primary cluster analysis.
+- [Historical paper calibration](../../../docs/provenance/execution/historical-evidence-v1/profiles.json): 15 participants in 14,061 processed rows; 135 participant-condition means/counts, nine summaries, five spatial and six timing/provenance comparisons.
+
+Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence PAPER-paper-signal-add-021`. Programme evidence does not establish direct interpretation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)

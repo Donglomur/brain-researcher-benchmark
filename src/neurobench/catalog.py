@@ -2,7 +2,8 @@
 """Build a deterministic navigation catalog from published metadata only.
 
 Never follow runtime verification receipts, data paths, private ledgers or
-candidate entrypoints. Catalog membership is not execution qualification.
+candidate entrypoints. Selected public reports are indexed with their original
+scope; neither their presence nor catalog membership is execution qualification.
 """
 import argparse
 from collections import Counter
@@ -13,6 +14,7 @@ from pathlib import Path
 import posixpath
 import re
 import stat
+import sys
 from urllib.parse import quote, urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -29,6 +31,26 @@ def improvement_module():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def companion_module(name):
+    """Load a fixed framework sibling without importing task implementation code."""
+    need(name in {'neural_understanding', 'evidence', 'operator'}, 'Unknown framework companion')
+    spec = importlib.util.spec_from_file_location('neurobench_' + name,
+                                                 Path(__file__).with_name(name + '.py'))
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+def understanding_counts(tasks):
+    neural = [row for row in tasks if row['track'] == 'neural']
+    dispositions = Counter(row.get('neural_understanding', {}).get('disposition', 'not_revised')
+                           for row in neural)
+    return {'registered': len(neural), 'covered': len(neural) - dispositions['not_revised'],
+            'dispositions': dict(sorted(dispositions.items())),
+            'count_basis': 'Source delivery scope, not model performance or scientific qualification.'}
 
 
 def improvement_counts(tasks):
@@ -255,6 +277,29 @@ def discover(root=ROOT):
              and {row['id'] for row in previous_rows.values() if row['track'] == 'paper'}
              == {row['id'] for row in rows if row['track'] == 'paper'},
              'Paper overhaul must preserve the original registration roster')
+    understanding_meta = registry.get('neural_understanding')
+    previous_neural_rows = None
+    if understanding_meta is not None:
+        need(isinstance(understanding_meta, dict)
+             and understanding_meta.get('schema_version') == 'neural-understanding/v1'
+             and understanding_meta.get('objective') == 'infer_neural_or_behavioral_targets_from_permitted_observations'
+             and understanding_meta.get('coverage_required') is True
+             and type(understanding_meta.get('registered_count')) is int
+             and understanding_meta['registered_count'] == sum(row['track'] == 'neural' for row in rows),
+             'Invalid current neural understanding registry binding')
+        previous_pin = understanding_meta['pre_understanding_registry']
+        need(previous_pin['path'] == 'docs/provenance/registrations/neural-pre-understanding-v1.json',
+             'Unexpected pre-understanding registry location')
+        previous_registry = checked_pin(reader, previous_pin, 'Pre-understanding registry')
+        need(previous_registry.get('schema_version') == 1
+             and previous_registry.get('kind') == 'neuroscience_benchmark_registry',
+             'Unsupported pre-understanding registry')
+        previous_neural_rows = {row['id']: row for row in previous_registry['tasks']}
+        need(len(previous_neural_rows) == len(previous_registry['tasks'])
+             and set(previous_neural_rows) <= {row['id'] for row in rows}
+             and {row['id'] for row in previous_neural_rows.values() if row['track'] == 'neural'}
+             == {row['id'] for row in rows if row['track'] == 'neural'},
+             'Neural revision must preserve the original registration roster')
     historical = registry['historical_registries']
     need(isinstance(historical, list), 'Historical registries must be a list')
     historical_paths = set()
@@ -276,10 +321,49 @@ def discover(root=ROOT):
         revision = row.get('specification_revision')
         if track == 'paper' and registry.get('paper_improvement', {}).get('coverage_required'):
             need(revision is not None, 'Active paper improvement registry requires every paper contract')
+        if track == 'neural' and registry.get('neural_understanding', {}).get('coverage_required'):
+            need(revision is not None, 'Active neural understanding registry requires every neural contract')
         improvement = None
+        understanding = None
         if revision is None:
             need(all(original.get(key) == row['specification'][key] for key in ('bytes', 'sha256')),
                  'Task definition differs from its preserved original identity')
+        elif track == 'neural':
+            need(previous_neural_rows is not None, 'Revised neural task requires its authenticated original registry')
+            need(type(revision) is dict and set(revision) ==
+                 {'version', 'previous_specification', 'understanding_contract'}
+                 and revision['version'] == 'neural-understanding/v1',
+                 'Unsupported task specification revision')
+            previous = revision['previous_specification']
+            need(previous['path'] == directory + '/historical/task.pre-understanding.v1.json'
+                 and all(previous.get(key) == original.get(key) for key in ('bytes', 'sha256')),
+                 'Revised neural task does not preserve its original identity')
+            prior_row = previous_neural_rows[identifier]
+            need(prior_row['track'] == 'neural'
+                 and all(prior_row['specification'].get(key) == previous.get(key) for key in ('bytes', 'sha256'))
+                 and original == prior_row['original_specification']
+                 and row['specification_id'] == prior_row['specification_id']
+                 and row['specification_alias'] == prior_row['specification_alias'],
+                 'Revised neural lineage differs from original registry')
+            checked_pin(reader, previous, 'Historical neural specification')
+            pin = revision['understanding_contract']
+            need(pin['path'] == directory + '/understanding.v1.json', 'Understanding contract is outside its task')
+            contract = checked_pin(reader, pin, 'Neural understanding contract')
+            engine = companion_module('neural_understanding')
+            errors = engine.validate_contract(contract, task_id=identifier)
+            need(not errors, 'Invalid neural understanding contract: ' + identifier + ': ' + '; '.join(errors))
+            expected_binding = {
+                'schema_version': 'neural-understanding/v1',
+                'objective': 'infer_neural_or_behavioral_targets_from_permitted_observations',
+                'contract_path': 'understanding.v1.json', 'contract_sha256': pin['sha256'],
+                'original_definition_path': 'historical/task.pre-understanding.v1.json',
+                'original_definition_sha256': previous['sha256'],
+            }
+            need(doc.get('objective') == expected_binding['objective']
+                 and doc.get('evaluation', {}).get('neural_understanding') == expected_binding,
+                 'Current neural definition is not bound to its understanding contract')
+            understanding = {**engine.summary(contract), 'contract': pin,
+                             'historical_specification': previous}
         else:
             need(previous_rows is not None, 'Revised paper task requires its authenticated original registry')
             need(track == 'paper' and revision.get('version') == 'paper-improvement/v1',
@@ -344,6 +428,10 @@ def discover(root=ROOT):
             task['paper_improvement'] = improvement
             task['specification_revision'] = revision
             task['runtime_lineage_note'] = 'Historical paper implementations are calibration components; they cannot establish same-task paper improvement.'
+        if understanding is not None:
+            task['neural_understanding'] = understanding
+            task['specification_revision'] = revision
+            task['runtime_lineage_note'] = 'Earlier neural runtime declarations retain their original scope; programme results do not establish direct or viewer interpretation.'
         if task['runtime_manifest']:
             runtime = checked_pin(reader, task['runtime_manifest'], 'Runtime declaration')
             need(runtime.get('id') == identifier, 'Runtime declaration task ID mismatch')
@@ -372,6 +460,9 @@ def discover(root=ROOT):
     for row in tasks:
         row['implementation_ids'].sort()
         row['related_implementation_ids'].sort()
+    evidence = companion_module('evidence').load(root, task_ids=set(by_id))
+    for row in tasks:
+        row['recorded_evidence'] = evidence['records'].get(row['id'], [])
     components = registry.get('components', [])
     shared = registry.get('shared_contracts', [])
     need(isinstance(components, list) and isinstance(shared, list), 'Source collections and shared contracts must be lists')
@@ -387,10 +478,13 @@ def discover(root=ROOT):
                          'tasks_with_related_scientific_sources': sum(bool(row['related_implementation_ids']) for row in tasks),
                          'unresolved_implementation_artifacts': sum(row['scope'] == 'unresolved' for row in implementations)},
               'paper_improvement_counts': improvement_counts(tasks),
+              'neural_understanding_counts': understanding_counts(tasks),
+              'recorded_evidence': evidence,
               'scientific_readiness': 'unknown', 'submission_readiness': 'unknown',
               'counting_note': 'Registered task definitions, implementation artifacts and legacy runtime declarations are distinct. '
                                'An ownership link is not equivalence to the complete registered scientific contract or execution qualification. '
-                               'No receipts, data, candidate code or private construction ledger were followed.',
+                               'Only selected public evidence reports are indexed, with their reported scopes; '
+                               'no raw receipts, data, candidate code or private construction ledger were followed.',
               'registry_chain': historical, 'shared_contracts': shared, 'tasks': tasks,
               'unmapped_runtime_sources': [], 'components': components,
               'implementations': sorted(implementations, key=lambda record: record['id'])}
@@ -400,6 +494,8 @@ def discover(root=ROOT):
 
 def source_links(catalog):
     yield catalog['registry']['path']
+    for report in catalog['recorded_evidence']['reports']:
+        yield report['path']
     for implementation in catalog['implementations']:
         yield implementation['path']
     for row in catalog['tasks']:
@@ -409,6 +505,9 @@ def source_links(catalog):
         if row.get('paper_improvement'):
             yield row['paper_improvement']['contract']['path']
             yield row['paper_improvement']['historical_specification']['path']
+        if row.get('neural_understanding'):
+            yield row['neural_understanding']['contract']['path']
+            yield row['neural_understanding']['historical_specification']['path']
         if row['registry']:
             yield row['registry']
         if row['runtime_manifest']:
@@ -427,6 +526,7 @@ def validate(catalog, root=ROOT):
     need(len({row['id'] for row in tasks}) == len(tasks), 'Duplicate catalog task ID')
     need(all(catalog['counts'][key] == value for key, value in counts(tasks).items()), 'Catalog task totals disagree')
     need(catalog.get('paper_improvement_counts') == improvement_counts(tasks), 'Paper improvement counts disagree')
+    need(catalog.get('neural_understanding_counts') == understanding_counts(tasks), 'Neural understanding counts disagree')
     need(catalog['scientific_readiness'] == catalog['submission_readiness'] == 'unknown',
          'Catalog must not manufacture readiness')
     directories = set()
@@ -483,6 +583,32 @@ def paper_count_text(catalog):
             'Reproduction and numerical fidelity are calibration only. A new split is an extension, never a same-task paper victory.\n\n')
 
 
+def neural_count_text(catalog):
+    summary = catalog['neural_understanding_counts']
+    if not summary['covered']:
+        return ''
+    dispositions = ', '.join(f"{number} {name.replace('_', ' ')}"
+                             for name, number in summary['dispositions'].items())
+    return (f"Neural understanding revision: **{summary['covered']}/{summary['registered']} covered**; "
+            + dispositions + '. These describe delivered source scope. Direct observation, typed-viewer interpretation, '
+            'tool-assisted investigation and frozen prediction programmes have separate access conditions and evidence. '
+            'Programme performance does not establish direct interpretation.\n\n')
+
+
+def evidence_text(catalog, base=OUTPUT):
+    evidence = catalog['recorded_evidence']
+    counts = evidence['counts']
+    if not counts['tasks_with_recorded_evidence']:
+        return ''
+    return (f"Recorded public evidence covers **{counts['tasks_with_recorded_evidence']} distinct task IDs**. "
+            f"The pilot reports **{counts['paper_calibration_attempts']} historical paper-calibration attempts** and "
+            f"**{counts['neural_programme_attempts']} neural-programme attempts**; "
+            f"{counts['authentic_engineering_reports']} authentic-input engineering reports are separate software evidence. "
+            + markdown_link('Read the published evidence', evidence['reports'][0]['path'], base)
+            + ', or run `python3 scripts/neurobench.py evidence [TASK_ID]`. '
+            'These records do not establish current runtime qualification or paper improvement.\n\n')
+
+
 def render(catalog):
     c = catalog['counts']
     files = {'catalog.json': (json.dumps(catalog, indent=2, ensure_ascii=False) + '\n').encode()}
@@ -490,7 +616,7 @@ def render(catalog):
              'Scientific and submission readiness are **unknown here**. Runtime manifests '
              'and source components do not establish successful execution. Registered IDs '
              'may alias earlier contract identifiers; they do not count independent studies or datasets.\n\n')
-    files['README.md'] = (f'# Neuroscience task catalog\n\n{intro}' + paper_count_text(catalog) +
+    files['README.md'] = (f'# Neuroscience task catalog\n\n{intro}' + evidence_text(catalog) + paper_count_text(catalog) + neural_count_text(catalog) +
         f"Browse **{c['total']} registered questions**: [{c['paper']} paper tasks](paper.md) and "
         f"[{c['neural']} neural/behavioral tasks](neural.md). The roster combines 200 canonical specifications "
         f"with {c['expansion_drafts']} expansion drafts.\n\n"
@@ -515,6 +641,8 @@ def render(catalog):
         text = f'# {track.title()} tasks ({len(rows)})\n\n[Catalog](README.md)\n\n' + intro
         if track == 'paper':
             text += paper_count_text(catalog)
+        else:
+            text += neural_count_text(catalog)
         text += ('| ID | Scientific question / title | Current improvement disposition | Source stage | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- | --- |\n' if track == 'paper' else
                  '| ID | Scientific question / title | Source stage | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- |\n')
         for row in rows:
@@ -655,8 +783,9 @@ def render_tracks(catalog):
                   'Match its dataset, cohort, split, inputs, preprocessing, metric and aggregation. '
                   'Compare paper + data with paper + data + official code under fixed matched budgets; '
                   'historical reproduction is calibration only.'),
-        'neural': ('Neural-data understanding', 'Interpret neural and behavioral observations and make predictions. '
-                   'Compare a prediction program written in advance with case-by-case investigation.'),
+        'neural': ('Neural-data understanding', 'Infer specified targets from permitted neural and behavioral observations. '
+                   'Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes '
+                   'are distinct conditions; each requires its own competent comparator and evidence.'),
     }
     for track, (title, description) in descriptions.items():
         base = f'benchmarks/{track}'
@@ -667,6 +796,8 @@ def render_tracks(catalog):
         text += description + '\n\n'
         if track == 'paper':
             text += paper_count_text(catalog)
+        else:
+            text += neural_count_text(catalog)
         text += (f"**{len(rows)} registered task drafts: {len(groups[0][1])} original specifications + "
                  f"{len(groups[1][1])} expansion drafts.** Scientific and submission readiness remain **unknown**.\n\n"
                  'Each task folder contains its authoritative `task.json` and explicitly assigned source artifacts or links to shared families. '
@@ -711,6 +842,26 @@ def render_tracks(catalog):
                          'Existing reproduction graders and pilot scores remain calibration evidence. They cannot establish paper improvement. '
                          'Published paper results, reproduced author baselines, and verified current SOTA are separate claims. '
                          'A new split, easier inputs, smaller cohort or changed metric is an extension.\n\n')
+            if row.get('neural_understanding'):
+                understanding = row['neural_understanding']
+                text += ('## Current neural-understanding objective\n\n'
+                         + markdown_text(understanding['primary_target']) + '\n\n'
+                         '**Source delivery:** ' + markdown_text(understanding['disposition']) + '. '
+                         + markdown_text(understanding['disposition_reason']) + '\n\n'
+                         '- ' + markdown_link('Current target, controls and access conditions', understanding['contract']['path'], task) + '\n'
+                         '- ' + markdown_link('Preserved historical task definition', understanding['historical_specification']['path'], task) + '\n\n'
+                         '| Condition | Source availability | Representation and boundary | Missing |\n'
+                         '| --- | --- | --- | --- |\n')
+                for name, mode in understanding['access_modes'].items():
+                    missing = mode['missing']
+                    if isinstance(missing, list):
+                        missing = '; '.join(missing)
+                    text += ('| ' + markdown_text(readable_label(name)) + ' | '
+                             + markdown_text(mode['status']) + ' | '
+                             + markdown_text(str(mode['representation']) + ' ' + str(mode['boundary'])) + ' | '
+                             + markdown_text(missing) + ' |\n')
+                text += ('\nSource availability does not establish a qualified runtime. A programme score cannot be reported '
+                         'as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.\n\n')
             if isinstance(row['declared_specification_status'], (dict, list)):
                 text += ('## Declared status fields\n\n'
                          'These values are copied from the task definition. They do not establish current execution or scientific qualification.\n\n'
@@ -718,6 +869,15 @@ def render_tracks(catalog):
                 for field, value in declared_status_fields(row['declared_specification_status']):
                     text += '| ' + markdown_text(field) + ' | ' + markdown_text(value) + ' |\n'
                 text += '\n'
+            if row.get('recorded_evidence'):
+                text += ('## Recorded public evidence\n\n'
+                         'Each record keeps the scope of its original report. It is not current runtime qualification.\n\n')
+                for record in row['recorded_evidence']:
+                    text += ('- ' + markdown_link(markdown_text(readable_label(record['category'])),
+                                                  record['source']['path'], task)
+                             + ': ' + markdown_text(record['scope']) + '\n')
+                text += ('\nInspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence '
+                         + row['id'] + '`. Programme evidence does not establish direct interpretation.\n\n')
             if row['specification_alias']:
                 text += ('**Specification alias:** This registered ID refers to specification '
                          + markdown_text(row['specification_id'])

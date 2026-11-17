@@ -2,6 +2,8 @@
 
 This is a public source inventory, not a list of qualified benchmarks. Scientific and submission readiness are **unknown here**. Runtime manifests and source components do not establish successful execution. Registered IDs may alias earlier contract identifiers; they do not count independent studies or datasets.
 
+Recorded public evidence covers **5 distinct task IDs**. The pilot reports **4 historical paper-calibration attempts** and **4 neural-programme attempts**; 2 authentic-input engineering reports are separate software evidence. [Read the published evidence](../../docs/science/difficulty-pilot-20261117.json), or run `python3 scripts/neurobench.py evidence [TASK_ID]`. These records do not establish current runtime qualification or paper improvement.
+
 Paper improvement audit: **116/116 covered**; **0 improvement-ready**, **20 source-grounded designs**, **87 source-unresolved**, **9 ineligible**, **0 not audited**. Eligibility means an ordered source task was identified; it does not establish an executable or scientifically qualified comparison. Reproduction and numerical fidelity are calibration only. A new split is an extension, never a same-task paper victory.
 
 Browse **234 registered questions**: [116 paper tasks](paper.md) and [118 neural/behavioral tasks](neural.md). The roster combines 200 canonical specifications with 34 expansion drafts.

@@ -2,7 +2,7 @@
 
 [All benchmarks](../README.md) · [Other track](../paper/README.md)
 
-Interpret neural and behavioral observations and make predictions. Compare a prediction program written in advance with case-by-case investigation.
+Infer specified targets from permitted neural and behavioral observations. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes are distinct conditions; each requires its own competent comparator and evidence.
 
 **118 registered task drafts: 100 original specifications + 18 expansion drafts.** Scientific and submission readiness remain **unknown**.
 

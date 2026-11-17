@@ -10,6 +10,15 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Recorded public evidence
+
+Each record keeps the scope of its original report. It is not current runtime qualification.
+
+- [Neural programme attempt](../../../docs/science/difficulty-pilot-20261117.json): Feature programme with shared pretrained YASA outputs: two exposed development people and all 5,450 epochs; not direct signal interpretation.
+- [Neural programme attempt](../../../docs/science/difficulty-pilot-20261117.json): Feature programme with shared pretrained YASA outputs: two exposed development people and all 5,450 epochs; not direct signal interpretation.
+
+Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence NEURAL-007`. Programme evidence does not establish direct interpretation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
