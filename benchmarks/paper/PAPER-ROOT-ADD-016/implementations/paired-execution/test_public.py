@@ -1,4 +1,5 @@
 """Public relocation controls only; generated metadata, no Docker/data/models."""
+import ast
 import copy
 import hashlib
 import importlib.util
@@ -11,6 +12,7 @@ import subprocess
 import sys
 import tempfile
 import time
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -120,5 +122,73 @@ class PublicRelocation(unittest.TestCase):
     self.assertNotIn(b'artifacts'+b'-build/',body,p.name)
   self.assertFalse((self.local/'summary_score.py').exists())
   self.assertFalse((self.local/'process_owner.py').exists())
+
+class CandidateValidation(unittest.TestCase):
+ """Exercise the actual finalization boundary with generated, closed arm bytes."""
+ def fixture(self, summaries):
+  # Compile just this owner-side function: no import of the runtime, dependency
+  # loaders, candidate code, process owner, scientific data or private reference.
+  tree=ast.parse((HERE/'pair_run.py').read_bytes())
+  function=next(node for node in tree.body if isinstance(node,ast.FunctionDef) and node.name=='finalize_pair')
+  run=Path('/generated-cardiac-pair');bodies={};closed={};saved=[];captures=[];reference_reads=[]
+  input_sha='a'*64
+  def encode(value):return json.dumps(value,sort_keys=True,separators=(',',':')).encode()
+  def pin(body):return {'bytes':len(body),'sha256':hashlib.sha256(body).hexdigest()}
+  def need(value,message):
+   if not value:raise ValueError(message)
+  for condition in ('A','B'):
+   summary=summaries[condition];program_sha=('1' if condition=='A' else '2')*64
+   commit={'program_sha256':program_sha,'output':pin(summary),'producer_removed_before_capture':True,'all_candidate_holder_volume_absent':True}
+   commit_body=encode(commit)
+   outcome={'unit_status':'unit_committed','program_sha256':program_sha,'producer_output_commit_sha256':pin(commit_body)['sha256'],'output':pin(summary)}
+   outcome_body=encode(outcome)
+   for name,body in [('summary.json',summary),('commit.json',commit_body),('outcome_commit.json',outcome_body)]:bodies[run/condition/'unit'/name]=body
+   closed[condition]={'condition':condition,'group_absent':True,'native_absent':True,'outcome':outcome,'outcome_pin':pin(outcome_body)}
+  def validate(value):
+   need(type(value) is dict,'Generated candidate object required')
+   return value
+  def ordinary(path,*unused):return bodies[path]
+  def save(path,value,budget,**options):saved.append((path,value,options))
+  def capture(*args):captures.append(args);return {'generated_capture':True}
+  def score_pair(*args):
+   reference_reads.append(args)
+   raise RecursionError('generated operator reference recursion')
+  pair=SimpleNamespace(spec={'scope':{'input_sha256':input_sha}},capture=capture,score_pair=score_pair)
+  support=SimpleNamespace(need=need,pin=pin,ordinary=ordinary,decode=json.loads,save=save,packet=lambda:pair,
+                          runtime_manifest=lambda arm:{'program_sha256':closed[arm.name]['outcome']['program_sha256']})
+  paired=SimpleNamespace(S=SimpleNamespace(validate=validate),decode=json.loads)
+  namespace={'S':support,'sys':SimpleNamespace(modules={'_cardiac_current_pair':paired})}
+  exec(compile(ast.Module(body=[function],type_ignores=[]),str(HERE/'pair_run.py'),'exec'),namespace)
+  budget=SimpleNamespace(check=lambda *args,**kwargs:None)
+  return namespace['finalize_pair'],run,closed,budget,saved,captures,reference_reads,bodies
+ def test_deep_candidate_in_either_arm_is_invalid_before_any_private_stage(self):
+  valid=json.dumps({'input_sha256':'a'*64}).encode();deep=b'['*1500+b'0'+b']'*1500
+  for invalid_conditions in (('A',),('B',),('A','B')):
+   with self.subTest(conditions=invalid_conditions):
+    summaries={'A':valid,'B':valid}
+    for condition in invalid_conditions:summaries[condition]=deep
+    finalize,run,closed,budget,saved,captures,reads,_=self.fixture(summaries)
+    result=finalize(Path('/generated-pair-root'),run,closed,budget)
+    self.assertEqual(result['status'],'pair_has_unscored_candidate_outcome')
+    self.assertEqual(set(result['arms']),set(invalid_conditions))
+    for condition in invalid_conditions:self.assertEqual(result['arms'][condition]['status'],'invalid_submission')
+    self.assertEqual(result['private_reference_reads'],0)
+    self.assertIsNone(result['scientific_success'])
+    self.assertEqual(captures,[]);self.assertEqual(reads,[])
+    self.assertEqual(saved[-1],(run/'pair_result.json',result,{'private':True}))
+ def test_malformed_operator_reference_recursion_remains_an_operator_error(self):
+  valid=json.dumps({'input_sha256':'a'*64}).encode()
+  finalize,run,closed,budget,saved,captures,reads,_=self.fixture({'A':valid,'B':valid})
+  with self.assertRaisesRegex(RecursionError,'operator reference recursion'):
+   finalize(Path('/generated-pair-root'),run,closed,budget)
+  self.assertEqual(len(captures),2);self.assertEqual(len(reads),1)
+  self.assertFalse(any(path.name=='pair_result.json' for path,_,_ in saved))
+ def test_captured_bytes_must_still_match_closed_output_before_candidate_validation(self):
+  valid=json.dumps({'input_sha256':'a'*64}).encode()
+  finalize,run,closed,budget,_,captures,reads,bodies=self.fixture({'A':valid,'B':valid})
+  bodies[run/'A/unit/summary.json']=b'['*1500+b'0'+b']'*1500
+  with self.assertRaisesRegex(ValueError,'Only protected captured output'):
+   finalize(Path('/generated-pair-root'),run,closed,budget)
+  self.assertEqual(captures,[]);self.assertEqual(reads,[])
 
 if __name__=='__main__':unittest.main(verbosity=2)

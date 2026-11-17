@@ -119,7 +119,7 @@ def finalize_pair(pair_root,run,closed,budget):
             candidate=paired.S.validate(paired.decode(raw))
             S.need(candidate['input_sha256']==pair.spec['scope']['input_sha256'],'Exact scientific input identity')
             candidates[c]=candidate
-        except ValueError as error:invalid[c]={'status':'invalid_submission','error':str(error)[:1000]}
+        except (ValueError, RecursionError) as error:invalid[c]={'status':'invalid_submission','error':str(error)[:1000]}
     S.save(run/'PAIR_CLOSED.json',{'arms':closed,'before_any_private_grade':True},budget)
     if invalid:
         result={'status':'pair_has_unscored_candidate_outcome','arms':invalid,'private_reference_reads':0,'scientific_success':None}
