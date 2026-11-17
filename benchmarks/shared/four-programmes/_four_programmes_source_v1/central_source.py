@@ -3,6 +3,9 @@
 Inspection authenticates source and API definitions without scientific imports.
 Typed methods delegate to accepted original factories; they do not create
 native, Context, issuer, data or scientific qualification from metadata.
+
+Modified 2026-11-16: bind the single reviewed current DMD time-index validation repair
+separately from the unchanged historical lock and original source projections.
 """
 import ast
 import hashlib
@@ -15,6 +18,11 @@ import sys
 from types import ModuleType
 
 SOURCE_LOCK = (207185, '0fd8b6912ec45913ae3930963a8891107cda84fe548e70e91d58dc2f3294155f')
+CURRENT_SOURCE_REPAIR = (
+    'current/source/extensions/critical_init/numerics.py',
+    (9089, 'fa87084fee5caa1a82b9fff22927b7de84e64aac460352f4ede80f91e9c43d31'),
+    (9273, 'e3201eb4b0fb19c066b28a2d46c01e9fab6d80a21e778da93f7d50b27c4b3f95'),
+)
 TASKS = ('NEURAL-098', 'PAPER-paper-method-replacement-016')
 HELD = ('authoring/delivery-20261105/neural098/public/COHORT.json',
         'authoring/delivery-20261105/neural098/public/source/phase3.txt')
@@ -106,7 +114,18 @@ def capture_source():
              ('accepted_current_role', 'exact_runtime_table', 'ordinary_scientific_source', 'extension_projection')}
     need([len(kinds[k]) for k in ('accepted_current_role', 'exact_runtime_table', 'ordinary_scientific_source')] ==
          [256, 2, 264] and len(rows) == sum(map(len, kinds.values())), 'no source role pruned or silently added')
-    bodies = {r['path']: source_read(root, r['path'], r, budget, snapshots) for r in rows}
+    repaired_path, predecessor_pin, current_pin = CURRENT_SOURCE_REPAIR
+    selected = [r for r in rows if r['path'] == repaired_path]
+    need(len(selected) == 1 and selected[0]['kind'] == 'accepted_current_role' and
+         selected[0]['role'] == 'source/extensions/critical_init/numerics.py' and
+         (selected[0]['bytes'], selected[0]['sha256']) == predecessor_pin,
+         'exact historical predecessor for the single current DMD source repair')
+    # Only this exact current member changes. The lock, original bodies and
+    # original deployment projections continue to authenticate against old pins.
+    repaired_expected = {'bytes': current_pin[0], 'sha256': current_pin[1]}
+    bodies = {r['path']: source_read(root, r['path'],
+              repaired_expected if r['path'] == repaired_path else r,
+              budget, snapshots) for r in rows}
     source_inverse(root, set(names))
     catalogue = json.loads(bodies['current/source/runtime/four_programmes/SOURCE_CATALOG.json'])
     tables = json.loads(bodies['current/source/runtime/four_programmes/SCHEMA_TABLES.json'])
@@ -139,13 +158,25 @@ def capture_source():
              'exact original API definition span and body')
         api_definitions += 1
     need(api_definitions == 46 and metadata_apis == 1, '46 definitions and one metadata API, not47Python definitions')
-    # Extension copies bind existing current roles to a real ordinary Store
-    # root; they are deployment copies, not extra scientific roles or aliases.
+    # Original extension copies remain bound to their historical lock records.
+    # The one repaired current role has a deliberately unchanged predecessor
+    # projection; it must not be reported as matching the corrected current body.
     current = {r['role']: r for r in kinds['accepted_current_role']}
+    current_matches = 0;historical_projections = 0
     for r in kinds['extension_projection']:
         original = current[r['source_role']]
         need(r['bytes'] == original['bytes'] and r['sha256'] == original['sha256'] and
              r['path'].startswith('originals/_four_extensions/'), 'exact ordinary extension deployment copy')
+        if original['path'] == repaired_path:
+            need(r['path'] == 'originals/_four_extensions/critical_init/numerics.py' and
+                 (r['bytes'], r['sha256']) == predecessor_pin,
+                 'unchanged historical DMD deployment projection')
+            historical_projections += 1
+        else:
+            need(bodies[r['path']] == bodies[original['path']], 'unchanged current extension projection')
+            current_matches += 1
+    need(historical_projections == 1 and current_matches == 67,
+         '67 matching current projections and one historical DMD predecessor')
     scopes = {task: catalogue['programmes'][task]['scientific_scope'] for task in TASKS}
     need(scopes[TASKS[1]]['reference_jobs'] == 8223 and scopes[TASKS[1]]['condition_rows'] == 335 and
          scopes[TASKS[0]]['people'] == 33 and scopes[TASKS[0]]['conditions'] == ['A_F', 'A_I', 'B_F', 'B_I'] and
@@ -153,6 +184,12 @@ def capture_source():
     public = {'schema': 'four_inactive_central_source_inspection_v1', 'current_roles': 256,
         'runtime_tables': 2, 'ordinary_original_bodies': 264, 'original_scientific_roles': 266,
         'extension_deployment_copies': len(kinds['extension_projection']), 'original_API_definitions': 46,
+        'extension_current_body_matches': current_matches,
+        'extension_historical_predecessor_copies': historical_projections,
+        'current_source_repairs': [{'path': repaired_path,
+            'predecessor': {'bytes': predecessor_pin[0], 'sha256': predecessor_pin[1]},
+            'current': repaired_expected,
+            'scope': 'Current DMD time-index validation only; original projection and authoring source remain historical.'}],
         'original_metadata_APIs': 1, 'held_bodies_opened': False, 'original_modules_imported': False,
         'scope': scopes, 'qualification_holds_open': 65, 'inspection_bytes': budget,
         'runnable': False, 'research_qualified': False, 'submission_ready': False,

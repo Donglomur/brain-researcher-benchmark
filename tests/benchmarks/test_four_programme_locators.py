@@ -55,6 +55,20 @@ class FourProgrammeLocatorTests(unittest.TestCase):
         self.assertEqual(report['original_scientific_roles'], 266)
         self.assertEqual(report['original_API_definitions'], 46)
         self.assertEqual(report['qualification_holds_open'], 65)
+        self.assertEqual(report['extension_deployment_copies'], 68)
+        self.assertEqual(report['extension_current_body_matches'], 67)
+        self.assertEqual(report['extension_historical_predecessor_copies'], 1)
+        self.assertEqual(len(report['current_source_repairs']), 1)
+        repair = report['current_source_repairs'][0]
+        self.assertEqual(repair['path'], 'current/source/extensions/critical_init/numerics.py')
+        self.assertEqual(repair['predecessor'], {
+            'bytes': 9089,
+            'sha256': 'fa87084fee5caa1a82b9fff22927b7de84e64aac460352f4ede80f91e9c43d31',
+        })
+        self.assertEqual(repair['current'], {
+            'bytes': 9273,
+            'sha256': 'e3201eb4b0fb19c066b28a2d46c01e9fab6d80a21e778da93f7d50b27c4b3f95',
+        })
         for field in ('held_bodies_opened', 'original_modules_imported', 'runnable',
                       'research_qualified', 'submission_ready',
                       'scientific_or_native_execution', 'authority_issued'):
@@ -76,7 +90,8 @@ class FourProgrammeLocatorTests(unittest.TestCase):
         self.assertEqual(bindings['qualification_holds_open'], 65)
         self.assertEqual({row['path'] for row in bindings['current_wrappers']},
                          {str(path) for path in ENTRIES.values()})
-        for group in ('current_wrappers', 'historical_manifests', 'unchanged_shared_dependencies'):
+        for group in ('current_wrappers', 'current_shared_sources',
+                      'historical_manifests', 'unchanged_shared_dependencies'):
             for pin in bindings[group]:
                 with self.subTest(group=group, path=pin['path']):
                     body = (ROOT / pin['path']).read_bytes()
@@ -147,6 +162,34 @@ class FourProgrammeLocatorTests(unittest.TestCase):
         for task, relative in ENTRIES.items():
             with self.subTest(task=task):
                 self.assert_refusal(self.invoke(root / relative), 'exact source body identity')
+
+    def test_repaired_current_helper_cannot_roll_back_to_historical_bytes(self):
+        root = self.copied_checkout()
+        current = root / SHARED / 'current/source/extensions/critical_init/numerics.py'
+        predecessor = root / SHARED / 'originals/_four_extensions/critical_init/numerics.py'
+        current.write_bytes(predecessor.read_bytes())
+        for task, relative in ENTRIES.items():
+            with self.subTest(task=task):
+                self.assert_refusal(self.invoke(root / relative), 'exact ordinary source extent')
+
+    def test_current_override_does_not_apply_to_either_historical_helper(self):
+        root = self.copied_checkout()
+        current_body = (root / SHARED / 'current/source/extensions/critical_init/numerics.py').read_bytes()
+        originals = (
+            'originals/_four_extensions/critical_init/numerics.py',
+            'originals/authoring/delivery-20261105/common/remaining-builds-wave39/'
+            'critical-init-complete-design/implementation-v1/successor-v3/critical_init/numerics.py',
+        )
+        for historical in originals:
+            path = root / SHARED / historical
+            old_body = path.read_bytes()
+            try:
+                path.write_bytes(current_body)
+                for task, relative in ENTRIES.items():
+                    with self.subTest(historical=historical, task=task):
+                        self.assert_refusal(self.invoke(root / relative), 'exact ordinary source extent')
+            finally:
+                path.write_bytes(old_body)
 
     def test_hardlinked_central_source_still_refuses(self):
         root = self.copied_checkout()

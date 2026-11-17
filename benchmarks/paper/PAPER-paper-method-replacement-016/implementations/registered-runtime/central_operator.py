@@ -11,7 +11,7 @@ import sys
 from types import ModuleType
 
 TASK = 'PAPER-paper-method-replacement-016'
-SOURCE = (21412, '6f35ea43692f88eb8247f98c67fd350e4b78005c2fde63c2747e05ccf8b17f6f')
+SOURCE = (23781, '07b4b531a5378f9b6796cf255fc7b22cffc5fa6e4bcf3957f7fbda3cc755cc64')
 NAME = '_four_inactive_central_source_v1'
 INSTALLED = 'benchmarks/paper/PAPER-paper-method-replacement-016/implementations/registered-runtime/central_operator.py'
 SHARED = 'benchmarks/shared/four-programmes/_four_programmes_source_v1'
