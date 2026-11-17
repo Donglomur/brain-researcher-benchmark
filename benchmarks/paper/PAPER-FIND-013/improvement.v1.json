@@ -1,0 +1,179 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-013",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "The registered endpoints quantify CA1/CA3 place-field shifts and mechanistic agreement of BTSP/STDP models, not an ordered predictive benchmark. Increasing slope significance, directional proportions or in-sample trajectory R² does not surpass the biological finding. The reviewed source does not establish a single original predictive-loss task; a new held-animal task would be an extension.",
+  "source_paper": {
+    "title": "Synaptic plasticity rules driving representational shifting in the hippocampus",
+    "url": "https://www.nature.com/articles/s41593-025-01894-6"
+  },
+  "evidence": [
+    {
+      "id": "abstract",
+      "kind": "paper",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40113934/",
+      "locator": "Abstract",
+      "supports": "Mechanistic account of trial-by-trial place-field shifting in familiar/new environments."
+    },
+    {
+      "id": "readme",
+      "kind": "author_code",
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP",
+      "locator": "README, Figures 1a-c/5/6/7a-c and model sections",
+      "supports": "Reused Dong et al. recordings, CA1/CA3 COM input files, separate optogenetics, figure-to-code mapping."
+    },
+    {
+      "id": "com",
+      "kind": "author_code",
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/COMtraj/Main/CanDataAnalysis.m",
+      "locator": "15-lap and 30-lap eligibility; animal assignments; COM conversion/centering and trajectory fits",
+      "supports": "Original descriptive trajectory units, preprocessing and fits."
+    },
+    {
+      "id": "models",
+      "kind": "author_code",
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/BTSP/SummaryBTSPmodels_vs_CA1data.m",
+      "locator": "Comparison CA1 vs best models; P(CS) dynamic models",
+      "supports": "Slope distributions, directional proportions and mean-squared-displacement comparisons, without a recovered ordered held-out model score."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Describe familiar/novel CA1 and CA3 place-field center-of-mass shifts and compare their dynamics with STDP/BTSP mechanisms, including separate optogenetic effects.",
+      "evidence_ids": [
+        "abstract",
+        "readme",
+        "models"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author-supplied CA1_COM_withPFs.mat and CA3_COM_withPFs.mat reuse Dong et al. 2021 recordings; optogenetic experiments are separate source materials.",
+      "evidence_ids": [
+        "readme"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Source assigns animals explicitly and groups fields by region/environment. The complete animal roster across reused recordings, optogenetics and model analyses is not authenticated by this audit.",
+      "evidence_ids": [
+        "com",
+        "readme"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "Reviewed descriptive COM analysis fits observed trajectories; no source-held-animal predictive benchmark is defined for the registered endpoints.",
+      "evidence_ids": [
+        "com",
+        "models"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Processed place-field COM trajectories, onset laps and source animal/environment assignments; model simulations supply mechanism comparisons.",
+      "evidence_ids": [
+        "com",
+        "models"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Author analyses convert positions to centimeters, center at onset and apply trajectory support requirements (15 laps for selected analyses, 30 for specified displacement comparisons); linear/exponential fits and interpolation have distinct roles.",
+      "evidence_ids": [
+        "com"
+      ]
+    },
+    "metric": {
+      "status": "not_applicable",
+      "description": "Slopes, shift-direction proportions, trajectory R² and displacement statistics characterize data and mechanisms. There is no defensible uniformly ordered paper-win metric for these registered findings.",
+      "evidence_ids": [
+        "com",
+        "models"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Some original comparisons pool fields and others average animal summaries. These are distinct scientific estimands and must not be swapped to produce a larger effect.",
+      "evidence_ids": [
+        "com",
+        "models"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No ordered performance metric for the registered place-field findings",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Descriptive biological statistics are not source performance scores.",
+      "evidence_ids": [
+        "abstract",
+        "com",
+        "models"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "No author performance baseline applies to the descriptive registration; numerical COM reconstruction remains calibration.",
+      "evidence_ids": [
+        "abstract",
+        "com",
+        "models"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "No ordered improvement endpoint exists for this registered descriptive finding.",
+      "evidence_ids": [
+        "abstract",
+        "com",
+        "models"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No paper-win inference admitted.",
+      "independent_unit": "Not defined for a paper-win comparison.",
+      "rationale": "Descriptive confidence or significance is not algorithmic superiority.",
+      "evidence_ids": [
+        "abstract",
+        "com",
+        "models"
+      ]
+    },
+    "paper_win_requires": [
+      "This registration cannot admit a paper win while it retains only descriptive COM/mechanistic endpoints.",
+      "Reconsider eligibility only with an explicitly recovered original ordered model-performance endpoint, complete source cohort and comparator; do not silently create held-animal prediction.",
+      "Do not count better R², stronger P values, changed inclusion or larger shifts as superiority over the paper."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; source-paper reproduction and source-author reruns are separate claims.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "No active improvement loop is admitted for the descriptive registration. Preserve reconstruction and mechanistic review separately.",
+    "candidate_freeze": "Not applicable until a source-supported ordered task is recovered and reviewed.",
+    "final_evaluation": "No same-task superiority evaluation is currently defined.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The source COM/statistical pipeline is a calibration reference, not a performance rival."
+  },
+  "blocking_issues": [
+    "No source-defined ordered performance endpoint for the registered biological findings.",
+    "The original complete empirical/model/optogenetic scope is larger than the local bounded CA trajectory scorer.",
+    "A newly invented predictive split would change the question rather than surpass the original result."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The registered-runtime METHODS.md explicitly defines numerical reconstruction of processed trajectories and separate error/coverage scores. Preserve all OLS/trajectory graders and evidence as calibration only; they do not test a mechanism or an algorithmic paper win."
+  }
+}

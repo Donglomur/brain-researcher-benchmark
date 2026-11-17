@@ -1,0 +1,161 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-REP-012",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "ineligible",
+  "disposition_reason": "The registered core findings and bounded implementation estimate biological associations and intervention effects. The paper provides no ordered held-out performance endpoint for these findings. Stronger association, larger plasticity or smaller p value cannot mean surpassing the paper; a new cross-mouse prediction study would be a separate extension.",
+  "source_paper": {
+    "title": "Distinct synaptic plasticity rules operate across dendritic compartments in vivo during learning",
+    "url": "https://doi.org/10.1126/science.ads4706"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12906676/",
+      "locator": "Results, Figures 2F/2M and 3B/3H; Discussion",
+      "supports": "The selected endpoints are pooled associations between coactivity and subsequent structural spine changes, supporting compartment-specific plasticity claims rather than held-out model performance."
+    },
+    {
+      "id": "release",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/15047046",
+      "locator": "Record title, description and Repo_data_code.zip metadata",
+      "supports": "Author release provides data/code for Wright et al.; the current record describes updated documentation. Metadata does not resolve historical release-to-caption discrepancies."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-FIND-REP-012/implementations/pooled-associations/TASK.md",
+      "locator": "Four endpoints and limits of the released_source_four_pooled_pearson_v1 component",
+      "supports": "Historical score measures reconstruction of four released-source correlations, moments and support counts. It explicitly does not reward larger correlations or smaller p values."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original scientific target is the relationship of local synaptic coactivity and dendrite-coincident activity to subsequent spine structural plasticity in apical versus basal dendrites, including compartment-specific Kir manipulations; the bounded legacy component reconstructs four pooled correlations.",
+      "evidence_ids": [
+        "paper",
+        "legacy"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Wright et al. processed data/code archive at Zenodo 15047046; equivalence of the currently selected release to manuscript-linked release and detailed source-row provenance remains unresolved.",
+      "evidence_ids": [
+        "release",
+        "legacy"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Figures 2–3 early-training population: apical 375 classified spines in 19 dendrites/10 mice and basal 366 spines in 17 dendrites/12 mice. These nested counts are biological samples, not independently held-out prediction cases.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The selected paper panels report associations across the observed early-training population, not a training/validation/test prediction split. Creating a held-out-mouse split would define a new extension.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Observed local coactivity, dendrite-coincident activity and baseline/follow-up structural spine measurements. The observed structural outcome enters the association calculation and cannot be a candidate predictor in a new forecasting task.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Local-neighbor coactivity, compartment inclusion and structural-change definitions are described in the source, but full supplementary-method and release-version equivalence for the processed feature calculations is not resolved by this review.",
+      "evidence_ids": [
+        "paper",
+        "release",
+        "legacy"
+      ]
+    },
+    "metric": {
+      "status": "not_applicable",
+      "description": "Pearson correlation and inferential comparisons describe the biological association. There is no defensible direction in which altering a true correlation, a plasticity effect, or its p value constitutes better task performance.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Paper panels pool spine observations and report compartment-specific summaries; spines are nested in dendrites and mice. This is an association estimand, not an aggregate model-accuracy ranking.",
+      "evidence_ids": [
+        "paper"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "No ordered performance metric for the registered compartment-plasticity association task",
+    "direction": "unresolved",
+    "published_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Published association estimates or exact re-computation are calibration targets, not an accuracy baseline that should be exceeded.",
+      "evidence_ids": [
+        "paper",
+        "legacy"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "not_applicable",
+      "value": null,
+      "description": "Published association estimates or exact re-computation are calibration targets, not an accuracy baseline that should be exceeded.",
+      "evidence_ids": [
+        "paper",
+        "legacy"
+      ]
+    },
+    "minimum_effect": {
+      "status": "not_applicable",
+      "value": null,
+      "rationale": "No ordered performance endpoint exists for the selected biological association task.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "not_applicable",
+      "method": "No paper-win uncertainty test is defined for this ineligible objective.",
+      "independent_unit": "Mouse, with dendrite and spine nesting for any separately designed biological analysis.",
+      "rationale": "Uncertainty about a biological effect is not evidence that an algorithm surpasses that effect.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "No paper win is admissible for the current descriptive association task.",
+      "A separately registered predictive replacement must name an original source-paper prediction target, fixed inputs, split, score and author baseline; a newly invented cross-mouse prediction task cannot inherit this paper-win identity."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is asserted; the source-paper result and any later author rerun remain separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive for same-task improvement. Preserve the original reconstruction and scientific interpretation as calibration work.",
+    "candidate_freeze": "No candidate may enter a paper-win evaluation under this ineligible contract.",
+    "final_evaluation": "Historical reconstruction remains scoreable but cannot emit a same-task paper win.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+  },
+  "blocking_issues": [
+    "No ordered source-paper performance endpoint for the registered correlation/intervention findings.",
+    "Historical release-to-manuscript correspondence and caption-statistic discrepancies remain unresolved; these do not create an improvement target."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve pooled-associations, matched-paper-packets, rep012-portable and registered-runtime unchanged. Their numerical/support scores calibrate source reconstruction and do not establish improvement, independent biological inference or whole-paper performance."
+  }
+}

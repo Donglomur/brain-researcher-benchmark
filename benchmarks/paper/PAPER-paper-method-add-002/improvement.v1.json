@@ -1,0 +1,189 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-add-002",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original reaching-decoding and blocked reconstruction endpoints are ordered, but no exact published score and matching source evaluation artifact are recovered. The current 200-case conditional-position programme is a different evaluation and cannot establish a source-paper win. Paper/code decoding and CV discrepancies require reconciliation before admission.",
+  "source_paper": {
+    "title": "Dimensionality reduction beyond neural subspaces with slice tensor component analysis",
+    "url": "https://www.nature.com/articles/s41593-024-01626-2"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-024-01626-2",
+      "locator": "Fig.2; Methods: monkey reaching dataset, Additional preprocessing, Decoding analyses; Fig.3 and cross-validated model selection",
+      "supports": "Original reaching population, dimensionality-reduction/decoding task, and distinction from blocked tensor model selection."
+    },
+    {
+      "id": "fit",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/churchland_fit.ipynb",
+      "locator": "data-loading cell; hyperparameter cell; decompose loop; saved KeyboardInterrupt output",
+      "supports": "Named straight/curved arrays and transforms; executed-source loop sets cross_validation=False despite earlier configuration, so displayed output is not a qualified held-out result."
+    },
+    {
+      "id": "decoder",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/figures/Fig2/code/hand_decoding/functions.py",
+      "locator": "decoding; velocity_decoding; trial_wise_r2; k_fold_cross_validated_r2",
+      "supports": "Velocity prediction integrates from true initial position; exact R2 and fold/seed mechanics; default regularization is 1."
+    },
+    {
+      "id": "figure",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/figures/Fig2/code/Fig2.py",
+      "locator": "import_decoding_r2; get_r2_all; plot_k_fold; wilcoxon",
+      "supports": "Original straight/curved scoring, five folds, twenty permutations and seed=0; source score array named decoding_r2.npy, not inspected as observations."
+    },
+    {
+      "id": "cv",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/caycogajiclab/sliceTCA_paper/62b0ca1267fe9d615111a193080577eda601687e/run_sliceTCA/run/cv_search.py",
+      "locator": "decompose_mp and cv_search_sample",
+      "supports": "CV output uses root error and seed/rank search; actual masks and source score need recovery."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-002/implementations/registered-runtime/manifest.json",
+      "locator": "scope, verification, scientific_limits",
+      "supports": "Inactive 200-case conditional-position pair is explicitly bounded and not a whole-paper result."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Fig.2 hand-trajectory decoding from raw or decomposed neural activity, together with original blocked tensor-entry reconstruction error versus rank/type. Neither endpoint can replace the other in the registered combined task.",
+      "evidence_ids": [
+        "paper",
+        "decoder"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author Figshare record24961917/v1 and named Churchland straight/curved arrays are the route; content/version-to-Fig.2 membership and movement/condition artifact hashes remain unverified.",
+      "evidence_ids": [
+        "fit",
+        "figure"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Fig.2 uses monkey J, one session:182 neurons,511 trials (265 center-out and246 maze reaches),12 matched target positions; no unseen-animal claim.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Released plot_k_fold specifies five folds,20 trial permutations,seed0 separately by straight/curved condition. Recover exact original permutations and confirm treatment of leftover trials and decomposition exposure; new200-case splits cannot substitute. Recover the original reconstruction masks, block trimming and rank-search realizations independently; decoder folds do not define those masks.",
+      "evidence_ids": [
+        "figure",
+        "decoder"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source decoder receives reconstructed or raw neural trajectories plus true initial hand position; trial neural covariates available to unsupervised reconstruction must be disclosed.",
+      "evidence_ids": [
+        "decoder"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "The original neural tensor uses10ms bins,20ms Gaussian smoothing,whole-session neuronwise min-max scaling and no time warp, covering -1s to+0.5s relative to movement. Qualify the exact decoding time origin/window: Fig2.py slices neural[55:-15] against movement[65:-5] (10-bin lag), whereas Methods describes a -250ms to450ms decoding period. Source arrays and index provenance must resolve this before equivalence.",
+      "evidence_ids": [
+        "paper",
+        "fit",
+        "figure"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Trial R2=1-SSE/SST, summing squared error across time and XY and centering true position within trial; velocity decoder cumulatively integrates predicted increments from true start. Reconstruction uses the source masked MSE/root-error convention, which must be reconciled for each original panel before comparison.",
+      "evidence_ids": [
+        "decoder",
+        "cv"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Keep separate straight/curved means over trials/folds/permutations and all declared reconstruction comparators. Source figure defines this route, but exact original numerical vectors and OLS-versus-default-ridge parity remain unresolved.",
+      "evidence_ids": [
+        "decoder",
+        "figure"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Fig.2 trial-wise trajectory R2 for straight and curved reaches, reported separately",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No exact source figure score imported. decoding_r2.npy is named in author figure code; notebook training-loss prints are not published test performance.",
+      "evidence_ids": [
+        "figure",
+        "fit"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No author rerun performed. Recover original figure data and reconcile decoding regularization before qualifying the pinned author route.",
+      "evidence_ids": [
+        "decoder",
+        "figure"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A useful R2 gain must be justified relative to original trial variability and trajectory scale after authentic source calibration; none is imposed here.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "A paired trial-level uncertainty procedure preserving repeated-fold dependence must be specified; population generalization beyond this session requires a separately labelled extension.",
+      "independent_unit": "Reaching trials within one session; neither random permutation nor neuron is an independent animal.",
+      "rationale": "No confirmatory rule has been admitted. Repeated calculations on the same biological observations do not create independent samples.",
+      "evidence_ids": []
+    },
+    "paper_win_requires": [
+      "Recover authentic Fig.2 scores and exact source trial/fold identities, and qualify the original author pipeline before any candidate claim.",
+      "Keep original neural/hand inputs, time windows, starting-position access, preprocessing and both reach conditions; no200-case conditional-position substitute.",
+      "Resolve OLS stated in paper versus regularization=1 default in released velocity decoding; freeze a source-supported recipe and report any discrepancy.",
+      "Recover and retain the original blocked-reconstruction error-versus-rank/type panel, masks, edge trimming and full source comparator set as required companion endpoints. Predeclare a joint decision with decoding; a decoding-only result cannot satisfy the combined registration.",
+      "Require a meaningful predeclared improvement against the original source performance with valid uncertainty; reconstruction accuracy, a stronger Wilcoxon p-value or more optimizer restarts alone is insufficient.",
+      "A changed split, training-only rescaling or different neuron/session subset is an extension, not surpassing the original paper task."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was reviewed or established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After source recovery, iterate on a declared development partition while retaining reconstruction and decoding as required, separately reported endpoint panels. No scientific run is authorized by this contract.",
+    "candidate_freeze": "Freeze source-compatible transform, decomposition, decoder, rank/search policy and seed/prediction artifacts before final comparison.",
+    "final_evaluation": "Evaluate the original full Fig.2 decoding and original blocked-reconstruction/rank panels with source-matched exposure and a predeclared joint decision; report both reach conditions, protect final labels operationally and disclose prior public exposure.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published source scores, authentic author reruns and local engineering controls remain separate. Null episode budgets block active admission."
+  },
+  "blocking_issues": [
+    "Exact Fig.2 numerical baseline and original fold/mask provenance not recovered.",
+    "Native data, movement and condition asset hashes not authenticated.",
+    "OLS/ridge discrepancy and reconstruction exposure require source reconciliation.",
+    "Current runtime has no runnable same-task scorer; resource/access budgets, meaningful effect and uncertainty remain unbound.",
+    "Original reconstruction/rank panel masks, numeric error profiles and joint decoding/reconstruction decision rule not recovered.",
+    "Exact source decoder time-index origin/window must be reconciled between Methods and Fig2.py slices; no silent window replacement."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Retain the full200/400 paired conditional-position programme and every historical grader as calibration/extension evidence only; none can certify the original Fig.2 decoding or blocked reconstruction result."
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-013",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original ten-video experimental task, ordered segmentation metric and numeric source baseline are recoverable. Native assembly, checkpoint/reference equivalence, baseline replay and a protected improvement episode remain incomplete. The existing post-assembly evaluator is useful infrastructure but does not establish a ready same-task comparison.",
+  "source_paper": {
+    "title": "An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data",
+    "url": "https://www.nature.com/articles/s42256-024-00892-w"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12327232/",
+      "locator": "Results: Evaluating DeepCaImX on experimental datasets; Figure 3; Methods: evaluation; Extended Data Figure 7",
+      "supports": "Original ten-video Allen experimental benchmark reports mean F1 0.847, SD 0.037, with strict IoU>0.5 and shared-ROI trace evaluation."
+    },
+    {
+      "id": "readme",
+      "kind": "author_code",
+      "url": "https://github.com/KangningZhang/DeepCaImX/blob/305a4827929b2c6e82e44c5c69b2ea9d410e20a4/README.md",
+      "locator": "Full versus mini model; training data and experimental preprocessing",
+      "supports": "Full model uses synthetic NAOMi training, mini demo uses FISSA, and experimental inputs are normalized to [0,1]; mini examples are not the paper’s experimental panel."
+    },
+    {
+      "id": "tree",
+      "kind": "author_code",
+      "url": "https://api.github.com/repos/KangningZhang/DeepCaImX/git/trees/305a4827929b2c6e82e44c5c69b2ea9d410e20a4?recursive=1",
+      "locator": "Manually Labelled ROIs/ABO paths; Demo (full-version); preprocessing notebook",
+      "supports": "Pinned file metadata identifies the ten manual-ROI recordings and source frame labels 18501–23500; array contents were not read."
+    },
+    {
+      "id": "release",
+      "kind": "author_code",
+      "url": "https://zenodo.org/records/12650420",
+      "locator": "Version 1.0.0 archive metadata",
+      "supports": "Zenodo record archives the software; it must not be misidentified as the Allen source movie archive."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/evaluator.py",
+      "locator": "RECORDINGS, FRAME_LABELS, match_iou, _aggregate and evaluate holds",
+      "supports": "Current evaluator scores assembled masks/traces, emits macro-recording F1 and retains native assembly, authentic references and source-equivalence holds."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Denoise, detect and demix neurons in the original ten experimental Allen two-photon videos. Primary ordered comparison is original manual-ROI segmentation F1; extracted trace accuracy and runtime remain separately reported source endpoints, not substituted for segmentation.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Allen Brain Observatory motion-corrected experimental recordings, with pinned author manual-ROI files for frames 18501–23500. Zenodo 12650420 is the software archive, not the movie dataset. Exact movie/frame-to-reference transformation receipts remain unqualified.",
+      "evidence_ids": [
+        "tree",
+        "release",
+        "legacy"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All ten original GCaMP6f recordings from ten mice at depths 175, 275, 375, 550 and 625 micrometres: 501271265, 501704220, 524691284, 531006860, 603516552, 604145810, 607040613, 669233895, 671162628 and 679353932. Preserve every recording, depth and annotated frame interval.",
+      "evidence_ids": [
+        "paper",
+        "tree"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Use the source full model trained on NAOMi synthetic data and evaluated on the fixed ten-video experimental panel; mini FISSA demo data are not substitutes. The final ten-video panel must remain the same, and candidate development access/exposure must be declared rather than inventing a new mouse split.",
+      "evidence_ids": [
+        "paper",
+        "readme",
+        "tree"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original motion-corrected movie clips, each 488×488×5000, and permitted training data/model conditions. Manual ROI masks and imaging-derived reference traces are scoring labels, not model inputs during final evaluation.",
+      "evidence_ids": [
+        "paper",
+        "readme",
+        "tree"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source normalizes inputs to [0,1], tiles into 64×64×400 clips with 11-pixel spatial overlap, and assembles using spatial trace-correlation and temporal footprint-IoU rules. Exact historical source checkpoint, native padding/frame conventions and reference transformations still need qualification.",
+      "evidence_ids": [
+        "paper",
+        "readme",
+        "legacy"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Match each manual reference ROI to the highest-overlap predicted ROI with strict IoU>0.5. F1=2TP/(Npred+Nref). For trace correlation use the reference ROIs detected by every compared method; those imaging-derived traces do not measure electrical ground truth. Ambiguous many-reference matching requires source resolution.",
+      "evidence_ids": [
+        "paper",
+        "legacy"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Paper segmentation summary is arithmetic mean F1 across all ten videos, with SD across videos; baseline 0.847±0.037. Pooled ROI-count F1 is a different statistic and cannot replace the source macro-video score.",
+      "evidence_ids": [
+        "paper",
+        "legacy"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Arithmetic mean segmentation F1 across the ten original Allen experimental videos, using strict IoU>0.5",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.847,
+      "description": "Original Figure 3 experimental panel: mean F1=0.847, SD=0.037 across ten videos. Precision 0.852±0.031, recall 0.841±0.045 and shared-ROI trace correlation 0.938±0.019 are separate reported endpoints; none replaces this primary F1.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Pinned full-version model and experimental preprocessing provide the author route. No authentic movie-to-mask/trace baseline replay or agreement with the original ten-video scores is established; post-assembly evaluator correctness alone is insufficient.",
+      "evidence_ids": [
+        "readme",
+        "tree",
+        "legacy"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify a practical F1 gain relative to annotation uncertainty, segmentation errors and the rounded published mean. The reported between-video SD is not an automatically justified improvement margin.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Preregister a paired ten-video candidate-minus-author analysis preserving the depth strata and source mouse identities; choose a justified interval/test and effect threshold before final outputs are inspected.",
+      "independent_unit": "Original mouse/video; frames, tiles and ROIs are nested and must not inflate the effective sample size.",
+      "rationale": "The experimental comparison has ten videos from ten mice, with correlated structures within each. The source mean±SD is descriptive and does not by itself define a valid improvement test.",
+      "evidence_ids": [
+        "paper",
+        "tree"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate all ten original recording/frame/manual-reference mappings and the exact full-model checkpoint and native preprocessing/assembly.",
+      "Reproduce source-author per-video F1 and its ten-video mean, keeping the published 0.847 and rerun result distinct.",
+      "Evaluate candidate on all ten original videos under identical source labels, IoU matching and macro-video aggregation; no reduced recordings, new depths, external donors or mini-demo substitutes.",
+      "Keep trace comparison on common detected ROIs and disclose its imaging-derived reference; separately retain original trace/runtime endpoints when claiming improvement of the complete denoise/detect/demix task.",
+      "Freeze method, permitted training/access, reference exposure, meaningful effect, uncertainty rule and concrete resource budget before the final comparison."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is asserted; the source-paper result and any later author rerun remain separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate on allowed synthetic/development inputs and separately declared validation feedback; the original experimental panel remains the final same-task comparison. Public-label exposure must be disclosed.",
+    "candidate_freeze": "Freeze full model weights/code, tiling and merge rules, ROI extraction thresholds, training exposure and resource budget before scoring final assembled outputs.",
+    "final_evaluation": "Run candidate and authenticated author full model on the exact ten movie/frame intervals, then compute original per-video and mean F1 with paired uncertainty; retain source trace/runtime outputs separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+  },
+  "blocking_issues": [
+    "Authentic original movie/frame identity, native tiling/merge/reference transformations and exact full checkpoint not yet replay-qualified.",
+    "Ambiguous many-reference matching and frame-index conventions need historical equivalence; current evaluator fails closed on ambiguity.",
+    "No reproduced author baseline or qualified candidate runner on the original ten-video panel.",
+    "Manual-reference exposure, meaningful effect, paired uncertainty, concrete access/resource budgets and full native resource cost remain unresolved."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve initial-evaluator-v1 unchanged as post-assembly calibration infrastructure. Its macro-F1, common-ROI trace and pooled diagnostic outputs do not authenticate source execution or establish a paper win; pooled F1 must not replace the published ten-video mean."
+  }
+}

@@ -1,0 +1,179 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-032",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original one-session retrieval/reconstruction task and corrected published retrieval score are recoverable. Native feature/reference parity, full reconstruction evaluation, exact historical preprocessing and sample manifests, a meaningful effect rule, and measured episode budgets remain unqualified; the feature-only component cannot admit an improvement win.",
+  "source_paper": {
+    "title": "MindEye2: Shared-Subject Models Enable fMRI-To-Image With 1 Hour of Data",
+    "url": "https://proceedings.mlr.press/v235/scotti24a.html"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2403.11207v2",
+      "locator": "Sections 2, 3, 3.3; Table 1; Appendix A.2 and A.5 Table 8",
+      "supports": "Original one-hour target, four-subject evaluation, shared-image test set, preprocessing and published endpoint panel."
+    },
+    {
+      "id": "correction",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MedARC-AI/MindEyeV2/76a2609243ba1bacb450e47e3dc78de1f78a9c00/README.md",
+      "locator": "Retrieval metric correction; Usage; pretrained model configurations",
+      "supports": "Corrected retrieval directions and scores; first-session adaptation of leave-target-subject-out checkpoints."
+    },
+    {
+      "id": "metric_code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MedARC-AI/MindEyeV2/76a2609243ba1bacb450e47e3dc78de1f78a9c00/src/final_evaluations.ipynb",
+      "locator": "Retrieval eval, cells 4f862220-1df3-49b0-a36c-0aa2f168315d and 2e49d57a-9b65-490c-a1e0-61bd05682171",
+      "supports": "OpenCLIP token space, cosine top-1 retrieval, 30 draws of 300 paired samples and draw averaging."
+    },
+    {
+      "id": "inference_code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MedARC-AI/MindEyeV2/76a2609243ba1bacb450e47e3dc78de1f78a9c00/src/recon_inference.ipynb",
+      "locator": "Parser --new_test; inference repeat handling and embedding/reconstruction production",
+      "supports": "Source inference entrypoint and repeated-image handling must be preserved when producing evaluation features."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "One-hour fMRI-to-image retrieval and reconstruction; primary ordered endpoint is corrected brain-query/image-candidate top-1 retrieval. Reconstruction remains a required companion panel, not an optional replacement endpoint.",
+      "evidence_ids": [
+        "paper",
+        "correction"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Natural Scenes Dataset (NSD), full 40-session release used in the paper, with author MindEyeV2 derivatives. Exact paper-era neural, image, checkpoint and derivative file hashes are not yet authenticated.",
+      "evidence_ids": [
+        "paper",
+        "correction"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Evaluate subjects 1, 2, 5 and 7; each target uses a shared model pretrained on the other seven NSD subjects. A single-subject or reduced-image result cannot substitute for this aggregate.",
+      "evidence_ids": [
+        "paper",
+        "correction"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Adapt on the first scanning session, excluding shared1000 test images; retain the same 1,000 shared test images and their original repeat support for every training-duration condition. Do not replace this with the legacy prospective session-disjoint restriction.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Single-trial nsdgeneral fMRI responses and paired training images, seven-other-subject pretraining, and the source pretrained image-model resources. Match and record neural/image/checkpoint exposure; no test image identity or feature target may enter a candidate query.",
+      "evidence_ids": [
+        "paper",
+        "correction"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "GLMSingle normalized betas, 1.8-mm native-volume nsdgeneral voxels, voxel z-scoring from the full training partition before reducing to one session. The paper acknowledges this extra normalization exposure; a first-session-only normalization experiment is a separately labelled extension. Native repeat handling still requires parity verification.",
+      "evidence_ids": [
+        "paper",
+        "inference_code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "For each 300-item draw, flatten and L2-normalize paired OpenCLIP ViT-bigG-14/laion2b_s39b_b160k token embeddings; score the fraction whose true image has greatest cosine similarity to the brain query. Preserve corrected orientation and qualify native ties/RNG behavior.",
+      "evidence_ids": [
+        "metric_code",
+        "correction"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Average retrieval accuracy over 30 sampled 300-image pools per subject, then equally across the four paper subjects. Keep reverse retrieval and all reconstruction metrics separate. Repeated pools are Monte Carlo variation, not independent people.",
+      "evidence_ids": [
+        "paper",
+        "metric_code"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Corrected one-hour image retrieval top-1 fraction (brain query, 300 image candidates)",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "description": "0.574 is the author-corrected one-hour Table 1 image retrieval mean (57.4%); corrected reverse retrieval is 0.790. This is a published result, not a local rerun or current-SOTA value.",
+      "evidence_ids": [
+        "paper",
+        "correction"
+      ],
+      "value": 0.574
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "No authentic one-hour four-subject author-model rerun was executed. The pinned README supplies the pretrained checkpoint/adaptation route; its actual data, weights, preprocessing and complete metric parity remain to be qualified.",
+      "evidence_ids": [
+        "correction",
+        "metric_code"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful gain must exceed source rounding and measured rerun/Monte Carlo variability while preserving the declared reconstruction trade-off rule. No source-justified numeric margin or qualified rerun variance is available.",
+      "evidence_ids": [
+        "paper",
+        "metric_code"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired comparison across the four paper subjects with shared-image dependence and stochastic retrieval/reconstruction variability represented; choose the interval and decision rule before candidate evaluation.",
+      "independent_unit": "Human participant; images are shared across participants and repeated retrieval pools are not independent biological replicates.",
+      "rationale": "The notebook interval across 30 overlapping pools describes sampling variability and cannot establish a population-level improvement. Four source subjects limit inference.",
+      "evidence_ids": [
+        "paper",
+        "metric_code"
+      ]
+    },
+    "paper_win_requires": [
+      "Reproduce the corrected author baseline on the original four subjects, first-session adaptation, shared1000 population and source normalization exposure before comparing a candidate.",
+      "Exceed 0.574 on the original corrected image-retrieval endpoint by the predeclared meaningful effect and uncertainty rule; also exceed the qualified author rerun on identical inputs and retrieval pools.",
+      "Retain brain retrieval and the complete original reconstruction panel, with a predeclared joint/trade-off decision; a retrieval-only subset result is not success for the registered combined task.",
+      "Freeze candidate code, checkpoints, preprocessing, image-model resources and exposure ledger before final scoring; preserve original test identities. A new split, reduced cohort or altered normalization regime is an extension.",
+      "Document public test exposure and reproduce all source evaluation semantics, including repeated presentations and metric direction; the existing generated-control feature scorer is insufficient evidence."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The source paper historical SOTA claim does not establish present SOTA. No current competing method comparison was verified.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate on the original training data and declared validation feedback within that training partition. Restore the full permitted first-session training allocation for final fitting and record all image/neural pretraining exposure. Do not tune from final shared1000 scores.",
+    "candidate_freeze": "Commit candidate algorithm, fitting/selection recipe, checkpoints, pretrained resources, exact trial/image manifests, native normalization/repeat rules and retrieval-pool schedule before final evaluation.",
+    "final_evaluation": "Run the frozen candidate and authentic author baseline on all four original subjects and the same shared1000 test images; report corrected retrieval and full reconstruction results, paired uncertainty and public-test exposure. Newly protected samples are a separate extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published corrected score, reproduced author score and any separately verified current-SOTA score remain distinct. Local numerical controls or a weaker single-subject model cannot replace the source author baseline."
+  },
+  "blocking_issues": [
+    "Authenticate exact NSD/derivative/checkpoint manifests and source exposure, including normalization statistics from more than the adaptation session.",
+    "Reconcile legacy evaluator session-disjoint prospective protection with the original shared1000 test population; do not silently drop first-session test presentations.",
+    "Qualify native feature extraction, repeat aggregation, historical retrieval RNG/ties and all original reconstruction metrics; no authentic full-panel rerun exists.",
+    "Freeze source-task reconstruction trade-offs, meaningful effect and participant-aware uncertainty without treating 30 overlapping pools as independent samples.",
+    "Set concrete access/validation/final-query and compute budgets and protect final scoring; public source test exposure must be disclosed."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "The original task and initial-evaluator-v1 remain calibration materials. Frozen-pool feature scoring and generated tests do not establish native reproduction or stronger-than-paper performance; their prospective split/RNG policies must not redefine the paper task."
+  }
+}
