@@ -4,20 +4,21 @@
   "track": "paper",
   "title": "EEG-based brain-computer interface enables real-time robotic hand control at individual finger level",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Classify imagined or executed thumb/index/pinky activity in the source-defined binary and ternary conditions. Retrospective recorded decoding and online closed-loop control remain distinct targets.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the original recorded-session finger-decoding and fine-tuning comparisons for the source-defined thumb–pinky and thumb–index–pinky conditions, preserving the complete Figure 2A MI model-by-session comparison and the separately identified ME counterpart in the current task. Keep source chronological training/calibration inputs, common assessment observations, participant/session identities and the controls needed for the claimed result. Evaluate improvement against a qualified author comparator on that same named recorded-decoding result. Report replayed and recorded online outputs distinctly; neither an isolated binary mean nor improved replay accuracy establishes a new human closed-loop gain or whole-paper reproduction.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Classify imagined or executed thumb/index/pinky activity in the source-defined binary and ternary conditions. Retrospective recorded decoding and online closed-loop control remain distinct targets.",
-    "Source-paper comparison for Original figure-specific offline finger-classification accuracy: Source offline classification accuracy needs its figure-specific window/trial rule recovered. Online cumulative finger decisions and a local hard-vote replay score are not interchangeable."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover a complete original offline paper panel, exact folds/session membership, decision rule and numeric EEGNet baseline before enabling same-task comparison.",
-    "Match imagery/execution, class roster, complete original participants, chronological training and source-prescribed calibration inputs; keep every trial’s overlapping windows together.",
-    "Compare against the source EEGNet training and fine-tuning procedure under identical allowed input and tuning budgets; nearest-centroid spectral references are calibration only.",
-    "Do not call improved replay accuracy a gain over the online human-adapting Base-versus-Finetune experiment.",
-    "Resolve S07 session-5 missing events without silently shrinking the original panel; predeclare task-specific effect and participant-level uncertainty. New participant-transfer splits are extensions.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v2.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results.",
+    "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply."
   ],
   "source_id": "paper-signal-add-017",
   "canonical_position_one_based": 41,
@@ -183,57 +184,80 @@
     "source_basis": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-signal-add-017/improvement.v1.json",
-      "bytes": 11057,
-      "sha256": "e009aab05c8d07b33eafd2f716ffcbe8ea2ed5c7a95b293ed5d8fba214aee16d"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v2.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-signal-add-017/historical/task.pre-improvement.v1.json",
-        "bytes": 14860,
-        "sha256": "63d23b0d71a7dfceeaa48db2c0df2afe8b1097cfa3056e631285fe18cd63f8ce"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-signal-add-017-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "scope_disposition": "same_primary_unqualified"
   },
   "episode": {
-    "improvement_loop": "After recovering the chosen original offline figure panel, iterate on its permitted participant/session training data and trial-grouped validation feedback. Respect MI/ME and binary/ternary source routes, including the two Base-folder route for binary fine-tuning. Keep overlapping windows within their original trial and log any preprocessing, EEGNet or calibration change without using final-session labels.",
-    "candidate_freeze": "Freeze the exact offline figure estimand, original participant/session/run roster and exclusions, source MAT conversion, original folds, source-folder calibration access, EEG preprocessing, window-to-trial rule, EEGNet selection/fine-tuning recipe, aggregation and budgets before final scoring. Resolve missing S07 events before freezing the denominator.",
-    "final_evaluation": "Evaluate the frozen candidate and recovered native EEGNet baseline on the same complete original offline panel, retaining every condition and participant result. A same-Finetune-trial replay gain, participant-transfer split or changed calibration allowance is a separate extension. No offline output can establish improvement over the online human-control headline.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Use the figure-matched original offline EEGNet result and qualified rerun as distinct comparators. Keep the online binary/ternary headline scores, local nearest-centroid spectral reference, calibration-augmented replay reference and prospective participant-macro/bootstrap diagnostics separately labeled; none substitutes for the missing original offline baseline."
+    "improvement": {
+      "improvement_loop": "After recovering the chosen original offline figure panel, iterate on its permitted participant/session training data and trial-grouped validation feedback. Respect MI/ME and binary/ternary source routes, including the two Base-folder route for binary fine-tuning. Keep overlapping windows within their original trial and log any preprocessing, EEGNet or calibration change without using final-session labels.",
+      "candidate_freeze": "Freeze the exact offline figure estimand, original participant/session/run roster and exclusions, source MAT conversion, original folds, source-folder calibration access, EEG preprocessing, window-to-trial rule, EEGNet selection/fine-tuning recipe, aggregation and budgets before final scoring. Resolve missing S07 events before freezing the denominator.",
+      "final_evaluation": "Evaluate the frozen candidate and recovered native EEGNet baseline on the same complete original offline panel, retaining every condition and participant result. A same-Finetune-trial replay gain, participant-transfer split or changed calibration allowance is a separate extension. No offline output can establish improvement over the online human-control headline.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Use the figure-matched original offline EEGNet result and qualified rerun as distinct comparators. Keep the online binary/ternary headline scores, local nearest-centroid spectral reference, calibration-augmented replay reference and prospective participant-macro/bootstrap diagnostics separately labeled; none substitutes for the missing original offline baseline."
+    },
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact original offline panel, numeric score, decision rule and folds/session aggregation are unresolved.",
-    "Complete source-MAT conversion and cohort membership remain unqualified, including S07 missing-event handling.",
-    "Native EEGNet environment, checkpoints, validation selection and first-four-layer fine-tuning freeze have no qualified rerun.",
-    "Local same-Finetune-trial spectral comparison changes the original human-adapting Base/Finetune design.",
-    "No matched author baseline, fixed access/resource budget or justified effect and uncertainty rule."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact original offline panel, numeric score, decision rule and folds/session aggregation are unresolved.",
       "Complete source-MAT conversion and cohort membership remain unqualified, including S07 missing-event handling.",
       "Native EEGNet environment, checkpoints, validation selection and first-four-layer fine-tuning freeze have no qualified rerun.",
       "Local same-Finetune-trial spectral comparison changes the original human-adapting Base/Finetune design.",
       "No matched author baseline, fixed access/resource budget or justified effect and uncertainty rule."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact original offline panel, numeric score, decision rule and folds/session aggregation are unresolved.",
+        "Complete source-MAT conversion and cohort membership remain unqualified, including S07 missing-event handling.",
+        "Native EEGNet environment, checkpoints, validation selection and first-four-layer fine-tuning freeze have no qualified rerun.",
+        "Local same-Finetune-trial spectral comparison changes the original human-adapting Base/Finetune design.",
+        "No matched author baseline, fixed access/resource budget or justified effect and uncertainty rule."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v2.json.",
+    "reproduction_contract": "reproduction.v2.json",
+    "current_primary_source_limits": [
+      "The original recorded-session source-member, participant/session/run/trial and exclusion joins, trained-model/checkpoint provenance, complete figure-specific prediction outputs and immutable comparison roster remain unqualified.",
+      "Preserve distinct roles for Figure 2A EEGNet replay, recorded S2-Finetune outputs and source human-learning controls. The author's trial-first 80/20 training/validation split is not the final figure assessment or five-fold FBCSP evaluation. Exact source folds are required only for enrolled five-fold companion outputs.",
+      "The source defines trial-majority voting, but complete window/trial eligibility, tie handling, participant aggregation and numerical original references still need independent verification. Paper means or p-values cannot substitute for computation or agreement/superiority criteria.",
+      "The ME/S7 counterpart is described in the inspected main text, while complete supplementary numerical definitions remain unavailable; preserve its own source identities and report it as unqualified until resolved rather than expanding or pooling from MI.",
+      "Source controls and uncertainty must match the enrolled claim. Machine-versus-human learning attribution requires its relevant FBCSP/run-trend companions; a bounded decoder comparison alone cannot establish that broader interpretation.",
+      "Assessment targets and recorded prediction/probability fields are operator evaluation/reference material, not candidate-time decoding inputs. Preserve authentic chronological training/calibration access and matched paper+data versus +code exposure/resources; these complete manifests remain unresolved.",
+      "No native parity, trained-decoder result, scientific reproduction or improvement is established. Full-Figure-6 four-finger discrepancies and Session-5 missing events are not automatic blockers for the named Session-1/2 result; attach them only to affected outputs if separately enrolled."
+    ],
+    "scope_correction_limit": "This scope correction grants no new observation access and changes no improvement metric, criterion or tolerance."
   },
   "next_implementation_action": {
-    "action": "The registration scopes recorded offline decoding, which is ordered, but its exact source-paper offline baseline and original folds/session mapping are unrecovered. The published online fine-tuned human-control headline is incompatible with replay scoring and cannot be the offline victory threshold. Exact original offline panel, numeric score, decision rule and folds/session aggregation are unresolved. Complete source-MAT conversion and cohort membership remain unqualified, including S07 missing-event handling. Native EEGNet environment, checkpoints, validation selection and first-four-layer fine-tuning freeze have no qualified rerun. Local same-Finetune-trial spectral comparison changes the original human-adapting Base/Finetune design. No matched author baseline, fixed access/resource budget or justified effect and uncertainty rule.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The registration scopes recorded offline decoding, which is ordered, but its exact source-paper offline baseline and original folds/session mapping are unrecovered. The published online fine-tuned human-control headline is incompatible with replay scoring and cannot be the offline victory threshold. Exact original offline panel, numeric score, decision rule and folds/session aggregation are unresolved. Complete source-MAT conversion and cohort membership remain unqualified, including S07 missing-event handling. Native EEGNet environment, checkpoints, validation selection and first-four-layer fine-tuning freeze have no qualified rerun. Local same-Finetune-trial spectral comparison changes the original human-adapting Base/Finetune design. No matched author baseline, fixed access/resource budget or justified effect and uncertainty rule.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v2.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -248,8 +272,29 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate.",
+  "primary_scope": "The retained offline-trained finger decoder and recorded cross-session/fine-tuning comparison, already scoped to labels 1/2/4 and binary/ternary conditions. Figure 2A MI compares S1-Base, S1-Finetune and S2-Base replay on common S2-Finetune observations with the recorded S2-Finetune result. Preserve both class conditions and the full source-defined model/participant/session comparison. MI is the explicit historical anchor; the existing current-task ME/S7 counterpart remains separately named and source-qualified, never pooled or inferred from MI-only outputs. Include human-learning/run-trend companions only when claiming their corresponding attribution. No automatic full-Figure-6 or whole-paper scope is enrolled.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-paper-signal-add-017"
+  },
+  "source_scope_correction": {
+    "disposition": "same_primary_unqualified",
+    "retained_scope_notes": "No new scientific secondary endpoint is selected. Retain existing source preparation as supporting software and the broader-paper census as context. The complete eleven-combination Figure 6 experiment is a genuine distinct empirical offline-decoding result, not simulation or preprocessing, but its presence in the paper does not make it the registered primary or an automatically enrolled secondary outcome. The source's Figure 2/S7 offline simulation is real recorded-EEG replay within the retained primary family.",
+    "retained_source_roles": null,
+    "remaining_source_limits": [
+      "The original recorded-session source-member, participant/session/run/trial and exclusion joins, trained-model/checkpoint provenance, complete figure-specific prediction outputs and immutable comparison roster remain unqualified.",
+      "Preserve distinct roles for Figure 2A EEGNet replay, recorded S2-Finetune outputs and source human-learning controls. The author's trial-first 80/20 training/validation split is not the final figure assessment or five-fold FBCSP evaluation. Exact source folds are required only for enrolled five-fold companion outputs.",
+      "The source defines trial-majority voting, but complete window/trial eligibility, tie handling, participant aggregation and numerical original references still need independent verification. Paper means or p-values cannot substitute for computation or agreement/superiority criteria.",
+      "The ME/S7 counterpart is described in the inspected main text, while complete supplementary numerical definitions remain unavailable; preserve its own source identities and report it as unqualified until resolved rather than expanding or pooling from MI.",
+      "Source controls and uncertainty must match the enrolled claim. Machine-versus-human learning attribution requires its relevant FBCSP/run-trend companions; a bounded decoder comparison alone cannot establish that broader interpretation.",
+      "Assessment targets and recorded prediction/probability fields are operator evaluation/reference material, not candidate-time decoding inputs. Preserve authentic chronological training/calibration access and matched paper+data versus +code exposure/resources; these complete manifests remain unresolved.",
+      "No native parity, trained-decoder result, scientific reproduction or improvement is established. Full-Figure-6 four-finger discrepancies and Session-5 missing events are not automatic blockers for the named Session-1/2 result; attach them only to affected outputs if separately enrolled."
+    ],
+    "scientific_outcome": "unknown"
   }
 }

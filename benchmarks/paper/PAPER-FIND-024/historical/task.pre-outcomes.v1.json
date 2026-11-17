@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-024",
+  "track": "paper",
+  "title": "Temporal integration in human auditory cortex is predominantly yoked to absolute time",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict the source untied integration-window estimates from the opposite nonoverlapping-segment split, retaining those target estimates unchanged across candidates.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict the source untied integration-window estimates from the opposite nonoverlapping-segment split, retaining those target estimates unchanged across candidates.",
+    "Source-paper comparison for Original fixed-untied-target cross-split Spearman correlation: Spearman rank correlation of predictor estimates with the fixed source opposite-split untied estimates; higher is better for this noisy-target agreement task, not demonstrated ground-truth accuracy."
+  ],
+  "success_criteria": [
+    "Verify admissibility of the original fixed-target prediction route and bind the exact source splits, cohort, preprocessing and correlation reduction.",
+    "Freeze opposite-split untied target arrays independently of the candidate; candidates must never redefine both sides of the correlation.",
+    "Recover or rerun the source tied predictor with the identical target and show improvement over its source-reported 0.668 anchor using justified effect and uncertainty criteria.",
+    "Do not substitute tied/tied 0.716, a biological yoking effect, new holdout split or correlation reconstruction as success.",
+    "Freeze access/resource budgets, method and preprocessing before final scoring; claims remain about noisy-target prediction unless independent truth evidence exists.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-024",
+  "canonical_position_one_based": 72,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41593-025-02060-8",
+    "publication_year": 2025,
+    "venue": "Nature Neuroscience"
+  },
+  "input_assets": {
+    "routes": [
+      "https://drive.google.com/drive/folders/1r7E4fQatSBvd5eGYgdr3s8E72dTuL568"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/0",
+        "recorded_fields": {
+          "path": "electrode_timecourses.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-024"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/1",
+        "recorded_fields": {
+          "path": "cross_context_correlation.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-024"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/2",
+        "recorded_fields": {
+          "path": "model_fits.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-024"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/3",
+        "recorded_fields": {
+          "path": "anatomical.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-024"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://www.nature.com/articles/s41593-025-02060-8",
+      "data_urls": [
+        "https://drive.google.com/drive/folders/1r7E4fQatSBvd5eGYgdr3s8E72dTuL568"
+      ],
+      "input_scope": "Processed electrode_timecourses.mat plus anatomical metadata; cross_context_correlation.mat and model_fits.mat are derived results and must not substitute for recomputation.",
+      "saved_metadata": {
+        "input_version": "Public author Drive folder, observed 2026-10-29; unversioned",
+        "input_code_bridge": "The public author Drive folder exposes electrode_timecourses.mat, cross_context_correlation.mat, model_fits.mat, anatomical.mat. Inspected loaders define D as time × stimulus × electrode × repetition and call cross_context_corr/modelfit_cross_context_corr on these empirical inputs. Cohort loops must replace the example subject selection.",
+        "inventory": [
+          {
+            "path": "electrode_timecourses.mat",
+            "evidence": "Observed public folder filename and author loader"
+          },
+          {
+            "path": "cross_context_correlation.mat",
+            "evidence": "Observed public folder filename and author loader"
+          },
+          {
+            "path": "model_fits.mat",
+            "evidence": "Observed public folder filename and author loader"
+          },
+          {
+            "path": "anatomical.mat",
+            "evidence": "Observed public folder filename and author loader"
+          }
+        ]
+      },
+      "code_url": "https://github.com/snormanhaignere/time-vs-structure",
+      "revision_or_archive_version": "08f2319a99a047ab2d1f631e0bffcfcea8a5bc08",
+      "entrypoints": [
+        "matlab-code/demo_cross_context_correlation.m",
+        "matlab-code/demo_model_fits.m",
+        "matlab-code/demo_rescaling.m",
+        "STAN/bayesian_LME_stan.ipynb"
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-024",
+        "versions_and_loader_contract": {
+          "input_version": "Public author Drive folder, observed 2026-10-29; unversioned",
+          "input_code_bridge": "The public author Drive folder exposes electrode_timecourses.mat, cross_context_correlation.mat, model_fits.mat, anatomical.mat. Inspected loaders define D as time × stimulus × electrode × repetition and call cross_context_corr/modelfit_cross_context_corr on these empirical inputs. Cohort loops must replace the example subject selection.",
+          "readiness_scope": "Only the listed substantial empirical analyses are artifact-ready for an attempt. This is not whole-paper reproduction, environment qualification, or scientific validation.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "input_inventory",
+          "input_version",
+          "input_code_bridge"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "FIND-024",
+        "versions_and_loader_contract": {
+          "declared_scope": "Recompute cross-context neural correlations and noise ceilings from electrode response timecourses across speech rates; Refit integration windows and assess absolute-time versus structure-yoked integration with participant/electrode hierarchy."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/snormanhaignere/time-vs-structure",
+    "revision_or_archive_version": "08f2319a99a047ab2d1f631e0bffcfcea8a5bc08",
+    "entrypoints": [
+      "matlab-code/demo_cross_context_correlation.m",
+      "matlab-code/demo_model_fits.m",
+      "matlab-code/demo_rescaling.m",
+      "STAN/bayesian_LME_stan.ipynb"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-024",
+        "recorded": {
+          "code_url": "https://github.com/snormanhaignere/time-vs-structure",
+          "code_revision": "08f2319a99a047ab2d1f631e0bffcfcea8a5bc08",
+          "entrypoints": [
+            "matlab-code/demo_cross_context_correlation.m",
+            "matlab-code/demo_model_fits.m",
+            "matlab-code/demo_rescaling.m",
+            "STAN/bayesian_LME_stan.ipynb"
+          ],
+          "dependencies": [
+            "MATLAB 2024b; bundled TCI code",
+            "Python/Stan for hierarchical model"
+          ]
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "FIND-024",
+        "recorded": {
+          "code_url": "https://github.com/snormanhaignere/time-vs-structure",
+          "code_revision_or_archive_version": "08f2319a99a047ab2d1f631e0bffcfcea8a5bc08",
+          "entrypoints": [
+            "matlab-code/demo_cross_context_correlation.m",
+            "matlab-code/demo_model_fits.m",
+            "matlab-code/demo_rescaling.m",
+            "STAN/bayesian_LME_stan.ipynb"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "3a5382c70005097016826caa3702dc1fcdd1ae2ad1874cb1cca39de4945e43ee",
+    "audit_record_sha256": "f8e4a98f8880cf2d7333e2d2cdd2582d0d9e8be23710dc23b2ba1dbec1992a05",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+          "bytes": 1654641,
+          "sha256": "3782e843842fd2848b653253a23db84053308427ce3b3246a918644f2e25fe3a"
+        },
+        "record_id": "FIND-024",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 23,
+        "record_sha256": "4f55e39a94d6ca1848b68b894c8a7bfe7a699f748aa053ced06acf21499147c1"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "FIND-024",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 23,
+        "record_sha256": "6b3185ea6719622956caf995b6870a97dade0b184b5dd27ecfb59b69692af9e9"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "roster_statement": {
+      "estimate": "CPU workstation; hours for cohort correlation/model refits, estimated.",
+      "basis": "Static source and archive metadata inspection; estimate, not measured."
+    },
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-024/improvement.v1.json",
+      "bytes": 9970,
+      "sha256": "3c484ec88a17f9a9f4bcb35767f6ea0e4739f2e91969a55bbc65e8861a738f4e"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-024/historical/task.pre-improvement.v1.json",
+        "bytes": 19137,
+        "sha256": "c7b6aa9cd264aeb0d7b7021e5fdd2bd2a670ed97cc8cdd01f061bd0b41852201"
+      },
+      "implementation_ids": [
+        "construction-paper-find-024-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After admissibility and split recovery, allow source-compatible training/development feedback with evaluator-owned opposite-split untied targets.",
+    "candidate_freeze": "Freeze estimator, native dependencies, preprocessing, tuning decisions and predictor-side outputs before final target access.",
+    "final_evaluation": "Evaluate the frozen predictor against unchanged original opposite-split untied estimates using the source Spearman aggregation and paired uncertainty rule.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep 0.668 fixed-target prediction, 0.614 untied comparator and 0.716 tied/tied reliability distinct; source yoking statistics remain calibration outcomes."
+  },
+  "blocking_issues": [
+    "Original split-level arrays, source participant/electrode roster and correlation aggregation are unresolved.",
+    "Fixed untied target generation and evaluator access boundaries require audit; source targets are noisy and publicly described.",
+    "Native TCI parity, source-author rerun, task-specific effect/uncertainty and concrete episode budgets are incomplete."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original split-level arrays, source participant/electrode roster and correlation aggregation are unresolved.",
+      "Fixed untied target generation and evaluator access boundaries require audit; source targets are noisy and publicly described.",
+      "Native TCI parity, source-author rerun, task-specific effect/uncertainty and concrete episode budgets are incomplete."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Source-native rebinding identifies the original cross-split prediction of fixed untied integration-window estimates: tied predictor versus opposite-split untied target has reported Spearman correlation 0.668. Exact split identities, target arrays and aggregation are unresolved. Tied/tied reliability 0.716 is not truth accuracy and cannot be used when a candidate may alter both sides. Original split-level arrays, source participant/electrode roster and correlation aggregation are unresolved. Fixed untied target generation and evaluator access boundaries require audit; source targets are noisy and publicly described. Native TCI parity, source-author rerun, task-specific effect/uncertainty and concrete episode budgets are incomplete.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-024/historical/task.pre-improvement.v1.json",
+      "bytes": 19137,
+      "sha256": "c7b6aa9cd264aeb0d7b7021e5fdd2bd2a670ed97cc8cdd01f061bd0b41852201"
+    },
+    "notes": "Preserve CCC/noise-ceiling and integration/yoking reconstruction as calibration. Current source-native route is the original fixed-untied-target cross-split comparison; optional newly grouped stories and tied/tied self-consistency are not source-paper victory."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

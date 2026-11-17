@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "Precise spatial tuning of visually driven alpha oscillations in human visual cortex",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Predict stimulus-location-dependent alpha and broadband amplitudes with population receptive-field models; the ordered comparison is original cross-validated prediction accuracy, including the source baseline-correction comparison. Larger alpha pRFs or stronger negative gain are descriptive checks, not win scores.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Predict stimulus-location-dependent alpha and broadband amplitudes with population receptive-field models; the ordered comparison is original cross-validated prediction accuracy, including the source baseline-correction comparison. Larger alpha pRFs or stronger negative gain are descriptive checks, not win scores.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Predict stimulus-location-dependent alpha and broadband amplitudes with population receptive-field models; the ordered comparison is original cross-validated prediction accuracy, including the source baseline-correction comparison. Larger alpha pRFs or stronger negative gain are descriptive checks, not win scores.",
-    "Source-paper comparison for Original Fig.7 median cross-validated alpha pRF variance explained (%): Higher cross-validated variance explained is ordered. Reconcile literal paper1−SSE/sum(response²) with the source routine’s foldwise DC projection and exact gain constraints; report percent units and preserve both formulas until equivalence is established."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Bind the original366-electrode population and exact figure-specific selections; keep all required alpha/broadband and baseline contrasts.",
-    "Reproduce the source metric/gain branch and original median before claiming improvement over43% and the author rerun.",
-    "Do not count a corrected implementation, portable-optimizer advantage, equal-person433-electrode mean or a new split as an original-paper win.",
-    "Freeze the method, spectral preprocessing, aperture geometry, selection and uncertainty policy before final predictions.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "ROOT-ADD-014",
   "canonical_position_one_based": 62,
@@ -446,55 +447,67 @@
     "source_basis": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-ROOT-ADD-014/improvement.v1.json",
-      "bytes": 10451,
-      "sha256": "d8f2608f23ed37612d0c848326ce64277a32648fc3f4925ddd486115dfd767d4"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-ROOT-ADD-014/historical/task.pre-improvement.v1.json",
-        "bytes": 25445,
-        "sha256": "6e490c1e30ca23159e0d3f475c0336ce9292c3cd6ce981620bf6e1b5d91cc8de"
-      },
-      "implementation_ids": [
-        "authoring-delivery-20261105-common-remaining-builds-wave16-visual-alpha-complete-program"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Once the original endpoint is recovered, develop pRF/spectral models using only training halves and declared validation feedback; no final-half response may influence fitting seeds or model selection.",
-    "candidate_freeze": "Freeze all preprocessing, model families, gain bounds, original electrode mask, fold membership, numerical scoring and resource/access budgets.",
-    "final_evaluation": "Evaluate both methods on identical original held halves and report the source aggregate plus participant-aware uncertainty; retain descriptive spatial-scale and gain checks without turning them into success scores.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Published43% median, native author rerun and local portable comparator remain separate. Only an authenticated original-task comparison supports a paper win."
+    "improvement": {
+      "improvement_loop": "Once the original endpoint is recovered, develop pRF/spectral models using only training halves and declared validation feedback; no final-half response may influence fitting seeds or model selection.",
+      "candidate_freeze": "Freeze all preprocessing, model families, gain bounds, original electrode mask, fold membership, numerical scoring and resource/access budgets.",
+      "final_evaluation": "Evaluate both methods on identical original held halves and report the source aggregate plus participant-aware uncertainty; retain descriptive spatial-scale and gain checks without turning them into success scores.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Published43% median, native author rerun and local portable comparator remain separate. Only an authenticated original-task comparison supports a paper win."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes.",
-    "Original metric centering and gain branch not reconciled with current scorer.",
-    "No source-equivalent raw-to-fit preprocessing and competent native author rerun.",
-    "Effect margin, clustered decision rule and concrete episode budgets not fixed."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes.",
       "Original metric centering and gain branch not reconciled with current scorer.",
       "No source-equivalent raw-to-fit preprocessing and competent native author rerun.",
       "Effect margin, clustered decision rule and concrete episode budgets not fixed."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes.",
+        "Original metric centering and gain branch not reconciled with current scorer.",
+        "No source-equivalent raw-to-fit preprocessing and competent native author rerun.",
+        "Effect margin, clustered decision rule and concrete episode budgets not fixed."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "A real ordered source endpoint exists: alpha pRF heldout prediction, including the reported43% median with baseline correction in Fig.7. The original electrode mask and metric implementation are not reconciled with the433-electrode local programme, its prospective equal-person mean, or the portable optimizer. Those local comparisons cannot certify surpassing the original source result. Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes. Original metric centering and gain branch not reconciled with current scorer. No source-equivalent raw-to-fit preprocessing and competent native author rerun. Effect margin, clustered decision rule and concrete episode budgets not fixed.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "A real ordered source endpoint exists: alpha pRF heldout prediction, including the reported43% median with baseline correction in Fig.7. The original electrode mask and metric implementation are not reconciled with the433-electrode local programme, its prospective equal-person mean, or the portable optimizer. Those local comparisons cannot certify surpassing the original source result. Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes. Original metric centering and gain branch not reconciled with current scorer. No source-equivalent raw-to-fit preprocessing and competent native author rerun. Effect margin, clustered decision rule and concrete episode budgets not fixed.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -509,8 +522,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

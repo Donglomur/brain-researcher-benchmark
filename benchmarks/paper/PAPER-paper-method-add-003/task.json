@@ -4,20 +4,21 @@
   "track": "paper",
   "title": "DREDge: robust motion correction for high-density extracellular recordings across species",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Estimate brain/probe displacement and stabilize the human recordings; the recovered ordered source comparison is agreement of DREDge LFP motion with manual LFP tracking, not independently observed physical displacement.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the original Pt01–Pt03 human DREDge result: source-native LFP motion estimates and manual-trace agreement, with the source-linked before/after neural alignment and fidelity evidence. Assess improvement of manual-trace agreement on the same original complete patient panel only after its comparison and fidelity criteria are justified. Report the local held-channel consistency and alternate-settings panel separately as a prospective diagnostic extension.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Estimate brain/probe displacement and stabilize the human recordings; the recovered ordered source comparison is agreement of DREDge LFP motion with manual LFP tracking, not independently observed physical displacement.",
-    "Source-paper comparison for Original per-patient Pearson correlation with manual LFP motion trace; exact full-cohort admission rule unresolved: Published human comparison uses Pearson correlation between DREDge and manual LFP displacement traces per patient. Correlation increases agreement but is insensitive to offset/scale and does not certify physical displacement accuracy. Exact reference/temporal alignment is unresolved; adjacent-time voltage consistency is a different metric."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover exact source raw segments, manual references, temporal alignment, preprocessing and native author outputs for Pt01-Pt03.",
-    "Predeclare an ordered full-cohort rule against the recovered source per-patient results without selecting one patient or silently constructing a new reported aggregate.",
-    "Compare frozen candidate and competent author execution on identical original inputs and source metric, with justified effect and dependence-aware uncertainty.",
-    "Retain neural fidelity and report the claim as improvement of source manual-trace agreement; no claim of absolute physical displacement truth follows.",
-    "Do not count local adjacent-time consistency, oversmoothing, new held-channel/time subsets or synthetic-motion accuracy as surpassing the original human task.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results.",
+    "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply."
   ],
   "source_id": "paper-method-add-003",
   "canonical_position_one_based": 40,
@@ -509,57 +510,79 @@
     "source_basis": "Resource class is inspection-based estimate, not measured runtime."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-add-003/improvement.v1.json",
-      "bytes": 10862,
-      "sha256": "f1e90e5dd4abeec863f0890fa55ac948c70d7d7853b3ed4fc72ac73006f4139f"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-add-003/historical/task.pre-improvement.v1.json",
-        "bytes": 30135,
-        "sha256": "d49aa3d8687475d00aecefe55ac9e71e5e8c727e32bf72af95809c109638be68"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-add-003-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "scope_disposition": "same_primary_unqualified"
   },
   "episode": {
-    "improvement_loop": "Inactive until source endpoint recovery. Any later iteration must use separately declared development evidence while preserving the source human comparison and recording membership.",
-    "candidate_freeze": "Before source final evaluation, freeze code, registration parameters, preprocessing, input-support policy, displacement outputs and the original alignment/metric evaluator.",
-    "final_evaluation": "Replay both methods on every original Pt01-Pt03 source interval using the recovered manual reference; no new channel/time split can substitute. Operator-held reference traces remain unavailable to candidate fitting.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep source per-patient correlations, a future native author rerun and any prospective consistency diagnostics distinct. No native replay was performed in this curation. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+    "improvement": {
+      "improvement_loop": "Inactive until source endpoint recovery. Any later iteration must use separately declared development evidence while preserving the source human comparison and recording membership.",
+      "candidate_freeze": "Before source final evaluation, freeze code, registration parameters, preprocessing, input-support policy, displacement outputs and the original alignment/metric evaluator.",
+      "final_evaluation": "Replay both methods on every original Pt01-Pt03 source interval using the recovered manual reference; no new channel/time split can substitute. Operator-held reference traces remain unavailable to candidate fitting.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep source per-patient correlations, a future native author rerun and any prospective consistency diagnostics distinct. No native replay was performed in this curation. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact original human temporal support, manual-reference identity and trace alignment need source-level recovery.",
-    "Patient-specific preprocessing and complete native registration/interpolation route are not executed or authenticated.",
-    "No source scalar aggregate or predeclared scientifically valid full-cohort superiority rule is established.",
-    "Current local evaluator measures a different prospective consistency/fidelity endpoint.",
-    "Meaningful effect, temporal-dependence-aware uncertainty, fixed episode budgets and working source endpoint remain unresolved."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact original human temporal support, manual-reference identity and trace alignment need source-level recovery.",
       "Patient-specific preprocessing and complete native registration/interpolation route are not executed or authenticated.",
       "No source scalar aggregate or predeclared scientifically valid full-cohort superiority rule is established.",
       "Current local evaluator measures a different prospective consistency/fidelity endpoint.",
       "Meaningful effect, temporal-dependence-aware uncertainty, fixed episode budgets and working source endpoint remain unresolved."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact original human temporal support, manual-reference identity and trace alignment need source-level recovery.",
+        "Patient-specific preprocessing and complete native registration/interpolation route are not executed or authenticated.",
+        "No source scalar aggregate or predeclared scientifically valid full-cohort superiority rule is established.",
+        "Current local evaluator measures a different prospective consistency/fidelity endpoint.",
+        "Meaningful effect, temporal-dependence-aware uncertainty, fixed episode budgets and working source endpoint remain unresolved."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json",
+    "current_primary_source_limits": [
+      "The authenticated publisher extraction contains abstract, captions and availability information, not complete Results/Methods text.",
+      "Exact manual-reference identities, temporal support, preprocessing, source execution and complete-cohort decision rules remain unresolved.",
+      "Numerical correlation values quoted in later curation were not independently reauthenticated from the publisher extraction; exact numeric reference mapping remains open.",
+      "Required fidelity outputs, patient/interval correspondence and reproduction/superiority criteria must be recovered before complete qualification.",
+      "Pearson agreement is invariant to offset and positive scale; it is not independently observed absolute displacement accuracy. No scalar average, selected patient or prospective consistency score substitutes for the original panel.",
+      "The source-unresolved paired proposal and partial scalar coverage do not establish runnable parity, scientific reproduction, improvement or SOTA."
+    ],
+    "scope_correction_limit": "This scope correction grants no new observation access and changes no improvement metric, criterion or tolerance."
   },
   "next_implementation_action": {
-    "action": "The source reports ordered human motion-trace agreement, but the registered Pt01-Pt03 task is currently scored by a new consistency/fidelity panel rather than an exactly recovered paper endpoint. Published per-patient correlations are recoverable; their exact temporal alignment, preprocessing, corresponding author output and an admissible full-cohort comparison remain unresolved. Human agreement must not be relabelled absolute motion accuracy. Exact original human temporal support, manual-reference identity and trace alignment need source-level recovery. Patient-specific preprocessing and complete native registration/interpolation route are not executed or authenticated. No source scalar aggregate or predeclared scientifically valid full-cohort superiority rule is established. Current local evaluator measures a different prospective consistency/fidelity endpoint. Meaningful effect, temporal-dependence-aware uncertainty, fixed episode budgets and working source endpoint remain unresolved.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The source reports ordered human motion-trace agreement, but the registered Pt01-Pt03 task is currently scored by a new consistency/fidelity panel rather than an exactly recovered paper endpoint. Published per-patient correlations are recoverable; their exact temporal alignment, preprocessing, corresponding author output and an admissible full-cohort comparison remain unresolved. Human agreement must not be relabelled absolute motion accuracy. Exact original human temporal support, manual-reference identity and trace alignment need source-level recovery. Patient-specific preprocessing and complete native registration/interpolation route are not executed or authenticated. No source scalar aggregate or predeclared scientifically valid full-cohort superiority rule is established. Current local evaluator measures a different prospective consistency/fidelity endpoint. Meaningful effect, temporal-dependence-aware uncertainty, fixed episode budgets and working source endpoint remain unresolved.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -574,8 +597,41 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate.",
+  "primary_scope": "Legitimate empirical methods result on authentic human neural recordings: source-native LFP motion estimates and per-patient manual-trace agreement over the complete Pt01–Pt03 panel, with original temporal alignment and source-linked before/after neural fidelity. Preserve all relevant source intervals and required trace/spectral companions. Pt03 video or additional human spike/LFP validation is required only when included in the exact source result claimed; no every-figure or other-species expansion is implied.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-paper-method-add-003"
+  },
+  "source_scope_correction": {
+    "disposition": "same_primary_unqualified",
+    "retained_scope_notes": "prospective_diagnostic_extension: Local held-channel adjacent-time voltage consistency, energy-ratio and default/fixed/no-correction/alternate-settings comparisons. This proposed evaluator is not an authenticated original-paper co-primary and uses a distinct rigid comparator and interpolation workflow.\npartial_primary_coverage: Three per-patient correlation scalars are a subpanel of the legitimate real-human primary, not complete reproduction or qualification. Their retention does not discharge before/after fidelity and source-companion obligations.\nprospective_or_simulation_extension: Any newly introduced held-channel/time split or synthetic-motion result remains separately labelled; it cannot establish superiority on the original human endpoint.",
+    "retained_source_roles": [
+      {
+        "role": "prospective_diagnostic_extension",
+        "scope": "Local held-channel adjacent-time voltage consistency, energy-ratio and default/fixed/no-correction/alternate-settings comparisons. This proposed evaluator is not an authenticated original-paper co-primary and uses a distinct rigid comparator and interpolation workflow."
+      },
+      {
+        "role": "partial_primary_coverage",
+        "scope": "Three per-patient correlation scalars are a subpanel of the legitimate real-human primary, not complete reproduction or qualification. Their retention does not discharge before/after fidelity and source-companion obligations."
+      },
+      {
+        "role": "prospective_or_simulation_extension",
+        "scope": "Any newly introduced held-channel/time split or synthetic-motion result remains separately labelled; it cannot establish superiority on the original human endpoint."
+      }
+    ],
+    "remaining_source_limits": [
+      "The authenticated publisher extraction contains abstract, captions and availability information, not complete Results/Methods text.",
+      "Exact manual-reference identities, temporal support, preprocessing, source execution and complete-cohort decision rules remain unresolved.",
+      "Numerical correlation values quoted in later curation were not independently reauthenticated from the publisher extraction; exact numeric reference mapping remains open.",
+      "Required fidelity outputs, patient/interval correspondence and reproduction/superiority criteria must be recovered before complete qualification.",
+      "Pearson agreement is invariant to offset and positive scale; it is not independently observed absolute displacement accuracy. No scalar average, selected patient or prospective consistency score substitutes for the original panel.",
+      "The source-unresolved paired proposal and partial scalar coverage do not establish runnable parity, scientific reproduction, improvement or SOTA."
+    ],
+    "scientific_outcome": "unknown"
   }
 }

@@ -1,0 +1,457 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-043",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original fMRI-to-image endpoint and eight final Table 1 aggregate findings are source-grounded, independently of an improvement decision. These eight source scalars do not exhaust native image outputs or companion verification. Authentic source identities/exposure, native image generation and feature extraction, historical SSIM, independent submitted-analysis verification, complete companion-control output manifests and justified numerical/uncertainty criteria remain unresolved. Scalar table agreement, derived-array scoring and copied printed values are not computational reproduction. Typed native-output representation has a separate schema limitation; genuine source and execution gaps independently prevent eligibility.",
+  "source_paper": {
+    "title": "NeuroPictor: Refining fMRI-to-Image Reconstruction via Multi-individual Pretraining and Multi-level Modulation",
+    "url": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf"
+  },
+  "evidence": [
+    {
+      "id": "np-paper",
+      "kind": "paper",
+      "url": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf",
+      "locator": "Sections 3.1, 4.1-4.3; Table 1, final NeuroPictor row; Table 2",
+      "supports": "Original reconstruction endpoint, four evaluation subjects, shared 982-image pool, three-trial averages, multi-subject pretraining, subject-macro aggregation and full numerical metric panel."
+    },
+    {
+      "id": "np-metrics",
+      "kind": "author_code",
+      "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/eval_metrics.py",
+      "locator": "two_way_identification lines 101-130; pixel/SSIM lines 132-164; feature models and scoring lines 166-266",
+      "supports": "Strict pairwise Pearson identification formula, complete distractor pool, feature extractors, pixel scaling and legacy SSIM call."
+    },
+    {
+      "id": "np-loader",
+      "kind": "author_code",
+      "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/dataset/dataset.py",
+      "locator": "NSDImageDataset, constructor and __getitem__, lines 19-117",
+      "supports": "Named train/test label manifests, subject identities, normalized surface inputs, captions, image transform; val_data_fraction and available-label filtering can reduce evaluation support."
+    },
+    {
+      "id": "np-readme",
+      "kind": "author_code",
+      "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/README.md",
+      "locator": "Data Preparation; Multi-subject Pre-training; Single-subject Finetuning; fMRI-to-image Reconstruction",
+      "supports": "Released encoder/model route, source training/refining commands, four subject checkpoints and one-sample reconstruction command; release route does not prove checkpoint ancestry."
+    },
+    {
+      "id": "np-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-043/docs/initial-evaluator-v1.md",
+      "locator": "Scientific boundary and provenance; implementation evaluator.py HOLDS and validate_protocol",
+      "supports": "Existing arithmetic evaluator does not train/generate/extract features; prospective explicit 2D SSIM is not certified historical source SSIM; authentic pool and native replay remain open."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Generate the natural image viewed by a subject from that subject's fMRI; preserve both semantic and structural reconstruction assessment. Retrieval-only, caption prediction or encoder reconstruction is not the same output.",
+      "evidence_ids": [
+        "np-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original Natural Scenes Dataset fMRI and MS-COCO image/caption pairs; source release names NSD/unique_triallabel.npy and sub1257_shared_triallabel.npy. Exact release revision, label-manifest hashes and preprocessed surface derivation are not qualified.",
+      "evidence_ids": [
+        "np-paper",
+        "np-loader",
+        "np-readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All eight NSD subjects contribute training data (about 67,000 image-fMRI pairs); the main result fine-tunes and evaluates subjects 1, 2, 5 and 7, not a subject-1-only ablation.",
+      "evidence_ids": [
+        "np-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The paper specifies the same 982 shared test images for all four evaluation subjects and each original subject training split. Exact protected image/session IDs and exclusion of these images from all pretraining sources remain unbound. Source val_data_fraction must be 1 and missing-label filtering must not silently reduce this pool.",
+      "evidence_ids": [
+        "np-paper",
+        "np-loader"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "A normalized fMRI surface per test observation; three repeated responses to an image averaged. Training may use original image/caption supervision, UKB-pretrained fMRI encoder and Stable Diffusion 2.1 priors at declared matched access. Ground-truth test images/captions may score outputs but cannot guide generation or choose samples.",
+      "evidence_ids": [
+        "np-paper",
+        "np-loader",
+        "np-readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper maps fMRI into single-channel 256x256 brain activation images and averages three trials. Pin source surface normalization, ROI mapping, reconstruction resize and every pretrained feature model. Source eval_metrics.py resizes reconstructions to 256 then pixels to 425; historical grayscale multichannel=True SSIM parity remains unresolved.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics",
+        "np-loader"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Retain all eight Table 1 metrics: mean pixel Pearson r; source SSIM; AlexNet features.4/features.11, Inception avgpool and CLIP image-feature two-way identification; EfficientNet and SwAV correlation distances. For N images, identification is mean_j [sum_(i != j) 1(corr(real_i,pred_j)<corr(real_j,pred_j))/(N-1)], with ties failing. Higher is better except the two distances. Identification arithmetic is verified from the pinned code, but native parity for the complete panel is unresolved because the historical SSIM environment and grayscale multichannel semantics are not fixed.",
+      "evidence_ids": [
+        "np-metrics",
+        "np-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "One generated sample per subject-stimulus, full 982-image distractor set within each subject, then equal-weight average of the four subject scores. No best-of-many sample selection or treating pairwise distractor comparisons as independent observations.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Recreate the final fine-tuned NeuroPictor Table 1 result on all four subjects 1,2,5,7 and the same 982 shared test images per subject, retaining all eight source metrics and the full 981-distractor comparison per prediction. The 3928 generated images, per-image measurements, four subject-specific metric vectors and equal-weight subject means must remain separate. Preserve the existing matched target-only and neural-free benchmark companion outputs as complete identity-bound image and metric families, not invented source scalar findings. Table 2 subject-1 encoder/image-pretraining ablations are separate source evidence and cannot replace the four-subject endpoint or supply guessed four-subject control targets. The eight scalar findings below are incomplete without independent native-image and control verification; typed native-output support is described externally. Historical SSIM parity, authentic identities and companion output manifests remain unresolved.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics",
+        "np-loader",
+        "np-registration"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Both information conditions receive the paper and the same independently authenticated allowed neural inputs, original training image/caption supervision and declared pretrained assets. At test time reconstruction uses the normalized fMRI surface from the source three-response average, without test-image/caption guidance, oracle sample selection or test-score tuning. Preserve all-eight-subject image-pretraining membership and the separate UKB/fMRI-encoder and Stable Diffusion 2.1 prior lineage; a released encoder or multi-subject checkpoint does not establish raw-pretraining reproduction. The +author-code condition adds only an inventoried author-code package; final test images, saved author reconstructions, cached evaluation outputs and undisclosed checkpoints cannot enter as additional answers. The common asset/weight delivery and exposure manifests are not yet frozen, so this factual observation boundary does not establish an available paired protocol.",
+      "evidence_ids": [
+        "np-paper",
+        "np-loader",
+        "np-readme",
+        "np-metrics"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "table1_final_pixcorr",
+      "kind": "scalar",
+      "description": "Published Table 1 final fine-tuned NeuroPictor pixel Pearson correlation across the four original evaluation subjects. The expected number is a published source target, not a local author rerun or AI result. Retain this metric alongside every semantic and structural companion; no single cell stands for the paper.",
+      "status": "verified",
+      "expected": 0.229,
+      "units": "Pearson correlation coefficient",
+      "aggregation": "For each of subjects 1,2,5,7, evaluate one generated image for each of the same 982 source stimuli, average the per-stimulus metric within that subject, then take the equal-weight mean of the four subject scores. Identification uses every other real image in that subject as a distractor, divides strict successes by 981 and counts ties as failures; distractor pairs are not independent units.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded repeated-run variability or independently justified equivalence margin is available. Rounded table precision is not a tolerance for stochastic reconstruction, and arithmetic software tolerances do not qualify reproduction.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-faithful repetition and paired uncertainty policy over shared stimulus clusters, fixed subjects and stochastic training/generation seeds is not frozen. No interval, confidence level or replicate count is invented.",
+        "independent_unit": "Shared image/stimulus clusters across four fixed subjects for within-cohort reconstruction; subject for population generalization. Repeated responses, distractor pairs and generation samples are dependent, not additional independent subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source table reports aggregate point estimates, while the common image pool and stochastic generation induce dependence. Printed decimal precision does not establish numerical reproducibility or a valid uncertainty criterion.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      }
+    },
+    {
+      "id": "table1_final_source_ssim",
+      "kind": "scalar",
+      "description": "Published Table 1 final fine-tuned NeuroPictor historical source SSIM across the four original evaluation subjects. The expected number is a published source target, not a local author rerun or AI result. This target requires the historical source SSIM semantics; the existing ssim_2d_prospective output is not an admissible substitute.",
+      "status": "verified",
+      "expected": 0.375,
+      "units": "SSIM score",
+      "aggregation": "For each of subjects 1,2,5,7, evaluate one generated image for each of the same 982 source stimuli, average the per-stimulus metric within that subject, then take the equal-weight mean of the four subject scores. Identification uses every other real image in that subject as a distractor, divides strict successes by 981 and counts ties as failures; distractor pairs are not independent units.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded repeated-run variability or independently justified equivalence margin is available. Rounded table precision is not a tolerance for stochastic reconstruction, and arithmetic software tolerances do not qualify reproduction.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-faithful repetition and paired uncertainty policy over shared stimulus clusters, fixed subjects and stochastic training/generation seeds is not frozen. No interval, confidence level or replicate count is invented.",
+        "independent_unit": "Shared image/stimulus clusters across four fixed subjects for within-cohort reconstruction; subject for population generalization. Repeated responses, distractor pairs and generation samples are dependent, not additional independent subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source table reports aggregate point estimates, while the common image pool and stochastic generation induce dependence. Printed decimal precision does not establish numerical reproducibility or a valid uncertainty criterion.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      }
+    },
+    {
+      "id": "table1_final_alexnet2",
+      "kind": "scalar",
+      "description": "Published Table 1 final fine-tuned NeuroPictor AlexNet features.4 two-way identification across the four original evaluation subjects. The expected number is a published source target, not a local author rerun or AI result. Published identification percentages are represented as fractions.",
+      "status": "verified",
+      "expected": 0.965,
+      "units": "identification fraction",
+      "aggregation": "For each of subjects 1,2,5,7, evaluate one generated image for each of the same 982 source stimuli, average the per-stimulus metric within that subject, then take the equal-weight mean of the four subject scores. Identification uses every other real image in that subject as a distractor, divides strict successes by 981 and counts ties as failures; distractor pairs are not independent units.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded repeated-run variability or independently justified equivalence margin is available. Rounded table precision is not a tolerance for stochastic reconstruction, and arithmetic software tolerances do not qualify reproduction.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-faithful repetition and paired uncertainty policy over shared stimulus clusters, fixed subjects and stochastic training/generation seeds is not frozen. No interval, confidence level or replicate count is invented.",
+        "independent_unit": "Shared image/stimulus clusters across four fixed subjects for within-cohort reconstruction; subject for population generalization. Repeated responses, distractor pairs and generation samples are dependent, not additional independent subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source table reports aggregate point estimates, while the common image pool and stochastic generation induce dependence. Printed decimal precision does not establish numerical reproducibility or a valid uncertainty criterion.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      }
+    },
+    {
+      "id": "table1_final_alexnet5",
+      "kind": "scalar",
+      "description": "Published Table 1 final fine-tuned NeuroPictor AlexNet features.11 two-way identification across the four original evaluation subjects. The expected number is a published source target, not a local author rerun or AI result. Published identification percentages are represented as fractions.",
+      "status": "verified",
+      "expected": 0.984,
+      "units": "identification fraction",
+      "aggregation": "For each of subjects 1,2,5,7, evaluate one generated image for each of the same 982 source stimuli, average the per-stimulus metric within that subject, then take the equal-weight mean of the four subject scores. Identification uses every other real image in that subject as a distractor, divides strict successes by 981 and counts ties as failures; distractor pairs are not independent units.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded repeated-run variability or independently justified equivalence margin is available. Rounded table precision is not a tolerance for stochastic reconstruction, and arithmetic software tolerances do not qualify reproduction.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-faithful repetition and paired uncertainty policy over shared stimulus clusters, fixed subjects and stochastic training/generation seeds is not frozen. No interval, confidence level or replicate count is invented.",
+        "independent_unit": "Shared image/stimulus clusters across four fixed subjects for within-cohort reconstruction; subject for population generalization. Repeated responses, distractor pairs and generation samples are dependent, not additional independent subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source table reports aggregate point estimates, while the common image pool and stochastic generation induce dependence. Printed decimal precision does not establish numerical reproducibility or a valid uncertainty criterion.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      }
+    },
+    {
+      "id": "table1_final_inception",
+      "kind": "scalar",
+      "description": "Published Table 1 final fine-tuned NeuroPictor Inception-v3 avgpool two-way identification across the four original evaluation subjects. The expected number is a published source target, not a local author rerun or AI result. Published identification percentages are represented as fractions.",
+      "status": "verified",
+      "expected": 0.945,
+      "units": "identification fraction",
+      "aggregation": "For each of subjects 1,2,5,7, evaluate one generated image for each of the same 982 source stimuli, average the per-stimulus metric within that subject, then take the equal-weight mean of the four subject scores. Identification uses every other real image in that subject as a distractor, divides strict successes by 981 and counts ties as failures; distractor pairs are not independent units.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded repeated-run variability or independently justified equivalence margin is available. Rounded table precision is not a tolerance for stochastic reconstruction, and arithmetic software tolerances do not qualify reproduction.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-faithful repetition and paired uncertainty policy over shared stimulus clusters, fixed subjects and stochastic training/generation seeds is not frozen. No interval, confidence level or replicate count is invented.",
+        "independent_unit": "Shared image/stimulus clusters across four fixed subjects for within-cohort reconstruction; subject for population generalization. Repeated responses, distractor pairs and generation samples are dependent, not additional independent subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source table reports aggregate point estimates, while the common image pool and stochastic generation induce dependence. Printed decimal precision does not establish numerical reproducibility or a valid uncertainty criterion.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      }
+    },
+    {
+      "id": "table1_final_clip",
+      "kind": "scalar",
+      "description": "Published Table 1 final fine-tuned NeuroPictor CLIP image-feature two-way identification across the four original evaluation subjects. The expected number is a published source target, not a local author rerun or AI result. Published identification percentages are represented as fractions.",
+      "status": "verified",
+      "expected": 0.933,
+      "units": "identification fraction",
+      "aggregation": "For each of subjects 1,2,5,7, evaluate one generated image for each of the same 982 source stimuli, average the per-stimulus metric within that subject, then take the equal-weight mean of the four subject scores. Identification uses every other real image in that subject as a distractor, divides strict successes by 981 and counts ties as failures; distractor pairs are not independent units.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded repeated-run variability or independently justified equivalence margin is available. Rounded table precision is not a tolerance for stochastic reconstruction, and arithmetic software tolerances do not qualify reproduction.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-faithful repetition and paired uncertainty policy over shared stimulus clusters, fixed subjects and stochastic training/generation seeds is not frozen. No interval, confidence level or replicate count is invented.",
+        "independent_unit": "Shared image/stimulus clusters across four fixed subjects for within-cohort reconstruction; subject for population generalization. Repeated responses, distractor pairs and generation samples are dependent, not additional independent subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source table reports aggregate point estimates, while the common image pool and stochastic generation induce dependence. Printed decimal precision does not establish numerical reproducibility or a valid uncertainty criterion.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      }
+    },
+    {
+      "id": "table1_final_effnet",
+      "kind": "scalar",
+      "description": "Published Table 1 final fine-tuned NeuroPictor EfficientNet-B1 paired correlation distance across the four original evaluation subjects. The expected number is a published source target, not a local author rerun or AI result. Retain this metric alongside every semantic and structural companion; no single cell stands for the paper.",
+      "status": "verified",
+      "expected": 0.639,
+      "units": "correlation distance",
+      "aggregation": "For each of subjects 1,2,5,7, evaluate one generated image for each of the same 982 source stimuli, average the per-stimulus metric within that subject, then take the equal-weight mean of the four subject scores. Identification uses every other real image in that subject as a distractor, divides strict successes by 981 and counts ties as failures; distractor pairs are not independent units.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded repeated-run variability or independently justified equivalence margin is available. Rounded table precision is not a tolerance for stochastic reconstruction, and arithmetic software tolerances do not qualify reproduction.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-faithful repetition and paired uncertainty policy over shared stimulus clusters, fixed subjects and stochastic training/generation seeds is not frozen. No interval, confidence level or replicate count is invented.",
+        "independent_unit": "Shared image/stimulus clusters across four fixed subjects for within-cohort reconstruction; subject for population generalization. Repeated responses, distractor pairs and generation samples are dependent, not additional independent subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source table reports aggregate point estimates, while the common image pool and stochastic generation induce dependence. Printed decimal precision does not establish numerical reproducibility or a valid uncertainty criterion.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      }
+    },
+    {
+      "id": "table1_final_swav",
+      "kind": "scalar",
+      "description": "Published Table 1 final fine-tuned NeuroPictor SwAV paired correlation distance across the four original evaluation subjects. The expected number is a published source target, not a local author rerun or AI result. Retain this metric alongside every semantic and structural companion; no single cell stands for the paper.",
+      "status": "verified",
+      "expected": 0.35,
+      "units": "correlation distance",
+      "aggregation": "For each of subjects 1,2,5,7, evaluate one generated image for each of the same 982 source stimuli, average the per-stimulus metric within that subject, then take the equal-weight mean of the four subject scores. Identification uses every other real image in that subject as a distractor, divides strict successes by 981 and counts ties as failures; distractor pairs are not independent units.",
+      "evidence_ids": [
+        "np-paper",
+        "np-metrics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded repeated-run variability or independently justified equivalence margin is available. Rounded table precision is not a tolerance for stochastic reconstruction, and arithmetic software tolerances do not qualify reproduction.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "A source-faithful repetition and paired uncertainty policy over shared stimulus clusters, fixed subjects and stochastic training/generation seeds is not frozen. No interval, confidence level or replicate count is invented.",
+        "independent_unit": "Shared image/stimulus clusters across four fixed subjects for within-cohort reconstruction; subject for population generalization. Repeated responses, distractor pairs and generation samples are dependent, not additional independent subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source table reports aggregate point estimates, while the common image pool and stochastic generation induce dependence. Printed decimal precision does not establish numerical reproducibility or a valid uncertainty criterion.",
+        "evidence_ids": [
+          "np-paper",
+          "np-metrics"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate the ordered original shared 982-stimulus pool and all 3928 subject-stimulus observations, original subject-specific training/session/repetition membership, three-response averaging and all-eight-subject image-pretraining overlap. Counts or caller-supplied identities alone are insufficient.",
+    "Distinguish released UKB/fMRI encoder initialization, raw UKB pretraining, multi-subject fMRI-image pretraining and final subject fine-tuning. Source checkpoint lineage, original configuration and prior/data exposure receipts are not authenticated. Table 2 subject-1 ablations cannot supply four-subject control targets.",
+    "Resolve source reconstruction resizing, every feature extractor and weight version, and the historical grayscale multichannel=True SSIM environment. Existing explicit ssim_2d_prospective is not the original metric and cannot satisfy table1_final_source_ssim or either source-SSIM control.",
+    "The actual available local analysis interfaces are initial-evaluator-v1/evaluator.py and bounded-panel-v2/evaluator.py, each exposing evaluate(manifest, base) and a manifest --output CLI. They score trusted operator-prepared pixels/features only, require pretrained/target_only/neural_free conditions and return per-stimulus, per-subject and subject-macro metrics. They do not execute a submitted fMRI-to-image program, extract native features or independently establish authentic input/output derivation.",
+    "The pinned author train.py, dataset/dataset.py, reconstruction.py and eval_metrics.py are source-native training/loading/generation/scoring routes, not locally qualified submitted-analysis interfaces. Freeze a runnable submitted analysis with exact code/runtime/invocation/input/weight identities; independently execute it on the authentic allowed fMRI observations after candidate freeze. Author algorithm reuse is allowed only under its declared condition and lineage; alternative algorithms may preserve the same scientific task.",
+    "Granular verification must bind all 3928 actual generated image files per condition to original subject/stimulus/session/repetition identities and the fMRI execution trace; independently check the three-response construction and complete source population. Training/pretraining membership and permitted-observation checks must exclude test guidance or oracle sample selection. A program printing the table or copying stored reconstruction outputs is insufficient.",
+    "An independent operator must extract pixels and source-native feature arrays from the submitted images and operator reference images using pinned transforms/weights, recompute all per-image metric contributions with every source distractor, and reconcile all four subject vectors and eight macro means. Candidate-supplied feature arrays or self-attested hashes cannot substitute for image generation and independent verification.",
+    "Require the same granular image/extraction/metric evidence for complete target-only and neural-free companion panels, with authentic matched training, encoder-initialization, prior and generation-budget records. Their reference values and numerical criteria remain unresolved; the eight published Table 1 values must not be reused as control targets.",
+    "No immutable authentic-data, ordered cohort/split/panel/observation/metric/aggregation manifests or independent verification-program identity is qualified. admission_policy is deliberately absent because its mandatory hashes would otherwise be invented; current scorer code hashes are not authentic-data or submitted-analysis verification identities.",
+    "Each original metric and control needs an independently justified reproduction tolerance and uncertainty policy before final execution. Source printed rounding, a convenient software epsilon, identification-pair pseudo-replication, interval overlap or nonsignificance cannot define reproduction.",
+    "Freeze matched paper+data and paper+data+author-code delivery, source/data/model rights, exposure policy and cumulative resource/access budgets. Author code must be inventoried separately from cached outputs, test reconstructions and answer-bearing artifacts. No valid paired protocol or new AI receipt exists.",
+    "Scientific outcomes remain unknown: operator author replay is calibration, earlier software controls are engineering evidence, and historical attempts retain their historical scope. Full-population native runtime and memory remain unmeasured despite the bounded prepared-array scorer.",
+    "The findings list contains only the eight actual source Table 1 scalars. It does not claim complete representation or verification of native generated images, source-derived feature/pixel families or benchmark companion-control outputs. Scalar/categorical v1 cannot encode these as typed native findings; its existing computation.required_outputs can bind externally verified artifacts once genuine identities exist. The external STRUCTURED_OUTPUT_PROPOSAL separates this representation gap from the still-unresolved authentic source, historical SSIM and execution evidence. No scalar reduction or unknown-value placeholder is invented for a tensor family."
+  ]
+}

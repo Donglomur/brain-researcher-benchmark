@@ -1,0 +1,433 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-POYO",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Original POYO decoding and transfer findings are legitimate reproduction targets independently of improvement. Published distinct panel values are identified, but the complete original pretraining/transfer/companion panel, historical arithmetic, authentic computation and matched access protocols remain unresolved. No original-paper reproduction or improvement result is established.",
+  "source_paper": {
+    "title": "A Unified, Scalable Framework for Neural Population Decoding",
+    "url": "https://papers.nips.cc/paper_files/paper/2023/hash/8ca113d122584f12a6727341aaf58887-Abstract-Conference.html"
+  },
+  "evidence": [
+    {
+      "id": "poyo-paper",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2023/file/8ca113d122584f12a6727341aaf58887-Paper-Conference.pdf",
+      "locator": "Tables 1–3; sections 3.1, 3.4–3.5; Appendices A.4.3, A.5 and B.1",
+      "supports": "Original pretraining versus held-session distinction, transfer results and source-specific evaluation regimes."
+    },
+    {
+      "id": "poyo-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/poyo/6b052f148128ec5d8e3fe7077692b3ffbac92039/src/callbacks.py",
+      "locator": "continuous-output evaluation callback, lines 87–206",
+      "supports": "Contemporary timestamp stitching, R2Score and session averaging; historical algorithm identity is not established by this revision."
+    },
+    {
+      "id": "poyo-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-POYO/implementations/frozen-grid-evaluator/README.md",
+      "locator": "Selected scientific policy; Evidence, controls and remaining work",
+      "supports": "The local consumer selects a prospective TorchMetrics-1.9 uniform-dimension/session policy and explicitly disclaims historical experiment recovery, corpus authentication and native numerical parity."
+    },
+    {
+      "id": "poyo-table2",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2023/file/8ca113d122584f12a6727341aaf58887-Paper-Conference.pdf",
+      "locator": "Table 2 POYO-1+Finetune: C center-out, T center-out, T random-target; sections 3.4 and3.5; Appendix A.5",
+      "supports": "Source-reported population means and printed dispersions, separately for 2, 6, 6 sessions. They are published expected findings, not executed results or an admitted historical scorer."
+    },
+    {
+      "id": "poyo-table3",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2023/file/8ca113d122584f12a6727341aaf58887-Paper-Conference.pdf",
+      "locator": "Table 3: separate NLB Maze and RTT decoding results; Appendix B.1",
+      "supports": "Published NLB decoding R2 values remain distinct from Table 2 population transfer summaries."
+    },
+    {
+      "id": "poyo-original-panel",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2023/file/8ca113d122584f12a6727341aaf58887-Paper-Conference.pdf",
+      "locator": "Tables 1-3; sections 3.1,3.4-3.5; Appendices A.4.3,A.5,B.1",
+      "supports": "Full pretraining versus held-session transfer scope, source-specific masks and original adaptation comparisons. Exact original companion-row and budget mapping remains unresolved in retained evidence."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Decode two-dimensional hand velocity from neural spikes and transfer the pretrained decoder to new sessions/animals under the original adaptation conditions.",
+      "evidence_ids": [
+        "poyo-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Four-source POYO-1 corpus is identified, but original immutable source-to-session joins remain unresolved; later DANDI conversions cannot silently replace 2023 data.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "158 sessions describe POYO-1 pretraining, not 158 held-out evaluations. Table 2 has 2 C center-out, 6 T center-out and 6 T random-target sessions; Table 3 uses distinct NLB datasets. Exact original manifest remains missing.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-registration"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper reserves 20% trials for test and 10% validation within sessions; transfer excludes designated sessions from pretraining. Exact trial membership and all adaptation-budget assignments are not recovered.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Spike events with unit identities and permitted adaptation kinematics; no held evaluation velocities or session-target lookup.",
+      "evidence_ids": [
+        "poyo-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve original source-specific preprocessing, lab-level velocity normalization and successful-reaching versus continuous-segment masks. Contemporary pipeline provenance does not prove these historical joins.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-code",
+        "poyo-registration"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Original decoding R² is the endpoint. The exact historical dimension weighting, stitching and near-constant behavior are not established by the contemporary TorchMetrics-based callback.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-code",
+        "poyo-registration"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Tables report separate transfer populations and tasks. The registration’s complete adaptation-grid macro endpoint lacks a recovered paper aggregation; do not collapse these panels into an invented scalar.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-code",
+        "poyo-registration"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve the complete original four-source POYO-1 pretraining and transfer experiments:158 pretraining sessions across 7 primates, separate Table 2 C center-out 2 sessions, T center-out 6 sessions and T random-target 6 sessions, distinct Table 3 NLB Maze and RTT tasks, every original adaptation budget and unit-identification/fine-tuning comparison, original per-source/per-animal results and required source companions. The 158 sessions are not a held-out roster. Exact Table 1 and companion method rows, full adaptation curves, numerical references and source-to-session joins remain unrecovered; the explicitly enumerated published findings below are not a claim of complete-panel recovery. Do not substitute a Perich-only/POYO-MP experiment or collapse these panels into one macro scalar.",
+      "evidence_ids": [
+        "poyo-paper",
+        "poyo-original-panel",
+        "poyo-registration"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Both information conditions receive the same original permitted spike events and unit identities, pretraining/training/validation observations and adaptation kinematics at each source budget. Held evaluation velocities remain operator-only and must not enter pretraining, normalization, adaptation or selection, including across budgets. Only the author-code material is added to paper+data+author-code; actual corpus/split/normalization/author-code manifests and exposure enforcement are not yet frozen.",
+      "evidence_ids": [
+        "poyo-paper"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "table2-c-co-finetune-mean",
+      "kind": "scalar",
+      "description": "Original Table 2 POYO-1+Finetune held-session decoding mean for C center-out. Published value is an expected finding only; authentic prediction-derived computation is required.",
+      "status": "verified",
+      "expected": 0.9683,
+      "units": "dimensionless decoding R2",
+      "aggregation": "Source Table 2 C center-out population of 2 sessions, kept separate from other populations and budgets. Preserve original dimension/session weighting and mask; historical exact aggregation remains unresolved.",
+      "evidence_ids": [
+        "poyo-table2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision and a printed dispersion do not by themselves justify a reproduction equivalence tolerance. Historical R2 arithmetic, source normalization, original replication and variability must be recovered and reviewed before any absolute criterion is frozen.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original panel-specific aggregation and replication; independently predeclare reproduction uncertainty without treating sessions, windows, adaptation budgets or training seeds as independent animals.",
+        "independent_unit": "Sessions nested in source animals and laboratories; Table2 populations and Table3 NLB tasks remain distinct, and the original independent-unit design is unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent sample minimum or inferential rule is supplied by the preserved source interpretation. Printed plus/minus values are not automatically confidence intervals or tolerance bands.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      }
+    },
+    {
+      "id": "table2-c-co-reported-spread",
+      "kind": "scalar",
+      "description": "Original Table 2 printed plus/minus dispersion accompanying POYO-1+Finetune C center-out. Preserve this companion quantity separately; its exact generating uncertainty definition remains unresolved.",
+      "status": "verified",
+      "expected": 0.0118,
+      "units": "dimensionless decoding R2",
+      "aggregation": "Printed dispersion associated with the same original Table 2 C center-out population; do not relabel it SD, SEM, a confidence interval or an equivalence tolerance until primary-method lineage is recovered.",
+      "evidence_ids": [
+        "poyo-table2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision and a printed dispersion do not by themselves justify a reproduction equivalence tolerance. Historical R2 arithmetic, source normalization, original replication and variability must be recovered and reviewed before any absolute criterion is frozen.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original panel-specific aggregation and replication; independently predeclare reproduction uncertainty without treating sessions, windows, adaptation budgets or training seeds as independent animals.",
+        "independent_unit": "Sessions nested in source animals and laboratories; Table2 populations and Table3 NLB tasks remain distinct, and the original independent-unit design is unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent sample minimum or inferential rule is supplied by the preserved source interpretation. Printed plus/minus values are not automatically confidence intervals or tolerance bands.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      }
+    },
+    {
+      "id": "table2-t-co-finetune-mean",
+      "kind": "scalar",
+      "description": "Original Table 2 POYO-1+Finetune held-session decoding mean for T center-out. Published value is an expected finding only; authentic prediction-derived computation is required.",
+      "status": "verified",
+      "expected": 0.9364,
+      "units": "dimensionless decoding R2",
+      "aggregation": "Source Table 2 T center-out population of 6 sessions, kept separate from other populations and budgets. Preserve original dimension/session weighting and mask; historical exact aggregation remains unresolved.",
+      "evidence_ids": [
+        "poyo-table2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision and a printed dispersion do not by themselves justify a reproduction equivalence tolerance. Historical R2 arithmetic, source normalization, original replication and variability must be recovered and reviewed before any absolute criterion is frozen.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original panel-specific aggregation and replication; independently predeclare reproduction uncertainty without treating sessions, windows, adaptation budgets or training seeds as independent animals.",
+        "independent_unit": "Sessions nested in source animals and laboratories; Table2 populations and Table3 NLB tasks remain distinct, and the original independent-unit design is unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent sample minimum or inferential rule is supplied by the preserved source interpretation. Printed plus/minus values are not automatically confidence intervals or tolerance bands.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      }
+    },
+    {
+      "id": "table2-t-co-reported-spread",
+      "kind": "scalar",
+      "description": "Original Table 2 printed plus/minus dispersion accompanying POYO-1+Finetune T center-out. Preserve this companion quantity separately; its exact generating uncertainty definition remains unresolved.",
+      "status": "verified",
+      "expected": 0.0132,
+      "units": "dimensionless decoding R2",
+      "aggregation": "Printed dispersion associated with the same original Table 2 T center-out population; do not relabel it SD, SEM, a confidence interval or an equivalence tolerance until primary-method lineage is recovered.",
+      "evidence_ids": [
+        "poyo-table2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision and a printed dispersion do not by themselves justify a reproduction equivalence tolerance. Historical R2 arithmetic, source normalization, original replication and variability must be recovered and reviewed before any absolute criterion is frozen.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original panel-specific aggregation and replication; independently predeclare reproduction uncertainty without treating sessions, windows, adaptation budgets or training seeds as independent animals.",
+        "independent_unit": "Sessions nested in source animals and laboratories; Table2 populations and Table3 NLB tasks remain distinct, and the original independent-unit design is unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent sample minimum or inferential rule is supplied by the preserved source interpretation. Printed plus/minus values are not automatically confidence intervals or tolerance bands.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      }
+    },
+    {
+      "id": "table2-t-rt-finetune-mean",
+      "kind": "scalar",
+      "description": "Original Table 2 POYO-1+Finetune held-session decoding mean for T random-target. Published value is an expected finding only; authentic prediction-derived computation is required.",
+      "status": "verified",
+      "expected": 0.8145,
+      "units": "dimensionless decoding R2",
+      "aggregation": "Source Table 2 T random-target population of 6 sessions, kept separate from other populations and budgets. Preserve original dimension/session weighting and mask; historical exact aggregation remains unresolved.",
+      "evidence_ids": [
+        "poyo-table2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision and a printed dispersion do not by themselves justify a reproduction equivalence tolerance. Historical R2 arithmetic, source normalization, original replication and variability must be recovered and reviewed before any absolute criterion is frozen.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original panel-specific aggregation and replication; independently predeclare reproduction uncertainty without treating sessions, windows, adaptation budgets or training seeds as independent animals.",
+        "independent_unit": "Sessions nested in source animals and laboratories; Table2 populations and Table3 NLB tasks remain distinct, and the original independent-unit design is unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent sample minimum or inferential rule is supplied by the preserved source interpretation. Printed plus/minus values are not automatically confidence intervals or tolerance bands.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      }
+    },
+    {
+      "id": "table2-t-rt-reported-spread",
+      "kind": "scalar",
+      "description": "Original Table 2 printed plus/minus dispersion accompanying POYO-1+Finetune T random-target. Preserve this companion quantity separately; its exact generating uncertainty definition remains unresolved.",
+      "status": "verified",
+      "expected": 0.0496,
+      "units": "dimensionless decoding R2",
+      "aggregation": "Printed dispersion associated with the same original Table 2 T random-target population; do not relabel it SD, SEM, a confidence interval or an equivalence tolerance until primary-method lineage is recovered.",
+      "evidence_ids": [
+        "poyo-table2"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision and a printed dispersion do not by themselves justify a reproduction equivalence tolerance. Historical R2 arithmetic, source normalization, original replication and variability must be recovered and reviewed before any absolute criterion is frozen.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original panel-specific aggregation and replication; independently predeclare reproduction uncertainty without treating sessions, windows, adaptation budgets or training seeds as independent animals.",
+        "independent_unit": "Sessions nested in source animals and laboratories; Table2 populations and Table3 NLB tasks remain distinct, and the original independent-unit design is unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent sample minimum or inferential rule is supplied by the preserved source interpretation. Printed plus/minus values are not automatically confidence intervals or tolerance bands.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      }
+    },
+    {
+      "id": "table3-nlb-maze-r2",
+      "kind": "scalar",
+      "description": "Original Table 3 NLB Maze decoding result. Preserve the source task and its original allowed observations; this is separate from the Table 2 transfer populations.",
+      "status": "verified",
+      "expected": 0.9482,
+      "units": "dimensionless decoding R2",
+      "aggregation": "Source Table 3 NLB Maze result; no pooling with the other NLB task or Table 2. Preserve original source metric, sample masks and aggregation after exact lineage recovery.",
+      "evidence_ids": [
+        "poyo-table3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision and a printed dispersion do not by themselves justify a reproduction equivalence tolerance. Historical R2 arithmetic, source normalization, original replication and variability must be recovered and reviewed before any absolute criterion is frozen.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original panel-specific aggregation and replication; independently predeclare reproduction uncertainty without treating sessions, windows, adaptation budgets or training seeds as independent animals.",
+        "independent_unit": "Sessions nested in source animals and laboratories; Table2 populations and Table3 NLB tasks remain distinct, and the original independent-unit design is unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent sample minimum or inferential rule is supplied by the preserved source interpretation. Printed plus/minus values are not automatically confidence intervals or tolerance bands.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      }
+    },
+    {
+      "id": "table3-nlb-rtt-r2",
+      "kind": "scalar",
+      "description": "Original Table 3 NLB RTT decoding result. Preserve the source task and its original allowed observations; this is separate from the Table 2 transfer populations.",
+      "status": "verified",
+      "expected": 0.7378,
+      "units": "dimensionless decoding R2",
+      "aggregation": "Source Table 3 NLB RTT result; no pooling with the other NLB task or Table 2. Preserve original source metric, sample masks and aggregation after exact lineage recovery.",
+      "evidence_ids": [
+        "poyo-table3"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published precision and a printed dispersion do not by themselves justify a reproduction equivalence tolerance. Historical R2 arithmetic, source normalization, original replication and variability must be recovered and reviewed before any absolute criterion is frozen.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original panel-specific aggregation and replication; independently predeclare reproduction uncertainty without treating sessions, windows, adaptation budgets or training seeds as independent animals.",
+        "independent_unit": "Sessions nested in source animals and laboratories; Table2 populations and Table3 NLB tasks remain distinct, and the original independent-unit design is unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent sample minimum or inferential rule is supplied by the preserved source interpretation. Printed plus/minus values are not automatically confidence intervals or tolerance bands.",
+        "evidence_ids": [
+          "poyo-paper"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Original immutable Churchland/Shenoy, Perich/Miller, O'Doherty/Sabes and Flint releases and158 pretraining-session joins are not authenticated; contemporary DANDI conversions and draft pipelines cannot substitute for 2023 source inputs.",
+    "Separate Table 2 transfer identities, all original training/validation/test trials, adaptation-budget membership, unit-identification versus fine-tuning configurations and Table 3 NLB evaluation identities are not frozen.",
+    "Full Table 1/pretraining outcome and original adaptation-curve/companion-method decomposition is not recovered in retained evidence. The eight listed scalar targets are a verified subset; source-panel completion is mandatory before eligibility. Do not replace missing curves by invented means or categorical claims.",
+    "Preserve all original source companions. The legacy consumer's from_scratch/ridge/recurrent tables, no-pretraining and shuffled-identifier obligations require reconciliation with the original source panel; their presence or labels do not prove historical comparator identity or competence.",
+    "Original source-specific successful-reaching versus continuous-segment masks, timestamp clock/stitching, lab-level velocity normalization, dimension weighting and near-constant R2 behavior remain unresolved. The protected-grid policy is explicitly prospective TorchMetrics 1.9 uniform-dimension/session arithmetic.",
+    "The accepted protected-grid evaluator only consumes supplied design/prediction/target artifacts. Its158-member corpus ABI is not an authenticated original pretraining/transfer partition; it does not train a decoder, authenticate method execution, independently verify granular outputs, or reproduce separate original Table 2/Table 3 findings.",
+    "Computational reproduction requires an independently executed submitted analysis using authentic source observations and frozen code/data/runtime identities, producing all observation-level two-dimensional trajectories, original sample masks, split/adaptation membership, session/dimension metrics and source panel summaries. Printing the known table values, including from a script, is insufficient.",
+    "Authentic full-panel/input manifests, a source-native independent verification program and original author-code exposure manifest do not exist here. Optional admission_policy is omitted rather than populated with invented hashes; author-code access alone does not establish paired execution.",
+    "No source-justified reproduction tolerance, printed-dispersion interpretation or dependence-aware uncertainty criterion is frozen. Published decimal precision, generated software tests and prospective scorer parity cannot substitute.",
+    "Matched cumulative resource/access budgets, protected paper_data/paper_data_author_code conditions, independent candidate freeze and final evaluation are unresolved. Neither prior author calibration nor historical solver records populate these cells."
+  ]
+}

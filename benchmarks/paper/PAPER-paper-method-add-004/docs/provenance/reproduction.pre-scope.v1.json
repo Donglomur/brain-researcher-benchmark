@@ -1,0 +1,3008 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-add-004",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Original estimation and empirical stability findings are valid independent reproduction targets. Source summary arithmetic and several empirical interfaces are executable, but full original scientific identities, source-native complete outputs, numerical criteria and independent execution verification remain unresolved; eligibility is not inherited from improvement.",
+  "source_paper": {
+    "title": "iSTTC: A robust method for accurate estimation of intrinsic neural timescales from single-unit recordings",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+      "locator": "Results 2.2–2.6; Figs. 3–7; Table 3; Methods 4.1.1–4.1.2, 4.3–4.5, 4.8 and 4.10",
+      "supports": "Synthetic generator parameters and full data grid; Allen cohort/QC; estimation recipe; Eq.21 and empirical reference definition. Eq.21 was visually inspected on PDF page26."
+    },
+    {
+      "id": "readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/iinnpp/isttc/e78cfd2b2ea79b7a7e707db7b79e218212497e43/README.md",
+      "locator": "How to run; Functions; acf_sttc_trial_concat",
+      "supports": "Author reproduction route for 10-minute continuous and 40 one-second trial records; four-estimator comparison and padded-trial treatment."
+    },
+    {
+      "id": "fitter",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/iinnpp/isttc/e78cfd2b2ea79b7a7e707db7b79e218212497e43/src/isttc/scripts/calculate_tau.py",
+      "locator": "func_single_exp; fit_single_exp; confidence interval helpers",
+      "supports": "Pinned implementation parameterizes the exponential directly by tau; publication Methods describes decay rate b and propagated tau uncertainty. Release parity requires verification."
+    },
+    {
+      "id": "reg",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-004/task.json",
+      "locator": "implementations/isttc-programme/README.md and baseline/baseline.py; implementations/sensitivity-glm-v1/POLICY.json",
+      "supports": "Finite synthetic programme, current-source-only baseline, prospective windows, QC .01 versus .1 discrepancy, and unresolved empirical/native parity."
+    },
+    {
+      "id": "synthetic_results",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+      "locator": "Results2.1-2.7; Figs2-6; S1-S11; Methods4.1.1,4.3-4.5,4.8-4.10",
+      "supports": "Original synthetic continuous/trial accuracy, fit quality, parameter interactions, duration/trial-count/bin-size sensitivity, resampling stability, computational cost and aABC comparison."
+    },
+    {
+      "id": "empirical_results",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
+      "locator": "Results2.8; Fig7A-G; S12-S14; Methods4.1.2,4.8,4.10",
+      "supports": "Original 5775-unit/26-mouse/eight-area cohort; area hierarchy and 50 trial resamples; single-unit contrasts, pseudo-reference stability, sensitivity and inclusion companions. Pseudo-REE is not biological truth error."
+    },
+    {
+      "id": "synthetic_summary",
+      "kind": "author_code",
+      "url": "https://github.com/iinnpp/isttc/blob/7cdeaf0560b9bffa6c8fe4bda7a4594b312c10c5/notebooks/synthetic/generate_summary_datasets.ipynb",
+      "locator": "Git blob e7f1e0aef7a34352378606371f5a3bd238b44c63; cells4,8,10,12,14-24; cells26-32 are separate bin/lag sweeps",
+      "supports": "Source absolute percentage REE, tau*50ms, lag-unit CI widths, all-column nonmissing and R2>=0 paired masks, main-panel Lv, coordinate-local sensitivity masks, iteration0, 60/150/300/450/600s and40/60/80/100trials.19 distinct fits per unit support five summary tables, not the complete figure panel."
+    },
+    {
+      "id": "empirical_notebook",
+      "kind": "author_code",
+      "url": "https://github.com/iinnpp/isttc/blob/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/calculate_and_plot_tau_per_unit_4methods.ipynb",
+      "locator": "Original four-method empirical reduction; companion duration and trial-count notebooks, r_scripts/mice_taus_units_4methods.R and mice_trial_methods_fr_lv.R",
+      "supports": "Original empirical source formulas and covariates; historical reference, missingness, fitter and identity ambiguities remain material."
+    },
+    {
+      "id": "accepted_components",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/tree/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-add-004/implementations",
+      "locator": "synthetic-summary-v1; empirical-estimation; empirical-diagnostics; sensitivity-glm-v1; isttc-programme",
+      "supports": "Coordinator-designated final integrated SOURCE d3a4d4ed420bbab19d253da5b44eefca1d73eb00; exact locally inspected component bytes are pinned externally, with no unperformed Git equivalence claim. Runnable source interfaces and generated software controls only. No complete original-finding reproduction, AI attempt or improvement is established."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Estimate single-unit autocorrelation decay time constants from the same continuous and epoched spike observations. Synthetic Hawkes target is tau_ACF=tau_kernel/(1−alpha); empirical analysis estimates timescales and stability, not known biological truth.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Paper Table3 synthetic Hawkes parameter dataset and its duration/trial variants, plus Allen Visual Coding Neuropixels Functional Connectivity spontaneous activity. Use the original releases and manifestations; new simulations or new window draws are extensions.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Synthetic base comprises 100000 independent parameter sets with f 0.01–10Hz, alpha .1–.9 and tau 50–300ms. Empirical paper cohort is 5775 units spanning eight areas with presence ratio≥.9, ISI violations≤.5 and amplitude cutoff≤.01. Local retained loader policy differs on amplitude cutoff; authentic original roster is not reconciled.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "This is an estimator study, not a published train/test learner split. Reuse the exact original 600-second records, 40/60/80/100 one-second trial draws and duration truncations; original trial/window realizations and any tuning exposure are not recovered. A held-out generator partition would be an extension.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Spike times and the condition-specific observation duration/trial structure. The synthetic truth tau, generator parameters and author fitted results are evaluator information; empirical full-duration references must not leak into a trial-only candidate.",
+      "evidence_ids": [
+        "paper",
+        "readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Methods4.4–4.5 specify 20 lags, 50-ms lag/bin, 25-ms STTC tolerance, 3000-ms trial padding and single-exponential fitting from lag1 (lag2 for area fits), excluding NaN ACFs. Publication b-based fitting/uncertainty and current tau-based source must be reconciled; historical quality masks remain material.",
+      "evidence_ids": [
+        "paper",
+        "fitter",
+        "reg"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Methods4.8 Eq21 displays 100*(tau_est−tau_truth)/tau_truth. Registered policy uses 100*abs(tau_est−tau_ref)/tau_ref and conditional mean/median summaries. Resolve the original figure-producing absolute/signed convention and masks from primary code before assigning a lower-is-better success criterion. Empirical reference is full-duration ACF/iSTTC, so pseudo-REE is stability rather than truth error.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain complete original continuous/trial/duration conditions, success/failed-fit denominators and source condition/model summaries. No favorable successful-fit subset or newly weighted aggregate may replace source figures. Original numerical aggregate baseline and exact masks are not authenticated.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Retain the original100000 synthetic parameter draws across continuous and trial-based estimation, all original duration/trial-count conditions, source errors and complete failures/quality masks, figure/model/parameter-interaction and stability companions, bin/lag and padding checks, computational-cost analyses and the source-defined10000-unit aABC companion subset. The recovered19-fit-per-unit source summary is an intermediate, not this complete panel. Retain the registered empirical5775 units from26mice and eight areas, original40 one-second windows, per-area hierarchy and50 sampling repetitions, four-method single-unit results, original duration/trial-count and resampling/inclusion companions. Required arrays include REE parameter maps and inclusion curves, quality profiles, resampling convergence, bin/lag and padding outputs, runtime curves, aABC distributions, empirical area hierarchies, unit distributions and duration/trial curves. These remain explicit obligations in source evidence, blockers and the external granular-interface inventory, never scalar placeholders. Exact original manifests, figure reductions and some companion source outputs remain unresolved; this scalar contract is a partial representation, and no smaller available panel substitutes for the full panel.",
+      "evidence_ids": [
+        "synthetic_results",
+        "empirical_results",
+        "synthetic_summary",
+        "accepted_components"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Both information conditions receive the same source paper and original condition-specific spike times, observation durations and trial structure. Only the paper_data_author_code condition additionally receives the frozen author-code allowlist. Evaluator-only synthetic truths/generator parameters, author fitted results, and empirical full-duration reference fits are excluded from candidate observation views; a trial-only analysis cannot access full-duration observations as an undeclared input. Public source exposure is recorded and does not establish secrecy. Original observation identity and enforcement still require authenticated paired manifests.",
+      "evidence_ids": [
+        "paper",
+        "readme",
+        "synthetic_summary"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "syn_continuous_method",
+      "kind": "scalar",
+      "description": "Fig3/S2A: iSTTC versus ACF continuous-source model coefficient; reported95%CI[-0.039,-0.034].",
+      "status": "verified",
+      "expected": -0.037,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_continuous_method_fr",
+      "kind": "scalar",
+      "description": "Fig3D/S2A: method-by-firing-rate interaction coefficient.",
+      "status": "verified",
+      "expected": 0.003,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_continuous_method_alpha",
+      "kind": "scalar",
+      "description": "Fig3D/S2A: method-by-excitation-strength interaction coefficient.",
+      "status": "verified",
+      "expected": -0.037,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_continuous_method_tau",
+      "kind": "scalar",
+      "description": "Fig3D/S2A: method-by-true-timescale interaction coefficient.",
+      "status": "verified",
+      "expected": 0.005,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_lv_alpha",
+      "kind": "scalar",
+      "description": "S2C-D: local variation association with excitation strength.",
+      "status": "verified",
+      "expected": 0.436,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_method_lv",
+      "kind": "scalar",
+      "description": "S2D: method-by-local-variation interaction in synthetic error.",
+      "status": "verified",
+      "expected": -0.042,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_trial_method",
+      "kind": "scalar",
+      "description": "Fig4/S4A: iSTTC versus PearsonR trial-source model coefficient; reported95%CI[-0.090,-0.077].",
+      "status": "verified",
+      "expected": -0.083,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_trial_method_fr",
+      "kind": "scalar",
+      "description": "Fig4C/S4A: method-by-firing-rate interaction coefficient.",
+      "status": "verified",
+      "expected": -0.008,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_trial_method_alpha",
+      "kind": "scalar",
+      "description": "Fig4C/S4A: method-by-excitation-strength interaction coefficient.",
+      "status": "verified",
+      "expected": 0.009,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_trial_method_tau",
+      "kind": "scalar",
+      "description": "Fig4C/S4A: method-by-true-timescale interaction coefficient.",
+      "status": "verified",
+      "expected": -0.015,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_duration_method",
+      "kind": "scalar",
+      "description": "Fig5B/S7A: method effect across original continuous durations.",
+      "status": "verified",
+      "expected": -0.029,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_duration_method_duration",
+      "kind": "scalar",
+      "description": "Fig5B/S7A: method-by-duration interaction coefficient.",
+      "status": "verified",
+      "expected": -0.006,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_duration_method_alpha",
+      "kind": "scalar",
+      "description": "Fig5B/S7A: method-by-excitation-strength interaction coefficient.",
+      "status": "verified",
+      "expected": -0.031,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_duration_method_tau",
+      "kind": "scalar",
+      "description": "Fig5B/S7A: method-by-true-timescale interaction coefficient.",
+      "status": "verified",
+      "expected": 0.004,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_trialcount_method",
+      "kind": "scalar",
+      "description": "Fig5D/S7B: method effect across original trial counts.",
+      "status": "verified",
+      "expected": -0.062,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_trialcount_method_count",
+      "kind": "scalar",
+      "description": "Fig5D/S7B: method-by-trial-count interaction coefficient.",
+      "status": "verified",
+      "expected": 0.0098,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_trialcount_method_tau",
+      "kind": "scalar",
+      "description": "Fig5D/S7B: method-by-true-timescale interaction coefficient.",
+      "status": "verified",
+      "expected": -0.015,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_decline",
+      "kind": "scalar",
+      "description": "Fig6C: ACF/ACF-like decline association with REE.",
+      "status": "verified",
+      "expected": -0.946,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_ci_zero",
+      "kind": "scalar",
+      "description": "Fig6C: CI excluding zero association with REE.",
+      "status": "verified",
+      "expected": -1.325,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_r_squared",
+      "kind": "scalar",
+      "description": "Fig6C: R-squared association with REE.",
+      "status": "verified",
+      "expected": -1.613,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original paired methods within each synthetic draw; source complete support/masks, covariates, transforms and model coefficients retained.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_excluded_acf_full",
+      "kind": "scalar",
+      "description": "Fig6A: original excluded-fit count for acf_full; retain failed-fit versus negative-R2 categories separately in granular outputs.",
+      "status": "verified",
+      "expected": 248,
+      "units": "excluded fits",
+      "aggregation": "Per method over all100000 original synthetic units; no successful-fit denominator substitution.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_excluded_isttc_full",
+      "kind": "scalar",
+      "description": "Fig6A: original excluded-fit count for isttc_full; retain failed-fit versus negative-R2 categories separately in granular outputs.",
+      "status": "verified",
+      "expected": 238,
+      "units": "excluded fits",
+      "aggregation": "Per method over all100000 original synthetic units; no successful-fit denominator substitution.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_excluded_pearsonr_trial_avg",
+      "kind": "scalar",
+      "description": "Fig6A: original excluded-fit count for pearsonr_trial_avg; retain failed-fit versus negative-R2 categories separately in granular outputs.",
+      "status": "verified",
+      "expected": 16594,
+      "units": "excluded fits",
+      "aggregation": "Per method over all100000 original synthetic units; no successful-fit denominator substitution.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_excluded_sttc_trial_concat",
+      "kind": "scalar",
+      "description": "Fig6A: original excluded-fit count for sttc_trial_concat; retain failed-fit versus negative-R2 categories separately in granular outputs.",
+      "status": "verified",
+      "expected": 6268,
+      "units": "excluded fits",
+      "aggregation": "Per method over all100000 original synthetic units; no successful-fit denominator substitution.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_failed_overlap_both_trials",
+      "kind": "scalar",
+      "description": "Fig6B: both trial methods failed",
+      "status": "verified",
+      "expected": 4469,
+      "units": "units",
+      "aggregation": "Exact overlap by original unit ID; retain parameter-stratified distributions.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_failed_overlap_pearsonr_only",
+      "kind": "scalar",
+      "description": "Fig6B: only PearsonR failed",
+      "status": "verified",
+      "expected": 12125,
+      "units": "units",
+      "aggregation": "Exact overlap by original unit ID; retain parameter-stratified distributions.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_failed_overlap_isttc_only",
+      "kind": "scalar",
+      "description": "Fig6B: only trial iSTTC failed",
+      "status": "verified",
+      "expected": 1799,
+      "units": "units",
+      "aggregation": "Exact overlap by original unit ID; retain parameter-stratified distributions.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_acf_full_60",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for acf_full, duration_s=60; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_acf_full_150",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for acf_full, duration_s=150; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_acf_full_300",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for acf_full, duration_s=300; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_acf_full_450",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for acf_full, duration_s=450; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_acf_full_600",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for acf_full, duration_s=600; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_isttc_full_60",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for isttc_full, duration_s=60; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_isttc_full_150",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for isttc_full, duration_s=150; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_isttc_full_300",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for isttc_full, duration_s=300; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_isttc_full_450",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for isttc_full, duration_s=450; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_isttc_full_600",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for isttc_full, duration_s=600; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_pearsonr_trial_avg_40",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for pearsonr_trial_avg, n_trials=40; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_pearsonr_trial_avg_60",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for pearsonr_trial_avg, n_trials=60; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_pearsonr_trial_avg_80",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for pearsonr_trial_avg, n_trials=80; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_pearsonr_trial_avg_100",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for pearsonr_trial_avg, n_trials=100; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_sttc_trial_concat_40",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for sttc_trial_concat, n_trials=40; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_sttc_trial_concat_60",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for sttc_trial_concat, n_trials=60; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_sttc_trial_concat_80",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for sttc_trial_concat, n_trials=80; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_median_ree_sttc_trial_concat_100",
+      "kind": "scalar",
+      "description": "Original synthetic conditional median absolute REE for sttc_trial_concat, n_trials=100; preserve source figure-specific support in addition to the recovered summary mask.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Median over the complete original condition-specific source-supported units; report all failure/quality denominators alongside it.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_runtime_isttc_full",
+      "kind": "scalar",
+      "description": "S3/S6: paper-reported median per-unit computation time for isttc_full.",
+      "status": "verified",
+      "expected": 0.2838,
+      "units": "seconds per unit",
+      "aggregation": "Original method/runtime measurement panel with source hardware, concurrency, input lengths and phase accounting; never use generated-control timing.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original hardware/runtime measurement conditions and an admissible cross-platform reproduction criterion remain unresolved; published runtime is not a new measurement.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_runtime_acf_full",
+      "kind": "scalar",
+      "description": "S3/S6: paper-reported median per-unit computation time for acf_full.",
+      "status": "verified",
+      "expected": 0.0088,
+      "units": "seconds per unit",
+      "aggregation": "Original method/runtime measurement panel with source hardware, concurrency, input lengths and phase accounting; never use generated-control timing.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original hardware/runtime measurement conditions and an admissible cross-platform reproduction criterion remain unresolved; published runtime is not a new measurement.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_runtime_sttc_trial_concat",
+      "kind": "scalar",
+      "description": "S3/S6: paper-reported median per-unit computation time for sttc_trial_concat.",
+      "status": "verified",
+      "expected": 0.0384,
+      "units": "seconds per unit",
+      "aggregation": "Original method/runtime measurement panel with source hardware, concurrency, input lengths and phase accounting; never use generated-control timing.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original hardware/runtime measurement conditions and an admissible cross-platform reproduction criterion remain unresolved; published runtime is not a new measurement.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_runtime_pearsonr_trial_avg",
+      "kind": "scalar",
+      "description": "S3/S6: paper-reported median per-unit computation time for pearsonr_trial_avg.",
+      "status": "verified",
+      "expected": 0.0542,
+      "units": "seconds per unit",
+      "aggregation": "Original method/runtime measurement panel with source hardware, concurrency, input lengths and phase accounting; never use generated-control timing.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Original hardware/runtime measurement conditions and an admissible cross-platform reproduction criterion remain unresolved; published runtime is not a new measurement.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_lv_crossover",
+      "kind": "scalar",
+      "description": "S2D, Results2.2: paper-reported Lv crossover of the fitted ACF/iSTTC REE comparison; the text states1.099. This is a source-model crossover, not a new threshold or current result.",
+      "status": "verified",
+      "expected": 1.099,
+      "units": "local variation (dimensionless)",
+      "aggregation": "Original synthetic source interaction model and covariate scaling; retain the coefficient/design outputs used to derive the crossing.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_runtime_model_continuous_method",
+      "kind": "scalar",
+      "description": "S3A-B: iSTTC versus ACF runtime-model method coefficient; reported95%CI[0.2707,0.2723].",
+      "status": "verified",
+      "expected": 0.2715,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original source timing-model response and method/covariate coding; retain original per-unit timings, hardware/concurrency/phase conditions and design outputs. These coefficients are not new benchmark runtimes.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_runtime_model_continuous_method_fr",
+      "kind": "scalar",
+      "description": "S3B: continuous runtime method-by-firing-rate effect; reported95%CI[0.1589,0.1606].",
+      "status": "verified",
+      "expected": 0.16,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original source timing-model response and method/covariate coding; retain original per-unit timings, hardware/concurrency/phase conditions and design outputs. These coefficients are not new benchmark runtimes.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_runtime_model_trial_method",
+      "kind": "scalar",
+      "description": "S6A-B: iSTTC versus PearsonR runtime-model method coefficient; reported95%CI[-0.0092,0.0047],p=0.52; nonrejection is not equivalence.",
+      "status": "verified",
+      "expected": -0.0023,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original source timing-model response and method/covariate coding; retain original per-unit timings, hardware/concurrency/phase conditions and design outputs. These coefficients are not new benchmark runtimes.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_runtime_model_trial_method_fr",
+      "kind": "scalar",
+      "description": "S6B: trial runtime method-by-firing-rate effect; reported95%CI[-0.026,-0.012].",
+      "status": "verified",
+      "expected": -0.019,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original source timing-model response and method/covariate coding; retain original per-unit timings, hardware/concurrency/phase conditions and design outputs. These coefficients are not new benchmark runtimes.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_runtime_model_trial_method_alpha",
+      "kind": "scalar",
+      "description": "S6B: trial runtime method-by-excitation-strength effect; reported95%CI[0.0096,0.0235].",
+      "status": "verified",
+      "expected": 0.0166,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original source timing-model response and method/covariate coding; retain original per-unit timings, hardware/concurrency/phase conditions and design outputs. These coefficients are not new benchmark runtimes.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_pass_acf_decline_pearsonr_trial_avg",
+      "kind": "scalar",
+      "description": "Fig6D left/S9A; ACF-like decline in50-200ms: paper-reported trial quality pass percentage for pearsonr_trial_avg.",
+      "status": "verified",
+      "expected": 53.4,
+      "units": "percent of original source-defined denominator",
+      "aggregation": "Original epoched synthetic units and named quality criterion; authenticate exact denominator and failure handling from source outputs, never substitute successful-fit-only support.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_pass_acf_decline_sttc_trial_concat",
+      "kind": "scalar",
+      "description": "Fig6D left/S9A; ACF-like decline in50-200ms: paper-reported trial quality pass percentage for sttc_trial_concat.",
+      "status": "verified",
+      "expected": 61.4,
+      "units": "percent of original source-defined denominator",
+      "aggregation": "Original epoched synthetic units and named quality criterion; authenticate exact denominator and failure handling from source outputs, never substitute successful-fit-only support.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_gain_acf_decline",
+      "kind": "scalar",
+      "description": "Fig6D left/S9A; ACF-like decline in50-200ms: paper-reported increase in retained trial units for iSTTC over PearsonR; source comparison only.",
+      "status": "verified",
+      "expected": 8.0,
+      "units": "percentage points",
+      "aggregation": "Difference of original method-specific inclusion percentages, preserving source reporting precision and denominator. Not a new improvement outcome.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_pass_ci_excludes_zero_pearsonr_trial_avg",
+      "kind": "scalar",
+      "description": "Fig6D right/S9A;95%CI excludes zero: paper-reported trial quality pass percentage for pearsonr_trial_avg.",
+      "status": "verified",
+      "expected": 30.4,
+      "units": "percent of original source-defined denominator",
+      "aggregation": "Original epoched synthetic units and named quality criterion; authenticate exact denominator and failure handling from source outputs, never substitute successful-fit-only support.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_pass_ci_excludes_zero_sttc_trial_concat",
+      "kind": "scalar",
+      "description": "Fig6D right/S9A;95%CI excludes zero: paper-reported trial quality pass percentage for sttc_trial_concat.",
+      "status": "verified",
+      "expected": 38.0,
+      "units": "percent of original source-defined denominator",
+      "aggregation": "Original epoched synthetic units and named quality criterion; authenticate exact denominator and failure handling from source outputs, never substitute successful-fit-only support.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_gain_ci_excludes_zero",
+      "kind": "scalar",
+      "description": "Fig6D right/S9A;95%CI excludes zero: paper-reported increase in retained trial units for iSTTC over PearsonR; source comparison only.",
+      "status": "verified",
+      "expected": 7.6,
+      "units": "percentage points",
+      "aggregation": "Difference of original method-specific inclusion percentages, preserving source reporting precision and denominator. Not a new improvement outcome.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_pass_r_squared_pearsonr_trial_avg",
+      "kind": "scalar",
+      "description": "Fig6E/S9A;R2>=0.5: paper-reported trial quality pass percentage for pearsonr_trial_avg.",
+      "status": "verified",
+      "expected": 43.9,
+      "units": "percent of original source-defined denominator",
+      "aggregation": "Original epoched synthetic units and named quality criterion; authenticate exact denominator and failure handling from source outputs, never substitute successful-fit-only support.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_pass_r_squared_sttc_trial_concat",
+      "kind": "scalar",
+      "description": "Fig6E/S9A;R2>=0.5: paper-reported trial quality pass percentage for sttc_trial_concat.",
+      "status": "verified",
+      "expected": 51.6,
+      "units": "percent of original source-defined denominator",
+      "aggregation": "Original epoched synthetic units and named quality criterion; authenticate exact denominator and failure handling from source outputs, never substitute successful-fit-only support.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "syn_quality_gain_r_squared",
+      "kind": "scalar",
+      "description": "Fig6E/S9A;R2>=0.5: paper-reported increase in retained trial units for iSTTC over PearsonR; source comparison only.",
+      "status": "verified",
+      "expected": 7.7,
+      "units": "percentage points",
+      "aggregation": "Difference of original method-specific inclusion percentages, preserving source reporting precision and denominator. Not a new improvement outcome.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "aabc_rejection_rate",
+      "kind": "scalar",
+      "description": "S11C: paper-reported aABC rejected-fit fraction in its original10000-unit companion subset.",
+      "status": "verified",
+      "expected": 6.5,
+      "units": "percent",
+      "aggregation": "Original aABC support and algorithm rejection rule; retain all rejected original units.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "aabc_runtime",
+      "kind": "scalar",
+      "description": "S11D: paper-reported aABC median computation time.",
+      "status": "verified",
+      "expected": 212,
+      "units": "seconds per unit",
+      "aggregation": "Original aABC timing protocol; original source subset and runtime conditions must be recovered.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "aabc_isttc_runtime",
+      "kind": "scalar",
+      "description": "S11D: paper-reported iSTTC median computation time in the comparison.",
+      "status": "verified",
+      "expected": 0.04,
+      "units": "seconds per unit",
+      "aggregation": "Original matched timing conditions, not generic full-panel timing.",
+      "evidence_ids": [
+        "synthetic_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Original synthetic parameter draw/spike-train realization, retaining repeated durations/trials within draw.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "synthetic_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_full_method",
+      "kind": "scalar",
+      "description": "Fig7C/S12E: full iSTTC versus ACF coefficient; reported95%CI[-0.023,0.085],p=0.264. Nonrejection does not establish equivalence.",
+      "status": "verified",
+      "expected": 0.03,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and unit/mouse grouping; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_pearsonr_vs_acf",
+      "kind": "scalar",
+      "description": "Fig7C/S12E: PearsonR trial estimate versus full ACF coefficient.",
+      "status": "verified",
+      "expected": 0.655,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and unit/mouse grouping; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_isttc_trials_vs_acf",
+      "kind": "scalar",
+      "description": "Fig7C/S12E: iSTTC trial estimate versus full ACF coefficient.",
+      "status": "verified",
+      "expected": 0.624,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and unit/mouse grouping; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_trial_pseudo_ree",
+      "kind": "scalar",
+      "description": "Fig7C/S12F: trial iSTTC versus PearsonR pseudo-REE coefficient; reported95%CI[-0.117,-0.024].",
+      "status": "verified",
+      "expected": -0.071,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and unit/mouse grouping; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_duration_method",
+      "kind": "scalar",
+      "description": "Fig7D/S13A: method effect across original continuous durations.",
+      "status": "verified",
+      "expected": -0.031,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and unit/mouse grouping; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_trialcount_method",
+      "kind": "scalar",
+      "description": "Fig7F/S13B: method effect across original trial counts; reported95%CI[-0.054,0.004],p=0.0894. Nonrejection is not reproduction evidence.",
+      "status": "verified",
+      "expected": -0.025,
+      "units": "coefficient on original source-model response scale; transform and coding require authentication",
+      "aggregation": "Original empirical source model with named method reference, full required covariates and unit/mouse grouping; retain coefficients, design/scaling, covariance and source inferential outputs. Pseudo-REE measures stability, not true biological error.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_four_method_support",
+      "kind": "scalar",
+      "description": "Fig7C: reported all-four-method single-unit analysis support; exact identities and source masks must be authenticated.",
+      "status": "verified",
+      "expected": 3053,
+      "units": "units",
+      "aggregation": "Source cohort5775 units from26mice; counts are expected published support, never evidence of current preparation or independent animal sample size.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_duration_support",
+      "kind": "scalar",
+      "description": "Fig7D: reported support shared across both methods and all original signal lengths; exact identities and source masks must be authenticated.",
+      "status": "verified",
+      "expected": 5674,
+      "units": "units",
+      "aggregation": "Source cohort5775 units from26mice; counts are expected published support, never evidence of current preparation or independent animal sample size.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_trialcount_support",
+      "kind": "scalar",
+      "description": "Fig7F: reported support shared across both methods and all original trial counts; exact identities and source masks must be authenticated.",
+      "status": "verified",
+      "expected": 4588,
+      "units": "units",
+      "aggregation": "Source cohort5775 units from26mice; counts are expected published support, never evidence of current preparation or independent animal sample size.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_pearsonr_trial_rejection",
+      "kind": "scalar",
+      "description": "S14A: paper-reported pearsonr trial rejection fraction.",
+      "status": "verified",
+      "expected": 40.6,
+      "units": "percent",
+      "aggregation": "Original empirical denominator and failed/negative-R2 classification; retain all5775 units and exact mouse/area identities.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_isttc_trial_rejection",
+      "kind": "scalar",
+      "description": "S14A: paper-reported isttc trial rejection fraction.",
+      "status": "verified",
+      "expected": 28.3,
+      "units": "percent",
+      "aggregation": "Original empirical denominator and failed/negative-R2 classification; retain all5775 units and exact mouse/area identities.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_quality_gain_acf_decline",
+      "kind": "scalar",
+      "description": "S14C-D: paper-reported increase for trial iSTTC over PearsonR in units meeting ACF-like decline in50-200ms.",
+      "status": "verified",
+      "expected": 5.3,
+      "units": "percentage points",
+      "aggregation": "Original empirical method-specific quality-pass fractions with original unit/mouse/area identities, source denominators and failure handling. Printed source comparison only; no current improvement outcome.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_quality_gain_ci_excludes_zero",
+      "kind": "scalar",
+      "description": "S14C-D: paper-reported increase for trial iSTTC over PearsonR in units meeting 95%CI excludes zero.",
+      "status": "verified",
+      "expected": 3.6,
+      "units": "percentage points",
+      "aggregation": "Original empirical method-specific quality-pass fractions with original unit/mouse/area identities, source denominators and failure handling. Printed source comparison only; no current improvement outcome.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    },
+    {
+      "id": "empirical_quality_gain_r_squared",
+      "kind": "scalar",
+      "description": "S14C-D: paper-reported increase for trial iSTTC over PearsonR in units meeting R2>=0.5.",
+      "status": "verified",
+      "expected": 4.7,
+      "units": "percentage points",
+      "aggregation": "Original empirical method-specific quality-pass fractions with original unit/mouse/area identities, source denominators and failure handling. Printed source comparison only; no current improvement outcome.",
+      "evidence_ids": [
+        "empirical_results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Printed precision and published confidence intervals are target evidence, not an independently justified equivalence tolerance. Freeze source-parity numerical and scientific acceptance criteria before any final attempt.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the original estimator/model and its uncertainty, then justify a reproduction comparison rule; no interval-overlap or nonrejection rule is adopted.",
+        "independent_unit": "Biological mouse for population inference, retaining nested units and repeated windows; original source-model inference must be reconciled separately.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Source design does not by itself specify an independently justified reproduction uncertainty criterion; original numerical targets and complete inferential source must be authenticated.",
+        "evidence_ids": [
+          "empirical_results"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The original100000-draw dataset identity and all original condition/window realizations are not authenticated for complete reproduction. The finite600s/40-trial programme and19-fit summary intermediate do not cover the full original finding panel.",
+    "Source summary absoluteREE and coordinate-local paired masks are recovered, but downstream figures/R transforms, source statistical coefficients, confidence procedures, additional masks and exact source-panel cells require reconciliation. Required array/vector panels are not represented by scalar findings; retain every original family in full_panel and the external granular-interface inventory. A reviewed structured schema is needed; genuine missing axes/criteria/data/source remain separately unresolved.",
+    "The author-designated paper release7cdeaf and retained current-source fittere78cfd2 differ; native point-estimate, uncertainty and environment parity are unqualified. Source code and generated controls do not establish authentic computation.",
+    "Original5775-unit/26-mouse/eight-area identities, QC composition, biological covariates, original windows and all50 area resamples remain unqualified. Source paper empirical cross-coordinate masks/reference choices differ from the prospective sensitivity policy; prospective resolution is not exact historical reproduction.",
+    "Original synthetic/empirical resampling, hyperparameter/quality companions, runtime conditions and source10000-unit aABC subset require complete original source and granular outputs. No numerical results are invented for missing panels.",
+    "No independent complete authentic-data execution/output-verification programme or immutable full scientific identity manifests is available; admission_policy is omitted rather than populated with invented hashes.",
+    "All numerical tolerances and reproduction uncertainty criteria remain unresolved. Published confidence intervals, matching printed values and nonrejection of differences do not establish computational reproduction.",
+    "Paired common input, author-code allowlist, observation/exposure enforcement and cumulative access/resource budgets are not frozen for either outcome. No new AI receipts or scientific outcomes exist."
+  ]
+}

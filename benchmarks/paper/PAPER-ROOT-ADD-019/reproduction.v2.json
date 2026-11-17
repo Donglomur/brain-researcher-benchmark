@@ -1,0 +1,617 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-ROOT-ADD-019",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Standalone reproduction of the root-selected complete Figure 6h fast/slow contralateral reaction-time decoder under Figure 6g method boundaries. The two indexed source families and three source scalar summaries below declare the complete selected traces/session panel without inventing references, axes, identities or numerical criteria. Source/native verification, actual displayed uncertainty and comparison criteria remain unresolved; no execution, independent accuracy or scientific superiority is established.",
+  "source_paper": {
+    "title": "Acetylcholine demixes heterogeneous dopamine signals for learning and moving",
+    "url": "https://www.nature.com/articles/s41593-026-02227-x"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13061617/",
+      "locator": "Figure 6g–h; Methods: Logistic regression model; Statistics and reproducibility; Data availability",
+      "supports": "Source contains an ordered fast-versus-slow reaction-time decoder in addition to descriptive dopamine/acetylcholine timing and learning claims."
+    },
+    {
+      "id": "decode",
+      "kind": "author_code",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/DMS_AChDA/vis/plot_fig6h.m",
+      "locator": "decodeSpeed and plot_fig6h",
+      "supports": "Loads npx_DMS.mat S/SU, forms contralateral fast/slow quartiles and 0–0.5 s spike predictors, fits ridge logistic models and reports 100*(1-min(kfoldLoss)); exact native implementation contains an outlier-threshold spelling discrepancy."
+    },
+    {
+      "id": "fig6",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13061617/",
+      "locator": "Figure 6g method schematic; complete Figure 6h two-cell fast/slow example traces and eighteen-session/eight-rat accuracy profile and summary",
+      "supports": "The selected original decoder result, source example traces, original qualifying population and reported accuracy summary/count; distinct from other Figure 6 physiological findings."
+    },
+    {
+      "id": "ephys_release",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/17457318",
+      "locator": "data-published.zip; NpxData/npx_DMS.mat S/SU; A_structs/S_structs and DLCdata; membership/schema must still be authenticated",
+      "supports": "Source release route for task behavior, electrophysiology and tracked movement, not proof of actual preparation."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Candidate ordered source subtask is Figure 6g–h: predict whether contralateral reaction time is in the fastest or slowest within-session quartile from simultaneously recorded DMS spiking. This is explicitly a scoped paper subtask; Figure 3 timing and the paper’s full causal demixing claims remain distinct obligations, not silently replaced or won.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Article-linked Zenodo 17457318 behavioral/electrophysiology release; author decoder reads data-published/NpxData/npx_DMS.mat variables S and SU. Exact archive/member identity and row manifest have not been verified here.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper Figure 6h reports 18 sessions from eight rats, restricted to sessions with at least five simultaneously recorded DMS units and contralateral trials. Exact qualifying sessions and rat mapping require an authenticated manifest.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Paper uses tenfold within-session cross-validation and selects among 11 ridge strengths from 10^-4 to 10^-0.2 by minimum classification error. Author code does not pin fold RNG/assignment in the inspected function; recovering the published split/selection realization is unresolved. A leave-rat-out split would be an extension.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Trial-by-neuron-by-time DMS spike tensor from 0 to 0.5 seconds after reward-port assignment, flattened as predictors. Reaction times determine fast/slow labels; they are scoring labels rather than candidate input. Same neural and behavioral availability must hold for comparator and candidate.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Author code applies recording-hemisphere rules, excludes ipsilateral trials, forms log2 reaction-time quartiles and nearest-grid 0–0.5-second spike windows. The code assigns thres(1) but then indexes thresh(1), so outlier filtering cannot be silently repaired and called the original executable baseline.",
+      "evidence_ids": [
+        "decode"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Per-session cross-validated classification accuracy in percent: 100 times one minus the minimum kfoldLoss among the 11 ridge penalties. It is a source selection-biased CV statistic, not an independent external test accuracy.",
+      "evidence_ids": [
+        "decode",
+        "paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure 6h reports the mean across 18 sessions from eight rats. Caption describes SEM but inspected plotting code passes unscaled SD to errorbar; the correct published uncertainty and numerical session scores remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "decode"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Complete Figure 6h: source two-cell fast/slow example traces and all eighteen qualifying session scores/profile and summary from eight rats. Figure 6g supplies the schematic/method boundary. Preserve the source at-least-five-simultaneous-DMS-unit eligibility, contralateral fastest/slowest within-session reaction-time quartiles and ties, original 0–0.5-second post-assignment spike window, source tenfold within-session CV, original best-of-eleven ridge selection and equal-session aggregation. Source displayed uncertainty remains subject to the unresolved SD-versus-SEM discrepancy. This is same-trial classification, not a verified strictly pre-movement forecast. Complete reproduction requires the source two-cell fast/slow traces with authentic cells, trial supports, original time axes, normalization and displayed uncertainty; all eighteen session accuracies from eight rats; every original eleven-penalty loss and selected index; original trial labels, masks, ties, folds and OOF predictions; equal-session mean and the actual source error bar. The reported 17/18 above-chance count is a companion, never the numerical accuracy baseline. Figure 6g is the method schematic, not the location of the example traces. Preserve thres/thresh, sequential trial-index label mutation, inclusive quartile ties and original unpinned folds without silently choosing a corrected historical baseline. Resolve caption SEM versus plotted SD; neither display is automatically a rat-level CI. Best-of-eleven selection and reporting reuse the CV outcomes. Higher selected CV score alone cannot admit scientific superiority: total candidate search/exposure, freeze, matched access/resources, dependence/selection-aware comparison and meaningful effect remain unqualified. Independent/nested or rat-held-out designs are separate prospective comparisons for both methods, not replacements for historical reproduction. Figure 3 timing/learning and other physiological/intervention source results remain separately named evidence; distinct obligations in the preserved target anchor do not make all 37 roots or Extended Data 1-10 primary requirements. Missing complete reference and verification identities are not supplied by metadata equality.",
+      "evidence_ids": [
+        "paper",
+        "fig6",
+        "decode",
+        "ephys_release"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Original authenticated npx_DMS.mat S/SU observations, same original qualifying session/rat/unit/trial roster and source trial-by-neuron-by-time spike input for both conditions. Reaction times, fast/slow labels and source final verification arrays are scoring/preparation evidence, not additional candidate predictors. Preserve original reward-port-assignment clock, nearest source time-grid 0-0.5-second SON window, hemisphere exclusions and trial/fold identity. Same-trial classification is not a verified strictly pre-movement forecast. Paper+data and paper+data+official-code have identical scientific observations and noncode resources; only approved author code differs. Actual access/delivery/observation manifests remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "decode",
+        "ephys_release"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig6h_source_example_trace_family",
+      "kind": "indexed_array_family",
+      "description": "Complete Figure6h left two-cell fast/slow example traces with authentic original support and actual source display uncertainty; no source output-to-panel exporter is yet qualified.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig6h_source_example_trace_family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "source_example_firing_rate_traces",
+            "manifest_key": "source_example_firing_rate_traces",
+            "source_quantity": "Complete original fast/slow time-dependent firing-rate traces for the two simultaneously recorded source example cells in Figure6h left; exact cell/session/trial/time identity and layout unresolved.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source firing-rate units; exact normalization unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original per-cell fast/slow trial aggregation and source time coordinates. No invented shared rectangular time grid or substitute source cells. Exact plotted normalization and native exporter remain unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "fig6",
+              "decode"
+            ]
+          },
+          {
+            "id": "source_example_trace_uncertainty",
+            "manifest_key": "source_example_trace_uncertainty",
+            "source_quantity": "Actual source-displayed uncertainty/support accompanying the two-cell fast/slow source traces; recover native quantity and its linkage before declaring array layout or values.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "source firing-rate uncertainty units; actual display definition unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Recover original trial-based display procedure and supports; do not invent an SEM, SD, confidence level or sampling unit.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "fig6",
+              "decode"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "fig6",
+          "decode"
+        ]
+      },
+      "required_granular_output_ids": [
+        "fig6h_example_native_traces",
+        "fig6h_example_trial_support_and_display"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently verify original data-to-output derivation and complete source support before a source-equivalent numerical-reference comparison. Actual reference/program/criterion/uncertainty bindings remain absent; no all-close or threshold is inferred.",
+        "independent_unit": "Rat for biological interpretation; source session/trial/cell observations retain nesting.",
+        "dependence": "Eight original rats, eighteen nested sessions and trial-level outputs; CV folds share training data and best-of-eleven selection reuses CV outcomes. Example cells are source illustration units, not independent animal replication.",
+        "multiplicity": "Retain every source member/coordinate and setting. No favorable subset, arbitrary aggregate, default equivalence margin or inferred significance correction.",
+        "rationale": "Numerical-reference equivalence is a supported metadata class, but genuine source references, identities, numerical criteria and native provenance remain unresolved. This does not assert computational reproduction or superiority.",
+        "evidence_ids": [
+          "paper",
+          "fig6",
+          "decode"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "fig6",
+        "decode"
+      ]
+    },
+    {
+      "id": "fig6h_complete_session_decoder_family",
+      "kind": "indexed_array_family",
+      "description": "Complete Figure6h right eighteen-session/eight-rat selected-CV profile and its source-native eleven-setting losses, selected indices and original OOF/label/fold support.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "fig6h_complete_session_decoder_family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "session_selected_accuracy_percent",
+            "manifest_key": "session_selected_accuracy_percent",
+            "source_quantity": "Every original qualifying session accuracy 100*(1-min(kfoldLoss)) in source session order.",
+            "membership": "fixed",
+            "shape": [
+              18
+            ],
+            "axes": [
+              {
+                "name": "source_session",
+                "units": "source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "All original eighteen qualifying session identities/order and mapping to eight rats remain unauthenticated."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "percent classification accuracy",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One source selected value per original session; no pooled-trial weighting or reduced session roster.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "fig6",
+              "decode"
+            ]
+          },
+          {
+            "id": "all_native_penalty_losses",
+            "manifest_key": "all_native_penalty_losses",
+            "source_quantity": "Every original native kfoldLoss for all eleven ridge settings in each of eighteen sessions, including nonwinning settings.",
+            "membership": "fixed",
+            "shape": [
+              18,
+              11
+            ],
+            "axes": [
+              {
+                "name": "source_session",
+                "units": "source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "All original eighteen qualifying session identities/order and mapping to eight rats remain unauthenticated."
+                }
+              },
+              {
+                "name": "source_penalty_position",
+                "units": "source ordered ridge index",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 1,
+                  "step": 1,
+                  "count": 11
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "misclassification fraction",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Native source weighted/pooling semantics must match actual outputs. Penalty positions1-11 correspond to source logspace(-4,-0.2,11); no newly selected penalties.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "fig6",
+              "decode"
+            ]
+          },
+          {
+            "id": "source_selected_penalty_position",
+            "manifest_key": "source_selected_penalty_position",
+            "source_quantity": "Original first-minimum penalty index for each qualifying session.",
+            "membership": "fixed",
+            "shape": [
+              18
+            ],
+            "axes": [
+              {
+                "name": "source_session",
+                "units": "source session identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "All original eighteen qualifying session identities/order and mapping to eight rats remain unauthenticated."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source ordered ridge index",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original MATLAB min first-tie choice on the complete native eleven-loss vector.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "fig6",
+              "decode"
+            ]
+          },
+          {
+            "id": "source_oof_class_predictions",
+            "manifest_key": "source_oof_class_predictions",
+            "source_quantity": "Original per-trial out-of-fold predicted classes from each setting and original partitioned fitted model, linked to native kfoldLoss.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "source binary class label; literal preprocessing/label semantics unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "One prediction record per authenticated session, source penalty position and retained original trial; no new folds or newly fitted export substituted. Record membership/counts remain data-dependent and unknown.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "source_session_id",
+                "source_penalty_position",
+                "source_trial_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Exact source session/trial/setting keys and ordered support must be independently authenticated and matched; no value-based, favorable or inferred correspondence is allowed.",
+                "evidence_ids": [
+                  "paper",
+                  "decode"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "fig6",
+              "decode"
+            ]
+          },
+          {
+            "id": "source_trial_class_labels",
+            "manifest_key": "source_trial_class_labels",
+            "source_quantity": "Original source label for each retained trial, with literal sequential source mutation audited against intended fast/slow masks.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "source class label; fast=1/slow=0 intention versus literal mutation unresolved",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve original reaction-time exclusions, log2 quartile boundaries/ties and label provenance. No silent correction.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "source_session_id",
+                "source_trial_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Exact source session/trial/setting keys and ordered support must be independently authenticated and matched; no value-based, favorable or inferred correspondence is allowed.",
+                "evidence_ids": [
+                  "paper",
+                  "decode"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "fig6",
+              "decode"
+            ]
+          },
+          {
+            "id": "source_trial_cv_fold",
+            "manifest_key": "source_trial_cv_fold",
+            "source_quantity": "Original within-session tenfold assignment for every retained trial.",
+            "membership": "data_dependent",
+            "shape": [],
+            "axes": [],
+            "allowed_dtypes": null,
+            "units": "source fold identity",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original fold realization/RNG remains unknown; all ten source folds and exact original trial support required, not regenerated folds.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "source_session_id",
+                "source_trial_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Exact source session/trial/setting keys and ordered support must be independently authenticated and matched; no value-based, favorable or inferred correspondence is allowed.",
+                "evidence_ids": [
+                  "paper",
+                  "decode"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "paper",
+              "fig6",
+              "decode"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "fig6",
+          "decode"
+        ]
+      },
+      "required_granular_output_ids": [
+        "fig6h_authentic_preparation_and_masks",
+        "fig6h_all_setting_native_predictions_losses",
+        "fig6h_session_profile_and_selection"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently verify original data-to-output derivation and complete source support before a source-equivalent numerical-reference comparison. Actual reference/program/criterion/uncertainty bindings remain absent; no all-close or threshold is inferred.",
+        "independent_unit": "Rat for biological interpretation; source session/trial/cell observations retain nesting.",
+        "dependence": "Eight original rats, eighteen nested sessions and trial-level outputs; CV folds share training data and best-of-eleven selection reuses CV outcomes. Example cells are source illustration units, not independent animal replication.",
+        "multiplicity": "Retain every source member/coordinate and setting. No favorable subset, arbitrary aggregate, default equivalence margin or inferred significance correction.",
+        "rationale": "Numerical-reference equivalence is a supported metadata class, but genuine source references, identities, numerical criteria and native provenance remain unresolved. This does not assert computational reproduction or superiority.",
+        "evidence_ids": [
+          "paper",
+          "fig6",
+          "decode"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "fig6",
+        "decode"
+      ]
+    },
+    {
+      "id": "fig6h_mean_accuracy",
+      "kind": "scalar",
+      "description": "Figure 6h mean across all 18 sessions of 100*(1-min(kfoldLoss)) over all 11 ridge strengths; full original 0-0.5-second contralateral spike inputs and both RT quartile classes are required.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent classification accuracy",
+      "aggregation": "Equal-weight mean across 18 original sessions from eight rats, best-of-11 within-session tenfold CV; retain all 18x11 loss values, selected indices, per-trial OOF predictions and fold assignments. This is selection-biased CV, not external-test accuracy.",
+      "evidence_ids": [
+        "fig6",
+        "decode",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded acceptance tolerance has been established. Printed precision, old grader tolerances and nonsignificance do not establish a reproduction margin.",
+        "evidence_ids": [
+          "fig6",
+          "decode",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original estimator and dependence must be recovered and an equivalence/uncertainty rule independently justified before admission.",
+        "independent_unit": "Rat for biological inference; 18 nested sessions for the source descriptive mean; CV folds share training data.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent-unit minimum or default equivalence band is invented. Published error bars or failure to reject a difference alone cannot prove reproduction.",
+        "evidence_ids": [
+          "fig6",
+          "decode",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig6h_sessions_above_chance",
+      "kind": "scalar",
+      "description": "Figure 6h accompanying count of sessions whose source cross-validated classification accuracy exceeds 50 percent. Seventeen of eighteen is not an accuracy value and does not assert 17 statistically significant sessions.",
+      "status": "verified",
+      "expected": 17,
+      "units": "sessions",
+      "aggregation": "Count over the same full 18-session panel after source per-session ridge selection; recompute from all 18 derived accuracies, never copy the printed count.",
+      "evidence_ids": [
+        "fig6",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded acceptance tolerance has been established. Printed precision, old grader tolerances and nonsignificance do not establish a reproduction margin.",
+        "evidence_ids": [
+          "fig6",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Original estimator and dependence must be recovered and an equivalence/uncertainty rule independently justified before admission.",
+        "independent_unit": "Rat for biological inference; this is a descriptive count of nested sessions.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent-unit minimum or default equivalence band is invented. Published error bars or failure to reject a difference alone cannot prove reproduction.",
+        "evidence_ids": [
+          "fig6",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "fig6h_displayed_accuracy_uncertainty",
+      "kind": "scalar",
+      "description": "Actual scalar error-bar magnitude displayed around the source equal-session mean accuracy; source caption SEM versus native unscaled SD remains unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percentage points of classification accuracy",
+      "aggregation": "Original complete eighteen-session display across eight rats. Recover actual published display/reference and source SD-versus-SEM equivalence; no rat-level biological CI is inferred.",
+      "evidence_ids": [
+        "fig6",
+        "decode",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-grounded acceptance tolerance has been established. Printed precision, old grader tolerances and nonsignificance do not establish a reproduction margin.",
+        "evidence_ids": [
+          "fig6",
+          "decode",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve the actual source display and numerical reference before justifying a reproduction criterion. Native unscaled session SD and caption SEM are retained as conflicting evidence, not silently selected alternatives.",
+        "independent_unit": "Rat for biological inference; 18 nested sessions for the source descriptive mean; CV folds share training data.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No confidence level, independent-unit minimum or default equivalence band is invented. Published error bars or failure to reject a difference alone cannot prove reproduction.",
+        "evidence_ids": [
+          "fig6",
+          "decode",
+          "paper"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authentic original eighteen-session/eight-rat/unit/trial cohort, source masks and nearest-grid input/clock identities are absent; declared counts and software hashes do not authenticate observations.",
+    "Original Figure6h left-panel two-cell traces, actual normalization/time support/uncertainty and native output-to-panel export mapping are unrecovered. Shape, axes, dtypes and references remain null rather than invented.",
+    "Complete session numerical references, every18x11 native loss, selected indices, original OOF predictions, labels and tenfold realization are missing.",
+    "Source thres/thresh outlier filtering, sequential trial-index label collision, inclusive quartile ties and unpinned source RNG/folds require explicit reviewed reconciliation; no silent corrected branch is historical equivalence.",
+    "Caption SEM versus native errorbar SD and actual source display values remain unresolved. No arbitrary uncertainty policy, confidence level, independent-unit minimum or absolute equivalence tolerance is admitted.",
+    "Accepted figure6h-oof-score-v1 checks supplied granular arithmetic and native-loss consistency; it does not authenticate source preparation, native training, OOF provenance, source traces or independent candidate execution. Its1e-12 native-loss check is not a scientific reproduction tolerance.",
+    "Independent full data-to-output verification and authentic reference/criterion/program identities are absent; optional admission_policy is omitted rather than populated with fabricated hashes.",
+    "This source selected-CV procedure is not independent held-out accuracy or verified pre-movement forecasting. Scientific superiority requires a separately qualified, frozen, search/exposure- and dependence-aware comparison; increasing the selected statistic or limiting candidates to eleven settings is insufficient.",
+    "Canonical task identity and outcome alignment remain unreleased. Exact eight-anchor descriptions are preserved, but anchor equality alone cannot qualify paired outcomes. No repository or outcomes file is changed.",
+    "Numerical-reference-equivalence is the declared reproduction comparison class; source identities and criteria are genuinely unresolved. Any unsupported future scientific comparison is a schema limitation, not scientific ineligibility."
+  ]
+}

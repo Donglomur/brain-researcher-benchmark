@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-EXP-20261113-004",
+  "track": "paper",
+  "title": "A flexible hippocampal population code for experience relative to reward",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Decode circular position relative to reward from CA1 activity, retaining Fig. 3 before-switch and after-switch conditions and RR, TR and non-RR cell panels; Fig. 2 remapping outputs remain calibration.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Decode circular position relative to reward from CA1 activity, retaining Fig. 3 before-switch and after-switch conditions and RR, TR and non-RR cell panels; Fig. 2 remapping outputs remain calibration.",
+    "Source-paper comparison for Fig. 3b session-level mean cosine RR decoding score, retaining every source condition: Per-sample score cos(theta_RR - theta_hat_RR), higher is better; Fig. 3b compares session means with shuffle means. Effect size 2.7 for post-switch RR is not a cosine score."
+  ],
+  "success_criteria": [
+    "Recover the exact Fig. 3 source scores and source-authorized rerun, including original 11 mice and seven switch days.",
+    "Match original targets, retrospective cell memberships, occupancy samples, folds, inputs and preprocessing privileges for candidate and author comparator.",
+    "Beat the published result and the verified author rerun on the same admitted endpoint with a task-specific meaningful-effect and uncertainty rule.",
+    "Report every original condition; no larger standardized effect against shuffle, chronological split score, or reduced cohort is a paper win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "paper": {
+    "doi": "10.1038/s41593-025-01985-4",
+    "url": "https://www.nature.com/articles/s41593-025-01985-4",
+    "venue": "Nature Neuroscience",
+    "publication_date": "2025-06-11"
+  },
+  "data": [
+    {
+      "url": "https://doi.org/10.25452/figshare.plus.27098065",
+      "version": 1,
+      "role": "Preprocessed fluorescence/behavior for recomputation.",
+      "archive_bytes": 134494791807,
+      "selected_seven_switch_day_bytes": 71486162858,
+      "license": "CC-BY-4.0"
+    },
+    {
+      "url": "https://doi.org/10.25452/figshare.plus.27138633",
+      "version": 1,
+      "role": "Postprocessed reward-relative identities: reference/reconstruction material only, excluded from hidden-prediction input.",
+      "switch_day_bytes": 11495726090,
+      "all_day_bytes": 22558058915,
+      "license": "CC-BY-4.0"
+    },
+    {
+      "url": "https://doi.org/10.48324/dandi.001361/0.250406.0045",
+      "version": "0.250406.0045",
+      "archive_bytes": 92560251500,
+      "files": 152,
+      "subjects": 11,
+      "license": "CC-BY-4.0"
+    }
+  ],
+  "code": {
+    "url": "https://github.com/GiocomoLab/Sosa_et_al_2024",
+    "observed_main_commit": "adf0f9ed3defa22275d92fa0ed996f47008e05b3",
+    "historical_paper_commit": "Unresolved; current main is not proof of the published version.",
+    "license": "MIT"
+  },
+  "source_pins": [
+    {
+      "source_id": "paper-expansion-contracts-v5",
+      "bytes": 53169,
+      "sha256": "a2d24ddbe6e7480a3b5a0e07b4c84eba7e98cb28b7f910ee802919839d2ba821",
+      "selector": {
+        "candidate_id": "PAPER-EXP-20261113-004"
+      }
+    },
+    {
+      "source_id": "registered-expansion-20261113-v2",
+      "bytes": 11688,
+      "sha256": "c2ff7062f1a654e017171d2b836a51ea91e277618b3707f4e672f86b1fe68c68"
+    }
+  ],
+  "source_families": [
+    "figshare:27098065",
+    "figshare:27138633",
+    "dandi:001361"
+  ],
+  "rights": {
+    "code": "MIT.",
+    "data": "CC-BY-4.0 reported by the three acquisition records.",
+    "serialization": "Authenticate serialized inputs and safe loader custody before reading pickles."
+  },
+  "resources": {
+    "documented_ram": "32 GB minimum; 64 GB recommended for all animals/days.",
+    "selected_switch_day_bytes": 71486162858,
+    "measured_runtime": null,
+    "streaming_or_reduction_validated": false
+  },
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "provenance": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-EXP-20261113-004/improvement.v1.json",
+      "bytes": 10201,
+      "sha256": "f539a2cd9475a4b00842692e44332296d0219098ffda5e91cba6cad5f77520d8"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-EXP-20261113-004/historical/task.pre-improvement.v1.json",
+        "bytes": 7365,
+        "sha256": "e90ae33da875213e1fa39479e32284a7997e6b91841f9cf2e6726e79ce2139be"
+      },
+      "implementation_ids": [
+        "construction-paper-exp-20261113-004-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Admission is blocked. After source recovery, allow iteration using only declared source training/validation feedback; the existing chronological episode remains an explicitly separate extension.",
+    "candidate_freeze": "Before final scoring, freeze method, original fold/sample mapping, cell memberships, preprocessing access, comparison panel, effect rule, uncertainty procedure and concrete resource/access ceilings.",
+    "final_evaluation": "Evaluate the frozen candidate and independently rerun author method on the original Fig. 3 support without adaptive final-score feedback. Current evaluator cannot certify this.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published Fig. 3 scores, independently rerun author scores and the local chronological comparator are distinct; none may stand in for another. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Exact published Fig. 3 score artifacts and source historical code revision are not bound.",
+    "Original cross-validation/downsampling realization and classification access privileges remain unresolved.",
+    "Current scorer implements a new split and cannot emit a same-task victory.",
+    "Meaningful effect, valid uncertainty, finite access/resource budgets and a source-protocol evaluator remain unadmitted."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact published Fig. 3 score artifacts and source historical code revision are not bound.",
+      "Original cross-validation/downsampling realization and classification access privileges remain unresolved.",
+      "Current scorer implements a new split and cannot emit a same-task victory.",
+      "Meaningful effect, valid uncertainty, finite access/resource budgets and a source-protocol evaluator remain unadmitted."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original Fig. 3 reward-relative decoder has an ordered score, but its exact published score vector, historical folds, cell-selection privileges and author revision are not recovered. The current chronological post-switch-calibration evaluator changes the original protocol and cannot establish a same-task paper win. Exact published Fig. 3 score artifacts and source historical code revision are not bound. Original cross-validation/downsampling realization and classification access privileges remain unresolved. Current scorer implements a new split and cannot emit a same-task victory. Meaningful effect, valid uncertainty, finite access/resource budgets and a source-protocol evaluator remain unadmitted.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-EXP-20261113-004/historical/task.pre-improvement.v1.json",
+      "bytes": 7365,
+      "sha256": "e90ae33da875213e1fa39479e32284a7997e6b91841f9cf2e6726e79ce2139be"
+    },
+    "notes": "Preserve full Fig. 2/3 reconstruction and chronological extension artifacts as calibration or labelled extension only; cosine arithmetic alone does not establish stronger-than-paper performance."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

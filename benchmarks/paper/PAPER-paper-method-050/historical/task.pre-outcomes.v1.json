@@ -1,0 +1,592 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-050",
+  "track": "paper",
+  "title": "Density-based longitudinal neuron tracking in high-density electrophysiological recordings",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Assign the same neuron across recording sessions using DANT’s original longitudinal tracking task. Increase valid tracking duration while retaining source matching precision/recall, PETH consistency and false-match controls; total matches or track duration alone is not accuracy.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Assign the same neuron across recording sessions using DANT’s original longitudinal tracking task. Increase valid tracking duration while retaining source matching precision/recall, PETH consistency and false-match controls; total matches or track duration alone is not accuracy.",
+    "Source-paper comparison for Figure5D estimated marginal mean tracked length in sessions, conditional on original matching-quality safeguards: Primary Figure5D endpoint is tracked length in sessions estimated by Equation19, not raw pair yield. Mandatory fidelity measures include Figure5E PETH Fisher-z correlation and5H/I precision=TP/(TP+FP), recall=TP/(TP+FN) against joint Kilosort2.5 sorting; that reference is close to ground truth, not direct neuron identity."
+  ],
+  "success_criteria": [
+    "Authenticate the exact original Figure5 units, sessions, exclusions and common preprocessing; reproduce8.63sessions with the original model and source DANT settings before comparison.",
+    "Exceed source DANT tracking duration by a justified meaningful margin while meeting a predeclared non-degradation rule for original matching precision, recall, PETH consistency and false-match controls; never reward over-merging.",
+    "Recover and use original Figure5H/I session pairs and joint-sort reference: published DANT precision96.0%±4.8%SD and recall81.5%±11.2%SD are safeguards, not newly chosen held-out identity labels.",
+    "Retain source Figure5E rate/day/pair-count filters, unmatched-pair analysis and Figure6 cross-shank false-match validation with their original scopes. Recover numerical reference arrays before deciding non-degradation margins.",
+    "Use the same inputs and default-policy boundary for source methods; a new animal split, all13-dataset comparison or probability-calibration task is a separately named extension.",
+    "Freeze candidate and all comparison rules before final scoring; improved p-values, engineered fixture success and local all-pair yield cannot count as surpassing the paper.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-050",
+  "canonical_position_one_based": 7,
+  "paper_identity": {
+    "url": "https://doi.org/10.1016/j.patter.2026.101590",
+    "publication_year": 2026,
+    "venue": "Patterns"
+  },
+  "input_assets": {
+    "routes": [
+      "https://zenodo.org/records/20019488"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "README.md",
+          "bytes": 1578,
+          "url": "https://zenodo.org/api/records/20019489/files/README.md/content",
+          "checksum": "md5:523e5df0260829cff77c7d13194420f9"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:523e5df0260829cff77c7d13194420f9"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "spikeInfo_Nasha.mat",
+          "bytes": 741071704,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Nasha.mat/content",
+          "checksum": "md5:543d73f9410447eb262522f6880dd629"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:543d73f9410447eb262522f6880dd629"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "spikeInfo_Davee.mat",
+          "bytes": 2409873735,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Davee.mat/content",
+          "checksum": "md5:fb203cb0e79d625a85cd5ed33a37a069"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:fb203cb0e79d625a85cd5ed33a37a069"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "spikeInfo_EkkoM1.mat",
+          "bytes": 158653852,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_EkkoM1.mat/content",
+          "checksum": "md5:7d7cf44b682cc998e34b4eb140d9ae2c"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:7d7cf44b682cc998e34b4eb140d9ae2c"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "spikeInfo_Hector.mat",
+          "bytes": 279323322,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Hector.mat/content",
+          "checksum": "md5:a3864d9436b35c43f2384f6eae8c7425"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:a3864d9436b35c43f2384f6eae8c7425"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/5",
+        "recorded_fields": {
+          "name": "spikeInfo_EkkoDMS.mat",
+          "bytes": 132564390,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_EkkoDMS.mat/content",
+          "checksum": "md5:65a2089885a7a4513bb5383968d91150"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:65a2089885a7a4513bb5383968d91150"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/6",
+        "recorded_fields": {
+          "name": "spikeInfo_FarrenDLS.mat",
+          "bytes": 1163117000,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_FarrenDLS.mat/content",
+          "checksum": "md5:987ac839d21e01014a8adc481f15c1d3"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:987ac839d21e01014a8adc481f15c1d3"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/7",
+        "recorded_fields": {
+          "name": "spikeInfo_Neymar.mat",
+          "bytes": 101047449,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Neymar.mat/content",
+          "checksum": "md5:a983ee53cca20ab7f3f8d008116ae57e"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:a983ee53cca20ab7f3f8d008116ae57e"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/8",
+        "recorded_fields": {
+          "name": "spikeInfo_Michael.mat",
+          "bytes": 1551866582,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Michael.mat/content",
+          "checksum": "md5:a9d09b05df5f0039456a07d4c6b2e515"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:a9d09b05df5f0039456a07d4c6b2e515"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/9",
+        "recorded_fields": {
+          "name": "spikeInfo_Oscar.mat",
+          "bytes": 269419144,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Oscar.mat/content",
+          "checksum": "md5:75dd8508375759237d9ab203742d4901"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:75dd8508375759237d9ab203742d4901"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/10",
+        "recorded_fields": {
+          "name": "spikeInfo_Pierce.mat",
+          "bytes": 7786290168,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Pierce.mat/content",
+          "checksum": "md5:e064cb44838a6356e9137323ebb84f2b"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:e064cb44838a6356e9137323ebb84f2b"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/11",
+        "recorded_fields": {
+          "name": "spikeInfo_PunchDMS.mat",
+          "bytes": 983881382,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_PunchDMS.mat/content",
+          "checksum": "md5:fcde846ca05bd0588fcb1bf612c756e8"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:fcde846ca05bd0588fcb1bf612c756e8"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/12",
+        "recorded_fields": {
+          "name": "spikeInfo_PunchM1.mat",
+          "bytes": 1069720913,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_PunchM1.mat/content",
+          "checksum": "md5:55ddff40750655714defd3899aca58c1"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:55ddff40750655714defd3899aca58c1"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/13",
+        "recorded_fields": {
+          "name": "Animals.xlsx",
+          "bytes": 9751,
+          "url": "https://zenodo.org/api/records/20019489/files/Animals.xlsx/content",
+          "checksum": "md5:bec74243f79b93414d9f2e1fbafe1791"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:bec74243f79b93414d9f2e1fbafe1791"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/14",
+        "recorded_fields": {
+          "name": "spikeInfo_Timothy.mat",
+          "bytes": 6162392783,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Timothy.mat/content",
+          "checksum": "md5:c2328c4bbbc5d86a1b10adbdbc36c049"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:c2328c4bbbc5d86a1b10adbdbc36c049"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-050"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/0",
+        "recorded_fields": {
+          "name": "README.md",
+          "bytes": 1578,
+          "url": "https://zenodo.org/api/records/20019489/files/README.md/content",
+          "checksum": "md5:523e5df0260829cff77c7d13194420f9"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:523e5df0260829cff77c7d13194420f9"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-050"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/1",
+        "recorded_fields": {
+          "name": "spikeInfo_Nasha.mat",
+          "bytes": 741071704,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Nasha.mat/content",
+          "checksum": "md5:543d73f9410447eb262522f6880dd629"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:543d73f9410447eb262522f6880dd629"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-050"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/0/files/representative_files/2",
+        "recorded_fields": {
+          "name": "spikeInfo_Davee.mat",
+          "bytes": 2409873735,
+          "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Davee.mat/content",
+          "checksum": "md5:fb203cb0e79d625a85cd5ed33a37a069"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:fb203cb0e79d625a85cd5ed33a37a069"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-050"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Processed longitudinal rat spikeInfo MAT files, waveform/spike/session observations.",
+      "data_urls": [
+        "https://zenodo.org/records/20019488"
+      ],
+      "input_version": null,
+      "input_inventory_or_loader_evidence": [
+        {
+          "metadata_url": "https://zenodo.org/api/records/20019488",
+          "resolved_record_id": 20019489,
+          "title": "Longitudinal chronic Neuropixels recordings from rats during reaction-time and self-timed behaviors",
+          "version": "1.0.0",
+          "license": {
+            "id": "cc-by-4.0"
+          },
+          "files": {
+            "listed_file_count": 15,
+            "representative_files": [
+              {
+                "name": "README.md",
+                "bytes": 1578,
+                "url": "https://zenodo.org/api/records/20019489/files/README.md/content",
+                "checksum": "md5:523e5df0260829cff77c7d13194420f9"
+              },
+              {
+                "name": "spikeInfo_Nasha.mat",
+                "bytes": 741071704,
+                "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Nasha.mat/content",
+                "checksum": "md5:543d73f9410447eb262522f6880dd629"
+              },
+              {
+                "name": "spikeInfo_Davee.mat",
+                "bytes": 2409873735,
+                "url": "https://zenodo.org/api/records/20019489/files/spikeInfo_Davee.mat/content",
+                "checksum": "md5:fb203cb0e79d625a85cd5ed33a37a069"
+              }
+            ],
+            "limit": "Inventory examples; not payload/schema qualification."
+          },
+          "metadata_inspected": true,
+          "files_downloaded": false
+        }
+      ],
+      "source_bridge": "Refit density-based longitudinal matching on the13 released rat spikeInfo datasets and validate tracking stability by session/animal.",
+      "code_url": "https://github.com/jiumao2/pyDANT",
+      "code_revision_or_archive_version": "96060c1dd816181f32f089aaa686801aeae821bb",
+      "entrypoints": [
+        {
+          "path": "pyDANT/Preprocess.py",
+          "url": "https://github.com/jiumao2/pyDANT/blob/96060c1dd816181f32f089aaa686801aeae821bb/pyDANT/Preprocess.py",
+          "role": "spikeInfo2npy converts the released MATLAB inputs into the Python input arrays.",
+          "inspected_as_text": true
+        },
+        "mainDANT.py",
+        "pyDANT/Runner.py",
+        "settings.json"
+      ],
+      "missing_core_inputs_as_recorded": [
+        "Zenodo20019488 concept resolves to version20019489. Rename each selected input to spikeInfo.mat in its own data directory before the author converter. Tracking identity remains indirectly validated; full paper may include other species/probe datasets."
+      ],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-050",
+        "versions_and_loader_contract": {
+          "scope_description": "Refit density-based longitudinal matching on the13 released rat spikeInfo datasets and validate tracking stability by session/animal.",
+          "unresolved_coverage": [
+            "Zenodo20019488 concept resolves to version20019489. Rename each selected input to spikeInfo.mat in its own data directory before the author converter. Tracking identity remains indirectly validated; full paper may include other species/probe datasets."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/jiumao2/pyDANT",
+    "revision_or_archive_version": "96060c1dd816181f32f089aaa686801aeae821bb",
+    "entrypoints": [
+      {
+        "path": "pyDANT/Preprocess.py",
+        "url": "https://github.com/jiumao2/pyDANT/blob/96060c1dd816181f32f089aaa686801aeae821bb/pyDANT/Preprocess.py",
+        "role": "spikeInfo2npy converts the released MATLAB inputs into the Python input arrays.",
+        "inspected_as_text": true
+      },
+      "mainDANT.py",
+      "pyDANT/Runner.py",
+      "settings.json"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-050",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/jiumao2/pyDANT",
+            "commit": "96060c1dd816181f32f089aaa686801aeae821bb",
+            "author_linkage": [
+              "https://doi.org/10.1016/j.patter.2026.101590",
+              "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+              "https://doi.org/10.6084/m9.figshare.30596258.v2",
+              "https://github.com/jiumao2/pyDANT",
+              "https://doi.org/10.5281/zenodo.20019488"
+            ],
+            "default_branch": "master",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/jiumao2/pyDANT/96060c1dd816181f32f089aaa686801aeae821bb/README.md",
+            "license_source": "https://raw.githubusercontent.com/jiumao2/pyDANT/96060c1dd816181f32f089aaa686801aeae821bb/LICENSE",
+            "file_tree": {
+              "source": "https://api.github.com/repos/jiumao2/pyDANT/git/trees/96060c1dd816181f32f089aaa686801aeae821bb?recursive=1",
+              "truncated": false,
+              "paths": [
+                ".github/workflows/python-publish.yml",
+                "README.md",
+                "mainDANT.py",
+                "mainDANT_MultiShank.py",
+                "pyDANT/AutoCuration.py",
+                "pyDANT/ComputeWaveformFeatures.py",
+                "pyDANT/IterativeClustering.py",
+                "pyDANT/MotionEstimation.py",
+                "pyDANT/Preprocess.py",
+                "pyDANT/Runner.py",
+                "pyDANT/__init__.py",
+                "pyDANT/utils.py",
+                "pyDANT_colab_demo.ipynb",
+                "settings.json",
+                "setup.py"
+              ],
+              "all_file_count": 18,
+              "rate_remaining": "44"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "pyDANT/Preprocess.py",
+              "url": "https://github.com/jiumao2/pyDANT/blob/96060c1dd816181f32f089aaa686801aeae821bb/pyDANT/Preprocess.py",
+              "role": "spikeInfo2npy converts the released MATLAB inputs into the Python input arrays.",
+              "inspected_as_text": true
+            },
+            "mainDANT.py",
+            "pyDANT/Runner.py",
+            "settings.json"
+          ],
+          "dependencies": [
+            "Python3.11",
+            "NumPy",
+            "h5py",
+            "SciPy",
+            "scikit-learn; see setup.py"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "0afb79b73259874203947be26fea6ffe5563cd2f9c8dc2cded642ddb2c44a680",
+    "audit_record_sha256": "d9eadc905e766e34f3c78924c6a70850755a5aaf255cdd3eec0acd80e4c6fc3f",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-050",
+        "declared_record_sha256": "3456217e4d5fba806d424c11cbbbe6d70b3dc5488941b594798090c5ee1eedee",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 49,
+        "record_sha256": "3456217e4d5fba806d424c11cbbbe6d70b3dc5488941b594798090c5ee1eedee"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": "CPU workstation; total archive~23GB; smaller animals~100–160MB",
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-050/improvement.v1.json",
+      "bytes": 13785,
+      "sha256": "ebf85129b90541030c41ff8e3726465864a4b6a991635a546928307dad5be527"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-050/historical/task.pre-improvement.v1.json",
+        "bytes": 29754,
+        "sha256": "fcd65edd8550ca28997a59ad5199df24179aea1c304ad4140177ba1d45b707d3"
+      },
+      "implementation_ids": [
+        "construction-paper-paper-method-050-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After original cohort and independent validation recovery, develop matching using declared waveform/session information and permitted development feedback, retaining PETH and final joint-sort references outside matching/tuning. Maintain every candidate evaluation in the ledger.",
+    "candidate_freeze": "Freeze clustering/motion parameters, matching thresholds, preprocessing, eligible populations, seed policy and resource/access budgets before original final matching and fidelity assessment.",
+    "final_evaluation": "Run frozen candidate and authentic DANT/UnitMatch/EMD baselines on identical original units/sessions; estimate the original tracked-length EMM and score all original fidelity checks under the predeclared improvement rule.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published DANT8.63sessions is the historical anchor; an authenticated DANT rerun is separately reported. UnitMatch and EMD are original controls, not replacements for DANT. Source proxies, joint-sort validation and direct ground truth must remain explicitly distinguished."
+  },
+  "blocking_issues": [
+    "Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion.",
+    "Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified.",
+    "No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract.",
+    "Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold.",
+    "Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified.",
+    "The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion.",
+      "Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified.",
+      "No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract.",
+      "Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold.",
+      "Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified.",
+      "The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source provides a numerical original tracking-duration endpoint and independent matching-quality checks, supporting an improvement design. Exact Figure5 population/session identities, native method parity, quality-reference artifacts and a justified decision rule remain incomplete. Longer tracks alone can be produced by over-merging and never suffice for success. Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion. Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified. No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract. Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold. Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified. The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-050/historical/task.pre-improvement.v1.json",
+      "bytes": 29754,
+      "sha256": "fcd65edd8550ca28997a59ad5199df24179aea1c304ad4140177ba1d45b707d3"
+    },
+    "notes": "Preserve the initial evaluator, roster and tests as conversion/calibration and extension infrastructure. Its all13-dataset paired-yield/PETH outputs are not the original12-dataset Figure5 comparison and cannot establish a paper win, probability calibration or neuron identity accuracy."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

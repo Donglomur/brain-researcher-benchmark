@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "Neural population geometry and optimal coding of tasks with shared latent structure",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Predict source single-unit 500-ms spike counts from navigation covariates in both rat PFC and CA1; improve the original cross-validated predictive fit. Geometry trends, theory agreement and stronger mixed-effects significance are supporting reproduction outputs, not ordered improvement outcomes.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the source's empirical rat GLM and learning-dependent CA1/PFC coding-geometry findings, including the original navigation readout, behavioral comparisons and necessary controls across the source-defined eight-animal, eight-session panel. Preserve the original covariance, normalization, sampling and trend analyses. Report regional cross-validated GLM D2 as a named supporting empirical prediction result; higher D2 alone does not establish reproduction or improvement of the biological geometry finding. Assess same-result primary improvement only under an independently justified criterion, and report new animal/session holdouts or nonlinear-readout comparisons as separate extensions.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Predict source single-unit 500-ms spike counts from navigation covariates in both rat PFC and CA1; improve the original cross-validated predictive fit. Geometry trends, theory agreement and stronger mixed-effects significance are supporting reproduction outputs, not ordered improvement outcomes.",
-    "Source-paper comparison for Cross-validated population Poisson D2, separately for PFC and CA1: Higher cross-validated Poisson deviance explained D2 = 1 - D(y,mu)/D(y,mean(y)); D is Poisson deviance with the zero-count log contribution set to zero. Preserve the source PoissonRegressor scoring/null convention, invalid-fold handling and both regional outputs."
+    "Reproduction: executable analysis and source-native outputs for the corrected primary empirical findings: Empirical CA1/PFC learning-dependent coding geometry and navigation readout in the original rat panel, with raw versus GLM-expected activity, task-relevant dimensionality, source geometric trajectories, empirical/theoretical readout and behavioral comparisons, and indispensable source controls. Original GLM fitting supports this family; no whole-paper simulations, artificial networks or other biological datasets are added.",
+    "Primary improvement: unavailable until a source-grounded same-result comparison is independently justified; no new score or direction is implied.",
+    "Retained secondary work: Preserve regional cross-validated Poisson GLM D2 as genuine supporting empirical fit evidence from the original GLM route. Its ordered improvement can be reported within that named prediction result once qualified, but does not establish improved biological geometry or optimal coding. Preserve prospective animal/session holdouts, nonlinear readouts and finite-sample analyses separately; they are not substituted for the paper's original comparison."
   ],
   "success_criteria": [
-    "Reconstruct the original eight-rat/eight-session PFC and CA1 populations and author folds, masks, covariates and score aggregation; reconcile every paper/code discrepancy affecting the endpoint.",
-    "Reproduce the author source D2 = 0.29 for PFC and 0.25 for CA1 within a separately justified calibration tolerance before testing a frozen candidate.",
-    "Exceed the source result under a predeclared meaningful-effect and uncertainty policy covering both regions, with equal allowed inputs and fixed training/selection resources; report every regional outcome.",
-    "Do not count a new held-animal split, easier prediction covariates, a selected session subset, a better p-value or a changed geometric statistic as surpassing this source task.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Recreate the corrected primary empirical findings with their source-defined populations, complete required panels and controls.",
+    "Use an explicitly bound reproduction proposal only within its declared eligibility, comparison and execution limits; copying published findings is insufficient.",
+    "The preserved improvement.v1.json retains its declared comparison and coverage. Use retained_secondary_scope for its relationship to the corrected primary findings; satisfying a secondary or partial-component criterion alone does not establish complete primary reproduction or improvement.",
+    "The primary same-target outcome bundle is unavailable. Any primary improvement requires an independently justified source-grounded comparison; no replacement metric, direction or tolerance is invented.",
+    "Keep the paper+data and paper+data+author-code outcomes separate. All scientific outcomes remain unknown until qualifying original-data execution and independent verification.",
+    "Preserve prior task definitions, improvement criteria and useful secondary implementations with their original scopes. Historical attempts and source metadata do not become qualified AI results."
   ],
   "source_id": "paper-method-add-006",
   "canonical_position_one_based": 17,
@@ -438,57 +439,98 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-add-006/improvement.v1.json",
-      "bytes": 11293,
-      "sha256": "2ce6dba979e0ad415d8f4048a0c7767e5c07f7d3d65d876c1d5c3ad4ef1d1352"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": null,
+      "improvement": null
     },
-    "disposition": "design_ready",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-add-006/historical/task.pre-improvement.v1.json",
-        "bytes": 28357,
-        "sha256": "12e49fb9771ec26dd7bf9a907a7af788ddda085b74969694dfe5611522617d73"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-add-006-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "reproduction_proposal": "Only a proposal explicitly bound in outcomes.v1.json is adopted.",
+    "retained_secondary_improvement": "improvement.v1.json",
+    "primary_bundle_status": "unavailable_primary_secondary_scope_mismatch"
   },
   "episode": {
-    "improvement_loop": "Not admitted. After source calibration and fold/access reconciliation, iterate on spike-count prediction using only authorized training/validation feedback while retaining the original source task and both regions.",
-    "candidate_freeze": "Freeze model, hyperparameters, preprocessing, all access records and all evaluation mappings before protected final replay; prohibit candidate changes after final score disclosure.",
-    "final_evaluation": "Replay original complete PFC/CA1 task against the verified author baseline. A separately designed animal holdout may support an extension but cannot replace the source result.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Author Poisson GLM and source fold protocol are the comparator; local source-inspired implementations and geometry reproduction are calibration components only."
+    "retained_secondary_improvement": {
+      "improvement_loop": "Not admitted. After source calibration and fold/access reconciliation, iterate on spike-count prediction using only authorized training/validation feedback while retaining the original source task and both regions.",
+      "candidate_freeze": "Freeze model, hyperparameters, preprocessing, all access records and all evaluation mappings before protected final replay; prohibit candidate changes after final score disclosure.",
+      "final_evaluation": "Replay original complete PFC/CA1 task against the verified author baseline. A separately designed animal holdout may support an extension but cannot replace the source result.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Author Poisson GLM and source fold protocol are the comparator; local source-inspired implementations and geometry reproduction are calibration components only."
+    },
+    "primary_source_limits": [
+      "Exact native animal/session/bin/unit identities, movement and rate masks, session anatomy and ZT2 mapping remain unauthenticated. Archive existence and source roster declarations do not qualify the input panel.",
+      "Preserve source covariance and z-scoring conventions, raw versus fitted activity, participation-ratio and other geometric trajectories, readout/behavior pairings, and original quadratic and follow-up linear trend analyses. Six scalar summaries cannot replace this structured result.",
+      "Preserve source GLM basis and regularization selection, ten-fold behavior, both regional D2 outputs and exact fold/unit/session/rat aggregation; native outputs, null-unit treatment and boundary conventions remain unresolved.",
+      "Retain the paper/code CA1 subset discrepancy: paper Methods specifies 24 CA1 and 19 PFC units, whereas a retained code route uses 19 CA1 units. Original 500-observation subsets, 300 training observations and 500-subset averaging require authentic identities rather than a newly chosen recipe.",
+      "The primary source reports CA1 behavioral/readout R2 as 0.48 in main text and 0.49 in the Figure 7 caption. Preserve this discrepancy and unresolved source references and numerical criteria.",
+      "No justified primary superiority criterion is established. Higher D2, stronger correlations or smaller p-values alone do not improve the primary biological finding. Structured-output schema limitations do not justify replacing the finding with a scalar diagnostic.",
+      "No explicit task-specific authority to replace the retained family with D2 alone was found in the bounded inspected records. A supplied reviewed named-result revision must be evaluated on its actual terms; actively choosing D2 as sole primary is a new scope decision.",
+      "The mixed primary-geometry reproduction and D2-only improvement bundle remains unavailable if the schema cannot faithfully express the distinction. This does not invalidate the useful empirical D2 source components."
+    ],
+    "outcome_availability": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Recover native NWB session/unit mapping and exact original ten-fold assignments and software behavior.",
-    "Reconcile source preprocessing/null-model boundaries and population-score aggregation before claiming equality to the reported numbers.",
-    "Validate the author baseline for both regions; no native reference was executed in this audit.",
-    "The related readout analysis has a paper/code CA1 subset discrepancy (24 versus 19 units); it cannot silently become the predictive endpoint.",
-    "Resolve selection-on-CV-score exposure, meaningful-effect/uncertainty policy, concrete access/resource caps and a working protected evaluator."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "retained_secondary_improvement": [
       "Recover native NWB session/unit mapping and exact original ten-fold assignments and software behavior.",
       "Reconcile source preprocessing/null-model boundaries and population-score aggregation before claiming equality to the reported numbers.",
       "Validate the author baseline for both regions; no native reference was executed in this audit.",
       "The related readout analysis has a paper/code CA1 subset discrepancy (24 versus 19 units); it cannot silently become the predictive endpoint.",
       "Resolve selection-on-CV-score exposure, meaningful-effect/uncertainty policy, concrete access/resource caps and a working protected evaluator."
+    ],
+    "primary_source_limits": [
+      "Exact native animal/session/bin/unit identities, movement and rate masks, session anatomy and ZT2 mapping remain unauthenticated. Archive existence and source roster declarations do not qualify the input panel.",
+      "Preserve source covariance and z-scoring conventions, raw versus fitted activity, participation-ratio and other geometric trajectories, readout/behavior pairings, and original quadratic and follow-up linear trend analyses. Six scalar summaries cannot replace this structured result.",
+      "Preserve source GLM basis and regularization selection, ten-fold behavior, both regional D2 outputs and exact fold/unit/session/rat aggregation; native outputs, null-unit treatment and boundary conventions remain unresolved.",
+      "Retain the paper/code CA1 subset discrepancy: paper Methods specifies 24 CA1 and 19 PFC units, whereas a retained code route uses 19 CA1 units. Original 500-observation subsets, 300 training observations and 500-subset averaging require authentic identities rather than a newly chosen recipe.",
+      "The primary source reports CA1 behavioral/readout R2 as 0.48 in main text and 0.49 in the Figure 7 caption. Preserve this discrepancy and unresolved source references and numerical criteria.",
+      "No justified primary superiority criterion is established. Higher D2, stronger correlations or smaller p-values alone do not improve the primary biological finding. Structured-output schema limitations do not justify replacing the finding with a scalar diagnostic.",
+      "No explicit task-specific authority to replace the retained family with D2 alone was found in the bounded inspected records. A supplied reviewed named-result revision must be evaluated on its actual terms; actively choosing D2 as sole primary is a new scope decision.",
+      "The mixed primary-geometry reproduction and D2-only improvement bundle remains unavailable if the schema cannot faithfully express the distinction. This does not invalidate the useful empirical D2 source components."
+    ],
+    "outcome_availability": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_predecessor_limits": {
+      "task_specific": [
+        "Recover native NWB session/unit mapping and exact original ten-fold assignments and software behavior.",
+        "Reconcile source preprocessing/null-model boundaries and population-score aggregation before claiming equality to the reported numbers.",
+        "Validate the author baseline for both regions; no native reference was executed in this audit.",
+        "The related readout analysis has a paper/code CA1 subset discrepancy (24 versus 19 units); it cannot silently become the predictive endpoint.",
+        "Resolve selection-on-CV-score exposure, meaningful-effect/uncertainty policy, concrete access/resource caps and a working protected evaluator."
+      ]
+    },
+    "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
+    "primary_source_limits": [
+      "Exact native animal/session/bin/unit identities, movement and rate masks, session anatomy and ZT2 mapping remain unauthenticated. Archive existence and source roster declarations do not qualify the input panel.",
+      "Preserve source covariance and z-scoring conventions, raw versus fitted activity, participation-ratio and other geometric trajectories, readout/behavior pairings, and original quadratic and follow-up linear trend analyses. Six scalar summaries cannot replace this structured result.",
+      "Preserve source GLM basis and regularization selection, ten-fold behavior, both regional D2 outputs and exact fold/unit/session/rat aggregation; native outputs, null-unit treatment and boundary conventions remain unresolved.",
+      "Retain the paper/code CA1 subset discrepancy: paper Methods specifies 24 CA1 and 19 PFC units, whereas a retained code route uses 19 CA1 units. Original 500-observation subsets, 300 training observations and 500-subset averaging require authentic identities rather than a newly chosen recipe.",
+      "The primary source reports CA1 behavioral/readout R2 as 0.48 in main text and 0.49 in the Figure 7 caption. Preserve this discrepancy and unresolved source references and numerical criteria.",
+      "No justified primary superiority criterion is established. Higher D2, stronger correlations or smaller p-values alone do not improve the primary biological finding. Structured-output schema limitations do not justify replacing the finding with a scalar diagnostic.",
+      "No explicit task-specific authority to replace the retained family with D2 alone was found in the bounded inspected records. A supplied reviewed named-result revision must be evaluated on its actual terms; actively choosing D2 as sole primary is a new scope decision.",
+      "The mixed primary-geometry reproduction and D2-only improvement bundle remains unavailable if the schema cannot faithfully express the distinction. This does not invalidate the useful empirical D2 source components."
     ]
   },
   "next_implementation_action": {
-    "action": "The source contains a genuine ordered rat spike-count prediction endpoint with published regional D2 values. Source anchors support design, but native folds, exact population aggregation, author reproduction, meaningful effect, uncertainty and a protected episode are incomplete; descriptive geometry changes cannot serve as success. Recover native NWB session/unit mapping and exact original ten-fold assignments and software behavior. Reconcile source preprocessing/null-model boundaries and population-score aggregation before claiming equality to the reported numbers. Validate the author baseline for both regions; no native reference was executed in this audit. The related readout analysis has a paper/code CA1 subset discrepancy (24 versus 19 units); it cannot silently become the predictive endpoint. Resolve selection-on-CV-score exposure, meaningful-effect/uncertainty policy, concrete access/resource caps and a working protected evaluator.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "retained_secondary_improvement": {
+      "action": "The source contains a genuine ordered rat spike-count prediction endpoint with published regional D2 values. Source anchors support design, but native folds, exact population aggregation, author reproduction, meaningful effect, uncertainty and a protected episode are incomplete; descriptive geometry changes cannot serve as success. Recover native NWB session/unit mapping and exact original ten-fold assignments and software behavior. Reconcile source preprocessing/null-model boundaries and population-score aggregation before claiming equality to the reported numbers. Validate the author baseline for both regions; no native reference was executed in this audit. The related readout analysis has a paper/code CA1 subset discrepancy (24 versus 19 units); it cannot silently become the predictive endpoint. Resolve selection-on-CV-score exposure, meaningful-effect/uncertainty policy, concrete access/resource caps and a working protected evaluator.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "primary": "Resolve the corrected primary source limits and establish a source-grounded reproduction interface; separately justify any primary improvement comparison."
   },
   "legacy": {
     "role": "calibration_only",
@@ -503,8 +545,15 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the preserved secondary improvement contract. Primary reproduction and same-result improvement require their own source-grounded eligibility decisions.",
+  "primary_scope": "Empirical CA1/PFC learning-dependent coding geometry and navigation readout in the original rat panel, with raw versus GLM-expected activity, task-relevant dimensionality, source geometric trajectories, empirical/theoretical readout and behavioral comparisons, and indispensable source controls. Original GLM fitting supports this family; no whole-paper simulations, artificial networks or other biological datasets are added.",
+  "retained_secondary_scope": "Preserve regional cross-validated Poisson GLM D2 as genuine supporting empirical fit evidence from the original GLM route. Its ordered improvement can be reported within that named prediction result once qualified, but does not establish improved biological geometry or optimal coding. Preserve prospective animal/session holdouts, nonlinear readouts and finite-sample analyses separately; they are not substituted for the paper's original comparison.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-paper-method-add-006"
   }
 }

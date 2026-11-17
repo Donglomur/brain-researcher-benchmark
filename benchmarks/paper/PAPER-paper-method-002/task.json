@@ -4,21 +4,21 @@
   "track": "paper",
   "title": "Jaxley: differentiable simulation enables large-scale training of detailed biophysical models of neural dynamics",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Original task.json retinal target: predict dendritic calcium of the supplied transient Off-alpha retinal ganglion cell from checkerboard stimulation using its detailed morphology. This is final published Figure 3, despite author directory nex/fig4_rgc and historical Fig4 labels. The broader 36-family implementation is retained and must not be declared won by this single endpoint.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate and improve held-out stimulus-to-calcium prediction for the supplied retinal ganglion cell under the original observation, fitting and evaluation protocol, preserving the registered matched-control comparison until its exact primary-source identity is resolved.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Original task.json retinal target: predict dendritic calcium of the supplied transient Off-alpha retinal ganglion cell from checkerboard stimulation using its detailed morphology. This is final published Figure 3, despite author directory nex/fig4_rgc and historical Fig4 labels. The broader 36-family implementation is retained and must not be declared won by this single endpoint.",
-    "Source-paper comparison for Mean masked held-out Pearson correlation across the original 147 retinal recording sites: For each recording site compute Pearson correlation between predicted and observed held-out calcium on its valid mask; then take the arithmetic mean across the 147 sites. Training loss or neuron-simulator numerical agreement cannot replace this response-prediction score."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Pin the original 20161028_1 morphology, all recording-field/ROI identities, 147-site cache and exact published train/validation/test indices.",
-    "Reproduce the source author method on the identical full retinal task and distinguish its score from the rounded published 0.25.",
-    "Freeze candidate and all hyperparameter selection before final labels; compare identical allowable stimuli, masks and normalization with the original mean-Pearson metric.",
-    "Justify task-specific effect and dependence-aware uncertainty, and fix concrete access/resource budgets before admission.",
-    "Do not replace the full original retinal population with the reduced-data seven-field experiment, an Allen cell, simulator parity, or a smaller site subset.",
-    "Resolve task.json retinal scope versus the full36 implementation explicitly; a scoped retinal win cannot be reported as surpassing every source-paper result.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v2.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results.",
+    "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply."
   ],
   "source_id": "paper-method-002",
   "canonical_position_one_based": 50,
@@ -427,60 +427,80 @@
     "source_basis": "Inspection-based resource class, not a measured runtime."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-002/improvement.v1.json",
-      "bytes": 13085,
-      "sha256": "b7c83b20cca52ce0c282953357ea1a3f43592d33791fde4f23f9e8eaaa90e569"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v2.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "design_ready",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-002/historical/task.pre-improvement.v1.json",
-        "bytes": 28093,
-        "sha256": "d8f437bfee21b13dca7844816bf8cb4b6793460de96ce0f3871c3fd818e52c89"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-paper-paper-method-002",
-        "benchmarks-scientific_components-jaxley_allen_selector"
-      ],
-      "runtime_manifest": {
-        "path": "benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/manifest.json",
-        "bytes": 2374,
-        "sha256": "f88310dabe7780bba587f417955b7cde46febaea7dc59698a336e42411b22b5d"
-      }
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "scope_disposition": "same_primary_unqualified"
   },
   "episode": {
-    "improvement_loop": "After admission, iterate on original training stimuli with the original validation mechanism; keep the published final test indices and response labels out of feedback.",
-    "candidate_freeze": "Freeze model equations/architecture, morphology treatment, optimization recipe, randomization, resource use and validation-selected checkpoint procedure before final test comparison.",
-    "final_evaluation": "Replay candidate and admitted author comparator on the exact original retinal test indices and 147-site mask, recording mean and site-level correlations and the preregistered uncertainty rule. Preserve broader programme obligations separately.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+    "improvement": {
+      "improvement_loop": "After admission, iterate on original training stimuli with the original validation mechanism; keep the published final test indices and response labels out of feedback.",
+      "candidate_freeze": "Freeze model equations/architecture, morphology treatment, optimization recipe, randomization, resource use and validation-selected checkpoint procedure before final test comparison.",
+      "final_evaluation": "Replay candidate and admitted author comparator on the exact original retinal test indices and 147-site mask, recording mean and site-level correlations and the preregistered uncertainty rule. Preserve broader programme obligations separately.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+    },
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact published split/index/checkpoint/cache configuration and raw-ROI-to-147-site correspondence unresolved.",
-    "Pinned default config is not proven to reproduce the published 0.25 result.",
-    "Canonical full36 scope differs from retinal task.json; binding must explicitly preserve broader obligations rather than silently narrowing success.",
-    "Native input/backend equivalence, author replay, working candidate evaluation, meaningful effect, uncertainty rule and concrete episode budgets unqualified."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact published split/index/checkpoint/cache configuration and raw-ROI-to-147-site correspondence unresolved.",
       "Pinned default config is not proven to reproduce the published 0.25 result.",
       "Canonical full36 scope differs from retinal task.json; binding must explicitly preserve broader obligations rather than silently narrowing success.",
       "Native input/backend equivalence, author replay, working candidate evaluation, meaningful effect, uncertainty rule and concrete episode budgets unqualified."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact published split/index/checkpoint/cache configuration and raw-ROI-to-147-site correspondence unresolved.",
+        "Pinned default config is not proven to reproduce the published 0.25 result.",
+        "Canonical full36 scope differs from retinal task.json; binding must explicitly preserve broader obligations rather than silently narrowing success.",
+        "Native input/backend equivalence, author replay, working candidate evaluation, meaningful effect, uncertainty rule and concrete episode budgets unqualified."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v2.json.",
+    "reproduction_contract": "reproduction.v2.json",
+    "current_primary_source_limits": [
+      "No verified cached primary paper body or pinned local author notebooks were available to these reviewers or the source owner. Current numerical targets, population mapping and figure identities are retained earlier-audit assertions, not newly authenticated primary-body evidence.",
+      "The historical fixed/untrained OR constrained-parameter control requirement is registration evidence. Exact original-paper membership, reported direction/magnitude and compatibility with the full retinal evaluation remain unbound. Do not invent a roster, require both alternatives, choose the easiest alternative or silently substitute the seven-field comparison.",
+      "The derived implementation establishes that J17 simulates fitted-model responses, J18 analyzes measured/model receptive fields and J19 uses separate reduced data support. This is implementation evidence, not independent authentication of the original paper's conclusions or indispensable-control relationships.",
+      "Absence of a software dependency does not prove absence of a required scientific control. If authentic primary evidence establishes one, source-bind it before qualification; current registration and metadata acceptance alone do not make J17/J18/J19 mandatory.",
+      "Exact historical cache, raw-ROI-to-model-site correspondence, published train/validation/test indices, response transformations, checkpoint and reproduced author comparator remain unqualified. Default configurations are not proof of the published realization.",
+      "Published rounded0.25 and the separately reported positive-site count/maximum are not actual replay results or self-justifying numerical tolerances. Primary acceptance criteria, meaningful gain and dependence-aware uncertainty remain unbound.",
+      "One cell remains one biological unit. Sites, fields, stimuli and fitting seeds supply dependent or conditional information, not independent animal replication or cross-cell generalization.",
+      "The 36-family source programme explicitly does not rewrite the canonical task roster. Preserve it without requiring or claiming whole-programme success from the retinal endpoint.",
+      "All four outcome/access cells remain unknown. Central scope continuity does not admit model execution, historical source equivalence, candidate freeze, scientific reproduction or improvement."
+    ],
+    "scope_correction_limit": "This scope correction grants no new observation access and changes no improvement metric, criterion or tolerance."
   },
   "next_implementation_action": {
-    "action": "The original retinal response-prediction task has an ordered metric, recoverable author route and published mean correlation 0.25. Exact historical cache, published split/checkpoint, author replay and admission remain incomplete. This design is explicitly retinal-scoped; the expanded 36-family implementation remains preserved and cannot receive whole-programme success from this endpoint. Exact published split/index/checkpoint/cache configuration and raw-ROI-to-147-site correspondence unresolved. Pinned default config is not proven to reproduce the published 0.25 result. Canonical full36 scope differs from retinal task.json; binding must explicitly preserve broader obligations rather than silently narrowing success. Native input/backend equivalence, author replay, working candidate evaluation, meaningful effect, uncertainty rule and concrete episode budgets unqualified.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The original retinal response-prediction task has an ordered metric, recoverable author route and published mean correlation 0.25. Exact historical cache, published split/checkpoint, author replay and admission remain incomplete. This design is explicitly retinal-scoped; the expanded 36-family implementation remains preserved and cannot receive whole-programme success from this endpoint. Exact published split/index/checkpoint/cache configuration and raw-ROI-to-147-site correspondence unresolved. Pinned default config is not proven to reproduce the published 0.25 result. Canonical full36 scope differs from retinal task.json; binding must explicitly preserve broader obligations rather than silently narrowing success. Native input/backend equivalence, author replay, working candidate evaluation, meaningful effect, uncertainty rule and concrete episode budgets unqualified.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v2.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -495,8 +515,31 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate.",
+  "primary_scope": "Retain the source-defined cell, morphology, recording-site/ROI correspondence, stimuli, response transforms, masks, train/validation/test identities and complete original held-out prediction vector. The retained current contract specifies cell20161028_1,15fields and147model sites; authenticate that historical realization and its raw-ROI mapping before qualification. Compare source-author and candidate predictions on identical evaluation observations using the original masked sitewise Pearson aggregate, with a separately reported recreated author baseline. Keep the original fixed/untrained or constrained-parameter control requirement unresolved until its actual membership, source status and split compatibility are established. Do not substitute a seven-field experiment, simulator agreement, other cells or network tasks.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-paper-method-002"
+  },
+  "source_scope_correction": {
+    "disposition": "same_primary_unqualified",
+    "retained_scope_notes": "Preserve J17 fitted-model spatial calcium/voltage simulation, J18 measured/model receptive-field analysis, J19 reduced-data learning comparison and the wider source programme as separately named, source-unqualified result families. They neither replace nor automatically gate the primary prediction outcome. Retain authentic anatomy/observation lineage needed to define the prediction computation; do not infer every illustrative output as a separate success criterion. A prediction win alone does not establish mechanistic validity, true conductance recovery, all-paper reproduction or cross-cell generalization.",
+    "retained_source_roles": null,
+    "remaining_source_limits": [
+      "No verified cached primary paper body or pinned local author notebooks were available to these reviewers or the source owner. Current numerical targets, population mapping and figure identities are retained earlier-audit assertions, not newly authenticated primary-body evidence.",
+      "The historical fixed/untrained OR constrained-parameter control requirement is registration evidence. Exact original-paper membership, reported direction/magnitude and compatibility with the full retinal evaluation remain unbound. Do not invent a roster, require both alternatives, choose the easiest alternative or silently substitute the seven-field comparison.",
+      "The derived implementation establishes that J17 simulates fitted-model responses, J18 analyzes measured/model receptive fields and J19 uses separate reduced data support. This is implementation evidence, not independent authentication of the original paper's conclusions or indispensable-control relationships.",
+      "Absence of a software dependency does not prove absence of a required scientific control. If authentic primary evidence establishes one, source-bind it before qualification; current registration and metadata acceptance alone do not make J17/J18/J19 mandatory.",
+      "Exact historical cache, raw-ROI-to-model-site correspondence, published train/validation/test indices, response transformations, checkpoint and reproduced author comparator remain unqualified. Default configurations are not proof of the published realization.",
+      "Published rounded0.25 and the separately reported positive-site count/maximum are not actual replay results or self-justifying numerical tolerances. Primary acceptance criteria, meaningful gain and dependence-aware uncertainty remain unbound.",
+      "One cell remains one biological unit. Sites, fields, stimuli and fitting seeds supply dependent or conditional information, not independent animal replication or cross-cell generalization.",
+      "The 36-family source programme explicitly does not rewrite the canonical task roster. Preserve it without requiring or claiming whole-programme success from the retinal endpoint.",
+      "All four outcome/access cells remain unknown. Central scope continuity does not admit model execution, historical source equivalence, candidate freeze, scientific reproduction or improvement."
+    ],
+    "scientific_outcome": "unknown"
   }
 }

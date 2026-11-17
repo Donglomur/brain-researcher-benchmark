@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Figure 2d,e unfamiliar-trained feature decoding/reconstruction is a genuine related empirical result supporting the geometry interpretation; Figure 3c familiarity classification and Extended Data Figure 10k face-identity classification are distinct empirical results. These alternatives remain unselected and source-unqualified as decoder targets. Preserve all corresponding source inventory and implementations. The registered six-curve geometry reconstruction is useful partial numerical support with disclosed adaptations, not literal source parity or biological superiority. Decoder 999-face/1000-fold and ten-shuffle requirements do not transfer to primary geometry. Reviewed source limits: Original source-neuron, animal/session, face and stimulus-set identities, feature scaling, population-specific geometry sampling and complete original time support remain unresolved. Bind complete original axis fits, geometry outputs, source-defined companion controls, aggregation and uncertainty before claiming empirical reproduction; the exact primary result's operational latency/region details remain unqualified. Preserve the source's 964/36/36 geometry comparison, stimulus-set-specific subsampling/repetition matching, 20-feature convention and 50-ms/10-ms geometry windows; do not substitute decoder protocols. Resolve the main-text PR divergence time of 155 ms versus Figure 2 caption 175 ms; neither is an independently justified benchmark threshold. The local adapter's different paper-window assertion has unverified source/version provenance. The local geometry component discloses full-feature RMS scaling, a new PCG64 realization and TP-specific selection; its RMSE against a local reference establishes neither literal author parity nor biological improvement. Source-compatible numerical agreement and same-result superiority criteria, independent computation verification and paired exposure/resource qualification remain unavailable. Larger axis separation, stronger significance or better decoder accuracy cannot by themselves establish improvement of the geometry finding. No explicit reviewed replacement-primary authority was present in the bounded inspected source/definition records. Any subsequently supplied such authority needs adjudication; this review does not claim an exhaustive historical search.
+
+**Primary scientific scope:** Original familiar/unfamiliar axis-geometry comparison across AM, PR and TP and time, centered on Figure 2b,c with its indispensable source controls; no whole-paper, raw-spike or automatic inactivation requirement.
+
+**Retained secondary policy:** Figure 2d,e unfamiliar-trained feature decoding/reconstruction is a genuine related empirical result supporting the geometry interpretation; Figure 3c familiarity classification and Extended Data Figure 10k face-identity classification are distinct empirical results. These alternatives remain unselected and source-unqualified as decoder targets. Preserve all corresponding source inventory and implementations. The registered six-curve geometry reconstruction is useful partial numerical support with disclosed adaptations, not literal source parity or biological superiority. Decoder 999-face/1000-fold and ten-shuffle requirements do not transfer to primary geometry.
+
+- [Reproduction proposal (inspection only)](reproduction.v1.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The full source paper contains original ordered feature, familiarity and identity decoding evaluations. Their exact selected endpoint, source data/splits/full cohort and matching numeric baseline have not been recovered, so whole-paper eligibility remains source-unresolved rather than determined by the descriptive legacy axis-geometry component.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18975 bytes; SHA-256 `7485969b479156106c113841d5d5c9afd9f94a489b6e151c7f5ead7f74a3e4b2`.
+- Specification identity: 26728 bytes; SHA-256 `fda04d496a805eda0caed078f24a197f8ac13a30da6606d611bae730bdabfd67`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

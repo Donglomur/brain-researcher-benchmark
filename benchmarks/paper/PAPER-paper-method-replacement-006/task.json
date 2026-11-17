@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "Population Transformer: Learning Population-level Representations of Neural Activity",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Binary word-volume decoding on the paper’s original Volume endpoint: distinguish top versus bottom RMS-intensity quartiles within each recording. This original endpoint is within the registration’s volume/speech/sentence scope; a result claims this endpoint only. Retain the original Volume electrode-count analysis alongside the 90-electrode Table 1 primary.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Binary word-volume decoding on the paper’s original Volume endpoint: distinguish top versus bottom RMS-intensity quartiles within each recording. This original endpoint is within the registration’s volume/speech/sentence scope; a result claims this endpoint only. Retain the original Volume electrode-count analysis alongside the 90-electrode Table 1 primary.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Binary word-volume decoding on the paper’s original Volume endpoint: distinguish top versus bottom RMS-intensity quartiles within each recording. This original endpoint is within the registration’s volume/speech/sentence scope; a result claims this endpoint only. Retain the original Volume electrode-count analysis alongside the 90-electrode Table 1 primary.",
-    "Source-paper comparison for Table 1 Volume ROC-AUC, BrainBERT inputs, 90 electrodes, mean across seven subjects: Within each participant compute ROC-AUC, equivalently P(score_positive>score_negative)+0.5 P(tie), then source aggregation. Higher is better. F1 and local PopT-minus-linear gains do not replace the absolute PopT source score."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Bind the original 90-electrode Table 1 Volume task for all seven participants, including source random-row partitions, labels, BrainBERT features and pretrained access.",
-    "Exceed 0.87 published subject-mean ROC-AUC and a calibrated matched pretrained-PopT rerun by a justified predeclared effect with uncertainty.",
-    "Freeze candidate after original training/validation development and before complete original test scoring.",
-    "Report new chronological/support-disjoint splits, fewer electrodes, alternate tasks or narrowed participants as extensions; none establishes Table 1 victory.",
-    "Retain the Figure 3 Volume analysis at all original 1, 10, 20, 30, 40 and 50 electrode counts and its four source comparator curves; recover numerical curves and predeclare how count effects constrain the claim. The 90-electrode primary does not license omitting registered electrode-count effects.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-replacement-006",
   "canonical_position_one_based": 61,
@@ -520,57 +520,69 @@
     "source_basis": "Unmeasured planning estimate unless an author-reported figure is separately stated."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-replacement-006/improvement.v1.json",
-      "bytes": 12683,
-      "sha256": "7ad0e9e5552477bc67b5f8d77e6d0aecadb81f4a74c13fef0177650bb2412d21"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "design_ready",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-replacement-006/historical/task.pre-improvement.v1.json",
-        "bytes": 31269,
-        "sha256": "4b06cd0993642d160ce1f953434c777292f771c86d27896feafa5775c64ca4ef"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-replacement-006-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "After historical binding, use the original training/validation rows for candidate development; train-only channel ranking must be reconciled with the historical recipe rather than silently changed.",
-    "candidate_freeze": "Freeze candidate, feature/checkpoint provenance, all seven word rosters/splits, 90-channel membership/order, class mapping, training seeds and metric policy before test access.",
-    "final_evaluation": "Evaluate complete original test rows with author ROC-AUC per subject and source mean aggregation; retain shared-stimulus and temporal uncertainty. Report the complete original Figure 3 Volume electrode-count conditions and comparators alongside the 90-electrode primary.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "The stronger-than-paper comparator is pretrained PopT+BrainBERT at 90 channels. Linear/deep concatenation baselines remain calibration controls; new support-disjoint evaluation is separately labeled extension. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+    "improvement": {
+      "improvement_loop": "After historical binding, use the original training/validation rows for candidate development; train-only channel ranking must be reconciled with the historical recipe rather than silently changed.",
+      "candidate_freeze": "Freeze candidate, feature/checkpoint provenance, all seven word rosters/splits, 90-channel membership/order, class mapping, training seeds and metric policy before test access.",
+      "final_evaluation": "Evaluate complete original test rows with author ROC-AUC per subject and source mean aggregation; retain shared-stimulus and temporal uncertainty. Report the complete original Figure 3 Volume electrode-count conditions and comparators alongside the 90-electrode primary.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "The stronger-than-paper comparator is pretrained PopT+BrainBERT at 90 channels. Linear/deep concatenation baselines remain calibration controls; new support-disjoint evaluation is separately labeled extension. Where the source protocol itself uses stochastic draws, a faithful rerun may use declared provenance, a justified reproduction tolerance and paired candidate-author draws; fixed source partitions and full original condition support must remain unchanged."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact original row order, saved .8/.1/.1 memberships and ranked 90-channel membership/order are unauthenticated.",
-    "Native audio/brain alignment, quartile ties, class orientation and feature/checkpoint content identity require qualification.",
-    "Author pretrained-PopT rerun, compatible working evaluator, fixed episode budgets, meaningful effect and joint uncertainty remain absent.",
-    "Pretraining exposure includes downstream subjects; trial disjointness is not unseen-subject or unseen-movie evidence.",
-    "Original Figure 3 Volume curve values and ranked ensembles at 1/10/20/30/40/50 electrodes need recovery; no digitized plot ordinates are treated as a rerun."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact original row order, saved .8/.1/.1 memberships and ranked 90-channel membership/order are unauthenticated.",
       "Native audio/brain alignment, quartile ties, class orientation and feature/checkpoint content identity require qualification.",
       "Author pretrained-PopT rerun, compatible working evaluator, fixed episode budgets, meaningful effect and joint uncertainty remain absent.",
       "Pretraining exposure includes downstream subjects; trial disjointness is not unseen-subject or unseen-movie evidence.",
       "Original Figure 3 Volume curve values and ranked ensembles at 1/10/20/30/40/50 electrodes need recovery; no digitized plot ordinates are treated as a rerun."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact original row order, saved .8/.1/.1 memberships and ranked 90-channel membership/order are unauthenticated.",
+        "Native audio/brain alignment, quartile ties, class orientation and feature/checkpoint content identity require qualification.",
+        "Author pretrained-PopT rerun, compatible working evaluator, fixed episode budgets, meaningful effect and joint uncertainty remain absent.",
+        "Pretraining exposure includes downstream subjects; trial disjointness is not unseen-subject or unseen-movie evidence.",
+        "Original Figure 3 Volume curve values and ranked ensembles at 1/10/20/30/40/50 electrodes need recovery; no digitized plot ordinates are treated as a rerun."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The original volume-decoding task and Table 1 90-channel PopT+BrainBERT result are identifiable, including all seven downstream participants. Exact historical rows, ranked channel ensembles and checkpoint/feature binding are still unqualified. The existing support-disjoint prospective RMS evaluator cannot stand in for the paper’s random-row task. Exact original row order, saved .8/.1/.1 memberships and ranked 90-channel membership/order are unauthenticated. Native audio/brain alignment, quartile ties, class orientation and feature/checkpoint content identity require qualification. Author pretrained-PopT rerun, compatible working evaluator, fixed episode budgets, meaningful effect and joint uncertainty remain absent. Pretraining exposure includes downstream subjects; trial disjointness is not unseen-subject or unseen-movie evidence. Original Figure 3 Volume curve values and ranked ensembles at 1/10/20/30/40/50 electrodes need recovery; no digitized plot ordinates are treated as a rerun.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The original volume-decoding task and Table 1 90-channel PopT+BrainBERT result are identifiable, including all seven downstream participants. Exact historical rows, ranked channel ensembles and checkpoint/feature binding are still unqualified. The existing support-disjoint prospective RMS evaluator cannot stand in for the paper’s random-row task. Exact original row order, saved .8/.1/.1 memberships and ranked 90-channel membership/order are unauthenticated. Native audio/brain alignment, quartile ties, class orientation and feature/checkpoint content identity require qualification. Author pretrained-PopT rerun, compatible working evaluator, fixed episode budgets, meaningful effect and joint uncertainty remain absent. Pretraining exposure includes downstream subjects; trial disjointness is not unseen-subject or unseen-movie evidence. Original Figure 3 Volume curve values and ranked ensembles at 1/10/20/30/40/50 electrodes need recovery; no digitized plot ordinates are treated as a rerun.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -585,8 +597,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

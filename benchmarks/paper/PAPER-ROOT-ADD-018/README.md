@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: empirical\_method: Native hLDS held-neuron conditional reconstruction: the target neuron's loading is learned during training, but its test observations are excluded from latent inference. Preserve as empirical model validation, not future forecasting, unseen-neuron generalization or proof of improved belief inference. simulation\_control: Inference/divisive-model and ATI-recovery simulations remain interpretive controls where strategy claims require them; they are not independent substitutes for the empirical primary or a universal 200-simulation obligation. prospective\_extension: Future-time forecasting and new held-session/animal predictive comparisons retain separate prospective status. Reviewed source limits: Exact original cohort, animal/session/unit and figure joins remain unresolved, including the 5,249/5,429 neural denominator discrepancy. The native hLDS producer, dependencies, folds, metric and numerical baseline are not fully authenticated. Source-faithful descriptive preprocessing must remain distinct from prospective train-only prediction policies. The complete external supplement is unauthenticated; later counts of 50 main panels and 24 supplementary branches do not define the retained primary. Original numerical agreement criteria and a scientifically justified same-primary superiority endpoint, comparator and decision rule remain unresolved. Higher mutual information, stronger significance, higher ATI or lower reconstruction loss cannot alone establish improvement of the primary empirical finding. Mixed primary-reproduction/secondary-improvement admission remains unavailable if the schema cannot represent the distinction; all scientific outcomes remain unknown.
+
+**Primary scientific scope:** Expert-versus-naive OFC state-inference signals and task-aligned population factors, interpreted alongside the source behavioral and OFC-inactivation comparisons and indispensable controls; no automatic whole-paper or every-figure requirement.
+
+**Retained secondary policy:** empirical\_method: Native hLDS held-neuron conditional reconstruction: the target neuron's loading is learned during training, but its test observations are excluded from latent inference. Preserve as empirical model validation, not future forecasting, unseen-neuron generalization or proof of improved belief inference. simulation\_control: Inference/divisive-model and ATI-recovery simulations remain interpretive controls where strategy claims require them; they are not independent substitutes for the empirical primary or a universal 200-simulation obligation. prospective\_extension: Future-time forecasting and new held-session/animal predictive comparisons retain separate prospective status.
+
+- [Reproduction proposal (inspection only)](reproduction.v2.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The paper combines descriptive OFC/state-inference results with native neural-model comparisons. The registered complete-paper design identifies a genuine held-neuron conditional-prediction branch, but its exact native split, score, author producer and numerical baseline are unresolved. The existing 60/20/20 future-time prediction policy is explicitly a prospective extension and cannot be used to claim surpassing the paper on its original task.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18547 bytes; SHA-256 `17ba1586e6e164350bb6d9a6c9346cec4aec9e1dcfe0b312945e6ef65ececf12`.
+- Specification identity: 24481 bytes; SHA-256 `211be4de10677214ca5dd22345ac454f5ee17db6159afe90af82f358e23e15ba`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

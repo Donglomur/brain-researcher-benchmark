@@ -1,0 +1,1520 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-REP-009",
+  "track": "paper",
+  "title": "Control of representation updating by higher-order thalamus enables history-based decision-making",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Decode whether an identical tone occurs in a rare or common block from population neural activity, separately with/without PUL suppression (Figure 3C) and TRN activation (Figure 3G); retain both registered perturbation panels.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Decode whether an identical tone occurs in a rare or common block from population neural activity, separately with/without PUL suppression (Figure 3C) and TRN activation (Figure 3G); retain both registered perturbation panels.",
+    "Source-paper comparison for Original Figure3C/3G context-decoding ROC-AUC, pending exact author metric and aggregation recovery: Recover the original per-condition ROC-AUC calculation, class direction and source aggregation from the exact author runs before selecting a primary predictive score. The local implementation distinguishes source-auto pROC orientation from fixed Randomised-positive AUC; probability-MAE agreement and perturbation p-values are calibration/descriptive outputs."
+  ],
+  "success_criteria": [
+    "Recover the published numeric baseline and reconcile author preprocessing, class orientation, original partitions and source population for both 3C and3G.",
+    "Freeze candidate and author-reproduction recipes before final evaluation on the same original support and allowed neural inputs.",
+    "Exceed the faithful author decoder by a justified effect with valid paired uncertainty; reproduce the perturbation contrasts without using a larger contrast or smaller p-value as the win.",
+    "Retain all original sessions and both conditions; do not claim whole-paper improvement from the existing3C-only probability reconstruction.",
+    "Label temporally blocked, session-held-out or animal-held-out decoding as an extension, even if it improves over a rerun author algorithm on that new split.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-REP-009",
+  "canonical_position_one_based": 6,
+  "paper_identity": {
+    "url": "https://doi.org/10.1016/j.neuron.2026.04.045",
+    "publication_year": 2026,
+    "venue": "Neuron"
+  },
+  "input_assets": {
+    "routes": [
+      "https://doi.org/10.5281/zenodo.19465617"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/input_inventory/0",
+        "recorded_fields": {
+          "name": "Figure 4.zip",
+          "size": 2071055,
+          "checksum": "md5:33e5b6cfff6a951fd2709bf89ef66a68",
+          "url": "https://zenodo.org/api/records/19465617/files/Figure%204.zip/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:33e5b6cfff6a951fd2709bf89ef66a68"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/input_inventory/1",
+        "recorded_fields": {
+          "name": "Figure 2.zip",
+          "size": 183668515,
+          "checksum": "md5:26de42b18e7eb8168dcb88bfb08f5da4",
+          "url": "https://zenodo.org/api/records/19465617/files/Figure%202.zip/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:26de42b18e7eb8168dcb88bfb08f5da4"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/input_inventory/2",
+        "recorded_fields": {
+          "name": "Figure 1.zip",
+          "size": 1509342,
+          "checksum": "md5:5f260028657657826def9aa9c1ffe068",
+          "url": "https://zenodo.org/api/records/19465617/files/Figure%201.zip/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:5f260028657657826def9aa9c1ffe068"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/input_inventory/3",
+        "recorded_fields": {
+          "name": "Figure 3.zip",
+          "size": 327348037,
+          "checksum": "md5:a09182a53e67bb97f0edcb5fc7e7d02f",
+          "url": "https://zenodo.org/api/records/19465617/files/Figure%203.zip/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:a09182a53e67bb97f0edcb5fc7e7d02f"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/input_inventory/4",
+        "recorded_fields": {
+          "name": "ff_readme.md",
+          "size": 38994,
+          "checksum": "md5:8d22db5e958ccf940d8405bc2d168ea4",
+          "url": "https://zenodo.org/api/records/19465617/files/ff_readme.md/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:8d22db5e958ccf940d8405bc2d168ea4"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/input_inventory/5",
+        "recorded_fields": {
+          "name": "Figure 5.zip",
+          "size": 400019778,
+          "checksum": "md5:0b0f82cb8cbef6d3d3fed3b73c27d53e",
+          "url": "https://zenodo.org/api/records/19465617/files/Figure%205.zip/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:0b0f82cb8cbef6d3d3fed3b73c27d53e"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/input_inventory/6",
+        "recorded_fields": {
+          "name": "rnn_model.zip",
+          "size": 14748422,
+          "checksum": "md5:e551a2464e1598069d53a8fc00df4f0a",
+          "url": "https://zenodo.org/api/records/19465617/files/rnn_model.zip/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:e551a2464e1598069d53a8fc00df4f0a"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/input_inventory/7",
+        "recorded_fields": {
+          "name": "rnn_README.md",
+          "size": 6283,
+          "checksum": "md5:9f6802a7f9033b1bedb651e33de1d163",
+          "url": "https://zenodo.org/api/records/19465617/files/rnn_README.md/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:9f6802a7f9033b1bedb651e33de1d163"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/0",
+        "recorded_fields": {
+          "name": "Figure 4/4BtoD/Fig4SourceTRNActBehav.m",
+          "size": 5864
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/1",
+        "recorded_fields": {
+          "name": "Figure 4/4BtoD/TRNActEffectBehavSourceF4.mat",
+          "size": 552489
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/2",
+        "recorded_fields": {
+          "name": "Figure 4/4FG/Figure4FGplot.m",
+          "size": 1103
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/3",
+        "recorded_fields": {
+          "name": "Figure 4/4FG/Laser_dis.mat",
+          "size": 1292
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/4",
+        "recorded_fields": {
+          "name": "Figure 4/4FG/Nonlaser_dis.mat",
+          "size": 1303
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/5",
+        "recorded_fields": {
+          "name": "Figure 4/4HtoJ/Fig4SourceTRNActmTDREnc.m",
+          "size": 2671
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/6",
+        "recorded_fields": {
+          "name": "Figure 4/4HtoJ/TRNActEffectmTDRSourceF4HtoJ.mat",
+          "size": 544933
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/7",
+        "recorded_fields": {
+          "name": "Figure 4/Examples/mTDR Example Jeff 2 Line.fig",
+          "size": 295360
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/8",
+        "recorded_fields": {
+          "name": "Figure 4/Examples/mTDR Example Jeff 2 Line.pdf",
+          "size": 28702
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/9",
+        "recorded_fields": {
+          "name": "Figure 4/Examples/mTDR Example Jeff 4 Line.fig",
+          "size": 293320
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/10",
+        "recorded_fields": {
+          "name": "Figure 4/Examples/mTDR Example Jeff 4 Line.pdf",
+          "size": 29163
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/11",
+        "recorded_fields": {
+          "name": "Figure 4/Examples/mTDR Example Laplace 11 Line.fig",
+          "size": 297760
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/12",
+        "recorded_fields": {
+          "name": "Figure 4/Examples/mTDR Example Laplace 11 Line.pdf",
+          "size": 28991
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/13",
+        "recorded_fields": {
+          "name": "Figure 4/Examples/mTDR Example Laplace 9 Line Fig4I.pdf",
+          "size": 213530
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/14",
+        "recorded_fields": {
+          "name": "Figure 4/Examples/mTDR Example Laplace 9 Line.fig",
+          "size": 286865
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/15",
+        "recorded_fields": {
+          "name": "Figure 4/Examples/mTDR Example Newton 3.fig",
+          "size": 264914
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/16",
+        "recorded_fields": {
+          "name": "Figure 4/Examples/mTDR Example Newton 3.pdf",
+          "size": 41691
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/0/file_inventory/selected_files/17",
+        "recorded_fields": {
+          "name": "Figure 4/Figure4v4.pdf",
+          "size": 1684193
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/0",
+        "recorded_fields": {
+          "name": "Figure 2/2C/boxplot2.m",
+          "size": 1223
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/1",
+        "recorded_fields": {
+          "name": "Figure 2/2C/Fig2GenCfigS2ADEHtoJ.m",
+          "size": 8184
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/2",
+        "recorded_fields": {
+          "name": "Figure 2/2C/ZpeakSetAllthresh15.mat",
+          "size": 55308725
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/3",
+        "recorded_fields": {
+          "name": "Figure 2/2EFK/Behav_decoding.mat",
+          "size": 375
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/4",
+        "recorded_fields": {
+          "name": "Figure 2/2EFK/Figure2EFKplot.m",
+          "size": 2414
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/5",
+        "recorded_fields": {
+          "name": "Figure 2/2EFK/Figure2Eplot.asv",
+          "size": 279
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/6",
+        "recorded_fields": {
+          "name": "Figure 2/2EFK/Peaktiming_PPC.mat",
+          "size": 208
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/7",
+        "recorded_fields": {
+          "name": "Figure 2/2EFK/Peaktiming_PUL.mat",
+          "size": 219
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/8",
+        "recorded_fields": {
+          "name": "Figure 2/2EFK/Post_decoding.mat",
+          "size": 370
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/9",
+        "recorded_fields": {
+          "name": "Figure 2/2EFK/PPCsupp_decoding.mat",
+          "size": 1530
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/10",
+        "recorded_fields": {
+          "name": "Figure 2/2EFK/PULsupp_decoding.mat",
+          "size": 2332
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/11",
+        "recorded_fields": {
+          "name": "Figure 2/2H/FigSource2HmTDRPUL.m",
+          "size": 649
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/12",
+        "recorded_fields": {
+          "name": "Figure 2/2H/mTDRSourcePULFig2H.mat",
+          "size": 125732092
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/13",
+        "recorded_fields": {
+          "name": "Figure 2/2I/FigSource2ImTDRPPC.m",
+          "size": 663
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/14",
+        "recorded_fields": {
+          "name": "Figure 2/2I/mTDRSourcePPCFig2I.mat",
+          "size": 335787
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/15",
+        "recorded_fields": {
+          "name": "Figure 2/2L/Fig2SourcemTDRBehavPost.m",
+          "size": 642
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/16",
+        "recorded_fields": {
+          "name": "Figure 2/2L/prePostmTDRscatterSource.mat",
+          "size": 77642
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/1/file_inventory/selected_files/17",
+        "recorded_fields": {
+          "name": "Figure 2/Examples/ExampleParmS2U25TT4PPCNorm.fig",
+          "size": 189174
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/2/file_inventory/selected_files/0",
+        "recorded_fields": {
+          "name": "Figure 1/Fig1SourcePPCSupp.asv",
+          "size": 5515
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/2/file_inventory/selected_files/1",
+        "recorded_fields": {
+          "name": "Figure 1/Fig1SourcePPCSupp.m",
+          "size": 5679
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/2/file_inventory/selected_files/2",
+        "recorded_fields": {
+          "name": "Figure 1/Fig1SourcePULSupp.m",
+          "size": 5574
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/2/file_inventory/selected_files/3",
+        "recorded_fields": {
+          "name": "Figure 1/Figure1v3.pdf",
+          "size": 1522448
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/2/file_inventory/selected_files/4",
+        "recorded_fields": {
+          "name": "Figure 1/PPCSuppEffectsSourceF1.mat",
+          "size": 804157
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/2/file_inventory/selected_files/5",
+        "recorded_fields": {
+          "name": "Figure 1/PULSuppEffectsSourceF1.mat",
+          "size": 789851
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/0",
+        "recorded_fields": {
+          "name": "Figure 3/3C/Figure3C_analysis.R",
+          "size": 5950
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/1",
+        "recorded_fields": {
+          "name": "Figure 3/3C/Figure3C_data.RData",
+          "size": 46260209
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/2",
+        "recorded_fields": {
+          "name": "Figure 3/3F/Figure 3F Decoding and SHAP.R",
+          "size": 5854
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/3",
+        "recorded_fields": {
+          "name": "Figure 3/3F/Figure 3F SHAP cell analysis.R",
+          "size": 1165
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/4",
+        "recorded_fields": {
+          "name": "Figure 3/3F/Figure 3F_data.R.RData",
+          "size": 339132757
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/5",
+        "recorded_fields": {
+          "name": "Figure 3/3F/Figure3F_SHAP_analysis_data.rds",
+          "size": 505934
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/6",
+        "recorded_fields": {
+          "name": "Figure 3/3G/Figure 3G_analysis.R",
+          "size": 6032
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/7",
+        "recorded_fields": {
+          "name": "Figure 3/3G/Figure 3G_data.RData",
+          "size": 163317682
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/8",
+        "recorded_fields": {
+          "name": "Figure 3/3H/Figure3H_analysis.R",
+          "size": 8249
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/9",
+        "recorded_fields": {
+          "name": "Figure 3/3H/Figure3H_data.RData",
+          "size": 47141973
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/10",
+        "recorded_fields": {
+          "name": "Figure 3/Examples/Example cells.pdf",
+          "size": 1263559
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/11",
+        "recorded_fields": {
+          "name": "Figure 3/Examples/ppc_wide.pdf",
+          "size": 923641
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/12",
+        "recorded_fields": {
+          "name": "Figure 3/Figure3v5.pdf",
+          "size": 2122085
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/3/file_inventory/selected_files/13",
+        "recorded_fields": {
+          "name": "Figure 3/README MAIN FIGURE 3_ PSH.docx",
+          "size": 11587
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/0",
+        "recorded_fields": {
+          "name": "Figure 5/5CD/figure5cdplot.m",
+          "size": 2515
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/1",
+        "recorded_fields": {
+          "name": "Figure 5/5CD/figure5dtable.m",
+          "size": 2114
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/2",
+        "recorded_fields": {
+          "name": "Figure 5/5CD/MaxValues.mat",
+          "size": 22867
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/3",
+        "recorded_fields": {
+          "name": "Figure 5/5CD/MeanTrace.mat",
+          "size": 50061003
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/4",
+        "recorded_fields": {
+          "name": "Figure 5/5CD/PeakFRETTable.xlsx",
+          "size": 68992
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/5",
+        "recorded_fields": {
+          "name": "Figure 5/5CD/READ ME FIG 5 CD.txt",
+          "size": 1484
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/6",
+        "recorded_fields": {
+          "name": "Figure 5/5CD/shadedErrorBar.m",
+          "size": 7663
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/7",
+        "recorded_fields": {
+          "name": "Figure 5/5FS9F/Fig5SourceTRNMatMis.m",
+          "size": 2316
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/8",
+        "recorded_fields": {
+          "name": "Figure 5/5FS9F/MatMisCorrIncTRNF1Source.mat",
+          "size": 15037113
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/9",
+        "recorded_fields": {
+          "name": "Figure 5/5GS9H/mTDRUpdateCellTypeF5.asv",
+          "size": 6116
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/10",
+        "recorded_fields": {
+          "name": "Figure 5/5GS9H/mTDRUpdateCellTypeF5.m",
+          "size": 6412
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/11",
+        "recorded_fields": {
+          "name": "Figure 5/5GS9H/updatingNetFinMin.mat",
+          "size": 199080613
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/12",
+        "recorded_fields": {
+          "name": "Figure 5/5IJ/Figure5IJplot.m",
+          "size": 786
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/13",
+        "recorded_fields": {
+          "name": "Figure 5/5IJ/MotifDeltacontrol_behav.mat",
+          "size": 36303
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/14",
+        "recorded_fields": {
+          "name": "Figure 5/5IJ/MotifDelta_behav.mat",
+          "size": 1072
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/15",
+        "recorded_fields": {
+          "name": "Figure 5/5IJ/MotifFrequency.mat",
+          "size": 16527
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/16",
+        "recorded_fields": {
+          "name": "Figure 5/5LS1O/Fig5SourcePULMotifMatMis.m",
+          "size": 3487
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/4/file_inventory/selected_files/17",
+        "recorded_fields": {
+          "name": "Figure 5/5LS1O/MatMisCorrIncMotifPULF1Source.mat",
+          "size": 104053352
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/0",
+        "recorded_fields": {
+          "name": "rnn_model/assets/equations/firing_rate.svg",
+          "size": 6729
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/1",
+        "recorded_fields": {
+          "name": "rnn_model/assets/equations/I_ext.svg",
+          "size": 8463
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/2",
+        "recorded_fields": {
+          "name": "rnn_model/assets/equations/output.svg",
+          "size": 7646
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/3",
+        "recorded_fields": {
+          "name": "rnn_model/assets/equations/synaptic_dynamics.svg",
+          "size": 9345
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/4",
+        "recorded_fields": {
+          "name": "rnn_model/CustomRnn_gtune_dale_relu.py",
+          "size": 100743
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/5",
+        "recorded_fields": {
+          "name": "rnn_model/CustomRnn_suss_dale_relu.py",
+          "size": 99220
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/6",
+        "recorded_fields": {
+          "name": "rnn_model/data_collect_example.ipynb",
+          "size": 16499
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/7",
+        "recorded_fields": {
+          "name": "rnn_model/df_matlab_6_models.csv",
+          "size": 155427
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/8",
+        "recorded_fields": {
+          "name": "rnn_model/df_perform_6_models.csv",
+          "size": 9124
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/9",
+        "recorded_fields": {
+          "name": "rnn_model/eval_models.ipynb",
+          "size": 104538
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/10",
+        "recorded_fields": {
+          "name": "rnn_model/requirements.txt",
+          "size": 5256
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/11",
+        "recorded_fields": {
+          "name": "rnn_model/RNN_plotting_motif_performance.mlx",
+          "size": 372044
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/12",
+        "recorded_fields": {
+          "name": "rnn_model/TBPTT_bio_Gtune_valid/RateRNNstructNUM20.db",
+          "size": 6029312
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/13",
+        "recorded_fields": {
+          "name": "rnn_model/TBPTT_bio_Gtune_valid/RateRNNstructNUM22.db",
+          "size": 6029312
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/14",
+        "recorded_fields": {
+          "name": "rnn_model/TBPTT_bio_Gtune_valid/RateRNNstructNUM23.db",
+          "size": 6029312
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/15",
+        "recorded_fields": {
+          "name": "rnn_model/TBPTT_bio_Gtune_valid/RateRNNstructNUM24.db",
+          "size": 6029312
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/16",
+        "recorded_fields": {
+          "name": "rnn_model/TBPTT_bio_Gtune_valid/RateRNNstructNUM25.db",
+          "size": 6029312
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/archive_directory_inspection/5/file_inventory/selected_files/17",
+        "recorded_fields": {
+          "name": "rnn_model/TBPTT_bio_sussano_valid/RateRNNstructNUM0.db",
+          "size": 6029312
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "source_record_id": "FIND-REP-009"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/0",
+        "recorded_fields": {
+          "name": "Figure 4.zip",
+          "size": 2071055,
+          "checksum": "md5:33e5b6cfff6a951fd2709bf89ef66a68",
+          "url": "https://zenodo.org/api/records/19465617/files/Figure%204.zip/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:33e5b6cfff6a951fd2709bf89ef66a68"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-REP-009"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/1",
+        "recorded_fields": {
+          "name": "Figure 2.zip",
+          "size": 183668515,
+          "checksum": "md5:26de42b18e7eb8168dcb88bfb08f5da4",
+          "url": "https://zenodo.org/api/records/19465617/files/Figure%202.zip/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:26de42b18e7eb8168dcb88bfb08f5da4"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-REP-009"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/2",
+        "recorded_fields": {
+          "name": "Figure 1.zip",
+          "size": 1509342,
+          "checksum": "md5:5f260028657657826def9aa9c1ffe068",
+          "url": "https://zenodo.org/api/records/19465617/files/Figure%201.zip/content"
+        },
+        "checksum_fields_as_recorded": {
+          "checksum": "md5:5f260028657657826def9aa9c1ffe068"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-REP-009"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Trial-by-unit firing-rate RData with context, laser-block and unit/trial identifiers.",
+      "data_urls": [
+        "https://doi.org/10.5281/zenodo.19465617"
+      ],
+      "input_version": "19465617",
+      "input_inventory_or_loader_evidence": {
+        "listed_file_count": 8,
+        "representative_files": [
+          {
+            "name": "Figure 4.zip",
+            "size": 2071055,
+            "checksum": "md5:33e5b6cfff6a951fd2709bf89ef66a68",
+            "url": "https://zenodo.org/api/records/19465617/files/Figure%204.zip/content"
+          },
+          {
+            "name": "Figure 2.zip",
+            "size": 183668515,
+            "checksum": "md5:26de42b18e7eb8168dcb88bfb08f5da4",
+            "url": "https://zenodo.org/api/records/19465617/files/Figure%202.zip/content"
+          },
+          {
+            "name": "Figure 1.zip",
+            "size": 1509342,
+            "checksum": "md5:5f260028657657826def9aa9c1ffe068",
+            "url": "https://zenodo.org/api/records/19465617/files/Figure%201.zip/content"
+          }
+        ],
+        "limit": "Inventory examples; not payload/schema qualification."
+      },
+      "source_bridge": "Figure3 archive includes RData firing-rate workspaces and R analyses. Inspected 3C/3G code pivots raw_pred_db fields t_num, context, laser_block, spk.st and uuid_tb into trial×unit predictors. Public filenames differ slightly from hardcoded load calls and need explicit path edits. 3F contains a stale undefined test reference after full-data fitting; repair required and its reported accuracy is not accepted.",
+      "code_url": "https://doi.org/10.5281/zenodo.19465617",
+      "code_revision_or_archive_version": "Versioned author archive 19465617; file checksums in input_inventory",
+      "entrypoints": [
+        "Figure 3/3C/Figure3C_analysis.R",
+        "Figure 3/3G/Figure 3G_analysis.R",
+        "Figure 3/3F/Figure 3F Decoding and SHAP.R (repair needed)"
+      ],
+      "missing_core_inputs_as_recorded": [],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "record_id": "FIND-REP-009",
+        "versions_and_loader_contract": {
+          "input_version": "19465617",
+          "input_code_bridge": "Figure3 archive includes RData firing-rate workspaces and R analyses. Inspected 3C/3G code pivots raw_pred_db fields t_num, context, laser_block, spk.st and uuid_tb into trial×unit predictors. Public filenames differ slightly from hardcoded load calls and need explicit path edits. 3F contains a stale undefined test reference after full-data fitting; repair required and its reported accuracy is not accepted.",
+          "readiness_scope": "Substantial Figure 3 neural context/perturbation experiment reanalysis; other behavior and RNN claims not certified as reconstructible.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "input_inventory",
+          "data_metadata",
+          "input_version",
+          "input_code_bridge",
+          "archive_directory_inspection"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://doi.org/10.5281/zenodo.19465617",
+    "revision_or_archive_version": "Versioned author archive 19465617; file checksums in input_inventory",
+    "entrypoints": [
+      "Figure 3/3C/Figure3C_analysis.R",
+      "Figure 3/3G/Figure 3G_analysis.R",
+      "Figure 3/3F/Figure 3F Decoding and SHAP.R (repair needed)"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+        "record_id": "FIND-REP-009",
+        "recorded": {
+          "code_url": "https://doi.org/10.5281/zenodo.19465617",
+          "code_revision": "Versioned author archive 19465617; file checksums in input_inventory",
+          "entrypoints": [
+            "Figure 3/3C/Figure3C_analysis.R",
+            "Figure 3/3G/Figure 3G_analysis.R",
+            "Figure 3/3F/Figure 3F Decoding and SHAP.R (repair needed)"
+          ],
+          "dependencies": [
+            "R; caret, xgboost, SHAPforxgboost, dplyr, tidyr, pROC, rmatio and related documented packages"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "89b59ad4c13e00c220b13c76e89098dc15dad4d4937de815adb5e2fa9ea7c5b7",
+    "audit_record_sha256": "d5a99435409ce0885a5c50416e13da7969c5fe8737802716ae05dea37ce487f1",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/findings_replacements.json",
+          "bytes": 498779,
+          "sha256": "bc3df562aff558cb693fbd4777c0189d15903dff140c53064b68d81d7077c632"
+        },
+        "record_id": "FIND-REP-009",
+        "declared_record_sha256": "83c4854705553a15a01575f5c83642746350c3b136918637a7dacb52c7b22ed8",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 8,
+        "record_sha256": "83c4854705553a15a01575f5c83642746350c3b136918637a7dacb52c7b22ed8"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "Approximately 0.33 GB neural Figure3 archive; parallel CPU, hours estimated.",
+      "basis": "File-size metadata and static source inspection; compute is estimated, not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-REP-009/improvement.v1.json",
+      "bytes": 11624,
+      "sha256": "9cac22f47f687c0d5eb96259f3cfbfcb13a31bb219b7a80a597277beae9afb91"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-REP-009/historical/task.pre-improvement.v1.json",
+        "bytes": 71818,
+        "sha256": "200b04832b08f8898cc228ed775545f6f2c08573dfc47a6b8eaec40655855fae"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-find-rep-009",
+        "components-thalamus17-fixed-reference"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-FIND-REP-009/implementations/registered-runtime/manifest.json",
+        "bytes": 10851,
+        "sha256": "02047f00a8d096bb6a02f8f90b635599fd01b639b574b8e4d3021c0a91a861f0"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Inactive until source recovery. A future episode may iterate only on declared development feedback inside the original training portion, keeping the same source task and exposing neither protected test labels nor reference probabilities.",
+    "candidate_freeze": "Commit the complete method, feature/access policy, preprocessing, tuning and seed policy before a single owner-controlled final comparison; no adaptive feedback between sessions.",
+    "final_evaluation": "Use the recovered original 3C and3G supports and source metric. Report all condition/session results and candidate-minus-author differences. Existing artifact grading remains a separate calibration outcome.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Recover and independently audit author scripts and numeric paper outputs; retain any source defects and local repairs as declared provenance. A repaired/new-split baseline must not silently replace the original paper result."
+  },
+  "blocking_issues": [
+    "Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered.",
+    "Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved.",
+    "Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator.",
+    "Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted.",
+    "Existing exposed-label probability reconstruction cannot establish predictive superiority."
+  ],
+  "holds": {
+    "task_specific": [
+      "Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered.",
+      "Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved.",
+      "Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator.",
+      "Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted.",
+      "Existing exposed-label probability reconstruction cannot establish predictive superiority."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The author release contains ordered rare/common-context decoding analyses, but the published Figure 3C/3G score vectors, exact source partitions and animal-to-session mapping are not recovered. The existing 17-session fixed-reference probability reconstruction is explicitly calibrated to locally declared conventions and cannot stand in for the paper baseline. Both perturbation panels in the registered target must remain in scope. Published3C/3G metric values and exact author train/test/tuning recipe are unrecovered. Animal/session mapping and recorded Figure3C annotation discrepancy remain unresolved. Upstream firing feature construction, Figure3G subsampling and complete source support are not bound to an evaluator. Fixed concrete iteration/access/compute budgets, meaningful effect, biological uncertainty rule and protected same-task evaluator are not admitted. Existing exposed-label probability reconstruction cannot establish predictive superiority.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-REP-009/historical/task.pre-improvement.v1.json",
+      "bytes": 71818,
+      "sha256": "200b04832b08f8898cc228ed775545f6f2c08573dfc47a6b8eaec40655855fae"
+    },
+    "notes": "Preserve the 17-session34-cell fixed-reference grader and historical probability-MAE results unchanged. They measure reconstruction of explicit local conventions; neither near-zero discrepancy nor a copied-label AUC establishes a paper win."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

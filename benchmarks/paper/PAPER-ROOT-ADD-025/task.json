@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "Confirmation bias through selective readout of information encoded in human parietal cortex",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Source-native prediction of presented stimulus-sample angle S from each regional neural principal component, assessed by held-out corr(S,S_hat) under the paper ten-fold decoder; retain behavioral-estimate prediction corr(E,E_hat) as a source companion metric. MI/II and consistency/readout contrasts remain descriptive companions, not quantities to maximize.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the original parietal information encoding/readout and confirmation-bias associations from the released regional neural components and behavior, preserving the named result's original conditions, participants and indispensable controls. Retain the complete S11 decoder result separately. Higher decoding accuracy alone cannot satisfy primary reproduction or improvement; primary superiority remains unresolved.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Source-native prediction of presented stimulus-sample angle S from each regional neural principal component, assessed by held-out corr(S,S_hat) under the paper ten-fold decoder; retain behavioral-estimate prediction corr(E,E_hat) as a source companion metric. MI/II and consistency/readout contrasts remain descriptive companions, not quantities to maximize.",
-    "Source-paper comparison for Original ten-fold mean held-out signed Pearson stimulus-decoding correlation corr(S,S_hat); exact S11 aggregation unresolved: Source predictive endpoint is signed Pearson correlation between held-out predicted and actual stimulus, averaged over ten folds; the companion estimate predictor uses corr(E,E_hat). Readout corr(S_hat,E), absolute consistency differences and MI/II are distinct and cannot substitute for decoding accuracy."
+    "Reproduction: executable analysis and source-native outputs for the corrected primary empirical findings: The original empirical human MEG finding of consistency-dependent parietal information readout versus encoding and its participant-level association with behavioral evidence weighting, anchored to Figures 4-5 and their indispensable behavioral, Choice/Cue, consistency, sample-position and encoding controls. This is a named result family, not every figure or whole-paper reproduction.",
+    "Primary improvement: unavailable until a source-grounded same-result comparison is independently justified; no new score or direction is implied.",
+    "Retained secondary work: The genuine empirical Supplementary Figure S11 linear decoder analysis, retaining stimulus prediction, behavioral-estimate prediction and predicted-stimulus/behavior readout as distinct measures with the source condition and consistency contrasts. Higher stimulus-decoding correlation alone does not establish the primary finding."
   ],
   "success_criteria": [
-    "Recover and surpass the original ten-fold neural-to-stimulus decoder on the same source PCA representation, participants, parcels, sample pairs, consistency conditions, folds and data-selection rules.",
-    "Freeze exact signed-correlation aggregation and full source condition coverage before candidate evaluation; do not select favorable PCs, participants, time points or regions.",
-    "Require meaningful improvement and valid paired participant uncertainty under fixed concrete access/resource budgets; use an authenticated author baseline rather than only the constructed local evaluator.",
-    "Retain all-trial PCA and row-fold exposure as properties of the original task. Grouped-trial or participant-held-out results are separate extensions, even if methodologically stronger.",
-    "A larger MI/II contrast, larger absolute readout effect, smaller p-value or better numerical reconstruction is not a decoding win.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Recreate the corrected primary empirical findings with their source-defined populations, complete required panels and controls.",
+    "Use an explicitly bound reproduction proposal only within its declared eligibility, comparison and execution limits; copying published findings is insufficient.",
+    "The preserved improvement.v1.json retains its declared comparison and coverage. Use retained_secondary_scope for its relationship to the corrected primary findings; satisfying a secondary or partial-component criterion alone does not establish complete primary reproduction or improvement.",
+    "The primary same-target outcome bundle is unavailable. Any primary improvement requires an independently justified source-grounded comparison; no replacement metric, direction or tolerance is invented.",
+    "Keep the paper+data and paper+data+author-code outcomes separate. All scientific outcomes remain unknown until qualifying original-data execution and independent verification.",
+    "Preserve prior task definitions, improvement criteria and useful secondary implementations with their original scopes. Historical attempts and source metadata do not become qualified AI results."
   ],
   "source_id": "ROOT-ADD-025",
   "canonical_position_one_based": 36,
@@ -1974,57 +1974,92 @@
     "source_basis": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-ROOT-ADD-025/improvement.v1.json",
-      "bytes": 12702,
-      "sha256": "5c4118d43a2be1f7d3f6b5e85342b59d3be4f53f6da5516e49aa8021913a1342"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": null,
+      "improvement": null
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-ROOT-ADD-025/historical/task.pre-improvement.v1.json",
-        "bytes": 96433,
-        "sha256": "0e4a5b37da28a0d6936d45af4ff352a5cc64529358f9fae7c09059057b322f2a"
-      },
-      "implementation_ids": [
-        "construction-paper-root-add-025-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "reproduction_proposal": "Only a proposal explicitly bound in outcomes.v1.json is adopted.",
+    "retained_secondary_improvement": "improvement.v1.json",
+    "primary_bundle_status": "unavailable_primary_secondary_scope_mismatch"
   },
   "episode": {
-    "improvement_loop": "Blocked until exact source decoder baselines and fold/aggregation identities are recovered. After admission, use declared source training folds and development feedback with final original-fold predictions owned by the evaluator.",
-    "candidate_freeze": "Freeze model, feature use, preprocessing, signed score calculation, all source conditions and source-fold handling before final assessment.",
-    "final_evaluation": "Compare source-matched stimulus predictions against exact published and rerun author decoder results. Preserve original all-trial PCA disclosure; do not claim globally unseen or participant-held-out generalization.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep published decoder, authenticated author rerun and current SOTA separate. The existing linear evaluator is calibration until native equivalence is established; main MI/II descriptions are not predictive baselines. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+    "retained_secondary_improvement": {
+      "improvement_loop": "Blocked until exact source decoder baselines and fold/aggregation identities are recovered. After admission, use declared source training folds and development feedback with final original-fold predictions owned by the evaluator.",
+      "candidate_freeze": "Freeze model, feature use, preprocessing, signed score calculation, all source conditions and source-fold handling before final assessment.",
+      "final_evaluation": "Compare source-matched stimulus predictions against exact published and rerun author decoder results. Preserve original all-trial PCA disclosure; do not claim globally unseen or participant-held-out generalization.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep published decoder, authenticated author rerun and current SOTA separate. The existing linear evaluator is calibration until native equivalence is established; main MI/II descriptions are not predictive baselines. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+    },
+    "primary_source_limits": [
+      "Authenticate the MI/II estimator and source-code/paper correspondence before primary scoring; the existing linear evaluator does not implement the primary information endpoint.",
+      "Recover exact primary participant/parcel identities, source condition aggregation, reference arrays and justified reproduction tolerances; the supplementary decoder cohort must not replace the primary cohort.",
+      "The secondary decoder still lacks authenticated fold realization, upstream source aggregation, numerical baseline and native parity; declared prospective repairs remain distinct from exact author reproduction.",
+      "No ordered same-result primary superiority estimand or decision rule is established. Larger effects, smaller p-values or higher secondary decoding accuracy are insufficient.",
+      "A mixed primary-reproduction/secondary-improvement bundle remains unavailable if the schema requires an identical target.",
+      "Official indexed primary text and pinned regression code were inspected. No newly frozen complete article body or independent cached-article hash authentication is claimed."
+    ],
+    "outcome_availability": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Recover exact supplementary decoding score arrays and an unambiguous source primary time/region/condition aggregation.",
-    "Resolve S11 thirty-subject source selection, native participant/parcel identities and its all-finite-mean population without importing main MI/II eligibility.",
-    "Recover native sample/trial alignment, original subsampling/fold random state and precomputed gCORR/gSCR generation.",
-    "Audit MATLAB/Python correlation equivalence, resampling, missing-value and scaling behavior against the author path; preserve any corrected branch as separately labeled.",
-    "Specify paired participant uncertainty, meaningful effect and concrete episode budgets; authenticate author baseline before admitting same-task success."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "retained_secondary_improvement": [
       "Recover exact supplementary decoding score arrays and an unambiguous source primary time/region/condition aggregation.",
       "Resolve S11 thirty-subject source selection, native participant/parcel identities and its all-finite-mean population without importing main MI/II eligibility.",
       "Recover native sample/trial alignment, original subsampling/fold random state and precomputed gCORR/gSCR generation.",
       "Audit MATLAB/Python correlation equivalence, resampling, missing-value and scaling behavior against the author path; preserve any corrected branch as separately labeled.",
       "Specify paired participant uncertainty, meaningful effect and concrete episode budgets; authenticate author baseline before admitting same-task success."
+    ],
+    "primary_source_limits": [
+      "Authenticate the MI/II estimator and source-code/paper correspondence before primary scoring; the existing linear evaluator does not implement the primary information endpoint.",
+      "Recover exact primary participant/parcel identities, source condition aggregation, reference arrays and justified reproduction tolerances; the supplementary decoder cohort must not replace the primary cohort.",
+      "The secondary decoder still lacks authenticated fold realization, upstream source aggregation, numerical baseline and native parity; declared prospective repairs remain distinct from exact author reproduction.",
+      "No ordered same-result primary superiority estimand or decision rule is established. Larger effects, smaller p-values or higher secondary decoding accuracy are insufficient.",
+      "A mixed primary-reproduction/secondary-improvement bundle remains unavailable if the schema requires an identical target.",
+      "Official indexed primary text and pinned regression code were inspected. No newly frozen complete article body or independent cached-article hash authentication is claimed."
+    ],
+    "outcome_availability": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_predecessor_limits": {
+      "task_specific": [
+        "Recover exact supplementary decoding score arrays and an unambiguous source primary time/region/condition aggregation.",
+        "Resolve S11 thirty-subject source selection, native participant/parcel identities and its all-finite-mean population without importing main MI/II eligibility.",
+        "Recover native sample/trial alignment, original subsampling/fold random state and precomputed gCORR/gSCR generation.",
+        "Audit MATLAB/Python correlation equivalence, resampling, missing-value and scaling behavior against the author path; preserve any corrected branch as separately labeled.",
+        "Specify paired participant uncertainty, meaningful effect and concrete episode budgets; authenticate author baseline before admitting same-task success."
+      ]
+    },
+    "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
+    "primary_source_limits": [
+      "Authenticate the MI/II estimator and source-code/paper correspondence before primary scoring; the existing linear evaluator does not implement the primary information endpoint.",
+      "Recover exact primary participant/parcel identities, source condition aggregation, reference arrays and justified reproduction tolerances; the supplementary decoder cohort must not replace the primary cohort.",
+      "The secondary decoder still lacks authenticated fold realization, upstream source aggregation, numerical baseline and native parity; declared prospective repairs remain distinct from exact author reproduction.",
+      "No ordered same-result primary superiority estimand or decision rule is established. Larger effects, smaller p-values or higher secondary decoding accuracy are insufficient.",
+      "A mixed primary-reproduction/secondary-improvement bundle remains unavailable if the schema requires an identical target.",
+      "Official indexed primary text and pinned regression code were inspected. No newly frozen complete article body or independent cached-article hash authentication is claimed."
     ]
   },
   "next_implementation_action": {
-    "action": "The source paper explicitly defines ten-fold prediction of stimulus angles and behavioral estimates from neural PCs, with held-out Pearson correlation. This ordered source-native decoder is a valid overhaul route even though the main MI/II findings are descriptive. Exact original decoding baseline arrays, source participant/parcel aggregation and fold membership remain unrecovered, so no same-task win is currently admitted. Recover exact supplementary decoding score arrays and an unambiguous source primary time/region/condition aggregation. Resolve S11 thirty-subject source selection, native participant/parcel identities and its all-finite-mean population without importing main MI/II eligibility. Recover native sample/trial alignment, original subsampling/fold random state and precomputed gCORR/gSCR generation. Audit MATLAB/Python correlation equivalence, resampling, missing-value and scaling behavior against the author path; preserve any corrected branch as separately labeled. Specify paired participant uncertainty, meaningful effect and concrete episode budgets; authenticate author baseline before admitting same-task success.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "retained_secondary_improvement": {
+      "action": "The source paper explicitly defines ten-fold prediction of stimulus angles and behavioral estimates from neural PCs, with held-out Pearson correlation. This ordered source-native decoder is a valid overhaul route even though the main MI/II findings are descriptive. Exact original decoding baseline arrays, source participant/parcel aggregation and fold membership remain unrecovered, so no same-task win is currently admitted. Recover exact supplementary decoding score arrays and an unambiguous source primary time/region/condition aggregation. Resolve S11 thirty-subject source selection, native participant/parcel identities and its all-finite-mean population without importing main MI/II eligibility. Recover native sample/trial alignment, original subsampling/fold random state and precomputed gCORR/gSCR generation. Audit MATLAB/Python correlation equivalence, resampling, missing-value and scaling behavior against the author path; preserve any corrected branch as separately labeled. Specify paired participant uncertainty, meaningful effect and concrete episode budgets; authenticate author baseline before admitting same-task success.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "primary": "Resolve the corrected primary source limits and establish a source-grounded reproduction interface; separately justify any primary improvement comparison."
   },
   "legacy": {
     "role": "calibration_only",
@@ -2039,8 +2074,15 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the preserved secondary improvement contract. Primary reproduction and same-result improvement require their own source-grounded eligibility decisions.",
+  "primary_scope": "The original empirical human MEG finding of consistency-dependent parietal information readout versus encoding and its participant-level association with behavioral evidence weighting, anchored to Figures 4-5 and their indispensable behavioral, Choice/Cue, consistency, sample-position and encoding controls. This is a named result family, not every figure or whole-paper reproduction.",
+  "retained_secondary_scope": "The genuine empirical Supplementary Figure S11 linear decoder analysis, retaining stimulus prediction, behavioral-estimate prediction and predicted-stimulus/behavior readout as distinct measures with the source condition and consistency contrasts. Higher stimulus-decoding correlation alone does not establish the primary finding.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-ROOT-ADD-025"
   }
 }

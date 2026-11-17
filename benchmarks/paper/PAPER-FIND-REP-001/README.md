@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: simulation\_method: Extended Data 9a generated-sequence next-symbol/reward prediction and related RNN arithmetic remain genuine secondary model evidence; preserve source reward-recall behavior and model/version discrepancies rather than silently replacing its score. simulation\_control: A claimed mechanistic model explanation additionally needs source-defined representation and learning-dynamics comparators against empirical observations; reward performance alone is inadequate. These controls are not automatically imposed on a narrower Figure 2f numerical claim. prospective\_extension: Held-animal prediction and new spatial-model comparison retain proposed-extension status; they do not fill unresolved source-panel mappings. Reviewed source limits: Source-native exports and exact animal/session/registered-cell identities, near/far trial definitions, cue-set eligibility and matched behavior remain to be authenticated. The prepared-export Figure 2f evaluator covers six regional learning trajectories but does not establish a native pipeline, direct day-to-day PV stability or state-versus-continuous-position model comparison. Exact source mapping for the retained state-specific-versus-position and stability claims remains unresolved; no replacement decoder or new split is admitted. The 97-session and first/last-session comparisons have distinct aggregation scopes; they must not be treated as 97 independent animals or one selected trajectory. Published reference arrays, source-version parity, agreement criteria and independent computation verification remain unresolved. The empirical Fig\_2f notebook is supported by a retained source receipt and inspected implementation/documentation, not a fresh raw-notebook audit in the independent memo. Source simulation reward recall admits an always-reward arithmetic ceiling; model selection used test performance. Preserve these exposure and score limitations. A scientifically justified same-primary improvement criterion is missing; stronger decorrelation, lower p-values, embedding appearance or simulation reward recall do not establish improvement. Mixed-target four-cell admission remains unavailable; all scientific outcomes remain unknown.
+
+**Primary scientific scope:** Longitudinal hippocampal population decorrelation and state-specific versus position-based representation/stability from per-cell neural activity and matched behavior, including complete source-defined regional comparisons; no automatic whole-paper or every-figure requirement.
+
+**Retained secondary policy:** simulation\_method: Extended Data 9a generated-sequence next-symbol/reward prediction and related RNN arithmetic remain genuine secondary model evidence; preserve source reward-recall behavior and model/version discrepancies rather than silently replacing its score. simulation\_control: A claimed mechanistic model explanation additionally needs source-defined representation and learning-dynamics comparators against empirical observations; reward performance alone is inadequate. These controls are not automatically imposed on a narrower Figure 2f numerical claim. prospective\_extension: Held-animal prediction and new spatial-model comparison retain proposed-extension status; they do not fill unresolved source-panel mappings.
+
+- [Reproduction proposal (inspection only)](reproduction.v2.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. Whole-paper review identifies an original ordered prediction task: reward-symbol accuracy in Extended Data Fig. 9a, from models trained to predict the next sensory symbol in the 2ACDC sequence. Exact published scores, model-specific simulation manifests, prediction masks and native evaluation callers remain unrecovered. The legacy Fig. 2f descriptive scope does not limit this authorized source-native rebind; its learning curves remain calibration only.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 39487 bytes; SHA-256 `759b3f442819f938830d73bc305a625d1bb7b603b353311ff6b5f3071b875348`.
+- Specification identity: 46502 bytes; SHA-256 `c391c844601afe114cb0644e48c351cf82e9bf3f7a9e581ba1a3743616368407`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

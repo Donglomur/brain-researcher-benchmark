@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "A doubly stochastic renewal framework for partitioning spiking variability",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Estimate spike-generation irregularity phi from spike trains alone and compare against voltage-derived operational-time ISI CV² for the paper’s Fig. 3 intracellular validation. The contribution phi/CVraw² is a biological quantity, not a score to maximize.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Estimate spike-generation irregularity phi from spike trains alone and compare against voltage-derived operational-time ISI CV² for the paper’s Fig. 3 intracellular validation. The contribution phi/CVraw² is a biological quantity, not a score to maximize.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Estimate spike-generation irregularity phi from spike trains alone and compare against voltage-derived operational-time ISI CV² for the paper’s Fig. 3 intracellular validation. The contribution phi/CVraw² is a biological quantity, not a score to maximize.",
-    "Source-paper comparison for Source-reported average discrepancy between spike-only phi and voltage-derived phi; exact formula unresolved: The source reports an average discrepancy of 23% between spike-only and voltage-derived phi. The reviewed text does not resolve its denominator, signed/absolute operation and aggregation, so it is not yet an executable percentage-error score."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover the source definition of 23% discrepancy and the exact empirical Fig. 3 pipeline, including source-authorized resolution of 25 versus 50 ms bins.",
-    "Match all eight original neurons, five mice and the twenty-segment mapping; independently calibrate the native author estimator and voltage-derived reference.",
-    "Freeze the spike-only candidate before final comparison and exceed a justified meaningful effect under a valid dependence-aware uncertainty rule.",
-    "Do not count smaller phi, larger phi/CVraw², synthetic-ground-truth performance, newly held-out trials or a new cohort as surpassing the original empirical paper task.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-009",
   "canonical_position_one_based": 28,
@@ -472,59 +473,71 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-009/improvement.v1.json",
-      "bytes": 10909,
-      "sha256": "6fbf09c8da0a79802f6627d55e4258b11fa6cf1bdcf70b00dc382cddc0567e10"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-009/historical/task.pre-improvement.v1.json",
-        "bytes": 29438,
-        "sha256": "52c52ea135ca8710635d929290d1abdc2344c34c054030167e826a7f01284b96"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-009-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Inactive until exact source validation is recoverable. Any exploratory held-trial stability study must be labelled as an extension and cannot supply the original paper-win score.",
-    "candidate_freeze": "Freeze candidate estimator, source-equivalent preprocessing, cohort/segment manifest, reference construction, metric and budgets before comparison.",
-    "final_evaluation": "Use the recovered original empirical Fig. 3 validation and native author comparator; retain all paired cell-level results and dependence structure. A local natural-cubic held-trial evaluator is not assumed to be the source evaluator.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep the published 23% statement, a future exact author rerun and prospective held-trial results separate. The source physiological fractions 0.26 and 0.27 are not performance baselines."
+    "improvement": {
+      "improvement_loop": "Inactive until exact source validation is recoverable. Any exploratory held-trial stability study must be labelled as an extension and cannot supply the original paper-win score.",
+      "candidate_freeze": "Freeze candidate estimator, source-equivalent preprocessing, cohort/segment manifest, reference construction, metric and budgets before comparison.",
+      "final_evaluation": "Use the recovered original empirical Fig. 3 validation and native author comparator; retain all paired cell-level results and dependence structure. A local natural-cubic held-trial evaluator is not assumed to be the source evaluator.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep the published 23% statement, a future exact author rerun and prospective held-trial results separate. The source physiological fractions 0.26 and 0.27 are not performance baselines."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact mathematical definition and aggregation of reported 23% discrepancy are unresolved.",
-    "Source Results/Methods use 50 ms voltage/rate bins while Fig. 3b states 25 ms.",
-    "Empirical voltage-spline family/support details, source cohort identities and twenty-segment mapping have not been recovered.",
-    "Pinned time_rescaling.py is a spike-generation routine, not the empirical validation pipeline.",
-    "The local evaluator openly uses prospective held trials and natural-cubic policies; this is not native Figure 3 reconstruction.",
-    "No same-task working scorer, justified effect/uncertainty rule, candidate freeze or concrete episode budgets exist."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact mathematical definition and aggregation of reported 23% discrepancy are unresolved.",
       "Source Results/Methods use 50 ms voltage/rate bins while Fig. 3b states 25 ms.",
       "Empirical voltage-spline family/support details, source cohort identities and twenty-segment mapping have not been recovered.",
       "Pinned time_rescaling.py is a spike-generation routine, not the empirical validation pipeline.",
       "The local evaluator openly uses prospective held trials and natural-cubic policies; this is not native Figure 3 reconstruction.",
       "No same-task working scorer, justified effect/uncertainty rule, candidate freeze or concrete episode budgets exist."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact mathematical definition and aggregation of reported 23% discrepancy are unresolved.",
+        "Source Results/Methods use 50 ms voltage/rate bins while Fig. 3b states 25 ms.",
+        "Empirical voltage-spline family/support details, source cohort identities and twenty-segment mapping have not been recovered.",
+        "Pinned time_rescaling.py is a spike-generation routine, not the empirical validation pipeline.",
+        "The local evaluator openly uses prospective held trials and natural-cubic policies; this is not native Figure 3 reconstruction.",
+        "No same-task working scorer, justified effect/uncertainty rule, candidate freeze or concrete episode budgets exist."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The registered Fig. 3 task admits an ordered estimation-agreement question, and the paper reports 23% average discrepancy between spike-only and voltage-derived irregularity. However, the exact percentage-error definition, empirical voltage reference pipeline, cohort/segment identities and conflicting 25/50 ms preprocessing are unresolved. The local prospective held-trial evaluator changes the historical evaluation and cannot certify a same-task paper win. Exact mathematical definition and aggregation of reported 23% discrepancy are unresolved. Source Results/Methods use 50 ms voltage/rate bins while Fig. 3b states 25 ms. Empirical voltage-spline family/support details, source cohort identities and twenty-segment mapping have not been recovered. Pinned time_rescaling.py is a spike-generation routine, not the empirical validation pipeline. The local evaluator openly uses prospective held trials and natural-cubic policies; this is not native Figure 3 reconstruction. No same-task working scorer, justified effect/uncertainty rule, candidate freeze or concrete episode budgets exist.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The registered Fig. 3 task admits an ordered estimation-agreement question, and the paper reports 23% average discrepancy between spike-only and voltage-derived irregularity. However, the exact percentage-error definition, empirical voltage reference pipeline, cohort/segment identities and conflicting 25/50 ms preprocessing are unresolved. The local prospective held-trial evaluator changes the historical evaluation and cannot certify a same-task paper win. Exact mathematical definition and aggregation of reported 23% discrepancy are unresolved. Source Results/Methods use 50 ms voltage/rate bins while Fig. 3b states 25 ms. Empirical voltage-spline family/support details, source cohort identities and twenty-segment mapping have not been recovered. Pinned time_rescaling.py is a spike-generation routine, not the empirical validation pipeline. The local evaluator openly uses prospective held trials and natural-cubic policies; this is not native Figure 3 reconstruction. No same-task working scorer, justified effect/uncertainty rule, candidate freeze or concrete episode budgets exist.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -539,8 +552,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

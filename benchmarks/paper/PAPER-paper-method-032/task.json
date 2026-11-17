@@ -4,20 +4,21 @@
   "track": "paper",
   "title": "MindEye2: Shared-Subject Models Enable fMRI-To-Image With 1 Hour of Data",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: One-hour fMRI-to-image retrieval and reconstruction; primary ordered endpoint is corrected brain-query/image-candidate top-1 retrieval. Reconstruction remains a required companion panel, not an optional replacement endpoint.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce the original one-hour MindEye2 retrieval and reconstruction result on subjects 1, 2, 5 and 7, and the source's one-hour subject-1 pretrained-versus-from-scratch reconstruction contrast. Preserve each result's original test support, reconstruction metrics, normalization references and exposure; report both corrected physical retrieval directions and the complete named reconstruction panel. Assess candidate improvement against a qualified author comparator on the same one-hour task under a justified joint decision, keeping the subject-1 transfer contrast separate. Retrieval-only success does not discharge reconstruction or the transfer comparison.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: One-hour fMRI-to-image retrieval and reconstruction; primary ordered endpoint is corrected brain-query/image-candidate top-1 retrieval. Reconstruction remains a required companion panel, not an optional replacement endpoint.",
-    "Source-paper comparison for Corrected one-hour image retrieval top-1 fraction (brain query, 300 image candidates): For each 300-item draw, flatten and L2-normalize paired OpenCLIP ViT-bigG-14/laion2b_s39b_b160k token embeddings; score the fraction whose true image has greatest cosine similarity to the brain query. Preserve corrected orientation and qualify native ties/RNG behavior."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Reproduce the corrected author baseline on the original four subjects, first-session adaptation, shared1000 population and source normalization exposure before comparing a candidate.",
-    "Exceed 0.574 on the original corrected image-retrieval endpoint by the predeclared meaningful effect and uncertainty rule; also exceed the qualified author rerun on identical inputs and retrieval pools.",
-    "Retain brain retrieval and the complete original reconstruction panel, with a predeclared joint/trade-off decision; a retrieval-only subset result is not success for the registered combined task.",
-    "Freeze candidate code, checkpoints, preprocessing, image-model resources and exposure ledger before final scoring; preserve original test identities. A new split, reduced cohort or altered normalization regime is an extension.",
-    "Document public test exposure and reproduce all source evaluation semantics, including repeated presentations and metric direction; the existing generated-control feature scorer is insufficient evidence.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results.",
+    "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply."
   ],
   "source_id": "paper-method-032",
   "canonical_position_one_based": 89,
@@ -4235,57 +4236,79 @@
     "known_local_scientific_runtime_seconds": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-032/improvement.v1.json",
-      "bytes": 11381,
-      "sha256": "97752be74ac2af84fbd8441f50e2f4e9ba1e2a518d0b90ec553f8d08d19890b0"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "design_ready",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-032/historical/task.pre-improvement.v1.json",
-        "bytes": 185659,
-        "sha256": "be0baca5eebb4c64fa0d6096fdbd9df12aa16e4abf9342c6d16ab0aa433ac9ff"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-032-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "scope_disposition": "same_primary_unqualified"
   },
   "episode": {
-    "improvement_loop": "After admission, iterate on the original training data and declared validation feedback within that training partition. Restore the full permitted first-session training allocation for final fitting and record all image/neural pretraining exposure. Do not tune from final shared1000 scores.",
-    "candidate_freeze": "Commit candidate algorithm, fitting/selection recipe, checkpoints, pretrained resources, exact trial/image manifests, native normalization/repeat rules and retrieval-pool schedule before final evaluation.",
-    "final_evaluation": "Run the frozen candidate and authentic author baseline on all four original subjects and the same shared1000 test images; report corrected retrieval and full reconstruction results, paired uncertainty and public-test exposure. Newly protected samples are a separate extension.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Published corrected score, reproduced author score and any separately verified current-SOTA score remain distinct. Local numerical controls or a weaker single-subject model cannot replace the source author baseline."
+    "improvement": {
+      "improvement_loop": "After admission, iterate on the original training data and declared validation feedback within that training partition. Restore the full permitted first-session training allocation for final fitting and record all image/neural pretraining exposure. Do not tune from final shared1000 scores.",
+      "candidate_freeze": "Commit candidate algorithm, fitting/selection recipe, checkpoints, pretrained resources, exact trial/image manifests, native normalization/repeat rules and retrieval-pool schedule before final evaluation.",
+      "final_evaluation": "Run the frozen candidate and authentic author baseline on all four original subjects and the same shared1000 test images; report corrected retrieval and full reconstruction results, paired uncertainty and public-test exposure. Newly protected samples are a separate extension.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Published corrected score, reproduced author score and any separately verified current-SOTA score remain distinct. Local numerical controls or a weaker single-subject model cannot replace the source author baseline."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Authenticate exact NSD/derivative/checkpoint manifests and source exposure, including normalization statistics from more than the adaptation session.",
-    "Reconcile legacy evaluator session-disjoint prospective protection with the original shared1000 test population; do not silently drop first-session test presentations.",
-    "Qualify native feature extraction, repeat aggregation, historical retrieval RNG/ties and all original reconstruction metrics; no authentic full-panel rerun exists.",
-    "Freeze source-task reconstruction trade-offs, meaningful effect and participant-aware uncertainty without treating 30 overlapping pools as independent samples.",
-    "Set concrete access/validation/final-query and compute budgets and protect final scoring; public source test exposure must be disclosed."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Authenticate exact NSD/derivative/checkpoint manifests and source exposure, including normalization statistics from more than the adaptation session.",
       "Reconcile legacy evaluator session-disjoint prospective protection with the original shared1000 test population; do not silently drop first-session test presentations.",
       "Qualify native feature extraction, repeat aggregation, historical retrieval RNG/ties and all original reconstruction metrics; no authentic full-panel rerun exists.",
       "Freeze source-task reconstruction trade-offs, meaningful effect and participant-aware uncertainty without treating 30 overlapping pools as independent samples.",
       "Set concrete access/validation/final-query and compute budgets and protect final scoring; public source test exposure must be disclosed."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Authenticate exact NSD/derivative/checkpoint manifests and source exposure, including normalization statistics from more than the adaptation session.",
+        "Reconcile legacy evaluator session-disjoint prospective protection with the original shared1000 test population; do not silently drop first-session test presentations.",
+        "Qualify native feature extraction, repeat aggregation, historical retrieval RNG/ties and all original reconstruction metrics; no authentic full-panel rerun exists.",
+        "Freeze source-task reconstruction trade-offs, meaningful effect and participant-aware uncertainty without treating 30 overlapping pools as independent samples.",
+        "Set concrete access/validation/final-query and compute budgets and protect final scoring; public source test exposure must be disclosed."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json",
+    "current_primary_source_limits": [
+      "Exact source data/checkpoint/input identities, shared1000 support, source-normalization/repeat lineage and native metric parity remain unresolved.",
+      "The exact original one-hour subject-1 contrast ordinates, normalization references, model identities and source comparison outputs still require authentication; its support must not be pooled into the four-subject retrieval result.",
+      "Pretraining exposure intentionally differs between the source pretrained and from-scratch arms and must be disclosed rather than equated.",
+      "Complete reconstruction coverage, qualified same-one-hour author comparator, numerical agreement/superiority criteria and the joint decision remain unresolved. Retrieval-only gain or a forty-session control cannot satisfy the selected complete outcome.",
+      "Thirty overlapping retrieval draws cannot establish participant-level uncertainty, independent sample size or superiority. No scientific criterion is inferred from corrected labels or printed precision.",
+      "Paired paper+data and paper+data+author-code delivery/exposure/resource budgets, independent submitted-computation verification and final canonical bindings remain unqualified; all four scientific outcomes remain unknown."
+    ],
+    "scope_correction_limit": "This scope correction grants no new observation access and changes no improvement metric, criterion or tolerance."
   },
   "next_implementation_action": {
-    "action": "The original one-session retrieval/reconstruction task and corrected published retrieval score are recoverable. Native feature/reference parity, full reconstruction evaluation, exact historical preprocessing and sample manifests, a meaningful effect rule, and measured episode budgets remain unqualified; the feature-only component cannot admit an improvement win. Authenticate exact NSD/derivative/checkpoint manifests and source exposure, including normalization statistics from more than the adaptation session. Reconcile legacy evaluator session-disjoint prospective protection with the original shared1000 test population; do not silently drop first-session test presentations. Qualify native feature extraction, repeat aggregation, historical retrieval RNG/ties and all original reconstruction metrics; no authentic full-panel rerun exists. Freeze source-task reconstruction trade-offs, meaningful effect and participant-aware uncertainty without treating 30 overlapping pools as independent samples. Set concrete access/validation/final-query and compute budgets and protect final scoring; public source test exposure must be disclosed.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The original one-session retrieval/reconstruction task and corrected published retrieval score are recoverable. Native feature/reference parity, full reconstruction evaluation, exact historical preprocessing and sample manifests, a meaningful effect rule, and measured episode budgets remain unqualified; the feature-only component cannot admit an improvement win. Authenticate exact NSD/derivative/checkpoint manifests and source exposure, including normalization statistics from more than the adaptation session. Reconcile legacy evaluator session-disjoint prospective protection with the original shared1000 test population; do not silently drop first-session test presentations. Qualify native feature extraction, repeat aggregation, historical retrieval RNG/ties and all original reconstruction metrics; no authentic full-panel rerun exists. Freeze source-task reconstruction trade-offs, meaningful effect and participant-aware uncertainty without treating 30 overlapping pools as independent samples. Set concrete access/validation/final-query and compute budgets and protect final scoring; public source test exposure must be disclosed.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -4300,8 +4323,41 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate.",
+  "primary_scope": "Root-selected Option A: the original four-subject one-hour fMRI-to-image retrieval/reconstruction result in Tables 1/8 plus the one-hour point of the subject-1 pretrained-versus-from-scratch reconstruction contrast in Figure 5/Section 3.1.1. Preserve their separate test supports, complete named reconstruction metrics, normalization references, training and image-model exposure, original repeated presentations and source reductions. Apply the authoritative physical-direction correction unambiguously in the task and both access conditions while retaining original labels and correction provenance. Same target-subject data does not imply equal total pretraining data or compute.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-paper-method-032"
+  },
+  "source_scope_correction": {
+    "disposition": "same_primary_unqualified",
+    "retained_scope_notes": "genuine_selected_primary_component: Corrected one-hour brain-query/image-candidate retrieval, source mean 0.574, and reverse retrieval, source mean 0.790, remain separate real empirical method endpoints; neither alone discharges the reconstruction or subject-1 transfer comparison. Published values are source observations, not newly justified acceptance thresholds.\nseparate_empirical_source_results: Forty-session Table 6, additional training-duration points, human preference, captions, GNet, architecture, ceiling, COCO retrieval, UMAP/ROI/semantic and other source outputs remain separately named evidence where retained. They neither substitute for the selected one-hour contrast nor automatically become mandatory task outcomes.\nprospective_extension: New splits, first-session-only normalization, altered cohorts or changed neural/image-model pretraining exposure remain explicitly labelled extensions rather than silent replacements of the original task.",
+    "retained_source_roles": [
+      {
+        "role": "genuine_selected_primary_component",
+        "scope": "Corrected one-hour brain-query/image-candidate retrieval, source mean 0.574, and reverse retrieval, source mean 0.790, remain separate real empirical method endpoints; neither alone discharges the reconstruction or subject-1 transfer comparison. Published values are source observations, not newly justified acceptance thresholds."
+      },
+      {
+        "role": "separate_empirical_source_results",
+        "scope": "Forty-session Table 6, additional training-duration points, human preference, captions, GNet, architecture, ceiling, COCO retrieval, UMAP/ROI/semantic and other source outputs remain separately named evidence where retained. They neither substitute for the selected one-hour contrast nor automatically become mandatory task outcomes."
+      },
+      {
+        "role": "prospective_extension",
+        "scope": "New splits, first-session-only normalization, altered cohorts or changed neural/image-model pretraining exposure remain explicitly labelled extensions rather than silent replacements of the original task."
+      }
+    ],
+    "remaining_source_limits": [
+      "Exact source data/checkpoint/input identities, shared1000 support, source-normalization/repeat lineage and native metric parity remain unresolved.",
+      "The exact original one-hour subject-1 contrast ordinates, normalization references, model identities and source comparison outputs still require authentication; its support must not be pooled into the four-subject retrieval result.",
+      "Pretraining exposure intentionally differs between the source pretrained and from-scratch arms and must be disclosed rather than equated.",
+      "Complete reconstruction coverage, qualified same-one-hour author comparator, numerical agreement/superiority criteria and the joint decision remain unresolved. Retrieval-only gain or a forty-session control cannot satisfy the selected complete outcome.",
+      "Thirty overlapping retrieval draws cannot establish participant-level uncertainty, independent sample size or superiority. No scientific criterion is inferred from corrected labels or printed precision.",
+      "Paired paper+data and paper+data+author-code delivery/exposure/resource budgets, independent submitted-computation verification and final canonical bindings remain unqualified; all four scientific outcomes remain unknown."
+    ],
+    "scientific_outcome": "unknown"
   }
 }

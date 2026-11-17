@@ -10,6 +10,53 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Separate paper outcomes
+
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
+
+**Corrected primary scope; outcomes remain unqualified.** Both outcome contracts retain the same primary scientific task. Unresolved source criteria still limit receipt admission.
+
+**Primary goal:** Reproduce the original Figure 4D context-decoding result from speed-equalized CA1 population vectors conditioned on actual position, with its global and shuffled-label comparisons across the complete original session panel; assess improvement on that identical decoding task only after source metric and comparator qualification.
+
+**Primary scientific scope:** The explicitly reviewed original Figure 4D named result, with companion Figure 4B global/context-shuffle evidence, conditional context/position shuffles and complete source session support. This is a legitimate reviewed result-level revision, not a claim that decoding reproduces the full historical hierarchy/learning family. Broader reproduction obligations must be aligned to this accepted named target.
+
+**Remaining source limits:**
+
+- Existing scientific review explicitly accepted Figure 4D; current broader reproduction scope still needs consistent canonical alignment and final repinning. same\_primary\_unqualified refers to the reviewed named target, not admission of the existing mismatched draft.
+- Exact source accuracy/error ordinate, numerical targets and repeated/session/rat aggregation remain unresolved.
+- Speed-equalized input preparation, fine/coarse position identities, source eligibility and complete observation lineage remain unqualified.
+- The conditional routine returns an unassigned zero score vector; prediction-derived source scoring and other documented author-code defects require reviewed repair, not a zero baseline.
+- Preserve original repeated stratified partitions, within-partition bootstrap multiplicities, matched method/control draws and source session panel. A justified calibrated source-protocol rerun may be used; no new convenient split.
+- Authentic submitted computation, granular independent verification, complete references, comparison uncertainty, meaningful same-task gain and matched code exposure remain unresolved.
+- Improved decoding would establish this named readout result only, not a stronger or complete biological hierarchy explanation; all scientific outcomes remain unknown.
+
+**Retained source scope:** separate\_empirical\_results: Preserve hierarchy/variance-depth reconstruction, learning/reward relationships, spatial decoding and other historical biological evidence separately. Their source status is retained; they do not automatically become required panels for Figure 4D. partial\_primary\_support: Preserve the accepted Figure4D prediction scorer and complete context-arm inventory. Operator-supplied labels and arithmetic checks do not establish authentic neural-input computation or source reproduction. prospective\_extension: New animal/day/whole-trial holdouts and inferred-position conditioning are distinct extensions, not substitutions for the original protocol.
+
+**Retained source roles:**
+
+| Source field | Declared role |
+| --- | --- |
+| Item 1 / Role | Separate empirical results |
+| Item 1 / Scope | Preserve hierarchy/variance depth reconstruction, learning/reward relationships, spatial decoding and other historical biological evidence separately. Their source status is retained; they do not automatically become required panels for Figure 4D. |
+| Item 2 / Role | Partial primary support |
+| Item 2 / Scope | Preserve the accepted Figure4D prediction scorer and complete context arm inventory. Operator supplied labels and arithmetic checks do not establish authentic neural input computation or source reproduction. |
+| Item 3 / Role | Prospective extension |
+| Item 3 / Scope | New animal/day/whole trial holdouts and inferred position conditioning are distinct extensions, not substitutions for the original protocol. |
+
+- [Reviewed primary scope correction](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Original-finding reproduction contract](reproduction.v1.json)
+- [Paired outcome protocols](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
 ## Current paper-improvement objective
 
 **Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
@@ -24,7 +71,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 16070 bytes; SHA-256 `0c1b7d6cfdba0adc3d5ed6defb5c719a9b53f55703e4d41aa74701bba594eaf3`.
+- Specification identity: 21008 bytes; SHA-256 `5d3a5f63f2c58163a6a311b61416af2b9397f662c86783bce1c832bf5567042e`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

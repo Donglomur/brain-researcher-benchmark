@@ -1,0 +1,1518 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-signal-add-020",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original descriptive ERP/choice findings are meaningful reproduction targets even though stronger coefficients cannot define superiority. Formula and input-preparation support exists, but complete original targets/companions, scientific criteria and computation-verification/execution identities remain unresolved; this is independent of improvement ineligibility.",
+  "source_paper": {
+    "title": "Separable neural signals for reward and emotion prediction errors",
+    "url": "https://www.nature.com/articles/s41467-025-63135-5"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41467-025-63135-5",
+      "locator": "Fig. 3; Methods: Participants, Psychophysiological recording and processing, Analyses; Data availability; primary Results accompanying Fig. 3, local erp-paper.txt lines 1237–1257: four conditional coefficients/SE/CIs and conditional/unconditional P3b comparisons",
+      "supports": "The paper tests dissociation of reward, valence and arousal PE associations with FRN/P3a/P3b and choices in 41 participants; it reports mixed-effects inference rather than a held-out ERP/choice prediction benchmark. Four original conditional beta values are verified documentary targets, with source-reported SE/CIs retained as evidence and all scientific reproduction criteria unresolved."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/jpheffne/2025_epe_eeg/blob/4f5767df1516e0ec3c234d51ba36e4b741eb60e8/analysis/eeg_epe_ms.Rmd",
+      "locator": "analysis/eeg_epe_ms.Rmd: inputs (lines 47–55 in retained remote transcript); fig3_data positional joins/filter (204–212); conditional FRN/P3a/P3b models (224–229,255–260,286–291); unconditional companions (232–284,300–322); source P3b contrast (294–299); fig2b_model and round reparameterizations (381–419). Line numbers are the inspected remote rendering, not a newly hashed local source file. Existing local erp-code.txt cache lines 300–370 confirms three P3a unconditional models, two P3b unconditional models only, and separate conditional valence-minus-reward versus unconditional reward-minus-valence comparisons; this cache is separately hashed externally and is not a new authenticated author-code manifest.",
+      "supports": "Source formulas, input names, ordered joins and first filter are source-observed. Conditional P3b source contrast omits coefficient covariance and applies pnorm(-abs(z)); this must remain distinct from the later covariance-aware two-sided diagnostic. This source inspection supplies no fitted coefficients or empirical result. The unconditional P3b arousal model is absent and must not be inferred from the other ERPs; the second original P3b contrast is retained as an effect estimate, with z/probability arithmetic as granular verification evidence."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-020/task.json",
+      "locator": "primary_outputs; implementations/registered-runtime/public_contract.json primary and row_selection",
+      "supports": "Local scored endpoint is equal-model coefficient RMSE in reference standard errors, with fixed conditional REML models and row-order correspondence assumed. It explicitly disclaims independent improvement."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://github.com/jpheffne/2025_epe_eeg/tree/4f5767df1516e0ec3c234d51ba36e4b741eb60e8/data/clean",
+      "locator": "BEH_ug.csv and the seven FRN/P2/P3a/P3b offer/baseline CSVs named in registered-runtime/public_contract.json",
+      "supports": "The complete original processed panel is pinned by eight public byte counts/SHA256 values. ERP files have no independent trial keys; actual preparation by the new component remains unrun."
+    },
+    {
+      "id": "preparer",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/tree/660cb3b9fca4c98125777d3c48b5d954ebd32302/benchmarks/paper/PAPER-paper-signal-add-020/implementations/processed-inputs-v1",
+      "locator": "prepare.py; README.md; PREPARATION_PROTOCOL.md",
+      "supports": "Executable pinned-input preparer preserves source rows, unchanged scaled strings and formula-specific cases. Thirteen generated controls and independent row/string controls passed; no authentic preparation, fitting, AI execution or complete reproduction occurred."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Distinct relationships of reward and emotion prediction errors with FRN, P3a and P3b amplitudes, and associations with subsequent social choices; registered central scope reconstructs the fixed mixed-effects coefficients and uncertainty.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author processed behavior and ERP CSVs in 2025_epe_eeg at revision 4f5767df1516e0ec3c234d51ba36e4b741eb60e8; continuous cleaned EEG is a separate input level and raw-to-ERP reproduction is outside the registered numerical component.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "41 participants, 180 repeated Ultimatum Game trials each and 36 partners per participant. Author analyses exclude invalid/missing affect reports and use model-specific complete cases; the local contract counts 6,403 rows but this is not a published predictive test set.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "split": {
+      "status": "not_applicable",
+      "description": "The source central models fit the measured participant cohort with participant random effects. There is no published held-out participant/partner split for the registered coefficient-dissociation endpoint.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Trial reward and affect expectations/experiences, choices, participant identifiers, and extracted offer-locked FRN/P2/P3a/P3b and baseline ERP amplitudes. Source PE values are experience minus expectation.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "500-Hz EEG; average reference, eye-artifact correction, 0.1–40-Hz filtering, offer epochs −200–800 ms and artifact rejection. Single-trial windows: FRN 315–415 ms, P3a 363–463 ms and P3b 530–630 ms with source ROIs/covariates. PE standardization preserves meaningful zero; author CSV joins are positional.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Source fixed-effect estimates and uncertainty for PE terms in participant mixed-effects ERP models, including contrasts across PE coefficients; these are inferential estimands, not a predictive accuracy target.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Separate FRN/P3a/P3b models retain participant random effects over trials. Participant is the independent sampling unit; the local equal-model coefficient RMSE is only reference-reconstruction aggregation.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Registered processed-table panel requires the three conditional FRN/P3a/P3b fixed-effect vectors; three source PE-specific unconditional effects for FRN, three for P3a and two for P3b; both original P3b contrast effect estimates (conditional valence-minus-reward and unconditional reward-minus-valence); and source ERP-by-round choice effects. Full covariance, literal author contrast statistics, covariance-aware conditional diagnostic corrections, model designs and fitted outputs are mandatory granular verification evidence, not separately scored original findings. Four published conditional magnitudes are documentary targets; the remaining magnitudes, complete companion/choice closure and scientific acceptance remain unresolved. This is not continuous-EEG or whole-paper reconstruction.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "registration"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "The paper and the complete eight pinned public processed behavior/ERP CSVs are allowed observations, including the original participant/trial/partner identities, source-scaled columns and model-specific missingness. The +author-code arm may additionally receive only the pinned author RMarkdown and an authenticated code manifest. Published tables are exposed references; historical private numerical targets, solver answers and unregistered continuous-EEG preprocessing outputs are not participant inputs.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "data"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "frn_beta_intercept",
+      "kind": "scalar",
+      "description": "FRN conditional fixed-effect estimate for (Intercept); include nuisance/baseline terms and intercept alongside all three absolute PE terms. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional FRN REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "frn_beta_abs_rpe_s",
+      "kind": "scalar",
+      "description": "FRN conditional fixed-effect estimate for abs_rpe_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms. Documentary primary-paper target: beta=-0.04, reported SE=0.01, 95% CI=[-0.06, -0.01], t=-2.75, p=0.006. These reported uncertainty values and printed precision are not reproduction acceptance thresholds.",
+      "status": "verified",
+      "expected": -0.04,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional FRN REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "frn_beta_abs_epe_valence_s",
+      "kind": "scalar",
+      "description": "FRN conditional fixed-effect estimate for abs_epe_valence_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms. Documentary primary-paper target: beta=0.03, reported SE=0.01, 95% CI=[0.01, 0.06], t=2.37, p=0.02. These reported uncertainty values and printed precision are not reproduction acceptance thresholds.",
+      "status": "verified",
+      "expected": 0.03,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional FRN REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "frn_beta_abs_epe_arousal_s",
+      "kind": "scalar",
+      "description": "FRN conditional fixed-effect estimate for abs_epe_arousal_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional FRN REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "frn_beta_p2_offer_s",
+      "kind": "scalar",
+      "description": "FRN conditional fixed-effect estimate for P2_offer_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional FRN REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "frn_beta_p2_base_offer_s",
+      "kind": "scalar",
+      "description": "FRN conditional fixed-effect estimate for P2_base_offer_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional FRN REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "frn_unconditional_beta_abs_rpe_s",
+      "kind": "scalar",
+      "description": "Source PE-specific unconditional FRN companion coefficient for abs_rpe_s, retaining the source P2/baseline covariates and its own participant random-effects structure; do not replace the joint conditional result with this estimate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled absolute prediction error",
+      "aggregation": "One source unconditional model, on its own model-specific complete cases; no favorable-PE or model selection.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "frn_unconditional_beta_abs_epe_valence_s",
+      "kind": "scalar",
+      "description": "Source PE-specific unconditional FRN companion coefficient for abs_epe_valence_s, retaining the source P2/baseline covariates and its own participant random-effects structure; do not replace the joint conditional result with this estimate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled absolute prediction error",
+      "aggregation": "One source unconditional model, on its own model-specific complete cases; no favorable-PE or model selection.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "frn_unconditional_beta_abs_epe_arousal_s",
+      "kind": "scalar",
+      "description": "Source PE-specific unconditional FRN companion coefficient for abs_epe_arousal_s, retaining the source P2/baseline covariates and its own participant random-effects structure; do not replace the joint conditional result with this estimate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled absolute prediction error",
+      "aggregation": "One source unconditional model, on its own model-specific complete cases; no favorable-PE or model selection.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3a_beta_intercept",
+      "kind": "scalar",
+      "description": "P3a conditional fixed-effect estimate for (Intercept); include nuisance/baseline terms and intercept alongside all three absolute PE terms. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional P3a REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3a_beta_abs_rpe_s",
+      "kind": "scalar",
+      "description": "P3a conditional fixed-effect estimate for abs_rpe_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional P3a REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3a_beta_abs_epe_valence_s",
+      "kind": "scalar",
+      "description": "P3a conditional fixed-effect estimate for abs_epe_valence_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional P3a REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3a_beta_abs_epe_arousal_s",
+      "kind": "scalar",
+      "description": "P3a conditional fixed-effect estimate for abs_epe_arousal_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional P3a REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3a_beta_p3a_base_offer_s",
+      "kind": "scalar",
+      "description": "P3a conditional fixed-effect estimate for P3a_base_offer_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional P3a REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3a_unconditional_beta_abs_rpe_s",
+      "kind": "scalar",
+      "description": "Source PE-specific unconditional P3a companion coefficient for abs_rpe_s, retaining the source P2/baseline covariates and its own participant random-effects structure; do not replace the joint conditional result with this estimate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled absolute prediction error",
+      "aggregation": "One source unconditional model, on its own model-specific complete cases; no favorable-PE or model selection.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3a_unconditional_beta_abs_epe_valence_s",
+      "kind": "scalar",
+      "description": "Source PE-specific unconditional P3a companion coefficient for abs_epe_valence_s, retaining the source P2/baseline covariates and its own participant random-effects structure; do not replace the joint conditional result with this estimate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled absolute prediction error",
+      "aggregation": "One source unconditional model, on its own model-specific complete cases; no favorable-PE or model selection.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3a_unconditional_beta_abs_epe_arousal_s",
+      "kind": "scalar",
+      "description": "Source PE-specific unconditional P3a companion coefficient for abs_epe_arousal_s, retaining the source P2/baseline covariates and its own participant random-effects structure; do not replace the joint conditional result with this estimate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled absolute prediction error",
+      "aggregation": "One source unconditional model, on its own model-specific complete cases; no favorable-PE or model selection.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3b_beta_intercept",
+      "kind": "scalar",
+      "description": "P3b conditional fixed-effect estimate for (Intercept); include nuisance/baseline terms and intercept alongside all three absolute PE terms. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional P3b REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3b_beta_abs_rpe_s",
+      "kind": "scalar",
+      "description": "P3b conditional fixed-effect estimate for abs_rpe_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms. Documentary primary-paper target: beta=0.03, reported SE=0.02, 95% CI=[-0.01, 0.07], t=1.34, p=0.19. These reported uncertainty values and printed precision are not reproduction acceptance thresholds.",
+      "status": "verified",
+      "expected": 0.03,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional P3b REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3b_beta_abs_epe_valence_s",
+      "kind": "scalar",
+      "description": "P3b conditional fixed-effect estimate for abs_epe_valence_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms. Documentary primary-paper target: beta=0.06, reported SE=0.02, 95% CI=[0.03, 0.09], t=3.98, p=<0.001. These reported uncertainty values and printed precision are not reproduction acceptance thresholds.",
+      "status": "verified",
+      "expected": 0.06,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional P3b REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3b_beta_abs_epe_arousal_s",
+      "kind": "scalar",
+      "description": "P3b conditional fixed-effect estimate for abs_epe_arousal_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional P3b REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3b_beta_p3b_base_offer_s",
+      "kind": "scalar",
+      "description": "P3b conditional fixed-effect estimate for P3b_base_offer_s; include nuisance/baseline terms and intercept alongside all three absolute PE terms. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled covariate; intercept in source-scaled ERP amplitude",
+      "aggregation": "One conditional P3b REML model over its own complete-case original cohort, retaining participant random effects; no pooling or equal-model averaging of coefficients.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3b_unconditional_beta_abs_rpe_s",
+      "kind": "scalar",
+      "description": "Source PE-specific unconditional P3b companion coefficient for abs_rpe_s, retaining the source P2/baseline covariates and its own participant random-effects structure; do not replace the joint conditional result with this estimate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled absolute prediction error",
+      "aggregation": "One source unconditional model, on its own model-specific complete cases; no favorable-PE or model selection.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3b_unconditional_beta_abs_epe_valence_s",
+      "kind": "scalar",
+      "description": "Source PE-specific unconditional P3b companion coefficient for abs_epe_valence_s, retaining the source P2/baseline covariates and its own participant random-effects structure; do not replace the joint conditional result with this estimate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled ERP amplitude per source-scaled absolute prediction error",
+      "aggregation": "One source unconditional model, on its own model-specific complete cases; no favorable-PE or model selection.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3b_contrast_difference",
+      "kind": "scalar",
+      "description": "Conditional P3b valence-PE coefficient minus reward-PE coefficient.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled P3b coefficient difference",
+      "aggregation": "One conditional P3b fit with all fixed-effect covariance entries and unchanged source participant dependence.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "choice_beta_intercept",
+      "kind": "scalar",
+      "description": "Source Table 2/fig2b_model binomial-logit fixed effect (Intercept); include all ERP, round and interaction companions, not only a significant P3b term. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "log odds per declared source-scaled ERP/round predictor (intercept in log odds)",
+      "aggregation": "One source binomial mixed model with (1 + P3a_offer_s | sub), model-specific complete cases, and complete original repeated-game cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "choice_beta_p3b_offer_s",
+      "kind": "scalar",
+      "description": "Source Table 2/fig2b_model binomial-logit fixed effect P3b_offer_s; include all ERP, round and interaction companions, not only a significant P3b term.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "log odds per declared source-scaled ERP/round predictor (intercept in log odds)",
+      "aggregation": "One source binomial mixed model with (1 + P3a_offer_s | sub), model-specific complete cases, and complete original repeated-game cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "choice_beta_triallocal",
+      "kind": "scalar",
+      "description": "Source Table 2/fig2b_model binomial-logit fixed effect trialLocal; include all ERP, round and interaction companions, not only a significant P3b term. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "log odds per declared source-scaled ERP/round predictor (intercept in log odds)",
+      "aggregation": "One source binomial mixed model with (1 + P3a_offer_s | sub), model-specific complete cases, and complete original repeated-game cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "choice_beta_p3a_offer_s",
+      "kind": "scalar",
+      "description": "Source Table 2/fig2b_model binomial-logit fixed effect P3a_offer_s; include all ERP, round and interaction companions, not only a significant P3b term.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "log odds per declared source-scaled ERP/round predictor (intercept in log odds)",
+      "aggregation": "One source binomial mixed model with (1 + P3a_offer_s | sub), model-specific complete cases, and complete original repeated-game cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "choice_beta_frn_n2_offer_s",
+      "kind": "scalar",
+      "description": "Source Table 2/fig2b_model binomial-logit fixed effect FRN_N2_offer_s; include all ERP, round and interaction companions, not only a significant P3b term.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "log odds per declared source-scaled ERP/round predictor (intercept in log odds)",
+      "aggregation": "One source binomial mixed model with (1 + P3a_offer_s | sub), model-specific complete cases, and complete original repeated-game cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "choice_beta_p2_offer_s",
+      "kind": "scalar",
+      "description": "Source Table 2/fig2b_model binomial-logit fixed effect P2_offer_s; include all ERP, round and interaction companions, not only a significant P3b term. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "log odds per declared source-scaled ERP/round predictor (intercept in log odds)",
+      "aggregation": "One source binomial mixed model with (1 + P3a_offer_s | sub), model-specific complete cases, and complete original repeated-game cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "choice_beta_p3b_offer_s_triallocal",
+      "kind": "scalar",
+      "description": "Source Table 2/fig2b_model binomial-logit fixed effect P3b_offer_s:trialLocal; include all ERP, round and interaction companions, not only a significant P3b term. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "log odds per declared source-scaled ERP/round predictor (intercept in log odds)",
+      "aggregation": "One source binomial mixed model with (1 + P3a_offer_s | sub), model-specific complete cases, and complete original repeated-game cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "choice_beta_p3a_offer_s_triallocal",
+      "kind": "scalar",
+      "description": "Source Table 2/fig2b_model binomial-logit fixed effect P3a_offer_s:trialLocal; include all ERP, round and interaction companions, not only a significant P3b term. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "log odds per declared source-scaled ERP/round predictor (intercept in log odds)",
+      "aggregation": "One source binomial mixed model with (1 + P3a_offer_s | sub), model-specific complete cases, and complete original repeated-game cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "choice_beta_frn_n2_offer_s_triallocal",
+      "kind": "scalar",
+      "description": "Source Table 2/fig2b_model binomial-logit fixed effect FRN_N2_offer_s:trialLocal; include all ERP, round and interaction companions, not only a significant P3b term. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "log odds per declared source-scaled ERP/round predictor (intercept in log odds)",
+      "aggregation": "One source binomial mixed model with (1 + P3a_offer_s | sub), model-specific complete cases, and complete original repeated-game cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "choice_beta_p2_offer_s_triallocal",
+      "kind": "scalar",
+      "description": "Source Table 2/fig2b_model binomial-logit fixed effect P2_offer_s:trialLocal; include all ERP, round and interaction companions, not only a significant P3b term. This is an original reported-model parameter companion, not an additional independent biological discovery.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "log odds per declared source-scaled ERP/round predictor (intercept in log odds)",
+      "aggregation": "One source binomial mixed model with (1 + P3a_offer_s | sub), model-specific complete cases, and complete original repeated-game cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve source model-specific coefficient uncertainty and participant dependence; the reproduction acceptance rule, source contrast-tail policy and equivalence criterion have not been independently justified.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    },
+    {
+      "id": "p3b_unconditional_contrast_difference",
+      "kind": "scalar",
+      "description": "Original unconditional P3b reward-PE coefficient from fig3c_model1 minus valence-PE coefficient from fig3c_model2. Preserve the source reward-minus-valence direction, which is opposite the conditional comparison. The paper reports a comparison of these two effects; a failure to reject their difference is not an equivalence finding.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source-scaled P3b coefficient difference",
+      "aggregation": "Difference of two separately fitted source unconditional P3b coefficients, each using its own complete cases and participant random effects. Do not assume independence for estimates from the same cohort.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No accepted scientific reproduction band for this estimand has been recovered. Historical numerical-reference tolerances, printed precision or stronger significance cannot supply a scientific criterion.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Preserve both original models and their uncertainty outputs plus literal source independent-SE contrast arithmetic. Cross-model dependence and a scientific acceptance rule remain unresolved; a single conditional covariance matrix cannot supply covariance between these separate fits.",
+        "independent_unit": "Participant; 41 people with repeated trials and partner interactions, not 6,403 independent people.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A deterministic rerun of the same cohort is not independent replication; nonsignificance or interval overlap cannot establish reproduction.",
+        "evidence_ids": [
+          "paper",
+          "code"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Four published conditional beta values and reported SE/CIs are authenticated documentary targets from the cached primary paper; the remaining 32 effect magnitudes and complete companion/choice targets remain unresolved. Historical private references and solver answers were not accessed; copied paper values cannot establish executed analysis.",
+    "No scientific tolerance or independent reproduction uncertainty/decision rule is justified for the full panel. The source one-tail independent-SE P3b comparison differs from the preserved covariance-aware two-sided diagnostic; source reproduction and inferential correction must be reported separately.",
+    "The public processed-inputs-v1/prepare.py command is runnable preparation only: it emits three conditional model CSVs and receipts, never fitted parameters, covariance, likelihood, random effects, predictions or source-derived findings. Authentic eight-table preparation remains unrun.",
+    "The historical registered-runtime/score.py facade requires absent authoring dependencies and accepts aggregate summaries; it is neither a portable submitted-analysis interface nor proof of computation from data. Historical runner/qualification declarations do not establish a current authenticated execution route.",
+    "No complete runnable submitted-analysis interface or independently pinned verification program exists for conditional, unconditional and choice models. Required granular outputs are original source-row masks/design matrices, model-specific fitted values/residuals, random/fixed effects, covariance, convergence/likelihood evidence and both explicitly labeled P3b contrast calculations. A program printing tables is insufficient.",
+    "ERP/behavior linkage remains the author positional assumption; behavior trial keys and file hashes do not independently establish ERP trial correspondence. Continuous-EEG-to-ERP extraction is outside the registered processed-data component and remains unresolved.",
+    "The complete companion panel and source choice coding/round-1 and round-5 reparameterization outputs require further exact-source closure; the current minimum required panel does not certify whole-paper coverage.",
+    "No fresh authenticated common-input, author-code-only addition, ordered full-panel, permitted-observation, exposure/evaluator or cumulative-budget manifests exist for the two information conditions. Both pairing protocols remain null; no AI result or historical promotion is admitted.",
+    "Covariance matrices and contrast z/probability outputs are required granular uncertainty/diagnostic evidence, not additional original scientific findings. The full verifier design is documented externally; no runnable independent verifier or scientific band has been implemented.",
+    "Publication hold: the integration owner must correct current canonical improvement-only wording, supply the final integrated current-task commit/raw hash and repin outcomes.original_task_sha256. The present raw hash is real current group-cutoff metadata, not a final publication pin.",
+    "Existing primary code cache confirms eight unconditional PE models, not nine: P3b has reward-only and valence-only models, with no arousal-only fit. Both original conditional and unconditional P3b effect comparisons are required, using their different source subtraction directions. Source z/probability statistics remain verification evidence; nonrejection is not evidence of equivalence."
+  ]
+}

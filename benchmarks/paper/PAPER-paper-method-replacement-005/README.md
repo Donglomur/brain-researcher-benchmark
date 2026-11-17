@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: The current 42 Table 1/Table 10 means and SEMs are genuine partial evidence within the SAME empirical primary result family, not an unrelated secondary task. Preserve them and their useful implementations. They do not by themselves establish the omitted same-architecture training contrast or multi-session/single-session transfer comparison. Reviewed source limits: Exact required comparative panel membership, source counterpart mapping, Figure 2 values and session-level outputs remain to be frozen; the retained specification does not license invented all-figure coverage. The original comparison uses different multi-session and single-session model sizes. Preserve the source configurations and limitation; a new equal-size/equal-compute causal experiment is a separately labeled extension. Original recording versions, eligible units/trials, session/probe/animal joins, trial partitions and paper/code preprocessing equivalence remain unqualified, including the firing-rate threshold discrepancy. Authentic native author replay, independent submitted-output verification and a predeclared joint neural/behavioral improvement rule remain unavailable. Published means and SEMs do not supply reproduction tolerances or superiority margins. No explicit authorized revision narrowing the retained comparative primary to absolute Table 1/Table 10 scores was established in the inspected handoff/review/gate evidence. Such a deliberate replacement would require a scope decision. Same-primary full-bundle admission remains unavailable until the comparative scope and scientific qualification gaps are resolved; existing source summaries remain useful partial evidence.
+
+**Primary scientific scope:** The retained empirical IBL joint encoding/decoding comparative result: source Figure 2A multitask versus same-architecture unimodal training and source Figure 2B multi-session versus single-session performance, together with the already retained Table 1/Table 10 outcomes and original masks, cohorts, partitions and necessary controls. This does not add brain-region classification, monkey data or every separate masking ablation, and does not claim pretraining is causally isolated at fixed model capacity.
+
+**Retained secondary policy:** The current 42 Table 1/Table 10 means and SEMs are genuine partial evidence within the SAME empirical primary result family, not an unrelated secondary task. Preserve them and their useful implementations. They do not by themselves establish the omitted same-architecture training contrast or multi-session/single-session transfer comparison.
+
+- [Reproduction proposal (inspection only)](reproduction.v1.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** design\_ready. The final ICML paper reports ordered encoding/decoding endpoints, numerical multi-session NEDS baselines and the original held-out-animal design. An executable same-task comparison is blocked by unresolved original data/trial provenance, paper/code preprocessing discrepancies and native baseline qualification. The local ridge reference is not the paper model.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 27973 bytes; SHA-256 `8a64d139b88eec2d7d2d7ae98f32f1a0cdb53d7a000cffc6366c68ac5735c7e0`.
+- Specification identity: 34695 bytes; SHA-256 `4cdb445b2d6c862335ad540ab2f5d82598192e53865241cbec6c3c7b941ef895`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

@@ -1,0 +1,203 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-SMC-RNN-2024",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original offline endpoint and both source author recipes are specified, but author score linkage, strongest qualified comparator, actual participant materials/learning condition, effect/uncertainty policy and offline execution/admission interface remain unresolved. This additive successor corrects universalized author receptive-field restrictions; it grants no execution or qualification.",
+  "source_paper": {
+    "title": "Inferring stochastic low-rank recurrent neural networks from neural data",
+    "url": "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf",
+      "locator": "Supplement B.5, Table2; D.7",
+      "supports": "Complete MC_Maze20ms causal/noncausal SMC-RNN results; selected models and192-particle,32-repeat inference."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/smc_rnns/tree/c808c76ad940491b0a14d2671e3884140aa61258",
+      "locator": "evaluation/eval_nlb.py; vi_rnn/vae.py; selected36D model configurations and checkpoints",
+      "supports": "Source-native prediction and selected36D configurations; both arms use filtered output smooth=False."
+    },
+    {
+      "id": "nlb-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/abs/2109.04463",
+      "locator": "Neural Latents Benchmark, Table4 and evaluation definitions",
+      "supports": "Original MC_Maze cohort, split and observation access;137held-in/45held-out units,2295provided training/validation and574test trials,108conditions."
+    },
+    {
+      "id": "archive",
+      "kind": "author_data",
+      "url": "https://doi.org/10.48324/dandi.000128/0.220113.0400",
+      "locator": "Both full Jenkins NWB assets; data_manifest.json content hashes",
+      "supports": "Complete official source input archive, immutable asset identities, CC-BY-4.0 attribution."
+    },
+    {
+      "id": "scorer",
+      "kind": "author_code",
+      "url": "https://github.com/neurallatents/nlb_tools/blob/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/evaluation.py",
+      "locator": "evaluate, bits_per_spike, eval_psth, fit_and_eval_decoder",
+      "supports": "Original evaluator byte-identical to nlb-tools0.0.3. Target release publicly exposed January2026; exact target LFS digest recorded."
+    },
+    {
+      "id": "nlb-original-rules",
+      "kind": "paper",
+      "url": "https://datasets-benchmarks-proceedings.neurips.cc/paper_files/paper/2021/file/979d472a84804b9f647bc185a877a8b5-Paper-round2.pdf",
+      "locator": "Sections 3.1–3.3, printed pages 6–7; original task information access, behavior-guided learning, co-smoothing and unseen future prediction",
+      "supports": "Original NLB permits supplied behavioral data to guide representation learning and supplies the held-in observation window at test without an author-encoder prefix restriction. Its 5-ms numerical baselines are not the SMC paper 20-ms references."
+    },
+    {
+      "id": "nlb-tensors",
+      "kind": "author_code",
+      "url": "https://github.com/neurallatents/nlb_tools/blob/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/make_tensors.py",
+      "locator": "MC_Maze align_range=(-250,450), fp_len=200; make_eval_input_tensors and make_train_input_tensors(include_behavior=True)",
+      "supports": "The 20-ms source task supplies 35 held-in observation bins and protects ten future bins. Tensor presence does not itself grant new participant fields or settle adaptation policy."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict held-out neural activity and unseen future activity on the complete original offline MC_Maze 20-ms NLB test panel. Preserve both Table 2 SMC-RNN source-method result rows for reproduction and author calibration; one primary offline candidate prediction set need not reproduce two source-specific temporal restrictions.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "DANDI000128/0.220113.0400 provides both complete authentic NWBs and matches the original NLB cohort. The2024paper did not pin a DANDI revision; historical score/checkpoint-to-version calibration remains required.",
+      "evidence_ids": [
+        "archive",
+        "nlb-paper"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Jenkins MC_Maze recording;182neurons (137held-in,45held-out),2295training/validation and574test trials,108source task conditions. Preserve all original rows;108does not mean108nonempty scored PSTHs.",
+      "evidence_ids": [
+        "paper",
+        "nlb-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Use original NWB train/val/test labels and order. Validation training tensors use train; final test decoder training tensors use train+val. No random split or straight-reach subset.",
+      "evidence_ids": [
+        "code",
+        "archive"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original NLB permits all 35 supplied same-trial held-in observation bins for co-smoothing and for predicting the ten unseen future bins. Test held-out spikes, future spikes and test behavior remain evaluator-only locally; original test targets have been public since January 2026. Original supplied training/validation spikes and behavior may guide fitting or selection, but the actual delivered fields, validation feedback, adaptation policy and budgets must be frozen before execution; this declaration grants no additional fields, trials or test-wide adaptation. Disclose behavioral guidance and distinguish it from matched neural-only learning. Author prefix bounds 0..max(t,13) and 0..min(t+17,34) are method-specific or separately named matched-access conditions, not primary offline candidate restrictions.",
+      "evidence_ids": [
+        "code",
+        "nlb-paper",
+        "scorer",
+        "nlb-original-rules",
+        "nlb-tensors"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Original NLB1ms timestamps then20ms resampling;35observation and10forward bins. All original fields retained before native NaN-based row support. Memory-only complete-column scheduling preserves source timebounds, representative masks, Gaussian smoothing and trial/condition aggregation.",
+      "evidence_ids": [
+        "code",
+        "scorer"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original co-smoothing Poisson log-likelihood improvement over per-neuron mean on evaluated counts, divided by total spikes and ln2; higher is better. Required companions: velocityR2,PSTHR2,forwardbps.",
+      "evidence_ids": [
+        "paper",
+        "scorer"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Use the original scorer over the complete test panel with its original support and reductions, never a selected-trial/condition mean. Preserve both source rows and every companion metric separately for reproduction/calibration. Assess one full-panel primary offline candidate against the strongest qualified relevant source comparator selected before candidate results; do not average source arms or choose the weaker reference after seeing candidate output. The frozen comparison policy must record both published and qualified reproduced anchors; a lower reproduced point cannot silently replace a higher published result for a claim of surpassing the paper.",
+      "evidence_ids": [
+        "paper",
+        "scorer"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original complete-panel offline co-bps against the strongest qualified relevant SMC-RNN source comparator, selected before candidate results",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "description": "Retain the complete published 20-ms source vector: causal co-bps 0.3225, noncausal 0.3407; companions (velocity R2, PSTH R2, forward bps) causal (0.8479,0.5927,0.2184) and noncausal (0.8902,0.5963,0.2417). The noncausal row is the stronger published SMC-RNN co-bps reference, but strongest qualified relevant comparator selection and printed-score linkage must be frozen before candidate results. No source-arm average or original NLB 5-ms baseline substitutes.",
+      "evidence_ids": [
+        "paper"
+      ],
+      "value": null
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "description": "Both selected36D checkpoints load with exact key/shape compatibility. Full192×32original-panel predictions and numerical printed-score calibration have not been established.",
+      "evidence_ids": [
+        "code"
+      ],
+      "value": null
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "No candidate campaign or effect threshold has been admitted. The diagnostic0.01calibration tolerance is not an improvement margin.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Freeze a paired comparison and companion non-regression rule accounting for finite test trials, shared neurons and stochastic source/candidate inference before any candidate final score.",
+      "independent_unit": "Original recording/trials with dependent neurons and conditions;32particle repetitions are Monte Carlo inference repetitions, not32independent biological subjects.",
+      "rationale": "Published point scores do not supply an independent replicate variance. No confirmatory superiority test has been qualified.",
+      "evidence_ids": []
+    },
+    "paper_win_requires": [
+      "Preserve both original filtered-output author recipes and all eight Table 2 source findings as separate reproduction/calibration obligations; neither an operator author run nor a copied table is an AI reproduction.",
+      "Qualify both released author checkpoints on the complete original 20-ms panel with 192 particles and 32 repeats; preserve all source recipe evidence and printed-score/data-version linkage limits.",
+      "Before candidate results, freeze the strongest qualified relevant source comparator, baseline values/identities and selection rule. Record how both published and qualified reproduced values constrain a paper-win claim: a lower reproduced point cannot silently replace a higher published result. Beating only the weaker arm does not establish superiority over the best relevant paper result; agreement, effect and uncertainty rules remain independently unresolved.",
+      "Freeze one primary offline candidate prediction set, code, selection/exposure history, authentic panel identities, actual allowed fields/feedback, adaptation policy and equal paired participant budgets before final target access. Separate source-matched or strict-online claims require their own qualified observation/state boundary and comparator.",
+      "Exceed the preselected source comparator on original complete-panel co-bps under a prospectively justified effect and uncertainty rule; preserve and evaluate every companion metric under prospectively fixed non-regression criteria.",
+      "Report whether supplied behavior guided candidate fitting or selection. Original-NLB behavior-assisted performance cannot alone establish matched neural-only training-information superiority; no new fields or trials are authorized by the source permission.",
+      "Disclose public original-target exposure. Offline full-window results cannot establish causal or strict-online improvement; the source causal reflect-padding startup is not strictly online.",
+      "Reproduction, source software controls, faster inference alone and exceeding only a weak local comparator do not establish improvement. Smoothing is source-suggested prior art, not automatically novel or authorized for a new run."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "The paper already reports stronger LFADSco-bps0.3554 and NDT0.3597. Exceeding SMC-RNN does not establish superiority to these or current SOTA.",
+      "evidence_ids": [
+        "paper"
+      ]
+    }
+  },
+  "episode": {
+    "improvement_loop": "Develop candidates using declared permitted training/validation access. Paper+data and paper+data+official-code exports share all complete admitted inputs, paper, task interface and metadata; official code is the only information difference. No new solver run is authorized in this engineering wave.",
+    "candidate_freeze": "Freeze method, selection/exposure history, actual delivered training/validation fields and feedback, behavioral guidance, adaptation policy, original full-panel prediction hashes, strongest qualified comparator and equal paired budgets before scoring. Bind the primary offline 35-bin access policy; do not reuse an author-arm label as execution evidence.",
+    "final_evaluation": "An independent operator verifies the frozen primary offline candidate prediction set and canonical exposed-target digest, then executes the original 20-ms NLB scorer for co-bps and all companions against the preselected qualified comparator. Separate author calibration/reproduction continues to report both source arms with their original filtered-output recipes.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Author calibration retains its separately authorized frozen native protocol and cumulative budget. This definition grants no candidate or additional author run. Participant budgets and the strongest qualified relevant comparator must freeze prospectively; old paired materials and source-arm scorer receipts do not admit the new primary offline episode."
+  },
+  "blocking_issues": [
+    "No complete author 192×32 source-score linkage or strongest qualified relevant comparator is established by this definition proposal.",
+    "No justified improvement effect, uncertainty or companion non-regression policy is frozen.",
+    "Actual delivered training/validation fields, behavior-guided fitting/selection, validation feedback, adaptation policy and equal participant budgets remain unqualified; original permission does not itself add materials or authorize a trial.",
+    "The existing source-matched-nlb-v1 exporter and candidate scorer label outputs causal/noncausal and encode the superseded primary restrictions. A separately reviewed offline participant interface and primary successor binding are required; historical materials/receipts cannot be relabeled.",
+    "Original targets are publicly exposed; local isolation cannot create an untouched holdout.",
+    "Source-matched and strict-online comparisons are separate optional claims requiring an enforced observation/state/latency boundary and appropriate comparator; neither is established by a primary offline result.",
+    "Paired metadata, source software controls and author calibration do not establish participant performance or either scientific outcome."
+  ],
+  "legacy": {
+    "role": "no_predecessor",
+    "original_task": null,
+    "notes": "Initial SMC task identity has no pre-improvement registration. This additive temporal-scope successor retains improvement.v1.json byte-identically as the initial contract; the explicit primary-outcome binding and preserved task predecessor record this revision."
+  }
+}

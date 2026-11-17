@@ -10,9 +10,30 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Preserve the previously reviewed original Figure 5 binary, novel-independent and activity-aligned memory-retrieval simulations, symmetric/nonsymmetric/echo-state comparisons, fixed-lag/time-independent conditions, complete required curves and source companions as a separate legitimate simulation result. It may support its own source-qualified result-level reproduction or comparison, but cannot discharge empirical neural-scaling reproduction or improvement. Original model comparisons necessary to interpret the chosen empirical claim remain indispensable companions. Newly authored memory-AUC/grid and chronological five-frame forecasting remain prospective extensions. Reviewed source limits: Exact empirical spectrum/dynamics subpanels, recording/cohort identities, reused-versus-new acquisition joins, neuron/time support, preprocessing, covariance estimators, model comparisons, reductions and uncertainty remain unfrozen. Inventory totals or positional source arrays do not establish an admitted claim-specific population. Preserve direct, SVCA/SVCA2, source sampling and shuffle companions where necessary for the selected empirical claim. Matching a spectrum or improving power-law fit does not uniquely identify biological criticality. Historical held-out recording/animal predictive proposals are new evaluations rather than recovered original superiority endpoints. The prior Figure 5 source-native recovery was legitimate and scientifically reviewed, but no explicit authority replacing this task's real-data primary was established in the bounded records. Preserve that review, exact prior definitions, improvement contract and source programme. A proposal to make simulation the replacement primary needs an explicit new scientific scope decision. Figure 5 retains independent source gaps: notebook-generated acc\_\*.npz versus plotted acc\_\*2.npz, conflicting aligned-input counts, echo-state gain, decoder class, fold membership and cumulative time-mixing descriptions. Original curves, realization identities, source-compatible criteria and comparison rules are not authenticated; do not select favorable variants. The scalar/categorical schema cannot represent complete native curves. Reader/proposal correctness is engineering/source evidence, not native reproduction. Source/runtime qualification, independent submitted-analysis execution/verifier, numerical references and paired input/exposure/budget manifests remain unresolved. Keep the mixed empirical-primary and Figure-5-simulation-improvement bundle unavailable where their relationship cannot be represented faithfully. All scientific outcomes remain unknown; no thresholds, new task IDs, access, readiness or SOTA claim follows from this hierarchy correction.
+
+**Primary scientific scope:** The expressly retained real-mouse empirical covariance-spectrum, dimensionality and timescale claim family. A complete original Figure 2/3 claim and indispensable companions must be bound; exact subpanels, recording identities and numerical criteria remain unresolved. No automatic all-Figure-2/3, whole-paper or complete-programme requirement is inferred.
+
+**Retained secondary policy:** Preserve the previously reviewed original Figure 5 binary, novel-independent and activity-aligned memory-retrieval simulations, symmetric/nonsymmetric/echo-state comparisons, fixed-lag/time-independent conditions, complete required curves and source companions as a separate legitimate simulation result. It may support its own source-qualified result-level reproduction or comparison, but cannot discharge empirical neural-scaling reproduction or improvement. Original model comparisons necessary to interpret the chosen empirical claim remain indispensable companions. Newly authored memory-AUC/grid and chronological five-frame forecasting remain prospective extensions.
+
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The empirical spectrum/dynamics summaries have no performance ordering, but the existing complete-programme implementation also preserves original Figure 5 memory accuracy tasks. Those are a defensible original-task recovery route. Numeric source curves, invocation/delay grid and paper-code correspondence are unresolved; the authored prospective AUC memory task and five-frame forecasting task are not equivalent substitutes.
 
@@ -24,7 +45,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 33953 bytes; SHA-256 `d90b528e9bb3ccf543184c75801da2f29cf4559938be9eee974fa3738e924a6b`.
+- Specification identity: 44157 bytes; SHA-256 `ba1c73401ff99526ee9c103da7360bb4c0488b0158988308e7cf708268c1cf4d`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "Estimating Dimensionality of Neural Representations from Finite Samples",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Estimate the participation ratio gamma=(tr K)^2/tr(K^2) of the specified neural representation under finite stimulus and neuron sampling, including the source two-repeat noise correction. Preserve the original estimator regimes and biological panels; reproducing A, B or gamma numerically is calibration.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Estimate the participation ratio gamma=(tr K)^2/tr(K^2) of the specified neural representation under finite stimulus and neuron sampling, including the source two-repeat noise correction. Preserve the original estimator regimes and biological panels; reproducing A, B or gamma numerically is calibration.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Estimate the participation ratio gamma=(tr K)^2/tr(K^2) of the specified neural representation under finite stimulus and neuron sampling, including the source two-repeat noise correction. Preserve the original estimator regimes and biological panels; reproducing A, B or gamma numerically is calibration.",
-    "Source-paper comparison for Source-matched finite-sample participation-ratio estimation loss; exact numeric final-paper reduction unresolved: Source simulations assess proximity to known PR (Figure 1: d=50, additive-noise variance 0.2; P sweep at Q=100 and Q sweep at P=200). Biological Figure 2 assesses convergence to full-data estimates, explicitly not known biological truth. A source-matched numeric estimator-loss criterion and baseline have not been recovered; local reference-output relative RMSE is not that criterion."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover final-paper source baseline and exact P/Q/noise grids; compare candidate and author estimator with identical observed matrices and preprocessing.",
-    "Demonstrate a predeclared meaningful improvement in original estimator accuracy with valid uncertainty; agreement with the local author-formula outputs is only reproduction.",
-    "Retain all originally claimed biological branches and required controls. A single Stringer session or selected P/Q point cannot establish the full-paper claim.",
-    "Do not treat full-data biological PR as known truth, or a constant/biased estimator as superior because it is less sample-sensitive.",
-    "New noise families, new datasets or newly selected splits must be labeled extensions and cannot substitute for the original comparison.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v2.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-001",
   "canonical_position_one_based": 10,
@@ -1203,62 +1203,69 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-001/improvement.v1.json",
-      "bytes": 12414,
-      "sha256": "73ebb6bbf1d41ef352db1eceb524065d35dcf89b989239a67d43cec0a7a1b33a"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v2.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-001/historical/task.pre-improvement.v1.json",
-        "bytes": 60877,
-        "sha256": "87a7df3ee70d12071460d74e1f1f5c9e6f0b68d28147a4cabf2d879e4ab86705"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-paper-paper-method-001",
-        "benchmarks-scientific_contracts-dimensionality"
-      ],
-      "runtime_manifest": {
-        "path": "benchmarks/paper/PAPER-paper-method-001/implementations/registered-runtime/manifest.json",
-        "bytes": 6790,
-        "sha256": "8fc6aaf650ee1fb8ca1f54446ca69d8014e30d9208e33370fe70a56200b11a22"
-      }
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Inactive pending source resolution. Once admitted, allow estimator development and diagnostics on the declared original development regimes, with paired author/candidate feedback; source curves remain exposed historical evidence.",
-    "candidate_freeze": "Seal estimator code, numerical precision, all preprocessing, tuning choices, failure policy and source-compatible evaluation plan before evaluator-only target calculations or final assessment.",
-    "final_evaluation": "Evaluate the frozen candidate and recovered author estimator on the complete original claim-specific grid and cohorts; report known-truth estimation error separately from empirical convergence diagnostics and reconstruction checks.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Author final-paper baseline and native-route replay must be recorded separately from existing authored reconstruction references. Retain legacy grader and full BUILD_ONLY programme as calibration/design assets; neither confers improvement readiness."
+    "improvement": {
+      "improvement_loop": "Inactive pending source resolution. Once admitted, allow estimator development and diagnostics on the declared original development regimes, with paired author/candidate feedback; source curves remain exposed historical evidence.",
+      "candidate_freeze": "Seal estimator code, numerical precision, all preprocessing, tuning choices, failure policy and source-compatible evaluation plan before evaluator-only target calculations or final assessment.",
+      "final_evaluation": "Evaluate the frozen candidate and recovered author estimator on the complete original claim-specific grid and cohorts; report known-truth estimation error separately from empirical convergence diagnostics and reconstruction checks.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Author final-paper baseline and native-route replay must be recorded separately from existing authored reconstruction references. Retain legacy grader and full BUILD_ONLY programme as calibration/design assets; neither confers improvement readiness."
+    },
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "No recovered numeric final-paper estimation-loss baseline and exact scalar reduction.",
-    "Final Figure 2 panel/session identity and full source-data/version correspondence unresolved.",
-    "Final 50-draw Stringer recipe differs from pinned 100-draw legacy notebook; native projector/backend parity unresolved.",
-    "Complete empirical and original synthetic comparison is not qualified; existing one-session grader cannot stand in for it.",
-    "Meaningful effect, valid uncertainty, protected evaluation, concrete access/resource budgets and working same-task comparison admission remain open."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "No recovered numeric final-paper estimation-loss baseline and exact scalar reduction.",
       "Final Figure 2 panel/session identity and full source-data/version correspondence unresolved.",
       "Final 50-draw Stringer recipe differs from pinned 100-draw legacy notebook; native projector/backend parity unresolved.",
       "Complete empirical and original synthetic comparison is not qualified; existing one-session grader cannot stand in for it.",
       "Meaningful effect, valid uncertainty, protected evaluation, concrete access/resource budgets and working same-task comparison admission remain open."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "No recovered numeric final-paper estimation-loss baseline and exact scalar reduction.",
+        "Final Figure 2 panel/session identity and full source-data/version correspondence unresolved.",
+        "Final 50-draw Stringer recipe differs from pinned 100-draw legacy notebook; native projector/backend parity unresolved.",
+        "Complete empirical and original synthetic comparison is not qualified; existing one-session grader cannot stand in for it.",
+        "Meaningful effect, valid uncertainty, protected evaluation, concrete access/resource budgets and working same-task comparison admission remain open."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v2.json.",
+    "reproduction_contract": "reproduction.v2.json"
   },
   "next_implementation_action": {
-    "action": "The paper supplies an estimator-comparison problem, but the final-paper numeric risk baseline, complete source panel correspondence and original resampling recipe are not recovered. The existing one-session relative-RMSE grader measures reconstruction of authored reference outputs, not estimator improvement. Biological full-data participation ratio is itself an estimate; increased dimensionality or reduced variation alone cannot establish improved accuracy. No recovered numeric final-paper estimation-loss baseline and exact scalar reduction. Final Figure 2 panel/session identity and full source-data/version correspondence unresolved. Final 50-draw Stringer recipe differs from pinned 100-draw legacy notebook; native projector/backend parity unresolved. Complete empirical and original synthetic comparison is not qualified; existing one-session grader cannot stand in for it. Meaningful effect, valid uncertainty, protected evaluation, concrete access/resource budgets and working same-task comparison admission remain open.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The paper supplies an estimator-comparison problem, but the final-paper numeric risk baseline, complete source panel correspondence and original resampling recipe are not recovered. The existing one-session relative-RMSE grader measures reconstruction of authored reference outputs, not estimator improvement. Biological full-data participation ratio is itself an estimate; increased dimensionality or reduced variation alone cannot establish improved accuracy. No recovered numeric final-paper estimation-loss baseline and exact scalar reduction. Final Figure 2 panel/session identity and full source-data/version correspondence unresolved. Final 50-draw Stringer recipe differs from pinned 100-draw legacy notebook; native projector/backend parity unresolved. Complete empirical and original synthetic comparison is not qualified; existing one-session grader cannot stand in for it. Meaningful effect, valid uncertainty, protected evaluation, concrete access/resource budgets and working same-task comparison admission remain open.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v2.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -1273,8 +1280,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

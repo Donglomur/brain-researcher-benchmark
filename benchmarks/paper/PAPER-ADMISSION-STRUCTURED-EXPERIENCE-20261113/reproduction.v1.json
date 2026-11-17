@@ -1,0 +1,247 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Partial source-unresolved representation of genuine original Figure 6f scientific summaries: shaping-gap direction and its published t/P statistics. Reproduction is independently meaningful even without a superiority rule. These three summaries do not cover the complete required 13-session by 3-source by 3-test error array and 13 session-gap values; those remain mandatory unrepresented outputs in full_panel and blockers. Complete authentic input/row identities, computational analysis and verification, numerical targets and justified agreement criteria are absent. No complete canonical coverage or eligible computational endpoint is claimed.",
+  "source_paper": {
+    "title": "Structured experience shapes strategy learning and neural dynamics in the medial entorhinal cortex",
+    "url": "https://www.nature.com/articles/s41593-026-02409-7"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02409-7",
+      "locator": "Figure 6f–i; Methods, RNN analysis / Time decoding",
+      "supports": "Ephys shaping cohorts, context-transfer result and ten-fold trial decoding; nearest-1-second statement belongs to the RNN methods."
+    },
+    {
+      "id": "producer",
+      "kind": "author_code",
+      "url": "https://github.com/heyslab/StructuredExperience_NatNeuro_2026/blob/8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/ms_figures/ephys_time_decoding/time_decoding_ephys.py",
+      "locator": "smoothed_spikes; main.test_model.train_slice",
+      "supports": "40-bin ephys features, original trial-order ten folds, LDA and source-context restriction."
+    },
+    {
+      "id": "consumer",
+      "kind": "author_code",
+      "url": "https://github.com/heyslab/StructuredExperience_NatNeuro_2026/blob/8c62c1cfe91644e3030a35d3ebb45e3bee94c3c8/ms_figures/ephys_time_decoding/test_ephys_decode.py",
+      "locator": "calc_error and mean_mse/error_list/x calculations; lines 205–245",
+      "supports": "0.5-second conversion, circular error, context-pair averaging, absolute across/within gap and session-level t test."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict elapsed time within the 20-second tDNMS trial from MEC spiking, training each decoder on LS, SL or SS trials and testing all three contexts. The Figure 6f biological gap is distinct from the underlying prediction error.",
+      "evidence_ids": [
+        "paper",
+        "producer",
+        "consumer"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author ephys sessions are identified in the source consumer, but the complete authenticated recording objects and trial/unit rosters have not been admitted. Cached time_decoding.h5 outputs cannot replace fresh inputs.",
+      "evidence_ids": [
+        "producer",
+        "consumer"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Figure 6f compares eight SL-only sessions from four mice with five LS+SL shaping sessions from four mice. Session-to-animal joins still require data authentication.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Original per-session split is np.array_split on the source ordered unique trial list into ten folds; training excludes each fold and source-context LDA predicts every test context. There is no original outer leave-one-mouse-out split.",
+      "evidence_ids": [
+        "producer"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Per-cluster spikes.h5 events with trial, trial_type, result and trial_time used to construct neural features. True bins and metadata define grouping, not predictor columns.",
+      "evidence_ids": [
+        "producer"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Source drops missing rows and literal None trial types, bins events into 40 bins over 0–20 s, applies a centered Gaussian rolling window of 16/std 4, normalizes each unit/trial by sample SD and fills absent feature values with zero. Exact native parity and zero-event trial support remain unverified.",
+      "evidence_ids": [
+        "producer"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Consumer converts bins to 0.5 s and calculates squared circular time error over period 20 s. Figure 6f uses the absolute difference between across-context and within-context mean error; that gap and its t/P value are not a loss to optimize.",
+      "evidence_ids": [
+        "consumer"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Source first averages rows within session and test context, excludes the all-context decoder, then averages the three within-context or six across-context pairs per session and takes their absolute gap. Sessions enter the original group t test; changing to equal-mouse aggregation is an extension.",
+      "evidence_ids": [
+        "consumer"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The registered Figure 6f scope requires the complete 13-session by 3-source-context by 3-test-context circular-error array (117 cells, including 39 within-context companion controls), the 13-element session absolute-gap vector, and the original shaping direction/t/P comparison. The array and gap vector remain mandatory but are NOT represented by the three summary findings below; neither a scalar reduction nor a categorical match replaces them. Authentic membership, numerical expected arrays and structured-output comparison are unresolved. Adjacent Figure 6g/h confusion-matrix selection and Figure 6i trial-outcome scope/producer joins require explicit adjudication before extending a claim to the complete context-transfer figure; no neighboring panel is silently substituted or declared covered.",
+      "evidence_ids": [
+        "paper",
+        "producer",
+        "consumer"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both information conditions must receive the same original paper, authentic complete ephys observations and source-permitted training/calibration labels, under the same original split. True time bins and context/result/trial identities define grouping rather than predictor features. Cached time_decoding.h5 results and operator expected-row artifacts are excluded from participant input. The author-code condition may add only a separately cleared pinned code view; common input, exposure and code manifests are not yet established.",
+      "evidence_ids": [
+        "paper",
+        "producer",
+        "consumer"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig6f_shaping_gap_direction",
+      "kind": "categorical",
+      "description": "The original Figure 6f cohort contrast has a larger mean absolute across/within decoding gap after SL-only shaping than after LS+SL shaping. Direction alone cannot satisfy the complete reproduction panel.",
+      "status": "verified",
+      "expected": "SL_only_greater_absolute_gap",
+      "units": "ordered_shaping_group_contrast",
+      "aggregation": "Compare the unweighted means of eight SL-only session absolute gaps and five LS+SL session absolute gaps; retain four mice per group and dependent repeated sessions in provenance.",
+      "evidence_ids": [
+        "paper",
+        "consumer"
+      ],
+      "categories": [
+        "SL_only_greater_absolute_gap",
+        "equal_absolute_gap",
+        "SL_only_smaller_absolute_gap"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "A direction is categorical, but a matching printed direction alone is not computational reproduction.",
+        "evidence_ids": [
+          "paper",
+          "consumer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No scientific agreement or uncertainty rule is admitted. Recompute source arithmetic on the original panel; do not infer independent-animal replication from dependent session rows or ten overlapping training folds.",
+        "independent_unit": "Mouse for biological inference; original Figure 6f arithmetic uses sessions, with repeated sessions within eight mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source session t test can be reconstructed but is not an independently calibrated animal-level equivalence or reproduction acceptance rule. No arbitrary sample minimum or significance cutoff is supplied.",
+        "evidence_ids": [
+          "paper",
+          "consumer"
+        ]
+      }
+    },
+    {
+      "id": "fig6f_published_t",
+      "kind": "scalar",
+      "description": "Published rounded Figure 6f two-sided independent two-sample t statistic for the shaping contrast; a reproduction anchor, not a decoder-performance baseline.",
+      "status": "verified",
+      "expected": 3.2,
+      "units": "dimensionless_t_statistic",
+      "aggregation": "SciPy pooled equal-variance ttest_ind on eight SL-only versus five LS+SL session absolute gaps, in that group order; source arithmetic has 11 degrees of freedom.",
+      "evidence_ids": [
+        "paper",
+        "consumer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No independently justified numerical agreement tolerance has been frozen for complete source-native outputs. Published rounding is retained as evidence, not silently converted into an acceptance margin.",
+        "evidence_ids": [
+          "paper",
+          "producer",
+          "consumer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No scientific agreement or uncertainty rule is admitted. Recompute source arithmetic on the original panel; do not infer independent-animal replication from dependent session rows or ten overlapping training folds.",
+        "independent_unit": "Mouse for biological inference; original Figure 6f arithmetic uses sessions, with repeated sessions within eight mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source session t test can be reconstructed but is not an independently calibrated animal-level equivalence or reproduction acceptance rule. No arbitrary sample minimum or significance cutoff is supplied.",
+        "evidence_ids": [
+          "paper",
+          "consumer"
+        ]
+      }
+    },
+    {
+      "id": "fig6f_published_p",
+      "kind": "scalar",
+      "description": "Published rounded Figure 6f two-sided shaping-comparison P value; matching this alone cannot establish a reconstructed analysis or a paper improvement.",
+      "status": "verified",
+      "expected": 0.00872,
+      "units": "probability",
+      "aggregation": "Two-sided P value paired with the original pooled session t statistic from all eight versus five session gaps; do not treat sessions as independent mice.",
+      "evidence_ids": [
+        "paper",
+        "consumer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No independently justified numerical agreement tolerance has been frozen for complete source-native outputs. Published rounding is retained as evidence, not silently converted into an acceptance margin.",
+        "evidence_ids": [
+          "paper",
+          "producer",
+          "consumer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No scientific agreement or uncertainty rule is admitted. Recompute source arithmetic on the original panel; do not infer independent-animal replication from dependent session rows or ten overlapping training folds.",
+        "independent_unit": "Mouse for biological inference; original Figure 6f arithmetic uses sessions, with repeated sessions within eight mice.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source session t test can be reconstructed but is not an independently calibrated animal-level equivalence or reproduction acceptance rule. No arbitrary sample minimum or significance cutoff is supplied.",
+        "evidence_ids": [
+          "paper",
+          "consumer"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "PARTIAL CANONICAL COVERAGE: the three source-supported scalar/categorical summaries do not represent the mandatory full 13x3x3 error array or 13 session gaps. The current scalar/categorical finding schema lacks the needed source-native structured-output contract; no invented reduction, cellwise placeholder expansion, complete-coverage claim or eligible admission_policy is supplied.",
+    "Complete authentic source recordings, all-unit/behavior trial census, source ordered indices and the 13-session/eight-mouse join have not been admitted; all-unit-zero-event trial handling remains unresolved.",
+    "The full original 13x3x3 numerical error array and 13 session-gap vector have no independently recovered expected values or justified array-level comparison. Published t=3.2, P=0.00872 and direction do not determine those arrays or establish computation.",
+    "No numerical tolerance or source-supported uncertainty/equivalence rule is frozen. Reconstructing the published session test is separate from valid independent-animal inference.",
+    "The reviewed original-row scorer verifies supplied row coverage, folds and reduction but does not execute or authenticate source preprocessing, LDA fitting, candidate predictor inputs or use of neural data. A runnable submitted-analysis interface and independent source-native verifier remain missing.",
+    "Immutable authentic data, full-panel, split, observation, analysis-interface and verification-program manifests are absent. No admission_policy or fake identity hashes are supplied.",
+    "Figure 6h reports six SL-only sessions from three mice whereas the pinned consumer includes eight SL-only sessions from four mice. The displayed-matrix selection is unjoined; Figure 6i trial-outcome mixed-model producer and complete trial panel are also unjoined. This contract cannot claim whole-figure reproduction while these adjacent-panel scope issues remain unresolved.",
+    "Paper RNN nearest-1-second wording and ephys 0.5-second code require method-scope adjudication for paper-only derivation. Exact file-scoped author-code rights and paired common-input/exposure/access/resource protocols remain unresolved.",
+    "Original source preprocessing/numerical LDA parity and all required source-native comparison outputs have not been exercised on authentic inputs. Generated controls and author-operator calibration cannot populate either AI condition."
+  ]
+}

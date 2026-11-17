@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Preserve regional cross-validated Poisson GLM D2 as genuine supporting empirical fit evidence from the original GLM route. Its ordered improvement can be reported within that named prediction result once qualified, but does not establish improved biological geometry or optimal coding. Preserve prospective animal/session holdouts, nonlinear readouts and finite-sample analyses separately; they are not substituted for the paper's original comparison. Reviewed source limits: Exact native animal/session/bin/unit identities, movement and rate masks, session anatomy and ZT2 mapping remain unauthenticated. Archive existence and source roster declarations do not qualify the input panel. Preserve source covariance and z-scoring conventions, raw versus fitted activity, participation-ratio and other geometric trajectories, readout/behavior pairings, and original quadratic and follow-up linear trend analyses. Six scalar summaries cannot replace this structured result. Preserve source GLM basis and regularization selection, ten-fold behavior, both regional D2 outputs and exact fold/unit/session/rat aggregation; native outputs, null-unit treatment and boundary conventions remain unresolved. Retain the paper/code CA1 subset discrepancy: paper Methods specifies 24 CA1 and 19 PFC units, whereas a retained code route uses 19 CA1 units. Original 500-observation subsets, 300 training observations and 500-subset averaging require authentic identities rather than a newly chosen recipe. The primary source reports CA1 behavioral/readout R2 as 0.48 in main text and 0.49 in the Figure 7 caption. Preserve this discrepancy and unresolved source references and numerical criteria. No justified primary superiority criterion is established. Higher D2, stronger correlations or smaller p-values alone do not improve the primary biological finding. Structured-output schema limitations do not justify replacing the finding with a scalar diagnostic. No explicit task-specific authority to replace the retained family with D2 alone was found in the bounded inspected records. A supplied reviewed named-result revision must be evaluated on its actual terms; actively choosing D2 as sole primary is a new scope decision. The mixed primary-geometry reproduction and D2-only improvement bundle remains unavailable if the schema cannot faithfully express the distinction. This does not invalidate the useful empirical D2 source components.
+
+**Primary scientific scope:** Empirical CA1/PFC learning-dependent coding geometry and navigation readout in the original rat panel, with raw versus GLM-expected activity, task-relevant dimensionality, source geometric trajectories, empirical/theoretical readout and behavioral comparisons, and indispensable source controls. Original GLM fitting supports this family; no whole-paper simulations, artificial networks or other biological datasets are added.
+
+**Retained secondary policy:** Preserve regional cross-validated Poisson GLM D2 as genuine supporting empirical fit evidence from the original GLM route. Its ordered improvement can be reported within that named prediction result once qualified, but does not establish improved biological geometry or optimal coding. Preserve prospective animal/session holdouts, nonlinear readouts and finite-sample analyses separately; they are not substituted for the paper's original comparison.
+
+- [Reproduction proposal (inspection only)](reproduction.v1.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** design\_ready. The source contains a genuine ordered rat spike-count prediction endpoint with published regional D2 values. Source anchors support design, but native folds, exact population aggregation, author reproduction, meaningful effect, uncertainty and a protected episode are incomplete; descriptive geometry changes cannot serve as success.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 28674 bytes; SHA-256 `7b3c1c24b18bd60d9a6d42786508d15d28a4139738cba4233c64c3c81ef0454f`.
+- Specification identity: 37856 bytes; SHA-256 `70af1c18ebe23ed3b5e73090e2228cc3843efc3cc3a02c3a9dc398930d4d8746`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

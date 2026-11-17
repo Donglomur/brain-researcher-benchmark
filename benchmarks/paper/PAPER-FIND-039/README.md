@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: The genuine empirical Figure 5i RF position-decoding result in its original young and aged session strata, with its source-defined companion analyses and controls. Improved position decoding alone cannot establish the primary spatial/context coding or remapping findings. Reviewed source limits: Complete primary panel identities, source numerical references and justified reproduction tolerances remain unrecovered. The historical alternative-threshold robustness phrase does not authenticate a complete sensitivity grid; exact alternatives, panel mappings and required outputs remain unresolved and must not be invented. The secondary decoder retains unresolved cohort/fold realization, full score vectors, qualified author replay, paper/notebook correlation correspondence, submitted-analysis interface and comparison criteria. No ordered same-result primary superiority estimand or decision rule is established. Larger age effects, stronger correlations, smaller p-values or higher secondary decoding accuracy are insufficient. A mixed primary-reproduction/secondary-improvement bundle remains unavailable if the schema requires an identical target. Official indexed primary text was inspected. Direct article access was limited; no complete local paper body was newly acquired or hashed, and the immutable Figure 5 notebook body was not independently re-retrieved in this adjudication.
+
+**Primary scientific scope:** The original empirical age-associated MEC spatial/context coding and remapping/context-alignment relationships with behavior, anchored to the Figure 2-3 result family with each result's actual age cohorts, task phases, shuffled cell typing and indispensable map/session construction and alignment controls. No every-figure or universal-cohort requirement is inferred.
+
+**Retained secondary policy:** The genuine empirical Figure 5i RF position-decoding result in its original young and aged session strata, with its source-defined companion analyses and controls. Improved position decoding alone cannot establish the primary spatial/context coding or remapping findings.
+
+- [Reproduction proposal (inspection only)](reproduction.v2.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The original paper contains an ordered Figure 5i RF position-decoding task with published young and aged score strata. This source-native route is retained for the authorized canonical overhaul, while the old Figure 2 stability contrasts remain calibration. Exact original session/cell and fold bindings, the complete source score vector, author replay and a qualified decoder evaluator are unresolved; no convenient scalar or new split replaces the source comparison.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 84011 bytes; SHA-256 `21332f060b004add7515a661300df57a5bc324dc25aec5ab586b076eebf6a816`.
+- Specification identity: 89977 bytes; SHA-256 `467ef1b7c3a2850df7845e4e5f6d04346f2417141059bab6bfc278ec06de746e`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

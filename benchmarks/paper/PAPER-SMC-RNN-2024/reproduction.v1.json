@@ -1,0 +1,517 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-SMC-RNN-2024",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Both original source-method result panels remain required, but historical checkpoint/data-version linkage, actual paired execution provenance and scientifically justified reproduction tolerances/uncertainty remain unresolved. The original task is offline NLB; author encoder bounds describe source-method reproduction or separately named matched comparisons, not a universal restriction on primary offline improvement. Author calibration is not an AI attempt.",
+  "source_paper": {
+    "title": "Inferring stochastic low-rank recurrent neural networks from neural data",
+    "url": "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf",
+      "locator": "Supplement B.5, Table2; D.7",
+      "supports": "Complete MC_Maze20ms causal/noncausal SMC-RNN results; selected models and192-particle,32-repeat inference."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/smc_rnns/tree/c808c76ad940491b0a14d2671e3884140aa61258",
+      "locator": "evaluation/eval_nlb.py; vi_rnn/vae.py; selected36D model configurations and checkpoints",
+      "supports": "Source-native prediction and selected36D configurations; both arms use filtered output smooth=False."
+    },
+    {
+      "id": "nlb-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/abs/2109.04463",
+      "locator": "Neural Latents Benchmark, Table4 and evaluation definitions",
+      "supports": "Original MC_Maze cohort, split and observation access;137held-in/45held-out units,2295provided training/validation and574test trials,108conditions."
+    },
+    {
+      "id": "archive",
+      "kind": "author_data",
+      "url": "https://doi.org/10.48324/dandi.000128/0.220113.0400",
+      "locator": "Both full Jenkins NWB assets; data_manifest.json content hashes",
+      "supports": "Complete official source input archive, immutable asset identities, CC-BY-4.0 attribution."
+    },
+    {
+      "id": "scorer",
+      "kind": "author_code",
+      "url": "https://github.com/neurallatents/nlb_tools/blob/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/evaluation.py",
+      "locator": "evaluate, bits_per_spike, eval_psth, fit_and_eval_decoder",
+      "supports": "Original evaluator byte-identical to nlb-tools0.0.3. Target release publicly exposed January2026; exact target LFS digest recorded."
+    },
+    {
+      "id": "nlb-original-rules",
+      "kind": "paper",
+      "url": "https://datasets-benchmarks-proceedings.neurips.cc/paper_files/paper/2021/file/979d472a84804b9f647bc185a877a8b5-Paper-round2.pdf",
+      "locator": "Sections 3.1–3.3, printed pages 6–7; original task information access, behavior-guided learning, co-smoothing and unseen future prediction",
+      "supports": "Original NLB permits supplied behavioral data to guide representation learning and supplies the held-in observation window at test without an author-encoder prefix restriction. Its 5-ms numerical baselines are not the SMC paper 20-ms references."
+    },
+    {
+      "id": "nlb-tensors",
+      "kind": "author_code",
+      "url": "https://github.com/neurallatents/nlb_tools/blob/42f8410b88e12db136910fa2f888b025ea0aa2ae/nlb_tools/make_tensors.py",
+      "locator": "MC_Maze align_range=(-250,450), fp_len=200; make_eval_input_tensors and make_train_input_tensors(include_behavior=True)",
+      "supports": "The 20-ms source task supplies 35 held-in observation bins and protects ten future bins. Tensor presence does not itself grant new participant fields or settle adaptation policy."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict held-out neural activity and unseen future activity on the complete original offline MC_Maze 20-ms NLB test panel. Preserve both Table 2 SMC-RNN source-method result rows for reproduction and author calibration; one primary offline candidate prediction set need not reproduce two source-specific temporal restrictions.",
+      "evidence_ids": [
+        "paper",
+        "code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "DANDI000128/0.220113.0400 provides both complete authentic NWBs and matches the original NLB cohort. The2024paper did not pin a DANDI revision; historical score/checkpoint-to-version calibration remains required.",
+      "evidence_ids": [
+        "archive",
+        "nlb-paper"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Jenkins MC_Maze recording;182neurons (137held-in,45held-out),2295training/validation and574test trials,108source task conditions. Preserve all original rows;108does not mean108nonempty scored PSTHs.",
+      "evidence_ids": [
+        "paper",
+        "nlb-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Use original NWB train/val/test labels and order. Validation training tensors use train; final test decoder training tensors use train+val. No random split or straight-reach subset.",
+      "evidence_ids": [
+        "code",
+        "archive"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original NLB permits all 35 supplied same-trial held-in observation bins for co-smoothing and for predicting the ten unseen future bins. Test held-out spikes, future spikes and test behavior remain evaluator-only locally; original test targets have been public since January 2026. Original supplied training/validation spikes and behavior may guide fitting or selection, but the actual delivered fields, validation feedback, adaptation policy and budgets must be frozen before execution; this declaration grants no additional fields, trials or test-wide adaptation. Disclose behavioral guidance and distinguish it from matched neural-only learning. Author prefix bounds 0..max(t,13) and 0..min(t+17,34) are method-specific or separately named matched-access conditions, not primary offline candidate restrictions.",
+      "evidence_ids": [
+        "code",
+        "nlb-paper",
+        "scorer",
+        "nlb-original-rules",
+        "nlb-tensors"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Original NLB1ms timestamps then20ms resampling;35observation and10forward bins. All original fields retained before native NaN-based row support. Memory-only complete-column scheduling preserves source timebounds, representative masks, Gaussian smoothing and trial/condition aggregation.",
+      "evidence_ids": [
+        "code",
+        "scorer"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original co-smoothing Poisson log-likelihood improvement over per-neuron mean on evaluated counts, divided by total spikes and ln2; higher is better. Required companions: velocityR2,PSTHR2,forwardbps.",
+      "evidence_ids": [
+        "paper",
+        "scorer"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Use the original scorer over the complete test panel with its original support and reductions, never a selected-trial/condition mean. Preserve both source rows and every companion metric separately for reproduction/calibration. Assess one full-panel primary offline candidate against the strongest qualified relevant source comparator selected before candidate results; do not average source arms or choose the weaker reference after seeing candidate output. The frozen comparison policy must record both published and qualified reproduced anchors; a lower reproduced point cannot silently replace a higher published result for a claim of surpassing the paper.",
+      "evidence_ids": [
+        "paper",
+        "scorer"
+      ]
+    },
+    "full_panel": {
+      "status": "verified",
+      "description": "Complete standard MC_Maze 20-ms panel: 182 neurons (137 held-in/45 held-out), original 1,721 train/574 validation/574 test trials, 108 source conditions, 35 observed and ten forward bins. Final decoder training uses all 2,295 train+validation trials. Require all eight Table 2 arm-by-metric findings and original nonempty-scored-condition support; 108 source conditions does not imply 108 scored PSTHs.",
+      "evidence_ids": [
+        "paper",
+        "nlb-paper",
+        "archive",
+        "code",
+        "scorer"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Original NLB permits all 35 supplied same-trial held-in observation bins for co-smoothing and for predicting the ten unseen future bins. Test held-out spikes, future spikes and test behavior remain evaluator-only locally; original test targets have been public since January 2026. Original supplied training/validation spikes and behavior may guide fitting or selection, but the actual delivered fields, validation feedback, adaptation policy and budgets must be frozen before execution; this declaration grants no additional fields, trials or test-wide adaptation. Disclose behavioral guidance and distinguish it from matched neural-only learning. Author prefix bounds 0..max(t,13) and 0..min(t+17,34) are method-specific or separately named matched-access conditions, not primary offline candidate restrictions.",
+      "evidence_ids": [
+        "code",
+        "nlb-paper",
+        "scorer",
+        "nlb-original-rules",
+        "nlb-tensors"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "causal_co_bps",
+      "kind": "scalar",
+      "description": "Original Table 2 causal-proposal co-smoothing bits per spike on the complete MC_Maze 20-ms panel; require source-native rate tensors and original scorer outputs for this arm.",
+      "status": "verified",
+      "expected": 0.3225,
+      "units": "bits/spike",
+      "aggregation": "Original nlb-tools evaluator across the full test panel and source condition support; keep proposal arms separate. No mean over selected trials, conditions or a favorable arm replaces the source reduction.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "nlb-paper",
+        "scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved. No numerical reproduction tolerance has been scientifically justified or frozen.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved.",
+        "independent_unit": "One original recording with dependent neurons, trials and conditions; 32 particle repeats are Monte Carlo repetitions, not 32 biological subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve source point/variability reporting; no default equivalence margin, confidence rule or independence assumption is inferred.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      }
+    },
+    {
+      "id": "causal_velocity_r2",
+      "kind": "scalar",
+      "description": "Original Table 2 causal-proposal decoded velocity R2 on the complete MC_Maze 20-ms panel; require source-native rate tensors and original scorer outputs for this arm.",
+      "status": "verified",
+      "expected": 0.8479,
+      "units": "dimensionless",
+      "aggregation": "Original nlb-tools evaluator across the full test panel and source condition support; keep proposal arms separate. Fit the original behavior decoder using only permitted train+validation tensors.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "nlb-paper",
+        "scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved. No numerical reproduction tolerance has been scientifically justified or frozen.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved.",
+        "independent_unit": "One original recording with dependent neurons, trials and conditions; 32 particle repeats are Monte Carlo repetitions, not 32 biological subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve source point/variability reporting; no default equivalence margin, confidence rule or independence assumption is inferred.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      }
+    },
+    {
+      "id": "causal_psth_r2",
+      "kind": "scalar",
+      "description": "Original Table 2 causal-proposal condition PSTH R2 on the complete MC_Maze 20-ms panel; require source-native rate tensors and original scorer outputs for this arm.",
+      "status": "verified",
+      "expected": 0.5927,
+      "units": "dimensionless",
+      "aggregation": "Original nlb-tools evaluator across the full test panel and source condition support; keep proposal arms separate. No mean over selected trials, conditions or a favorable arm replaces the source reduction.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "nlb-paper",
+        "scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved. No numerical reproduction tolerance has been scientifically justified or frozen.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved.",
+        "independent_unit": "One original recording with dependent neurons, trials and conditions; 32 particle repeats are Monte Carlo repetitions, not 32 biological subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve source point/variability reporting; no default equivalence margin, confidence rule or independence assumption is inferred.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      }
+    },
+    {
+      "id": "causal_forward_bps",
+      "kind": "scalar",
+      "description": "Original Table 2 causal-proposal forward-prediction bits per spike on the complete MC_Maze 20-ms panel; require source-native rate tensors and original scorer outputs for this arm.",
+      "status": "verified",
+      "expected": 0.2184,
+      "units": "bits/spike",
+      "aggregation": "Original nlb-tools evaluator across the full test panel and source condition support; keep proposal arms separate. No mean over selected trials, conditions or a favorable arm replaces the source reduction.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "nlb-paper",
+        "scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved. No numerical reproduction tolerance has been scientifically justified or frozen.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved.",
+        "independent_unit": "One original recording with dependent neurons, trials and conditions; 32 particle repeats are Monte Carlo repetitions, not 32 biological subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve source point/variability reporting; no default equivalence margin, confidence rule or independence assumption is inferred.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      }
+    },
+    {
+      "id": "noncausal_co_bps",
+      "kind": "scalar",
+      "description": "Original Table 2 noncausal-proposal co-smoothing bits per spike on the complete MC_Maze 20-ms panel; require source-native rate tensors and original scorer outputs for this arm.",
+      "status": "verified",
+      "expected": 0.3407,
+      "units": "bits/spike",
+      "aggregation": "Original nlb-tools evaluator across the full test panel and source condition support; keep proposal arms separate. No mean over selected trials, conditions or a favorable arm replaces the source reduction.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "nlb-paper",
+        "scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved. No numerical reproduction tolerance has been scientifically justified or frozen.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved.",
+        "independent_unit": "One original recording with dependent neurons, trials and conditions; 32 particle repeats are Monte Carlo repetitions, not 32 biological subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve source point/variability reporting; no default equivalence margin, confidence rule or independence assumption is inferred.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      }
+    },
+    {
+      "id": "noncausal_velocity_r2",
+      "kind": "scalar",
+      "description": "Original Table 2 noncausal-proposal decoded velocity R2 on the complete MC_Maze 20-ms panel; require source-native rate tensors and original scorer outputs for this arm.",
+      "status": "verified",
+      "expected": 0.8902,
+      "units": "dimensionless",
+      "aggregation": "Original nlb-tools evaluator across the full test panel and source condition support; keep proposal arms separate. Fit the original behavior decoder using only permitted train+validation tensors.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "nlb-paper",
+        "scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved. No numerical reproduction tolerance has been scientifically justified or frozen.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved.",
+        "independent_unit": "One original recording with dependent neurons, trials and conditions; 32 particle repeats are Monte Carlo repetitions, not 32 biological subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve source point/variability reporting; no default equivalence margin, confidence rule or independence assumption is inferred.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      }
+    },
+    {
+      "id": "noncausal_psth_r2",
+      "kind": "scalar",
+      "description": "Original Table 2 noncausal-proposal condition PSTH R2 on the complete MC_Maze 20-ms panel; require source-native rate tensors and original scorer outputs for this arm.",
+      "status": "verified",
+      "expected": 0.5963,
+      "units": "dimensionless",
+      "aggregation": "Original nlb-tools evaluator across the full test panel and source condition support; keep proposal arms separate. No mean over selected trials, conditions or a favorable arm replaces the source reduction.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "nlb-paper",
+        "scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved. No numerical reproduction tolerance has been scientifically justified or frozen.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved.",
+        "independent_unit": "One original recording with dependent neurons, trials and conditions; 32 particle repeats are Monte Carlo repetitions, not 32 biological subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve source point/variability reporting; no default equivalence margin, confidence rule or independence assumption is inferred.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      }
+    },
+    {
+      "id": "noncausal_forward_bps",
+      "kind": "scalar",
+      "description": "Original Table 2 noncausal-proposal forward-prediction bits per spike on the complete MC_Maze 20-ms panel; require source-native rate tensors and original scorer outputs for this arm.",
+      "status": "verified",
+      "expected": 0.2417,
+      "units": "bits/spike",
+      "aggregation": "Original nlb-tools evaluator across the full test panel and source condition support; keep proposal arms separate. No mean over selected trials, conditions or a favorable arm replaces the source reduction.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "nlb-paper",
+        "scorer"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved. No numerical reproduction tolerance has been scientifically justified or frozen.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Published rounded point values supply no independent replicate variance. The operator diagnostic 0.01 calibration tolerance is not an AI reproduction equivalence margin; source linkage and justified per-finding uncertainty remain unresolved.",
+        "independent_unit": "One original recording with dependent neurons, trials and conditions; 32 particle repeats are Monte Carlo repetitions, not 32 biological subjects.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Preserve source point/variability reporting; no default equivalence margin, confidence rule or independence assumption is inferred.",
+        "evidence_ids": [
+          "paper",
+          "code",
+          "nlb-paper",
+          "scorer"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "DANDI000128/0.220113.0400 complete preparation is authenticated, but the 2024 source did not pin its data revision; historical printed-score/checkpoint-to-version linkage remains unresolved. Source-equivalent author replay is a calibration route and never counts as an AI reproduction outcome.",
+    "Retain both original author recipe definitions, source-filtered output choice and authenticated encoder-dependency proofs when reproducing their named findings. These proofs do not impose a primary offline candidate prefix restriction. Any explicitly claimed source-information-matched or strict-online result requires its own enforced boundary; source reflect-padding startup is not strict online. Actual materials, learning condition, adaptation policy and budgets still require prospective freeze.",
+    "Freeze a runnable AI analysis with authentic full inputs and independently rerun source-native complete train/eval rate tensors, ordered trial/neuron/bin identities, original decoder/condition/forward outputs and all eight original metrics. Copied Table 2 values, metadata-only shape checks and author-run receipts are insufficient.",
+    "Justify separate reproduction tolerances/uncertainty for all eight published point findings. Do not reuse the operator 0.01 diagnostic calibration tolerance, infer population replication from 32 Monte Carlo repeats, or collapse the two-arm vector into one scalar.",
+    "Freeze complete paired participant/evaluator/output-verifier identities and equal participant access/resource budgets. Existing source-only paired materials and operator calibration protocols do not establish AI execution, protected access or scientific reproduction.",
+    "Preserve public target-exposure disclosure and all original source support. No numerical targets or current scientific calibration results are read or inferred by this contract adoption.",
+    "The primary offline participant interface requires separate review and explicit successor binding; stale source-arm delivery or scoring metadata cannot be promoted by changing an outcome digest. No source finding, tolerance or qualification is changed."
+  ]
+}

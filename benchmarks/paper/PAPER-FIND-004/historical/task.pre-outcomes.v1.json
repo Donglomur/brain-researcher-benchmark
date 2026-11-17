@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-004",
+  "track": "paper",
+  "title": "Brain-wide representations of prior information in mouse decision-making",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Decode the Bayes-optimal prior from pre-stimulus neural activity; retain movement-predictor and pseudosession controls. Better prior decoding does not prove causal prior computation.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Decode the Bayes-optimal prior from pre-stimulus neural activity; retain movement-predictor and pseudosession controls. Better prior decoding does not prove causal prior computation.",
+    "Source-paper comparison for Source-paper pre-stimulus Bayes-optimal-prior decoding R-squared and regional null-corrected R-squared: R-squared measures prior decoding; corrected R-squared subtracts the median of 1,000 pseudosession scores. Counts of significant regions and smaller p-values do not measure prediction improvement."
+  ],
+  "success_criteria": [
+    "Recover publication-linked numeric baseline scores and resolve all paper-versus-script configuration conflicts.",
+    "Use the original modality-specific inputs, windows, inclusion rules, prior target, trial splits and score aggregation for the complete declared source panel.",
+    "Retain movement/pseudosession controls; do not reward significance or anatomical coverage as if it were higher predictive performance.",
+    "Report new mouse-held-out/session-held-out testing only as an extension, and predeclare meaningful effect and valid paired uncertainty before final scoring.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-004",
+  "canonical_position_one_based": 34,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41586-025-09226-1",
+    "publication_year": 2025,
+    "venue": "Nature"
+  },
+  "input_assets": {
+    "routes": [
+      "https://int-brain-lab.github.io/iblenv/notebooks_external/data_release_brainwidemap.html"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/0",
+        "recorded_fields": {
+          "path": "brainwidemap/fixtures/2023_12_bwm_release.csv"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-004"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/1",
+        "recorded_fields": {
+          "path": "spikes.times, spikes.clusters, clusters and trials ALF objects"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-004"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "IBL sorted spikes and trial/behavior objects selected by the same brain-wide release family.",
+      "data_urls": [
+        "https://int-brain-lab.github.io/iblenv/notebooks_external/data_release_brainwidemap.html"
+      ],
+      "input_version": "IBL freeze 2023_12_bwm_release; author loader enforces unit-version hash",
+      "input_inventory_or_loader_evidence": {
+        "listed_file_count": 2,
+        "representative_files": [
+          {
+            "path": "brainwidemap/fixtures/2023_12_bwm_release.csv",
+            "source": "Author session selector; includes session/probe IDs"
+          },
+          {
+            "path": "spikes.times, spikes.clusters, clusters and trials ALF objects",
+            "source": "Author ONE loader and data_loading_examples.py"
+          }
+        ],
+        "limit": "Inventory examples; not payload/schema qualification."
+      },
+      "source_bridge": "Author code uses ONE SessionLoader and brainwidemap loaders for the public IBL brain-wide release; 2023_12_bwm_release fixture and version/hash guard are present in the companion loader.",
+      "code_url": "https://github.com/int-brain-lab/prior-localization",
+      "code_revision_or_archive_version": "380e7e68f31f9b55ec20e3f4863abec9eec25d30",
+      "entrypoints": [
+        "prior_localization/run_scripts/01_stage_data.py",
+        "prior_localization/prepare_data.py",
+        "prior_localization/fit_data.py"
+      ],
+      "missing_core_inputs_as_recorded": [],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-004",
+        "versions_and_loader_contract": {
+          "input_version": "IBL freeze 2023_12_bwm_release; author loader enforces unit-version hash",
+          "input_code_bridge": "Author code uses ONE SessionLoader and brainwidemap loaders for the public IBL brain-wide release; 2023_12_bwm_release fixture and version/hash guard are present in the companion loader.",
+          "readiness_scope": "Only the central empirical outputs listed here; no claim of reproducing every figure or acquisition/preprocessing stage.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "input_inventory",
+          "input_version",
+          "input_code_bridge"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/int-brain-lab/prior-localization",
+    "revision_or_archive_version": "380e7e68f31f9b55ec20e3f4863abec9eec25d30",
+    "entrypoints": [
+      "prior_localization/run_scripts/01_stage_data.py",
+      "prior_localization/prepare_data.py",
+      "prior_localization/fit_data.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-004",
+        "recorded": {
+          "code_url": "https://github.com/int-brain-lab/prior-localization",
+          "code_revision": "380e7e68f31f9b55ec20e3f4863abec9eec25d30",
+          "entrypoints": [
+            "prior_localization/run_scripts/01_stage_data.py",
+            "prior_localization/prepare_data.py",
+            "prior_localization/fit_data.py"
+          ],
+          "dependencies": [
+            "Python 3.8–3.10",
+            "ONE/IBL brainbox and brainwidemap",
+            "scikit-learn; requirements.txt"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "ba0940e1b217e6e3951db4982741a160c623285b32696a3353c981994185fcf6",
+    "audit_record_sha256": "47efe500a0826602fffb5e8d62788ca141b27e220504be1ab56e1a122cad840b",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+          "bytes": 1654641,
+          "sha256": "3782e843842fd2848b653253a23db84053308427ce3b3246a918644f2e25fe3a"
+        },
+        "record_id": "FIND-004",
+        "declared_record_sha256": "9f3b83e0d7b3551bda66c65fdd2d0fb7333c8e6c84e58c60c9040f68db57412f",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 3,
+        "record_sha256": "9f3b83e0d7b3551bda66c65fdd2d0fb7333c8e6c84e58c60c9040f68db57412f"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "CPU workstation for a region subset; multicore server/cluster for paper-wide decoding and nulls (estimated hours to days).",
+      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-004/improvement.v1.json",
+      "bytes": 9064,
+      "sha256": "37b150019ca0eb11fc743616e70163237b7ea2332a51af3048413b5b626b246b"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-004/historical/task.pre-improvement.v1.json",
+        "bytes": 16157,
+        "sha256": "ac5ceceab1a9d99e37d891694395298a8f6da246f67cbe6ba982083174e255f8"
+      },
+      "implementation_ids": [
+        "construction-paper-find-004-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Source recovery blocks admission. Future iteration uses training/inner-validation folds under the original modality-specific protocol, with explicit public-target exposure accounting.",
+    "candidate_freeze": "Freeze preprocessing, prior construction, candidate, feature policy and search configuration before protected outer-fold scoring.",
+    "final_evaluation": "Score on exact original trial partitions and source cohort, preserving ten-run and null corrections; do not use generic-default reconstruction as a paper-win decision.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published regional results, a journal-compatible author rerun and generic-script reconstruction are distinct comparators. No local authored baseline replaces the source."
+  },
+  "blocking_issues": [
+    "Exact source baseline score vector and source-authorized overall comparison rule are missing.",
+    "Original input roster/version and exact fold identities are not bound.",
+    "Paper-versus-script conflicts include estimator/folds, run and regional aggregation, null count, session/unit filters and reaction-time limit.",
+    "No complete same-task evaluator, uncertainty/effect rule or concrete episode budgets are admitted."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact source baseline score vector and source-authorized overall comparison rule are missing.",
+      "Original input roster/version and exact fold identities are not bound.",
+      "Paper-versus-script conflicts include estimator/folds, run and regional aggregation, null count, session/unit filters and reaction-time limit.",
+      "No complete same-task evaluator, uncertainty/effect rule or concrete episode budgets are admitted."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The paper has an ordered neural-decoding R-squared endpoint, but exact regional baseline values and the paper-compatible runtime are unrecovered. Pinned generic author defaults and the local evaluator differ from journal cohort, folds and aggregation; significant regions or a mouse-held-out extension cannot substitute. Exact source baseline score vector and source-authorized overall comparison rule are missing. Original input roster/version and exact fold identities are not bound. Paper-versus-script conflicts include estimator/folds, run and regional aggregation, null count, session/unit filters and reaction-time limit. No complete same-task evaluator, uncertainty/effect rule or concrete episode budgets are admitted.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-004/historical/task.pre-improvement.v1.json",
+      "bytes": 16157,
+      "sha256": "ac5ceceab1a9d99e37d891694395298a8f6da246f67cbe6ba982083174e255f8"
+    },
+    "notes": "Preserve the generic-script initial evaluator and historical definition for calibration. Its run-mean, 200-null, 50-fold script protocol and Fisher/BH output are not a journal reconstruction or scientific success criterion."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

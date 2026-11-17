@@ -1,0 +1,611 @@
+{
+  "schema_version": 1,
+  "id": "paper-pcca-fa-bilateral-pfc-arousal-2026",
+  "track": "paper",
+  "title": "Reproduce bilateral prefrontal covariance decomposition and pupil-linked arousal, then test protected neural-to-pupil prediction",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Recover known across-area and within-area percentage shared variance (%sv) and shared dimensionality (d_shared) from the paper simulated two-population datasets, matching Fig. 3e/f. Original pCCA and pCCA-FA fitting comparisons are retained. Supplementary Fig. 4 neural method comparisons are a separately identified source validation route, not pooled into the recovery score.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Recover known across-area and within-area percentage shared variance (%sv) and shared dimensionality (d_shared) from the paper simulated two-population datasets, matching Fig. 3e/f. Original pCCA and pCCA-FA fitting comparisons are retained. Supplementary Fig. 4 neural method comparisons are a separately identified source validation route, not pooled into the recovery score.",
+    "Source-paper comparison for Source Fig. 3 ground-truth recovery error for across/within %sv and d_shared; exact source loss and summary unresolved: Fig. 3 reports estimated versus true across/within %sv and d_shared; closeness to known truth is ordered, but an exact source-defined scalar recovery loss and its units/combination have not been recovered. Do not invent an average over these different endpoints. Source crossvalidated likelihood is an additional ordered fitting/comparison measure with separate normalization still unresolved."
+  ],
+  "success_criteria": [
+    "Recover the original Fig. 3 parameter draws/datasets, trial-count grid, dimension search, crossvalidation and final fitting protocol, exact ground-truth metrics and numeric pCCA-FA comparator.",
+    "Surpass the source pCCA-FA estimator on the same original recovery task and all original conditions with a justified loss and uncertainty rule; beating only the weaker pCCA control is insufficient.",
+    "Preserve %sv and d_shared endpoints separately unless the source supports an exact combined summary; no cherry-picked trial counts, altered generator or favorable seed subset.",
+    "A fresh simulation draw set, changed variance ratio/dimensionality, new empirical split or protected pupil prediction is an extension, even if both methods are rerun.",
+    "Higher in-sample pupil R², larger covariance components, stronger significance or closer descriptive reconstruction is not an estimator-recovery win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "paper": {
+    "title": "Interactions across hemispheres in prefrontal cortex reflect global cognitive processing",
+    "doi": "10.1038/s41467-026-71725-0",
+    "venue": "Nature Communications",
+    "published": "2026-04-11",
+    "pmcid": "PMC13247044",
+    "url": "https://doi.org/10.1038/s41467-026-71725-0",
+    "primary_source_url": "https://www.nature.com/articles/s41467-026-71725-0"
+  },
+  "data": {
+    "doi": "10.1184/R1/31431415.v1",
+    "url": "https://api.figshare.com/v2/articles/31431415",
+    "version": 1,
+    "license": "CC-BY-4.0",
+    "selected_files": 49,
+    "selected_bytes": 1583332461,
+    "selection": "Exactly all 42 *_sort0.2.mat correlation-session files, all three cmp_*.mat array geometries, all three pupil_*.mat session collections, and the corr_sessions README file id 62236873. The other study-specific transformed session files in the 92-file deposit are not extra subjects and are not silently substituted.",
+    "schema": "Spike event times from firstspike+cumulative spiketimesdiff at 30 kHz, spikeinfo channel/sort codes, trialcodes and per-trial angle/timing; pupil behav session-name and trial arrays; array identities and geometry. Pe dat+testDat must be concatenated, not treated as a benchmark train/test split.",
+    "identity": "Native session stem, animal, original dat/testDat trial origin and ordinal, original hardware channel and hemisphere form keys. Exact per-session counts and cross-modal trial bijection must be materialized and frozen. Never join only by array position or infer pupil alignment from equal lengths.",
+    "coverage": "Source inventory must reconcile 42 sessions and 3+3 auxiliary files before any scoring. Pupil exclusion must be listed by native Wa session ID with the paper's IQR calculation and pre/post counts; no identity was guessed from metadata.",
+    "native_support_status": "The complete source inventory is identified by publisher metadata. Scientific MAT payloads, native identities, cross-modal joins and publisher checksums have not been verified by benchmark ingestion. Metadata alone does not establish runnable support.",
+    "source_inventory": {
+      "version": 1,
+      "selected_files": 49,
+      "publisher_listed_original_bytes": 1583332461,
+      "payload_verified": false,
+      "files": [
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236927",
+          "file_id": 62236927,
+          "name": "Pe180714_sort0.2.mat",
+          "publisher_md5": "93db2bfae700217641ee5ccaaabba4c8",
+          "publisher_size_bytes": 79354394,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236867",
+          "file_id": 62236867,
+          "name": "Sa191227_sort0.2.mat",
+          "publisher_md5": "4a48c14522effc23ba223f3e7f8ae99d",
+          "publisher_size_bytes": 9128006,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236870",
+          "file_id": 62236870,
+          "name": "Sa191209_sort0.2.mat",
+          "publisher_md5": "f102e10a3a28c4ad10cf7813a729bb43",
+          "publisher_size_bytes": 14613589,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236888",
+          "file_id": 62236888,
+          "name": "Wa180220_sort0.2.mat",
+          "publisher_md5": "adaee7def9d1ca1e7c83221fb525bafb",
+          "publisher_size_bytes": 23392686,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236921",
+          "file_id": 62236921,
+          "name": "Pe180726_sort0.2.mat",
+          "publisher_md5": "afa3e0b3b6a90109c0e305c86dc28532",
+          "publisher_size_bytes": 45371798,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236864",
+          "file_id": 62236864,
+          "name": "cmp_wakko.mat",
+          "publisher_md5": "4d33c1561181bb5189bb4088b0448c80",
+          "publisher_size_bytes": 17720,
+          "role": "geometry"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236897",
+          "file_id": 62236897,
+          "name": "Wa180207_sort0.2.mat",
+          "publisher_md5": "44b79568800f0c998ada70353441713d",
+          "publisher_size_bytes": 28783656,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236915",
+          "file_id": 62236915,
+          "name": "Pe180718_sort0.2.mat",
+          "publisher_md5": "f440e88823d2f57883112acca1ff2a04",
+          "publisher_size_bytes": 34410878,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236882",
+          "file_id": 62236882,
+          "name": "Sa191127_sort0.2.mat",
+          "publisher_md5": "523ce80454fbb042927388ea5e98d1a6",
+          "publisher_size_bytes": 17903323,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236954",
+          "file_id": 62236954,
+          "name": "pupil_pepe.mat",
+          "publisher_md5": "6348f324a2e031e8939a1915d4d1601d",
+          "publisher_size_bytes": 73943227,
+          "role": "pupil"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236930",
+          "file_id": 62236930,
+          "name": "Pe180723_sort0.2.mat",
+          "publisher_md5": "62a4ea24d1414024a6ba5516640aac5d",
+          "publisher_size_bytes": 43393307,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236885",
+          "file_id": 62236885,
+          "name": "Sa191210_sort0.2.mat",
+          "publisher_md5": "0dcecba455bb8cefdccc5067d68acda6",
+          "publisher_size_bytes": 13688550,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236957",
+          "file_id": 62236957,
+          "name": "Pe180720_sort0.2.mat",
+          "publisher_md5": "fb2c2f28d0583092441e7be8707edf86",
+          "publisher_size_bytes": 57783531,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236909",
+          "file_id": 62236909,
+          "name": "Sa191221_sort0.2.mat",
+          "publisher_md5": "afea56b12c259ed30ecebad3d652cac9",
+          "publisher_size_bytes": 24195491,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236969",
+          "file_id": 62236969,
+          "name": "Pe180712_sort0.2.mat",
+          "publisher_md5": "c94b0838fc60c44283da4272bd884a9d",
+          "publisher_size_bytes": 58278479,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236876",
+          "file_id": 62236876,
+          "name": "Sa191228_sort0.2.mat",
+          "publisher_md5": "58799ec5bdb033b3d19ac383e2b4dc29",
+          "publisher_size_bytes": 11430547,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236942",
+          "file_id": 62236942,
+          "name": "Sa191206_sort0.2.mat",
+          "publisher_md5": "f0cf1de005019eb265892e31e22e2b45",
+          "publisher_size_bytes": 41983645,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236900",
+          "file_id": 62236900,
+          "name": "Sa191203_sort0.2.mat",
+          "publisher_md5": "05973dc94c76bf822c04bd4b5553a1dd",
+          "publisher_size_bytes": 23887287,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236981",
+          "file_id": 62236981,
+          "name": "Pe180730_sort0.2.mat",
+          "publisher_md5": "afb0657110df2a68b2b3045c3979b33f",
+          "publisher_size_bytes": 55843978,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236906",
+          "file_id": 62236906,
+          "name": "Wa180218_sort0.2.mat",
+          "publisher_md5": "dc641fcdfa3dd6fab927f3d91c7b65da",
+          "publisher_size_bytes": 23180646,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236960",
+          "file_id": 62236960,
+          "name": "Pe180725_sort0.2.mat",
+          "publisher_md5": "14779c58e9b1585fef4cc8aac9be7ec3",
+          "publisher_size_bytes": 39637075,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236894",
+          "file_id": 62236894,
+          "name": "Pe180717_sort0.2.mat",
+          "publisher_md5": "8e40768b1acfb18b620c4a6abf95083f",
+          "publisher_size_bytes": 12101604,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62237002",
+          "file_id": 62237002,
+          "name": "Wa180211_sort0.2.mat",
+          "publisher_md5": "855ba8ba4dc860b0b4f51d25161605e2",
+          "publisher_size_bytes": 58202648,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236945",
+          "file_id": 62236945,
+          "name": "Sa191224_sort0.2.mat",
+          "publisher_md5": "ebac9dbb667b849533e82ef1ffef87a9",
+          "publisher_size_bytes": 30036032,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236951",
+          "file_id": 62236951,
+          "name": "Pe180801_sort0.2.mat",
+          "publisher_md5": "503bba5fe9837f6e1b1aa812137d6d12",
+          "publisher_size_bytes": 32783056,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236873",
+          "file_id": 62236873,
+          "name": "README.md",
+          "publisher_md5": "1ac088c340a1e7dc51f8cee563ff6729",
+          "publisher_size_bytes": 3190,
+          "role": "source_readme"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236963",
+          "file_id": 62236963,
+          "name": "Sa191211_sort0.2.mat",
+          "publisher_md5": "d21414a8137e5dfb93730f1351e252d7",
+          "publisher_size_bytes": 33051440,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62236987",
+          "file_id": 62236987,
+          "name": "Pe180722_sort0.2.mat",
+          "publisher_md5": "732e47a91976410ad57daabcb296c77f",
+          "publisher_size_bytes": 39496482,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236879",
+          "file_id": 62236879,
+          "name": "cmp_satchel.mat",
+          "publisher_md5": "70331252251fe70481279c2f31249c83",
+          "publisher_size_bytes": 18132,
+          "role": "geometry"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236936",
+          "file_id": 62236936,
+          "name": "Sa191204_sort0.2.mat",
+          "publisher_md5": "d0eb760a47001f25eb9e30b37955a0e8",
+          "publisher_size_bytes": 25175337,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62237020",
+          "file_id": 62237020,
+          "name": "Pe180719_sort0.2.mat",
+          "publisher_md5": "8a003fe2191cbff32f9d006581b58b92",
+          "publisher_size_bytes": 88850886,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236948",
+          "file_id": 62236948,
+          "name": "Wa180221_sort0.2.mat",
+          "publisher_md5": "bde974c287d59c4e45280cb3708021fe",
+          "publisher_size_bytes": 28120060,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236924",
+          "file_id": 62236924,
+          "name": "Sa191214_sort0.2.mat",
+          "publisher_md5": "3ad615f6f5b9dae88832eeb6e0ce41a5",
+          "publisher_size_bytes": 20605718,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236912",
+          "file_id": 62236912,
+          "name": "Sa191226_sort0.2.mat",
+          "publisher_md5": "635f80c7c418db82dfdac936cc5221b4",
+          "publisher_size_bytes": 16476137,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236993",
+          "file_id": 62236993,
+          "name": "Sa191208_sort0.2.mat",
+          "publisher_md5": "d67c91e39cfb144dd078526fd1ef24e2",
+          "publisher_size_bytes": 34249019,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236972",
+          "file_id": 62236972,
+          "name": "pupil_wakko.mat",
+          "publisher_md5": "14c376e05678717ea447e6f1d436f0fa",
+          "publisher_size_bytes": 25845662,
+          "role": "pupil"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62236891",
+          "file_id": 62236891,
+          "name": "cmp_pepe.mat",
+          "publisher_md5": "2d3ae5ef3ac7c1a86cb8355329205b9f",
+          "publisher_size_bytes": 17526,
+          "role": "geometry"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236933",
+          "file_id": 62236933,
+          "name": "Wa180210_sort0.2.mat",
+          "publisher_md5": "80128584c15e8267239d47ac017a1423",
+          "publisher_size_bytes": 21831467,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236939",
+          "file_id": 62236939,
+          "name": "Wa180222_sort0.2.mat",
+          "publisher_md5": "d7b5aa26e8a9982018013059b0b40a16",
+          "publisher_size_bytes": 21333192,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62237014",
+          "file_id": 62237014,
+          "name": "Pe180724_sort0.2.mat",
+          "publisher_md5": "1e0f52c96805a160e43a4bbf70681780",
+          "publisher_size_bytes": 40188553,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62236984",
+          "file_id": 62236984,
+          "name": "Sa191202_sort0.2.mat",
+          "publisher_md5": "48cff8bb9cfad6ae5a0e81ea78053363",
+          "publisher_size_bytes": 25554118,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236990",
+          "file_id": 62236990,
+          "name": "Wa180219_sort0.2.mat",
+          "publisher_md5": "84c8e5819f8b26ceeb3d8f889fba446c",
+          "publisher_size_bytes": 25340956,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Sa",
+          "download_url": "https://ndownloader.figshare.com/files/62237011",
+          "file_id": 62237011,
+          "name": "Sa191207_sort0.2.mat",
+          "publisher_md5": "27fc5e5ccc2d1ac72c66bde46ad1a07f",
+          "publisher_size_bytes": 31210486,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62237029",
+          "file_id": 62237029,
+          "name": "Pe180728_sort0.2.mat",
+          "publisher_md5": "9888b272220ab295b11fec257af8ffbb",
+          "publisher_size_bytes": 46656048,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62237038",
+          "file_id": 62237038,
+          "name": "Pe180713_sort0.2.mat",
+          "publisher_md5": "f71de4573dfe38ac52975fc4489cf220",
+          "publisher_size_bytes": 47029255,
+          "role": "neural_session"
+        },
+        {
+          "animal": null,
+          "download_url": "https://ndownloader.figshare.com/files/62237068",
+          "file_id": 62237068,
+          "name": "pupil_satchel.mat",
+          "publisher_md5": "d4139cf428dbd39c19020b41dea1741c",
+          "publisher_size_bytes": 82219754,
+          "role": "pupil"
+        },
+        {
+          "animal": "Pe",
+          "download_url": "https://ndownloader.figshare.com/files/62237053",
+          "file_id": 62237053,
+          "name": "Pe180721_sort0.2.mat",
+          "publisher_md5": "3ff34e599da9480e1de1dd6d656d4c38",
+          "publisher_size_bytes": 49869256,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236978",
+          "file_id": 62236978,
+          "name": "Wa180227_sort0.2.mat",
+          "publisher_md5": "2c71c5f046367057a080a327fc53b807",
+          "publisher_size_bytes": 19739959,
+          "role": "neural_session"
+        },
+        {
+          "animal": "Wa",
+          "download_url": "https://ndownloader.figshare.com/files/62236918",
+          "file_id": 62236918,
+          "name": "Wa180209_sort0.2.mat",
+          "publisher_md5": "02cff5f165a27b14dd29fdf29817e334",
+          "publisher_size_bytes": 7104675,
+          "role": "neural_session"
+        }
+      ]
+    }
+  },
+  "code": {
+    "model_repo": "https://github.com/SmithLabNeuro/pcca_fa",
+    "model_release": "v1.1",
+    "model_commit": "b6255d97a99f73459d49952fe28ff46a69e9a40b",
+    "model_archive_doi": "10.5281/zenodo.18913386",
+    "model_archive_md5": "c6caa0fc4f37624f1225efd7ed5c3548",
+    "model_archive_bytes": 671647,
+    "model_license": "Apache-2.0 in LICENSE and Zenodo metadata",
+    "figures_repo": "https://github.com/meganmcd13/figures-dual-pfc",
+    "figures_release": "v1.0",
+    "figures_commit": "2d749c185b0f0e9944ce2baf9820b6da13c1d75b",
+    "figures_archive_doi": "10.5281/zenodo.18929016",
+    "figures_archive_md5": "35e37e4614f290abf3707df2d365570d",
+    "figures_archive_bytes": 85596,
+    "figures_license": "Apache-2.0 declared in release .zenodo.json and archive metadata; no top-level LICENSE in the inspected tree.",
+    "scientific_version_match": "Default heads d13882eca2eee8cdb5e6ee4b0047b32b01f08754 /3b59632fb5b84c377d82a16ae7dd491e70eba4b5 were inspected. Complete recursive tree comparison with release tags finds only README and .zenodo metadata changes; every scientific-code blob matches release. Do not pin to moving main.",
+    "submodules": [
+      {
+        "repo": "https://github.com/meganmcd13/cca",
+        "commit": "8ea46fa6fd9432e18155105d664b5addf9e38ac7",
+        "license": "No LICENSE in complete pinned tree; Apache scope over this dependency not established."
+      },
+      {
+        "repo": "https://github.com/meganmcd13/fa",
+        "commit": "21ac16d2671ad6eef133261f7ef5555f68471a57",
+        "license": "No LICENSE in complete pinned tree; Apache scope over this dependency not established."
+      }
+    ],
+    "environment": "MATLAB preprocessing and Python numpy/scipy/scikit-learn/joblib/psutil/tqdm model analysis. environment.yml is not a solved environment lock; MATLAB toolbox/license and package versions require later executable validation.",
+    "provenance_limit": "Release and submodule references identify the selected commits and scientific files. Some source API responses reported the requested commit in a top-level SHA field; that response value is not itself authentication of a Git tree root or a missing release commit object. Verify exact commit, recursive tree, blob and archive bindings before acquisition or execution."
+  },
+  "runtime_storage": {
+    "observed_runtime": null,
+    "observed_peak_ram": null,
+    "unpacked_bytes": null,
+    "compute_note": "Original dimension search is up to 15^3×10=33750 fits per session, up to 1,417,500 fold fits over 42 sessions plus final/canonical-correlation fits; channel constraints may reduce this. EM default upper limit 1e6 iterations is a bound, not measured convergence time. Nested protected fits add substantial work; no lightweight claim.",
+    "publisher_listed_original_bytes": 1583332461,
+    "evidence_limit": "No complete benchmark ingestion, reference execution or agent evaluation has established working storage, peak memory or runtime. Publisher file size is not expanded resource feasibility."
+  },
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "resources": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "provenance": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/paper-pcca-fa-bilateral-pfc-arousal-2026/improvement.v1.json",
+      "bytes": 14564,
+      "sha256": "5cabc804948b95202b1ce34ace4280f89c381a292dd2f3bdcad4852a3ef418bc"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/paper-pcca-fa-bilateral-pfc-arousal-2026/historical/task.pre-improvement.v1.json",
+        "bytes": 59603,
+        "sha256": "e73f78befc63920315646c5a895072289427f6687aed8205f39eef5fb61cf654"
+      },
+      "implementation_ids": [
+        "benchmarks-scientific_components-pcca_descriptive_outputs"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked until the original source simulation artifacts, baseline and endpoint aggregation are recovered. After admission, permit estimator development only on declared source development inputs; keep assessment ground truth and original comparison artifacts evaluator-owned.",
+    "candidate_freeze": "Freeze estimation method, hyperparameters, dimension-selection policy, source condition coverage and scoring summary before final comparison on the recovered original Fig. 3 assessment datasets.",
+    "final_evaluation": "Compare candidate recovery with published and authenticated rerun pCCA-FA on identical original datasets and all source trial-count conditions. Any original Supplementary Fig. 4 likelihood comparison must retain its own exact empirical splits/normalization and be reported separately.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source pCCA-FA is the performance comparator; pCCA/FA are source controls. Published results, author reruns and current SOTA remain distinct. Existing covariance/pupil reconstruction is calibration; new protected prediction or newly generated simulations cannot silently replace original paper assessment. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+  },
+  "blocking_issues": [
+    "Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed.",
+    "Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark.",
+    "Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy.",
+    "Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim.",
+    "Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets."
+  ],
+  "holds": {
+    "task_specific": [
+      "Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed.",
+      "Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark.",
+      "Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy.",
+      "Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim.",
+      "Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original paper contains an ordered estimator-validation route: Fig. 3e/f recovery of known across/within shared variance and dimensionality on simulated data, with pCCA comparison, plus Supplementary Fig. 4 method comparisons on neural recordings. The authorized overhaul can select this original source task. Exact original simulation draws/trial-count grid, baseline arrays, loss aggregation and matched evaluation protocol remain unrecovered; in-sample pupil R² is retained only as descriptive calibration. Authenticate original simdataset_varyN_noWS.pkl and parameter/sample draws, generator RNG, trial grid and source-release bindings; the visible CV seed is not an explicit simulation seed. Recover source %sv/d_shared numeric curves, exact comparison loss/aggregation and author variability; no invented scalar benchmark. Reconcile paper simulation dimensions1–10 with inspected driver0–14, and paper empirical ten-fold policy with the Fig3 driver five-fold CV; freeze the correct original branch and EM/no-warmstart policy. Recover Supplementary Fig. 4 empirical comparison endpoint, per-session folds and likelihood normalization before making that separate source-method claim. Implement evaluator/author baseline route; justify task-specific minimum effect and uncertainty; fix concrete access/resource budgets.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/paper-pcca-fa-bilateral-pfc-arousal-2026/historical/task.pre-improvement.v1.json",
+      "bytes": 59603,
+      "sha256": "e73f78befc63920315646c5a895072289427f6687aed8205f39eef5fb61cf654"
+    },
+    "notes": "Preserve all existing P01–P05 covariance/pupil outputs, fixed examples and historical empirical assay. Published pupil mean R²=.25 and its within-area comparators are descriptive calibration only. The authorized overhaul selects the paper original Fig. 3 estimator-recovery task; no simulation, model fit or improvement has been run."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

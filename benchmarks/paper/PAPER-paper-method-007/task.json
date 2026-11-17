@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "Tracking neurons across days with high-density probes",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Track putative identical neurons across recordings from spike waveforms; evaluate cross-day match versus nonmatch separation using independent ISI fingerprints. AUC measures functional consistency, not ground-truth identity accuracy.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Track putative identical neurons across recordings from spike waveforms; evaluate cross-day match versus nonmatch separation using independent ISI fingerprints. AUC measures functional consistency, not ground-truth identity accuracy.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Track putative identical neurons across recordings from spike waveforms; evaluate cross-day match versus nonmatch separation using independent ISI fingerprints. AUC measures functional consistency, not ground-truth identity accuracy.",
-    "Source-paper comparison for Original Fig. 4 cross-day ISI-fingerprint AUC, full 16-mouse population: ROC AUC separating ISI-histogram correlations of matches from nonmatches; use original exclusions and require at least 20 matched units per eligible recording comparison. Within-recording matched units are excluded."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Restore and evaluate every original eligible16-mouse recording/location/day comparison using paper-equivalent matching and fingerprint construction.",
-    "Reproduce 0.88 under the original aggregation with a declared calibration tolerance; compare against both the published result and a competent author rerun.",
-    "Demonstrate the predeclared meaningful AUC gain with animal-level uncertainty while preserving matched-unit yield and eligible support; do not improve AUC by selecting fewer easy matches.",
-    "Do not count a five-mouse demo gain, new held-mouse split, changed code version, human-curation agreement or increased match count alone as surpassing the paper.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-007",
   "canonical_position_one_based": 98,
@@ -394,60 +395,67 @@
     "known_local_scientific_runtime_seconds": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-007/improvement.v1.json",
-      "bytes": 10592,
-      "sha256": "fb0028def33b2be2f66c2c84ed5d5d9ed74118ec3fbb758f53578bb3d1fa1606"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "design_ready",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-007/historical/task.pre-improvement.v1.json",
-        "bytes": 23235,
-        "sha256": "3e3892fcf6d8112e483f4d88b7aa35858a92504da07771f69813886b5c9cecaf"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-paper-paper-method-007",
-        "benchmarks-scientific_components-unitmatch_native_paired"
-      ],
-      "runtime_manifest": {
-        "path": "benchmarks/paper/PAPER-paper-method-007/implementations/registered-runtime/manifest.json",
-        "bytes": 18801,
-        "sha256": "2c3e3deb6c045b893e0907e72971f153af3e3190df47839093d15f357091f44e"
-      }
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "After source recovery, iterate waveform-only algorithms on permitted development recordings with final functional targets inaccessible. Freeze any use of development functional information explicitly; it cannot be assumed equivalent to source unsupervised calibration.",
-    "candidate_freeze": "Seal waveform feature definitions, matching policy, preprocessing, source revision, exclusions and all selection choices before final original-cohort functional evaluation.",
-    "final_evaluation": "Run candidate and paper-equivalent native reference on identical full original recordings; keep the legacy five-mouse paired report separately labeled. Compare paired animal endpoints only after full support and provenance admission.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Published16-mouse AUC, paper-era author rerun and current v2 demo results are separate records; runtime declaration envelopes are not an approved same-task improvement budget."
+    "improvement": {
+      "improvement_loop": "After source recovery, iterate waveform-only algorithms on permitted development recordings with final functional targets inaccessible. Freeze any use of development functional information explicitly; it cannot be assumed equivalent to source unsupervised calibration.",
+      "candidate_freeze": "Seal waveform feature definitions, matching policy, preprocessing, source revision, exclusions and all selection choices before final original-cohort functional evaluation.",
+      "final_evaluation": "Run candidate and paper-equivalent native reference on identical full original recordings; keep the legacy five-mouse paired report separately labeled. Compare paired animal endpoints only after full support and provenance admission.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Published16-mouse AUC, paper-era author rerun and current v2 demo results are separate records; runtime declaration envelopes are not an approved same-task improvement budget."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release.",
-    "Paper-era default source and native result equivalence are not established for the selected v2 runtime.",
-    "The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review.",
-    "Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release.",
       "Paper-era default source and native result equivalence are not established for the selected v2 runtime.",
       "The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review.",
       "Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release.",
+        "Paper-era default source and native result equivalence are not established for the selected v2 runtime.",
+        "The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review.",
+        "Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The paper reports an ordered waveform-only tracking validation endpoint and its numeric result. The existing five-mouse/two-day demo and v2 native runtime are a reduced, differently defined comparison, not the original 16-mouse cross-day endpoint; full original data, paper-era code equivalence and scientific admission remain incomplete. Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release. Paper-era default source and native result equivalence are not established for the selected v2 runtime. The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review. Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The paper reports an ordered waveform-only tracking validation endpoint and its numeric result. The existing five-mouse/two-day demo and v2 native runtime are a reduced, differently defined comparison, not the original 16-mouse cross-day endpoint; full original data, paper-era code equivalence and scientific admission remain incomplete. Full original 16-mouse Fig. 4 recordings and eligible session/location/pair roster are not available in the five-mouse release. Paper-era default source and native result equivalence are not established for the selected v2 runtime. The registered greedy two-day probability decoder, finite-value rules and yield guard are benchmark conventions requiring original-paper parity review. Meaningful AUC effect, uncertainty decision, candidate access and concrete cumulative resource budget remain unfrozen.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -462,8 +470,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

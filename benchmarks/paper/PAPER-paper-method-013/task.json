@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Denoise, detect and demix neurons in the original ten experimental Allen two-photon videos. Primary ordered comparison is original manual-ROI segmentation F1; extracted trace accuracy and runtime remain separately reported source endpoints, not substituted for segmentation.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Denoise, detect and demix neurons in the original ten experimental Allen two-photon videos. Primary ordered comparison is original manual-ROI segmentation F1; extracted trace accuracy and runtime remain separately reported source endpoints, not substituted for segmentation.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Denoise, detect and demix neurons in the original ten experimental Allen two-photon videos. Primary ordered comparison is original manual-ROI segmentation F1; extracted trace accuracy and runtime remain separately reported source endpoints, not substituted for segmentation.",
-    "Source-paper comparison for Arithmetic mean segmentation F1 across the ten original Allen experimental videos, using strict IoU>0.5: Match each manual reference ROI to the highest-overlap predicted ROI with strict IoU>0.5. F1=2TP/(Npred+Nref). For trace correlation use the reference ROIs detected by every compared method; those imaging-derived traces do not measure electrical ground truth. Ambiguous many-reference matching requires source resolution."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Authenticate all ten original recording/frame/manual-reference mappings and the exact full-model checkpoint and native preprocessing/assembly.",
-    "Reproduce source-author per-video F1 and its ten-video mean, keeping the published 0.847 and rerun result distinct.",
-    "Evaluate candidate on all ten original videos under identical source labels, IoU matching and macro-video aggregation; no reduced recordings, new depths, external donors or mini-demo substitutes.",
-    "Keep trace comparison on common detected ROIs and disclose its imaging-derived reference; separately retain original trace/runtime endpoints when claiming improvement of the complete denoise/detect/demix task.",
-    "Freeze method, permitted training/access, reference exposure, meaningful effect, uncertainty rule and concrete resource budget before the final comparison.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-013",
   "canonical_position_one_based": 76,
@@ -430,55 +430,67 @@
     "known_local_scientific_runtime_seconds": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-013/improvement.v1.json",
-      "bytes": 13968,
-      "sha256": "962f753f2f16490ba31209d0ea4d85b9e0dc3f4357c0574257b2c01d4daa091e"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "design_ready",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-013/historical/task.pre-improvement.v1.json",
-        "bytes": 30161,
-        "sha256": "10ddbdc9848384c6c39c42c55e13e78b4720e2b8649f59c5bddb9f8c03842a12"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-013-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "After admission, iterate on allowed synthetic/development inputs and separately declared validation feedback; the original experimental panel remains the final same-task comparison. Public-label exposure must be disclosed.",
-    "candidate_freeze": "Freeze full model weights/code, tiling and merge rules, ROI extraction thresholds, training exposure and resource budget before scoring final assembled outputs.",
-    "final_evaluation": "Run candidate and authenticated author full model on the exact ten movie/frame intervals, then compute original per-video and mean F1 with paired uncertainty; retain source trace/runtime outputs separately.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+    "improvement": {
+      "improvement_loop": "After admission, iterate on allowed synthetic/development inputs and separately declared validation feedback; the original experimental panel remains the final same-task comparison. Public-label exposure must be disclosed.",
+      "candidate_freeze": "Freeze full model weights/code, tiling and merge rules, ROI extraction thresholds, training exposure and resource budget before scoring final assembled outputs.",
+      "final_evaluation": "Run candidate and authenticated author full model on the exact ten movie/frame intervals, then compute original per-video and mean F1 with paired uncertainty; retain source trace/runtime outputs separately.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep published source score, reproduced author baseline, and any independently source-verified current SOTA separate. Reproduction is calibration only."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Original 512-to-488 spatial crop and raw frame-index origin, native assembly and paper-equivalent checkpoint remain unresolved. Authenticated released full checkpoint has 8 outputs/396-frame traces versus paper N=15/P=9; filename identity does not establish equivalence.",
-    "Ambiguous many-reference matching and frame-index conventions need historical equivalence; current evaluator fails closed on ambiguity.",
-    "No reproduced author baseline or qualified candidate runner on the original ten-video panel.",
-    "Public manual-reference exposure, meaningful effect, donor-clustered uncertainty (eight donors and ten videos), concrete improvement budgets and full native resource cost remain unresolved."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Original 512-to-488 spatial crop and raw frame-index origin, native assembly and paper-equivalent checkpoint remain unresolved. Authenticated released full checkpoint has 8 outputs/396-frame traces versus paper N=15/P=9; filename identity does not establish equivalence.",
       "Ambiguous many-reference matching and frame-index conventions need historical equivalence; current evaluator fails closed on ambiguity.",
       "No reproduced author baseline or qualified candidate runner on the original ten-video panel.",
       "Public manual-reference exposure, meaningful effect, donor-clustered uncertainty (eight donors and ten videos), concrete improvement budgets and full native resource cost remain unresolved."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Original 512-to-488 spatial crop and raw frame-index origin, native assembly and paper-equivalent checkpoint remain unresolved. Authenticated released full checkpoint has 8 outputs/396-frame traces versus paper N=15/P=9; filename identity does not establish equivalence.",
+        "Ambiguous many-reference matching and frame-index conventions need historical equivalence; current evaluator fails closed on ambiguity.",
+        "No reproduced author baseline or qualified candidate runner on the original ten-video panel.",
+        "Public manual-reference exposure, meaningful effect, donor-clustered uncertainty (eight donors and ten videos), concrete improvement budgets and full native resource cost remain unresolved."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The original ten-video experimental task, ordered segmentation metric and numeric source baseline are recoverable. Native assembly, checkpoint/reference equivalence, baseline replay and a protected improvement episode remain incomplete. The existing post-assembly evaluator is useful infrastructure but does not establish a ready same-task comparison. Original 512-to-488 spatial crop and raw frame-index origin, native assembly and paper-equivalent checkpoint remain unresolved. Authenticated released full checkpoint has 8 outputs/396-frame traces versus paper N=15/P=9; filename identity does not establish equivalence. Ambiguous many-reference matching and frame-index conventions need historical equivalence; current evaluator fails closed on ambiguity. No reproduced author baseline or qualified candidate runner on the original ten-video panel. Public manual-reference exposure, meaningful effect, donor-clustered uncertainty (eight donors and ten videos), concrete improvement budgets and full native resource cost remain unresolved.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The original ten-video experimental task, ordered segmentation metric and numeric source baseline are recoverable. Native assembly, checkpoint/reference equivalence, baseline replay and a protected improvement episode remain incomplete. The existing post-assembly evaluator is useful infrastructure but does not establish a ready same-task comparison. Original 512-to-488 spatial crop and raw frame-index origin, native assembly and paper-equivalent checkpoint remain unresolved. Authenticated released full checkpoint has 8 outputs/396-frame traces versus paper N=15/P=9; filename identity does not establish equivalence. Ambiguous many-reference matching and frame-index conventions need historical equivalence; current evaluator fails closed on ambiguity. No reproduced author baseline or qualified candidate runner on the original ten-video panel. Public manual-reference exposure, meaningful effect, donor-clustered uncertainty (eight donors and ten videos), concrete improvement budgets and full native resource cost remain unresolved.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -493,8 +505,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

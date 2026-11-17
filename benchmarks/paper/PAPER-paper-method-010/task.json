@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "Rastermap: a discovery method for neural population recordings",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Recover one-dimensional within-module neuron order and preserve module continuity in the original Figure 1h-j five-module simulation benchmark. This is an endpoint actually evaluated in the source paper.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Recover one-dimensional within-module neuron order and preserve module continuity in the original Figure 1h-j five-module simulation benchmark. This is an endpoint actually evaluated in the source paper.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Recover one-dimensional within-module neuron order and preserve module continuity in the original Figure 1h-j five-module simulation benchmark. This is an endpoint actually evaluated in the source paper.",
-    "Source-paper comparison for Figure 1i per-module correctly ordered triplets (%); Figure 1j per-module contamination (%) is a required lower-is-better companion endpoint: Per-module fraction of sampled triples with the correct relative order, allowing reversal (higher is better), and sampled between-neuron contamination by other modules (lower is better). Preserve the exact metrics.py draw counts, qualifying-pair rule and interval slicing; report percentages as in Figure 1."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover exact original published Rastermap scores and reproduce the source generator, original ten realizations and both per-module scoring panels.",
-    "Surpass Rastermap itself under the same source simulation condition; beating t-SNE, UMAP, random sorting or a locally authored baseline is insufficient.",
-    "Declare meaningful improvement, guardrails and paired uncertainty before candidate evaluation; retain every original module and both metrics rather than choosing a favorable subset.",
-    "Freeze candidate code and all tuning before final scoring; prohibit access to xi_all, iperm and latent generator outputs as model inputs, and disclose that the public generator and original seeds are exposed.",
-    "New seeds, altered noise, fewer neurons, power-law-only simulations, new splits or empirical behavior prediction can be separately reported source conditions or extensions, but cannot replace this Figure 1 score comparison.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-010",
   "canonical_position_one_based": 93,
@@ -472,57 +472,69 @@
     "known_local_scientific_runtime_seconds": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-010/improvement.v1.json",
-      "bytes": 13559,
-      "sha256": "69d79c1c42009119815f4158a8a151a314e5169bf719f490e21955e869e762e5"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-010/historical/task.pre-improvement.v1.json",
-        "bytes": 28326,
-        "sha256": "8764f79a3610f0323b82f342d2bfde9a98b5551241604d44af8684c1a97932bd"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-010-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "After recovering the original baseline, iterate on explicitly declared development feedback while keeping the original ten-realization final roster fixed. Any additional development simulations must retain their provenance and may not substitute for the original final condition.",
-    "candidate_freeze": "Freeze algorithm, hyperparameters, source access, preprocessing, evaluator RNG policy, joint metric rule and budgets before scoring on the original final realizations.",
-    "final_evaluation": "Run the calibrated source Rastermap and frozen candidate on every original Figure 1 simulation using identical activity inputs and source metric semantics; report published agreement and candidate gains separately. Preserve the full ten-by-five-by-two result panel.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep original published scores, author reruns, alternative algorithms and later SOTA scores distinct. Existing empirical reconstruction and local synthetic unit controls remain calibration only."
+    "improvement": {
+      "improvement_loop": "After recovering the original baseline, iterate on explicitly declared development feedback while keeping the original ten-realization final roster fixed. Any additional development simulations must retain their provenance and may not substitute for the original final condition.",
+      "candidate_freeze": "Freeze algorithm, hyperparameters, source access, preprocessing, evaluator RNG policy, joint metric rule and budgets before scoring on the original final realizations.",
+      "final_evaluation": "Run the calibrated source Rastermap and frozen candidate on every original Figure 1 simulation using identical activity inputs and source metric semantics; report published agreement and candidate gains separately. Preserve the full ten-by-five-by-two result panel.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep original published scores, author reruns, alternative algorithms and later SOTA scores distinct. Existing empirical reconstruction and local synthetic unit controls remain calibration only."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Original numeric Figure 1i-j baseline and sim_performance.npz provenance/checksums are unrecovered.",
-    "Original serialized simulation assets and execution environment need pinning and source-generator reconciliation without assuming reruns reproduce published bytes.",
-    "No calibrated complete simulation evaluator is bound to this registration; historical empirical evaluator measures different endpoints.",
-    "Meaningful-effect, joint-panel superiority and uncertainty rules remain unspecified.",
-    "Candidate development access, ground-truth isolation, tuning/compute and final-query budgets remain unfixed."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Original numeric Figure 1i-j baseline and sim_performance.npz provenance/checksums are unrecovered.",
       "Original serialized simulation assets and execution environment need pinning and source-generator reconciliation without assuming reruns reproduce published bytes.",
       "No calibrated complete simulation evaluator is bound to this registration; historical empirical evaluator measures different endpoints.",
       "Meaningful-effect, joint-panel superiority and uncertainty rules remain unspecified.",
       "Candidate development access, ground-truth isolation, tuning/compute and final-query budgets remain unfixed."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Original numeric Figure 1i-j baseline and sim_performance.npz provenance/checksums are unrecovered.",
+        "Original serialized simulation assets and execution environment need pinning and source-generator reconciliation without assuming reruns reproduce published bytes.",
+        "No calibrated complete simulation evaluator is bound to this registration; historical empirical evaluator measures different endpoints.",
+        "Meaningful-effect, joint-panel superiority and uncertainty rules remain unspecified.",
+        "Candidate development access, ground-truth isolation, tuning/compute and final-query budgets remain unfixed."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The source paper has a defensible ordered task: recover the original within-module ordering in its Figure 1 five-module simulation benchmark. The original generator, population, ten realization IDs and metric implementations are recoverable, but the published numeric Rastermap score panel and original result artifact have not been recovered and pinned. No scientific run establishes an author replay. The legacy empirical evaluator is not the simulation scorer and cannot establish this paper win. Original numeric Figure 1i-j baseline and sim_performance.npz provenance/checksums are unrecovered. Original serialized simulation assets and execution environment need pinning and source-generator reconciliation without assuming reruns reproduce published bytes. No calibrated complete simulation evaluator is bound to this registration; historical empirical evaluator measures different endpoints. Meaningful-effect, joint-panel superiority and uncertainty rules remain unspecified. Candidate development access, ground-truth isolation, tuning/compute and final-query budgets remain unfixed.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The source paper has a defensible ordered task: recover the original within-module ordering in its Figure 1 five-module simulation benchmark. The original generator, population, ten realization IDs and metric implementations are recoverable, but the published numeric Rastermap score panel and original result artifact have not been recovered and pinned. No scientific run establishes an author replay. The legacy empirical evaluator is not the simulation scorer and cannot establish this paper win. Original numeric Figure 1i-j baseline and sim_performance.npz provenance/checksums are unrecovered. Original serialized simulation assets and execution environment need pinning and source-generator reconciliation without assuming reruns reproduce published bytes. No calibrated complete simulation evaluator is bound to this registration; historical empirical evaluator measures different endpoints. Meaningful-effect, joint-panel superiority and uncertainty rules remain unspecified. Candidate development access, ground-truth isolation, tuning/compute and final-query budgets remain unfixed.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -537,8 +549,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

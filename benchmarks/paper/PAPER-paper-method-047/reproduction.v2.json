@@ -1,0 +1,1123 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-047",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "V2 can represent the real per-neuron Figure 1 arrays without scalar substitution. Source identity, historical configuration, full-panel closure, reference and scientific comparison gaps remain independent of that engineering advance. This is a partial unresolved original-finding declaration, not complete original-task eligibility or executable readiness.",
+  "source_paper": {
+    "title": "Spike inference from calcium imaging data acquired with GCaMP8 indicators",
+    "url": "https://www.nature.com/articles/s41592-026-03183-x"
+  },
+  "evidence": [
+    {
+      "id": "gcamp-paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41592-026-03183-x",
+      "locator": "Fig.1; Methods: Spike inference with CASCADE; MLSpike for spike inference; Fig.6",
+      "supports": "The paper retrains GC8-pooled and variant-specific models with leave-one-neuron-out evaluation; interneuron and online conditions are distinct."
+    },
+    {
+      "id": "gcamp-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/README.md",
+      "locator": "Updates2026-10-27; Typical work flow; Quantify expected performance",
+      "supports": "Author reports a one-frame timing error affecting some models, distinguishes training configuration and out-of-dataset benchmarking, and links the GCaMP8 paper."
+    },
+    {
+      "id": "gcamp-loo",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model_within_dataset.py",
+      "locator": "lines16–64 and70–91",
+      "supports": "Demonstrates excluding each test neuron from training; config-derived smoothing, correlations/errors/bias and multiple noise levels. It is a current demo, not proof of historical Figure1 equivalence."
+    },
+    {
+      "id": "gcamp-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-047/implementations/registered-runtime/manifest.json",
+      "locator": "scope; scientific_limits; admission",
+      "supports": "Registered released117 pair explicitly states unresolved historical105 Figure1 mapping and no scientific execution/qualification."
+    },
+    {
+      "id": "gcamp-figure1-e",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41592-026-03183-x",
+      "locator": "Figure 1e caption; Methods: benchmarking and comparisons across algorithms; retained PRIMARY_CAPTION_DECISION.json and PROTOCOL_REVISION.md",
+      "supports": "Per-neuron Pearson method comparison at 30 Hz and noise 8; 36 f, 42 m and 39 s are source-reported roster counts, not recovered ordered numerical-array identities. Required method/variant vectors are not means or medians."
+    },
+    {
+      "id": "gcamp-figure1-g",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41592-026-03183-x",
+      "locator": "Figure 1g caption; retained PRIMARY_CAPTION_DECISION.json observations and explicit correction",
+      "supports": "Low- and high-noise per-neuron correlation gains over raw fluorescence. Exact method/noise/gain definition and row identities remain unresolved. The Panel g 105-finite subset does not identify the distinct Figure 1e OASIS 105 denominator."
+    },
+    {
+      "id": "gcamp-publication-demo",
+      "kind": "author_code",
+      "url": "https://github.com/HelmchenLabSoftware/Cascade/tree/213fd1206653bbb9dbe68a5faa8c0dab91fc46ee",
+      "locator": "Retained publication_benchmark.py.txt lines 109–116 and 140; source snapshot identity in SOURCE_EVIDENCE.json",
+      "supports": "Publication-date demo trains a temporary excluded-dataset model but calls the original model for prediction. It is not proof of the Figure 1 pipeline or paper contamination, and cannot establish source-equivalent reference outputs."
+    },
+    {
+      "id": "gcamp-timing-patch",
+      "kind": "author_code",
+      "url": "https://github.com/HelmchenLabSoftware/Cascade/commit/bcc00141a6a89c03402b0352d0b9be08baedd636",
+      "locator": "27 October 2026 inference and benchmark center-index patch; retained PROTOCOL_REVISION.md",
+      "supports": "Publication-era j+31 inference differs from j+32 training and corrected inference. Corrected current code is a distinct version until original-source equivalence is demonstrated."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Infer time-resolved spike rates from GCaMP8 calcium fluorescence and compare with simultaneous electrophysiological ground truth, preserving pooled-GC8 and variant-specific source comparisons. Interneuron, single-AP and online analyses are separately identified conditions.",
+      "evidence_ids": [
+        "gcamp-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author CASCADE Ground_truth GCaMP8 variants underlie the task; the existing DS30/31/32 released117-file panel is not yet mapped to the historical Figure1 input version. Current database files alone do not establish original data identity.",
+      "evidence_ids": [
+        "gcamp-readme",
+        "gcamp-registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Recover the exact historical Figure1 neuron inclusion and biological animal identities. The registration explicitly distinguishes117 released neuron files from unresolved historical105 mapping; pooling interneurons with excitatory neurons would change the task.",
+      "evidence_ids": [
+        "gcamp-registration",
+        "gcamp-paper"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "For paper GC8-trained CASCADE, leave the test neuron out of training and retrain each model; pooled-GC8 and variant-specific training pools differ. A new leave-animal-out split can be reported only as an extension.",
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-loo"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Calcium ΔF/F traces at the declared frame rate and noise condition; paired electrophysiological spikes supervise permitted training neurons and remain evaluator-only for each heldout neuron. No all-neuron checkpoint may be assumed heldout.",
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-loo"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Pin resampling, standardized noise generation, temporal window alignment, Gaussian target smoothing and boundary masking to the historical figure. Current configuration-driven demo and2026-10-27 one-frame fix require explicit paper-era/corrected separation.",
+      "evidence_ids": [
+        "gcamp-readme",
+        "gcamp-loo"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Pearson correlation between inferred and ground-truth spike-rate vectors is the ordered candidate primary endpoint; error and bias remain secondary. Demo uses corrcoef on prepared rates and smoothed normalized absolute error/bias. Historical smoothing/timing and exact figure condition must be recovered before adopting its values.",
+      "evidence_ids": [
+        "gcamp-loo",
+        "gcamp-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Recover the original figure’s neuron/noise/variant aggregation and reported numbers. Demo exports means, medians and quantiles by noise level; this does not identify which summary is the original paper endpoint. Do not pool time bins or noise replicas as independent cells.",
+      "evidence_ids": [
+        "gcamp-loo",
+        "gcamp-registration"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve the complete original Figure 1e method-by-variant per-neuron correlation family and Figure 1g low/high-noise gain companions, including every original undefined or excluded record. Nominal release/caption counts are 36 f/42 m/39 s (117 total), not authenticated vector dimensions. Historical error/timing/generalization coverage and separately named single-AP/interneuron/online conditions remain source-defined full-panel obligations pending exact native quantities/cohorts; they are not silently dropped or converted to generic findings. Indicator nonlinearity is broader inventory, not automatically compulsory.",
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-figure1-e",
+        "gcamp-figure1-g",
+        "gcamp-registration"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Retain authentic calcium, clock, segment and source noise observations for each heldout neuron. Ephys labels supervise only permitted training neurons for protected inference and remain evaluator-only for the heldout neuron. Disclose source historical evaluation-fitted OASIS/MLSpike tuning separately; it does not confer heldout-label access on a protected candidate. Offline symmetric and online causal observation support must be separately source-bound. Exact exposure/boundary manifests remain missing.",
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-loo",
+        "gcamp-registration"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "figure1e-original-per-neuron-method-comparison",
+      "kind": "indexed_array_family",
+      "description": "Original Figure 1e complete source method/variant per-neuron Pearson comparison at 30 Hz, noise 8 and source-described symmetric 50 ms target smoothing. Eight methods across three variants are named individually; all ordered neuron identities, vector dimensions, values and definedness remain unresolved. Source-reported 117 slots are preserved in the coverage design without pretending to authenticate the historical Figure 1 arrays.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure1e-original-neuron-correlation-family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "raw-fluorescence-gcamp8f-pearson",
+            "manifest_key": "figure1e/raw-fluorescence/gcamp8f/pearson_per_neuron",
+            "source_quantity": "Figure 1e raw calcium fluorescence, GCaMP8f: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8f neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 36 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "raw-fluorescence-gcamp8m-pearson",
+            "manifest_key": "figure1e/raw-fluorescence/gcamp8m/pearson_per_neuron",
+            "source_quantity": "Figure 1e raw calcium fluorescence, GCaMP8m: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8m neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 42 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "raw-fluorescence-gcamp8s-pearson",
+            "manifest_key": "figure1e/raw-fluorescence/gcamp8s/pearson_per_neuron",
+            "source_quantity": "Figure 1e raw calcium fluorescence, GCaMP8s: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8s neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 39 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "default-cascade-gcamp8f-pearson",
+            "manifest_key": "figure1e/default-cascade/gcamp8f/pearson_per_neuron",
+            "source_quantity": "Figure 1e Default CASCADE, GCaMP8f: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8f neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 36 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "default-cascade-gcamp8m-pearson",
+            "manifest_key": "figure1e/default-cascade/gcamp8m/pearson_per_neuron",
+            "source_quantity": "Figure 1e Default CASCADE, GCaMP8m: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8m neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 42 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "default-cascade-gcamp8s-pearson",
+            "manifest_key": "figure1e/default-cascade/gcamp8s/pearson_per_neuron",
+            "source_quantity": "Figure 1e Default CASCADE, GCaMP8s: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8s neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 39 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "gc8-pooled-cascade-gcamp8f-pearson",
+            "manifest_key": "figure1e/gc8-pooled-cascade/gcamp8f/pearson_per_neuron",
+            "source_quantity": "Figure 1e GC8-tuned pooled CASCADE, GCaMP8f: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8f neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 36 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "gc8-pooled-cascade-gcamp8m-pearson",
+            "manifest_key": "figure1e/gc8-pooled-cascade/gcamp8m/pearson_per_neuron",
+            "source_quantity": "Figure 1e GC8-tuned pooled CASCADE, GCaMP8m: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8m neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 42 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "gc8-pooled-cascade-gcamp8s-pearson",
+            "manifest_key": "figure1e/gc8-pooled-cascade/gcamp8s/pearson_per_neuron",
+            "source_quantity": "Figure 1e GC8-tuned pooled CASCADE, GCaMP8s: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8s neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 39 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "gc8-variant-cascade-gcamp8f-pearson",
+            "manifest_key": "figure1e/gc8-variant-cascade/gcamp8f/pearson_per_neuron",
+            "source_quantity": "Figure 1e variant-specific GC8-tuned CASCADE, GCaMP8f: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8f neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 36 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "gc8-variant-cascade-gcamp8m-pearson",
+            "manifest_key": "figure1e/gc8-variant-cascade/gcamp8m/pearson_per_neuron",
+            "source_quantity": "Figure 1e variant-specific GC8-tuned CASCADE, GCaMP8m: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8m neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 42 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "gc8-variant-cascade-gcamp8s-pearson",
+            "manifest_key": "figure1e/gc8-variant-cascade/gcamp8s/pearson_per_neuron",
+            "source_quantity": "Figure 1e variant-specific GC8-tuned CASCADE, GCaMP8s: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8s neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 39 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "default-oasis-gcamp8f-pearson",
+            "manifest_key": "figure1e/default-oasis/gcamp8f/pearson_per_neuron",
+            "source_quantity": "Figure 1e default OASIS, GCaMP8f: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8f neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 36 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "default-oasis-gcamp8m-pearson",
+            "manifest_key": "figure1e/default-oasis/gcamp8m/pearson_per_neuron",
+            "source_quantity": "Figure 1e default OASIS, GCaMP8m: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8m neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 42 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "default-oasis-gcamp8s-pearson",
+            "manifest_key": "figure1e/default-oasis/gcamp8s/pearson_per_neuron",
+            "source_quantity": "Figure 1e default OASIS, GCaMP8s: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8s neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 39 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "tuned-oasis-gcamp8f-pearson",
+            "manifest_key": "figure1e/tuned-oasis/gcamp8f/pearson_per_neuron",
+            "source_quantity": "Figure 1e historically tuned OASIS, GCaMP8f: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8f neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 36 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "tuned-oasis-gcamp8m-pearson",
+            "manifest_key": "figure1e/tuned-oasis/gcamp8m/pearson_per_neuron",
+            "source_quantity": "Figure 1e historically tuned OASIS, GCaMP8m: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8m neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 42 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "tuned-oasis-gcamp8s-pearson",
+            "manifest_key": "figure1e/tuned-oasis/gcamp8s/pearson_per_neuron",
+            "source_quantity": "Figure 1e historically tuned OASIS, GCaMP8s: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8s neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 39 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "default-mlspike-gcamp8f-pearson",
+            "manifest_key": "figure1e/default-mlspike/gcamp8f/pearson_per_neuron",
+            "source_quantity": "Figure 1e default MLSpike, GCaMP8f: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8f neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 36 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "default-mlspike-gcamp8m-pearson",
+            "manifest_key": "figure1e/default-mlspike/gcamp8m/pearson_per_neuron",
+            "source_quantity": "Figure 1e default MLSpike, GCaMP8m: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8m neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 42 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "default-mlspike-gcamp8s-pearson",
+            "manifest_key": "figure1e/default-mlspike/gcamp8s/pearson_per_neuron",
+            "source_quantity": "Figure 1e default MLSpike, GCaMP8s: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8s neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 39 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "tuned-mlspike-gcamp8f-pearson",
+            "manifest_key": "figure1e/tuned-mlspike/gcamp8f/pearson_per_neuron",
+            "source_quantity": "Figure 1e historically tuned MLSpike, GCaMP8f: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8f neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 36 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "tuned-mlspike-gcamp8m-pearson",
+            "manifest_key": "figure1e/tuned-mlspike/gcamp8m/pearson_per_neuron",
+            "source_quantity": "Figure 1e historically tuned MLSpike, GCaMP8m: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8m neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 42 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          },
+          {
+            "id": "tuned-mlspike-gcamp8s-pearson",
+            "manifest_key": "figure1e/tuned-mlspike/gcamp8s/pearson_per_neuron",
+            "source_quantity": "Figure 1e historically tuned MLSpike, GCaMP8s: original-condition Pearson correlation between the method output and simultaneous ephys-derived reference for each original neuron; raw fluorescence is the source calcium comparator.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered GCaMP8s neuron/file/animal/session identity and source-defined support/undefinedness are unbound. The caption/release reports 39 slots; that count does not fix this array length or cross-method row correspondence. No positional workbook row or invented neuron label is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless Pearson correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain the complete identified per-neuron vector. Compute Pearson on source-aligned rate pairs and evaluator-owned support; source segment/replica concatenation, exclusions and figure reduction remain unresolved. No mean, median, selected subgroup or equal weighting across variants is imposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-e",
+              "gcamp-loo"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "gcamp-paper",
+          "gcamp-figure1-e"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original-observations-and-clocks",
+        "calcium-derived-predictions",
+        "ephys-reference-and-support",
+        "source-fit-and-fold-provenance",
+        "complete-per-neuron-metrics"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Prospective numerical-reference equivalence route for the complete named source arrays; no comparison program, norm, per-cell all-close rule, scalar reduction or tolerance is selected. Recover original references and independently justify the scientific criterion before using this route. The native vector is preserved; documentary boxplots and later-demo means/medians cannot replace it.",
+        "independent_unit": "Original biological neuron, with animal/session grouping where present; exact grouping is unresolved.",
+        "dependence": "Pair methods on the same neurons; retain within-neuron segments/noise replicas, source fold and ensemble dependence. Time bins, method entries and variants of the same recording are not independent biological replicates.",
+        "multiplicity": "Complete declared method/variant/noise family and any required source companions; no post-hoc favorable subset. Exact simultaneous-coverage or other inferential rule remains unfrozen.",
+        "rationale": "The source quantities are numerical vectors, so this class can represent a future justified reference comparison, but metadata support does not establish its scientific sufficiency. Source identities, original reduction, reference values, biological dependence and criteria remain unresolved. If the eventual source criterion requires an unsupported relational/distributional class, record schema_limited then; do not force equivalence to obtain eligibility.",
+        "evidence_ids": [
+          "gcamp-paper",
+          "gcamp-figure1-e"
+        ]
+      },
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-figure1-e",
+        "gcamp-loo"
+      ]
+    },
+    {
+      "id": "figure1g-original-low-high-noise-gain",
+      "kind": "indexed_array_family",
+      "description": "Original low- and high-noise per-neuron correlation-gain companions. Two actual source-described vectors are retained; exact methods, noise levels, units, gain formula, support and identities remain unbound.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure1g-original-noise-gain-family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "low-noise-correlation-gain",
+            "manifest_key": "figure1g/low_noise/correlation_gain_per_neuron",
+            "source_quantity": "Figure 1g source low-noise per-neuron correlation gain over raw calcium fluorescence; exact arithmetic gain definition, participating method and numeric noise value are unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original ordered neuron identity across low/high noise and its crosswalk to Figure 1e are unresolved. Caption/release 117 is nominal support only; preserve original undefined states. The observed 105 finite Panel g slots do not justify a 105-length array or twelve exclusions."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "unresolved: source correlation-gain scale (dimensionless difference, relative gain or plotted scaling must be recovered)",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original per-neuron gain and its raw-fluorescence/method constituents and definedness. Do not invent a subtraction/ratio/percentage, mean/median, method pooling or low/high-noise aggregation.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-g"
+            ]
+          },
+          {
+            "id": "high-noise-correlation-gain",
+            "manifest_key": "figure1g/high_noise/correlation_gain_per_neuron",
+            "source_quantity": "Figure 1g source high-noise per-neuron correlation gain over raw calcium fluorescence; exact arithmetic gain definition, participating method and numeric noise value are unresolved.",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "original_neuron",
+                "units": "identified biological neuron",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original ordered neuron identity across low/high noise and its crosswalk to Figure 1e are unresolved. Caption/release 117 is nominal support only; preserve original undefined states. The observed 105 finite Panel g slots do not justify a 105-length array or twelve exclusions."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "unresolved: source correlation-gain scale (dimensionless difference, relative gain or plotted scaling must be recovered)",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Retain every original per-neuron gain and its raw-fluorescence/method constituents and definedness. Do not invent a subtraction/ratio/percentage, mean/median, method pooling or low/high-noise aggregation.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "gcamp-paper",
+              "gcamp-figure1-g"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "gcamp-paper",
+          "gcamp-figure1-g"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original-observations-and-clocks",
+        "calcium-derived-predictions",
+        "ephys-reference-and-support",
+        "source-fit-and-fold-provenance",
+        "complete-per-neuron-metrics",
+        "source-low-high-noise-gains"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Prospective numerical-reference equivalence route for the complete named source arrays; no comparison program, norm, per-cell all-close rule, scalar reduction or tolerance is selected. Recover original references and independently justify the scientific criterion before using this route. The source gain formula and low/high-noise identities must be bound before a numerical comparison is meaningful.",
+        "independent_unit": "Original biological neuron, with animal/session grouping where present; exact grouping is unresolved.",
+        "dependence": "Pair methods on the same neurons; retain within-neuron segments/noise replicas, source fold and ensemble dependence. Time bins, method entries and variants of the same recording are not independent biological replicates.",
+        "multiplicity": "Complete declared method/variant/noise family and any required source companions; no post-hoc favorable subset. Exact simultaneous-coverage or other inferential rule remains unfrozen.",
+        "rationale": "The source quantities are numerical vectors, so this class can represent a future justified reference comparison, but metadata support does not establish its scientific sufficiency. Source identities, original reduction, reference values, biological dependence and criteria remain unresolved. If the eventual source criterion requires an unsupported relational/distributional class, record schema_limited then; do not force equivalence to obtain eligibility.",
+        "evidence_ids": [
+          "gcamp-paper",
+          "gcamp-figure1-g"
+        ]
+      },
+      "evidence_ids": [
+        "gcamp-paper",
+        "gcamp-figure1-g"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Original Figure 1 neuron/file/segment/animal/session identities, method-specific eligibility/undefinedness and row correspondence are unauthenticated. Source-reported 36 f/42 m/39 s and 117 released files do not supply ordered numeric-array identities or finite-score counts.",
+    "The initial release already contains 117 files. Figure 1e OASIS prose reports 105 while Figure 1g has a different 105-finite subset in the retained restricted census. Do not invent twelve exclusions or use the latter to explain the former.",
+    "Literal publisher Figure 1 source-workbook href and source-row-to-neuron mapping remain unverified. The derived MOESM4 object and structural slot counts are not original reference-manifest identities; no numerical source payload was opened for this declaration.",
+    "Actual Figure 1 source revision, preprocessing/noise random states, training/model/ensemble/architecture/epochs and fold identities remain incomplete. Source release/filter configuration [30,40,50] versus published [20,30,40] and demo five-member snapshots do not establish the original recipe.",
+    "Pooled leave-one-neuron-out source counts imply 116 training neurons per nominal 117-neuron fold and variant counts 35/41/38, but original membership and all segments/noise replicas/model members must be authenticated. Do not use all-neuron checkpoints, first-dataset-only demo training, or a smaller cohort.",
+    "At 30 Hz, source Figure 1 target smoothing is symmetric 50 ms (sigma 1.5 samples); checked-in 25 ms gives sigma 0.75. At 60 Hz, 25 ms also gives sigma 1.5 but is a different condition. Primary Pearson uses prepared rates; extra error/bias smoothing is a distinct diagnostic operation.",
+    "Historical j+31 inference versus j+32 training and corrected inference must remain versioned. Do not maximize correlation by selecting a temporal shift or assume corrected current code is publication-equivalent.",
+    "Historical optimized OASIS/MLSpike evaluation-label fitting, smoothing and ±1-second shifts differ from neuron-heldout CASCADE. Reproduction must disclose the source procedure; a protected improvement protocol cannot inherit heldout-label access or silently replace the original tuning.",
+    "Figure 1g exact method/noise conditions, gain scale/formula and original reduction remain unknown. No scalar mean/median, percentage gain or fabricated method axis is supplied.",
+    "Historical per-cell error and timing calibration/generalization obligations and current separately named single-AP/interneuron/online analyses require exact source native endpoints, cohorts and controls before full task coverage can be declared. Indicator nonlinearity remains inventory only. These are explicit full-panel blockers, not invented generic scalar/array findings.",
+    "Full source-equivalent references, original figure aggregation and independently justified numerical equivalence/uncertainty/multiplicity criteria are missing. Matching exposed paper vectors alone, a null test, mean match or current-code reconstruction does not establish original reproduction.",
+    "Existing author-rate-metrics-v1 scores evaluator-prepared rates only. A full calcium-to-spikes submitted-analysis interface, authentic data and exposure manifests, independent target/mask/fit verifier and scientific comparator remain absent. Admission policy is omitted rather than filled with placeholder hashes.",
+    "Final integrated current task raw hash, exact paired common inputs, sole author-code addition, cumulative resource/exposure budgets and original source continuity are not frozen. No outcomes bundle or new AI result is admitted."
+  ]
+}

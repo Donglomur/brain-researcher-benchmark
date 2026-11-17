@@ -59,6 +59,9 @@ def revision_pin(reader, row):
     task_pin = {**specification, "original_path": original["path"],
                 "predecessor": {key: original[key] for key in ("bytes", "sha256")},
                 "specification_revision": row["specification_revision"]}
+    if "paper_outcomes" in row:
+        integrity.require(track == "paper", "Only paper revisions can bind paper outcomes")
+        task_pin["paper_outcomes"] = copy.deepcopy(row["paper_outcomes"])
     document = integrity.strict_json(reader.checked(specification["path"], specification))
     integrity.require(type(document) is dict
                       and document.get("id") == row.get("specification_id", row["id"])
@@ -128,6 +131,11 @@ def build_outputs(root, *, update_workflows=True):
             integrity.require(existing["specification_revision"]["previous_specification"]
                               == task_pin["specification_revision"]["previous_specification"],
                               "Refusing to replace previously preserved task history")
+        if "paper_outcomes" in existing:
+            integrity.require("paper_outcomes" in task_pin
+                              and existing["paper_outcomes"]["previous_specification"]
+                              == task_pin["paper_outcomes"]["previous_specification"],
+                              "Refusing to replace the preserved pre-outcomes definition")
         package["registered_task"] = copy.deepcopy(task_pin)
     # This also authenticates every original implementation inventory and neural task.
     integrity.check_configuration(reader, updated)
@@ -168,10 +176,13 @@ def build_outputs(root, *, update_workflows=True):
                             integrity.require(integrity.same_pin(value, previous),
                                               "Closure task pin does not authenticate historical bytes: " + path)
                             value["path"] = previous["path"]
-                            lineage[parts[1]][parts[2]] = {"task_id": parts[2], "version": profile["version"],
+                            entry = {"task_id": parts[2], "version": profile["version"],
                                 "role": profile["role"], "historical_specification": previous,
                                 "current_specification": {key: task_pin[key] for key in ("path", "bytes", "sha256")},
                                 profile["contract"]: revision[profile["contract"]]}
+                            if "paper_outcomes" in task_pin:
+                                entry["paper_outcomes"] = copy.deepcopy(task_pin["paper_outcomes"])
+                            lineage[parts[1]][parts[2]] = entry
                 for key, child in value.items():
                     if key not in {profile["field"] for profile in PROFILES.values()}:
                         visit(child)
@@ -195,6 +206,12 @@ def build_outputs(root, *, update_workflows=True):
                                       and item["role"] == profile["role"]
                                       and item["historical_specification"] == selected[item["task_id"]]["historical_specification"],
                                       "Refusing to replace existing closure history")
+                    if "paper_outcomes" in item:
+                        current_binding = selected[item["task_id"]].get("paper_outcomes")
+                        integrity.require(type(current_binding) is dict
+                                          and item["paper_outcomes"]["previous_specification"]
+                                          == current_binding["previous_specification"],
+                                          "Refusing to replace existing pre-outcomes closure history")
             if selected:
                 result[profile["field"]] = expected
         if result != document:

@@ -1,0 +1,410 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-replacement-005",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original empirical method family requires source Figure 2A multitask versus task-specific training and Figure 2B multi-session versus single-session comparisons. Five actual Figure 2B printed relative-improvement annotations are represented below; they are not a complete comparison panel or a computational reproduction. Exact Figure 2A cells, source counterpart identities, Figure 2B session scores and annotation formula, native verification and independent acceptance criteria remain unresolved. Prior Table 1/Table 10 findings remain useful partial evidence in the same family, retained without making every available table entry mandatory.",
+  "source_paper": {
+    "title": "Neural Encoding and Decoding at Scale",
+    "url": "https://proceedings.mlr.press/v267/zhang25bw.html"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/zhang25bw/zhang25bw.pdf",
+      "locator": "Final ICML Sections 3.1, 4.1, 5.1-5.2; Figure 2A-B; Appendices A, C and D Table 9; Table 1 and Appendix E Table 10 as retained partial same-family evidence",
+      "supports": "Original IBL training/held-out design, same-architecture single-session multimodal/unimodal comparison, multi-session/single-session comparison and source metrics. Native result identities and exact numerical counterpart mappings are not established by printed summaries."
+    },
+    {
+      "id": "author_readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/README.md",
+      "locator": "Datasets and Models; training/evaluation script instructions",
+      "supports": "Author baseline route and distinction between pretraining and held-out session lists."
+    },
+    {
+      "id": "train_roster",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/train_eids.txt",
+      "locator": "Complete 74-line session roster at pinned revision",
+      "supports": "Original source pretraining session membership."
+    },
+    {
+      "id": "test_roster",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/test_eids.txt",
+      "locator": "Complete 10-line session roster at pinned revision",
+      "supports": "Original source held-out session membership."
+    },
+    {
+      "id": "prepare",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/prepare_data.py",
+      "locator": "params; mean_fr/keep_unit_idxs; Data partition block",
+      "supports": "20-ms bins, stimulus-aligned two-second windows, code unit threshold and seeded 70/10/20 trial allocation."
+    },
+    {
+      "id": "evaluation",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/utils/eval_utils.py",
+      "locator": "co_smoothing_eval; neg_log_likelihood; bits_per_spike; plot_psth",
+      "supports": "Evaluation modality masks, Poisson-gain metric, neuron mean, classification accuracy and flattened un-clipped trial R2."
+    },
+    {
+      "id": "preprocess",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/utils/ibl_data_utils.py",
+      "locator": "load_trials_and_mask; align_data",
+      "supports": "Eligibility, alignment, validity-mask and scaling provenance requiring paper/code reconciliation."
+    },
+    {
+      "id": "encoding_panel",
+      "kind": "paper",
+      "url": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/zhang25bw/zhang25bw.pdf",
+      "locator": "Final ICML Table 1 and Section 5.2; retained extracted-text lines 441-453",
+      "supports": "NEDS all/choice/block/wheel/whisker encoding means 0.27/0.06/0.10/0.12/0.11 bits per spike and SEMs 0.03/0.02/0.02/0.02/0.02 over ten held-out animals after original multi-session pretraining and fine-tuning."
+    },
+    {
+      "id": "transfer_comparison",
+      "kind": "paper",
+      "url": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/zhang25bw/zhang25bw.pdf",
+      "locator": "Final ICML Appendix E Table 10 and Section 5.2; retained extracted-text lines 1057-1072",
+      "supports": "NEDS four decoding means and SEMs, together with all four decoding means and SEMs for each of RRR, NDT2 and POYO+, on the same ten held-out sessions. Table 10 reports no encoding endpoint for those three decoder comparators."
+    },
+    {
+      "id": "granular_evaluator",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/neds_evaluator.py",
+      "locator": "validate_session, input_packet, make_receipt, score_session, bits_per_spike, classification, r_squared, evaluate",
+      "supports": "Existing runnable engineering interfaces accept ordered trial/unit identities and six-task prediction arrays, enforce permitted modality packets, compute per-unit source Poisson gains and four behavior scores, and retain all nine NEDS endpoints. The ridge default is prospective; it is not author NEDS. The full evaluate wrapper requires all 84 source sessions and two complete six-task methods, so it cannot directly admit decoder-only comparator outputs or establish historical ten-session mean/SEM parity."
+    },
+    {
+      "id": "split_replay",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-replacement-005/implementations/source-split-replay-v1/source_split.py",
+      "locator": "replay, encode_state, verify_partition_ids, physical_overlap",
+      "supports": "Existing conditional split replay preserves original post-alignment row order, process-wide legacy seed-42 random draws or captured MT19937 state, literal floating floor boundaries, exact ordered partition IDs and unpurged two-second physical support. This does not supply authentic original row identities or process history."
+    },
+    {
+      "id": "fig2_training_comparison",
+      "kind": "paper",
+      "url": "https://proceedings.mlr.press/v267/zhang25bw.html",
+      "locator": "Final ICML Section 5.1, Figure 2A caption; retained extracted text lines 331-352 and 410-418; extracted-text SHA-256 2963604e42b3315ef285095e76d0f0e89b3577f2ee00b6b88f53868103f32b0d",
+      "supports": "Source compares multi-session NEDS and single-session NEDS with linear baselines and single-session unimodal NEDS. Single-session unimodal and multimodal NEDS use the same approximately 3M-parameter transformer encoder. Preserve actual task-specific training controls, not only inference input masks. Exact plotted numerical cells remain unresolved."
+    },
+    {
+      "id": "fig2_transfer_comparison",
+      "kind": "paper",
+      "url": "https://proceedings.mlr.press/v267/zhang25bw.html",
+      "locator": "Final ICML Figure 2B axis labels/green annotations and caption; retained extracted text lines 368-378 and 417-420; Sections 5.1-5.2; extracted-text SHA-256 2963604e42b3315ef285095e76d0f0e89b3577f2ee00b6b88f53868103f32b0d",
+      "supports": "Five per-session multi-session versus single-session comparisons: spike encoding, wheel, whisker, choice and block decoding. Printed green relative-improvement annotations are respectively 24%, 7%, 11%, 9% and 4%. Caption identifies each dot as one session; the exact annotation formula and result arrays are not frozen."
+    },
+    {
+      "id": "source_configuration_limit",
+      "kind": "paper",
+      "url": "https://proceedings.mlr.press/v267/zhang25bw.html",
+      "locator": "Final ICML Figure 2 caption lines 413-418 and Appendix D/Table 9 lines 1038-1054 in retained extracted text",
+      "supports": "Original main comparison uses an approximately 3M-parameter single-session transformer encoder and approximately 12M-parameter multi-session encoder. It does not isolate a causal pretraining benefit at fixed model capacity. The 12M single-session ablation is not added to the required Figure 2A/B panel."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "The retained empirical IBL joint encoding/decoding comparative result: source Figure 2A multitask versus same-architecture unimodal training and source Figure 2B multi-session versus single-session performance, together with the already retained Table 1/Table 10 outcomes and original masks, cohorts, partitions and necessary controls. This does not add brain-region classification, monkey data or every separate masking ablation, and does not claim pretraining is causally isolated at fixed model capacity.",
+      "evidence_ids": [
+        "paper",
+        "fig2_training_comparison",
+        "fig2_transfer_comparison",
+        "source_configuration_limit"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "IBL repeated-site Neuropixels and behavioral recordings. Exact historical ONE object versions/checksums and processed arrays linked to the reported results remain unresolved; substituting a current download is not demonstrated parity.",
+      "evidence_ids": [
+        "paper",
+        "prepare"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Preserve all 74 pinned pretraining sessions for the multi-session condition and the original ten held-out sessions for matched comparison, with single-session training confined to each corresponding held-out session. The paper describes 73 pretraining animals plus ten held-out animals and two insertions from one training animal. Exact Figure 2 counterpart session membership and the EID/probe/animal join must be authenticated.",
+      "evidence_ids": [
+        "paper",
+        "train_roster",
+        "test_roster",
+        "fig2_transfer_comparison"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Retain the original held-out-session 70% training, 10% validation and 20% test trial design for each source comparison condition. Multi-session models receive the original pretraining exposure before held-out-session fine-tuning; single-session models use only the source-permitted target-session training trials. Preserve original eligibility-dependent row order, process-wide seed-42 RNG history and literal float-floor boundaries. Actual partitions and identity correspondence across the published Figure 2 conditions remain unauthenticated.",
+      "evidence_ids": [
+        "paper",
+        "prepare",
+        "split_replay",
+        "fig2_training_comparison",
+        "fig2_transfer_comparison"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "At inference, neural encoding uses only its declared behavioral observations while hiding spikes, and behavioral decoding uses spikes while hiding behavioral targets. Preserve Figure 2's actual source training/masking regime for each multimodal, unimodal and linear comparison condition; changing an inference behavior mask alone is not the task-specific training control. Exact source condition-to-mask support remains to be authenticated. Reward, target aliases, test-derived null rates and arbitrary auxiliary modalities are not candidate observations.",
+      "evidence_ids": [
+        "paper",
+        "evaluation",
+        "fig2_training_comparison"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "20-ms spike/behavior bins in stimulus-aligned [-0.5,1.5]-s windows. Paper excludes neurons below 2 Hz, while pinned prepare_data.py retains mean_fr>1/0.2 (>5 Hz). Original eligibility, validity-mask handling, behavior scaling and camera lineage require reconciliation rather than silent repair.",
+      "evidence_ids": [
+        "paper",
+        "prepare",
+        "preprocess"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Retain source per-neuron Poisson log-likelihood gain over the evaluation-mean null divided by total spikes and ln(2), ordinary choice/block accuracy and un-clipped wheel/whisker R2 on the original evaluation support, including zero-rate and undefined-neuron behavior. Figure 2B also reports five relative-improvement percentages; their exact source denominator and reduction are unresolved and must not be inferred from Table 9/Table 10 means.",
+      "evidence_ids": [
+        "paper",
+        "evaluation",
+        "fig2_transfer_comparison"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve source neuron-to-session reduction, each held-out session's five distinct neural/behavioral scores, Figure 2A condition summaries with original uncertainty, and Figure 2B paired session scatter and relative-improvement annotations. Exact original Figure 2 summaries/annotation formula and session-to-animal mapping remain unresolved. Keep animal and seed variation separate; do not pool nested neurons/trials/bins as independent animals or collapse bits/spike, R2 and accuracy into an undocumented composite.",
+      "evidence_ids": [
+        "paper",
+        "evaluation",
+        "fig2_training_comparison",
+        "fig2_transfer_comparison"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The bounded required panel is the complete source Figure 2A training comparison and Figure 2B multi-session/single-session comparison over the source neural encoding and four behavioral decoding endpoints, with their indispensable original controls and session-level evidence. Retain actual source Fig. 2A linear, single-session unimodal, single-session multimodal and multi-session method/task cells without inventing a Cartesian product. Figure 2B requires each session's paired spike-encoding, wheel, whisker, choice and block scores and the five source green annotations. Exact Figure 2A numeric cells, source condition mapping and Figure 2B annotation derivation remain unresolved. Five printed annotation findings below are partial coverage only. The 42 Table 1/Table 10 findings and ten Table 9 3M summaries are retained separately as partial same-family evidence, not automatically mandatory cells. Do not expand to every masking ablation, brain-region classification, monkey data, Figure 2C-F illustrations or a new equal-capacity causal experiment.\n\nRetained source-specific qualifications:\nThe source's joint neural encoding and behavioral decoding result on the original IBL held-out sessions, retaining Figure 2A multitask versus task-specific training and Figure 2B multi-session versus single-session transfer comparisons with original masks, exposure, configurations and neural/behavioral endpoints. Existing Table 1/Table 10 summaries are partial evidence within this same result family; absolute pretrained scores alone do not establish the comparative findings.",
+      "evidence_ids": [
+        "paper",
+        "fig2_training_comparison",
+        "fig2_transfer_comparison",
+        "source_configuration_limit",
+        "train_roster",
+        "test_roster"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Preserve source condition-specific training exposure and original 70/10/20 trial partitions. Only the multi-session branch receives its original 74-session pretraining exposure; source single-session controls receive their matched target-session training trials. Source validation governs selection and original test targets stay operator-side. Preserve original training objectives, modality masks, class conventions, ordered trial/unit identities and expected spike counts per 20-ms bin. Published paper and printed results are available to both AI conditions; authenticated author code is the only intended information addition, with otherwise identical frozen budgets and inputs. Exact Figure 2 branch manifests and permissible observations remain to be authenticated.",
+      "evidence_ids": [
+        "paper",
+        "evaluation",
+        "prepare",
+        "fig2_training_comparison",
+        "fig2_transfer_comparison"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "Fig2B_spike_encoding_reported_relative_improvement",
+      "kind": "scalar",
+      "description": "Figure 2B printed green relative-improvement annotation for spike encoding, comparing original 74-session NEDS with original single-session NEDS. This records a published annotation, not a computed local contrast.",
+      "status": "verified",
+      "expected": 24,
+      "units": "percent relative improvement as printed; exact source formula unresolved",
+      "aggregation": "Source caption identifies individual scatter dots as sessions and the green annotation as relative improvement of 74-session over single-session NEDS. The endpoint's underlying metric is bits per spike. Original per-session values, precise denominator, averaging order and undefined-value treatment are not yet authenticated. Do not substitute percentage change of separately printed table means, mean per-session percentage gain, percentage-point difference or an invented contrast.",
+      "evidence_ids": [
+        "fig2_transfer_comparison"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The annotation is a known source value, not a criterion. Neither integer printing precision nor table SEM gives a justified reproduction tolerance; the source formula, native outputs and an independent acceptance rule remain unresolved.",
+        "evidence_ids": [
+          "fig2_transfer_comparison"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified uncertainty or deterministic equivalence rule is frozen for this original reported relative-improvement statistic.",
+        "independent_unit": "Original held-out mouse after authentic session/probe/animal join; retain paired session values and distinguish model-seed variation.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source panel has ten held-out animals/sessions, but exact original paired support and annotation reduction are not authenticated. No CI level, threshold, nonrejection rule or numerical superiority margin is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig2_transfer_comparison"
+        ]
+      }
+    },
+    {
+      "id": "Fig2B_wheel_decoding_reported_relative_improvement",
+      "kind": "scalar",
+      "description": "Figure 2B printed green relative-improvement annotation for wheel decoding, comparing original 74-session NEDS with original single-session NEDS. This records a published annotation, not a computed local contrast.",
+      "status": "verified",
+      "expected": 7,
+      "units": "percent relative improvement as printed; exact source formula unresolved",
+      "aggregation": "Source caption identifies individual scatter dots as sessions and the green annotation as relative improvement of 74-session over single-session NEDS. The endpoint's underlying metric is R2. Original per-session values, precise denominator, averaging order and undefined-value treatment are not yet authenticated. Do not substitute percentage change of separately printed table means, mean per-session percentage gain, percentage-point difference or an invented contrast.",
+      "evidence_ids": [
+        "fig2_transfer_comparison"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The annotation is a known source value, not a criterion. Neither integer printing precision nor table SEM gives a justified reproduction tolerance; the source formula, native outputs and an independent acceptance rule remain unresolved.",
+        "evidence_ids": [
+          "fig2_transfer_comparison"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified uncertainty or deterministic equivalence rule is frozen for this original reported relative-improvement statistic.",
+        "independent_unit": "Original held-out mouse after authentic session/probe/animal join; retain paired session values and distinguish model-seed variation.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source panel has ten held-out animals/sessions, but exact original paired support and annotation reduction are not authenticated. No CI level, threshold, nonrejection rule or numerical superiority margin is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig2_transfer_comparison"
+        ]
+      }
+    },
+    {
+      "id": "Fig2B_whisker_decoding_reported_relative_improvement",
+      "kind": "scalar",
+      "description": "Figure 2B printed green relative-improvement annotation for whisker decoding, comparing original 74-session NEDS with original single-session NEDS. This records a published annotation, not a computed local contrast.",
+      "status": "verified",
+      "expected": 11,
+      "units": "percent relative improvement as printed; exact source formula unresolved",
+      "aggregation": "Source caption identifies individual scatter dots as sessions and the green annotation as relative improvement of 74-session over single-session NEDS. The endpoint's underlying metric is R2. Original per-session values, precise denominator, averaging order and undefined-value treatment are not yet authenticated. Do not substitute percentage change of separately printed table means, mean per-session percentage gain, percentage-point difference or an invented contrast.",
+      "evidence_ids": [
+        "fig2_transfer_comparison"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The annotation is a known source value, not a criterion. Neither integer printing precision nor table SEM gives a justified reproduction tolerance; the source formula, native outputs and an independent acceptance rule remain unresolved.",
+        "evidence_ids": [
+          "fig2_transfer_comparison"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified uncertainty or deterministic equivalence rule is frozen for this original reported relative-improvement statistic.",
+        "independent_unit": "Original held-out mouse after authentic session/probe/animal join; retain paired session values and distinguish model-seed variation.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source panel has ten held-out animals/sessions, but exact original paired support and annotation reduction are not authenticated. No CI level, threshold, nonrejection rule or numerical superiority margin is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig2_transfer_comparison"
+        ]
+      }
+    },
+    {
+      "id": "Fig2B_choice_decoding_reported_relative_improvement",
+      "kind": "scalar",
+      "description": "Figure 2B printed green relative-improvement annotation for choice decoding, comparing original 74-session NEDS with original single-session NEDS. This records a published annotation, not a computed local contrast.",
+      "status": "verified",
+      "expected": 9,
+      "units": "percent relative improvement as printed; exact source formula unresolved",
+      "aggregation": "Source caption identifies individual scatter dots as sessions and the green annotation as relative improvement of 74-session over single-session NEDS. The endpoint's underlying metric is accuracy. Original per-session values, precise denominator, averaging order and undefined-value treatment are not yet authenticated. Do not substitute percentage change of separately printed table means, mean per-session percentage gain, percentage-point difference or an invented contrast.",
+      "evidence_ids": [
+        "fig2_transfer_comparison"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The annotation is a known source value, not a criterion. Neither integer printing precision nor table SEM gives a justified reproduction tolerance; the source formula, native outputs and an independent acceptance rule remain unresolved.",
+        "evidence_ids": [
+          "fig2_transfer_comparison"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified uncertainty or deterministic equivalence rule is frozen for this original reported relative-improvement statistic.",
+        "independent_unit": "Original held-out mouse after authentic session/probe/animal join; retain paired session values and distinguish model-seed variation.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source panel has ten held-out animals/sessions, but exact original paired support and annotation reduction are not authenticated. No CI level, threshold, nonrejection rule or numerical superiority margin is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig2_transfer_comparison"
+        ]
+      }
+    },
+    {
+      "id": "Fig2B_block_decoding_reported_relative_improvement",
+      "kind": "scalar",
+      "description": "Figure 2B printed green relative-improvement annotation for block decoding, comparing original 74-session NEDS with original single-session NEDS. This records a published annotation, not a computed local contrast.",
+      "status": "verified",
+      "expected": 4,
+      "units": "percent relative improvement as printed; exact source formula unresolved",
+      "aggregation": "Source caption identifies individual scatter dots as sessions and the green annotation as relative improvement of 74-session over single-session NEDS. The endpoint's underlying metric is accuracy. Original per-session values, precise denominator, averaging order and undefined-value treatment are not yet authenticated. Do not substitute percentage change of separately printed table means, mean per-session percentage gain, percentage-point difference or an invented contrast.",
+      "evidence_ids": [
+        "fig2_transfer_comparison"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The annotation is a known source value, not a criterion. Neither integer printing precision nor table SEM gives a justified reproduction tolerance; the source formula, native outputs and an independent acceptance rule remain unresolved.",
+        "evidence_ids": [
+          "fig2_transfer_comparison"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No independently justified uncertainty or deterministic equivalence rule is frozen for this original reported relative-improvement statistic.",
+        "independent_unit": "Original held-out mouse after authentic session/probe/animal join; retain paired session values and distinguish model-seed variation.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source panel has ten held-out animals/sessions, but exact original paired support and annotation reduction are not authenticated. No CI level, threshold, nonrejection rule or numerical superiority margin is invented.",
+        "evidence_ids": [
+          "paper",
+          "fig2_transfer_comparison"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "This external proposal corrects the primary scope only. Current canonical task/improvement/outcomes and old drafts remain unchanged; final task SHA is HOLD. The corrected factual anchors intentionally cannot bind to the old improvement contract until the canonical owner aligns and independently reviews the full bundle.",
+    "Freeze actual Figure 2A method-by-endpoint cells and source counterpart mapping, numerical values and uncertainty using original result provenance. Do not infer task-specific training from a different inference mask, import all masking ablations or treat a sparse source panel as an invented Cartesian grid.",
+    "Authenticate Figure 2B per-session paired scores and the exact formula for its five relative-improvement annotations. Table 9/Table 10 means do not determine those annotations. Matching five printed percentages alone cannot establish the complete original comparison.",
+    "The 42 previous Table 1/Table 10 findings remain preserved in the unchanged old draft and exact external source inventory. Table 9's ten 3M single-session summaries are inventory only. They are useful partial same-family evidence, not automatically additional mandatory panel cells; promote only explicitly source-mapped indispensable outputs after review.",
+    "Retain original same-architecture single-session multimodal/unimodal controls, original linear comparator cells and original approximately 3M single-session versus approximately 12M multi-session configurations. This does not establish a fixed-capacity causal pretraining effect or mandate a new equal-size/equal-compute experiment.",
+    "Authenticate original ONE revisions/checksums, all 74 pretraining and ten held-out session identities, eligible units and trials, exact Figure 2 condition matches and EID/probe/animal join. Native data and result artifacts remain missing.",
+    "Recover preparation invocation grouping, successful-session order, original post-alignment rows and process-wide RNG history or states. Reuse source-split-replay-v1 for conditional literal 70/10/20 replay and exact ordered partition verification; never silently reseed by session, round boundaries or purge original physical overlaps.",
+    "Resolve the paper's below-2-Hz exclusion versus pinned code's above-5-Hz retention, list-truthiness validity masks, presplit scaling, camera lineage and full-trial versus apparent final-batch evaluation against the result-producing source. Prospective corrections remain separate.",
+    "Native verification must preserve condition-specific training exposure, architecture/masking objectives and selection traces, test predictions with original trial/time/unit identities, spike/Poisson-null contributions, behavioral class counts and continuous residual/target sums of squares, all session scores, source Figure 2A summaries and Figure 2B paired scatter/annotation derivation. Printed aggregate agreement is insufficient.",
+    "Existing evaluator kernels and split replay are reusable engineering interfaces, not a complete independent Figure 2 verifier. The evaluator's full wrapper assumes 84 sessions and two complete six-task methods, lacks a verified condition-aware sparse panel dispatcher and historical SEM/relative-improvement route, and cannot authenticate native training or observations.",
+    "No authentic immutable data, branch-specific observation/panel identities, submitted-analysis or independent verification manifests exist. Omit admission policy rather than fabricate identity hashes. A typed sparse/ragged comparison artifact or source-specific verifier is an engineering need distinct from missing source provenance and numeric criteria.",
+    "No endpoint-specific reproduction tolerances, original uncertainty treatment or joint same-family improvement rule is qualified. Keep separate endpoint metrics and controls; a larger annotation or all-behavior score alone is not a full-family win. Neither source means nor SEMs are tolerance or superiority margins.",
+    "Both paper+data and paper+data+author-code conditions remain unavailable for each outcome until actual common input/exposure/evaluator/budget and code manifests exist. All four scientific outcomes remain unknown; no execution, calibration, reproduction or improvement is claimed."
+  ]
+}

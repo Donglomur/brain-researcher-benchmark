@@ -51,8 +51,8 @@ jobs:
           rows = [
               {
                   "path": "benchmarks/integrity/current-closures/construction-cardiac-admission/SOURCE_BINDINGS.json",
-                  "bytes": 4924,
-                  "sha256": "e4772aa7cf85bd4d7c2e0cdad22b2ed9a79f32c69ff43beb3a79094ff4ff1b38"
+                  "bytes": 5723,
+                  "sha256": "3b20350e7d0682d456b59327087fd9099821b20c79d900acdf8c165f1bdd667e"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-dosei-v2/SOURCE_BINDINGS.json",
@@ -66,8 +66,8 @@ jobs:
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-isttc-endpoints/SOURCE_PINS.json",
-                  "bytes": 5804,
-                  "sha256": "d3b40e56968d88180ca3d083fab7907c6c3c028a32109155b4a752b5f52841ea"
+                  "bytes": 6628,
+                  "sha256": "28c0a39a61d62cebbab722dd03c186b8417a5b59f7a0bb571c651b54120308b4"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-seizure-events/SOURCE_PINS.json",
@@ -378,7 +378,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1"
           ]
           assert len(rows) == 64 > 0
-          assert sum(row['bytes'] for row in rows) == 869686 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 871309 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -421,7 +421,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 869686,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 871309,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -445,13 +445,13 @@ jobs:
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-meg-nested/SOURCE_BINDINGS.json",
-                  "bytes": 6281,
-                  "sha256": "c9e721c6c286538c103879cfb331f5f5106bf9c9118b112b6f405cbe554255e9"
+                  "bytes": 7654,
+                  "sha256": "7b32837b868d139ce4e17336a25c63a574747151f94299ca4c9d1d2f75e61457"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-typing-v1/SOURCE_BINDINGS.json",
-                  "bytes": 3558,
-                  "sha256": "8729cabc51e5e373b5a64014455cad6614d77deddd6fa4b0d547922b11047a55"
+                  "bytes": 4358,
+                  "sha256": "4c14a9e3432edb931ff392d8d1505a50b9bdaf4629c1aa373354a3dbac02578b"
               },
               {
                   "path": "benchmarks/neural/NEURAL-025/docs/train-only-decoding-v1.md",
@@ -600,7 +600,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1"
           ]
           assert len(rows) == 31 > 0
-          assert sum(row['bytes'] for row in rows) == 670884 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 673057 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -643,7 +643,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 670884,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 673057,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

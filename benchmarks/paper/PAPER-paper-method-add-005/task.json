@@ -4,21 +4,20 @@
   "track": "paper",
   "title": "Generating realistic neurophysiological time series with denoising diffusion probabilistic models",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Impute whole missing ECoG channels and preserve their utility for rest-versus-movement decoding with the paper fixed random-forest classifier. Correlation/spectral fidelity are additional imputation checks, not interchangeable with classification accuracy.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Impute whole missing ECoG channels and preserve their utility for rest-versus-movement decoding with the paper fixed random-forest classifier. Correlation/spectral fidelity are additional imputation checks, not interchangeable with classification accuracy.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Impute whole missing ECoG channels and preserve their utility for rest-versus-movement decoding with the paper fixed random-forest classifier. Correlation/spectral fidelity are additional imputation checks, not interchangeable with classification accuracy.",
-    "Source-paper comparison for Fig. 3E per-participant rest-versus-movement RF accuracy at each original channel-dropout level: Original downstream metric is binary rest/movement test accuracy = correct labels divided by all eligible original test events, after source RF decoding of completed observed-plus-imputed channels. Lower local MSE is not equivalent."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover the full original Fig. 3E result vector, all 12-participant day/event identities and original mask-sampling protocol; reproduce author accuracy on historical masks or calibrated source-equivalent paired mask/RF-partition draws.",
-    "Compare to both published DDPM results and a competent author DDPM rerun with original deterministic-neural-network, mean-imputation and fully-observed controls.",
-    "Demonstrate a predeclared meaningful improvement over the original accuracy panel with appropriate participant-level uncertainty and matched observed-channel/time-context access.",
-    "A lower standardized MSE/PSD error, correlation-only gain, new ridge win, changed missingness pattern or new participant/time split is an extension and cannot establish the original decoding win.",
-    "Retain source secondary imputation correlations: surpassing DDPM 0.27 alone does not surpass the paper deterministic imputation result 0.50, and correlation does not guarantee decoding improvement.",
-    "Pair channel masks and RF training partitions across candidate/reference for every declared replicate; mask_seed controls both in the pinned author implementation. Source-equivalent stochastic mask draws are allowed after calibration; changed missingness mechanisms remain extensions.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-add-005",
   "canonical_position_one_based": 84,
@@ -1602,57 +1601,69 @@
     "known_local_scientific_runtime_seconds": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-add-005/improvement.v1.json",
-      "bytes": 12336,
-      "sha256": "3a33f6a66ffce2faee4de49ac2eec42b677565b5f65c57e61c821066f78672d7"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-add-005/historical/task.pre-improvement.v1.json",
-        "bytes": 77749,
-        "sha256": "98c1df78da7b6063962681eeedfcb553d7126498354fa899399e8dcdb94cd253"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-add-005-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Develop conditional imputation on original training-day windows and declared training-only validation; all final masks are isolated and source evaluation labels stay sealed. The published twelve-person imputation problem replaces no participant with a smaller proxy.",
-    "candidate_freeze": "Seal preprocessing, model training and sampling, data/day identities, channel access, RF recipe and all random seeds before final day 7 evaluation across the complete original mask panel.",
-    "final_evaluation": "After source recovery, apply candidate and paper-trained comparators to identical source test events and observed-channel masks, then unstandardize and score the original RF task. Keep local reconstruction scores as diagnostics.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Original published DDPM accuracy, independently rerun author DDPM and deterministic/mean source controls are distinct. Local mean/ridge reconstructions and rat-ripple F1 cannot substitute for this AJILE12 result. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+    "improvement": {
+      "improvement_loop": "Develop conditional imputation on original training-day windows and declared training-only validation; all final masks are isolated and source evaluation labels stay sealed. The published twelve-person imputation problem replaces no participant with a smaller proxy.",
+      "candidate_freeze": "Seal preprocessing, model training and sampling, data/day identities, channel access, RF recipe and all random seeds before final day 7 evaluation across the complete original mask panel.",
+      "final_evaluation": "After source recovery, apply candidate and paper-trained comparators to identical source test events and observed-channel masks, then unstandardize and score the original RF task. Keep local reconstruction scores as diagnostics.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Original published DDPM accuracy, independently rerun author DDPM and deterministic/mean source controls are distinct. Local mean/ridge reconstructions and rat-ripple F1 cannot substitute for this AJILE12 result. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Numeric source Fig. 3E accuracy vector and complete participant/dropout/fold aggregation lineage are not recovered.",
-    "Original processed event identities, paper day 7 split, masks and RNG state need exact reconciliation with current author loader and local latest-day implementation.",
-    "No trained author imputation models, deterministic-network baseline or native RF numerical calibration is admitted.",
-    "Current local reconstruction scorer has no original RF-accuracy success path and must remain calibration/extension-only.",
-    "Meaningful effect, paired uncertainty decision and fixed access/cumulative compute budgets remain unresolved."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Numeric source Fig. 3E accuracy vector and complete participant/dropout/fold aggregation lineage are not recovered.",
       "Original processed event identities, paper day 7 split, masks and RNG state need exact reconciliation with current author loader and local latest-day implementation.",
       "No trained author imputation models, deterministic-network baseline or native RF numerical calibration is admitted.",
       "Current local reconstruction scorer has no original RF-accuracy success path and must remain calibration/extension-only.",
       "Meaningful effect, paired uncertainty decision and fixed access/cumulative compute budgets remain unresolved."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Numeric source Fig. 3E accuracy vector and complete participant/dropout/fold aggregation lineage are not recovered.",
+        "Original processed event identities, paper day 7 split, masks and RNG state need exact reconciliation with current author loader and local latest-day implementation.",
+        "No trained author imputation models, deterministic-network baseline or native RF numerical calibration is admitted.",
+        "Current local reconstruction scorer has no original RF-accuracy success path and must remain calibration/extension-only.",
+        "Meaningful effect, paired uncertainty decision and fixed access/cumulative compute budgets remain unresolved."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The original AJILE12 missing-channel experiment has ordered decoding and imputation endpoints, but exact Fig. 3E participant-by-dropout decoding results and paper-equivalent event/mask provenance are not recovered. The current local MSE/PSD/ridge scorer is a prospective reconstruction extension, not the published RF decoding comparison. Numeric source Fig. 3E accuracy vector and complete participant/dropout/fold aggregation lineage are not recovered. Original processed event identities, paper day 7 split, masks and RNG state need exact reconciliation with current author loader and local latest-day implementation. No trained author imputation models, deterministic-network baseline or native RF numerical calibration is admitted. Current local reconstruction scorer has no original RF-accuracy success path and must remain calibration/extension-only. Meaningful effect, paired uncertainty decision and fixed access/cumulative compute budgets remain unresolved.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The original AJILE12 missing-channel experiment has ordered decoding and imputation endpoints, but exact Fig. 3E participant-by-dropout decoding results and paper-equivalent event/mask provenance are not recovered. The current local MSE/PSD/ridge scorer is a prospective reconstruction extension, not the published RF decoding comparison. Numeric source Fig. 3E accuracy vector and complete participant/dropout/fold aggregation lineage are not recovered. Original processed event identities, paper day 7 split, masks and RNG state need exact reconciliation with current author loader and local latest-day implementation. No trained author imputation models, deterministic-network baseline or native RF numerical calibration is admitted. Current local reconstruction scorer has no original RF-accuracy success path and must remain calibration/extension-only. Meaningful effect, paired uncertainty decision and fixed access/cumulative compute budgets remain unresolved.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -1667,8 +1678,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

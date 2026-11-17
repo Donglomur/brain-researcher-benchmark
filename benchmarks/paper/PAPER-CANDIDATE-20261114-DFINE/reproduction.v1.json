@@ -1,0 +1,1270 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-DFINE",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Reproduction is an independent first-class objective for the original grid-reaching missing-observation experiment. Its causal/smoothed endpoint and companion families are source defined, but the complete original ratio panel, numerical targets/intervals, historical data/fold/mask/readout bindings and justified reproduction criteria are unrecovered. The source-only reconciliation and numerical prediction scorer do not supply executable derivation from authentic data. This independently precludes an eligible or design_ready reproduction endpoint, without treating the distinct improvement effect requirement as a reproduction requirement.",
+  "source_paper": {
+    "title": "Dynamical flexible inference of nonlinear latent factors and structures in neural population activity",
+    "url": "https://www.nature.com/articles/s41551-023-01106-1"
+  },
+  "evidence": [
+    {
+      "id": "dfine-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11735406/",
+      "locator": "Figure 7e; Extended Data Figure 6e–f; Methods: 2D grid reaching task, Evaluation using 5-fold cross-validation, Behaviour prediction accuracy—Motor datasets, Inference analyses with missing observations",
+      "supports": "Defines grid-reaching behavior prediction, complete temporal support, fivefold evaluation, observed-ratio masks and distinct filtering/smoothing conditions. Full text reviewed through Europe PMC fullTextXML for the same PMCID."
+    },
+    {
+      "id": "dfine-metric",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/torchDFINE/blob/37d25e332753eaba49f42e91766d0db8e186aefe/time_series_utils.py",
+      "locator": "get_pearson_cc, lines 81–109; z_score_tensor, lines 113–146",
+      "supports": "Pearson correlation is calculated per output dimension, stored as float32, then aggregated after the explicit NaN handling; fit/apply z-scoring is separate. Current code lineage does not establish historical Figure 7 parity."
+    },
+    {
+      "id": "dfine-data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/3854034",
+      "locator": "Version v2 record description; variable names; Supplements session list",
+      "supports": "Public source has sorted spikes, cursor position and timestamps for Indy/Loco; identifies seven listed 20160622_01–20160921_01 sessions with raw-data supplements. These listings do not alone establish the exact seven analysis files used by DFINE."
+    },
+    {
+      "id": "dfine-fig7e",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11735406/",
+      "locator": "Figure 7e and caption; Results: DFINE can perform flexible inference with missing observations; Methods: Inference analyses with missing observations",
+      "supports": "Original grid-reaching filtering/smoothing behavior-CC curves, session/fold means and 95% confidence bounds. Text explicitly discusses observed ratios 0.2, 0.6 and 1, smoothing above filtering across all ratios, above-chance performance at 0.2 and relatively unchanged performance at 0.6. Neither the full ratio roster nor numerical ordinates/intervals are recovered."
+    },
+    {
+      "id": "dfine-ed6ef",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11735406/",
+      "locator": "Extended Data Figure 6e–f; caption inherits a–b definitions for the grid-reaching dataset; Figure 4 bar/dot/asterisk convention; Results: missing observations",
+      "supports": "Smoothed behavior predictions for DFINE, LDM, SAE zero imputation and SAE last/next-observation average imputation at observed ratios 0.3 and 0.6, with fully observed references. Six nonlinear-model percentage drops from 1 to 0.3 or 0.6; lower DFINE degradation than both SAE controls. Exact drop calculation and inferential aggregation are unrecovered."
+    },
+    {
+      "id": "dfine-forward",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/torchDFINE/blob/37d25e332753eaba49f42e91766d0db8e186aefe/DFINE.py",
+      "locator": "DFINE.forward: a_filter, a_smooth and behv_hat routing",
+      "supports": "Returns separate filtered and smoothed factors. Convenience behv_hat uses a_smooth or static a_hat, never a_filter; it cannot supply the original causal curve merely by changing behv_from_smooth. Original separately fitted behavioral readout still requires binding."
+    },
+    {
+      "id": "dfine-ldm",
+      "kind": "author_code",
+      "url": "https://github.com/ShanechiLab/torchDFINE/blob/37d25e332753eaba49f42e91766d0db8e186aefe/modules/LDM.py",
+      "locator": "LDM.compute_forwards and backward smoothing; Git blob 1c5df19717b9002ff3e2a87db15f0295c5a1d52a also present at publication-day commit c278035be4b750caab6e0d2cd57e2e9a09484a15",
+      "supports": "Missing observations set the filtering gain to zero; forward recursion predicts and updates from present/past inputs, while backward smoothing uses future inputs. Blob identity does not authenticate the historical experiment caller or enforce participant access."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict cursor x/y position and x/y velocity at every test timepoint under source-defined missing neural observations, separately for causal filtering and noncausal smoothing; retain full Figure 7e curves and Extended Data 6e–f comparisons.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "The paper uses public O’Doherty/Sabes grid-reaching recordings. Zenodo 3854034 v2 supplies the relevant data family, but exact release/file/hash correspondence to the DFINE analysis remains unbound; the dataset’s unrelated decoder-result CSV is not a DFINE reference.",
+      "evidence_ids": [
+        "dfine-paper",
+        "dfine-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Seven sessions of Monkey I from 20160622/01 through 20160921/01, right-hemisphere M1, are source specified. Recover the exact seven recording identities and selected neurons before admission; all seven are required and one monkey does not support independent-animal inference.",
+      "evidence_ids": [
+        "dfine-paper",
+        "dfine-data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source uses five equal folds per session, training on four and testing on one. Exact ordered folds, temporal alignment and missing-mask realizations/replicates are unrecovered. rho ranges from 0.2 to 1, with exactly (1-rho)*100 observations dropped per 100 steps; full ratio grid and partial-block behavior require binding. A new blocked/held-session split is an extension.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Fully observed training neural activity; test neural activity contains the fixed source masks. Filtering accesses present/past observations only; smoothing may access future observations. Test behavior and dropped neural values remain evaluator-only. The behavioral readout is trained from smoothed training factors.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source specifies top 30 behavior-predictive neurons, 10 ms spike bins, causal Gaussian smoothing with 30 ms SD, 50 ms sampling and training-statistic z-scoring. Historical neuron selection, ordered support and readout/hyperparameter selection need a source-bound implementation; changing those choices must not silently change the published comparison.",
+      "evidence_ids": [
+        "dfine-paper",
+        "dfine-metric"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Behavior Pearson CC on all test times, including missing-neural times: r_d=sum((y_d-mean(y_d))*(p_d-mean(p_d)))/sqrt(sum((y_d-mean(y_d))^2)*sum((p_d-mean(p_d))^2)), then arithmetic mean over four dimensions. Current author code maps NaN correlation to zero before the dimension mean; historical caller parity remains a separate binding gate. Higher is better.",
+      "evidence_ids": [
+        "dfine-paper",
+        "dfine-metric"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure 7 curves average over sessions and cross-validation folds, with source confidence bounds. All 35 session-fold cells and every original ratio are required for each inference regime; historical mask-replicate handling and numeric curve values are unresolved. The paper does not specify a single integrated loss across ratios.",
+      "evidence_ids": [
+        "dfine-paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Retain every original Figure 7e ratio-specific causal and smoothed behavior-CC ordinate and 95% confidence bound, all Extended Data 6e LDM and SAE zero/last-next-average smoothed controls at 0.3/0.6 with full-observation references, and all six Extended Data 6f percentage drops plus their directional/statistical companions. The declared scalar findings cover source-confirmed ratios only; the remaining Figure 7e ratio grid is unrecovered. Before admission, expand to every authenticated original ratio and recover its numerical values and intervals. These findings are an incomplete source-unresolved panel, never a reduced-panel substitute or a scalar integrated curve.",
+      "evidence_ids": [
+        "dfine-fig7e",
+        "dfine-ed6ef",
+        "dfine-paper"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Fit latent models to fully observed training neural activity and the behavioral MLP to smoothed training factors with training behavior. At each test time filtering may use only present/past retained neural observations; smoothing and SAE last/next imputation may use retained future neural observations. Neither path may read dropped neural values or test behavior. Predict all four behavior dimensions at every original test time. A current-code DFINE.forward call returning a_filter alongside a_smooth does not enforce this information boundary, and behv_hat is not a filtered-factor readout.",
+      "evidence_ids": [
+        "dfine-paper",
+        "dfine-forward",
+        "dfine-ldm"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig7e_dfine_filter_rho20",
+      "kind": "scalar",
+      "description": "Figure 7e DFINE causal filtering behavior-CC ordinate at observed ratio 0.2. This is a source-confirmed ordinate, not a substitute for the unrecovered remainder of the full ratio grid.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-fig7e",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig7e_dfine_filter_rho60",
+      "kind": "scalar",
+      "description": "Figure 7e DFINE causal filtering behavior-CC ordinate at observed ratio 0.6. This is a source-confirmed ordinate, not a substitute for the unrecovered remainder of the full ratio grid.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-fig7e",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig7e_dfine_filter_rho100",
+      "kind": "scalar",
+      "description": "Figure 7e DFINE causal filtering behavior-CC ordinate at observed ratio 1. This is a source-confirmed ordinate, not a substitute for the unrecovered remainder of the full ratio grid.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-fig7e",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig7e_dfine_smooth_rho20",
+      "kind": "scalar",
+      "description": "Figure 7e DFINE noncausal smoothing behavior-CC ordinate at observed ratio 0.2. This is a source-confirmed ordinate, not a substitute for the unrecovered remainder of the full ratio grid.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-fig7e",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig7e_dfine_smooth_rho60",
+      "kind": "scalar",
+      "description": "Figure 7e DFINE noncausal smoothing behavior-CC ordinate at observed ratio 0.6. This is a source-confirmed ordinate, not a substitute for the unrecovered remainder of the full ratio grid.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-fig7e",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig7e_dfine_smooth_rho100",
+      "kind": "scalar",
+      "description": "Figure 7e DFINE noncausal smoothing behavior-CC ordinate at observed ratio 1. This is a source-confirmed ordinate, not a substitute for the unrecovered remainder of the full ratio grid.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-fig7e",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-fig7e",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_dfine_smooth_rho30",
+      "kind": "scalar",
+      "description": "Extended Data 6e DFINE smoothed behavior-CC ordinate at observed ratio 0.3. Its 0.6 and full-observation companion values are shared with fig7e_dfine_smooth_rho60 and fig7e_dfine_smooth_rho100; do not count shared measurements twice.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_ldm_smooth_rho30",
+      "kind": "scalar",
+      "description": "Extended Data 6e LDM Kalman smoothing: behavior CC at observed ratio 0.3. Model trained on fully observed data; readout fitted to smoothed training factors.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_ldm_smooth_rho60",
+      "kind": "scalar",
+      "description": "Extended Data 6e LDM Kalman smoothing: behavior CC at observed ratio 0.6. Model trained on fully observed data; readout fitted to smoothed training factors.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_ldm_smooth_rho100",
+      "kind": "scalar",
+      "description": "Extended Data 6e LDM Kalman smoothing: behavior CC at observed ratio 1. Fully observed reference; SAE imputation branches share the no-missingness condition, not two independent replications.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_sae_zero_smooth_rho30",
+      "kind": "scalar",
+      "description": "Extended Data 6e SAE noncausal inference with zero imputation: behavior CC at observed ratio 0.3. Model trained on fully observed data; readout fitted to smoothed training factors.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_sae_zero_smooth_rho60",
+      "kind": "scalar",
+      "description": "Extended Data 6e SAE noncausal inference with zero imputation: behavior CC at observed ratio 0.6. Model trained on fully observed data; readout fitted to smoothed training factors.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_sae_zero_smooth_rho100",
+      "kind": "scalar",
+      "description": "Extended Data 6e SAE noncausal inference with zero imputation: behavior CC at observed ratio 1. Fully observed reference; SAE imputation branches share the no-missingness condition, not two independent replications.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_sae_average_smooth_rho30",
+      "kind": "scalar",
+      "description": "Extended Data 6e SAE noncausal inference with last/next available observation average imputation: behavior CC at observed ratio 0.3. Model trained on fully observed data; readout fitted to smoothed training factors.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_sae_average_smooth_rho60",
+      "kind": "scalar",
+      "description": "Extended Data 6e SAE noncausal inference with last/next available observation average imputation: behavior CC at observed ratio 0.6. Model trained on fully observed data; readout fitted to smoothed training factors.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_sae_average_smooth_rho100",
+      "kind": "scalar",
+      "description": "Extended Data 6e SAE noncausal inference with last/next available observation average imputation: behavior CC at observed ratio 1. Fully observed reference; SAE imputation branches share the no-missingness condition, not two independent replications.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper",
+        "dfine-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper",
+          "dfine-metric"
+        ]
+      }
+    },
+    {
+      "id": "ed6f_dfine_smooth_drop_100_to_30",
+      "kind": "scalar",
+      "description": "Extended Data 6f percentage decrease in dfine_smooth behavior-prediction accuracy from fully observed ratio 1 to 0.3; preserve the original percentage endpoint and its matched full/masked measurements.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent decrease in behavior Pearson CC",
+      "aggregation": "Source Extended Data 6f percentage decrease from the same model's fully observed behavior-CC reference to the specified observed ratio, retaining all seven sessions and five folds and their paired full/masked CC values. The exact percentage formula, whether transformation precedes averaging, mask-replicate handling and bar/error/test aggregation are unresolved.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      }
+    },
+    {
+      "id": "ed6f_dfine_smooth_drop_100_to_60",
+      "kind": "scalar",
+      "description": "Extended Data 6f percentage decrease in dfine_smooth behavior-prediction accuracy from fully observed ratio 1 to 0.6; preserve the original percentage endpoint and its matched full/masked measurements.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent decrease in behavior Pearson CC",
+      "aggregation": "Source Extended Data 6f percentage decrease from the same model's fully observed behavior-CC reference to the specified observed ratio, retaining all seven sessions and five folds and their paired full/masked CC values. The exact percentage formula, whether transformation precedes averaging, mask-replicate handling and bar/error/test aggregation are unresolved.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      }
+    },
+    {
+      "id": "ed6f_sae_zero_smooth_drop_100_to_30",
+      "kind": "scalar",
+      "description": "Extended Data 6f percentage decrease in sae_zero_smooth behavior-prediction accuracy from fully observed ratio 1 to 0.3; preserve the original percentage endpoint and its matched full/masked measurements.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent decrease in behavior Pearson CC",
+      "aggregation": "Source Extended Data 6f percentage decrease from the same model's fully observed behavior-CC reference to the specified observed ratio, retaining all seven sessions and five folds and their paired full/masked CC values. The exact percentage formula, whether transformation precedes averaging, mask-replicate handling and bar/error/test aggregation are unresolved.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      }
+    },
+    {
+      "id": "ed6f_sae_zero_smooth_drop_100_to_60",
+      "kind": "scalar",
+      "description": "Extended Data 6f percentage decrease in sae_zero_smooth behavior-prediction accuracy from fully observed ratio 1 to 0.6; preserve the original percentage endpoint and its matched full/masked measurements.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent decrease in behavior Pearson CC",
+      "aggregation": "Source Extended Data 6f percentage decrease from the same model's fully observed behavior-CC reference to the specified observed ratio, retaining all seven sessions and five folds and their paired full/masked CC values. The exact percentage formula, whether transformation precedes averaging, mask-replicate handling and bar/error/test aggregation are unresolved.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      }
+    },
+    {
+      "id": "ed6f_sae_average_smooth_drop_100_to_30",
+      "kind": "scalar",
+      "description": "Extended Data 6f percentage decrease in sae_average_smooth behavior-prediction accuracy from fully observed ratio 1 to 0.3; preserve the original percentage endpoint and its matched full/masked measurements.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent decrease in behavior Pearson CC",
+      "aggregation": "Source Extended Data 6f percentage decrease from the same model's fully observed behavior-CC reference to the specified observed ratio, retaining all seven sessions and five folds and their paired full/masked CC values. The exact percentage formula, whether transformation precedes averaging, mask-replicate handling and bar/error/test aggregation are unresolved.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      }
+    },
+    {
+      "id": "ed6f_sae_average_smooth_drop_100_to_60",
+      "kind": "scalar",
+      "description": "Extended Data 6f percentage decrease in sae_average_smooth behavior-prediction accuracy from fully observed ratio 1 to 0.6; preserve the original percentage endpoint and its matched full/masked measurements.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent decrease in behavior Pearson CC",
+      "aggregation": "Source Extended Data 6f percentage decrease from the same model's fully observed behavior-CC reference to the specified observed ratio, retaining all seven sessions and five folds and their paired full/masked CC values. The exact percentage formula, whether transformation precedes averaging, mask-replicate handling and bar/error/test aggregation are unresolved.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact source numerical target and its variability are unrecovered. No plot-digitization, decimal-precision or generic CC/percentage margin is substituted for a scientifically justified tolerance.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-paper"
+        ]
+      }
+    },
+    {
+      "id": "fig7e_smoothing_above_filtering",
+      "kind": "categorical",
+      "description": "Source reports smoothing above filtering across the entire original grid-reaching observed-ratio curve. All original ratios and both numerical curves remain mandatory.",
+      "status": "verified",
+      "expected": "smoothing_above_filtering_at_every_original_ratio",
+      "units": "source finding category",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-fig7e"
+      ],
+      "categories": [
+        "smoothing_above_filtering_at_every_original_ratio",
+        "source_direction_not_supported"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "An eventual directional decision uses the declared category, with its presently unresolved inferential rule. It cannot replace the required curve ordinates, confidence bounds or numerical degradation companions.",
+        "evidence_ids": [
+          "dfine-fig7e"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-fig7e"
+        ]
+      }
+    },
+    {
+      "id": "fig7e_above_chance_rho20",
+      "kind": "categorical",
+      "description": "Source reports both inference regimes above chance behavior CC of zero at observed ratio 0.2. Printed significance across the motor analyses is not itself a recreated grid-reaching result.",
+      "status": "verified",
+      "expected": "both_regimes_above_zero_at_rho20",
+      "units": "source finding category",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-fig7e"
+      ],
+      "categories": [
+        "both_regimes_above_zero_at_rho20",
+        "source_direction_not_supported"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "An eventual directional decision uses the declared category, with its presently unresolved inferential rule. It cannot replace the required curve ordinates, confidence bounds or numerical degradation companions.",
+        "evidence_ids": [
+          "dfine-fig7e"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-fig7e"
+        ]
+      }
+    },
+    {
+      "id": "fig7e_relative_stability_rho60",
+      "kind": "categorical",
+      "description": "Source describes both regimes as relatively unchanged at observed ratio 0.6 versus full observation. A quantitative definition of relatively unchanged has not been justified, so no expected decision category or equivalence criterion is asserted.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "source finding category",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-fig7e"
+      ],
+      "categories": [
+        "both_regimes_meet_source_justified_stability_rule",
+        "source_stability_rule_not_met"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "An eventual directional decision uses the declared category, with its presently unresolved inferential rule. It cannot replace the required curve ordinates, confidence bounds or numerical degradation companions.",
+        "evidence_ids": [
+          "dfine-fig7e"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-fig7e"
+        ]
+      }
+    },
+    {
+      "id": "ed6e_dfine_above_controls",
+      "kind": "categorical",
+      "description": "Source reports DFINE smoothing above LDM smoothing and both SAE imputation controls at the original missing-observation comparisons; each control and both observed ratios 0.3 and 0.6 remain required.",
+      "status": "verified",
+      "expected": "dfine_above_each_control_at_both_missing_ratios",
+      "units": "source finding category",
+      "aggregation": "Compute Pearson CC separately for cursor x position, y position, x velocity and y velocity on every ordered test timepoint, including missing-neural times; average the four dimensions within each session-fold, then the source session/fold means over all seven sessions and five folds. Retain all 35 cells and source confidence bounds. Historical mask-replicate handling, CI calculation and current float32/NaN metric caller parity remain unresolved; do not pool ratios or regimes.",
+      "evidence_ids": [
+        "dfine-ed6ef"
+      ],
+      "categories": [
+        "dfine_above_each_control_at_both_missing_ratios",
+        "source_direction_not_supported"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "An eventual directional decision uses the declared category, with its presently unresolved inferential rule. It cannot replace the required curve ordinates, confidence bounds or numerical degradation companions.",
+        "evidence_ids": [
+          "dfine-ed6ef"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef"
+        ]
+      }
+    },
+    {
+      "id": "ed6f_dfine_lower_degradation",
+      "kind": "categorical",
+      "description": "Source reports smaller percentage degradation for DFINE than for each SAE imputation control at the original 1-to-0.3 and 1-to-0.6 comparisons, with significance indicated by the source plot convention. All six numerical degradation findings remain required.",
+      "status": "verified",
+      "expected": "dfine_lower_drop_than_each_sae_control_at_both_missing_ratios",
+      "units": "source finding category",
+      "aggregation": "Source Extended Data 6f percentage decrease from the same model's fully observed behavior-CC reference to the specified observed ratio, retaining all seven sessions and five folds and their paired full/masked CC values. The exact percentage formula, whether transformation precedes averaging, mask-replicate handling and bar/error/test aggregation are unresolved.",
+      "evidence_ids": [
+        "dfine-ed6ef"
+      ],
+      "categories": [
+        "dfine_lower_drop_than_each_sae_control_at_both_missing_ratios",
+        "source_direction_not_supported"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "An eventual directional decision uses the declared category, with its presently unresolved inferential rule. It cannot replace the required curve ordinates, confidence bounds or numerical degradation companions.",
+        "evidence_ids": [
+          "dfine-ed6ef"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef"
+        ]
+      }
+    },
+    {
+      "id": "ed6_dfine_sae_advantage_grows_with_missingness",
+      "kind": "categorical",
+      "description": "Source reports that the DFINE advantage over SAE grows with more missing observations. Preserve both SAE imputation controls and all source comparison ratios; do not substitute a new slope, integrated loss or selected contrast.",
+      "status": "verified",
+      "expected": "source_dfine_sae_advantage_grows_with_more_missing_observations",
+      "units": "source finding category",
+      "aggregation": "Derive the original DFINE-versus-SAE comparisons from their complete paired CC and percentage-degradation outputs. The historical quantitative contrast and its uncertainty construction remain unbound.",
+      "evidence_ids": [
+        "dfine-ed6ef",
+        "dfine-fig7e"
+      ],
+      "categories": [
+        "source_dfine_sae_advantage_grows_with_more_missing_observations",
+        "source_direction_not_supported"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "An eventual directional decision uses the declared category, with its presently unresolved inferential rule. It cannot replace the required curve ordinates, confidence bounds or numerical degradation companions.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-fig7e"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the source session/fold/mask hierarchy and interval or directional-test construction, then freeze a dependence-aware reproduction rule across the full original panel. No rule is inferred from a printed p-value or a 95% plot band.",
+        "independent_unit": "Recording session or justified within-session temporal unit, conditional on the single monkey; five folds, four dimensions and mask repeats are repeated measurements, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source reports confidence bounds and Wilcoxon tests, but their historical construction and a justified reproduction acceptance rule have not been bound. Nonrejection does not establish equivalence; source directions do not replace numerical magnitudes or intervals.",
+        "evidence_ids": [
+          "dfine-ed6ef",
+          "dfine-fig7e"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Recover and authenticate the complete Figure 7e observed-ratio roster, numerical filtering/smoothing ordinates and 95% confidence bounds. Current findings enumerate only text-confirmed ratios; every missing original ratio must be added before admission, with no regular-grid guess or curve-wide scalar substitute.",
+    "Recover all Extended Data 6e companion numerical values and 6f percentage drops, exact percentage formula and order of transformation/aggregation, mask-replicate handling and original inferential comparisons. Shared full-observation SAE references are not independent repeats.",
+    "Bind authentic sorted-spike/cursor data, all seven original session files, ordered fivefold supports, selected top 30 neurons, behavioral dimension/velocity construction and preprocessing. The seven-file interval match is an inferred roster rather than an author analysis manifest; no authentic-data SHA-256 manifest is available.",
+    "Bind original missingness seeds and replicate count, per-100-step block alignment and incomplete-tail semantics. rho is retained observations; score every test time including dropped-neural times. Existing component equal-replicate averaging and tail rejection are not authenticated historical rules.",
+    "Supply a real frozen submitted-analysis entrypoint that trains or loads authenticated fold-specific models, fits the post-training MLP on smoothed training factors, and emits source-native factors and N-by-4 test predictions separately from a_filter and a_smooth under the original masks. Current behv_hat never maps a_filter, and the numerical grade(profile, candidate_records, reference_records, target_loader) component does not execute inference or verify output provenance.",
+    "Implement and authenticate independent operator execution and verification on the same original data: inspect the actual causal observation boundary, recompute granular all-time predictions and the full original CC/control/degradation panel, and bind outputs to the frozen executable and authentic inputs. A program printing paper aggregates, an imported result table, arbitrary plausible predictions or matching scores alone cannot establish computational reproduction. No runnable qualified analysis interface, authentic-data manifest or independent verification-program identity is presently bound.",
+    "Recover original numerical variability and replication hierarchy and justify reproduction tolerances and uncertainty rules before evaluation. Folds, dimensions and mask repeats are dependent measurements from one monkey; a printed p-value, 95% plot band or failure to reject change does not supply an equivalence rule.",
+    "Freeze identical authentic inputs, cohort/split/panel/observation/evaluator identities, public-data exposure accounting and finite feedback/compute budgets for paper_data versus paper_data_author_code, separately for reproduction and improvement. Author-code access must be the only information difference; these paired protocols remain unresolved."
+  ]
+}

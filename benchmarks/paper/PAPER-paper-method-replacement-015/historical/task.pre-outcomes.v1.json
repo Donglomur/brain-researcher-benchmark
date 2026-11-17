@@ -1,0 +1,982 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-replacement-015",
+  "track": "paper",
+  "title": "Spike Rate Inference from Mouse Spinal Cord Calcium Imaging Data",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Infer continuous, smoothed spike rates from spinal-cord calcium fluorescence against paired electrophysiology. Discrete-spike detection and in-vivo denoising are different endpoints.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Infer continuous, smoothed spike rates from spinal-cord calcium fluorescence against paired electrophysiology. Discrete-spike detection and in-vivo denoising are different endpoints.",
+    "Source-paper comparison for Per-neuron spike-rate correlation summarized by the original cell-type and sampling/noise panels: Pearson correlation of inferred and target spike-rate traces, higher is better. Error and signed bias must remain separate diagnostics rather than a new composite score."
+  ],
+  "success_criteria": [
+    "Recover exact original retrained-CASCADE per-cell outputs and every paper sampling/noise condition, with the original held-neuron exclusions.",
+    "Compare candidate and author models on identical fluorescence, target smoothing, alignment, edge masks and cell denominators.",
+    "Retain both glutamatergic and GABAergic cohorts; no favorable cell class, lower noise, slower target or reduced panel can define victory.",
+    "Keep source-era results and the later timing correction separate. Repairing a one-frame discrepancy is calibration, not scientific improvement.",
+    "Require meaningful correlation gain under a justified paired uncertainty rule with bias/error guardrails; new animal splits are extensions.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-replacement-015",
+  "canonical_position_one_based": 69,
+  "paper_identity": {
+    "url": "https://doi.org/10.1523/JNEUROSCI.1187-24.2025",
+    "publication_year": 2025,
+    "venue": "Journal of Neuroscience"
+  },
+  "input_assets": {
+    "routes": [
+      "https://github.com/HelmchenLabSoftware/Cascade/tree/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data_inputs/0/files/0",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_210914_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_210914_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/1",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211011_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211011_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/2",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211011_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211011_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/3",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211011_cell4_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211011_cell4_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/4",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211012_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211012_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/5",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211013_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211013_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/6",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211013_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211013_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/7",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211015_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211015_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/8",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211015_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211015_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/9",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211018_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211018_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/10",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211018_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211018_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/11",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211018_cell3_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211018_cell3_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/12",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211105_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211105_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/13",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211105_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211105_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/14",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211108_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211108_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/15",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211111_cell1_miXni.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211111_cell1_miXni.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/16",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211111_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211111_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/17",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211111_cell3_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211111_cell3_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/18",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211111_cell4_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211111_cell4_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/19",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211117_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211117_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/20",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211117_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211117_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/21",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211019_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211019_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/22",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211020_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211020_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/23",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211021_cell1_mXini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211021_cell1_mXini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/24",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211027_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211027_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/25",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211101_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211101_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/26",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211101_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211101_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/27",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211112_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211112_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/28",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211115_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211115_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/29",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211115_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211115_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/30",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211116_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211116_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/31",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211116_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211116_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/32",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211206_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211206_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/33",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211206_cell2_mXini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211206_cell2_mXini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/34",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211207_cell1_mXini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211207_cell1_mXini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/35",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211207_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211207_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/36",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211208_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211208_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/37",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211210_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211210_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/38",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211210_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211210_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/39",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211210_cell3_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211210_cell3_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/40",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211213_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211213_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/41",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211213_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211213_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/42",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211217_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211217_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/data_inputs/0/files/43",
+        "recorded_fields": {
+          "name": "Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211217_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS41-GCaMP6s-spinal-cord-inhibitory/CAttached_spinal_cord_inhibitory_211217_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "source_record_id": "paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/0",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_210914_cell2_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_210914_cell2_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-015"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/0/file_metadata_examples/1",
+        "recorded_fields": {
+          "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211011_cell1_mini.mat",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211011_cell1_mini.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-method-replacement-015"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://doi.org/10.1523/JNEUROSCI.1187-24.2025",
+      "data_urls": [
+        "https://github.com/HelmchenLabSoftware/Cascade/tree/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth"
+      ],
+      "input_scope": "DS40 excitatory and DS41 inhibitory paired spinal calcium/electrical-ground-truth MAT files at the pinned CASCADE revision; 44 deposited files are not automatically 44 paper-included evaluations.",
+      "saved_metadata": [
+        {
+          "metadata_url": "https://github.com/HelmchenLabSoftware/Cascade/tree/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth",
+          "version": "1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f",
+          "role": "44actual paired fluorescence/electrical-ground-truth MAT files:21excitatory DS40 and23inhibitory DS41. Repository filenames/tree inspected; no MAT data executed or downloaded.",
+          "files_downloaded": false,
+          "manifest_file_count": 44,
+          "file_metadata_examples": [
+            {
+              "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_210914_cell2_mini.mat",
+              "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_210914_cell2_mini.mat"
+            },
+            {
+              "name": "Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211011_cell1_mini.mat",
+              "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Ground_truth/DS40-GCaMP6s-spinal-cord-excitatory/CAttached_spinal_cord_excitatory_211011_cell1_mini.mat"
+            }
+          ],
+          "examples_are_not_selected_transfer_manifest": true
+        }
+      ],
+      "code_url": "https://github.com/HelmchenLabSoftware/Cascade",
+      "revision_or_archive_version": "1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f",
+      "entrypoints": [
+        {
+          "path": "Demo scripts/Demo_train.py",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_train.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "Demo scripts/Demo_benchmark_model.py",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "Demo scripts/Demo_benchmark_model_within_dataset.py",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model_within_dataset.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        },
+        {
+          "path": "Demo scripts/Demo_discrete_spikes_with_ground_truth.py",
+          "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_discrete_spikes_with_ground_truth.py",
+          "role": "Official source/configuration entrypoint; not executed",
+          "inspected_as_text": false,
+          "tree_verified": true
+        }
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-015",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce the paper’s paired-recording spike-rate inference project for excitatory and inhibitory spinal neurons, with leave-one-neuron-out evaluation against cortical models and conventional alternatives.",
+          "unresolved_coverage": [
+            "Paper-era versus current-corrected CASCADE timing must be explicit: the repository2026-10-27update fixes a one-timepoint alignment error for some models. Do not silently compare differently aligned targets/checkpoints.",
+            "Author filenames/inclusion rules and any excluded unusual high-firing inhibitory recordings must match paper criteria;44deposited files do not automatically mean44included evaluations.",
+            "Leave-one-neuron-out is not animal-held-out generalization; preserve animal identity where available and report the distinction.",
+            "The downstream in-vivo rate distribution claims and all acquisition experiments are outside this bounded paired-ground-truth project."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-replacement-015",
+        "versions_and_loader_contract": {
+          "declared_scope": "Reproduce the paper’s paired-recording spike-rate inference project for excitatory and inhibitory spinal neurons, with leave-one-neuron-out evaluation against cortical models and conventional alternatives."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/HelmchenLabSoftware/Cascade",
+    "revision_or_archive_version": "1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f",
+    "entrypoints": [
+      {
+        "path": "Demo scripts/Demo_train.py",
+        "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_train.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "Demo scripts/Demo_benchmark_model.py",
+        "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "Demo scripts/Demo_benchmark_model_within_dataset.py",
+        "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model_within_dataset.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      },
+      {
+        "path": "Demo scripts/Demo_discrete_spikes_with_ground_truth.py",
+        "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_discrete_spikes_with_ground_truth.py",
+        "role": "Official source/configuration entrypoint; not executed",
+        "inspected_as_text": false,
+        "tree_verified": true
+      }
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-replacement-015",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/HelmchenLabSoftware/Cascade",
+            "commit": "1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f",
+            "author_linkage": [
+              "https://doi.org/10.1523/JNEUROSCI.1187-24.2025",
+              "https://github.com/HelmchenLabSoftware/Cascade"
+            ],
+            "license": [
+              "Code GPL-3.0. Preserve per-source ground-truth data terms; a code license alone is not evidence that every contributed recording shares that license.",
+              "Actual paired data files are publicly committed in the official repository."
+            ],
+            "snapshot_evidence": "GitHub commit and recursive tree metadata inspected; author README and selected source files read as text.",
+            "file_tree": {
+              "paths": [
+                "Demo scripts/Demo_train.py",
+                "Demo scripts/Demo_benchmark_model.py",
+                "Demo scripts/Demo_benchmark_model_within_dataset.py",
+                "Demo scripts/Demo_discrete_spikes_with_ground_truth.py"
+              ]
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "Demo scripts/Demo_train.py",
+              "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_train.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "Demo scripts/Demo_benchmark_model.py",
+              "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "Demo scripts/Demo_benchmark_model_within_dataset.py",
+              "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model_within_dataset.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "Demo scripts/Demo_discrete_spikes_with_ground_truth.py",
+              "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_discrete_spikes_with_ground_truth.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            }
+          ],
+          "dependencies": [
+            "Python",
+            "TensorFlow/Keras",
+            "NumPy",
+            "SciPy",
+            "CASCADE",
+            "Suite2p for comparison"
+          ]
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-method-replacement-015",
+        "recorded": {
+          "code_url": "https://github.com/HelmchenLabSoftware/Cascade",
+          "code_revision_or_archive_version": "1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f",
+          "entrypoints": [
+            {
+              "path": "Demo scripts/Demo_train.py",
+              "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_train.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "Demo scripts/Demo_benchmark_model.py",
+              "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "Demo scripts/Demo_benchmark_model_within_dataset.py",
+              "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_benchmark_model_within_dataset.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            },
+            {
+              "path": "Demo scripts/Demo_discrete_spikes_with_ground_truth.py",
+              "url": "https://raw.githubusercontent.com/HelmchenLabSoftware/Cascade/1f9f98bf93b9b554ab68d6304aa365ab7c7ee34f/Demo%20scripts/Demo_discrete_spikes_with_ground_truth.py",
+              "role": "Official source/configuration entrypoint; not executed",
+              "inspected_as_text": false,
+              "tree_verified": true
+            }
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "a442bc70683457941c383318e5263c3f391c509c47d7f436620a15110808a658",
+    "audit_record_sha256": "2e59270942b42e9749df3bd968ed928b0f5d3b32eab565503bb874e5fd1408da",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-replacement-015",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 78,
+        "record_sha256": "8db6d32f3add677da36f83e6408a9d9e5e0ea31c22740977743d436159805e86"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "paper-method-replacement-015",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 161,
+        "record_sha256": "5451a7908e512ed5a66a12855c246aae507447eccad1c4af51a798def3f933e4"
+      },
+      {
+        "file": {
+          "path": "authoring/gcamp8-spike-inference/preflight-v1/PASS_GATE_MATRIX.md",
+          "bytes": 11384,
+          "sha256": "37d0d464ddb9cad9747bc15670251dbe9b5bc79b08ecda177ad100d001b702d6"
+        },
+        "record_id": null,
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "roster_statement": "CPU inference/GPU training;44paired-cell files. Paper reports7.4h and>70,000spikes; download size and runtime were not measured.",
+    "source_resource_evidence": "Unmeasured planning estimate unless an author-reported figure is separately stated.",
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-015/improvement.v1.json",
+      "bytes": 10285,
+      "sha256": "8bc9c83b2f6d029700c7e729d8c7de3c808cdaf3c67263aaaeac126c200a48ca"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-015/historical/task.pre-improvement.v1.json",
+        "bytes": 62282,
+        "sha256": "b24f01de53f9195dc060cfe7d88b05b531de544edd43c88b33b2edac62d3d80c"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-paper-method-replacement-015"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-015/implementations/registered-runtime/manifest.json",
+        "bytes": 14266,
+        "sha256": "beb7d189316b5555af28a5bf60b65c03c448259eff565abe44639a8578185a19"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After recovering the DS40/41 source-era configuration, iterate on declared training/development neurons while respecting each original leave-one-neuron-out exclusion. Keep all recordings and artificial-noise replicas of the test neuron out of that fit; tune denoisers and spike-rate inference only through the declared development route, with each attempt and timing convention recorded.",
+    "candidate_freeze": "Freeze the full glutamatergic/GABAergic roster, original sampling/noise grid and noise realizations, Gaussian target kernels, alignment and edge masks, source-era delay correction, held-neuron training exclusions, candidate parameters and budgets before final scoring. Do not select a favorable temporal shift using newly exposed final labels.",
+    "final_evaluation": "Evaluate candidate and recovered author models on every original held-neuron and sampling/noise condition. Preserve separate per-cell-type correlation summaries and bias/error diagnostics; retain failures and denominator changes explicitly. Lower noise, wider target smoothing, a subset of cells or the later timing repair cannot establish source-paper superiority.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The comparison target is the matching original retrained-CASCADE result, with cortical-default CASCADE, cross-dataset models, raw fluorescence and OASIS separately identified. Approximate default-model correlation and the modern demo’s different noise grid cannot replace the exact paper baseline. A source-era rerun and a timing-corrected rerun remain separate calibration records."
+  },
+  "blocking_issues": [
+    "Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered.",
+    "Later author demo noise grid differs from the original published main comparison.",
+    "Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication.",
+    "Animal/session dependence and full original cell membership need a frozen manifest.",
+    "No qualified evaluator/rerun, justified effect threshold or fixed episode budgets."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered.",
+      "Later author demo noise grid differs from the original published main comparison.",
+      "Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication.",
+      "Animal/session dependence and full original cell membership need a frozen manifest.",
+      "No qualified evaluator/rerun, justified effect threshold or fixed episode budgets."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The original spike-rate inference endpoint is recoverable, but the exact full retrained-CASCADE correlation baseline, source-era timing/configurations and per-condition panel are not yet bound. Approximate cortical-default performance or a later timing repair cannot serve as the improvement target. Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered. Later author demo noise grid differs from the original published main comparison. Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication. Animal/session dependence and full original cell membership need a frozen manifest. No qualified evaluator/rerun, justified effect threshold or fixed episode budgets.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-015/historical/task.pre-improvement.v1.json",
+      "bytes": 62282,
+      "sha256": "b24f01de53f9195dc060cfe7d88b05b531de544edd43c88b33b2edac62d3d80c"
+    },
+    "notes": "The registered runtime manifest has no qualified entrypoint or executed scientific comparison. Historical 44-cell/132-recording construction counts are not a paper win; all existing source/runtime artifacts remain calibration material."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

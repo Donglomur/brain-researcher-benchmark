@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "Spike inference from calcium imaging data acquired with GCaMP8 indicators",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Infer time-resolved spike rates from GCaMP8 calcium fluorescence and compare with simultaneous electrophysiological ground truth, preserving pooled-GC8 and variant-specific source comparisons. Interneuron, single-AP and online analyses are separately identified conditions.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Infer time-resolved spike rates from GCaMP8 calcium fluorescence and compare with simultaneous electrophysiological ground truth, preserving pooled-GC8 and variant-specific source comparisons. Interneuron, single-AP and online analyses are separately identified conditions.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Infer time-resolved spike rates from GCaMP8 calcium fluorescence and compare with simultaneous electrophysiological ground truth, preserving pooled-GC8 and variant-specific source comparisons. Interneuron, single-AP and online analyses are separately identified conditions.",
-    "Source-paper comparison for Original-condition per-neuron spike-rate Pearson correlation, with source figure aggregation: Pearson correlation between inferred and ground-truth spike-rate vectors is the ordered candidate primary endpoint; error and bias remain secondary. Demo uses corrcoef on prepared rates and smoothed normalized absolute error/bias. Historical smoothing/timing and exact figure condition must be recovered before adopting its values."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover original Figure1 identities, score, smoothing, sampling/noise conditions and aggregation before comparing methods.",
-    "Use competent pooled and variant-specific author retraining that excludes every test neuron; prove checkpoint membership.",
-    "Surpass the published matching result and author rerun with justified effect/uncertainty while preserving full original cohort and declared access/resources.",
-    "Report timing-bug corrections separately; no win from changing kernels, adding easier cells, selecting noise levels, using a new split or comparing against pre-GCaMP8 defaults alone.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v2.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-047",
   "canonical_position_one_based": 25,
@@ -5897,61 +5898,69 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-047/improvement.v1.json",
-      "bytes": 10602,
-      "sha256": "9d9cb69eeb744c3bddf06385ecc0524becbcec7b80c2f5fa820bd6a23e1d53d3"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v2.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-047/historical/task.pre-improvement.v1.json",
-        "bytes": 332355,
-        "sha256": "ad9290ad88bd885cc0a9953b45004335f86f62e1818bd5317543f2d87debd0b7"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-gcamp8"
-      ],
-      "runtime_manifest": {
-        "path": "benchmarks/paper/PAPER-paper-method-047/implementations/registered-runtime/manifest.json",
-        "bytes": 5944,
-        "sha256": "69e899ea27b08423b6036df90fa92fd7fd83f0bb43bc853374a42860d54131a5"
-      }
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "After original-task recovery, iterate inference models on permitted training-neuron data and a declared development route; record all fits and avoid direct final-neuron spike-label feedback.",
-    "candidate_freeze": "Freeze training and model membership, source cohort, variants, noise seeds, smoothing/alignment, aggregation, checkpoint/source hashes and resource/access budgets before final scoring.",
-    "final_evaluation": "Generate paired predictions on the unchanged original LOO tests under protected labels, keeping pooled and variant-specific results separate and preserving all original conditions.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Keep rounded/source reported scores, exact author rerun scores, generic pretrained models and corrected-code variants distinct. Local released117 evidence alone is calibration/extension evidence."
+    "improvement": {
+      "improvement_loop": "After original-task recovery, iterate inference models on permitted training-neuron data and a declared development route; record all fits and avoid direct final-neuron spike-label feedback.",
+      "candidate_freeze": "Freeze training and model membership, source cohort, variants, noise seeds, smoothing/alignment, aggregation, checkpoint/source hashes and resource/access budgets before final scoring.",
+      "final_evaluation": "Generate paired predictions on the unchanged original LOO tests under protected labels, keeping pooled and variant-specific results separate and preserving all original conditions.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Keep rounded/source reported scores, exact author rerun scores, generic pretrained models and corrected-code variants distinct. Local released117 evidence alone is calibration/extension evidence."
+    },
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Historical105-to-released117 cell identity/inclusion mapping missing.",
-    "Exact published baseline numbers and original aggregate not recovered.",
-    "Paper-era smoothing/frame assignment, corrected timing and excluded-neuron model provenance unresolved.",
-    "Animal/session dependence and valid final uncertainty rule missing.",
-    "No working original-task scientific evaluator qualification, matched author rerun, justified margin or frozen episode budgets."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Historical105-to-released117 cell identity/inclusion mapping missing.",
       "Exact published baseline numbers and original aggregate not recovered.",
       "Paper-era smoothing/frame assignment, corrected timing and excluded-neuron model provenance unresolved.",
       "Animal/session dependence and valid final uncertainty rule missing.",
       "No working original-task scientific evaluator qualification, matched author rerun, justified margin or frozen episode budgets."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Historical105-to-released117 cell identity/inclusion mapping missing.",
+        "Exact published baseline numbers and original aggregate not recovered.",
+        "Paper-era smoothing/frame assignment, corrected timing and excluded-neuron model provenance unresolved.",
+        "Animal/session dependence and valid final uncertainty rule missing.",
+        "No working original-task scientific evaluator qualification, matched author rerun, justified margin or frozen episode budgets."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v2.json.",
+    "reproduction_contract": "reproduction.v2.json"
   },
   "next_implementation_action": {
-    "action": "Spike inference has ordered ground-truth metrics, but the original Figure1 cohort/score and excluded-neuron author models are not recovered for the registered117-file panel. Smoothing/timing and paper-era versus corrected software differ. No numeric paper baseline or same-task win can be inferred from the released-panel controller or a generic pretrained CASCADE checkpoint. Historical105-to-released117 cell identity/inclusion mapping missing. Exact published baseline numbers and original aggregate not recovered. Paper-era smoothing/frame assignment, corrected timing and excluded-neuron model provenance unresolved. Animal/session dependence and valid final uncertainty rule missing. No working original-task scientific evaluator qualification, matched author rerun, justified margin or frozen episode budgets.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "Spike inference has ordered ground-truth metrics, but the original Figure1 cohort/score and excluded-neuron author models are not recovered for the registered117-file panel. Smoothing/timing and paper-era versus corrected software differ. No numeric paper baseline or same-task win can be inferred from the released-panel controller or a generic pretrained CASCADE checkpoint. Historical105-to-released117 cell identity/inclusion mapping missing. Exact published baseline numbers and original aggregate not recovered. Paper-era smoothing/frame assignment, corrected timing and excluded-neuron model provenance unresolved. Animal/session dependence and valid final uncertainty rule missing. No working original-task scientific evaluator qualification, matched author rerun, justified margin or frozen episode budgets.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v2.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -5966,8 +5975,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

@@ -1,0 +1,967 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-replacement-012",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The original Bugeon nine-panel classification findings support a distinct computational reproduction question, independently of the improvement contract's selected-panel goal. Reproduction is not currently eligible: exact conference-era source fidelity, the invalid current E/I-inductive split, complete source comparator/ablation coverage, eight seed-dispersion targets, justified equivalence criteria and a calcium-to-output independent execution/verifier path remain unresolved. Static split recovery and supplied-embedding software controls are not original-finding reproduction.",
+  "source_paper": {
+    "title": "Know Thyself by Knowing Others: Learning Neuron Identity from Population Context",
+    "url": "https://papers.nips.cc/paper_files/paper/2025/file/8f7dc9855bb4ae8ae4f2d649f3f4efe6-Paper-Conference.pdf"
+  },
+  "evidence": [
+    {
+      "id": "conference_scores",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2025/file/8f7dc9855bb4ae8ae4f2d649f3f4efe6-Paper-Conference.pdf",
+      "locator": "Table 1, page 7; Appendix A.8/Table 8, pages 18-19",
+      "supports": "Nine Bugeon macro-F1 panel results, reported as five-training-seed means and standard deviations; EI inductive LOLCAT exceeds NuCLR."
+    },
+    {
+      "id": "conference_protocol",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2025/file/8f7dc9855bb4ae8ae4f2d649f3f4efe6-Paper-Conference.pdf",
+      "locator": "Appendix B.3 and D.4, pages 19 and 22",
+      "supports": "Calcium population input and the three Bugeon exposure/split regimes; four development sessions excluded from final test."
+    },
+    {
+      "id": "split_routes",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/README.md",
+      "locator": "Data Splits and Bugeon sections",
+      "supports": "Nine named split files and resampling readout route; downloadable split bytes are not immutable or verified here."
+    },
+    {
+      "id": "readout",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/multi_split_eval.py",
+      "locator": "balanced_resampling; logreg_scores; checkpoint selection and final prediction concatenation",
+      "supports": "Train-only standardization, logistic regression, CV macro-F1 selection and pooled final macro-F1 aggregation."
+    },
+    {
+      "id": "inductive_sessions",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/configs/data/bugeon_inductive.yaml",
+      "locator": "train_dataset.exclude_sessions and val_dataset.sessions",
+      "supports": "Five SB028 sessions excluded from representation training; one is development-only."
+    },
+    {
+      "id": "preparation",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/prepare_data.py",
+      "locator": "extract_neural_activity; extract_neurons; main calcium concatenation",
+      "supports": "Session-local neuron IDs, transcriptomic label derivation, fluorescence normalization, and omitted UniqueID ingestion."
+    },
+    {
+      "id": "embedding_loader",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/utils.py",
+      "locator": "load_emb and load_embs",
+      "supports": "Embedding float32 conversion, increasing-epoch ordering and matching neuron IDs across checkpoints."
+    },
+    {
+      "id": "prior_conference_table_review",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark",
+      "locator": "Current task improvement.v1.json comparison.published_baseline.description; raw SHA256 f2d4275a29ff41e6a37fd674e3f2f50b2a34a0e7bdf7a8b992bfcc209e2f8f22; canonical contract digest d93c3ede173fe998124c4bfd2b1f7f94fd290553c283aa8eb65f4b63194663eb; primary Table 1 / Appendix A.8 Table 8 URL remains conference_scores",
+      "supports": "The nine NuCLR means, subclass-inductive seed SD 0.0556, E/I-inductive LOLCAT mean 0.7463 and seed SD 0.0095 are inherited from the existing conference-table review, not newly recovered or independently rechecked against a complete primary table asset in this rollout. Direct full-table verification remains required before admission."
+    },
+    {
+      "id": "readout_route_discrepancy",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/single_split_eval.py",
+      "locator": "single_split_eval.py SHA256 7438bd947a48c03f6efbafb1e993b60f34219101f3042652e74068fbf8f291b7: logreg_scores and parse_cli; contrast README.md SHA256 e2c42ebdf910e88a14c275106f65500a9c0cca6cb3268b0d7471f20ebe3d05ac Bugeon transductive command",
+      "supports": "README prescribes single_split_eval.py --class-balance=resample for Bugeon transductive panels, but the pinned script has no such argument and always uses LogisticRegression(class_weight='balanced'); its RandomOverSampler import is unused. multi_split_eval.py supports resampling and a single-val branch, but substituting it does not establish the conference readout route."
+    },
+    {
+      "id": "current_split_bytes",
+      "kind": "author_data",
+      "url": "https://ik.imagekit.io/7tkfmw7hc/nuclr/splits.zip",
+      "locator": "December 14 2025 archive SHA256 e168d754a2a9a281e66694aaa6a5e591cf337dceac0dbf198ae432ac8fb65d81; task source-splits-v2/source_audit.json; E/I inductive member SHA256 b4714a2b0c885b54ece6df44d24c3b7982849e56aa372dddce4b25b081aeef8c",
+      "supports": "All nine current Bugeon split members were independently projected without unpickling. E/I inductive outer training has 6307 non-SB028 units, but each CV training array contains all 3846 SB028 units, including all 3049 test units and 797 development units. Other eight current topologies pass the registered structural checks; neither conference equivalence nor model execution follows."
+    },
+    {
+      "id": "original_calcium_route",
+      "kind": "author_data",
+      "url": "https://figshare.com/articles/dataset/19448531",
+      "locator": "Version 2; Bugeon et al 2022 v2.zip, file 38046633, recorded 946468709 bytes and MD5 4556ed80ce98ca13f909129e25f60f3a; native acquisition/join not established by this rollout",
+      "supports": "Original calcium activity, timestamps and transcriptomic labels must supply the neural observations and source-local unit identities. The source-split projection is not a calcium-data preparation."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict Bugeon neuron identity in one or more complete, predeclared original label/exposure panels: E/I, five-subclass or eleven-class labels crossed with transductive, transductive-zero-shot or inductive-zero-shot evaluation. Claim scope must name the selected original panel; unrelated panels are not universally required.",
+      "evidence_ids": [
+        "conference_scores",
+        "split_routes"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Bugeon transcriptomic calcium data, represented as bugeon_transcriptomic_2022 in the pinned preparation code; exact source archive, metadata and paper-era split byte identities still require acquisition validation.",
+      "evidence_ids": [
+        "preparation",
+        "split_routes"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Source data comprise seventeen sessions across four mice. For the selected original label level and exposure regime, preserve the complete source-eligible neuron population, stimulus subrecordings and training/test subject structure. Repeated-cell linkage and label-map joins remain execution holds.",
+      "evidence_ids": [
+        "conference_protocol",
+        "preparation"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source protocols are neuron-wise transductive, four-subject leave-one-out transductive zero-shot, and SB028-held-out inductive zero-shot with three-subject CV. Preserve the exact released split for the selected panel, including development-session exclusions. Conference-equivalent split bytes are not verified; stochastic training reruns do not authorize regenerated or changed fixed splits.",
+      "evidence_ids": [
+        "conference_protocol",
+        "inductive_sessions",
+        "split_routes"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Calcium population activity supplies representations; transcriptomic labels train the downstream readout only within source folds. Transductive representation training sees test-population activity; inductive representation training excludes all SB028 sessions.",
+      "evidence_ids": [
+        "conference_protocol",
+        "inductive_sessions",
+        "readout"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Pinned preparation concatenates stimulus experiments with one-hour offsets, retains session-local neuron indices and forms fluorescence normalized by its flattened 99th percentile. Readout casts/standardizes embeddings using training data and uses author class resampling, without substituting class weighting.",
+      "evidence_ids": [
+        "preparation",
+        "readout",
+        "split_routes",
+        "embedding_loader"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Macro F1: average of per-class 2TP/(2TP+FP+FN) for the author evaluator label set; source sklearn macro-F1 behavior must be retained. Accuracy and balanced accuracy are diagnostics, not interchangeable victory metrics.",
+      "evidence_ids": [
+        "readout",
+        "conference_scores"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Within each panel, concatenate selected outer-test predictions before macro-F1; choose each checkpoint by pooled CV macro-F1. Conference scores then average five training seeds. Do not average subjects or all nine panels into an invented source score.",
+      "evidence_ids": [
+        "readout",
+        "conference_scores"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Reproduction retains the full original Bugeon nine-panel cross of E/I, five-subclass and eleven-class labels with transductive, transductive-zero-shot and inductive-zero-shot evaluation, all five training seeds and source-required comparison/ablation findings. The nine NuCLR means, nine seed-dispersion endpoints and the identified E/I-inductive LOLCAT companion are represented here. The complete original remaining comparator/ablation cell roster and eight NuCLR seed standard deviations have not been recovered in the available source review; this is not a complete admitted finding set. No eight-panel substitute, favorable panel selection, or synthetic average over the nine panels is allowed.",
+      "evidence_ids": [
+        "conference_scores",
+        "conference_protocol",
+        "split_routes",
+        "current_split_bytes"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "For both information conditions, representations use the source-allowed calcium population observations: all 17 sessions for transductive settings; all five SB028 sessions excluded from inductive representation training. Source transcriptomic labels enter only the permitted supervised readout/CV folds. Final test labels cannot train any CV readout, select a checkpoint, or guide method choice. The paper and published table values are exposed inputs. Author code is the sole permitted information addition to the matched paper+data+author-code condition, whose enforceable delivery protocol remains unresolved.",
+      "evidence_ids": [
+        "conference_protocol",
+        "inductive_sessions",
+        "readout",
+        "preparation"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "nuclr_ei_transductive_mean",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR E/I transductive macro-F1 mean across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.811,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Take the arithmetic mean of those five seed-level panel scores; do not average outer-fold F1 values or different label/exposure panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_ei_transductive_seed_sd",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR E/I transductive macro-F1 seed_sd across five training seeds. The expected seed SD remains unrecovered; it is not zero or optional.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Report the original publication's standard deviation across those five seed-level scores; the exact published SD convention still requires source-code/figure-script confirmation.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_ei_transductive_zero_shot_mean",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR E/I transductive zero shot macro-F1 mean across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.6826,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Take the arithmetic mean of those five seed-level panel scores; do not average outer-fold F1 values or different label/exposure panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_ei_transductive_zero_shot_seed_sd",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR E/I transductive zero shot macro-F1 seed_sd across five training seeds. The expected seed SD remains unrecovered; it is not zero or optional.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Report the original publication's standard deviation across those five seed-level scores; the exact published SD convention still requires source-code/figure-script confirmation.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_ei_inductive_zero_shot_mean",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR E/I inductive zero shot macro-F1 mean across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.6738,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Take the arithmetic mean of those five seed-level panel scores; do not average outer-fold F1 values or different label/exposure panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. The inductive endpoint has only one test mouse, SB028.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_ei_inductive_zero_shot_seed_sd",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR E/I inductive zero shot macro-F1 seed_sd across five training seeds. The expected seed SD remains unrecovered; it is not zero or optional.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Report the original publication's standard deviation across those five seed-level scores; the exact published SD convention still requires source-code/figure-script confirmation.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. The inductive endpoint has only one test mouse, SB028.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_subclass_transductive_mean",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR five-subclass transductive macro-F1 mean across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.6101,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Take the arithmetic mean of those five seed-level panel scores; do not average outer-fold F1 values or different label/exposure panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_subclass_transductive_seed_sd",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR five-subclass transductive macro-F1 seed_sd across five training seeds. The expected seed SD remains unrecovered; it is not zero or optional.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Report the original publication's standard deviation across those five seed-level scores; the exact published SD convention still requires source-code/figure-script confirmation.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_subclass_transductive_zero_shot_mean",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR five-subclass transductive zero shot macro-F1 mean across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.4014,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Take the arithmetic mean of those five seed-level panel scores; do not average outer-fold F1 values or different label/exposure panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_subclass_transductive_zero_shot_seed_sd",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR five-subclass transductive zero shot macro-F1 seed_sd across five training seeds. The expected seed SD remains unrecovered; it is not zero or optional.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Report the original publication's standard deviation across those five seed-level scores; the exact published SD convention still requires source-code/figure-script confirmation.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_subclass_inductive_zero_shot_mean",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR five-subclass inductive zero shot macro-F1 mean across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.3938,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Take the arithmetic mean of those five seed-level panel scores; do not average outer-fold F1 values or different label/exposure panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. The inductive endpoint has only one test mouse, SB028.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_subclass_inductive_zero_shot_seed_sd",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR five-subclass inductive zero shot macro-F1 seed_sd across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.0556,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Report the original publication's standard deviation across those five seed-level scores; the exact published SD convention still requires source-code/figure-script confirmation.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. The inductive endpoint has only one test mouse, SB028.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_11class_transductive_mean",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR eleven-class transductive macro-F1 mean across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.4056,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Take the arithmetic mean of those five seed-level panel scores; do not average outer-fold F1 values or different label/exposure panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_11class_transductive_seed_sd",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR eleven-class transductive macro-F1 seed_sd across five training seeds. The expected seed SD remains unrecovered; it is not zero or optional.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Report the original publication's standard deviation across those five seed-level scores; the exact published SD convention still requires source-code/figure-script confirmation.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_11class_transductive_zero_shot_mean",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR eleven-class transductive zero shot macro-F1 mean across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.2333,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Take the arithmetic mean of those five seed-level panel scores; do not average outer-fold F1 values or different label/exposure panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_11class_transductive_zero_shot_seed_sd",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR eleven-class transductive zero shot macro-F1 seed_sd across five training seeds. The expected seed SD remains unrecovered; it is not zero or optional.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Report the original publication's standard deviation across those five seed-level scores; the exact published SD convention still requires source-code/figure-script confirmation.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. Preserve the original four-mouse subject structure.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_11class_inductive_zero_shot_mean",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR eleven-class inductive zero shot macro-F1 mean across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.199,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Take the arithmetic mean of those five seed-level panel scores; do not average outer-fold F1 values or different label/exposure panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. The inductive endpoint has only one test mouse, SB028.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "nuclr_11class_inductive_zero_shot_seed_sd",
+      "kind": "scalar",
+      "description": "Original Bugeon NUCLR eleven-class inductive zero shot macro-F1 seed_sd across five training seeds. The expected seed SD remains unrecovered; it is not zero or optional.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Report the original publication's standard deviation across those five seed-level scores; the exact published SD convention still requires source-code/figure-script confirmation.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. The inductive endpoint has only one test mouse, SB028.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "lolcat_ei_inductive_zero_shot_mean",
+      "kind": "scalar",
+      "description": "Original Bugeon LOLCAT E/I inductive zero shot macro-F1 mean across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.7463,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Take the arithmetic mean of those five seed-level panel scores; do not average outer-fold F1 values or different label/exposure panels.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. The inductive endpoint has only one test mouse, SB028.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    },
+    {
+      "id": "lolcat_ei_inductive_zero_shot_seed_sd",
+      "kind": "scalar",
+      "description": "Original Bugeon LOLCAT E/I inductive zero shot macro-F1 seed_sd across five training seeds. Expected value is inherited from the pinned prior conference-table review in improvement.v1.json; complete Table 1/8 text was not independently rechecked in this rollout. This exposed reference does not establish calculation from data.",
+      "status": "verified",
+      "expected": 0.0095,
+      "units": "macro-F1 fraction (dimensionless, 0 to 1)",
+      "aggregation": "For each of the original five training seeds, choose each outer split's checkpoint by pooled CV macro-F1 with source epoch tie ordering, concatenate selected outer-test predictions and compute sklearn-default macro-F1. Report the original publication's standard deviation across those five seed-level scores; the exact published SD convention still requires source-code/figure-script confirmation.",
+      "evidence_ids": [
+        "conference_scores",
+        "readout",
+        "embedding_loader",
+        "prior_conference_table_review"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No source-justified numerical equivalence tolerance has been frozen for this original panel and statistic. Published rounding and reported seed SD do not alone define an acceptance band.",
+        "evidence_ids": [
+          "conference_scores"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No equivalence interval rule has been scientifically justified or frozen; source five-seed standard deviations are descriptive optimization variability, not an automatic tolerance or confidence interval.",
+        "independent_unit": "Independently trained seed for optimization variability conditional on the fixed original cohort; mouse for biological generalization. Neurons and CV folds are not independent mice. The inductive endpoint has only one test mouse, SB028.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Five original training seeds and their aggregation must be reproduced, but a valid equivalence criterion still needs reference repeatability and a predeclared scientific tolerance; neither printed decimal precision nor nonsignificance establishes reproduction.",
+        "evidence_ids": [
+          "conference_scores",
+          "conference_protocol"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The non-null published targets are inherited from the pinned prior conference-table review in current improvement.v1.json, with primary Table 1/Appendix A.8 Table 8 URL and locators preserved. No complete primary table asset was independently rechecked in this rollout; the known cached paper excerpt covers pages 19-22. Independently verify the complete original tables and their method/panel/seed-statistic assignments before admission; do not describe inherited references as fresh primary authentication.",
+    "The current December 2025 E/I-inductive split is incompatible with the original held-out-subject protocol: every CV-training array contains 3846 SB028 units, including all 3049 test units. Source-splits-v2 preserves and rejects that topology; no silent repair, eight-panel reduction or conference-era inference is permitted.",
+    "Conference-era fixed split byte identities remain unverified for the full nine panels, even where current-release topology checks pass. Source reproduction requires conference-consistent fixed membership and development exclusions, not regenerated splits or the current archive by assumption.",
+    "The pinned transductive readout route is contradictory: Bugeon README prescribes single_split_eval.py --class-balance=resample, but that exact script rejects the absent CLI option and always fits class_weight='balanced', without calling its imported RandomOverSampler. The three transductive panels therefore lack a reconciled original balancing/execution route. multi_split_eval.py supports resample and single-val folds, but it cannot be silently substituted or assumed to be the conference-era route. Literal inherited same_task preprocessing wording is preserved and does not resolve this discrepancy.",
+    "Eight NuCLR five-seed standard deviations, the exact source SD convention, and the complete original remaining comparator/ablation cell roster and numerical targets are unrecovered. Full-panel completeness remains unresolved; the identified 20 findings do not authorize dropping missing source controls. Historical proposals for calibration or label-efficiency improvements are not automatically original-paper reproduction findings.",
+    "Original calcium archive and author metadata identities, complete stimulus subrecordings, source-local unit-to-fluorescence-column joins and repeated biological cell linkage have not been authenticated by this component. The 17-session current label-map projection is metadata, not a prepared neural dataset.",
+    "A genuine submitted-analysis interface must run a frozen candidate from the complete permitted calcium inputs and source-authorized training information and emit per-seed, per-panel, per-checkpoint, per-unit representations, readout provenance, CV predictions and selected test predictions for all findings and controls. Existing initial-evaluator-v1 accepts supplied embeddings and source-splits-v2 statically projects labels/splits; neither verifies that embeddings were learned from calcium or implements independent submitted-program execution.",
+    "An independent operator verifier must authenticate raw-input/column/label identities and representation exposure, rerun the frozen submitted analysis, reconcile the original readout route before independently recomputing the source-prescribed balancing (RandomOverSampler seed 42 where established), train-only scaling and logistic regression, check pooled-CV checkpoint selection and test isolation, and derive every panel's five-seed mean/dispersion and original control contrast from source-native outputs. No such complete verifier or immutable interface/data/evaluator manifests are admitted; admission_policy is intentionally absent rather than filled with placeholder hashes.",
+    "Numerical equivalence tolerances, reference repeatability and uncertainty rules remain unfrozen. Five seeds describe optimization variability; the one-mouse inductive test does not justify neuron-bootstrap or seed-based claims about a mouse population. Null significance, matching rounded tables, or a program printing exposed source values cannot establish reproduction.",
+    "Matched paper+data versus paper+data+author-code deliveries, evaluator/identity/exposure manifests, genuine author-code manifest and cumulative access/resource budgets are not frozen for either outcome. Original split labels and published results are publicly exposed and require truthful exposure accounting, not an assertion of a sealed holdout."
+  ]
+}

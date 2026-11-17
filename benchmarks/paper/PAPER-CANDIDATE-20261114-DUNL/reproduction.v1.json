@@ -1,0 +1,392 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-DUNL",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "A meaningful original whisker analysis reproduction exists independently of superiority, but the original event point, complete comparison panel, source-to-data/execution joins and scientific agreement criteria are unresolved. Public schedule recovery alone is insufficient. This is an incomplete source-grounded proposal, not an admitted reproduction endpoint.",
+  "source_paper": {
+    "title": "Interpretable deep learning for deconvolutional analysis of neural signals",
+    "url": "https://doi.org/10.1016/j.neuron.2025.02.006"
+  },
+  "evidence": [
+    {
+      "id": "paper-fig4",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12006907/",
+      "locator": "Results: DUNL learns a population-level kernel...; Figure 4C-J and adjacent text",
+      "supports": "Whisker event-detection task, 10 ms tolerance, periodic protocol and distinct secondary reconstruction R-squared results."
+    },
+    {
+      "id": "data-v1",
+      "kind": "author_data",
+      "url": "https://data.mendeley.com/datasets/rzfyr2886h/1",
+      "locator": "Dataset title, version/date, DOI and description",
+      "supports": "Paper-associated version 1 archive; visible metadata does not resolve the assay file roster."
+    },
+    {
+      "id": "preprocess",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/btolooshams/dunl-compneuro/23a34f40b122c3ccf3715995f0dd19fcbbcb46a2/dunl/preprocess_scripts/preprocess_data_whisker_into_dataformat.py",
+      "locator": "init_params and main, lines 28-77, 93-151, 155-200",
+      "supports": "Ten specified neuron pairs versus eleven allocated channels; first-30 split; 5 ms binning and programmed event labels."
+    },
+    {
+      "id": "metric",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/btolooshams/dunl-compneuro/23a34f40b122c3ccf3715995f0dd19fcbbcb46a2/dunl/utils.py",
+      "locator": "compute_hit_rate, lines 207-234",
+      "supports": "Neighborhood hit/false counting, per-row denominators, NaN handling and mean aggregation."
+    },
+    {
+      "id": "plot",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/btolooshams/dunl-compneuro/23a34f40b122c3ccf3715995f0dd19fcbbcb46a2/dunl/postprocess_scripts/plot_hitrate_whisker_thalamus_groupneuralfiringsp.py",
+      "locator": "plot_miss_false, lines 157-225; train/test calls lines 125-155",
+      "supports": "Two-dimensional missed/false event display and clipping after mean hit calculation."
+    },
+    {
+      "id": "legacy-registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/task.json",
+      "locator": "complete_scope, reference, scoring, remaining_gates",
+      "supports": "Registered Figure 4F scope and unresolved original-paper/current-code relation."
+    },
+    {
+      "id": "legacy-grader",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/implementations/dunl-coupled-reconstruction/README.md",
+      "locator": "Scientific calculation; Evidence and remaining work",
+      "supports": "Local coupled response reconstruction is explicitly not generalization or qualified paper reproduction."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Infer whisker manipulation event onsets from single-trial VPm spikes; Figure 4F compares missed and false events. Shared-kernel reconstruction is a separate output.",
+      "evidence_ids": [
+        "paper-fig4"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Paper-associated Mendeley release rzfyr2886h version 1 is identified, but its exact whisker assay file roster and checksums are unjoined.",
+      "evidence_ids": [
+        "data-v1",
+        "legacy-registration"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Figure 4 shows ten neurons. The pinned preprocessor selects ten neuron pairs while allocating eleven channels; original eligibility, animal/session identities and the zero channel require reconciliation.",
+      "evidence_ids": [
+        "paper-fig4",
+        "preprocess"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Current preprocessing concatenates original train/test arrays and takes first 30 of 50 trials for training. Its equivalence to the publication split and trial identities has not been authenticated.",
+      "evidence_ids": [
+        "preprocess",
+        "legacy-registration"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Single-trial spikes and the disclosed stimulation protocol. Source code generates targets at floor((500+125*k)/5), k=0,...,15; that public schedule must remain equally available.",
+      "evidence_ids": [
+        "preprocess"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Pinned code bins 1 ms samples into 5 ms normalized sums and estimates logit baseline from the first 500 ms with a 0.001 floor. Exact publication configuration remains unresolved.",
+      "evidence_ids": [
+        "preprocess"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Current code binarizes positive predictions, marks target neighborhoods within two bins, and computes hit-count/target-count and outside-neighborhood-prediction-count/prediction-count. Miss=1-min(mean_hit,1). Multi-matches count; this is not one-to-one recall or F1. Publication-to-code parity remains unverified.",
+      "evidence_ids": [
+        "metric",
+        "plot"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "compute_hit_rate averages row-level hit and false fractions, after summing kernel/time axes; the plot clips the mean hit to one. Authentic trial/neuron reshaping and the Figure 4F producer remain unjoined.",
+      "evidence_ids": [
+        "metric",
+        "plot"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve the original ten-neuron whisker analysis: Figure 4F joint DUNL miss/false point, every source smoothed-raster threshold comparator, separate train/test roles where the original analysis reports them, disclosed schedule-only control, and data-dependent kernel/amplitude/response companion outputs including separately reported 16-event and 18-event reconstruction R-squared. The exact source curve grid, companion comparison criteria, original file/cohort join and complete machine-enumerated panel remain unresolved; the scalar finding list alone is not a complete admissible panel.",
+      "evidence_ids": [
+        "paper-fig4",
+        "preprocess",
+        "metric",
+        "plot"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both conditions must receive the same complete original spike observations, binning/baseline context, trial origins and disclosed periodic stimulation schedule and top-k assistance. Author code is the only information addition. Original training/test roles, repeated test-score exposure and selection provenance, authentic common delivery and protected evaluation access remain unjoined; do not hide the schedule, mask held-out spike bins or create a new split.",
+      "evidence_ids": [
+        "paper-fig4",
+        "preprocess",
+        "plot"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "figure4f_dunl_missed_fraction",
+      "kind": "scalar",
+      "description": "Original Figure 4F DUNL missed-event coordinate at 10 ms event tolerance, retained jointly with its false-event coordinate.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless missed-event fraction",
+      "aggregation": "Pinned current-code candidate convention: average row hit fractions then clip mean hit at one; missed fraction is one minus that clipped mean. False fraction averages each row's outside-neighborhood prediction count divided by its prediction count. Train/test remain separate. Publication caller, cohort and original aggregation are unresolved.",
+      "evidence_ids": [
+        "paper-fig4",
+        "metric",
+        "plot"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source point and result producer are missing; 10 ms is event matching tolerance, not an acceptable reproduction error margin.",
+        "evidence_ids": [
+          "paper-fig4",
+          "metric",
+          "plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source uncertainty and recording-group identities before freezing an agreement rule.",
+        "independent_unit": "Unresolved animal/recording groups with nested neuron/pair/trial identities; events, bins and repeated group rows are not independent biological units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Current code reports means and does not establish biological independence; no unsupported confidence level, sample minimum or deterministic equivalence criterion is supplied.",
+        "evidence_ids": [
+          "paper-fig4",
+          "metric",
+          "plot"
+        ]
+      }
+    },
+    {
+      "id": "figure4f_dunl_false_fraction",
+      "kind": "scalar",
+      "description": "Original Figure 4F DUNL false-event coordinate at the same frozen operating point and complete original panel.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless false-event fraction",
+      "aggregation": "Pinned current-code candidate convention: average row hit fractions then clip mean hit at one; missed fraction is one minus that clipped mean. False fraction averages each row's outside-neighborhood prediction count divided by its prediction count. Train/test remain separate. Publication caller, cohort and original aggregation are unresolved.",
+      "evidence_ids": [
+        "paper-fig4",
+        "metric",
+        "plot"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "Neither the source coordinate nor a source-supported numerical reproduction margin is established; do not scalarize the joint endpoint.",
+        "evidence_ids": [
+          "paper-fig4",
+          "metric",
+          "plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source uncertainty and recording-group identities before freezing an agreement rule.",
+        "independent_unit": "Unresolved animal/recording groups with nested neuron/pair/trial identities; events, bins and repeated group rows are not independent biological units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Current code reports means and does not establish biological independence; no unsupported confidence level, sample minimum or deterministic equivalence criterion is supplied.",
+        "evidence_ids": [
+          "paper-fig4",
+          "metric",
+          "plot"
+        ]
+      }
+    },
+    {
+      "id": "disclosed_schedule_missed_fraction",
+      "kind": "scalar",
+      "description": "Mandatory disclosed schedule-only control measured on the same authentic target identities and source caller geometry; mathematical zero on generated programmed labels is not an empirical source target.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless missed-event fraction",
+      "aggregation": "Pinned current-code candidate convention: average row hit fractions then clip mean hit at one; missed fraction is one minus that clipped mean. False fraction averages each row's outside-neighborhood prediction count divided by its prediction count. Train/test remain separate. Publication caller, cohort and original aggregation are unresolved.",
+      "evidence_ids": [
+        "preprocess",
+        "metric",
+        "plot"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authentic target export has been joined; do not infer an empirical zero from the programmed-label formula or set a tolerance from generated controls.",
+        "evidence_ids": [
+          "preprocess",
+          "metric",
+          "plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source uncertainty and recording-group identities before freezing an agreement rule.",
+        "independent_unit": "Unresolved animal/recording groups with nested neuron/pair/trial identities; events, bins and repeated group rows are not independent biological units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Current code reports means and does not establish biological independence; no unsupported confidence level, sample minimum or deterministic equivalence criterion is supplied.",
+        "evidence_ids": [
+          "preprocess",
+          "metric",
+          "plot"
+        ]
+      }
+    },
+    {
+      "id": "disclosed_schedule_false_fraction",
+      "kind": "scalar",
+      "description": "Mandatory disclosed schedule-only false-event control, paired with missed events and reported separately from DUNL.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless false-event fraction",
+      "aggregation": "Pinned current-code candidate convention: average row hit fractions then clip mean hit at one; missed fraction is one minus that clipped mean. False fraction averages each row's outside-neighborhood prediction count divided by its prediction count. Train/test remain separate. Publication caller, cohort and original aggregation are unresolved.",
+      "evidence_ids": [
+        "preprocess",
+        "metric",
+        "plot"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No authentic target export has been joined; the control must be recomputed on the same identities, without claiming neural understanding.",
+        "evidence_ids": [
+          "preprocess",
+          "metric",
+          "plot"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source uncertainty and recording-group identities before freezing an agreement rule.",
+        "independent_unit": "Unresolved animal/recording groups with nested neuron/pair/trial identities; events, bins and repeated group rows are not independent biological units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Current code reports means and does not establish biological independence; no unsupported confidence level, sample minimum or deterministic equivalence criterion is supplied.",
+        "evidence_ids": [
+          "preprocess",
+          "metric",
+          "plot"
+        ]
+      }
+    },
+    {
+      "id": "secondary_reconstruction_r2_16events",
+      "kind": "scalar",
+      "description": "Separately reported whisker response reconstruction R-squared using 16 events; never substitute this secondary reconstruction quantity for Figure 4F event detection.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless R-squared",
+      "aggregation": "Exact publication response/averaging panel and train/test role require the source result producer; preserve the 16-event setting separately from 18 events.",
+      "evidence_ids": [
+        "paper-fig4"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The prior contract describes a secondary reconstruction value, but no retained primary paper excerpt or result artifact has independently verified its value and complete observation/aggregation/role linkage in this review. Expected value and agreement tolerance remain unresolved; no event-detection target is inferred from reconstruction.",
+        "evidence_ids": [
+          "paper-fig4"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source uncertainty and recording-group identities before freezing an agreement rule.",
+        "independent_unit": "Unresolved animal/recording groups with nested neuron/pair/trial identities; events, bins and repeated group rows are not independent biological units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Current code reports means and does not establish biological independence; no unsupported confidence level, sample minimum or deterministic equivalence criterion is supplied.",
+        "evidence_ids": [
+          "paper-fig4"
+        ]
+      }
+    },
+    {
+      "id": "secondary_reconstruction_r2_18events",
+      "kind": "scalar",
+      "description": "Separately reported whisker response reconstruction R-squared using 18 events, preserving the disclosed assistance setting and its own response outputs.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless R-squared",
+      "aggregation": "Exact publication response/averaging panel and train/test role require the source result producer; do not average or select between the 16-event and 18-event reported results.",
+      "evidence_ids": [
+        "paper-fig4"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The prior contract describes a secondary reconstruction value, but no retained primary paper excerpt or result artifact has independently verified its value and complete observation/aggregation/role linkage in this review. Expected value and agreement tolerance remain unresolved; no event-detection target is inferred from reconstruction.",
+        "evidence_ids": [
+          "paper-fig4"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover source uncertainty and recording-group identities before freezing an agreement rule.",
+        "independent_unit": "Unresolved animal/recording groups with nested neuron/pair/trial identities; events, bins and repeated group rows are not independent biological units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Current code reports means and does not establish biological independence; no unsupported confidence level, sample minimum or deterministic equivalence criterion is supplied.",
+        "evidence_ids": [
+          "paper-fig4"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The exact Figure 4F DUNL missed/false point and complete smoothed-raster threshold curve are not recovered as source result artifacts; the publication smoothing and threshold settings are not authenticated. Current code defaults are not substituted.",
+    "The complete original whisker assay file/checksum manifest, ten-neuron eligibility and animal/session/pair/trial identities are unjoined. Ten selected neurons versus eleven allocated channels require explicit reconciliation without dropping a source row.",
+    "The publication split, stored original trial roles, current first-30/rest-20 reassignment, saved training/selection configuration, author checkpoint and result-array producer are unjoined. Repeated test logging prevents assuming an untouched selection boundary.",
+    "The full finding panel requires the Figure 4F curve and data-dependent shared kernel, neuron/event amplitudes and response reconstructions as companion evidence. The scalar findings below are only identified members; unknown source curve cardinality and kernel/response comparison criteria prevent claiming that the executable panel is complete.",
+    "No source-grounded numerical agreement tolerances or biological uncertainty rule are established. Events, repeated group rows, allocated channels and time bins cannot be counted as independent biological replicates; no sample minimum is invented.",
+    "The accepted historical event interface consumes already-exported owner targets and candidate codes for current defaults; it neither runs submitted analysis nor authenticates original input tensors, native export, kernel/amplitude/rate outputs or the full smoothed-raster comparator. A complete independent granular-output verifier is missing.",
+    "No authentic immutable cohort/split/panel/observations/metric/aggregation manifests, common input delivery, code-only information addition, exposure policy or cumulative access/resource budgets have been frozen. Both paired protocols remain unresolved.",
+    "The target event schedule is public (16 events, 500 ms phase, 125 ms period; 5 ms grid) and top-k16/top-k18 assistance is disclosed. Agreement from a schedule-only executable or printed paper aggregates cannot demonstrate data-dependent computational reproduction.",
+    "Secondary 16-event and 18-event reconstruction targets mentioned in prior metadata have not been independently verified against retained primary paper/result evidence. Their expected values remain null; inherited contract wording is not primary verification."
+  ]
+}

@@ -1,0 +1,364 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-013",
+  "track": "paper",
+  "title": "Synaptic plasticity rules driving representational shifting in the hippocampus",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Original Fig.6b reconstruction of each empirical onset-centered PF center-of-mass trajectory as a function of lap, comparing linear with plateauing-exponential fits. This is same-observation description, not prediction of unseen animals.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Original Fig.6b reconstruction of each empirical onset-centered PF center-of-mass trajectory as a function of lap, comparing linear with plateauing-exponential fits. This is same-observation description, not prediction of unseen animals.",
+    "Source-paper comparison for Original Fig.6b full2649-PF unadjusted reconstruction R2 comparison; scalar aggregation unresolved: Original unadjusted coefficient of determination R2 for each PF fit, with higher values indicating better reconstruction of the same observations. Source compares a two-parameter line with Amp*(1-exp(-n/tau))+epsilon; do not replace this metric by significance or adjusted R2."
+  ],
+  "success_criteria": [
+    "Recover the exact original2649-PF input and paired linear/nonlinear fit-score vector; reproduce the bounded author plateau-exponential reference on the same observations.",
+    "Preserve original lap support, centering, missingness/interpolation, cohort and unadjusted R2; a new holdout or selected-PF subset cannot replace this reconstruction task.",
+    "Freeze a source-comparable model-capacity and search/selection policy before candidate feedback. Document the original three-parameter nonlinear fit and two-parameter linear comparator; unrestricted interpolation or added effective degrees of freedom cannot earn a paper win.",
+    "Predeclare complete-panel aggregation, meaningful effect and dependence-aware uncertainty; require improved reconstruction against the original author result, not merely a larger effect or smaller p value.",
+    "Retain broader empirical/model/optogenetic outputs as separately assessed historical obligations. A qualified Fig.6b reconstruction gain must be labelled with that scope and cannot establish a plasticity mechanism or every paper claim.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-013",
+  "canonical_position_one_based": 71,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41593-025-01894-6",
+    "publication_year": 2025,
+    "venue": "Nature Neuroscience"
+  },
+  "input_assets": {
+    "routes": [
+      "https://github.com/antoinemadar/BTSPvsSTDP"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/0",
+        "recorded_fields": {
+          "path": "COMtraj/Main/data/CA1_COM_withPFs.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-013"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/1",
+        "recorded_fields": {
+          "path": "COMtraj/Main/data/CA3_COM_withPFs.mat"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-013"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/2",
+        "recorded_fields": {
+          "path": "COMtraj/Opto/data/all_PFs_lap45_NewCriteriaNominDF.csv"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-013"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/3",
+        "recorded_fields": {
+          "path": "COMtraj/Opto/data/optoLater_length_animals.csv"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-013"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/saved_metadata/inventory/4",
+        "recorded_fields": {
+          "path": "COMtraj/Opto/data/opto_length_animals.csv"
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-013"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://www.nature.com/articles/s41593-025-01894-6",
+      "data_urls": [
+        "https://github.com/antoinemadar/BTSPvsSTDP"
+      ],
+      "input_scope": "Bundled CA1_COM_withPFs.mat, CA3_COM_withPFs.mat and optogenetic trajectory tables are processed place-field inputs; raw imaging and upstream field selection are not reproduced.",
+      "saved_metadata": {
+        "input_version": "Bundled inputs pinned by Git commit 7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c",
+        "input_code_bridge": "Official README maps CA1_COM_withPFs.mat, CA3_COM_withPFs.mat and COMtraj/Opto/data tables to central figures; these exact inputs exist in the pinned Git tree.",
+        "inventory": [
+          {
+            "path": "COMtraj/Main/data/CA1_COM_withPFs.mat",
+            "source": "pinned Git tree; binary contents not downloaded"
+          },
+          {
+            "path": "COMtraj/Main/data/CA3_COM_withPFs.mat",
+            "source": "pinned Git tree; binary contents not downloaded"
+          },
+          {
+            "path": "COMtraj/Opto/data/all_PFs_lap45_NewCriteriaNominDF.csv",
+            "source": "pinned Git tree; binary contents not downloaded"
+          },
+          {
+            "path": "COMtraj/Opto/data/optoLater_length_animals.csv",
+            "source": "pinned Git tree; binary contents not downloaded"
+          },
+          {
+            "path": "COMtraj/Opto/data/opto_length_animals.csv",
+            "source": "pinned Git tree; binary contents not downloaded"
+          }
+        ]
+      },
+      "code_url": "https://github.com/antoinemadar/BTSPvsSTDP",
+      "revision_or_archive_version": "7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c",
+      "entrypoints": [
+        "COMtraj/Main/CanDataAnalysis.m",
+        "COMtraj/Main/CanDataAnalysis_NonLinRegBootstrapStats.m",
+        "COMtraj/Opto/OptoCOMtraj.m",
+        "BTSP/SummaryBTSPmodels_vs_CA1data.m"
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-013",
+        "versions_and_loader_contract": {
+          "input_version": "Bundled inputs pinned by Git commit 7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c",
+          "input_code_bridge": "Official README maps CA1_COM_withPFs.mat, CA3_COM_withPFs.mat and COMtraj/Opto/data tables to central figures; these exact inputs exist in the pinned Git tree.",
+          "readiness_scope": "Only the central empirical outputs listed here; no claim of reproducing every figure or acquisition/preprocessing stage.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "input_inventory",
+          "input_version",
+          "input_code_bridge"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "FIND-013",
+        "versions_and_loader_contract": {
+          "declared_scope": "CA1 versus CA3 place-field center-of-mass shifts and per-animal variability; Optogenetic effects on field shifts, and empirical discrimination of STDP versus BTSP model predictions."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/antoinemadar/BTSPvsSTDP",
+    "revision_or_archive_version": "7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c",
+    "entrypoints": [
+      "COMtraj/Main/CanDataAnalysis.m",
+      "COMtraj/Main/CanDataAnalysis_NonLinRegBootstrapStats.m",
+      "COMtraj/Opto/OptoCOMtraj.m",
+      "BTSP/SummaryBTSPmodels_vs_CA1data.m"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-013",
+        "recorded": {
+          "code_url": "https://github.com/antoinemadar/BTSPvsSTDP",
+          "code_revision": "7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c",
+          "entrypoints": [
+            "COMtraj/Main/CanDataAnalysis.m",
+            "COMtraj/Main/CanDataAnalysis_NonLinRegBootstrapStats.m",
+            "COMtraj/Opto/OptoCOMtraj.m",
+            "BTSP/SummaryBTSPmodels_vs_CA1data.m"
+          ],
+          "dependencies": [
+            "MATLAB",
+            "Brewermap, plot_ci and Violinplot dependencies identified in README"
+          ]
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "FIND-013",
+        "recorded": {
+          "code_url": "https://github.com/antoinemadar/BTSPvsSTDP",
+          "code_revision_or_archive_version": "7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c",
+          "entrypoints": [
+            "COMtraj/Main/CanDataAnalysis.m",
+            "COMtraj/Main/CanDataAnalysis_NonLinRegBootstrapStats.m",
+            "COMtraj/Opto/OptoCOMtraj.m",
+            "BTSP/SummaryBTSPmodels_vs_CA1data.m"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "6ae08f2a2ddc31342e6b1a54676f0df3625d453fcbf422b1739c1a288d1d3488",
+    "audit_record_sha256": "33e3b7472f1096913329883677e080b311f50a029c75bf5b36d8c9ffea8f1d2c",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+          "bytes": 1654641,
+          "sha256": "3782e843842fd2848b653253a23db84053308427ce3b3246a918644f2e25fe3a"
+        },
+        "record_id": "FIND-013",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 12,
+        "record_sha256": "dc2c61607d41c00e10d61b7def9082f34d1d601501e9e29402da5699812f4fa3"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "FIND-013",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 12,
+        "record_sha256": "07c48a16e7a12e544ba3a67a390bee94216ac498cd3dcd39231ae8465c44597e"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "roster_statement": {
+      "estimate": "CPU workstation; empirical analysis hours, model parameter sweeps potentially days (estimate).",
+      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
+    },
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-013/improvement.v1.json",
+      "bytes": 11620,
+      "sha256": "d2a0c233237cb0660b78e2ad6d198a6cbbd5e7f4020c0dc15818cd106e49b347"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-013/historical/task.pre-improvement.v1.json",
+        "bytes": 19590,
+        "sha256": "3bb69a120a48795c359e1d85c5e3ecb0b29965fab4f06781703953261458de89"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-find-013"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-FIND-013/implementations/registered-runtime/manifest.json",
+        "bytes": 8856,
+        "sha256": "bec187e96ed726b72bd1885f5d926b75668bc556eb10f23f6e9b686e47e872dd"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After source recovery and fixed-complexity admission, iterate using the original allowed observed COM inputs and declared fit-feedback budget. Original same-data fitting is intentional; no new predictive split is introduced.",
+    "candidate_freeze": "Freeze candidate family, parameterization, capacity, fitting/search budget, preprocessing and full-panel decision before final scoring.",
+    "final_evaluation": "Replay the frozen candidate and original author route on the complete original2649-PF reconstruction support. Report full paired scores and predeclared aggregation; protect scoring provenance without pretending source-observed trajectories are unseen data.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published full-vector fits, fresh author reruns and local reconstruction controls are distinct. Source mean/median thresholds are not invented; budgets and exact replay must be qualified before activation."
+  },
+  "blocking_issues": [
+    "Exact original2649-PF fit score vector, empirical asset versions and PF/animal/condition mappings unresolved.",
+    "Original regression lap support, missingness/interpolation, parameter initialization/bounds/stopping and native author parity require authentication.",
+    "No fixed source-comparable complexity/search policy or full-panel aggregation is admitted; unconstrained in-sample flexibility is not scientific improvement.",
+    "Meaningful effect, valid paired uncertainty, working source-author/candidate evaluation and concrete episode budgets remain unresolved.",
+    "Canonical task binding must identify the original Fig.6b reconstruction endpoint while preserving broader descriptive/mechanistic history."
+  ],
+  "holds": {
+    "task_specific": [
+      "Exact original2649-PF fit score vector, empirical asset versions and PF/animal/condition mappings unresolved.",
+      "Original regression lap support, missingness/interpolation, parameter initialization/bounds/stopping and native author parity require authentication.",
+      "No fixed source-comparable complexity/search policy or full-panel aggregation is admitted; unconstrained in-sample flexibility is not scientific improvement.",
+      "Meaningful effect, valid paired uncertainty, working source-author/candidate evaluation and concrete episode budgets remain unresolved.",
+      "Canonical task binding must identify the original Fig.6b reconstruction endpoint while preserving broader descriptive/mechanistic history."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The final paper contains an original ordered reconstruction task: Fig.6b compares linear and bounded plateauing-exponential fits to the same2649 empirical place-field trajectories using unadjusted R2. In-sample model fit is a valid source endpoint; no new predictive holdout is required. Exact source fit vectors, original observation support, full-panel aggregation and a defensible fixed-complexity superiority rule remain unrecovered. Descriptive biological effects and mechanistic claims remain distinct. Exact original2649-PF fit score vector, empirical asset versions and PF/animal/condition mappings unresolved. Original regression lap support, missingness/interpolation, parameter initialization/bounds/stopping and native author parity require authentication. No fixed source-comparable complexity/search policy or full-panel aggregation is admitted; unconstrained in-sample flexibility is not scientific improvement. Meaningful effect, valid paired uncertainty, working source-author/candidate evaluation and concrete episode budgets remain unresolved. Canonical task binding must identify the original Fig.6b reconstruction endpoint while preserving broader descriptive/mechanistic history.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-013/historical/task.pre-improvement.v1.json",
+      "bytes": 19590,
+      "sha256": "3bb69a120a48795c359e1d85c5e3ecb0b29965fab4f06781703953261458de89"
+    },
+    "notes": "Preserve all processed-trajectory OLS/error/coverage graders and mechanism summaries as calibration. The original paper also contains a valid ordered in-sample fit comparison; these local reconstruction controls do not yet reproduce its complete2649-PF score vector or establish superiority."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

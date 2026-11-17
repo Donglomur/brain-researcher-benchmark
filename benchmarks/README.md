@@ -2,7 +2,7 @@
 
 | Track | Original specifications | Expansion drafts | Registered total |
 | --- | ---: | ---: | ---: |
-| [Paper improvement](paper/README.md) | 100 | 16 | 116 |
+| [Paper reproduction and improvement](paper/README.md) | 100 | 17 | 117 |
 | [Neural-data understanding](neural/README.md) | 100 | 18 | 118 |
 
 Task folders contain the authoritative `task.json` and their available

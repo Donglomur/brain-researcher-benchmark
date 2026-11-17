@@ -4,20 +4,21 @@
   "track": "paper",
   "title": "Spike Rate Inference from Mouse Spinal Cord Calcium Imaging Data",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Infer continuous, smoothed spike rates from spinal-cord calcium fluorescence against paired electrophysiology. Discrete-spike detection and in-vivo denoising are different endpoints.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce and assess improvements in the paper's continuous spike-rate inference comparison on paired spinal calcium/electrophysiology recordings, preserving both spinal populations, the source-defined held-neuron exclusions, original sampling/noise/target-smoothing conditions, cortical/default and cross-dataset CASCADE, raw fluorescence and OASIS comparators, and source-grounded correlation, bias and error outcomes. Retain complete per-neuron and condition panels and necessary alignment and temporal-precision controls. Report reproduction and source-qualified improvement separately. Acquisition experiments and the downstream in-vivo application remain outside this bounded task.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Infer continuous, smoothed spike rates from spinal-cord calcium fluorescence against paired electrophysiology. Discrete-spike detection and in-vivo denoising are different endpoints.",
-    "Source-paper comparison for Per-neuron spike-rate correlation summarized by the original cell-type and sampling/noise panels: Pearson correlation of inferred and target spike-rate traces, higher is better. Error and signed bias must remain separate diagnostics rather than a new composite score."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover exact original retrained-CASCADE per-cell outputs and every paper sampling/noise condition, with the original held-neuron exclusions.",
-    "Compare candidate and author models on identical fluorescence, target smoothing, alignment, edge masks and cell denominators.",
-    "Retain both glutamatergic and GABAergic cohorts; no favorable cell class, lower noise, slower target or reduced panel can define victory.",
-    "Keep source-era results and the later timing correction separate. Repairing a one-frame discrepancy is calibration, not scientific improvement.",
-    "Require meaningful correlation gain under a justified paired uncertainty rule with bias/error guardrails; new animal splits are extensions.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v2.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results.",
+    "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply."
   ],
   "source_id": "paper-method-replacement-015",
   "canonical_position_one_based": 69,
@@ -906,61 +907,80 @@
     "known_local_scientific_runtime_seconds": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-replacement-015/improvement.v1.json",
-      "bytes": 10285,
-      "sha256": "8bc9c83b2f6d029700c7e729d8c7de3c808cdaf3c67263aaaeac126c200a48ca"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v2.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-replacement-015/historical/task.pre-improvement.v1.json",
-        "bytes": 62282,
-        "sha256": "b24f01de53f9195dc060cfe7d88b05b531de544edd43c88b33b2edac62d3d80c"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-paper-paper-method-replacement-015"
-      ],
-      "runtime_manifest": {
-        "path": "benchmarks/paper/PAPER-paper-method-replacement-015/implementations/registered-runtime/manifest.json",
-        "bytes": 14266,
-        "sha256": "beb7d189316b5555af28a5bf60b65c03c448259eff565abe44639a8578185a19"
-      }
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "scope_disposition": "same_primary_unqualified"
   },
   "episode": {
-    "improvement_loop": "After recovering the DS40/41 source-era configuration, iterate on declared training/development neurons while respecting each original leave-one-neuron-out exclusion. Keep all recordings and artificial-noise replicas of the test neuron out of that fit; tune denoisers and spike-rate inference only through the declared development route, with each attempt and timing convention recorded.",
-    "candidate_freeze": "Freeze the full glutamatergic/GABAergic roster, original sampling/noise grid and noise realizations, Gaussian target kernels, alignment and edge masks, source-era delay correction, held-neuron training exclusions, candidate parameters and budgets before final scoring. Do not select a favorable temporal shift using newly exposed final labels.",
-    "final_evaluation": "Evaluate candidate and recovered author models on every original held-neuron and sampling/noise condition. Preserve separate per-cell-type correlation summaries and bias/error diagnostics; retain failures and denominator changes explicitly. Lower noise, wider target smoothing, a subset of cells or the later timing repair cannot establish source-paper superiority.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "The comparison target is the matching original retrained-CASCADE result, with cortical-default CASCADE, cross-dataset models, raw fluorescence and OASIS separately identified. Approximate default-model correlation and the modern demo’s different noise grid cannot replace the exact paper baseline. A source-era rerun and a timing-corrected rerun remain separate calibration records."
+    "improvement": {
+      "improvement_loop": "After recovering the DS40/41 source-era configuration, iterate on declared training/development neurons while respecting each original leave-one-neuron-out exclusion. Keep all recordings and artificial-noise replicas of the test neuron out of that fit; tune denoisers and spike-rate inference only through the declared development route, with each attempt and timing convention recorded.",
+      "candidate_freeze": "Freeze the full glutamatergic/GABAergic roster, original sampling/noise grid and noise realizations, Gaussian target kernels, alignment and edge masks, source-era delay correction, held-neuron training exclusions, candidate parameters and budgets before final scoring. Do not select a favorable temporal shift using newly exposed final labels.",
+      "final_evaluation": "Evaluate candidate and recovered author models on every original held-neuron and sampling/noise condition. Preserve separate per-cell-type correlation summaries and bias/error diagnostics; retain failures and denominator changes explicitly. Lower noise, wider target smoothing, a subset of cells or the later timing repair cannot establish source-paper superiority.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "The comparison target is the matching original retrained-CASCADE result, with cortical-default CASCADE, cross-dataset models, raw fluorescence and OASIS separately identified. Approximate default-model correlation and the modern demo’s different noise grid cannot replace the exact paper baseline. A source-era rerun and a timing-corrected rerun remain separate calibration records."
+    },
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered.",
-    "Later author demo noise grid differs from the original published main comparison.",
-    "Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication.",
-    "Animal/session dependence and full original cell membership need a frozen manifest.",
-    "No qualified evaluator/rerun, justified effect threshold or fixed episode budgets."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered.",
       "Later author demo noise grid differs from the original published main comparison.",
       "Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication.",
       "Animal/session dependence and full original cell membership need a frozen manifest.",
       "No qualified evaluator/rerun, justified effect threshold or fixed episode budgets."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered.",
+        "Later author demo noise grid differs from the original published main comparison.",
+        "Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication.",
+        "Animal/session dependence and full original cell membership need a frozen manifest.",
+        "No qualified evaluator/rerun, justified effect threshold or fixed episode budgets."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v2.json.",
+    "reproduction_contract": "reproduction.v2.json",
+    "current_primary_source_limits": [
+      "Exact source-era condition/neuron/recording manifests, noise realizations, checkpoints, held-neuron exclusions, support masks, alignment and animal/session dependence remain unresolved.",
+      "Keep original source timing separate from the later one-timepoint correction, current demo noise grid and prospective native-400ms condition; none proves original figure equivalence.",
+      "Historical correlation, bias and error outcomes remain required. The component's single-pass normalized L1/signed-bias diagnostics are not qualified reproduction of original source or later-demo bias/error columns. Source metric definitions and timescale support must be authenticated.",
+      "Preserve source discrepancies in neuron-count ordering, noise eligibility and Figure 6c model identity. Do not resolve them by a favorable cell subset, guessed comparator or convenient filename glob.",
+      "Complete reference outputs, justified agreement/superiority criteria, uncertainty units and paired access/budget manifests remain unestablished. Correlation gain alone must not conceal rate-calibration failure.",
+      "Held-neuron electrical targets cannot be exposed to inference candidates to support a newly enrolled descriptive task. Any added target-access regime or full thirteen-group primary project requires explicit scientific scope and observation-policy decisions.",
+      "Neither metric software checks nor a source inventory establishes authentic reproduction, improvement, native parity or SOTA. Restore independent reproduction reporting without accepting a partial condition as the full task."
+    ],
+    "scope_correction_limit": "This scope correction grants no new observation access and changes no improvement metric, criterion or tolerance."
   },
   "next_implementation_action": {
-    "action": "The original spike-rate inference endpoint is recoverable, but the exact full retrained-CASCADE correlation baseline, source-era timing/configurations and per-condition panel are not yet bound. Approximate cortical-default performance or a later timing repair cannot serve as the improvement target. Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered. Later author demo noise grid differs from the original published main comparison. Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication. Animal/session dependence and full original cell membership need a frozen manifest. No qualified evaluator/rerun, justified effect threshold or fixed episode budgets.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The original spike-rate inference endpoint is recoverable, but the exact full retrained-CASCADE correlation baseline, source-era timing/configurations and per-condition panel are not yet bound. Approximate cortical-default performance or a later timing repair cannot serve as the improvement target. Exact full numeric retrained-author baseline and original figure-producing configurations are not recovered. Later author demo noise grid differs from the original published main comparison. Delay correction, edge masks, random noise replicates and checkpoint training exclusions need source-era authentication. Animal/session dependence and full original cell membership need a frozen manifest. No qualified evaluator/rerun, justified effect threshold or fixed episode budgets.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v2.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -975,8 +995,29 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate.",
+  "primary_scope": "The retained empirical paired-recording inference comparison: continuous smoothed rates against electrical ground truth, with original matched held-neuron evaluation, both spinal populations, original sampling/noise conditions, full method/control coverage and source-grounded correlation/bias/error outcomes. Preserve the source-qualified Figure 4 cortex comparison, sweeps and essential timing/precision controls already retained by the accepted component. The thirteen-group Figure 1-6 census was an owner's interpretation, not an explicit decision enrolling every result as primary. Figure 7 and acquisition experiments remain excluded.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-paper-method-replacement-015"
+  },
+  "source_scope_correction": {
+    "disposition": "same_primary_unqualified",
+    "retained_scope_notes": "Retain real paired-recording spike-pattern/kernel characterization, high-frequency-event reconstruction and separate relative-rate/segment analyses as specifically named source evidence. They are genuine empirical results, not automatically mandatory primary outcomes. The supplied-array metric kernel is partial support for the registered primary inference task; it is not a separate successful reproduction. The Figure 3d simulation illustration is distinct from these empirical results and cannot satisfy the primary task.",
+    "retained_source_roles": null,
+    "remaining_source_limits": [
+      "Exact source-era condition/neuron/recording manifests, noise realizations, checkpoints, held-neuron exclusions, support masks, alignment and animal/session dependence remain unresolved.",
+      "Keep original source timing separate from the later one-timepoint correction, current demo noise grid and prospective native-400ms condition; none proves original figure equivalence.",
+      "Historical correlation, bias and error outcomes remain required. The component's single-pass normalized L1/signed-bias diagnostics are not qualified reproduction of original source or later-demo bias/error columns. Source metric definitions and timescale support must be authenticated.",
+      "Preserve source discrepancies in neuron-count ordering, noise eligibility and Figure 6c model identity. Do not resolve them by a favorable cell subset, guessed comparator or convenient filename glob.",
+      "Complete reference outputs, justified agreement/superiority criteria, uncertainty units and paired access/budget manifests remain unestablished. Correlation gain alone must not conceal rate-calibration failure.",
+      "Held-neuron electrical targets cannot be exposed to inference candidates to support a newly enrolled descriptive task. Any added target-access regime or full thirteen-group primary project requires explicit scientific scope and observation-policy decisions.",
+      "Neither metric software checks nor a source inventory establishes authentic reproduction, improvement, native parity or SOTA. Restore independent reproduction reporting without accepting a partial condition as the full task."
+    ],
+    "scientific_outcome": "unknown"
   }
 }

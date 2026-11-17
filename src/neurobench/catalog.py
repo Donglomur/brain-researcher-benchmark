@@ -24,8 +24,13 @@ COMMON = {'schema_version', 'id', 'track', 'title', 'status', 'primary_outputs',
           'next_implementation_action', 'provenance', 'admission'}
 # Covers both tracks' versioned contracts plus exact preserved predecessors.
 # Per-member bounds and the cumulative refusal remain independent controls.
-READ_LIMIT = 32 * 1024 * 1024
+READ_LIMIT = 80 * 1024 * 1024
 PAPER_PRE_IMPROVEMENT_COUNT = 116
+PRIMARY_SUCCESSOR_PUBLIC_FIELDS = (
+    'improvement_disposition', 'retained_improvement_contract', 'retained_improvement_role',
+    'primary_policy_revision', 'primary_policy_provenance', 'candidate_interface', 'author_reproduction_routes',
+)
+RETAINED_POLICY_ROLE = 'retained_pre_outcomes_policy'
 
 
 def improvement_module():
@@ -38,7 +43,8 @@ def improvement_module():
 
 def companion_module(name):
     """Load a fixed framework sibling without importing task implementation code."""
-    need(name in {'neural_understanding', 'evidence', 'operator_routes'}, 'Unknown framework companion')
+    need(name in {'neural_understanding', 'evidence', 'operator_routes', 'paper_outcomes_binding'},
+         'Unknown framework companion')
     spec = importlib.util.spec_from_file_location('neurobench_' + name,
                                                  Path(__file__).with_name(name + '.py'))
     module = importlib.util.module_from_spec(spec)
@@ -64,6 +70,67 @@ def improvement_counts(tasks):
             'improvement_ready': dispositions['improvement_ready'],
             'design_ready': dispositions['design_ready'], 'source_unresolved': dispositions['source_unresolved'],
             'ineligible': dispositions['ineligible'], 'not_audited': dispositions['not_audited']}
+
+
+def paper_outcome_counts(tasks):
+    """Count registered identities once; outcome conditions are nested metadata."""
+    papers = [row for row in tasks if row['track'] == 'paper']
+    covered = [row for row in papers if row.get('paper_outcomes')]
+    reproduction = Counter(primary_paper_disposition(row, 'reproduction') for row in covered)
+    improvement = Counter(primary_paper_disposition(row, 'improvement') for row in covered)
+    result = {'registered': len(papers), 'covered': len(covered), 'not_bound': len(papers) - len(covered),
+            'primary_unavailable': sum(row['paper_outcomes'].get('availability') == 'unavailable' for row in covered),
+            'reproduction_eligibility': dict(sorted(reproduction.items())),
+            'improvement_disposition': dict(sorted(improvement.items())),
+            'scientific_outcomes': {'reproduction': 'unknown', 'improvement': 'unknown'},
+            'count_basis': 'Distinct registered paper task IDs. Outcome eligibility and access conditions '
+                           'do not add tasks or establish scientific performance.'}
+    gaps = sum(source_declaration_gap(row['paper_outcomes']) for row in covered)
+    if gaps:
+        result['source_declaration_unavailable'] = gaps
+    return result
+
+
+def primary_paper_disposition(row, outcome):
+    """A retained secondary policy cannot make an unavailable primary eligible."""
+    binding = row.get('paper_outcomes', {})
+    if binding.get('availability') == 'unavailable':
+        return 'unavailable'
+    if source_declaration_gap(binding):
+        return ('source_declaration_unavailable' if outcome == 'reproduction'
+                else binding['improvement_disposition'])
+    if outcome == 'reproduction':
+        return binding.get('reproduction_eligibility', 'not bound')
+    if binding.get('primary_policy_revision') is not None:
+        need(type(binding.get('improvement_disposition')) is str, 'Selected primary policy requires its current disposition')
+        return binding['improvement_disposition']
+    return row.get('paper_improvement', {}).get('disposition', 'not audited')
+
+
+def neutral_unavailable_reason(outcomes):
+    return (outcomes.get('availability') == 'unavailable'
+            and outcomes.get('reason_code') == 'full_primary_pairing_unavailable')
+
+
+def source_declaration_gap(outcomes):
+    return outcomes.get('availability') == 'source_declaration_unavailable'
+
+
+def registered_improvement_summary(bound, registered):
+    """Summarize the original policy with its unchanged registration provenance."""
+    revision = registered['specification_revision']
+    result = {**improvement_module().summary(bound['retained_improvement_contract']),
+              'contract': bound['retained_improvement_contract_pin']}
+    if revision['version'] == 'paper-improvement/initial-v1':
+        result.update(historical_specification=None, initial_registration=revision['initial_registration'])
+    else:
+        need(revision['version'] == 'paper-improvement/v1', 'Unsupported retained successor policy lineage')
+        result['historical_specification'] = revision['previous_specification']
+    return result
+
+
+def retained_successor_policy(bound, registered):
+    return {**registered_improvement_summary(bound, registered), 'role': RETAINED_POLICY_ROLE}
 
 
 def need(value, message):
@@ -257,6 +324,10 @@ def discover(root=ROOT):
     rows = registry['tasks']
     need(isinstance(rows, list) and all(isinstance(row, dict) for row in rows), 'Registry tasks must be objects')
     need(len({row['id'] for row in rows}) == len(rows), 'Duplicate registered task ID')
+    outcome_binding = companion_module('paper_outcomes_binding')
+    read_outcome_pin = lambda pin, label: checked_pin(reader, pin, label)
+    previous_outcome_rows = outcome_binding.coverage(registry, read_outcome_pin)
+    outcome_snapshot = registry.get('paper_outcomes', {}).get('pre_outcomes_registry')
     improvement_meta = registry.get('paper_improvement')
     previous_rows = None
     if improvement_meta is not None:
@@ -322,12 +393,17 @@ def discover(root=ROOT):
              'Neural revision must preserve the original registration roster')
     historical = registry['historical_registries']
     need(isinstance(historical, list), 'Historical registries must be a list')
+    need(outcome_snapshot is None or outcome_snapshot in historical,
+         'Pre-outcomes registry snapshot must be exactly enrolled')
     historical_paths = set()
     for pin in historical:
         need(pin['path'] not in historical_paths, 'Duplicate historical registry')
         historical_paths.add(pin['path'])
         # Authenticate the preserved JSON body, but do not traverse its old locators.
-        checked_pin(reader, pin, 'Historical registry')
+        # The outcome helper has already authenticated this exact snapshot.
+        # Its historical enrollment still participates in the unique-path check.
+        if pin != outcome_snapshot:
+            checked_pin(reader, pin, 'Historical registry')
     tasks = []
     classes = {'canonical': [], 'expansion': []}
     for row in rows:
@@ -336,6 +412,12 @@ def discover(root=ROOT):
         need(row.get('task_directory') == directory, 'Task directory does not match its track and ID')
         need(row['specification']['path'] == directory + '/task.json', 'Authoritative task definition must be task.json in its task folder')
         doc = checked_pin(reader, row['specification'], 'Task specification')
+        current_row, current_document = row, doc
+        bound_outcomes = outcome_binding.context(row, doc, previous_outcome_rows, read_outcome_pin)
+        if bound_outcomes is not None:
+            # These unchanged lineage checks describe the preserved pre-outcome
+            # definition. The current dual projection is authenticated separately.
+            row, doc = bound_outcomes['previous_row'], bound_outcomes['previous_document']
         original = row['original_specification']
         need(isinstance(original, dict) and isinstance(original.get('path'), str), 'Missing original task identity')
         revision = row.get('specification_revision')
@@ -374,7 +456,8 @@ def discover(root=ROOT):
                  and registration['specification'] == row['specification']
                  and registration['improvement_contract'] == pin,
                  'Initial paper registration differs from its preserved snapshot')
-            contract = checked_pin(reader, pin, 'Paper improvement contract')
+            contract = (bound_outcomes['retained_improvement_contract'] if bound_outcomes is not None
+                        else checked_pin(reader, pin, 'Paper improvement contract'))
             engine = improvement_module()
             errors = engine.validate_contract(contract, task_id=identifier)
             need(not errors, 'Invalid paper improvement contract: ' + identifier + ': ' + '; '.join(errors))
@@ -446,7 +529,8 @@ def discover(root=ROOT):
             checked_pin(reader, previous, 'Historical paper specification')
             pin = revision['improvement_contract']
             need(pin['path'] == directory + '/improvement.v1.json', 'Improvement contract is outside its task')
-            contract = checked_pin(reader, pin, 'Paper improvement contract')
+            contract = (bound_outcomes['retained_improvement_contract'] if bound_outcomes is not None
+                        else checked_pin(reader, pin, 'Paper improvement contract'))
             engine = improvement_module()
             errors = engine.validate_contract(contract, task_id=identifier)
             need(not errors, 'Invalid paper improvement contract: ' + identifier + ': ' + '; '.join(errors))
@@ -460,6 +544,7 @@ def discover(root=ROOT):
                  'Current paper definition is not bound to its improvement contract')
             improvement = {**engine.summary(contract), 'contract': pin,
                            'historical_specification': previous}
+        row, doc = current_row, current_document
         identity = doc.get('id', doc.get('candidate_id', doc.get('task_id')))
         need(isinstance(identity, str) and identity == row['specification_id'], 'Task specification identity mismatch')
         need(type(row['specification_alias']) is bool and row['specification_alias'] == (identity != identifier),
@@ -497,6 +582,16 @@ def discover(root=ROOT):
             task['runtime_lineage_note'] = ('Historical paper implementations are calibration components; they cannot establish same-task paper improvement.'
                                             if improvement['historical_specification'] else
                                             'Initial source-paper task with no predecessor benchmark; source preparation and author calibration do not establish candidate superiority.')
+        if bound_outcomes is not None:
+            task['paper_outcomes'] = outcome_binding.public_summary(row, bound_outcomes)
+            if bound_outcomes.get('primary_policy_revision') is not None:
+                task['paper_improvement']['role'] = RETAINED_POLICY_ROLE
+                task['runtime_lineage_note'] = (
+                    'The selected offline candidate and retained author-source routes are separate source interfaces; '
+                    'their metadata does not establish execution or scientific qualification.'
+                    if bound_outcomes['candidate_interface'] is not None else
+                    'The selected primary policy and retained predecessor policy are separate metadata records; '
+                    'neither establishes execution or scientific qualification.')
         if understanding is not None:
             task['neural_understanding'] = understanding
             task['specification_revision'] = revision
@@ -547,6 +642,7 @@ def discover(root=ROOT):
                          'tasks_with_related_scientific_sources': sum(bool(row['related_implementation_ids']) for row in tasks),
                          'unresolved_implementation_artifacts': sum(row['scope'] == 'unresolved' for row in implementations)},
               'paper_improvement_counts': improvement_counts(tasks),
+              'paper_outcome_counts': paper_outcome_counts(tasks),
               'neural_understanding_counts': understanding_counts(tasks),
               'recorded_evidence': evidence,
               'scientific_readiness': 'unknown', 'submission_readiness': 'unknown',
@@ -557,7 +653,7 @@ def discover(root=ROOT):
               'registry_chain': historical, 'shared_contracts': shared, 'tasks': tasks,
               'unmapped_runtime_sources': [], 'components': components,
               'implementations': sorted(implementations, key=lambda record: record['id'])}
-    validate(result, root)
+    validate(result, root, _reader=reader)
     return result
 
 
@@ -577,6 +673,28 @@ def source_links(catalog):
                 yield row['paper_improvement']['historical_specification']['path']
             else:
                 yield row['paper_improvement']['initial_registration']['path']
+        if row.get('paper_outcomes'):
+            for field in ('previous_specification', 'reproduction_contract', 'outcomes', 'source_declaration_gap'):
+                if row['paper_outcomes'].get(field) is not None:
+                    yield row['paper_outcomes'][field]['path']
+            decision = row['paper_outcomes'].get('root_scope_decision')
+            if decision is not None:
+                yield decision['path']
+            correction = row['paper_outcomes'].get('primary_scope_correction')
+            if correction is not None:
+                yield correction['root_scope_decision']['path']
+            outcomes = row['paper_outcomes']
+            if outcomes.get('primary_policy_revision') is not None:
+                for field in ('improvement_contract', 'retained_improvement_contract', 'primary_policy_revision'):
+                    yield outcomes[field]['path']
+                for pin in outcomes['primary_policy_provenance'].values():
+                    yield pin['path']
+                if outcomes['candidate_interface'] is not None:
+                    for field in ('delivery', 'scorer', 'policy'):
+                        yield outcomes['candidate_interface'][field]['path']
+                if outcomes['author_reproduction_routes'] is not None:
+                    for field in ('delivery', 'scorer', 'protocol'):
+                        yield outcomes['author_reproduction_routes'][field]['path']
         if row.get('neural_understanding'):
             yield row['neural_understanding']['contract']['path']
             yield row['neural_understanding']['historical_specification']['path']
@@ -591,16 +709,80 @@ def source_links(catalog):
         yield row['manifest']['path']
 
 
-def validate(catalog, root=ROOT):
+def validate(catalog, root=ROOT, *, _reader=None):
     need(catalog.get('schema_version') == 1 and catalog.get('kind') == 'public_neuroscience_source_catalog',
          'Unsupported public catalog')
     tasks = catalog['tasks']
     need(len({row['id'] for row in tasks}) == len(tasks), 'Duplicate catalog task ID')
     need(all(catalog['counts'][key] == value for key, value in counts(tasks).items()), 'Catalog task totals disagree')
     need(catalog.get('paper_improvement_counts') == improvement_counts(tasks), 'Paper improvement counts disagree')
+    need(catalog.get('paper_outcome_counts') == paper_outcome_counts(tasks), 'Paper outcome counts disagree')
     need(catalog.get('neural_understanding_counts') == understanding_counts(tasks), 'Neural understanding counts disagree')
     need(catalog['scientific_readiness'] == catalog['submission_readiness'] == 'unknown',
          'Catalog must not manufacture readiness')
+    # Reuse discovery's cumulative accounting, but never its source claims.
+    # Public supplied views get a fresh bounded reader. Source authentication is
+    # local to this invocation and cannot be replaced by supplied view metadata.
+    reader = _reader if _reader is not None else Reader(Path(root))
+    need(reader.root == Path(root).resolve(), 'Catalog reader must use the selected repository root')
+    source_state = None
+    primary_source = None
+    authenticated_previous_rows = None
+
+    def read_bound(pin, label):
+        need(type(pin) is dict and set(pin) == {'path', 'bytes', 'sha256'}
+             and type(pin['path']) is str and type(pin['bytes']) is int and type(pin['sha256']) is str,
+             'Invalid ' + label + ' pin')
+        return checked_pin(reader, pin, label)
+
+    def current_source():
+        nonlocal source_state
+        if source_state is None:
+            module = companion_module('paper_outcomes_binding')
+            module.require_pin(catalog.get('registry'), REGISTRY, 'current registry')
+            source_registry = read_bound(catalog['registry'], 'Current outcome registry')
+            need(source_registry.get('schema_version') == 1
+                 and source_registry.get('kind') == 'neuroscience_benchmark_registry',
+                 'Outcome scope requires the current registry')
+            source_rows = source_registry.get('tasks')
+            need(type(source_rows) is list and all(type(item) is dict and type(item.get('id')) is str for item in source_rows),
+                 'Outcome scope requires current registered identities')
+            source_by_id = {item['id']: item for item in source_rows}
+            need(len(source_by_id) == len(source_rows), 'Outcome scope registry has duplicate identities')
+            source_state = module, source_registry, source_by_id
+        return source_state
+
+    module, source_registry, source_by_id = current_source()
+    source_entries = {}
+    source_scope = None
+    source_metadata = source_registry.get('paper_outcomes')
+    # The original roster is authoritative even if a supplied view or the
+    # current roster has removed a fixed declaration-gap task. Source-only
+    # coverage returns None without reading an unregistered snapshot.
+    authenticated_previous_rows = module.coverage(source_registry, read_bound)
+    gap_ids = (set(authenticated_previous_rows) & module.SOURCE_DECLARATION_GAP_IDS
+               if authenticated_previous_rows is not None else set())
+    need(gap_ids <= {row['id'] for row in tasks}, 'Source declaration gap tasks cannot be omitted')
+    if type(source_metadata) is dict and 'scope_decisions' in source_metadata:
+        module.require_pin(source_metadata['scope_decisions'], module.SCOPE_PATH, 'scope decisions')
+        source_scope = module.scope_decisions(read_bound(source_metadata['scope_decisions'], 'Outcome scope decision'))
+        source_entries = source_scope['entries']
+    neutral_ids = {identifier for identifier, entry in source_entries.items()
+                   if entry['paired_bundle_status'] == 'unavailable_complete_primary_pairing'
+                   and identifier in source_by_id
+                   and type(source_by_id[identifier].get('paper_outcomes')) is dict}
+    need(neutral_ids <= {row['id'] for row in tasks}, 'Neutral unavailable source tasks cannot be omitted')
+    fixed_successors = {module.PRIMARY_SUCCESSOR_TASK} | module.SCOPE_POLICY_SUCCESSOR_TASKS
+    successor_ids = ({identifier for identifier, original in authenticated_previous_rows.items()
+                      if original.get('track') == 'paper' and identifier in fixed_successors}
+                     if authenticated_previous_rows is not None else set())
+    need(successor_ids <= {row['id'] for row in tasks}, 'Adopted primary successor tasks cannot be omitted')
+    for registered in source_by_id.values():
+        declaration = registered.get('paper_outcomes')
+        if type(declaration) is dict and module.PRIMARY_SUCCESSOR_FIELDS & set(declaration):
+            module.has_primary_successor(registered)
+        if type(declaration) is dict and 'source_declaration_gap' in declaration:
+            module.has_source_declaration_gap(registered)
     directories = set()
     for row in tasks:
         directory = task_directory(row['id'], row['track'])
@@ -611,6 +793,139 @@ def validate(catalog, root=ROOT):
         need(row['scientific_readiness'] == row['submission_readiness'] == 'unknown'
              and row['local_scoring_adapter_verified'] is None
              and row['local_program_runner_verified'] is None, 'Catalog must not manufacture task qualification')
+        outcomes = row.get('paper_outcomes')
+        successor_fields = set(PRIMARY_SUCCESSOR_PUBLIC_FIELDS) & set(outcomes) if type(outcomes) is dict else set()
+        if row['id'] in gap_ids:
+            successor_fields.discard('improvement_disposition')
+        gap_claim = type(outcomes) is dict and (source_declaration_gap(outcomes)
+            or outcomes.get('reason_code') == 'source_declaration_unavailable'
+            or any(field in outcomes for field in ('source_declaration_gap', 'scientific_ineligibility_inferred',
+                                                   'improvement_unavailable_by_reproduction_dependency', 'paired_outcome_admission')))
+        need(row['id'] in gap_ids or not gap_claim, 'Declaration gap claims require the authenticated original source task')
+        if row['id'] in gap_ids:
+            need(type(outcomes) is dict and source_declaration_gap(outcomes),
+                 'Source declaration gap cannot be omitted or reclassified')
+        retained_policy = row.get('paper_improvement')
+        retained_role = type(retained_policy) is dict and retained_policy.get('role') == RETAINED_POLICY_ROLE
+        need(row['id'] in successor_ids or not (successor_fields or retained_role),
+             'Primary successor claims require an adopted fixed reviewed source task')
+        if row['id'] in successor_ids:
+            need(type(outcomes) is dict and outcomes.get('primary_policy_revision') is not None,
+                 'Adopted primary successor selection cannot be omitted or replaced by a retained policy')
+        if row['id'] in neutral_ids:
+            need(type(outcomes) is dict and neutral_unavailable_reason(outcomes),
+                 'Neutral unavailable source classification cannot be omitted or relabeled')
+        if outcomes is not None:
+            need(row['track'] == 'paper' and type(outcomes) is dict
+                 and outcomes.get('availability', 'available') in ('available', 'unavailable', 'source_declaration_unavailable')
+                 and outcomes.get('scientific_outcomes') == {'reproduction': 'unknown', 'improvement': 'unknown'},
+                 'Paper outcome metadata cannot manufacture scientific results')
+            cells = outcomes.get('cells')
+            need(type(cells) is list and len(cells) == 4
+                 and {(cell.get('outcome'), cell.get('condition')) for cell in cells if type(cell) is dict}
+                 == {(outcome, condition) for outcome in ('reproduction', 'improvement')
+                     for condition in ('paper_data', 'paper_data_author_code')}
+                 and all(type(cell) is dict and cell.get('scientific_outcome') == 'unknown'
+                         and cell.get('receipt') is None for cell in cells),
+                 'Paper catalog requires four unscored outcome conditions')
+            if row['id'] in gap_ids:
+                registered = source_by_id.get(row['id'])
+                need(type(registered) is dict and registered.get('track') == 'paper'
+                     and module.encode(registered.get('specification')) == module.encode(row.get('specification'))
+                     and registered.get('title') == row.get('title'),
+                     'Declaration gap differs from current task identity')
+                document = read_bound(registered['specification'], 'Current declaration gap task')
+                bound = module.context(registered, document, authenticated_previous_rows, read_bound)
+                need(bound is not None and bound.get('availability') == 'source_declaration_unavailable'
+                     and module.encode(outcomes) == module.encode(module.public_summary(registered, bound)),
+                     'Declaration gap view differs from authenticated source')
+                need(module.encode(row.get('paper_improvement')) == module.encode(registered_improvement_summary(bound, registered))
+                     and module.encode(row.get('specification_revision')) == module.encode(registered['specification_revision'])
+                     and module.encode(row.get('original_specification')) == module.encode(registered['original_specification']),
+                     'Declaration gap must preserve its independent improvement policy and original lineage')
+            if outcomes.get('availability') == 'unavailable':
+                need(outcomes.get('reason_code') in ('primary_secondary_scope_mismatch', 'full_primary_pairing_unavailable'),
+                     'Unavailable primary outcomes require a supported source reason')
+                source_entry = source_entries.get(row['id'])
+                need(row['id'] in source_by_id and type(source_by_id[row['id']].get('paper_outcomes')) is dict
+                     and type(source_entry) is dict
+                     and outcomes['reason_code'] == module.UNAVAILABLE_REASONS[source_entry['paired_bundle_status']],
+                     'Unavailable outcome reason differs from authenticated source route')
+                need(all(cell.get('eligibility') == cell.get('pairing_status') == 'unavailable'
+                         and cell.get('endpoint_eligible') is False and cell.get('condition_available') is False
+                         for cell in cells), 'Unavailable primary outcomes cannot gain eligibility or paired access')
+            if neutral_unavailable_reason(outcomes):
+                module, source_registry, source_by_id = current_source()
+                if authenticated_previous_rows is None:
+                    authenticated_previous_rows = module.coverage(source_registry, read_bound)
+                    need(authenticated_previous_rows is not None, 'Neutral unavailable scope requires adopted outcome metadata')
+                registered = source_by_id.get(row['id'])
+                need(type(registered) is dict and registered.get('track') == 'paper'
+                     and module.encode(registered.get('specification')) == module.encode(row.get('specification'))
+                     and registered.get('title') == row.get('title'),
+                     'Neutral unavailable scope differs from current task identity')
+                document = read_bound(registered['specification'], 'Current neutral outcome task')
+                bound = module.context(registered, document, authenticated_previous_rows, read_bound)
+                need(bound is not None
+                     and module.encode(outcomes) == module.encode(module.public_summary(registered, bound)),
+                     'Neutral unavailable scope differs from authenticated source')
+            if row['id'] in successor_ids:
+                if authenticated_previous_rows is None:
+                    authenticated_previous_rows = module.coverage(source_registry, read_bound)
+                    need(authenticated_previous_rows is not None, 'Primary successor requires adopted outcome metadata')
+                registered = source_by_id[row['id']]
+                need(module.encode(registered['specification']) == module.encode(row.get('specification'))
+                     and registered['title'] == row.get('title'), 'Primary successor differs from current task identity')
+                document = read_bound(registered['specification'], 'Current primary successor task')
+                bound = module.context(registered, document, authenticated_previous_rows, read_bound)
+                need(bound is not None and bound.get('primary_policy_revision') is not None
+                     and module.encode(outcomes) == module.encode(module.public_summary(registered, bound)),
+                     'Primary successor view differs from authenticated current selection')
+                need(module.encode(row.get('paper_improvement')) == module.encode(retained_successor_policy(bound, registered))
+                     and module.encode(row.get('specification_revision')) == module.encode(registered['specification_revision'])
+                     and module.encode(row.get('original_specification')) == module.encode(registered['original_specification']),
+                     'Retained successor policy differs from authenticated original lineage')
+            correction = outcomes.get('primary_scope_correction')
+            if correction is not None:
+                need(type(correction) is dict and outcomes.get('availability') == 'available'
+                     and correction.get('disposition') == 'same_primary_unqualified'
+                     and correction.get('scientific_outcome') == 'unknown'
+                     and outcomes.get('reproduction_eligibility') == 'source_unresolved'
+                     and primary_paper_disposition(row, 'improvement') != 'improvement_ready'
+                     and type(correction.get('root_scope_decision')) is dict
+                     and correction.get('root_scope_decision', {}).get('task_entry_id') == row['id'],
+                     'Primary scope correction cannot qualify an outcome or change its availability')
+                if primary_source is None:
+                    module, source_registry, source_by_id = current_source()
+                    metadata = source_registry.get('paper_outcomes')
+                    need(type(metadata) is dict and metadata.get('schema_version') == module.VERSION
+                         and metadata.get('coverage_required') is True,
+                         'Primary scope correction requires adopted outcome metadata')
+                    scope_pin = metadata.get('scope_decisions')
+                    module.require_pin(scope_pin, module.SCOPE_PATH, 'scope decisions')
+                    scope = source_scope
+                    need(scope is not None, 'Primary scope correction requires an authenticated scope decision')
+                    primary_source = module, source_by_id, scope_pin, scope.get('same_primary_corrections', {})
+                module, source_by_id, scope_pin, source_corrections = primary_source
+                registered = source_by_id.get(row['id'])
+                need(type(registered) is dict and registered.get('track') == 'paper'
+                     and registered.get('specification') == row.get('specification')
+                     and type(registered.get('paper_outcomes')) is dict,
+                     'Primary scope correction differs from the current registered task')
+                registered_binding = registered['paper_outcomes']
+                registered_revision = registered.get('specification_revision')
+                expected_improvement = (bound['improvement_contract_pin'] if row['id'] in successor_ids else
+                                        registered_revision.get('improvement_contract') if type(registered_revision) is dict else None)
+                need(registered_binding.get('schema_version') == module.VERSION
+                     and type(registered_revision) is dict
+                     and outcomes.get('improvement_contract') == expected_improvement
+                     and all(outcomes.get(field) == registered_binding.get(field)
+                             for field in ('previous_specification', 'reproduction_contract', 'outcomes')),
+                     'Primary scope correction differs from current outcome bindings')
+                entry = source_corrections.get(row['id'])
+                need(type(entry) is dict
+                     and module.encode(correction) == module.encode(module.public_primary_scope_correction(entry, scope_pin, row['id'])),
+                     'Primary scope correction differs from authenticated source')
     implementations = checked_implementations(catalog['implementations'], {row['id']: row for row in tasks}, Path(root))
     owners = {row['id']: [] for row in tasks}
     related_tasks = {row['id']: [] for row in tasks}
@@ -647,13 +962,55 @@ def markdown_link(label, path, base=OUTPUT):
 
 def paper_count_text(catalog):
     counts = catalog['paper_improvement_counts']
-    return (f"Current paper-improvement contract audit: **{counts['covered']}/{counts['registered']} covered**; "
+    outcomes = catalog['paper_outcome_counts']
+    neutral_count = sum(neutral_unavailable_reason(row.get('paper_outcomes', {})) for row in catalog['tasks'])
+    successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None for row in catalog['tasks'])
+    scope_successor_count = sum(row.get('paper_outcomes', {}).get('primary_policy_revision') is not None
+                                and row['paper_outcomes']['candidate_interface'] is None for row in catalog['tasks'])
+    dual_text = ''
+    if outcomes['covered']:
+        eligibility = ', '.join(f"{count} {status.replace('_', ' ')}"
+                                for status, count in outcomes['reproduction_eligibility'].items())
+        dual_text = (f"Outcome metadata covers **{outcomes['covered']}/{outcomes['registered']} paper tasks**. "
+                     'This counts contract declarations and unavailability records; completion of both outcomes requires separate qualifying execution evidence. '
+                     f"Reproduction eligibility: {eligibility}. "
+                     + ('The two goals retain paper+data and paper+data+author-code condition labels; missing declarations do not establish paired protocols. '
+                        if outcomes.get('source_declaration_unavailable') else
+                        'Reproduction and improvement are assessed separately under paper+data and paper+data+author-code conditions. ')
+                     + 'These are nested conditions of the same registered tasks; both scientific outcomes remain **unknown**.\n\n')
+        mismatch_count = outcomes['primary_unavailable'] - neutral_count
+        if mismatch_count:
+            dual_text += (f"Complete primary-outcome pairing is unavailable for **{mismatch_count} tasks** with an explicit scientific scope mismatch. "
+                          'Their retained secondary improvement policies are not admitted as primary outcomes.\n\n')
+        if neutral_count:
+            dual_text += (f"Complete primary-outcome pairing is unavailable for **{neutral_count} tasks**. "
+                          'Their retained improvement contracts and declared coverage remain visible; these records do not establish completed primary outcomes.\n\n')
+        if outcomes.get('source_declaration_unavailable'):
+            dual_text += (f"Source-grounded reproduction declarations and matched paired protocols are not adopted for **{outcomes['source_declaration_unavailable']} tasks**. "
+                          'Their existing improvement contracts remain independently inspectable under their original criteria. '
+                          'Missing declarations do not imply scientific ineligibility, paired access, or completed outcomes.\n\n')
+        if successor_count:
+            dispositions = ', '.join(f"{count} {status.replace('_', ' ')}"
+                                      for status, count in outcomes['improvement_disposition'].items())
+            dual_text += 'Current primary improvement dispositions: ' + dispositions + '. '
+            if successor_count > scope_successor_count:
+                dual_text += ('For the revised SMC task, the old contract remains an author-source policy; '
+                              'the selected contract defines the candidate interface.')
+            if scope_successor_count:
+                dual_text += (' ' if successor_count > scope_successor_count else '')
+                dual_text += ('For the reviewed scope-policy selections, the current primary policy governs improvement; '
+                              'predecessor policies remain preserved with their original source scope. Runtime routes are not declared by those policy records.')
+            dual_text += '\n\n'
+    audit_label = 'Retained registration-policy audit' if successor_count else 'Current paper-improvement contract audit'
+    return dual_text + (f"{audit_label}: **{counts['covered']}/{counts['registered']} covered**; "
             f"**{counts['improvement_ready']} improvement-ready**, **{counts['design_ready']} source-grounded designs**, "
             f"**{counts['source_unresolved']} source-unresolved**, **{counts['ineligible']} ineligible**, "
             f"**{counts['not_audited']} not audited**. Eligibility means an ordered source task was identified; "
             'it does not establish an executable or scientifically qualified comparison. '
             'Paper reproduction is a separate first-class outcome; these counts describe the existing improvement contracts, '
-            'not reproduction qualification. Numerical fidelity remains a necessary comparison check. '
+            + ('including retained contracts with their declared coverage, not primary-outcome availability or reproduction qualification. '
+               if neutral_count else 'including any retained secondary policies, not primary-outcome availability or reproduction qualification. ')
+            + 'Numerical fidelity remains a necessary comparison check. '
             'A new split is an extension, never a same-task paper victory.\n\n')
 
 
@@ -728,14 +1085,15 @@ def render(catalog):
             text += paper_count_text(catalog)
         else:
             text += neural_count_text(catalog)
-        text += ('| ID | Scientific question / title | Current improvement disposition | Source stage | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- | --- |\n' if track == 'paper' else
+        text += ('| ID | Scientific question / title | Reproduction eligibility | Current improvement disposition | Source stage | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- | --- | --- |\n' if track == 'paper' else
                  '| ID | Scientific question / title | Source stage | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- |\n')
         for row in rows:
             title = row['title'].replace('\\', '\\\\').replace('[', '\\[').replace(']', '\\]').replace('|', '\\|').replace('\n', ' ').replace('\r', ' ')
             identifier = row['id'].replace('|', '\\|')
             runtime = markdown_link('manifest', row['runtime_manifest']['path']) if row['runtime_manifest'] else 'not included'
-            disposition = row.get('paper_improvement', {}).get('disposition', 'not audited' if track == 'paper' else 'not applicable')
-            text += '| ' + markdown_link(identifier, task_directory(row['id'], track) + '/README.md') + ' | ' + markdown_link(title, row['specification']['path']) + ' | ' + (disposition + ' | ' if track == 'paper' else '') + row['registration_stage'] + ' | ' + str(len(row['implementation_ids'])) + ' | ' + runtime + ' |\n'
+            disposition = primary_paper_disposition(row, 'improvement')
+            reproduction = primary_paper_disposition(row, 'reproduction')
+            text += '| ' + markdown_link(identifier, task_directory(row['id'], track) + '/README.md') + ' | ' + markdown_link(title, row['specification']['path']) + ' | ' + (reproduction + ' | ' + disposition + ' | ' if track == 'paper' else '') + row['registration_stage'] + ' | ' + str(len(row['implementation_ids'])) + ' | ' + runtime + ' |\n'
         files[track + '.md'] = text.encode()
     text = '# Supporting source components\n\n[Catalog](README.md) · [Shared scientific families](../shared/README.md)\n\n' + intro
     text += 'These packages and shared contracts are not additional registered benchmark IDs. No task association is inferred from a folder name.\n\n'
@@ -893,14 +1251,15 @@ def render_tracks(catalog):
                  'implementation artifacts do not add independent benchmarks.\n\n')
         for heading, group in groups:
             text += f'## {heading} ({len(group)})\n\n'
-            text += ('| Task | Scientific question / title | Improvement disposition | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- |\n' if track == 'paper' else
+            text += ('| Task | Scientific question / title | Reproduction eligibility | Improvement disposition | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- | --- | --- |\n' if track == 'paper' else
                      '| Task | Scientific question / title | Implementation artifacts | Legacy runtime declaration |\n| --- | --- | --- | --- |\n')
             for row in group:
                 task = task_directory(row['id'], track)
                 runtime = markdown_link('manifest', row['runtime_manifest']['path'], base) if row['runtime_manifest'] else 'not linked'
                 text += ('| ' + markdown_link(row['id'], task + '/README.md', base) + ' | '
                          + markdown_text(row['title']) + ' | '
-                         + (row.get('paper_improvement', {}).get('disposition', 'not audited') + ' | ' if track == 'paper' else '')
+                         + (primary_paper_disposition(row, 'reproduction') + ' | '
+                            + primary_paper_disposition(row, 'improvement') + ' | ' if track == 'paper' else '')
                          + str(len(row['implementation_ids'])) + ' | ' + runtime + ' |\n')
         text += ('\nGenerated with `python3 scripts/catalog.py` from the repository root. '
                  'Edit authoritative task definitions, then regenerate; do not edit these browse pages directly.\n')
@@ -918,14 +1277,141 @@ def render_tracks(catalog):
                      'The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are '
                      'assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. '
                      'Source presence is not evidence of successful execution or complete scientific qualification.\n\n')
+            if row.get('paper_outcomes'):
+                outcomes = row['paper_outcomes']
+                unavailable = outcomes.get('availability') == 'unavailable'
+                gap = source_declaration_gap(outcomes)
+                text += '## Separate paper outcomes\n\n'
+                if gap:
+                    text += ('Reproduction is a first-class goal, but its source-grounded declaration and matched paired protocols have not been adopted. '
+                             'The unchanged improvement contract remains independently inspectable under its original criteria. '
+                             'All scientific outcomes remain unknown.\n\n'
+                             + '**Source declaration gap:** ' + markdown_text(outcomes['reason']) + '\n\n'
+                             + '**Remaining source limits:**\n\n'
+                             + ''.join('- ' + markdown_text(limit) + '\n' for limit in outcomes['remaining_source_limits'])
+                             + '\n')
+                elif unavailable:
+                    text += ('**Current complete-primary paired-outcome admission is unavailable.** '
+                             'Independent reproduction remains separately assessable under the stated source limits. '
+                             + markdown_text(outcomes['reason']) + '\n\n'
+                             + '**Primary scientific scope:** ' + markdown_text(outcomes['primary_scope']) + '\n\n'
+                             + ('**Retained improvement contract coverage:** ' if neutral_unavailable_reason(outcomes)
+                                else '**Retained secondary policy:** ')
+                             + markdown_text(outcomes['retained_secondary_improvement']['scope_description']) + '\n\n')
+                else:
+                    text += ('The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. '
+                             'Each uses matched paper+data and paper+data+author-code conditions. '
+                             'Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.\n\n')
+                correction = outcomes.get('primary_scope_correction')
+                if correction is not None:
+                    text += ('**Corrected primary scope; outcomes remain unqualified.** '
+                             'Both outcome contracts retain the same primary scientific task. '
+                             'Unresolved source criteria still limit receipt admission.\n\n'
+                             '**Primary goal:** ' + markdown_text(correction['primary_goal']) + '\n\n'
+                             '**Primary scientific scope:** ' + markdown_text(correction['primary_scope']) + '\n\n')
+                    if correction['remaining_source_limits']:
+                        text += ('**Remaining source limits:**\n\n'
+                                 + ''.join('- ' + markdown_text(limit) + '\n' for limit in correction['remaining_source_limits'])
+                                 + '\n')
+                    if correction.get('retained_scope_notes'):
+                        text += '**Retained source scope:** ' + markdown_text(correction['retained_scope_notes']) + '\n\n'
+                    if correction.get('retained_source_roles'):
+                        text += ('**Retained source roles:**\n\n| Source field | Declared role |\n| --- | --- |\n'
+                                 + ''.join('| ' + markdown_text(field) + ' | ' + markdown_text(value) + ' |\n'
+                                           for field, value in declared_status_fields(correction['retained_source_roles']))
+                                 + '\n')
+                    text += ('- ' + markdown_link('Reviewed primary scope correction',
+                                                 correction['root_scope_decision']['path'], task) + '\n')
+                if outcomes.get('primary_policy_revision') is not None:
+                    candidate = outcomes['candidate_interface']
+                    author = outcomes['author_reproduction_routes']
+                    text += ('### Current primary improvement policy\n\n'
+                             '**Disposition:** ' + markdown_text(outcomes['improvement_disposition']) + '.\n\n')
+                    if candidate is None:
+                        text += ('The reviewed current policy selects the primary scientific scope. '
+                                 'Runtime routes are not declared by this policy metadata.\n\n'
+                                 '- ' + markdown_link('Selected current improvement contract', outcomes['improvement_contract']['path'], task) + '\n'
+                                 '- ' + markdown_link('Authenticated policy revision', outcomes['primary_policy_revision']['path'], task) + '\n'
+                                 '- ' + markdown_link('Reviewed primary scope decision', outcomes['primary_policy_provenance']['scope_decision']['path'], task) + '\n\n')
+                    else:
+                        text += ('The candidate source interface accepts one complete offline prediction set over the full 35-bin panel. '
+                                 + markdown_text(candidate['selection_limit']) + '\n\n'
+                                 '- ' + markdown_link('Selected current improvement contract', outcomes['improvement_contract']['path'], task) + '\n'
+                                 '- ' + markdown_link('Authenticated policy revision', outcomes['primary_policy_revision']['path'], task) + '\n'
+                                 '- ' + markdown_link('Current scientific contract', outcomes['primary_policy_provenance']['scientific_contract']['path'], task) + '\n'
+                                 '- ' + markdown_link('Reviewed task projection', outcomes['primary_policy_provenance']['projection']['path'], task) + '\n\n'
+                                 '| Candidate source | Selector |\n| --- | --- |\n')
+                        for field in ('delivery', 'scorer', 'policy'):
+                            text += '| ' + readable_label(field) + ' | ' + markdown_link(candidate[field]['path'].split('/')[-1], candidate[field]['path'], task) + ' |\n'
+                        text += ('\n### Retained author-source reproduction routes\n\n'
+                                 'Both author recipes remain available as source routes: '
+                                 + ', '.join(markdown_text(recipe) for recipe in author['recipes']) + '. '
+                                 + markdown_text(author['selection_limit']) + '\n\n'
+                                 '| Author source | Selector |\n| --- | --- |\n')
+                        for field in ('delivery', 'scorer', 'protocol'):
+                            text += '| ' + readable_label(field) + ' | ' + markdown_link(author[field]['path'].split('/')[-1], author[field]['path'], task) + ' |\n'
+                        text += '\nBoth source routes remain scientifically unknown; these selectors do not authorize execution.\n\n'
+                if outcomes.get('reproduction_contract') is not None:
+                    text += ('- ' + markdown_link('Reproduction proposal (inspection only)' if unavailable else
+                                                 'Original-finding reproduction contract',
+                                                 outcomes['reproduction_contract']['path'], task) + '\n')
+                if unavailable:
+                    text += ('- ' + markdown_link('Primary outcome pairing decision' if neutral_unavailable_reason(outcomes)
+                                                 else 'Primary and retained secondary scope decision',
+                                                 outcomes['root_scope_decision']['path'], task) + '\n')
+                if gap:
+                    text += '- ' + markdown_link('Source declaration gap record', outcomes['source_declaration_gap']['path'], task) + '\n'
+                else:
+                    text += ('- ' + markdown_link('Primary-outcome unavailability record' if unavailable else
+                                                  'Paired outcome protocols', outcomes['outcomes']['path'], task) + '\n')
+                text += '- ' + markdown_link('Preserved definition before dual outcomes', outcomes['previous_specification']['path'], task) + '\n\n'
+                if gap:
+                    text += ('| Outcome | Information condition | Paired protocol | Scientific outcome |\n'
+                             '| --- | --- | --- | --- |\n')
+                    for cell in outcomes['cells']:
+                        text += ('| ' + markdown_text(readable_label(cell['outcome'])) + ' | '
+                                 + markdown_text(readable_label(cell['condition'])) + ' | Not established | Unknown |\n')
+                else:
+                    text += ('| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |\n'
+                             '| --- | --- | --- | --- | --- | --- |\n')
+                    for cell in outcomes['cells']:
+                        text += ('| ' + markdown_text(readable_label(cell['outcome'])) + ' | '
+                                 + markdown_text(readable_label(cell['condition'])) + ' | '
+                                 + markdown_text(cell['eligibility']) + ' | '
+                                 + markdown_text(cell['pairing_status']) + ' | '
+                                 + ('unavailable' if unavailable else 'specified' if cell['condition_available'] else 'unresolved')
+                                 + ' | Unknown |\n')
+                text += ('\nAuthor-baseline replay and historical reconstruction attempts retain their original scopes. '
+                         'They are not promoted to qualified AI reproductions or improvements by these contracts.\n\n')
             if row.get('paper_improvement'):
                 improvement = row['paper_improvement']
-                text += ('## Current paper-improvement objective\n\n'
-                         '**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. '
-                         'Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.\n\n'
+                if improvement.get('role') == RETAINED_POLICY_ROLE:
+                    if row['paper_outcomes']['candidate_interface'] is None:
+                        text += ('## Retained predecessor improvement policy\n\n'
+                                 'This original contract preserves the predecessor scientific instructions and source scope. '
+                                 'The selected primary policy above governs current improvement.\n\n')
+                    else:
+                        text += ('## Retained author-source policy\n\n'
+                                 'This original registration contract remains attached to the author-source reproduction and calibration routes. '
+                                 'The selected current policy above defines the offline candidate interface; the retained author restrictions do not govern that candidate.\n\n')
+                elif row.get('paper_outcomes', {}).get('availability') == 'unavailable':
+                    if neutral_unavailable_reason(row['paper_outcomes']):
+                        text += ('## Retained improvement contract\n\n'
+                                 'This preserved contract retains the declared coverage described above. '
+                                 'Complete primary-outcome pairing remains unavailable, so the contract cannot admit a primary outcome under this marker.\n\n')
+                    else:
+                        text += ('## Retained secondary improvement policy\n\n'
+                                 'This preserved policy remains source evidence for a different or narrower scientific question. '
+                                 'It is unavailable for primary outcome admission and does not define primary paper success.\n\n')
+                else:
+                    text += ('## Current paper-improvement objective\n\n'
+                             '**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. '
+                             'Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.\n\n')
+                text += (
                          '**Disposition:** ' + markdown_text(improvement['disposition']) + '. '
                          + markdown_text(improvement.get('disposition_reason', '')) + '\n\n'
-                         '- ' + markdown_link('Source-grounded improvement contract', improvement['contract']['path'], task) + '\n'
+                         '- ' + markdown_link('Retained original improvement contract' if improvement.get('role') == RETAINED_POLICY_ROLE
+                                              else 'Source-grounded improvement contract', improvement['contract']['path'], task) + '\n'
                          '- ' + (markdown_link('Preserved historical task definition', improvement['historical_specification']['path'], task)
                                  if improvement['historical_specification'] else
                                  markdown_link('Initial source-paper task registration (no predecessor)', improvement['initial_registration']['path'], task)) + '\n\n'

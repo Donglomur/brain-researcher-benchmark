@@ -1,0 +1,1861 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-050",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Reproduction is an independent first-class outcome with source-grounded scalar findings and an accepted Fig5E computational component. Full source-identified numerical panels, authentic preparation, complete verifier and justified criteria remain unresolved. Current scalar findings cannot substitute for the mandatory24PETHmedians and other original per-dataset/pair/bin panels.",
+  "source_paper": {
+    "title": "Density-based longitudinal neuron tracking in high-density electrophysiological recordings",
+    "url": "https://doi.org/10.1016/j.patter.2026.101590"
+  },
+  "evidence": [
+    {
+      "id": "dant-paper-comparison",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+      "locator": "Results2.5, Figure5A–I; Methods4.17",
+      "supports": "Original DANT/UnitMatch/EMD comparison uses41591 units,12datasets,10rats with source truncations/exclusion; DANT tracked-length estimated marginal mean8.63sessions(SE1.80), plus PETH and joint-sorting quality checks."
+    },
+    {
+      "id": "dant-paper-statistics",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+      "locator": "Methods4.19, Equation19; Methods4.9.3, Equation11",
+      "supports": "TrackedLength mixed model has method fixed effect, dataset random intercept/slope and unit random intercept. PETH fidelity uses Fisher-transformed Pearson correlation under specific rate/day/pair-count filters."
+    },
+    {
+      "id": "dant-paper-preprocess",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+      "locator": "Methods4.1,4.3–4.4 and4.17",
+      "supports": "Describes adult Brown-Norway rats, Neuropixels processing, original well-isolated-unit selection, waveform unwhitening, no-PETH matching and UnitMatch half-session waveform requirements."
+    },
+    {
+      "id": "dant-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/jiumao2/pyDANT/96060c1dd816181f32f089aaa686801aeae821bb/README.md",
+      "locator": "Pinned README: paper linkage and usage",
+      "supports": "Author Python implementation and tutorial are provided; README is not a complete Figure5 reconstruction or numerical rerun."
+    },
+    {
+      "id": "dant-data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/20019489",
+      "locator": "Version1.0.0 file inventory and metadata; DOI10.5281/zenodo.20019489",
+      "supports": "Version-specific release contains13 processed spikeInfo datasets; the concept record20019488 is not the version pin."
+    },
+    {
+      "id": "dant-data-readme",
+      "kind": "author_data",
+      "url": "https://zenodo.org/api/records/20019489/files/README.md/content",
+      "locator": "spikeInfo fields and waveform dimensions",
+      "supports": "Describes processed animal/session IDs, spike times in milliseconds, waveforms in microvolts, channel/shank coordinates and PETH; waveform layout is declared n_channel×n_sample, requiring bridge verification."
+    },
+    {
+      "id": "dant-primary-xml",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13494646/fullTextXML",
+      "locator": "Recovered primary JATS article; sections2.5,4.9.3,4.17,4.19; Figures5-6; SHA25691ef8fda659cb90426140a64b015fb73d03f832c5df53c1ff2e14a71f46c6d80",
+      "supports": "Exact source cohort, original findings, numerical targets and companion scopes. Published targets are source evidence, not an executed reproduction."
+    },
+    {
+      "id": "dant-cross-shank",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+      "locator": "Section2.5 Figure6 and Methods4.17 multishank false-positive control",
+      "supports": "Rat3 mPFC sessions4-10, shanks2/3 at250um separation, seven real days represented as14 artificial days with aligned channel x coordinates. DANT and UnitMatch only; EMD not applicable.4926/3162 matched pairs;4.9+/-2.2 and3.5+/-2.3sessions;3.82%/4.87% cross-shank fractions;chi-square5.02,p=.025. DANT estimated same-shank FPR about3.4% is specific to this geometry."
+    },
+    {
+      "id": "dant-unmatched-results",
+      "kind": "paper",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13494646/fullTextXML",
+      "locator": "Section2.5 Figure5G; JATS paragraphp0175 in sourceSHA91ef8fda659cb90426140a64b015fb73d03f832c5df53c1ff2e14a71f46c6d80",
+      "supports": "0-20um unmatched-pair outlier proportions:DANT0.012,UnitMatch0.040,EMD0.027; source comparison odds ratios3.34 and2.20; chi-square(df2)1119 for0-20um and19.92 for20-40um. All cited comparisons reported only p<.001; exactp not inferred. Full denominator/count/interval arrays remain unrecovered."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Assign the same neuron across recording sessions using DANT’s original longitudinal tracking task. Increase valid tracking duration while retaining source matching precision/recall, PETH consistency and false-match controls; total matches or track duration alone is not accuracy.",
+      "evidence_ids": [
+        "dant-paper-comparison"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Use the author’s version1.0.0 processed chronic rat Neuropixels release, Zenodo20019489, as the input route. Its13datasets/11rats form the release, distinct from Figure5’s selected12datasets/10rats; the source comparator’s exact subset must be reconstructed.",
+      "evidence_ids": [
+        "dant-data",
+        "dant-paper-comparison"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Figure5 compares41591 well-isolated units in12datasets from10rats. Rat#2 and#4 are truncated to their first31 sessions for UnitMatch memory limits; rat#6 is excluded after EMD failure. Mapping these paper identifiers, unit filters and sessions to release files remains unfrozen. Using all13 release datasets changes the published cohort.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-preprocess"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "This is unsupervised tracking across the original available sessions with source defaults, not a supervised animal train/test split. PETH is excluded throughout matching in Figure5 and reserved for evaluation. The original ten joint-sort validation session pairs from five rats remain distinct assessment references; a held-out-animal redesign is an extension.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-preprocess"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Matching uses the same source well-isolated units and waveform/spike/session/channel inputs for all methods. Exclude PETH from DANT matching, tuning and selection for Figure5. UnitMatch requires first/second-half waveforms; their availability is a baseline execution gate.",
+      "evidence_ids": [
+        "dant-paper-preprocess",
+        "dant-data-readme"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Retain original CatGT phase-shift/common-average processing, modified Kilosort2.5 threshold[8,3], source manual/quality curation and unwhitened waveforms. Freeze source motion/quality defaults and common populations. Author README waveform orientation conflicts with the local converter’s stated assumption; no native payload was inspected to resolve it.",
+      "evidence_ids": [
+        "dant-paper-preprocess",
+        "dant-data-readme"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Primary Figure5D endpoint is tracked length in sessions estimated by Equation19, not raw pair yield. Mandatory fidelity measures include Figure5E PETH Fisher-z correlation and5H/I precision=TP/(TP+FP), recall=TP/(TP+FN) against joint Kilosort2.5 sorting; that reference is close to ground truth, not direct neuron identity.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Equation19: TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID), followed by estimated marginal means; source8.63±1.80 is EMM±SE. PETH uses consecutive days,mean≥1Hz,peak≥5Hz,each method≥100 valid pairs/dataset,leaving8datasets,with per-dataset median Fisher-z values. Do not substitute the current all-pair mean or count repeated pairs as independent.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve Figure5D three-method tracked-length EMMs and SEs from41591units/12datasets/10rats; Figure5E all eight retained datasets times DANT/UnitMatch/EMD median Fisher-z values plus original Friedman comparison; Figure5H/I all ten joint-sort session pairs from five rats for precision and recall for all three methods; Figure5F/G complete unmatched-pair distance/null/outlier analysis; and Figure6 original two-shank seven-real-day/14-artificial-day DANT/UnitMatch control. Figure5A-C original example overlap, survival and track-chain panels remain derivation diagnostics. Figure5E requires>=100valid matched PAIRS in each original method, not100distinct units or a common-pair intersection. The24 Figure5E dataset-method cells, original pair identities and distance-bin cells cannot yet be bound individually and remain mandatory granular-output requirements. They are not represented as invented scalar summaries or panel-valued scalar rows. Recover source identities and expand them to individually identified scalar cells before eligibility. Figure5G first-bin method proportions, two pairwise odds ratios and first-two-bin chi-square statistics are source-supported scalar findings; complete original bin denominators,95%CIs and remaining rates are still required.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics",
+        "dant-cross-shank",
+        "dant-unmatched-results"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Preserve original unsupervised waveform/spike/session/channel observations and common well-isolated units, original method defaults, session truncations and exclusion. Reserve PETH for independent fidelity evaluation and exclude it throughout matching, motion, tuning, selection and curation for the comparison. Keep original joint-sort reference matches outside candidate matching. Both paper+data and paper+data+author-code conditions use identical original scientific observations and evaluation identities; author code is the only information addition. Printed paper targets are exposed and cannot establish computational reproduction.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-preprocess",
+        "dant-data-readme"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig5d_dant_emm",
+      "kind": "scalar",
+      "description": "Original dant estimated marginal mean tracked length.",
+      "status": "verified",
+      "expected": 8.63,
+      "units": "sessions",
+      "aggregation": "Original Equation19: TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID), then method EMM; same41591unit/12dataset/10rat original panel, source31-session truncations/exclusion.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_dant_se",
+      "kind": "scalar",
+      "description": "Original dant standard error of tracked-length EMM, not standard deviation or reproduction tolerance.",
+      "status": "verified",
+      "expected": 1.8,
+      "units": "sessions",
+      "aggregation": "Original Equation19: TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID), then method EMM; same41591unit/12dataset/10rat original panel, source31-session truncations/exclusion. Report model-derived EMM standard error.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_unitmatch_emm",
+      "kind": "scalar",
+      "description": "Original unitmatch estimated marginal mean tracked length.",
+      "status": "verified",
+      "expected": 4.5,
+      "units": "sessions",
+      "aggregation": "Original Equation19: TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID), then method EMM; same41591unit/12dataset/10rat original panel, source31-session truncations/exclusion.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_unitmatch_se",
+      "kind": "scalar",
+      "description": "Original unitmatch standard error of tracked-length EMM, not standard deviation or reproduction tolerance.",
+      "status": "verified",
+      "expected": 0.98,
+      "units": "sessions",
+      "aggregation": "Original Equation19: TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID), then method EMM; same41591unit/12dataset/10rat original panel, source31-session truncations/exclusion. Report model-derived EMM standard error.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_emd_emm",
+      "kind": "scalar",
+      "description": "Original emd estimated marginal mean tracked length.",
+      "status": "verified",
+      "expected": 3.63,
+      "units": "sessions",
+      "aggregation": "Original Equation19: TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID), then method EMM; same41591unit/12dataset/10rat original panel, source31-session truncations/exclusion.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_emd_se",
+      "kind": "scalar",
+      "description": "Original emd standard error of tracked-length EMM, not standard deviation or reproduction tolerance.",
+      "status": "verified",
+      "expected": 0.42,
+      "units": "sessions",
+      "aggregation": "Original Equation19: TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID), then method EMM; same41591unit/12dataset/10rat original panel, source31-session truncations/exclusion. Report model-derived EMM standard error.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_dant_vs_unitmatch_p",
+      "kind": "scalar",
+      "description": "Original Bonferroni-corrected EMM comparison p-value; source reports p<.001 against UnitMatch and p=.002 against EMD. The censored UnitMatch p-value is not invented as an exact number.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "p-value",
+      "aggregation": "Original Equation19: TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID), then method EMM; same41591unit/12dataset/10rat original panel, source31-session truncations/exclusion. Preserve source post-hoc EMM comparison and Bonferroni correction, alongside effects and SEs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      }
+    },
+    {
+      "id": "fig5d_dant_vs_emd_p",
+      "kind": "scalar",
+      "description": "Original Bonferroni-corrected EMM comparison p-value; source reports p<.001 against UnitMatch and p=.002 against EMD. The censored UnitMatch p-value is not invented as an exact number.",
+      "status": "verified",
+      "expected": 0.002,
+      "units": "p-value",
+      "aggregation": "Original Equation19: TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID), then method EMM; same41591unit/12dataset/10rat original panel, source31-session truncations/exclusion. Preserve source post-hoc EMM comparison and Bonferroni correction, alongside effects and SEs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-paper-statistics"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-paper-statistics"
+        ]
+      }
+    },
+    {
+      "id": "fig5e_friedman_p",
+      "kind": "scalar",
+      "description": "Original three-method Friedman p-value across eight dataset medians; p=.882 is not evidence of equivalence or a reproduction success rule.",
+      "status": "verified",
+      "expected": 0.882,
+      "units": "p-value",
+      "aggregation": "Original DANT/UnitMatch/EMD dataset median panel; Friedman omnibus in R PMCMRplus. Require full median panel and source ranks, not only printed p-value.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_dant_precision_mean",
+      "kind": "scalar",
+      "description": "Original dant mean precision against joint Kilosort reference.",
+      "status": "verified",
+      "expected": 96.0,
+      "units": "percent",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source mean across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_dant_precision_sd",
+      "kind": "scalar",
+      "description": "Original dant standard deviation of precision; preserve pairwise support.",
+      "status": "verified",
+      "expected": 4.8,
+      "units": "percentage points",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source SD across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_dant_recall_mean",
+      "kind": "scalar",
+      "description": "Original dant mean recall against joint Kilosort reference.",
+      "status": "verified",
+      "expected": 81.5,
+      "units": "percent",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source mean across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_dant_recall_sd",
+      "kind": "scalar",
+      "description": "Original dant standard deviation of recall; preserve pairwise support.",
+      "status": "verified",
+      "expected": 11.2,
+      "units": "percentage points",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source SD across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_unitmatch_precision_mean",
+      "kind": "scalar",
+      "description": "Original unitmatch mean precision against joint Kilosort reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source mean across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_unitmatch_precision_sd",
+      "kind": "scalar",
+      "description": "Original unitmatch standard deviation of precision; preserve pairwise support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percentage points",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source SD across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_unitmatch_recall_mean",
+      "kind": "scalar",
+      "description": "Original unitmatch mean recall against joint Kilosort reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source mean across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_unitmatch_recall_sd",
+      "kind": "scalar",
+      "description": "Original unitmatch standard deviation of recall; preserve pairwise support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percentage points",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source SD across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_emd_precision_mean",
+      "kind": "scalar",
+      "description": "Original emd mean precision against joint Kilosort reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source mean across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_emd_precision_sd",
+      "kind": "scalar",
+      "description": "Original emd standard deviation of precision; preserve pairwise support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percentage points",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source SD across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_emd_recall_mean",
+      "kind": "scalar",
+      "description": "Original emd mean recall against joint Kilosort reference.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percent",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source mean across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_emd_recall_sd",
+      "kind": "scalar",
+      "description": "Original emd standard deviation of recall; preserve pairwise support.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "percentage points",
+      "aggregation": "Compute TP/FP/FN separately for each of the original ten paired-session joint-Kilosort2.5 references from five rats. Precision=TP/(TP+FP); recall=TP/(TP+FN). Original full-session tracking remains input to pairwise comparison; joint sort is a close-to-ground-truth reference, not direct neuron identity. Report source SD across ten validation pairs.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_dant_precision_vs_unitmatch_p",
+      "kind": "scalar",
+      "description": "Original DANT precision comparison with unitmatch; source recall-versus-UnitMatch is reported only as p<.001, so exact expected p remains null.",
+      "status": "verified",
+      "expected": 0.002,
+      "units": "p-value",
+      "aggregation": "Original Friedman comparison followed by source Nemenyi post-hoc when appropriate; preserve all ten pair-level values and original method panel. Neither significance nor nonrejection substitutes for precision/recall magnitudes.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_dant_precision_vs_emd_p",
+      "kind": "scalar",
+      "description": "Original DANT precision comparison with emd; source recall-versus-UnitMatch is reported only as p<.001, so exact expected p remains null.",
+      "status": "verified",
+      "expected": 0.065,
+      "units": "p-value",
+      "aggregation": "Original Friedman comparison followed by source Nemenyi post-hoc when appropriate; preserve all ten pair-level values and original method panel. Neither significance nor nonrejection substitutes for precision/recall magnitudes.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_dant_recall_vs_unitmatch_p",
+      "kind": "scalar",
+      "description": "Original DANT recall comparison with unitmatch; source recall-versus-UnitMatch is reported only as p<.001, so exact expected p remains null.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "p-value",
+      "aggregation": "Original Friedman comparison followed by source Nemenyi post-hoc when appropriate; preserve all ten pair-level values and original method panel. Neither significance nor nonrejection substitutes for precision/recall magnitudes.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5hi_dant_recall_vs_emd_p",
+      "kind": "scalar",
+      "description": "Original DANT recall comparison with emd; source recall-versus-UnitMatch is reported only as p<.001, so exact expected p remains null.",
+      "status": "verified",
+      "expected": 0.01,
+      "units": "p-value",
+      "aggregation": "Original Friedman comparison followed by source Nemenyi post-hoc when appropriate; preserve all ten pair-level values and original method panel. Neither significance nor nonrejection substitutes for precision/recall magnitudes.",
+      "evidence_ids": [
+        "dant-paper-comparison",
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Ten paired-session references nested in five rats; the ten pairs are not ten independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-paper-comparison",
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5fg_null_mean",
+      "kind": "scalar",
+      "description": "Original widely separated unmatched-pair Gaussian null and one-sided outlier construction: null_mean.",
+      "status": "verified",
+      "expected": 0.025,
+      "units": "Fisher z",
+      "aggregation": "Original consecutive-day unmatched unit pairs separated by>50um define Gaussian null. One-sided tail below.01% yields source threshold1.70. Preserve source distances and original pair inclusion.",
+      "evidence_ids": [
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5fg_null_sd",
+      "kind": "scalar",
+      "description": "Original widely separated unmatched-pair Gaussian null and one-sided outlier construction: null_sd.",
+      "status": "verified",
+      "expected": 0.45,
+      "units": "Fisher z",
+      "aggregation": "Original consecutive-day unmatched unit pairs separated by>50um define Gaussian null. One-sided tail below.01% yields source threshold1.70. Preserve source distances and original pair inclusion.",
+      "evidence_ids": [
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig5fg_outlier_threshold",
+      "kind": "scalar",
+      "description": "Original widely separated unmatched-pair Gaussian null and one-sided outlier construction: outlier_threshold.",
+      "status": "verified",
+      "expected": 1.7,
+      "units": "Fisher z",
+      "aggregation": "Original consecutive-day unmatched unit pairs separated by>50um define Gaussian null. One-sided tail below.01% yields source threshold1.70. Preserve source distances and original pair inclusion.",
+      "evidence_ids": [
+        "dant-primary-xml"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-primary-xml"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-primary-xml"
+        ]
+      }
+    },
+    {
+      "id": "fig6_dant_matched_pairs",
+      "kind": "scalar",
+      "description": "Original dant total matched unit-pair count in cross-shank control.",
+      "status": "verified",
+      "expected": 4926,
+      "units": "matched unit pairs",
+      "aggregation": "Figure6 original rat3 mPFC sessions4-10, shanks2/3 aligned to common channel map and interleaved into14artificial days; compare DANT/UnitMatch only, since EMD is inapplicable. Preserve all original units and matches.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig6_dant_tracked_length_mean",
+      "kind": "scalar",
+      "description": "Original dant mean sessions per tracked neuron in cross-shank control.",
+      "status": "verified",
+      "expected": 4.9,
+      "units": "artificial sessions",
+      "aggregation": "Figure6 original rat3 mPFC sessions4-10, shanks2/3 aligned to common channel map and interleaved into14artificial days; compare DANT/UnitMatch only, since EMD is inapplicable. Preserve all original units and matches. Mean over source tracked neurons.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig6_dant_tracked_length_reported_spread",
+      "kind": "scalar",
+      "description": "Original dant reported plus/minus magnitude accompanying mean sessions per tracked neuron. Source paragraphp0195 gives the numeric spread but does not label it SD or SE; that statistical interpretation remains unresolved.",
+      "status": "verified",
+      "expected": 2.2,
+      "units": "artificial sessions; spread statistic unspecified by source",
+      "aggregation": "Figure6 original rat3 mPFC seven-real-day/two-shank construction. Preserve the source displayed plus/minus magnitude; do not compute an SD,SE or confidence interval until the source spread definition is authenticated.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The displayed spread magnitude is source-supported, but its SD/SE/other interpretation is not established by p0195 or Figure6 caption. Nearby unit-yield mean+/-SD reporting does not establish the tracking-spread definition.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig6_dant_cross_shank_fraction",
+      "kind": "scalar",
+      "description": "Original dant cross-shank matches as fraction of all matches; every cross-shank match is false by construction.",
+      "status": "verified",
+      "expected": 3.82,
+      "units": "percent",
+      "aggregation": "Figure6 original rat3 mPFC sessions4-10, shanks2/3 aligned to common channel map and interleaved into14artificial days; compare DANT/UnitMatch only, since EMD is inapplicable. Preserve all original units and matches. n_cross/(n_cross+n_same), with source shank identities retained.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig6_unitmatch_matched_pairs",
+      "kind": "scalar",
+      "description": "Original unitmatch total matched unit-pair count in cross-shank control.",
+      "status": "verified",
+      "expected": 3162,
+      "units": "matched unit pairs",
+      "aggregation": "Figure6 original rat3 mPFC sessions4-10, shanks2/3 aligned to common channel map and interleaved into14artificial days; compare DANT/UnitMatch only, since EMD is inapplicable. Preserve all original units and matches.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig6_unitmatch_tracked_length_mean",
+      "kind": "scalar",
+      "description": "Original unitmatch mean sessions per tracked neuron in cross-shank control.",
+      "status": "verified",
+      "expected": 3.5,
+      "units": "artificial sessions",
+      "aggregation": "Figure6 original rat3 mPFC sessions4-10, shanks2/3 aligned to common channel map and interleaved into14artificial days; compare DANT/UnitMatch only, since EMD is inapplicable. Preserve all original units and matches. Mean over source tracked neurons.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig6_unitmatch_tracked_length_reported_spread",
+      "kind": "scalar",
+      "description": "Original unitmatch reported plus/minus magnitude accompanying mean sessions per tracked neuron. Source paragraphp0195 gives the numeric spread but does not label it SD or SE; that statistical interpretation remains unresolved.",
+      "status": "verified",
+      "expected": 2.3,
+      "units": "artificial sessions; spread statistic unspecified by source",
+      "aggregation": "Figure6 original rat3 mPFC seven-real-day/two-shank construction. Preserve the source displayed plus/minus magnitude; do not compute an SD,SE or confidence interval until the source spread definition is authenticated.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The displayed spread magnitude is source-supported, but its SD/SE/other interpretation is not established by p0195 or Figure6 caption. Nearby unit-yield mean+/-SD reporting does not establish the tracking-spread definition.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig6_unitmatch_cross_shank_fraction",
+      "kind": "scalar",
+      "description": "Original unitmatch cross-shank matches as fraction of all matches; every cross-shank match is false by construction.",
+      "status": "verified",
+      "expected": 4.87,
+      "units": "percent",
+      "aggregation": "Figure6 original rat3 mPFC sessions4-10, shanks2/3 aligned to common channel map and interleaved into14artificial days; compare DANT/UnitMatch only, since EMD is inapplicable. Preserve all original units and matches. n_cross/(n_cross+n_same), with source shank identities retained.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig6_chi_square",
+      "kind": "scalar",
+      "description": "Original cross-shank match fraction chi-square statistic.",
+      "status": "verified",
+      "expected": 5.02,
+      "units": "chi-square statistic",
+      "aggregation": "Original2method by cross/same-shank match table,df1; retain all contingency counts.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig6_chi_square_p",
+      "kind": "scalar",
+      "description": "Original cross-shank match fraction comparison p-value.",
+      "status": "verified",
+      "expected": 0.025,
+      "units": "p-value",
+      "aggregation": "Original chi-square test,df1; scalar p-value cannot replace contingency cells or effect magnitudes.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig6_dant_approx_same_shank_fpr",
+      "kind": "scalar",
+      "description": "Source approximate DANT same-shank false-positive estimate about3.4%; this is specific to the original geometry, not universal identity accuracy.",
+      "status": "verified",
+      "expected": 3.4,
+      "units": "percent",
+      "aggregation": "Source approximation(42/49)*n_cross/n_same=(6/7)*p/(1-p), using49cross-shank and42same-shank session pairs and source unit-yield assumptions.",
+      "evidence_ids": [
+        "dant-cross-shank"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "One original mPFC rat3 preparation, seven real recording days, two shanks;14artificial days do not provide14independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-cross-shank"
+        ]
+      }
+    },
+    {
+      "id": "fig5g_dant_outlier_proportion_0_20um",
+      "kind": "scalar",
+      "description": "DANT0-20um original unmatched-pair outlier proportion.",
+      "status": "verified",
+      "expected": 0.012,
+      "units": "proportion",
+      "aggregation": "Original Figure5G unmatched unit-pair population in the named source20um distance bin. Preserve source counts, denominator, method memberships and pooling before deriving proportions/contingency statistics. Source p<.001 is a censored published report, not an exact numeric target or a reproduction threshold. Do not reconstruct odds ratios from rounded printed proportions.",
+      "evidence_ids": [
+        "dant-unmatched-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      }
+    },
+    {
+      "id": "fig5g_unitmatch_outlier_proportion_0_20um",
+      "kind": "scalar",
+      "description": "UnitMatch0-20um original unmatched-pair outlier proportion.",
+      "status": "verified",
+      "expected": 0.04,
+      "units": "proportion",
+      "aggregation": "Original Figure5G unmatched unit-pair population in the named source20um distance bin. Preserve source counts, denominator, method memberships and pooling before deriving proportions/contingency statistics. Source p<.001 is a censored published report, not an exact numeric target or a reproduction threshold. Do not reconstruct odds ratios from rounded printed proportions.",
+      "evidence_ids": [
+        "dant-unmatched-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      }
+    },
+    {
+      "id": "fig5g_emd_outlier_proportion_0_20um",
+      "kind": "scalar",
+      "description": "EMD0-20um original unmatched-pair outlier proportion.",
+      "status": "verified",
+      "expected": 0.027,
+      "units": "proportion",
+      "aggregation": "Original Figure5G unmatched unit-pair population in the named source20um distance bin. Preserve source counts, denominator, method memberships and pooling before deriving proportions/contingency statistics. Source p<.001 is a censored published report, not an exact numeric target or a reproduction threshold. Do not reconstruct odds ratios from rounded printed proportions.",
+      "evidence_ids": [
+        "dant-unmatched-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      }
+    },
+    {
+      "id": "fig5g_unitmatch_vs_dant_outlier_odds_ratio_0_20um",
+      "kind": "scalar",
+      "description": "Source UnitMatch versus DANT0-20um outlier odds ratio from Fisher exact comparison.",
+      "status": "verified",
+      "expected": 3.34,
+      "units": "odds ratio",
+      "aggregation": "Original Figure5G unmatched unit-pair population in the named source20um distance bin. Preserve source counts, denominator, method memberships and pooling before deriving proportions/contingency statistics. Source p<.001 is a censored published report, not an exact numeric target or a reproduction threshold. Do not reconstruct odds ratios from rounded printed proportions.",
+      "evidence_ids": [
+        "dant-unmatched-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      }
+    },
+    {
+      "id": "fig5g_emd_vs_dant_outlier_odds_ratio_0_20um",
+      "kind": "scalar",
+      "description": "Source EMD versus DANT0-20um outlier odds ratio from Fisher exact comparison.",
+      "status": "verified",
+      "expected": 2.2,
+      "units": "odds ratio",
+      "aggregation": "Original Figure5G unmatched unit-pair population in the named source20um distance bin. Preserve source counts, denominator, method memberships and pooling before deriving proportions/contingency statistics. Source p<.001 is a censored published report, not an exact numeric target or a reproduction threshold. Do not reconstruct odds ratios from rounded printed proportions.",
+      "evidence_ids": [
+        "dant-unmatched-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      }
+    },
+    {
+      "id": "fig5g_chi_square_0_20um",
+      "kind": "scalar",
+      "description": "Original three-method0-20um outlier-rate comparison,df2.",
+      "status": "verified",
+      "expected": 1119,
+      "units": "chi-square statistic",
+      "aggregation": "Original Figure5G unmatched unit-pair population in the named source20um distance bin. Preserve source counts, denominator, method memberships and pooling before deriving proportions/contingency statistics. Source p<.001 is a censored published report, not an exact numeric target or a reproduction threshold. Do not reconstruct odds ratios from rounded printed proportions.",
+      "evidence_ids": [
+        "dant-unmatched-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      }
+    },
+    {
+      "id": "fig5g_chi_square_20_40um",
+      "kind": "scalar",
+      "description": "Original three-method20-40um outlier-rate comparison,df2.",
+      "status": "verified",
+      "expected": 19.92,
+      "units": "chi-square statistic",
+      "aggregation": "Original Figure5G unmatched unit-pair population in the named source20um distance bin. Preserve source counts, denominator, method memberships and pooling before deriving proportions/contingency statistics. Source p<.001 is a censored published report, not an exact numeric target or a reproduction threshold. Do not reconstruct odds ratios from rounded printed proportions.",
+      "evidence_ids": [
+        "dant-unmatched-results"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No computational parity or scientifically justified equivalence tolerance has been frozen. Printed precision, source SE/SD, and nonrejection are not an automatic acceptance band.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Retain the source estimator and its original repeated-observation structure; a reproduction-specific uncertainty/equivalence rule remains unfrozen.",
+        "independent_unit": "Rat is biological cluster; units and sessions repeated within datasets, with rats shared across regional datasets. Dataset count is not independent rat count.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published sampling scope is descriptive. No new independent-unit minimum, confidence level or deterministic acceptance rule is inferred from the source aggregate.",
+        "evidence_ids": [
+          "dant-unmatched-results"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Exact original41591unit/12dataset/10rat source membership, original rat-number mapping,31-session truncations and exclusion remain unbound.",
+    "Recover original eight Figure5E dataset identities and all24method-dataset median targets, all ten joint-sort session pairs and per-method values, and all remaining Figure5G distance-bin cells and intervals, alongside the source-supported first-bin rates and first-two-bin statistics. These mandatory granular panels cannot be replaced by the scalar findings currently represented; expand into individually source-identified findings before eligibility.",
+    "Source Figure5A-C example overlap/survival/track-chain diagnostic identities and original granular arrays remain unrecovered; preserve their derivation when verifying duration and matching.",
+    "Authentic source date interpretation, mean-rate measurement, PETH vectors, waveform orientation and UnitMatch half-session waveforms remain unprepared or unqualified.",
+    "The accepted figure5-peth-v2 scorer computes medians/Friedman from complete operator track assignments but does not authenticate original population or external PETH exclusion and does not emit a complete pair-level verification manifest.",
+    "Figure5D Equation19 model output, all original DANT/UnitMatch/EMD baseline executions, joint-sort labels/TP-FP-FN, unmatched-distance arrays and Figure6 original interleaved shank construction require independent source-native verification.",
+    "PeakPETH must be measured from the actual rate vector; mean-rate metadata and exact calendar-day semantics need native author parity. No ordinal-session or generated-fixture substitution.",
+    "No independently justified numeric tolerances or reproduction uncertainty rules are frozen. Source SE,SD,95%CI and printed precision do not establish them; p=.882 nonrejection is not equivalence.",
+    "No authentic ordered cohort/split/full-panel/observation/metric/aggregation manifests, full analysis-output verifier, matched input/code exposure manifests or cumulative participant budgets are available; admission_policy omitted and paired protocols remain null.",
+    "No new AI reproduction or improvement execution exists. Source-only recovery,16software controls and author calibration must not populate either outcome condition.",
+    "Figure6 reported tracking spreads2.2 and2.3sessions are not explicitly labeled SD or SE in sourcep0195/caption; their numerical magnitudes are preserved, but the spread definition must be authenticated before any estimator or acceptance rule is assigned."
+  ]
+}

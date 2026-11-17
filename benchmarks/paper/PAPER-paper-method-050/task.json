@@ -4,21 +4,20 @@
   "track": "paper",
   "title": "Density-based longitudinal neuron tracking in high-density electrophysiological recordings",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Assign the same neuron across recording sessions using DANT’s original longitudinal tracking task. Increase valid tracking duration while retaining source matching precision/recall, PETH consistency and false-match controls; total matches or track duration alone is not accuracy.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Assign the same neuron across recording sessions using DANT’s original longitudinal tracking task. Increase valid tracking duration while retaining source matching precision/recall, PETH consistency and false-match controls; total matches or track duration alone is not accuracy.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Assign the same neuron across recording sessions using DANT’s original longitudinal tracking task. Increase valid tracking duration while retaining source matching precision/recall, PETH consistency and false-match controls; total matches or track duration alone is not accuracy.",
-    "Source-paper comparison for Figure5D estimated marginal mean tracked length in sessions, conditional on original matching-quality safeguards: Primary Figure5D endpoint is tracked length in sessions estimated by Equation19, not raw pair yield. Mandatory fidelity measures include Figure5E PETH Fisher-z correlation and5H/I precision=TP/(TP+FP), recall=TP/(TP+FN) against joint Kilosort2.5 sorting; that reference is close to ground truth, not direct neuron identity."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Authenticate the exact original Figure5 units, sessions, exclusions and common preprocessing; reproduce8.63sessions with the original model and source DANT settings before comparison.",
-    "Exceed source DANT tracking duration by a justified meaningful margin while meeting a predeclared non-degradation rule for original matching precision, recall, PETH consistency and false-match controls; never reward over-merging.",
-    "Recover and use original Figure5H/I session pairs and joint-sort reference: published DANT precision96.0%±4.8%SD and recall81.5%±11.2%SD are safeguards, not newly chosen held-out identity labels.",
-    "Retain source Figure5E rate/day/pair-count filters, unmatched-pair analysis and Figure6 cross-shank false-match validation with their original scopes. Recover numerical reference arrays before deciding non-degradation margins.",
-    "Use the same inputs and default-policy boundary for source methods; a new animal split, all13-dataset comparison or probability-calibration task is a separately named extension.",
-    "Freeze candidate and all comparison rules before final scoring; improved p-values, engineered fixture success and local all-pair yield cannot count as surpassing the paper.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-050",
   "canonical_position_one_based": 7,
@@ -518,59 +517,71 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-050/improvement.v1.json",
-      "bytes": 13785,
-      "sha256": "ebf85129b90541030c41ff8e3726465864a4b6a991635a546928307dad5be527"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "design_ready",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-050/historical/task.pre-improvement.v1.json",
-        "bytes": 29754,
-        "sha256": "fcd65edd8550ca28997a59ad5199df24179aea1c304ad4140177ba1d45b707d3"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-050-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "After original cohort and independent validation recovery, develop matching using declared waveform/session information and permitted development feedback, retaining PETH and final joint-sort references outside matching/tuning. Maintain every candidate evaluation in the ledger.",
-    "candidate_freeze": "Freeze clustering/motion parameters, matching thresholds, preprocessing, eligible populations, seed policy and resource/access budgets before original final matching and fidelity assessment.",
-    "final_evaluation": "Run frozen candidate and authentic DANT/UnitMatch/EMD baselines on identical original units/sessions; estimate the original tracked-length EMM and score all original fidelity checks under the predeclared improvement rule.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Published DANT8.63sessions is the historical anchor; an authenticated DANT rerun is separately reported. UnitMatch and EMD are original controls, not replacements for DANT. Source proxies, joint-sort validation and direct ground truth must remain explicitly distinguished."
+    "improvement": {
+      "improvement_loop": "After original cohort and independent validation recovery, develop matching using declared waveform/session information and permitted development feedback, retaining PETH and final joint-sort references outside matching/tuning. Maintain every candidate evaluation in the ledger.",
+      "candidate_freeze": "Freeze clustering/motion parameters, matching thresholds, preprocessing, eligible populations, seed policy and resource/access budgets before original final matching and fidelity assessment.",
+      "final_evaluation": "Run frozen candidate and authentic DANT/UnitMatch/EMD baselines on identical original units/sessions; estimate the original tracked-length EMM and score all original fidelity checks under the predeclared improvement rule.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Published DANT8.63sessions is the historical anchor; an authenticated DANT rerun is separately reported. UnitMatch and EMD are original controls, not replacements for DANT. Source proxies, joint-sort validation and direct ground truth must remain explicitly distinguished."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion.",
-    "Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified.",
-    "No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract.",
-    "Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold.",
-    "Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified.",
-    "The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion.",
       "Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified.",
       "No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract.",
       "Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold.",
       "Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified.",
       "The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion.",
+        "Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified.",
+        "No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract.",
+        "Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold.",
+        "Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified.",
+        "The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The source provides a numerical original tracking-duration endpoint and independent matching-quality checks, supporting an improvement design. Exact Figure5 population/session identities, native method parity, quality-reference artifacts and a justified decision rule remain incomplete. Longer tracks alone can be produced by over-merging and never suffice for success. Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion. Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified. No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract. Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold. Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified. The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The source provides a numerical original tracking-duration endpoint and independent matching-quality checks, supporting an improvement design. Exact Figure5 population/session identities, native method parity, quality-reference artifacts and a justified decision rule remain incomplete. Longer tracks alone can be produced by over-merging and never suffice for success. Exact Figure5 dataset-file, rat-number, session and unit membership mapping remains unresolved, including source31-session truncations and rat#6 exclusion. Native waveform orientation and conversion require verification; UnitMatch half-session waveform support and all original quality filters are unqualified. No authenticated DANT/UnitMatch/EMD rerun or original mixed-model output exists for this contract. Exact PETH medians, original joint-sort reference pairs/artifacts, unmatched-pair arrays and cross-shank validation outputs are not fully recovered; no arbitrary non-degradation threshold. Meaningful tracking improvement, joint uncertainty/quality decision rules and concrete candidate information/compute budgets remain unspecified. The local all13-dataset prepared-input evaluator does not implement the original Figure5D EMM or complete original fidelity portfolio.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -585,8 +596,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

@@ -1,0 +1,918 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-030",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Original Figure3 denoising findings are valid first-class reproduction targets independently of improvement. Published scalar/directional results and tested optical extraction/scoring components exist, but original cohort/ROIs/EP alignment, full numerical frequency/prominence profiles, valid replication and a source-faithful computational admission protocol are unresolved. No authentic recording has been prepared or scored by the new optical component.",
+  "source_paper": {
+    "title": "Robust self-supervised denoising of voltage imaging data using CellMincer",
+    "url": "https://www.nature.com/articles/s44303-024-00055-x"
+  },
+  "evidence": [
+    {
+      "id": "cell-paper-task",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Results: CellMincer improves the detection of subthreshold events in real voltage imaging data with paired electrophysiology; paragraphs27–31; Figure3",
+      "supports": "Uses26 available simultaneous BeRST/EP datasets for model training as supported by each implementation, then22 activity-selected datasets for evaluation; Figure3 evaluates trace correlation, spectral noise reduction and prominence-binned peak F1."
+    },
+    {
+      "id": "cell-paper-preprocess",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Methods: Procuring fluorescence intensity traces and aligning to joint electrophysiology data; paragraphs71–72",
+      "supports": "ROI selection uses raw fluorescence correlation and watershed; common EP/fluorescence trend removal, timing alignment and affine L2 fit precede assessment."
+    },
+    {
+      "id": "cell-paper-metric",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Methods: Metrics for evaluating denoising performance on real voltage imaging with paired EP; equations21–23; paragraphs73–74",
+      "supports": "Specifies STFT64/48 noise analysis with high-EP-power intervals excluded; fuzzy-event F1 with strict2-ms tolerance, optimization within±0.2mV prominence, and averaging over prominence bins."
+    },
+    {
+      "id": "cell-code-manifest",
+      "kind": "author_code",
+      "url": "https://github.com/cellarium-ai/CellMincer/blob/8cc2dd3192671e4287c16a3a92c4ccdbd2eb7942/configs/manifest/miller-ephys-standard.yaml",
+      "locator": "Entire5-line manifest",
+      "supports": "Author format declares5000 frames, one segment, tyx order and500-Hz sampling; it is not an original cohort/split manifest."
+    },
+    {
+      "id": "cell-code-preprocess",
+      "kind": "author_code",
+      "url": "https://github.com/cellarium-ai/CellMincer/blob/8cc2dd3192671e4287c16a3a92c4ccdbd2eb7942/configs/preprocess/pairedephys.yaml",
+      "locator": "detrend, dejitter, feature_depth and trim entries",
+      "supports": "Pinned preprocessing uses polynomial detrending initialized with501-frame median smoothing, disabled dejitter and stated global feature settings; exact figure-level alignment remains separate."
+    },
+    {
+      "id": "cell-paper-availability",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Data availability; Code availability",
+      "supports": "Paper links the broad-dsp-cellmincer-data bucket and CellMincerPaperAnalysis repository. The analysis repository returned404 during this review; published availability text does not establish an executable recovered figure script."
+    },
+    {
+      "id": "cell-paper-figure3-caption",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Figure3 panels a/b aligned traces and subthreshold insets; c lagged correlation distributions; d frequency-dependent residual noise reductions; e prominence-binned F1",
+      "supports": "All Figure3 trace/correlation/spectral/peak companions must be retained; one high-frequency summary cannot replace the frequency or prominence profiles."
+    },
+    {
+      "id": "cell-paper-secondary-numbers",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Results paragraph30 and Figure3c/d",
+      "supports": "Printed median correlations are CellMincer0.90, SUPPORT0.91 and raw0.83; PMD/N2S are described as on par with raw, without exact values. Above100Hz mean noise reductions are CellMincer13.9dB, SUPPORT10.9dB, PMD3.2dB and N2S0.6dB. These are source targets, not computed outputs."
+    },
+    {
+      "id": "cell-paper-peak-findings",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11618097/",
+      "locator": "Results paragraph31 and Figure3e; Methods paragraph74 equations21–23",
+      "supports": "Reports12–194percent F1 increase over original comparator methods/raw for peaks between0.5and3mV; CellMincer and SUPPORT alone significantly improve over raw in the reported0.5–2mV and5–10mV ranges. Exact original bins, per-bin F1 values and inferential details remain unrecovered."
+    },
+    {
+      "id": "cell-data-raw22-metadata",
+      "kind": "author_data",
+      "url": "https://storage.googleapis.com/storage/v1/b/broad-dsp-cellmincer-data/o?prefix=PairedBeRST%2Fraw%2F&fields=items%28name%2Csize%2Cgeneration%2Cmd5Hash%29%2CnextPageToken&maxResults=1000",
+      "locator": "Cached official22-item raw TIFF metadata; names, generations, sizes and MD5 fields; paired22-recording population retained by the local components",
+      "supports": "All22 saved raw source objects have metadata checksum pins, but neither metadata nor matching ABF basenames establishes payload preparation, historical26-training membership, exact22-evaluation correspondence or original ROI masks."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Denoise real BeRST voltage movies and recover single-neuron optical traces faithful to simultaneous patch-clamp EP, including small subthreshold events. Preserve Figure3 F1*, lagged/zero-lag correlation and residual spectral fidelity together; stronger TTX-group significance or smoother traces is not improvement.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-metric"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original joint BeRST fluorescence and patch-clamp recordings from cultured rat hippocampal neurons, provided through the author data bucket. An immutable source snapshot and exact raw TIFF/EP-file mapping to the paper assessment have not been authenticated; no payloads were downloaded.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-availability"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The results describe26 available joint datasets and22 selected for discernible activity. The local22-pair inventory and filename-derived cell groups do not establish exact equivalence to the original selected cells/recordings; the article discussion also mentions30 experiments, requiring cohort reconciliation.",
+      "evidence_ids": [
+        "cell-paper-task"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original design trains the self-supervised denoisers on as many as all26 joint datasets and evaluates22 selected recordings; it is not held-out-cell supervised generalization. Method-specific training membership must be recovered. A new whole-cell split is a useful separate extension, never a comparison to the published Figure3 numbers.",
+      "evidence_ids": [
+        "cell-paper-task"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Denoiser training/inference uses raw optical movies without clean targets; global features may use the source-permitted recording context. EP is an assessment and alignment reference, not candidate training input. The original analysis allows grader-side timing/affine alignment using EP, which must be reproduced symmetrically and disclosed.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-preprocess"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Use original raw-derived ROIs for every method; median-filter fluorescence trend at one second, Savitzky–Golay cubic EP smoothing with51-point window, peak-based temporal mapping, interpolation and affine L2 calibration. Exact ROI masks, correspondence choices and all original fitting boundaries remain unbound. Author500-Hz/5000-frame manifest is verified but cannot supply these missing transformations.",
+      "evidence_ids": [
+        "cell-paper-preprocess",
+        "cell-code-manifest",
+        "cell-code-preprocess"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Paper F1*: precision and recall use existential peak matches with absolute time separation<2ms; harmonic mean is maximized over optical prominence p′ in[p−0.2,p+0.2]mV. Exact peak extraction, prominence-bin boundaries and undefined-case policy remain unrecovered. Secondary zero-lag correlation and STFT residual noise are retained; STFT window64/overlap48 are sourced, while the EP-power exclusion threshold and remaining conventions are unresolved.",
+      "evidence_ids": [
+        "cell-paper-metric"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Figure3c reports median trace correlation;3d averages residual log-power reduction by frequency, including>100Hz;3e averages F1* over prominence bins. Exact cell/recording weighting and bin integration need the original analysis. Do not substitute the local seven-point prominence grid or arbitrary scalar average of these endpoints.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-metric"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "The registered endpoint is the complete original Figure3 paired BeRST/EP panel: all22 activity-selected evaluation recordings after method-specific self-supervision using as many as all26 available recordings; aligned raw/CellMincer/SUPPORT/PMD/N2S traces and subthreshold insets, complete lagged-correlation distributions, every original residual-frequency bin, and every original prominence-bin F1* value including small and larger peaks. DeepCAD-RT was excluded in this source experiment. Exact original bin identities, all methodwise profile values, recording membership, raw-derived ROI masks and illustrated windows remain unrecovered. The public22-object cache and nine filename groups are not proof of this original panel. Recovered scalar/directional findings below preserve published summaries but cannot replace or fully enumerate the missing original numerical profiles; source recovery must expand the final scalar findings to all original bin-by-method quantities before admission.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-figure3-caption",
+        "cell-paper-metric",
+        "cell-paper-peak-findings",
+        "cell-data-raw22-metadata"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Denoiser development uses the source-permitted raw optical recordings and self-supervised recording/global-feature context without patch-clamp targets. The grader uses EP for the original common timing and affine L2 alignment and final comparison, with one raw-derived ROI shared across methods. Both information conditions must preserve identical original optical inputs, method-specific26/22 membership, EP boundary and assessment rules; paper+data+author-code adds only recovered author code. Neither supplied denoised arrays nor printed figure aggregates establish fresh computation, and no new held-out-cell split is silently introduced.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-preprocess",
+        "cell-code-manifest",
+        "cell-code-preprocess"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig3c-cellmincer-median-zero-lag-correlation",
+      "kind": "scalar",
+      "description": "Original Figure3c median zero-lag optical/EP trace correlation for cellmincer; retain the complete lagged-correlation distribution as a companion.",
+      "status": "verified",
+      "expected": 0.9,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Median over the original22 activity-selected recordings as described in Figure3c; exact original weighting, alignment, lag support and handling of undefined cases remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-secondary-numbers",
+        "cell-paper-figure3-caption"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed target does not justify a numerical reproduction tolerance. Original per-recording estimates, reporting precision and an independently frozen equivalence criterion remain unresolved.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-secondary-numbers",
+          "cell-paper-figure3-caption"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-secondary-numbers",
+          "cell-paper-figure3-caption"
+        ]
+      }
+    },
+    {
+      "id": "fig3c-support-median-zero-lag-correlation",
+      "kind": "scalar",
+      "description": "Original Figure3c median zero-lag optical/EP trace correlation for support; retain the complete lagged-correlation distribution as a companion.",
+      "status": "verified",
+      "expected": 0.91,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Median over the original22 activity-selected recordings as described in Figure3c; exact original weighting, alignment, lag support and handling of undefined cases remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-secondary-numbers",
+        "cell-paper-figure3-caption"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed target does not justify a numerical reproduction tolerance. Original per-recording estimates, reporting precision and an independently frozen equivalence criterion remain unresolved.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-secondary-numbers",
+          "cell-paper-figure3-caption"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-secondary-numbers",
+          "cell-paper-figure3-caption"
+        ]
+      }
+    },
+    {
+      "id": "fig3c-raw-median-zero-lag-correlation",
+      "kind": "scalar",
+      "description": "Original Figure3c median zero-lag optical/EP trace correlation for raw; retain the complete lagged-correlation distribution as a companion.",
+      "status": "verified",
+      "expected": 0.83,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Median over the original22 activity-selected recordings as described in Figure3c; exact original weighting, alignment, lag support and handling of undefined cases remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-secondary-numbers",
+        "cell-paper-figure3-caption"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed target does not justify a numerical reproduction tolerance. Original per-recording estimates, reporting precision and an independently frozen equivalence criterion remain unresolved.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-secondary-numbers",
+          "cell-paper-figure3-caption"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-secondary-numbers",
+          "cell-paper-figure3-caption"
+        ]
+      }
+    },
+    {
+      "id": "fig3c-pmd-median-zero-lag-correlation",
+      "kind": "scalar",
+      "description": "Original Figure3c median zero-lag optical/EP trace correlation for pmd; retain the complete lagged-correlation distribution as a companion.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Median over the original22 activity-selected recordings as described in Figure3c; exact original weighting, alignment, lag support and handling of undefined cases remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-secondary-numbers",
+        "cell-paper-figure3-caption"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "PMD/N2S are described as on par with raw; this does not specify their numerical median. Full original lagged distributions and all methodwise values must be recovered.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-secondary-numbers",
+          "cell-paper-figure3-caption"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "PMD/N2S are described as on par with raw; this does not specify their numerical median. Full original lagged distributions and all methodwise values must be recovered.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-secondary-numbers",
+          "cell-paper-figure3-caption"
+        ]
+      }
+    },
+    {
+      "id": "fig3c-n2s-median-zero-lag-correlation",
+      "kind": "scalar",
+      "description": "Original Figure3c median zero-lag optical/EP trace correlation for n2s; retain the complete lagged-correlation distribution as a companion.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Pearson correlation coefficient (dimensionless)",
+      "aggregation": "Median over the original22 activity-selected recordings as described in Figure3c; exact original weighting, alignment, lag support and handling of undefined cases remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-secondary-numbers",
+        "cell-paper-figure3-caption"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "PMD/N2S are described as on par with raw; this does not specify their numerical median. Full original lagged distributions and all methodwise values must be recovered.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-secondary-numbers",
+          "cell-paper-figure3-caption"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "PMD/N2S are described as on par with raw; this does not specify their numerical median. Full original lagged distributions and all methodwise values must be recovered.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-secondary-numbers",
+          "cell-paper-figure3-caption"
+        ]
+      }
+    },
+    {
+      "id": "fig3d-cellmincer-mean-noise-reduction-above100hz",
+      "kind": "scalar",
+      "description": "Original Figure3d cellmincer mean reduction of residual optical-minus-EP noise power relative to raw for frequencies above100Hz; this summary does not replace the full frequency profile.",
+      "status": "verified",
+      "expected": 13.9,
+      "units": "dB reduction relative to raw",
+      "aggregation": "Paper averages residual spectral power after conversion to dB in EP-low-power time intervals, then reports mean gain above100Hz; original mask threshold, frequency-bin integration and recording weighting remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-secondary-numbers",
+        "cell-paper-metric",
+        "cell-paper-figure3-caption"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed target does not justify a numerical reproduction tolerance. Original per-recording estimates, reporting precision and an independently frozen equivalence criterion remain unresolved.",
+        "evidence_ids": [
+          "cell-paper-secondary-numbers",
+          "cell-paper-metric",
+          "cell-paper-figure3-caption"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-secondary-numbers",
+          "cell-paper-metric",
+          "cell-paper-figure3-caption"
+        ]
+      }
+    },
+    {
+      "id": "fig3d-support-mean-noise-reduction-above100hz",
+      "kind": "scalar",
+      "description": "Original Figure3d support mean reduction of residual optical-minus-EP noise power relative to raw for frequencies above100Hz; this summary does not replace the full frequency profile.",
+      "status": "verified",
+      "expected": 10.9,
+      "units": "dB reduction relative to raw",
+      "aggregation": "Paper averages residual spectral power after conversion to dB in EP-low-power time intervals, then reports mean gain above100Hz; original mask threshold, frequency-bin integration and recording weighting remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-secondary-numbers",
+        "cell-paper-metric",
+        "cell-paper-figure3-caption"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed target does not justify a numerical reproduction tolerance. Original per-recording estimates, reporting precision and an independently frozen equivalence criterion remain unresolved.",
+        "evidence_ids": [
+          "cell-paper-secondary-numbers",
+          "cell-paper-metric",
+          "cell-paper-figure3-caption"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-secondary-numbers",
+          "cell-paper-metric",
+          "cell-paper-figure3-caption"
+        ]
+      }
+    },
+    {
+      "id": "fig3d-pmd-mean-noise-reduction-above100hz",
+      "kind": "scalar",
+      "description": "Original Figure3d pmd mean reduction of residual optical-minus-EP noise power relative to raw for frequencies above100Hz; this summary does not replace the full frequency profile.",
+      "status": "verified",
+      "expected": 3.2,
+      "units": "dB reduction relative to raw",
+      "aggregation": "Paper averages residual spectral power after conversion to dB in EP-low-power time intervals, then reports mean gain above100Hz; original mask threshold, frequency-bin integration and recording weighting remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-secondary-numbers",
+        "cell-paper-metric",
+        "cell-paper-figure3-caption"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed target does not justify a numerical reproduction tolerance. Original per-recording estimates, reporting precision and an independently frozen equivalence criterion remain unresolved.",
+        "evidence_ids": [
+          "cell-paper-secondary-numbers",
+          "cell-paper-metric",
+          "cell-paper-figure3-caption"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-secondary-numbers",
+          "cell-paper-metric",
+          "cell-paper-figure3-caption"
+        ]
+      }
+    },
+    {
+      "id": "fig3d-n2s-mean-noise-reduction-above100hz",
+      "kind": "scalar",
+      "description": "Original Figure3d n2s mean reduction of residual optical-minus-EP noise power relative to raw for frequencies above100Hz; this summary does not replace the full frequency profile.",
+      "status": "verified",
+      "expected": 0.6,
+      "units": "dB reduction relative to raw",
+      "aggregation": "Paper averages residual spectral power after conversion to dB in EP-low-power time intervals, then reports mean gain above100Hz; original mask threshold, frequency-bin integration and recording weighting remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-secondary-numbers",
+        "cell-paper-metric",
+        "cell-paper-figure3-caption"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed target does not justify a numerical reproduction tolerance. Original per-recording estimates, reporting precision and an independently frozen equivalence criterion remain unresolved.",
+        "evidence_ids": [
+          "cell-paper-secondary-numbers",
+          "cell-paper-metric",
+          "cell-paper-figure3-caption"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-secondary-numbers",
+          "cell-paper-metric",
+          "cell-paper-figure3-caption"
+        ]
+      }
+    },
+    {
+      "id": "fig3e-cellmincer-relative-f1-gain-range-lower",
+      "kind": "scalar",
+      "description": "Published lower endpoint of the12–194percent CellMincer F1 gain range relative to the other benchmarked algorithms and raw data for peaks between0.5and3mV.",
+      "status": "verified",
+      "expected": 12,
+      "units": "percent relative F1 gain",
+      "aggregation": "Lower endpoint of the source-reported range across original comparator/prominence comparisons; exact contributing bin/method identities, denominators and averaging conventions remain unresolved. The range is not the complete original F1 profile.",
+      "evidence_ids": [
+        "cell-paper-peak-findings",
+        "cell-paper-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed target does not justify a numerical reproduction tolerance. Original per-recording estimates, reporting precision and an independently frozen equivalence criterion remain unresolved.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig3e-cellmincer-relative-f1-gain-range-upper",
+      "kind": "scalar",
+      "description": "Published upper endpoint of the12–194percent CellMincer F1 gain range relative to the other benchmarked algorithms and raw data for peaks between0.5and3mV.",
+      "status": "verified",
+      "expected": 194,
+      "units": "percent relative F1 gain",
+      "aggregation": "Upper endpoint of the source-reported range across original comparator/prominence comparisons; exact contributing bin/method identities, denominators and averaging conventions remain unresolved. The range is not the complete original F1 profile.",
+      "evidence_ids": [
+        "cell-paper-peak-findings",
+        "cell-paper-metric"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The printed target does not justify a numerical reproduction tolerance. Original per-recording estimates, reporting precision and an independently frozen equivalence criterion remain unresolved.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig3ab-cellmincer-subthreshold-baseline-fidelity",
+      "kind": "categorical",
+      "description": "Original aligned trace/inset finding: CellMincer exhibits less noise and follows the EP baseline more accurately than SUPPORT, particularly around subthreshold activity.",
+      "status": "verified",
+      "expected": "cellmincer_less_noise_and_more_faithful_baseline",
+      "units": "source qualitative trace finding",
+      "aggregation": "Original Figure3a/b raw-derived ROI traces and indicated subthreshold insets; exact showcased identities/windows and a quantitative joint trace-fidelity rule remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-task",
+        "cell-paper-preprocess",
+        "cell-paper-figure3-caption"
+      ],
+      "categories": [
+        "cellmincer_less_noise_and_more_faithful_baseline",
+        "source_trace_pattern_not_recreated"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source statement; quantitative magnitudes and original inference must also be reconstructed.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-preprocess",
+          "cell-paper-figure3-caption"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-task",
+          "cell-paper-preprocess",
+          "cell-paper-figure3-caption"
+        ]
+      }
+    },
+    {
+      "id": "fig3e-cellmincer-over-raw-0p5-to2mv",
+      "kind": "categorical",
+      "description": "The source reports significant cellmincer peak-F1 improvement over raw in the0.5–2mV prominence range. This reported range is not assumed to be one original numerical bin.",
+      "status": "verified",
+      "expected": "positive_source_reported_significant_difference",
+      "units": "directional source finding",
+      "aggregation": "Original paired method-minus-raw comparison in the stated prominence range, retaining every original bin and recording; exact test, alpha, multiplicity and aggregation remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-peak-findings",
+        "cell-paper-metric"
+      ],
+      "categories": [
+        "positive_source_reported_significant_difference",
+        "source_directional_finding_not_recreated"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source statement; quantitative magnitudes and original inference must also be reconstructed.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig3e-cellmincer-over-raw-5-to10mv",
+      "kind": "categorical",
+      "description": "The source reports significant cellmincer peak-F1 improvement over raw in the5–10mV prominence range. This reported range is not assumed to be one original numerical bin.",
+      "status": "verified",
+      "expected": "positive_source_reported_significant_difference",
+      "units": "directional source finding",
+      "aggregation": "Original paired method-minus-raw comparison in the stated prominence range, retaining every original bin and recording; exact test, alpha, multiplicity and aggregation remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-peak-findings",
+        "cell-paper-metric"
+      ],
+      "categories": [
+        "positive_source_reported_significant_difference",
+        "source_directional_finding_not_recreated"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source statement; quantitative magnitudes and original inference must also be reconstructed.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig3e-support-over-raw-0p5-to2mv",
+      "kind": "categorical",
+      "description": "The source reports significant support peak-F1 improvement over raw in the0.5–2mV prominence range. This reported range is not assumed to be one original numerical bin.",
+      "status": "verified",
+      "expected": "positive_source_reported_significant_difference",
+      "units": "directional source finding",
+      "aggregation": "Original paired method-minus-raw comparison in the stated prominence range, retaining every original bin and recording; exact test, alpha, multiplicity and aggregation remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-peak-findings",
+        "cell-paper-metric"
+      ],
+      "categories": [
+        "positive_source_reported_significant_difference",
+        "source_directional_finding_not_recreated"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source statement; quantitative magnitudes and original inference must also be reconstructed.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig3e-support-over-raw-5-to10mv",
+      "kind": "categorical",
+      "description": "The source reports significant support peak-F1 improvement over raw in the5–10mV prominence range. This reported range is not assumed to be one original numerical bin.",
+      "status": "verified",
+      "expected": "positive_source_reported_significant_difference",
+      "units": "directional source finding",
+      "aggregation": "Original paired method-minus-raw comparison in the stated prominence range, retaining every original bin and recording; exact test, alpha, multiplicity and aggregation remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-peak-findings",
+        "cell-paper-metric"
+      ],
+      "categories": [
+        "positive_source_reported_significant_difference",
+        "source_directional_finding_not_recreated"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source statement; quantitative magnitudes and original inference must also be reconstructed.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig3e-cellmincer-over-support-small-events",
+      "kind": "categorical",
+      "description": "The source reports CellMincer significantly outperforming SUPPORT for small-magnitude events, while SUPPORT approaches CellMincer for larger peaks; exact magnitude boundaries and tests are not fully recovered.",
+      "status": "verified",
+      "expected": "cellmincer_higher_f1_for_small_events",
+      "units": "directional source finding",
+      "aggregation": "Original paired CellMincer-versus-SUPPORT peak-F1 comparison with full prominence profile retained; no local seven-point grid or favorable subrange substitutes for the original bins.",
+      "evidence_ids": [
+        "cell-paper-peak-findings",
+        "cell-paper-metric"
+      ],
+      "categories": [
+        "cellmincer_higher_f1_for_small_events",
+        "source_directional_finding_not_recreated"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source statement; quantitative magnitudes and original inference must also be reconstructed.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      }
+    },
+    {
+      "id": "fig3e-support-approaches-cellmincer-larger-events",
+      "kind": "categorical",
+      "description": "The source reports that SUPPORT peak-calling performance approaches CellMincer in the higher-magnitude regime; this qualitative statement supplies neither numerical equivalence nor exact regime boundaries.",
+      "status": "verified",
+      "expected": "support_approaches_cellmincer_for_larger_events",
+      "units": "source qualitative profile finding",
+      "aggregation": "Original larger-prominence portion of the complete SUPPORT/CellMincer F1 profile; exact bins and a source-grounded quantitative meaning of approaches remain unresolved.",
+      "evidence_ids": [
+        "cell-paper-peak-findings",
+        "cell-paper-metric"
+      ],
+      "categories": [
+        "support_approaches_cellmincer_for_larger_events",
+        "source_larger_event_pattern_not_recreated"
+      ],
+      "tolerance": {
+        "status": "not_applicable",
+        "absolute": null,
+        "rationale": "Categorical source statement; quantitative magnitudes and original inference must also be reconstructed.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original recording/cell/culture hierarchy and inference, then freeze a source-grounded reproduction criterion before final execution; no threshold, confidence level or deterministic equivalence is assumed.",
+        "independent_unit": "Original biological cell or culture hierarchy; repeated recordings, frames, peaks and overlapping STFT windows are not independent units.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original selection and biological independence, complete paired values and source inferential conventions are not authenticated; source significance wording supplies no executable threshold.",
+        "evidence_ids": [
+          "cell-paper-peak-findings",
+          "cell-paper-metric"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Original26-training/22-evaluation identities, method-specific training scope and the discussion reference to30 experiments are unreconciled; the22 saved raw/ABF basename pairs do not certify the original selected panel.",
+    "Authentic raw-derived ROI masks/seeds/thresholds/watershed decisions, selected Figure3a/b recording windows, EP channel/units/polarity, peak correspondences, clock interpolation and original affine L2 alignment are absent.",
+    "Every original Figure3e prominence-bin identity and raw/CellMincer/SUPPORT/PMD/N2S F1* value, and every Figure3d frequency-bin value, must be recovered and represented separately before admission. These reported scalar summaries and directional statements do not enumerate the full numerical profile; no average, range or seven-threshold prospective grid may substitute for it.",
+    "Full Figure3c lagged distributions, precise PMD/N2S medians, frequency/prominence integration and original recording/cell weighting are unbound; source numbers are printed targets, not authentic recalculations.",
+    "The paper specifies strict2ms existential event matching, prominence optimization within±0.2mV and STFT64/48, but peak extraction, exact boundary conventions, empty cases, original STFT window/boundary/scaling and EP-power exclusion threshold remain unresolved.",
+    "The native-roi component emits fluorescence AU for all22 saved identities using a supplied frozen raw-only mask. It has generated TIFF checks only and cannot produce aligned mV or certify historical ROIs/cohort. The prepared-trace scorer uses prospective split/grid/spectral/aggregation policies and cannot presently reproduce Figure3.",
+    "The actual source-granular analysis interface, authentic-data manifest and independent verifier cannot yet be frozen for the complete original endpoint; admission_policy is deliberately omitted rather than assigning hashes to missing artifacts.",
+    "Recover all original comparator outputs and fresh analysis lineage, including SUPPORT as well as PMD/N2S and raw; existing minimum-method checks and boxcar engineering controls do not establish the full source comparator panel.",
+    "Numerical tolerances, independent cell/culture units, sample minimums, confidence rules, source significance tests and cumulative matched access/resource budgets are not justified. No tolerance or alpha is inferred from printed precision or significance wording.",
+    "Matched paper+data and paper+data+author-code input/exposure/analysis/output-verification manifests are not available. Author analysis code recovery remains unresolved; original-finding reproduction and improvement each remain unknown."
+  ]
+}

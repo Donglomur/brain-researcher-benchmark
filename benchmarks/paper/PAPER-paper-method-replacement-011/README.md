@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Figure 5 regional-distribution results, Figures 6–7 word-onset and noun-versus-verb decoding, and Figures 2–3 confound-adjusted responsiveness/modulation remain separately named original empirical components. Preserve their implementations and prior broader definitions. They are neither silently claimed nor automatic prerequisites for the selected Figure 4a–c primary. Reviewed source limits: Original recording, transcript/annotation, example, contact and release-version manifests remain unqualified. The reviewed arXiv v1 source is not asserted to be byte/content equivalent to a separate proceedings version. Exact source negative sampling and buffers, original split identities/seeds and correct configured regression runner remain unresolved. A later release, new split or multichannel input cannot silently replace the selected source task. Source window endpoint handling and identities remain unresolved; nominal 250-ms windows, 100-ms steps and a −1 to +1 second interval do not justify inventing a 21-window manifest. Original contact selection/tie policies, reference curves, map and example identities, source numerical arrays and justified reproduction tolerances remain unresolved. Published timing scalars cannot represent the complete selected panel. Independent authentication of source observations, original training and native evaluation remains unresolved; supplied-score software components alone do not establish it. A candidate may change decoder architecture for the same qualified prediction task, while retaining the independently reproduced original linear baseline. Nonlinear AUC gains do not establish the original linear-specific timing interpretation or language-specificity beyond acoustic correlates. Meaningful effect, participant-aware and selection-aware superiority uncertainty, access/exposure and resource policies remain unresolved. Original electrode-level display intervals do not establish new confirmatory participant-level superiority uncertainty. No AUC margin, original array identity, held-out score, runtime readiness, scientific success or additional task count is established by the selection. Canonical task, outcome, catalog/CLI and admission wording require consistent bounded adoption with predecessor preservation.
+
+**Primary scientific scope:** Complete Figure 4a–c sentence-onset versus no-speech decoding from the original Brain Treebank cohort and recorded movies: source linear contact/time outputs, eligible-contact peak map, source example curve and training-selected temporal/frontal held-out curves. Preserve the original ten-participant population, remove the source 114 corrupted contacts, retain subject 5 in nonregional analyses while excluding that subject from atlas-region analyses and brain plots. Preserve source single-electrode inputs, balanced examples and speech-free buffers, original shared splits, training-fitted preprocessing and five-fold training-CV contact selection. Exact window endpoints and identities remain subject to source verification, not a presumed count.
+
+**Retained secondary policy:** Figure 5 regional-distribution results, Figures 6–7 word-onset and noun-versus-verb decoding, and Figures 2–3 confound-adjusted responsiveness/modulation remain separately named original empirical components. Preserve their implementations and prior broader definitions. They are neither silently claimed nor automatic prerequisites for the selected Figure 4a–c primary.
+
+- [Reproduction proposal (inspection only)](reproduction.v1.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The paper has an ordered decoding task, but the original release/splits, exact ROC-AUC panel numbers and full source aggregation have not been recovered. The registered implementation tests word responsiveness and cannot stand in for that baseline.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 38093 bytes; SHA-256 `6cb4599d9cc45b471ebc5ce7d10308233c91a4a784d32c9e47e1dadec48d1ca7`.
+- Specification identity: 47497 bytes; SHA-256 `c030ea3ebca0be88e291a1903de891d0b0570d5fb22786a819202ad24bc6e53d`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

@@ -1,0 +1,1053 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-023",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Computational reproduction of the complete original PhysioP300 Table 4 panel is a first-class outcome independently of superiority. All four rows and 24 mean/SD targets are source-recovered, but source cohort/preparation, report reduction, tolerances, submitted-analysis execution and independent granular verification are unresolved. The accepted metric-cell component and its software controls do not establish an AI reproduction.",
+  "source_paper": {
+    "title": "EEGPT: Pretrained Transformer for Universal and Reliable Representation of EEG Signals",
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2024/hash/4540d267eeec4e5dbd9dae9448f0b739-Abstract-Conference.html"
+  },
+  "evidence": [
+    {
+      "id": "eegpt-paper",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2024/file/4540d267eeec4e5dbd9dae9448f0b739-Paper-Conference.pdf",
+      "locator": "Table 4, PhysioP300/Ours row; section 3.2; Appendix C.2.5 and D",
+      "supports": "Binary P300 classification, published result, LOSO configuration, preprocessing description, three repetitions, and binary AUROC monitor."
+    },
+    {
+      "id": "eegpt-converter",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/BINE022/EEGPT/ea7282f698c406cd423ccbedbe9960853761144c/datasets/downstream/prepare_PhysioNetP300.py",
+      "locator": "lines 8-18, 30-47",
+      "supports": "Eight-subject preparation list, -0.1 to 2 second epoch, low-pass/resampling, event target labels, and output naming that restarts i in each recording."
+    },
+    {
+      "id": "eegpt-probe",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/BINE022/EEGPT/ea7282f698c406cd423ccbedbe9960853761144c/downstream/linear_probe_EEGPT_PhysioP300.py",
+      "locator": "lines 31-88, 98-118, 160-193, 199-207, 233-260",
+      "supports": "58-channel encoder route, class-1 probabilities, optimizer restricted to scaling/probes, nine subject LOSO loop, and per-epoch held-out subject validation."
+    },
+    {
+      "id": "eegpt-metrics",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/BINE022/EEGPT/ea7282f698c406cd423ccbedbe9960853761144c/downstream/utils_eval.py",
+      "locator": "get_metrics, lines 177-197",
+      "supports": "Binary metrics delegation to PyHealth, threshold convention, and single-class fallback; downstream library/version still requires pinning."
+    },
+    {
+      "id": "eegpt-data",
+      "kind": "author_data",
+      "url": "https://physionet.org/content/erpbci/1.0.0/",
+      "locator": "Dataset description; version 1.0.0; DOI 10.13026/C2101S",
+      "supports": "Original public ERP BCI release, annotated EEG/EOG matrix-speller recordings and provider description of ten participants."
+    },
+    {
+      "id": "eegpt-checkpoint",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/BINE022/EEGPT/ea7282f698c406cd423ccbedbe9960853761144c/README.md",
+      "locator": "Pretrained Models, lines 24-34; Other Downstream Tasks, lines 55-64",
+      "supports": "Official EEG_large checkpoint route and downstream entrypoint family; no verified checkpoint digest or empirical rerun supplied by this audit."
+    },
+    {
+      "id": "eegpt-table4-exact",
+      "kind": "paper",
+      "url": "https://papers.nips.cc/paper_files/paper/2024/file/4540d267eeec4e5dbd9dae9448f0b739-Paper-Conference.pdf",
+      "locator": "Table 4 PhysioP300 rows (paper p.8); section 3.2 (p.7); Appendix C.2.5 (p.20) and D (p.21). Retained paper text SHA256 1c4ef56ecb87e06e7842c655e6e202399a80c8a2c560b77aaf306caac13b373a, lines 421-435, 494-498, 1211-1228 and 1295-1306.",
+      "supports": "All four method rows and three metric means plus standard deviations; three repetitions; original adaptation regimes, LOSO and metric definitions. Printed standard deviations do not supply a computational reproduction tolerance."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict whether a matrix-speller stimulus contains the attended character from its EEG event epoch. Current scope is the complete original PhysioP300 Table 4 panel, including all source subjects, EEGPT and original BENDR/BIOT/LaBraM controls, and all three reported metrics.",
+      "evidence_ids": [
+        "eegpt-paper",
+        "eegpt-converter"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "PhysioNet ERP-based Brain-Computer Interface recordings, erpbci version 1.0.0 (10.13026/C2101S). No substitute P300 corpus or synthetic episodes.",
+      "evidence_ids": [
+        "eegpt-data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Paper describes nine subjects after excluding 8, 10, and 12. Probe uses [1,2,3,4,5,6,7,9,11], but converter uses [2,3,4,5,6,7,9,11]; provider describes ten participants. Recover original recording/person identity and exclusion manifest.",
+      "evidence_ids": [
+        "eegpt-paper",
+        "eegpt-converter",
+        "eegpt-probe",
+        "eegpt-data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "LOSO is documented and the probe holds out each of nine subject suffixes, but original cohort/event-support and assessment/selection semantics remain unqualified. The held-out subject is validated every epoch; the source does not identify how those values produce the reported result. A protocol-equivalent rerun may use declared new randomness while preserving the original LOSO rules and evaluation population.",
+      "evidence_ids": [
+        "eegpt-paper",
+        "eegpt-probe"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Author route selects 58 EEG channels, applies a pretrained frozen encoder and trains channel scales plus linear probes. The exact released checkpoint, pretraining ancestry, exposure parity, and historical event support require qualification. No extra EOG, test labels, or easier channel condition may be introduced.",
+      "evidence_ids": [
+        "eegpt-probe",
+        "eegpt-checkpoint"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper specifies a 2-second epoch from -0.7 seconds, 120 Hz low-pass and 256 Hz. Converter instead epochs -0.1 to 2 seconds, scales volts to mV and restarts output names i.subN for each recording; this can overwrite events. Probe mean-centers across channels before selecting 58. Recover the actual paper preparation before choosing any repair.",
+      "evidence_ids": [
+        "eegpt-paper",
+        "eegpt-converter",
+        "eegpt-probe"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Primary source component metric is AUROC, higher better: probability that a target event receives a higher class-1 score than a nontarget, with half credit for ties. Probe concatenates all validation-epoch scores before binary metrics. Report BAC and Cohen kappa too; single-class support cannot be silently accepted as a valid AUROC.",
+      "evidence_ids": [
+        "eegpt-paper",
+        "eegpt-probe",
+        "eegpt-metrics"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Paper reports three experiment repetitions and SD. Subject weighting, selected epoch and fold-to-run reduction require reconciliation. Reproducing the source-supported stochastic protocol with recorded new seeds is legitimate; the historical seed archive is not mandatory. Do not pool repeated predictions or treat epochs as independent people.",
+      "evidence_ids": [
+        "eegpt-paper",
+        "eegpt-probe"
+      ]
+    },
+    "full_panel": {
+      "status": "verified",
+      "description": "The selected original PhysioP300 Table 4 panel contains EEGPT (Ours), BENDR, BIOT and LaBraM, each with balanced accuracy, Cohen kappa and AUROC means and reported standard deviations over three experiment repetitions. Preserve all nine nominal LOSO subjects and complete original event support; the exact cohort and reporting reduction remain separately unresolved. Unrelated downstream datasets and whole-S8 claims are outside this selected panel.",
+      "evidence_ids": [
+        "eegpt-paper",
+        "eegpt-table4-exact",
+        "eegpt-probe"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both information conditions require the same source PhysioP300 EEG epochs, channels, original training/development observations, pretrained-state access and cumulative budgets. Author code must be the only added information in paper+data+author-code. The original held-out-subject validation/epoch-selection semantics, checkpoint ancestry and label-exposure boundary are not reconciled, so no common participant input or protected evaluation protocol is authenticated.",
+      "evidence_ids": [
+        "eegpt-paper",
+        "eegpt-probe",
+        "eegpt-converter",
+        "eegpt-checkpoint"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "physiop300_eegpt_balanced_accuracy_mean",
+      "kind": "scalar",
+      "description": "EEGPT PhysioP300 Table 4 balanced_accuracy published mean.",
+      "status": "verified",
+      "expected": 0.6502,
+      "units": "dimensionless balanced_accuracy",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_eegpt_balanced_accuracy_reported_sd",
+      "kind": "scalar",
+      "description": "EEGPT PhysioP300 Table 4 balanced_accuracy published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0063,
+      "units": "dimensionless balanced_accuracy standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_eegpt_cohen_kappa_mean",
+      "kind": "scalar",
+      "description": "EEGPT PhysioP300 Table 4 cohen_kappa published mean.",
+      "status": "verified",
+      "expected": 0.2999,
+      "units": "dimensionless cohen_kappa",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_eegpt_cohen_kappa_reported_sd",
+      "kind": "scalar",
+      "description": "EEGPT PhysioP300 Table 4 cohen_kappa published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0139,
+      "units": "dimensionless cohen_kappa standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_eegpt_auroc_mean",
+      "kind": "scalar",
+      "description": "EEGPT PhysioP300 Table 4 auroc published mean.",
+      "status": "verified",
+      "expected": 0.7168,
+      "units": "dimensionless auroc",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_eegpt_auroc_reported_sd",
+      "kind": "scalar",
+      "description": "EEGPT PhysioP300 Table 4 auroc published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0051,
+      "units": "dimensionless auroc standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_bendr_balanced_accuracy_mean",
+      "kind": "scalar",
+      "description": "BENDR PhysioP300 Table 4 balanced_accuracy published mean.",
+      "status": "verified",
+      "expected": 0.6114,
+      "units": "dimensionless balanced_accuracy",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_bendr_balanced_accuracy_reported_sd",
+      "kind": "scalar",
+      "description": "BENDR PhysioP300 Table 4 balanced_accuracy published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0118,
+      "units": "dimensionless balanced_accuracy standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_bendr_cohen_kappa_mean",
+      "kind": "scalar",
+      "description": "BENDR PhysioP300 Table 4 cohen_kappa published mean.",
+      "status": "verified",
+      "expected": 0.2227,
+      "units": "dimensionless cohen_kappa",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_bendr_cohen_kappa_reported_sd",
+      "kind": "scalar",
+      "description": "BENDR PhysioP300 Table 4 cohen_kappa published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0237,
+      "units": "dimensionless cohen_kappa standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_bendr_auroc_mean",
+      "kind": "scalar",
+      "description": "BENDR PhysioP300 Table 4 auroc published mean.",
+      "status": "verified",
+      "expected": 0.6588,
+      "units": "dimensionless auroc",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_bendr_auroc_reported_sd",
+      "kind": "scalar",
+      "description": "BENDR PhysioP300 Table 4 auroc published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0163,
+      "units": "dimensionless auroc standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_biot_balanced_accuracy_mean",
+      "kind": "scalar",
+      "description": "BIOT PhysioP300 Table 4 balanced_accuracy published mean.",
+      "status": "verified",
+      "expected": 0.5485,
+      "units": "dimensionless balanced_accuracy",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_biot_balanced_accuracy_reported_sd",
+      "kind": "scalar",
+      "description": "BIOT PhysioP300 Table 4 balanced_accuracy published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0325,
+      "units": "dimensionless balanced_accuracy standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_biot_cohen_kappa_mean",
+      "kind": "scalar",
+      "description": "BIOT PhysioP300 Table 4 cohen_kappa published mean.",
+      "status": "verified",
+      "expected": 0.0968,
+      "units": "dimensionless cohen_kappa",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_biot_cohen_kappa_reported_sd",
+      "kind": "scalar",
+      "description": "BIOT PhysioP300 Table 4 cohen_kappa published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0647,
+      "units": "dimensionless cohen_kappa standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_biot_auroc_mean",
+      "kind": "scalar",
+      "description": "BIOT PhysioP300 Table 4 auroc published mean.",
+      "status": "verified",
+      "expected": 0.5308,
+      "units": "dimensionless auroc",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_biot_auroc_reported_sd",
+      "kind": "scalar",
+      "description": "BIOT PhysioP300 Table 4 auroc published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0333,
+      "units": "dimensionless auroc standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_labram_balanced_accuracy_mean",
+      "kind": "scalar",
+      "description": "LaBraM PhysioP300 Table 4 balanced_accuracy published mean.",
+      "status": "verified",
+      "expected": 0.6477,
+      "units": "dimensionless balanced_accuracy",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_labram_balanced_accuracy_reported_sd",
+      "kind": "scalar",
+      "description": "LaBraM PhysioP300 Table 4 balanced_accuracy published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.011,
+      "units": "dimensionless balanced_accuracy standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_labram_cohen_kappa_mean",
+      "kind": "scalar",
+      "description": "LaBraM PhysioP300 Table 4 cohen_kappa published mean.",
+      "status": "verified",
+      "expected": 0.2935,
+      "units": "dimensionless cohen_kappa",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_labram_cohen_kappa_reported_sd",
+      "kind": "scalar",
+      "description": "LaBraM PhysioP300 Table 4 cohen_kappa published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0227,
+      "units": "dimensionless cohen_kappa standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_labram_auroc_mean",
+      "kind": "scalar",
+      "description": "LaBraM PhysioP300 Table 4 auroc published mean.",
+      "status": "verified",
+      "expected": 0.7068,
+      "units": "dimensionless auroc",
+      "aggregation": "Published summary of three experiment repetitions under the original nine-subject LOSO task; exact subject weighting, epoch selection and fold-to-run reduction remain unresolved.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    },
+    {
+      "id": "physiop300_labram_auroc_reported_sd",
+      "kind": "scalar",
+      "description": "LaBraM PhysioP300 Table 4 auroc published standard deviation across repeated experiments.",
+      "status": "verified",
+      "expected": 0.0134,
+      "units": "dimensionless auroc standard deviation",
+      "aggregation": "Published standard deviation over three experiment repetitions; the fold-to-run values, historical reporting epoch and SD denominator convention remain unresolved. It is not an event-level or biological-participant standard error.",
+      "evidence_ids": [
+        "eegpt-table4-exact"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The four-decimal printed target and three-run standard deviation are documentary results, not an independently justified equivalence band. Source-equivalent preparation, reduction and stochastic calibration must be established before a tolerance is frozen; no automatic rounding allowance or multiple of the published SD is adopted.",
+        "evidence_ids": [
+          "eegpt-table4-exact"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Prespecify source-compatible repeated-fit variation and any biological-participant uncertainty after the original event/cohort and reporting reduction are reconciled. Do not treat events, folds with overlapping training subjects, or three fit repetitions as independent biological participants.",
+        "independent_unit": "Biological participant for biological generalization; events and recordings are nested, LOSO fits share training subjects, and run variability is a separate conditional quantity.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Nine nominal subject tokens are not an authenticated biological identity mapping. Three published experiment repetitions and their SD do not specify an equivalence interval, confidence level, independent-unit minimum or statistical reproduction criterion.",
+        "evidence_ids": [
+          "eegpt-paper",
+          "eegpt-probe",
+          "eegpt-data"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Reconcile the paper/probe nine-subject population, converter omission of subject 1, provider biological-person mapping and the full recording/event roster without narrowing the original panel.",
+    "Recover source-equivalent epoch boundaries: paper describes two seconds from -0.7 seconds while the converter uses -0.1 to 2 seconds; retain channel, reference, filtering, units and resampling semantics.",
+    "Authenticate all original events despite converter output names restarting per recording; source-local event counts and the supplied operator roster alone do not establish original completeness.",
+    "Resolve held-out-subject epoch selection, subject weighting, fold-to-run aggregation and standard-deviation denominator. The accepted scorer deliberately emits no source-panel aggregate.",
+    "Pin source metric dependency behavior at probability exactly 0.5; the accepted component reports both >=0.5 and >0.5 and cannot choose historical parity.",
+    "Verify the exact pretrained checkpoints, adaptation and pretraining exposure for EEGPT and the original BENDR/BIOT/LaBraM controls; original BENDR full fine-tuning and the other linear-probe conditions cannot be interchanged.",
+    "Establish source-supported reproduction tolerances and uncertainty separately for all 24 required summary findings. A superiority margin is not a prerequisite for reproduction, and copied published numbers are not computational evidence.",
+    "Freeze a runnable AI-submitted analysis interface, authentic common-input manifests, complete cohort/split/panel/observation identities and independent verification of source-native event probabilities, fitted-state lineage and reported findings; these are not supplied by the arithmetic component.",
+    "Resolve the accepted scorer role mapping for reproduction: it requires 135 candidate-plus-four-reference cells while the original four-method reproduction panel has 108 subject/repetition/method cells. Do not silently add a fifth original method, substitute author outputs for AI computation, or duplicate EEGPT into candidate without an explicit reviewed interface.",
+    "Freeze matched paper+data and paper+data+author-code delivery, code-only addition, exposure boundary and cumulative budgets. Both reproduction conditions remain unavailable until that common protocol is authenticated."
+  ]
+}

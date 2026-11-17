@@ -1,0 +1,460 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-method-034",
+  "track": "paper",
+  "title": "MARBLE: interpretable representations of neural population dynamics using geometric deep learning",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Decode rat position within rat1 in Figure 5d; cross-animal consistency is a distinct secondary result.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Decode rat position within rat1 in Figure 5d; cross-animal consistency is a distinct secondary result.",
+    "Source-paper comparison for Figure 5d within-rat mean absolute position error: Mean absolute position error: sum(abs(predicted_position-true_position))/n on the original Figure 5d support, using32-dimensional embeddings and36-neighbor cosine decoding."
+  ],
+  "success_criteria": [
+    "Recover exact original Figure 5d query support, preprocessing, label access and authenticated checkpoint/recipe lineage.",
+    "Use mean error on all original2,000 observations with the source decoder and input regime; do not substitute helper median or1,999 support.",
+    "Qualify the numeric source result and author rerun separately, then freeze meaningful effect, dependence-aware uncertainty and fixed budgets before candidate iteration.",
+    "Preserve the four-rat clean/half-neuron comparator as a labelled extension; a win there is not a source-paper win.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-method-034",
+  "canonical_position_one_based": 54,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41592-024-02582-2",
+    "publication_year": 2025,
+    "venue": "Nature Methods"
+  },
+  "input_assets": {
+    "routes": [
+      "https://dataverse.harvard.edu/api/access/datafile/7609512"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/data/latestVersion/files/137",
+        "recorded_fields": {
+          "path": "rat_hippocampus/rat_data.pkl",
+          "url": "https://dataverse.harvard.edu/api/access/datafile/7609512",
+          "bytes": 22055089,
+          "byte_count_kind": "publisher_dataFile.filesize; prior_acquisition_receipt_matches",
+          "immutable_identity": {
+            "provider": "Harvard Dataverse",
+            "datafile_id": 7609512,
+            "dataset_id": 6962324,
+            "dataset_doi": "10.7910/DVN/KTE4PC",
+            "dataset_version": "12.0",
+            "dataset_version_id": 420908,
+            "file_metadata_version": 1
+          }
+        },
+        "checksum_fields_as_recorded": [
+          {
+            "algorithm": "MD5",
+            "value": "c94ab6ce283030f215a75e4919eef37c",
+            "domain": "publisher_declared_raw_file",
+            "evidence_id": "marble_dataset",
+            "verified_from_payload_by_this_wave": false
+          },
+          {
+            "algorithm": "SHA256",
+            "value": "29dffd951853a98615827e7b8f3507907f9e0f0ef67e875410778ab4aadd42ab",
+            "domain": "prior_local_acquired_raw_file",
+            "evidence_id": "marble_acquisition",
+            "verified_from_payload_by_this_wave": false
+          }
+        ],
+        "content_sha256_explicit": "29dffd951853a98615827e7b8f3507907f9e0f0ef67e875410778ab4aadd42ab",
+        "content_sha256_provenance": "prior_local_acquisition_receipt_not_reverified",
+        "evidence": {
+          "primary": "marble_dataset",
+          "supporting": [
+            "marble_acquisition",
+            "marble_contract"
+          ],
+          "pointer": "/data/latestVersion/files/137"
+        },
+        "role": "task_selected_rat_hippocampus_observation_file; notebook local alias rat_data.pkl",
+        "payload_read_or_hash_recomputed_by_this_wave": false,
+        "schema_or_scientific_readiness_promoted": false
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "assessment": "Official rat_hippocampus notebook directly downloads rat_data.pkl from immutable Dataversefile7609512 and refits MARBLE/CEBRA; decoding notebook documents training-only preprocessing.",
+      "official_code": {
+        "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE",
+        "commit": "09491ec077bf153b7dece8518cc65ddaa20eb26d"
+      },
+      "input_routes": [
+        {
+          "url": "https://dataverse.harvard.edu/api/access/datafile/7609512",
+          "version": "Dataverse immutable file ID7609512"
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-034",
+        "versions_and_loader_contract": {
+          "scope_description": "Reproduce MARBLE Figure5 rat hippocampal position decoding and cross-animal representation consistency from real spike/position inputs.",
+          "unresolved_coverage": [
+            "The direct real-data file is in the author notebook despite the paper availability paragraph emphasizing simulations. Whole macaque/RNN/synthetic coverage is separate. Earlier contribution dates to2023."
+          ]
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false,
+    "inventory_followup": {
+      "id": "PAPER-paper-method-034",
+      "file_count": 1,
+      "declared_file_bytes": 22055089,
+      "scope": "complete_existing_task_selected_file_metadata_not_whole_paper_or_dataset_coverage",
+      "availability": "held_repository_or_prior_acquisition_evidence; current_remote_availability_not_requeried",
+      "gaps": [
+        "Only the canonical rat hippocampus Figure5 scope is inventoried; all other Dataverse dataset-version files and macaque/RNN/synthetic paper experiments are separate.",
+        "Version12.0 is the held dataset metadata observation, not a fresh latest-version claim. File ID7609512 and file version1 remain explicit.",
+        "Publisher MD5 and prior local SHA256 are separate evidence; no current pickle body, schema, fit, native environment or historical solver/parameter equivalence is checked."
+      ],
+      "evidence": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave15-immutable-metadata/INVENTORY.json",
+        "bytes": 268985,
+        "sha256": "66505dc3887256f88565ba6a1de7d6c3e02d87675513c7b9d1123799ca5cb027"
+      },
+      "normalization_only": true,
+      "new_payload_or_schema_validation": false,
+      "readiness_promotion": false
+    }
+  },
+  "official_code": {
+    "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE",
+    "revision_or_archive_version": "09491ec077bf153b7dece8518cc65ddaa20eb26d",
+    "entrypoints": [
+      {
+        "path": "examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+        "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE/blob/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+        "role": "Downloads rat_data.pkl and refits MARBLE/CEBRA.",
+        "inspected_as_text": true
+      },
+      {
+        "path": "examples/rat_hippocampus/decoding.ipynb",
+        "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE/blob/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/decoding.ipynb",
+        "role": "Uses training-only preprocessing and evaluates position decoding.",
+        "inspected_as_text": true
+      },
+      "examples/rat_hippocampus/multianimal_consistency.ipynb"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+        "record_id": "paper-method-034",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE",
+            "commit": "09491ec077bf153b7dece8518cc65ddaa20eb26d",
+            "author_linkage": [
+              "https://www.nature.com/articles/s41592-024-02582-2",
+              "https://arxiv.org/abs/2304.03376",
+              "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE"
+            ],
+            "default_branch": "main",
+            "snapshot_evidence": "repository_audit.json",
+            "readme_source": "https://raw.githubusercontent.com/Dynamics-of-Neural-Systems-Lab/MARBLE/09491ec077bf153b7dece8518cc65ddaa20eb26d/README.md",
+            "license_source": "https://raw.githubusercontent.com/Dynamics-of-Neural-Systems-Lab/MARBLE/09491ec077bf153b7dece8518cc65ddaa20eb26d/LICENSE",
+            "file_tree": {
+              "source": "https://api.github.com/repos/Dynamics-of-Neural-Systems-Lab/MARBLE/git/trees/09491ec077bf153b7dece8518cc65ddaa20eb26d?recursive=1",
+              "truncated": false,
+              "paths": [
+                ".github/workflows/python-publish.yml",
+                ".github/workflows/run-tox.yml",
+                "MARBLE/__init__.py",
+                "MARBLE/dataloader.py",
+                "MARBLE/default_params.yaml",
+                "MARBLE/dynamics.py",
+                "MARBLE/geometry.py",
+                "MARBLE/layers.py",
+                "MARBLE/lib/__init__.py",
+                "MARBLE/lib/cknn.py",
+                "MARBLE/main.py",
+                "MARBLE/plotting.py",
+                "MARBLE/postprocessing.py",
+                "MARBLE/preprocessing.py",
+                "MARBLE/smoothing.py",
+                "MARBLE/utils.py",
+                "README.md",
+                "doc/README.md",
+                "doc/index_readme.md",
+                "doc/source/conf.py",
+                "environment.yml",
+                "environment_osx_arm.yml",
+                "environment_osx_intel.yml",
+                "environment_windows_native.yml",
+                "examples/RNN/RNN.ipynb",
+                "examples/RNN/RNN_scripts/__init__.py",
+                "examples/RNN/RNN_scripts/clustering.py",
+                "examples/RNN/RNN_scripts/dms.py",
+                "examples/RNN/RNN_scripts/helpers.py",
+                "examples/RNN/RNN_scripts/modules.py",
+                "examples/RNN/RNN_scripts/ranktwo.py",
+                "examples/macaque_reaching/README.md",
+                "examples/macaque_reaching/convert_spikes_to_firing_rates.py",
+                "examples/macaque_reaching/kinematic_decoding.ipynb",
+                "examples/macaque_reaching/macaque_reaching_helpers.py",
+                "examples/macaque_reaching/plot_MARBLE_representations.ipynb",
+                "examples/macaque_reaching/plot_vector_fields.ipynb",
+                "examples/macaque_reaching/run_cebra.py",
+                "examples/macaque_reaching/run_marble.py",
+                "examples/macaque_reaching/sensitivity_analysis.ipynb",
+                "examples/macaque_reaching/workflow_and_comparison_of_MARBLE_and_CEBRA.ipynb",
+                "examples/rat_hippocampus/README.md",
+                "examples/rat_hippocampus/decoding.ipynb",
+                "examples/rat_hippocampus/multianimal_consistency.ipynb",
+                "examples/rat_hippocampus/rat_utils.py",
+                "examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+                "examples/rat_hippocampus/sensitivity_analysis.ipynb",
+                "examples/toy_examples/ex_scalar_field_flat_surface.py",
+                "examples/toy_examples/ex_vector_field_curved_surface.py",
+                "examples/toy_examples/ex_vector_field_flat_surface.py",
+                "examples/toy_examples/vanderpol.ipynb",
+                "install.sh",
+                "requirements_osx_arm.txt",
+                "setup.py",
+                "tests/__init__.py",
+                "tests/test_grad_kernel.py",
+                "tests/test_vector_diffusion.py"
+              ],
+              "all_file_count": 78,
+              "rate_remaining": "47"
+            }
+          },
+          "entrypoints": [
+            {
+              "path": "examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+              "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE/blob/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/run_marble_and_cebra.ipynb",
+              "role": "Downloads rat_data.pkl and refits MARBLE/CEBRA.",
+              "inspected_as_text": true
+            },
+            {
+              "path": "examples/rat_hippocampus/decoding.ipynb",
+              "url": "https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE/blob/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/decoding.ipynb",
+              "role": "Uses training-only preprocessing and evaluates position decoding.",
+              "inspected_as_text": true
+            },
+            "examples/rat_hippocampus/multianimal_consistency.ipynb"
+          ],
+          "dependencies": [
+            "PyTorch",
+            "PyG",
+            "CEBRA",
+            "scikit-learn",
+            "environment.yml"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "a18455b7c89f5035ddcbee55e9a147316b172599aa31d8cc34e86e8abb210be5",
+    "audit_record_sha256": "5ae5df69e9901460f6e87162a7aca629c0985814ce4d0dca42c3954a1a46e4b8",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/methods_readiness.json",
+          "bytes": 1827122,
+          "sha256": "61d0fdf186a6367204e17ac3456e15f32af22e4e01646f792d8b93525313d9fe"
+        },
+        "record_id": "paper-method-034",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 33,
+        "record_sha256": "2f2ec306472d5b79581a86295f2aa2839f9c29e66f0115ed8ad380a6c90f9463"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-paper-method-034",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise.",
+    "inventory_metadata_followups": [
+      {
+        "checked_on": "2026-11-07",
+        "evidence": {
+          "path": "authoring/delivery-20261105/common/paper-inventory-wave15-immutable-metadata/INVENTORY.json",
+          "bytes": 268985,
+          "sha256": "66505dc3887256f88565ba6a1de7d6c3e02d87675513c7b9d1123799ca5cb027"
+        },
+        "source_receipts": {
+          "marble_dataset": {
+            "path": "authoring/delivery-20261105/marble/source-evidence/DATAVERSE_DATASET.json",
+            "bytes": 117194,
+            "sha256": "fc3bc3f04810e29b2195648634e160166f253a1db4c84011f5ad0d5e1b327c96"
+          },
+          "marble_acquisition": {
+            "path": "authoring/delivery-20261105/marble/source-evidence/ACQUISITION.json",
+            "bytes": 1808,
+            "sha256": "39ca1aba3e0ff36796ffae3b57f09f1cb74ba9671ee2620aac30237597bc8459"
+          },
+          "marble_contract": {
+            "path": "authoring/delivery-20261105/marble/source-evidence/SOURCE_CONTRACT.json",
+            "bytes": 5358,
+            "sha256": "36fad31b7324952b1fabeb7b4ae1f88c2d8f03b4661b766fb4819c8ce6cccec3"
+          },
+          "cascade_inventory": {
+            "path": "authoring/gcamp8-spike-inference/preflight-v1/data_manifest.json",
+            "bytes": 84013,
+            "sha256": "b41e9eaa6896f06b058c5402fefdc55dc8097bbe7a87e778456194e1ccecca18"
+          },
+          "cascade_tree": {
+            "path": "authoring/gcamp8-spike-inference/preflight-v1/source/Cascade_tree.json",
+            "bytes": 262228,
+            "sha256": "086344aa6317afc9f0288d65529e90b31e850e201e764360face270f84865f34"
+          },
+          "cascade_receipts": {
+            "path": "authoring/gcamp8-spike-inference/preflight-v1/source_receipts.json",
+            "bytes": 28350,
+            "sha256": "7fd8a65fe15903f278264bb3273e786374700343b0b335037ffe814685a946c7"
+          },
+          "cascade_scope": {
+            "path": "authoring/gcamp8-spike-inference/preflight-v1/PASS_GATE_MATRIX.md",
+            "bytes": 11384,
+            "sha256": "37d0d464ddb9cad9747bc15670251dbe9b5bc79b08ecda177ad100d001b702d6"
+          },
+          "pfc_listing": {
+            "path": "authoring/next-complete-task-source-scope-20261104/pfc007-complete-source-v1/ASSET_METADATA.json",
+            "bytes": 18457,
+            "sha256": "a6700a5cba59c30e2aedb11e18a6bf7878a0c3ccfcb6c083cfab1c3350da299e"
+          },
+          "pfc_head": {
+            "path": "authoring/next-complete-task-source-scope-20261104/pfc007-complete-source-v1/ROOT_HEAD_METADATA_001.json",
+            "bytes": 12631,
+            "sha256": "20ff87883b6b9d1e2f6a701777daeaa48064b269b9b7ee077c02a63ca82da98a"
+          },
+          "pfc_inventory": {
+            "path": "authoring/delivery-20261105/pfc-replay/public/ASSET_INVENTORY.json",
+            "bytes": 9549,
+            "sha256": "cd21b97159952b6bd3c9269d565a276691939026d80382364a251b9030c5c34f"
+          },
+          "pfc_binding": {
+            "path": "authoring/delivery-20261105/pfc-replay/ORIGINAL_INPUT_BINDING.source-002.json",
+            "bytes": 10350,
+            "sha256": "45895ec24d4950fffd258a0bd725876186ce333728fc4b4b1be84cdc53cff69c"
+          },
+          "pfc_acquisition": {
+            "path": "authoring/delivery-20261105/pfc-replay/originals-001/RECEIPT.002.json",
+            "bytes": 18600,
+            "sha256": "42972974f150013c9d2f20bb35f316deb37ade496c12cf76a319f639081b9a84"
+          }
+        },
+        "previous_manifest": {
+          "path": "benchmarks/manifests/paper/PAPER-paper-method-034.json",
+          "bytes": 17006,
+          "sha256": "321d8108f47b589e967191a8ded5bd6fb2231ea8eab327be2d145daf954388b8"
+        },
+        "scope_change": false,
+        "readiness_promotion": false
+      }
+    ]
+  },
+  "resources": {
+    "roster_resource_statement": "single GPU recommended",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-034/improvement.v1.json",
+      "bytes": 9975,
+      "sha256": "0736abf582da026072c8f9af14e262404ba02a31b17e51b3b26efff5717b9396"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-method-034/historical/task.pre-improvement.v1.json",
+        "bytes": 24007,
+        "sha256": "457ff2e4b512123d50f5345e1f0e9b4f67254e193445772976c5cc6e1dfa08c3"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-paper-paper-method-034",
+        "benchmarks-scientific_components-marble_fit_closed",
+        "paper-method-034-improvement-episode-v1"
+      ],
+      "runtime_manifest": {
+        "path": "benchmarks/paper/PAPER-paper-method-034/implementations/registered-runtime/manifest.json",
+        "bytes": 10183,
+        "sha256": "ed0d4f3b9804fc766733d4e942861aa434be8c74f7b2cc8abe4d9fb3c042eeba"
+      }
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Source-baseline admission first. Later iterate only with declared development feedback after original protocol/support is recovered; do not repurpose the four-rat extension as source evaluation.",
+    "candidate_freeze": "Freeze method, preprocessing, supervision, decoder, dimensionality and all selection decisions before one admitted final original-support evaluation.",
+    "final_evaluation": "Compare against both authenticated published mean error and qualified author rerun under the same original protocol. Public exposure must be recorded; isolation cannot make published targets unseen.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Official checkpoint metadata is a recovery route, not a baseline score. Locally authored train-only comparators are separately labelled and do not repair publication-lineage discrepancies."
+  },
+  "blocking_issues": [
+    "Numeric source baseline and checkpoint bytes/training provenance not admitted.",
+    "Paper/PCA 5, decoder/PCA 20 and training/PCA 10 correspondence unresolved.",
+    "Published 2,000 versus  helper1,999 query support, physical time units and original supervision unresolved.",
+    "Meaningful effect, independent uncertainty units, fixed access/resource budgets and qualified same-task evaluator missing."
+  ],
+  "holds": {
+    "task_specific": [
+      "Numeric source baseline and checkpoint bytes/training provenance not admitted.",
+      "Paper/PCA 5, decoder/PCA 20 and training/PCA 10 correspondence unresolved.",
+      "Published 2,000 versus  helper1,999 query support, physical time units and original supervision unresolved.",
+      "Meaningful effect, independent uncertainty units, fixed access/resource budgets and qualified same-task evaluator missing."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Figure 5d has a genuine ordered mean-position-error endpoint, but the paper and pinned author notebooks disagree on preprocessing/support and checkpoint training provenance is missing. A four-rat clean/half-neuron evaluation, median error or1,999 query rows cannot replace the original 2,000-observation within-rat comparison. Numeric source baseline and checkpoint bytes/training provenance not admitted. Paper/PCA 5, decoder/PCA 20 and training/PCA 10 correspondence unresolved. Published 2,000 versus  helper1,999 query support, physical time units and original supervision unresolved. Meaningful effect, independent uncertainty units, fixed access/resource budgets and qualified same-task evaluator missing.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-method-034/historical/task.pre-improvement.v1.json",
+      "bytes": 24007,
+      "sha256": "457ff2e4b512123d50f5345e1f0e9b4f67254e193445772976c5cc6e1dfa08c3"
+    },
+    "notes": "Keep fit-closed-comparator, complete48 fit/96 reference coverage and original graders unchanged as calibration/extension evidence. Reuse source-admission findings; do not treat newly authored four-rat support as Figure 5d equivalence."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

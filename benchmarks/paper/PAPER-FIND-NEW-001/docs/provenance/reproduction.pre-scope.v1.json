@@ -1,0 +1,2441 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-FIND-NEW-001",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Original predictive-density and companion findings are independently valid reproduction targets, but their final-paper correspondence, complete source observations and computational recipe remain unresolved. This is independent of improvement eligibility; historical correlation controls and known printed WAIC values do not establish reproduction.",
+  "source_paper": {
+    "title": "Hippocampal astrocytic sequences emerge during learning and memory recall",
+    "url": "https://www.nature.com/articles/s41593-026-02448-0"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02448-0",
+      "locator": "Abstract; Figures 2–5; Data and Code availability",
+      "supports": "Calcium-event sequences in fear conditioning and conditioned-context recall, with behavior association."
+    },
+    {
+      "id": "archive",
+      "kind": "author_data",
+      "url": "https://zenodo.org/api/records/21780255/files/README.md/content",
+      "locator": "Files; Using the imaging data; Scope",
+      "supports": "Released collections/traces/derived exports/behavior and archived code revision 5be84b4; some supplementary notebooks retain absolute paths."
+    },
+    {
+      "id": "crossval",
+      "kind": "author_code",
+      "url": "https://github.com/rsenne/dCA1_Paper/blob/5be84b4/notebooks/figures/Figure3_Cross_valled.ipynb",
+      "locator": "run_cross_validated_analysis; odd/even event split; Argmaxes; Spearman correlation",
+      "supports": "Within-animal odd/even source-ordering correlation and shuffle diagnostics; this legacy calculation is distinct from the peak-time density-model WAIC endpoint."
+    },
+    {
+      "id": "eta",
+      "kind": "author_code",
+      "url": "https://github.com/rsenne/dCA1_Paper/blob/5be84b4/onep/trace_analysis_functions.py",
+      "locator": "eta_individual_cells",
+      "supports": "Cubic interpolation, clipped event window and event-averaged traces."
+    },
+    {
+      "id": "preprint_waic",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13232304/",
+      "locator": "May 25, 2026 preprint version 2; Figure 2h and Results paragraphs on peak distributions; Figure 4e–f; Extended Data Figure 17c",
+      "supports": "Ordered WAIC predictive comparisons of power-law, exponential, Gaussian and uniform peak-time distributions; includes conditioning, recall-context and sex-stratified analyses. This evidence identifies a preprint endpoint, not a verified final-paper baseline."
+    },
+    {
+      "id": "preprint_model",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13232304/",
+      "locator": "Methods, Hierarchical Bayesian Model; Results preceding Figure 2h",
+      "supports": "Gaussian-shaped temporal receptive fields provide inferred peak times; source excludes conditioning peaks during shock (<2 seconds) for the distribution comparison. Final-version preprocessing/likelihood parity is not established."
+    },
+    {
+      "id": "preprint_peak_summaries",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13232304/",
+      "locator": "Results preceding Figure2h; Figure4d; Extended Data Figures7 and16",
+      "supports": "Inferred peak-location distribution summaries accompany the density comparisons; they derive from fitted cell/event temporal responses. May2026 preprint evidence only; final-paper correspondence unresolved."
+    },
+    {
+      "id": "preprint_sex_controls",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13232304/",
+      "locator": "Results accompanying Extended Data Figure17a-d and Supplemental Table1",
+      "supports": "Sex-stratified event-count controls, peak distributions, all four density comparisons and power-law exponent posteriors must remain distinct. May2026 preprint evidence only; final-paper correspondence unresolved."
+    },
+    {
+      "id": "preprint_habituation",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13232304/",
+      "locator": "Results habituation analysis; Extended Data Figure20b-e",
+      "supports": "Habituation event-count and individual-sequence controls precede the density comparison; the text and Figure20e caption disagree on uniform WAIC1192.9 versus1192.2. May2026 preprint evidence only; final-paper correspondence unresolved."
+    },
+    {
+      "id": "preprint_temporal_companions",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13232304/",
+      "locator": "Results Figure2i and Figure4g",
+      "supports": "Peak-width versus peak-time slope and repeated-event peak-variability contrasts are temporal-model companions; neither is a WAIC substitute. May2026 preprint evidence only; final-paper correspondence unresolved."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "unresolved",
+      "description": "Recover the original predictive-density comparison for inferred astrocytic peak times. The May 2026 preprint uses WAIC to compare four distribution families during conditioning and recall; final-paper endpoint correspondence must be verified before activation.",
+      "evidence_ids": [
+        "preprint_waic",
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Zenodo 21780255 and archived revision 5be84b4 supply traces and derived data. The exact peak-time inputs/posterior summaries used by each final-version WAIC comparison have not been authenticated.",
+      "evidence_ids": [
+        "archive",
+        "preprint_model"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Preprint density comparisons cover conditioning and both recall contexts, including sex-stratified recall analyses. Exact final-paper animal/cell inclusion and every source comparison row must be reconciled; the local 21-record prefix component is not this model-input census.",
+      "evidence_ids": [
+        "preprint_waic"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "WAIC is the source predictive-performance estimator; the reviewed text does not establish a separately held-animal test set for density fitting. Recover its original observation units and fit/evaluation access. Odd/even event sorting belongs to the distinct correlation analysis; a newly held-mouse split would be an extension.",
+      "evidence_ids": [
+        "preprint_waic",
+        "crossval"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Source density models use peak times inferred from hierarchical temporal-response fits. Recover the exact original posterior-summary or uncertainty treatment and allowed fitting inputs; sequence labels are not required for this density-estimation task.",
+      "evidence_ids": [
+        "preprint_model",
+        "preprint_waic"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "The preprint fits Gaussian-shaped temporal fields and excludes conditioning peaks below two seconds for distribution comparison. Exact final-paper event support, time windows, priors, peak extraction and code binding remain unverified; the legacy 3303-frame correlation recipe cannot substitute for them.",
+      "evidence_ids": [
+        "preprint_model",
+        "crossval"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "WAIC, lower is better, is explicitly used for predictive density comparison. Recover the source deviance/log-score convention, pointwise likelihood, posterior calculation and effective-complexity term rather than assuming a generic WAIC implementation matches the published numbers.",
+      "evidence_ids": [
+        "preprint_waic"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Source reports separate context and sex-group distribution comparisons. Exact pointwise likelihood aggregation and model-comparison uncertainty must be recovered; cell observations, events and posterior draws cannot automatically be treated as independent biological mice.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Preserve all four density-family WAIC comparisons in conditioning, recall A, recall B and each recall context separately for females and males. The inspected habituation source supports power-law and uniform comparisons; any other habituation-family rows require source authentication and are not declared scalar findings here. Retain complete inferred-peak distributions, sex-stratified power-law exponent posterior arrays, event-count/sequence controls and temporal width/variability companions. Posterior arrays without an identified source point summary must not be reduced to invented scalar findings. Complete final-version tables, arrays and animal/cell support remain unauthenticated, so the scalar list is not a complete representation of the original panel.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_peak_summaries",
+        "preprint_sex_controls",
+        "preprint_habituation",
+        "preprint_temporal_companions",
+        "paper"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both information conditions must share the same source-paper version, authentic original traces or source-admitted inferred-peak inputs, animal/cell/event identities, context/sex labels and declared published-result exposure. The author-code condition adds only the authenticated matching analysis source. The legacy21-case3303-frame correlation packet is not the full density-model panel; complete peak-model inputs, final-version correspondence and matching author-code manifest are unresolved.",
+      "evidence_ids": [
+        "archive",
+        "preprint_model",
+        "crossval",
+        "paper"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "conditioning_power_law_waic",
+      "kind": "scalar",
+      "description": "Fear conditioning: original power law predictive-density WAIC (Figure2h). The May2026 preprint prints 12008.7; this is known source exposure, not an admitted final-paper target or executed reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "conditioning_exponential_waic",
+      "kind": "scalar",
+      "description": "Fear conditioning: original exponential predictive-density WAIC (Figure2h). The May2026 preprint prints 14423.3; this is known source exposure, not an admitted final-paper target or executed reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "conditioning_gaussian_waic",
+      "kind": "scalar",
+      "description": "Fear conditioning: original gaussian predictive-density WAIC (Figure2h). The May2026 preprint prints 15832.2; this is known source exposure, not an admitted final-paper target or executed reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "conditioning_uniform_waic",
+      "kind": "scalar",
+      "description": "Fear conditioning: original uniform predictive-density WAIC (Figure2h). The May2026 preprint prints 17627.4; this is known source exposure, not an admitted final-paper target or executed reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_power_law_waic",
+      "kind": "scalar",
+      "description": "Recall context A: original power law predictive-density WAIC (Figure4e). The May2026 preprint prints 6914.4; this is known source exposure, not an admitted final-paper target or executed reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_exponential_waic",
+      "kind": "scalar",
+      "description": "Recall context A: original exponential predictive-density WAIC (Figure4e). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_gaussian_waic",
+      "kind": "scalar",
+      "description": "Recall context A: original gaussian predictive-density WAIC (Figure4e). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_uniform_waic",
+      "kind": "scalar",
+      "description": "Recall context A: original uniform predictive-density WAIC (Figure4e). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_power_law_waic",
+      "kind": "scalar",
+      "description": "Recall context B: original power law predictive-density WAIC (Figure4f). The May2026 preprint prints 5141.9; this is known source exposure, not an admitted final-paper target or executed reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_exponential_waic",
+      "kind": "scalar",
+      "description": "Recall context B: original exponential predictive-density WAIC (Figure4f). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_gaussian_waic",
+      "kind": "scalar",
+      "description": "Recall context B: original gaussian predictive-density WAIC (Figure4f). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_uniform_waic",
+      "kind": "scalar",
+      "description": "Recall context B: original uniform predictive-density WAIC (Figure4f). The May2026 preprint prints 5184.9; this is known source exposure, not an admitted final-paper target or executed reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_waic",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_waic",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_female_power_law_waic",
+      "kind": "scalar",
+      "description": "Recall context A, female: original power law predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_female_exponential_waic",
+      "kind": "scalar",
+      "description": "Recall context A, female: original exponential predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_female_gaussian_waic",
+      "kind": "scalar",
+      "description": "Recall context A, female: original gaussian predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_female_uniform_waic",
+      "kind": "scalar",
+      "description": "Recall context A, female: original uniform predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_male_power_law_waic",
+      "kind": "scalar",
+      "description": "Recall context A, male: original power law predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_male_exponential_waic",
+      "kind": "scalar",
+      "description": "Recall context A, male: original exponential predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_male_gaussian_waic",
+      "kind": "scalar",
+      "description": "Recall context A, male: original gaussian predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_male_uniform_waic",
+      "kind": "scalar",
+      "description": "Recall context A, male: original uniform predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_female_power_law_waic",
+      "kind": "scalar",
+      "description": "Recall context B, female: original power law predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_female_exponential_waic",
+      "kind": "scalar",
+      "description": "Recall context B, female: original exponential predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_female_gaussian_waic",
+      "kind": "scalar",
+      "description": "Recall context B, female: original gaussian predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_female_uniform_waic",
+      "kind": "scalar",
+      "description": "Recall context B, female: original uniform predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_male_power_law_waic",
+      "kind": "scalar",
+      "description": "Recall context B, male: original power law predictive-density WAIC (Extended Data Figure17c). The May2026 preprint prints 3478.9; this is known source exposure, not an admitted final-paper target or executed reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_male_exponential_waic",
+      "kind": "scalar",
+      "description": "Recall context B, male: original exponential predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_male_gaussian_waic",
+      "kind": "scalar",
+      "description": "Recall context B, male: original gaussian predictive-density WAIC (Extended Data Figure17c). No final-version numerical target is authenticated.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_male_uniform_waic",
+      "kind": "scalar",
+      "description": "Recall context B, male: original uniform predictive-density WAIC (Extended Data Figure17c). The May2026 preprint prints 3485.5; this is known source exposure, not an admitted final-paper target or executed reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "habituation_power_law_waic",
+      "kind": "scalar",
+      "description": "Habituation, original F9/M10 control support: original power law predictive-density WAIC (Extended Data Figure20e). The May2026 preprint prints 1189.1; this is known source exposure, not an admitted final-paper target or executed reproduction.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_habituation",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "habituation_uniform_waic",
+      "kind": "scalar",
+      "description": "Habituation, original F9/M10 control support: original uniform predictive-density WAIC (Extended Data Figure20e). Preprint prose gives1192.9 while the Figure20e caption gives1192.2; preserve both and resolve the discrepancy before defining a target or tolerance.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "WAIC on the original source scale; log-score/deviance convention unresolved",
+      "aggregation": "Original pointwise peak-time likelihood aggregation for this exact context/sex/control panel; conditioning excludes peaks below2seconds. Recover posterior treatment, effective-complexity term and model-comparison uncertainty; do not average across panels.",
+      "evidence_ids": [
+        "preprint_habituation",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "conditioning_peak_median",
+      "kind": "scalar",
+      "description": "Conditioning peak-location median; preprint4.1seconds. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_peak_summaries",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "conditioning_peak_q25",
+      "kind": "scalar",
+      "description": "Conditioning peak-location lower quartile; preprint3.0seconds. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_peak_summaries",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "conditioning_peak_q75",
+      "kind": "scalar",
+      "description": "Conditioning peak-location upper quartile; preprint6.4seconds. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_peak_summaries",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "conditioning_peak_q90",
+      "kind": "scalar",
+      "description": "Conditioning peak-location90th percentile; preprint12.1seconds. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_peak_summaries",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_peak_median",
+      "kind": "scalar",
+      "description": "Recall A peak-location median; preprint6.3seconds. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_peak_summaries",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_peak_iqr",
+      "kind": "scalar",
+      "description": "Recall A peak-location interquartile range; preprint12.7seconds. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_peak_summaries",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_peak_q90",
+      "kind": "scalar",
+      "description": "Recall A peak-location90th percentile; preprint23.0seconds. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_peak_summaries",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_peak_median",
+      "kind": "scalar",
+      "description": "Recall B peak-location median; preprint14.6seconds. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_peak_summaries",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_peak_iqr",
+      "kind": "scalar",
+      "description": "Recall B peak-location interquartile range; preprint16.1seconds. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_peak_summaries",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_peak_q90",
+      "kind": "scalar",
+      "description": "Recall B peak-location90th percentile; preprint27.2seconds. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_peak_summaries",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_peak_summaries",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_male_power_law_alpha",
+      "kind": "scalar",
+      "description": "Recall B male power-law exponent; preprint0.19 with interval0.07–0.34; source near-uniform interpretation requires its complete posterior comparison. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless exponent",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "habituation_power_law_alpha",
+      "kind": "scalar",
+      "description": "Habituation power-law exponent; preprint0.28 with95% interval0.07–0.48; preserve original posterior and near-uniform comparison. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "dimensionless exponent",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_habituation",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "sex_event_count_main_effect",
+      "kind": "scalar",
+      "description": "Original sex effect on detected-event counts (Extended Data17a); retain statistic and source uncertainty rather than converting nonrejection into reproduced equality. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "original ANOVA F statistic",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "context_event_count_main_effect",
+      "kind": "scalar",
+      "description": "Original context effect on detected-event counts in the sex-stratified control (Extended Data17a). Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "original ANOVA F statistic",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "sex_context_event_count_interaction",
+      "kind": "scalar",
+      "description": "Original sex-by-context interaction in detected-event counts (Extended Data17a). Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "original ANOVA F statistic",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_sex_controls",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_sex_controls",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "habituation_event_count_omnibus",
+      "kind": "scalar",
+      "description": "Original omnibus event-count comparison across habituation and recall (Extended Data20b). Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "original Kruskal–Wallis statistic",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_habituation",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "habituation_vs_recall_a_event_count",
+      "kind": "scalar",
+      "description": "Original habituation versus recall A event-count comparison (Extended Data20b). Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "original Mann–Whitney statistic",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_habituation",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "habituation_vs_recall_b_event_count",
+      "kind": "scalar",
+      "description": "Original habituation versus recall B event-count comparison (Extended Data20b). Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "original pairwise event-count statistic; exact test definition unresolved",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_habituation",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_vs_b_event_count",
+      "kind": "scalar",
+      "description": "Original recall A versus B event-count comparison retained in the habituation control (Extended Data20b). Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "original pairwise event-count statistic; exact test definition unresolved",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_habituation",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "habituation_f9_sequence_rho",
+      "kind": "scalar",
+      "description": "Original individual F9 habituation sequence correlation and its own shuffle control (Extended Data20c-d); figure-to-animal assignment remains to be authenticated. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Spearman rho",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_habituation",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "habituation_m10_sequence_rho",
+      "kind": "scalar",
+      "description": "Original individual M10 habituation sequence correlation and its own shuffle control (Extended Data20c-d); figure-to-animal assignment remains to be authenticated. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "Spearman rho",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_habituation",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_habituation",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "conditioning_peak_width_slope",
+      "kind": "scalar",
+      "description": "Original peak-width versus peak-time mixed-effects slope (Figure2i); preprint0.30. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds width per second peak time",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_temporal_companions",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_temporal_companions",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_temporal_companions",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_vs_conditioning_peak_variability",
+      "kind": "scalar",
+      "description": "Original recall A versus conditioning repeated-event peak-variability coefficient (Figure4g); preprint2.99. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds of peak-location variability",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_temporal_companions",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_temporal_companions",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_temporal_companions",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_b_vs_conditioning_peak_variability",
+      "kind": "scalar",
+      "description": "Original recall B versus conditioning repeated-event peak-variability coefficient (Figure4g); preprint5.56. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds of peak-location variability",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_temporal_companions",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_temporal_companions",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_temporal_companions",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "recall_a_vs_b_peak_variability",
+      "kind": "scalar",
+      "description": "Original recall A versus B repeated-event peak-variability post-hoc contrast (Figure4g), retaining original multiplicity treatment. Any printed preprint value is exposure only; final-version target and computation remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "seconds of peak-location variability contrast",
+      "aggregation": "Source-native aggregation for the named panel/contrast, preserving every original animal, cell and event and the source model/null/multiplicity structure. Exact final-version coefficients, observation support and uncertainty must be reconciled before admission.",
+      "evidence_ids": [
+        "preprint_temporal_companions",
+        "preprint_model",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The registered final-paper target, unrounded source computation and its numerical/stochastic variability are not reconciled. Printed precision alone does not justify a computational tolerance; no default or historical correlation tolerance is transferred.",
+        "evidence_ids": [
+          "preprint_temporal_companions",
+          "preprint_model",
+          "paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover the original statistic, uncertainty calculation and dependence treatment before declaring a computational reproduction criterion.",
+        "independent_unit": "Biological animals; cells and repeated events are nested, and posterior draws are computational samples rather than independent animals. Exact source likelihood/analysis units remain unresolved.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "No interval, confidence level, sample minimum, threshold or deterministic equivalence rule is invented. Published uncertainty and authentic-data computational verification must both be recovered.",
+        "evidence_ids": [
+          "preprint_temporal_companions",
+          "preprint_model",
+          "paper"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The registered September2026 final paper is not reconciled with the May2026 preprint density comparisons or companion panels; all final expected targets remain null.",
+    "No exact density-model likelihood, priors, posterior sampling/summary treatment, pointwise WAIC convention, effective complexity or comparison uncertainty is recovered. Temporal-response rStan settings do not define the subsequent density-model computation.",
+    "All animal/cell/event identities, full context/sex/habituation support, conditioning exclusion masks and modeling CSV schemas/units remain unauthenticated; the21-case source-prefix correlation packet is a different analysis.",
+    "Habituation uniform WAIC is internally inconsistent in the preprint:1192.9 prose versus1192.2 caption. Neither value can be selected through a loose tolerance.",
+    "The source-backed scalar list has30 density-comparison slots, including only power-law/uniform for habituation. Any additional habituation-family rows must first be recovered from the original table; they are not fabricated as unresolved scalar targets.",
+    "Extended Data Figure17d requires original alpha posterior distributions for every context/sex stratum. No source-defined mean, median or mode is authenticated for recall A female, recall A male or recall B female. Those required arrays remain outside this scalar schema and must not be replaced by invented point summaries; this is not full-panel representation.",
+    "Habituation event-count p-values also have unreconciled preprint prose/caption discrepancies. No conflicting value is chosen as a reproduction target or inference threshold.",
+    "Exact statistical definitions and final targets for peak-distribution, exponent, event-count, individual-habituation-sequence and temporal-model companions remain unreconciled.",
+    "Three pinned distribution notebooks were identified but not recovered: raw-host TLS failures and official contents API rate limit returned no source notebook; no new acquisition was attempted for these sidecars.",
+    "The existing registered-runtime score.py accepts42 finished correlation artifacts and delegates to historical workspace code; it neither executes submitted analysis nor verifies peak-density computation. No admitted WAIC analysis/output interface or independent verifier exists.",
+    "No authentic density-input manifest, ordered full-panel identities, evaluator identity, participant exposure/code-only difference or cumulative paired-condition budgets are frozen; admission_policy is omitted and both pairing protocols remain null.",
+    "No source-justified tolerance, uncertainty rule, fresh author WAIC replay, AI computational reproduction or same-task improvement result is established. Printed aggregate agreement or executable aggregate copying is insufficient."
+  ]
+}

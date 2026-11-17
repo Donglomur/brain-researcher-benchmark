@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-CANDIDATE-20261114-DUNL",
+  "track": "paper",
+  "title": "Reproduce and critically audit DUNL whisker event detection under disclosed periodic targets",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Infer whisker manipulation event onsets from single-trial VPm spikes; Figure 4F compares missed and false events. Shared-kernel reconstruction is a separate output.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Infer whisker manipulation event onsets from single-trial VPm spikes; Figure 4F compares missed and false events. Shared-kernel reconstruction is a separate output.",
+    "Source-paper comparison for Figure 4F missed-event fraction and false-event fraction at 10 ms tolerance (joint endpoint): Current code binarizes positive predictions, marks target neighborhoods within two bins, and computes hit-count/target-count and outside-neighborhood-prediction-count/prediction-count. Miss=1-min(mean_hit,1). Multi-matches count; this is not one-to-one recall or F1. Publication-to-code parity remains unverified."
+  ],
+  "success_criteria": [
+    "Recover the exact Figure 4F DUNL operating point and reproduce it from the publication-aligned author route on every original eligible case.",
+    "Keep the original target, inputs, split, 10 ms neighborhood convention and aggregation; a new split, one-to-one metric, hidden schedule or response-prediction task is a separately labelled extension.",
+    "Freeze the selected method and operating point using permitted training/development feedback before a single protected final comparison under declared access and resource budgets.",
+    "Demonstrate a justified improvement in the predeclared joint miss/false comparison with appropriate uncertainty; matching the paper or reducing local reconstruction loss is insufficient.",
+    "Include the disclosed schedule-only control; algebraic recovery of programmed labels alone is not an observed full-cohort paper win or evidence of neural understanding.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "participant_inputs": "All eligible whisker spike trials, source-defined binning, units/masks, trial origin and baseline context; both arms receive 16 events, 125 ms period, 500 ms phase, and disclosed top-k16/18 policy. Preserve current default 10 neuron pairs/11 allocated channels and 30/20 split as unresolved source behavior, not final-paper truth.",
+  "provenance": {
+    "paper": {
+      "title": "Interpretable deep learning for deconvolutional analysis of neural signals",
+      "venue": "Neuron",
+      "year": 2025,
+      "doi": "10.1016/j.neuron.2025.02.006",
+      "url": "https://www.sciencedirect.com/science/article/pii/S0896627325001199"
+    },
+    "data": [
+      {
+        "doi": "10.17632/rzfyr2886h.1",
+        "version": "1",
+        "url": "https://data.mendeley.com/datasets/rzfyr2886h/1",
+        "license": "CC-BY-4.0",
+        "access": "Public dataset metadata; no confidentiality flag. Download bodies untested.",
+        "representation": "Released spike/event arrays for the full whisker assay; raw electrophysiology unnecessary if exact released spike identities satisfy the panel.",
+        "observed_bytes": null,
+        "blocker": "Public HTML provides version/license but not the loaded file manifest; metadata API returned 401. Full bounded manifest and assay mapping are required."
+      }
+    ],
+    "official_code": {
+      "owner": "btolooshams",
+      "repo": "https://github.com/btolooshams/dunl-compneuro",
+      "commit": "23a34f40b122c3ccf3715995f0dd19fcbbcb46a2",
+      "license": "MIT",
+      "availability": "Pinned commit, README and license verified; includes preprocessing, dataloader and shared-kernel training paths.",
+      "publication_identity": "Current observed commit, not asserted identical to the paper release."
+    },
+    "reviewed_dossier": {
+      "path": null,
+      "bytes": 4277,
+      "sha256": "b14ec0698dd91df2def69b4637410865c8bd2143efe69e57820fbf2f6df580d3"
+    }
+  },
+  "source_family_ids": [
+    "dunl-whisker-rzfyr2886h"
+  ],
+  "publication_context": {
+    "status": "registered_construction_draft_definition_only",
+    "source_snapshot_date": "2026-11-14",
+    "source_definition_bytes": 17368,
+    "source_definition_sha256": "c19e82710e5d8ebf9769781eea6d5eaf3b4a4b19b69ab4ecc162f82f664b83e7",
+    "historical_administrative_text": "Proposal-era counts, recommendations and source-phase observations in inherited fields are historical. The package registry records the applied 233-draft programme state; no authentic readiness is inferred.",
+    "private_locator_policy": "Null path fields identify private construction evidence that is not shipped or dereferenced. Original byte/hash pins are provenance references, not public validation certificates or dependency availability.",
+    "scientific_definition_changed": false,
+    "runtime_binding": null,
+    "scientifically_qualified": false,
+    "submission_ready": false,
+    "shared_contract": "COMMON_TASK_AND_COUNT_CONTRACT.json",
+    "mandatory_interpretation": "REGISTRATION_INTERPRETATION.json"
+  },
+  "resources": {
+    "storage_GiB": [
+      2,
+      30
+    ],
+    "host_RAM_GiB": [
+      8,
+      32
+    ],
+    "GPU_RAM_GiB": [
+      8,
+      24
+    ],
+    "GPU_hours": [
+      5,
+      80
+    ],
+    "basis": "Full released whisker assay, fixed-kernel model and all declared baselines across five seeds; upper range includes preprocessing and tuning. Exact trial count and bytes remain unverified."
+  },
+  "input_assets": {
+    "status": "not_recorded_in_historical_specification"
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/improvement.v1.json",
+      "bytes": 11264,
+      "sha256": "b4cfb945694507bf822d9f1c486a9714aa0e3c03ecfc488605bfa63d2ffd3a82"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/historical/task.pre-improvement.v1.json",
+        "bytes": 17633,
+        "sha256": "750346e19cc38fcdbad50c1e694d2a6281e8647d90cc300b0b115c9598390864"
+      },
+      "implementation_ids": [
+        "benchmarks-neuroscience-dunl-coupled-reconstruction"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending source recovery. If admitted, iterate on original training trials and a declared development policy; do not use final paper test scores for selection.",
+    "candidate_freeze": "Freeze method, weights, threshold/operating point, code and data/configuration identities before final event scoring.",
+    "final_evaluation": "Run complete publication-aligned test cases once, report both original event fractions and author baseline; disclose public schedule assistance and retain reconstruction as a secondary calibration output.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "The paper point, reproduced author point and schedule-only control are separate. No invented score, current-code rerun, local grader tolerance or corrected split silently replaces the published baseline."
+  },
+  "blocking_issues": [
+    "Numeric Figure 4F operating point and its source result artifact are not recovered.",
+    "Publication trial split/configuration and exact source output producer are unjoined.",
+    "Complete archive file manifest, ten-neuron/eleven-channel reconciliation and animal/session map remain unresolved.",
+    "The programmed labels are publicly deterministic; any admissible event improvement must disclose this limitation.",
+    "Meaningful joint effect, independent-unit uncertainty, concrete budgets and an authenticated full event evaluator are not established."
+  ],
+  "holds": {
+    "task_specific": [
+      "Numeric Figure 4F operating point and its source result artifact are not recovered.",
+      "Publication trial split/configuration and exact source output producer are unjoined.",
+      "Complete archive file manifest, ten-neuron/eleven-channel reconciliation and animal/session map remain unresolved.",
+      "The programmed labels are publicly deterministic; any admissible event improvement must disclose this limitation.",
+      "Meaningful joint effect, independent-unit uncertainty, concrete budgets and an authenticated full event evaluator are not established."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "Figure 4F supplies an ordered missed/false-event comparison, but its numeric DUNL point, exact original split and complete source-to-file cohort join are not recovered. The current release makes the programmed target schedule explicit; hiding it or replacing this with held-response prediction would change the task. The existing coupled reconstruction grader cannot establish an event-detection paper win. Numeric Figure 4F operating point and its source result artifact are not recovered. Publication trial split/configuration and exact source output producer are unjoined. Complete archive file manifest, ten-neuron/eleven-channel reconciliation and animal/session map remain unresolved. The programmed labels are publicly deterministic; any admissible event improvement must disclose this limitation. Meaningful joint effect, independent-unit uncertainty, concrete budgets and an authenticated full event evaluator are not established.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/historical/task.pre-improvement.v1.json",
+      "bytes": 17633,
+      "sha256": "750346e19cc38fcdbad50c1e694d2a6281e8647d90cc300b0b115c9598390864"
+    },
+    "notes": "Retain historical event auditing and coupled decoder/response loss as calibration components. Neither engineering parity nor a mathematically perfect public schedule establishes a measured scientific improvement."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

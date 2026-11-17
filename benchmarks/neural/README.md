@@ -20,7 +20,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-004](NEURAL-004/README.md) | Conditional contrast inference and HMP evidence investigation | 3 | not linked |
 | [NEURAL-005](NEURAL-005/README.md) | ERP contribution to subsequent social choice | 3 | [manifest](NEURAL-005/implementations/registered-runtime/manifest.json) |
 | [NEURAL-006](NEURAL-006/README.md) | Reward versus emotion prediction-error physiology | 3 | not linked |
-| [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 7 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
+| [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 8 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
 | [NEURAL-008](NEURAL-008/README.md) | EOG information beyond EEG and sleep timing | 3 | [manifest](NEURAL-008/implementations/registered-runtime/manifest.json) |
 | [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 2 | not linked |
 | [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 2 | not linked |

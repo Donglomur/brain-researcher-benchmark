@@ -10,9 +10,30 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Extended Data 2c,d SOM quantization-error reconstruction on real neural inputs is a distinct secondary method endpoint. It cannot satisfy primary Figure 4 reproduction or improvement. Reviewed source limits: Original Figure 4, ED7 and ED2 population identities and counts remain unresolved. Preserve the discrepancy between at least 20 units in source prose and greater than 20 in inspected author code. Primary same-result superiority is unavailable until independently justified; stronger correlations or lower representation error alone do not improve the biological explanation.
+
+**Primary scientific scope:** Complete original Figure 4 activity organization and its indispensable source controls, not every figure or every raw acquisition stage.
+
+**Retained secondary policy:** Extended Data 2c,d SOM quantization-error reconstruction on real neural inputs is a distinct secondary method endpoint. It cannot satisfy primary Figure 4 reproduction or improvement.
+
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. Source-native rebinding can use the original ordered SOM reconstruction endpoint in Extended Data Figure2c,d: lower quantization error means better representation of the original unit feature vectors. Exact published region-wise errors, source map capacity/topology and complete source-to-unit joins remain unrecovered. Figure4 enrichment and hierarchy findings remain descriptive calibration; the local held-animal energy-score task is a different task.
 
@@ -24,7 +45,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 11851 bytes; SHA-256 `f26646cd7d0dfa5a692435cf824dcb7f8232f0bf480fa2128bcd72db4787d583`.
+- Specification identity: 14165 bytes; SHA-256 `e6e823ccf96e642ba568985a0fdf2861752e8c6d40a27e7a76b73e0232174d26`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261113/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

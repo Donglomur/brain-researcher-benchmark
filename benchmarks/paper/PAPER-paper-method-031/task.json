@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "Real-time self-supervised denoising for high-speed fluorescence neural imaging",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Denoise the original neural fluorescence recordings while preserving fast voltage/calcium dynamics and source real-time constraints. The real voltage fidelity endpoint compares denoised pixel fluorescence traces with simultaneous electrophysiology, not with a fabricated clean fluorescence image.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Denoise the original neural fluorescence recordings while preserving fast voltage/calcium dynamics and source real-time constraints. The real voltage fidelity endpoint compares denoised pixel fluorescence traces with simultaneous electrophysiology, not with a fabricated clean fluorescence image.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Denoise the original neural fluorescence recordings while preserving fast voltage/calcium dynamics and source real-time constraints. The real voltage fidelity endpoint compares denoised pixel fluorescence traces with simultaneous electrophysiology, not with a fabricated clean fluorescence image.",
-    "Source-paper comparison for Original Figure 3f denoised-fluorescence/electrophysiology Pearson correlation, with source fidelity and speed constraints; exact aggregate unresolved: Figure 3f uses Pearson correlation r=sum((x-xbar)(y-ybar))/sqrt(sum((x-xbar)^2)sum((y-ybar)^2)) between single-pixel ΔF/F and synchronized electrophysiology. Figure 3b analogously compares simulated traces with clean truth; image PSNR/SSIM and throughput are distinct outcomes."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover the exact real-recording author baseline, original pixel/ROI roster, preprocessing, correlation aggregation and permitted same-stack training protocol.",
-    "Compare candidate and FAST on identical original recordings and label access, with predeclared meaningful temporal-fidelity gain and valid uncertainty.",
-    "Preserve original real calcium and voltage scope; synthetic controls or a favorable selected pixel/recording cannot replace it.",
-    "Retain spike fidelity, matched temporal context and hardware-bound end-to-end resource measurements; faster inference or smoother traces alone are insufficient.",
-    "Treat the existing group-disjoint evaluator as an extension unless exact source equivalence is independently established; changed splits never count as original-task victory.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-031",
   "canonical_position_one_based": 63,
@@ -284,57 +284,69 @@
     "source_basis": "Resource class is an inspection-based estimate, not measured runtime."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-031/improvement.v1.json",
-      "bytes": 11717,
-      "sha256": "6fd7b561ecd8acd666f675bbc3be96bb742801b653f9c0c666d195167603d627"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-031/historical/task.pre-improvement.v1.json",
-        "bytes": 17637,
-        "sha256": "1b43d761bbefff82386fa2a5ae7f03a6a83dc3a62c38abbbfd63b520cdd67b90"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-031-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Inactive until source comparison is recovered. Development may tune denoising with source-permitted raw-stack self-supervision and declared validation feedback; electrophysiology and clean synthetic final targets remain evaluator-owned.",
-    "candidate_freeze": "Seal denoiser/training code, all context windows, source-allowed adaptation rule, checkpoint selection, ROI/baseline recipe and timing boundary before final target comparison.",
-    "final_evaluation": "Replay the author and frozen candidate on identical complete original-recording support and source preprocessing, reporting real voltage, calcium and synthetic controls separately. Measure matched-hardware latency/throughput without substituting it for fidelity.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Source-paper FAST values, newly reproduced FAST values and local prospective evaluator outputs remain separate. No raw-input baseline or group-disjoint extension can replace the source FAST comparator."
+    "improvement": {
+      "improvement_loop": "Inactive until source comparison is recovered. Development may tune denoising with source-permitted raw-stack self-supervision and declared validation feedback; electrophysiology and clean synthetic final targets remain evaluator-owned.",
+      "candidate_freeze": "Seal denoiser/training code, all context windows, source-allowed adaptation rule, checkpoint selection, ROI/baseline recipe and timing boundary before final target comparison.",
+      "final_evaluation": "Replay the author and frozen candidate on identical complete original-recording support and source preprocessing, reporting real voltage, calcium and synthetic controls separately. Measure matched-hardware latency/throughput without substituting it for fidelity.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Source-paper FAST values, newly reproduced FAST values and local prospective evaluator outputs remain separate. No raw-input baseline or group-disjoint extension can replace the source FAST comparator."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact numeric real-voltage FAST correlation baseline and original summary unavailable in reviewed main text/code.",
-    "Original pixel/ROI roster, ΔF/F baseline, synchronization and full archive file/version mapping unresolved.",
-    "Registered real-calcium plus real-voltage coverage not established by existing prospective panel.",
-    "Author Methods versus pinned configuration and native temporal/output handling need reconciliation.",
-    "Source-compatible evaluator, meaningful effect, dependence-aware uncertainty and fixed access/resource budgets remain unqualified."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact numeric real-voltage FAST correlation baseline and original summary unavailable in reviewed main text/code.",
       "Original pixel/ROI roster, ΔF/F baseline, synchronization and full archive file/version mapping unresolved.",
       "Registered real-calcium plus real-voltage coverage not established by existing prospective panel.",
       "Author Methods versus pinned configuration and native temporal/output handling need reconciliation.",
       "Source-compatible evaluator, meaningful effect, dependence-aware uncertainty and fixed access/resource budgets remain unqualified."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact numeric real-voltage FAST correlation baseline and original summary unavailable in reviewed main text/code.",
+        "Original pixel/ROI roster, ΔF/F baseline, synchronization and full archive file/version mapping unresolved.",
+        "Registered real-calcium plus real-voltage coverage not established by existing prospective panel.",
+        "Author Methods versus pinned configuration and native temporal/output handling need reconciliation.",
+        "Source-compatible evaluator, meaningful effect, dependence-aware uncertainty and fixed access/resource budgets remain unqualified."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "FAST has an ordered temporal-fidelity comparison, but the exact numeric source baseline and pixel/ROI/synchronization recipe for the registered real recordings are not recovered. The existing evaluator deliberately uses a prospective group-disjoint recipe, which changes the original same-stack self-supervised task and cannot award a source-paper win. Published throughput alone is not a substitute for denoising quality. Exact numeric real-voltage FAST correlation baseline and original summary unavailable in reviewed main text/code. Original pixel/ROI roster, ΔF/F baseline, synchronization and full archive file/version mapping unresolved. Registered real-calcium plus real-voltage coverage not established by existing prospective panel. Author Methods versus pinned configuration and native temporal/output handling need reconciliation. Source-compatible evaluator, meaningful effect, dependence-aware uncertainty and fixed access/resource budgets remain unqualified.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "FAST has an ordered temporal-fidelity comparison, but the exact numeric source baseline and pixel/ROI/synchronization recipe for the registered real recordings are not recovered. The existing evaluator deliberately uses a prospective group-disjoint recipe, which changes the original same-stack self-supervised task and cannot award a source-paper win. Published throughput alone is not a substitute for denoising quality. Exact numeric real-voltage FAST correlation baseline and original summary unavailable in reviewed main text/code. Original pixel/ROI roster, ΔF/F baseline, synchronization and full archive file/version mapping unresolved. Registered real-calcium plus real-voltage coverage not established by existing prospective panel. Author Methods versus pinned configuration and native temporal/output handling need reconciliation. Source-compatible evaluator, meaningful effect, dependence-aware uncertainty and fixed access/resource budgets remain unqualified.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -349,8 +361,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

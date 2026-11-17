@@ -1,0 +1,96 @@
+{
+  "schema_version": "paper-primary-successor/v1",
+  "revision": "smc-offline-nlb-temporal-scope/v1",
+  "task_id": "PAPER-SMC-RNN-2024",
+  "source_commit": "6428832d5e4fb4f8b7cdbf3961710640bff0280e",
+  "predecessor": {
+    "task": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/historical/task.pre-outcomes.v1.json",
+      "bytes": 6174,
+      "sha256": "5380450592ce4f379a0ecbd9d2da33d2ca8a3a5900a7b3ab5d5a8570ab015824"
+    },
+    "improvement_contract": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/improvement.v1.json",
+      "bytes": 11750,
+      "sha256": "e9f6630889c6be51513e917d4225d324d91e6a4de6582cc3860a8018bd4e5a2c"
+    },
+    "scientific_contract": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/scientific-contract.json",
+      "bytes": 3718,
+      "sha256": "a05e587878bab6846ba416cc36b3686613b5e5bfe0802d5fb02a42a47145f7bf"
+    }
+  },
+  "primary": {
+    "improvement_contract": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/improvement.temporal-scope.v1.json",
+      "bytes": 15763,
+      "sha256": "5f9aac50d4550908d0cca1ccc704d08e1d423f337ed4cf66a65963617171894d"
+    },
+    "scientific_contract": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/scientific-contract.temporal-scope.v1.json",
+      "bytes": 7276,
+      "sha256": "235c980c7a8c6db2176cd9f860f44f6634936295625c0e4f4b26ddcf14f47617"
+    },
+    "reproduction_contract": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/reproduction.v1.json",
+      "bytes": 29485,
+      "sha256": "d616c5c185d9affe390e9818a534d84071b4ae5f54e3cd407edcb777a1161856"
+    }
+  },
+  "projection": {
+    "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/temporal-scope-projection.v1.json",
+    "bytes": 5663,
+    "sha256": "8ee10e5586f2267f5ac43bef05a8ba7d271e03f19bf28ae670d2f1cde0ae133c"
+  },
+  "root_decision": {
+    "bytes": 2857,
+    "sha256": "d148a922505b20109b5d45389ac2acc4d748579283389c92bb85003655e234cc",
+    "text": "# Prospective SMC candidate-access decision\n\nRoot accepts the independent source review `SMC_TEMPORAL_SCOPE.md`, SHA256 `972c3c86a5e5f07976c78e2c390568f6e2fd848fe1fac8412cb37d9340cdf64f`, for prospective benchmark-definition corrections. The review checked both the original NLB rules and SMC paper/code. No active author inference, checkpoint, recipe, guard, budget or target handling changes.\n\n1. The primary same-task improvement endpoint is the original 20-ms offline MC_Maze/NLB task. Candidates may use all 35 supplied held-in observation bins for co-smoothing and for predicting the ten unseen future bins. Withheld test neurons, future activity and test behavior remain protected. Do not substitute the original NLB publication's 5-ms baseline numbers.\n2. The source encoder dependencies `0..max(t,13)` and `0..min(t+17,34)` describe particular author methods. Preserve their proof and any explicitly named information-matched comparison, but do not impose them as original NLB-wide restrictions on a candidate architecture.\n3. Preserve both original filtered-output author recipes and separate reproduction/calibration findings. Select the strongest qualified relevant author comparator before candidate results; do not declare superiority over the best paper result merely because a candidate beats the weaker arm. One candidate execution need not produce two differently restricted variants for the primary offline task.\n4. Original NLB explicitly permits supplied behavioral data to guide representation learning. This does not automatically add fields to our participant materials or make every comparison information-matched. Before any candidate execution, freeze the actual training/validation fields, selection feedback, adaptation policy and budget. Report whether behavior guided fitting or selection and distinguish that from the released neural-input training recipe. A behavior-assisted result cannot alone establish an improvement under matched neural-only training information.\n5. Strict-online claims require their own enforced stream/state/latency boundary and appropriate comparator. The source's reflect-padded startup does not qualify as strictly online. Full-window success cannot be relabeled as a causal win.\n6. Smoothing is existing source-suggested prior art. A future smoothing control is not automatically a novel discovery. No additional outputs, methods, training, candidate trial or smoothing run are authorized by this definition review.\n\nIntegration must preserve exact predecessor definitions and keep current task text, outcome scopes and admission behavior consistent. The current calibration checkout and runtime artifacts remain frozen. No candidate budget, numerical agreement, superiority margin, source qualification or current-SOTA claim is established. Officially public target exposure remains disclosed.\n"
+  },
+  "candidate_interface": {
+    "role": "primary_offline_candidate",
+    "prediction_interface": "one_complete_offline_prediction_set",
+    "delivery": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/delivery.py",
+      "bytes": 12197,
+      "sha256": "3164b4c40c26cf025e749c00f325aff890c22737df2466369f60720770370273"
+    },
+    "scorer": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/scorer.py",
+      "bytes": 12664,
+      "sha256": "4b47c00312c8a58a3a08afd832a3e75f313ba717e0ffffad50a990496955083f"
+    },
+    "policy": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/policy.py",
+      "bytes": 6723,
+      "sha256": "1fbcca835f8a9bb09599168c25a8e680f20a6b8d04eceee7093036ff0e0d7d79"
+    },
+    "scientific_outcome": "unknown",
+    "selection_limit": "Source selectors do not authenticate an episode policy, source comparator, execution or scientific outcome."
+  },
+  "author_reproduction_routes": {
+    "role": "author_source_reproduction_and_calibration",
+    "recipes": [
+      "causal-proposal",
+      "noncausal-proposal"
+    ],
+    "delivery": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/delivery.py",
+      "bytes": 23723,
+      "sha256": "bf63171f9737e6be6a0c6c7d575c727505f07208cfae6a460876746959a51cf8"
+    },
+    "scorer": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/scorer.py",
+      "bytes": 15050,
+      "sha256": "48638a595755138b32ff9c228804fd8c19c9ff874cd254f135fc5245ee9a25f8"
+    },
+    "protocol": {
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/protocol.json",
+      "bytes": 5849,
+      "sha256": "c8d437ece9c57b9066c5167ad499eada673d425ea17a06a9a20d62410ecbd644"
+    },
+    "scientific_outcome": "unknown",
+    "selection_limit": "Author calibration is not a qualified submitted AI reproduction; source-matched receipts cannot be relabeled as offline candidate receipts."
+  },
+  "scientific_outcome": "unknown"
+}

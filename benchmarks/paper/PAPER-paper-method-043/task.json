@@ -4,19 +4,20 @@
   "track": "paper",
   "title": "NeuroPictor: Refining fMRI-to-Image Reconstruction via Multi-individual Pretraining and Multi-level Modulation",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Generate the natural image viewed by a subject from that subject's fMRI; preserve both semantic and structural reconstruction assessment. Retrieval-only, caption prediction or encoder reconstruction is not the same output.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Generate the natural image viewed by a subject from that subject's fMRI; preserve both semantic and structural reconstruction assessment. Retrieval-only, caption prediction or encoder reconstruction is not the same output.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Generate the natural image viewed by a subject from that subject's fMRI; preserve both semantic and structural reconstruction assessment. Retrieval-only, caption prediction or encoder reconstruction is not the same output.",
-    "Source-paper comparison for Proposed Inception-v3 two-way identification, with all eight Table 1 metrics retained and panel guardrails unresolved: Retain all eight Table 1 metrics: mean pixel Pearson r; source SSIM; AlexNet features.4/features.11, Inception avgpool and CLIP image-feature two-way identification; EfficientNet and SwAV correlation distances. For N images, identification is mean_j [sum_(i != j) 1(corr(real_i,pred_j)<corr(real_j,pred_j))/(N-1)], with ties failing. Higher is better except the two distances. Identification arithmetic is verified from the pinned code, but native parity for the complete panel is unresolved because the historical SSIM environment and grayscale multichannel semantics are not fixed."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover and freeze the original complete train/test image and session membership, all four evaluation subjects and all eight pretraining-subject inputs.",
-    "Reproduce the final fine-tuned NeuroPictor reference with source metric parity and authenticated image/feature identity; keep the published score distinct from the rerun.",
-    "Before candidate freeze, resolve the proposed primary choice, meaningful effect, full-panel guardrails, uncertainty and matched budgets.",
-    "Exceed the source-paper baseline and matched author rerun under that fixed same-task rule. No subject-1 subset, new image split, easier prior access, best-of-many generation or prospective SSIM substitution can establish the paper win.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-043",
   "canonical_position_one_based": 91,
@@ -746,57 +747,69 @@
     "known_local_scientific_runtime_seconds": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-043/improvement.v1.json",
-      "bytes": 13107,
-      "sha256": "6a766b298e12e6458b932c5114bab46046d29f2af0b2a300661e11b6e3fa24cc"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-043/historical/task.pre-improvement.v1.json",
-        "bytes": 39845,
-        "sha256": "02f3c335df986b9276f0026fff9ffcd1d16a410be55372299a19ca93e87468af"
-      },
-      "implementation_ids": [
-        "construction-paper-paper-method-043-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Blocked pending complete original metric-panel recovery, including historical SSIM semantics. After source/evaluator qualification, tune on original training data with a declared development partition derived from training only; use development reconstruction feedback and retain all attempts. Original shared test stimuli receive no iterative feedback.",
-    "candidate_freeze": "Freeze model/code/weights, all four subject recipes, inference seed policy, one-sample rule, preprocessing, feature extractor versions, selected primary/guardrails, complete cohorts and budgets before final scoring.",
-    "final_evaluation": "Run frozen candidate and authenticated author reference on every original subject-stimulus pair; report the complete eight-metric panel, paired uncertainty and source-score comparison. A changed split or low-data condition is separately labeled extension.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Published Table 1, recreated author predictions and any new comparator are separate artifacts. Equalize actual pretrained encoder/diffusion/image/caption access and compute; a target-only ablation or neural-free control cannot replace NeuroPictor as the victory baseline."
+    "improvement": {
+      "improvement_loop": "Blocked pending complete original metric-panel recovery, including historical SSIM semantics. After source/evaluator qualification, tune on original training data with a declared development partition derived from training only; use development reconstruction feedback and retain all attempts. Original shared test stimuli receive no iterative feedback.",
+      "candidate_freeze": "Freeze model/code/weights, all four subject recipes, inference seed policy, one-sample rule, preprocessing, feature extractor versions, selected primary/guardrails, complete cohorts and budgets before final scoring.",
+      "final_evaluation": "Run frozen candidate and authenticated author reference on every original subject-stimulus pair; report the complete eight-metric panel, paired uncertainty and source-score comparison. A changed split or low-data condition is separately labeled extension.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Published Table 1, recreated author predictions and any new comparator are separate artifacts. Equalize actual pretrained encoder/diffusion/image/caption access and compute; a target-only ablation or neural-free control cannot replace NeuroPictor as the victory baseline."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact original image/session and pretraining-overlap manifests not authenticated.",
-    "Native image transforms, feature weights, SSIM semantics and complete evaluator replay not qualified.",
-    "Released model/encoder ancestry and original training configurations need authenticated receipts.",
-    "Meaningful effect, primary/panel rule, uncertainty design and concrete matched access/resource budgets not fixed.",
-    "No full-population reproduced author result or working candidate-to-native-metric evaluation established."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact original image/session and pretraining-overlap manifests not authenticated.",
       "Native image transforms, feature weights, SSIM semantics and complete evaluator replay not qualified.",
       "Released model/encoder ancestry and original training configurations need authenticated receipts.",
       "Meaningful effect, primary/panel rule, uncertainty design and concrete matched access/resource budgets not fixed.",
       "No full-population reproduced author result or working candidate-to-native-metric evaluation established."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact original image/session and pretraining-overlap manifests not authenticated.",
+        "Native image transforms, feature weights, SSIM semantics and complete evaluator replay not qualified.",
+        "Released model/encoder ancestry and original training configurations need authenticated receipts.",
+        "Meaningful effect, primary/panel rule, uncertainty design and concrete matched access/resource budgets not fixed.",
+        "No full-population reproduced author result or working candidate-to-native-metric evaluation established."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The original fMRI-to-image prediction task, Table 1 scores and Inception identification formula are recovered, but the complete eight-metric source panel remains unresolved because historical SSIM environment and grayscale multichannel semantics are unqualified. The paper specifies no single primary endpoint; selecting Inception alone cannot establish full source metric recovery. Preserve its verified published 0.945 component, all four subjects and all eight metrics while resolving metric parity, image membership, checkpoint lineage and the full-panel decision before design admission. Exact original image/session and pretraining-overlap manifests not authenticated. Native image transforms, feature weights, SSIM semantics and complete evaluator replay not qualified. Released model/encoder ancestry and original training configurations need authenticated receipts. Meaningful effect, primary/panel rule, uncertainty design and concrete matched access/resource budgets not fixed. No full-population reproduced author result or working candidate-to-native-metric evaluation established.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The original fMRI-to-image prediction task, Table 1 scores and Inception identification formula are recovered, but the complete eight-metric source panel remains unresolved because historical SSIM environment and grayscale multichannel semantics are unqualified. The paper specifies no single primary endpoint; selecting Inception alone cannot establish full source metric recovery. Preserve its verified published 0.945 component, all four subjects and all eight metrics while resolving metric parity, image membership, checkpoint lineage and the full-panel decision before design admission. Exact original image/session and pretraining-overlap manifests not authenticated. Native image transforms, feature weights, SSIM semantics and complete evaluator replay not qualified. Released model/encoder ancestry and original training configurations need authenticated receipts. Meaningful effect, primary/panel rule, uncertainty design and concrete matched access/resource budgets not fixed. No full-population reproduced author result or working candidate-to-native-metric evaluation established.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -811,8 +824,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

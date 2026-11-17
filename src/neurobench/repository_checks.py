@@ -3,6 +3,7 @@
 import argparse
 from collections import Counter
 import hashlib
+import importlib.util
 import json
 import os
 from pathlib import Path, PurePosixPath
@@ -23,7 +24,7 @@ PARALLEL_CONTROL_SOURCES = (PARALLEL_CONTROL_MANIFEST,
 CANONICAL_PER_TRACK = 100
 MAX_FILE_BYTES = 8 * 1024 * 1024
 # Finite allowance for the reviewed November 17 source enrollment.
-MAX_READ_BYTES = 144 * 1024 * 1024
+MAX_READ_BYTES = 192 * 1024 * 1024
 MAX_FILES = 12000
 MAX_TREE_ENTRIES = 30000
 MAX_DEPTH = 32
@@ -51,6 +52,15 @@ NEURAL_SNAPSHOT = "docs/provenance/registrations/neural-pre-understanding-v1.jso
 def need(value, message):
     if not value:
         raise ValueError(message)
+
+
+def paper_outcome_module():
+    """Load a fixed metadata validator, never a task implementation."""
+    path = Path(__file__).with_name("paper_outcomes_binding.py")
+    spec = importlib.util.spec_from_file_location("_repository_paper_outcomes_binding", path)
+    module = importlib.util.module_from_spec(spec)
+    exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
+    return module
 
 
 def relative_path(value):
@@ -292,7 +302,7 @@ def paper_initial_registry(reader, registry, tasks):
     return history_pin, previous
 
 
-def paper_initial_members(reader, row, document):
+def paper_initial_members(reader, row, document, *, archived_definition_pin=None):
     """Authenticate a first paper definition without manufacturing older bytes."""
     revision = row.get("specification_revision")
     need(row["track"] == "paper" and type(revision) is dict
@@ -307,7 +317,18 @@ def paper_initial_members(reader, row, document):
     need(type(specification) is dict and set(specification) == {"path", "bytes", "sha256"}
          and row.get("original_specification") == specification,
          "Initial paper specification must preserve its exact first definition")
-    actual_document = metadata_pin(reader, specification, directory + "/task.json", "Initial paper specification")
+    if archived_definition_pin is None:
+        actual_document = metadata_pin(reader, specification, directory + "/task.json", "Initial paper specification")
+    else:
+        # A later outcome projection does not rewrite the initial registration.
+        # Authenticate its exact former-current bytes at their explicit archive;
+        # do not alias the current task path to old content.
+        need(type(archived_definition_pin) is dict
+             and all(archived_definition_pin.get(key) == specification[key] for key in ("bytes", "sha256")),
+             "Archived initial definition differs from its first registered bytes")
+        actual_document = metadata_pin(reader, archived_definition_pin,
+                                       directory + "/historical/task.pre-outcomes.v1.json",
+                                       "Archived initial paper specification")
     need(actual_document == document, "Initial paper document changed during capture")
     registration_pin = revision["initial_registration"]
     registration_path = "docs/provenance/registrations/paper-initial/" + identifier + ".json"
@@ -509,6 +530,9 @@ def prepare(reader):
     tasks = registry.get("tasks")
     need(isinstance(tasks, list) and 0 < len(tasks) <= 1000
          and all(type(row) is dict for row in tasks), "Invalid task inventory")
+    outcome_module = paper_outcome_module()
+    outcome_read = lambda pin, label: metadata_pin(reader, pin, pin["path"], label)
+    prior_outcome_rows = outcome_module.coverage(registry, outcome_read)
     neural_history_pin, neural_previous = neural_revision_registry(reader, registry, tasks)
     initial_paper_history_pin, _ = paper_initial_registry(reader, registry, tasks)
     by_id, task_paths, members, expected_pins = {}, {}, {}, {}
@@ -535,13 +559,18 @@ def prepare(reader):
         need(identity == row["specification_id"] and row["specification_alias"] == (identity != identifier),
              "Task specification identity or alias mismatch: " + identifier)
         need(document.get("track", track) == track, "Task specification track mismatch")
+        outcome_context = outcome_module.context(row, document, prior_outcome_rows, outcome_read)
+        lineage_row = outcome_context["previous_row"] if outcome_context else row
+        lineage_document = outcome_context["previous_document"] if outcome_context else document
         if "specification_revision" in row:
             if track == "paper":
                 revision = row["specification_revision"]
                 if type(revision) is dict and revision.get("version") == PAPER_INITIAL_REVISION:
-                    revision_members = paper_initial_members(reader, row, document)
+                    revision_members = paper_initial_members(
+                        reader, lineage_row, lineage_document,
+                        archived_definition_pin=outcome_context["previous_pin"] if outcome_context else None)
                 else:
-                    revision_members = paper_revision_members(reader, row, document)
+                    revision_members = paper_revision_members(reader, lineage_row, lineage_document)
             else:
                 revision_members = neural_revision_members(reader, row, document, neural_previous.get(identifier))
             for path in revision_members:
@@ -555,6 +584,11 @@ def prepare(reader):
                  "Paper improvement coverage requires every paper revision")
             need(track != "neural" or neural_history_pin is None,
                  "Neural understanding coverage requires every neural revision")
+        if outcome_context:
+            for path in outcome_context["members"]:
+                need(path not in members, "Duplicate paper outcome metadata")
+                members[path] = "task:" + identifier
+            allowed_files[track].update(outcome_context["members"])
         members[pin["path"]] = "task:" + identifier
         allowed_files[track].update((directory + "/README.md", pin["path"]))
         for item in row.get("documentation", []):
@@ -672,6 +706,27 @@ def prepare(reader):
         need(NEURAL_SNAPSHOT not in members, "Duplicate neural registry provenance")
         members[NEURAL_SNAPSHOT] = "registration-provenance"
         expected_pins[NEURAL_SNAPSHOT] = neural_history_pin
+    if prior_outcome_rows is not None:
+        outcome_history = registry["paper_outcomes"]["pre_outcomes_registry"]
+        enrolled = [item for item in registry.get("historical_registries", [])
+                    if type(item) is dict and item.get("path") == outcome_module.SNAPSHOT]
+        need(len(enrolled) == 1, "Paper outcome snapshot must be exactly enrolled in historical registries")
+        outcome_module.require_pin(enrolled[0], outcome_module.SNAPSHOT, "historically enrolled paper outcome snapshot")
+        # The ordinary historical loop already owns this exact source. Reuse
+        # only that authenticated registration; all other overlap guards remain.
+        need(enrolled[0] == outcome_history
+             and members.get(outcome_module.SNAPSHOT) == "registration-provenance"
+             and expected_pins.get(outcome_module.SNAPSHOT) == outcome_history,
+             "Paper outcome snapshot enrollment pin or owner mismatch")
+        if prior_outcome_rows.scope_pin is not None:
+            need(outcome_module.SCOPE_PATH not in members, "Duplicate paper scope-decision provenance")
+            members[outcome_module.SCOPE_PATH] = "registration-provenance"
+            expected_pins[outcome_module.SCOPE_PATH] = prior_outcome_rows.scope_pin
+        if prior_outcome_rows.source_declaration_gap_pin is not None:
+            gap_path = outcome_module.SOURCE_DECLARATION_GAP_PATH
+            need(gap_path not in members, "Duplicate paper source-declaration provenance")
+            members[gap_path] = "registration-provenance"
+            expected_pins[gap_path] = prior_outcome_rows.source_declaration_gap_pin
     artifact_files = artifact_members(root, artifacts)
     need(not set(members) & set(artifact_files), "Artifact overlaps task or provenance metadata")
     members.update(artifact_files)

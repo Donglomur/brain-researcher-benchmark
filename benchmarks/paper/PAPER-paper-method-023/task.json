@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "EEGPT: Pretrained Transformer for Universal and Reliable Representation of EEG Signals",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Predict whether a matrix-speller stimulus contains the attended character from its EEG event epoch. Current scope is the complete original PhysioP300 Table 4 panel, including all source subjects, EEGPT and original BENDR/BIOT/LaBraM controls, and all three reported metrics.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Predict whether a matrix-speller stimulus contains the attended character from its EEG event epoch. Current scope is the complete original PhysioP300 Table 4 panel, including all source subjects, EEGPT and original BENDR/BIOT/LaBraM controls, and all three reported metrics.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Predict whether a matrix-speller stimulus contains the attended character from its EEG event epoch. Current scope is the complete original PhysioP300 Table 4 panel, including all source subjects, EEGPT and original BENDR/BIOT/LaBraM controls, and all three reported metrics.",
-    "Source-paper comparison for PhysioP300 Table 4 AUROC with complete source comparison panel and BAC/Cohen kappa reporting: Primary source component metric is AUROC, higher better: probability that a target event receives a higher class-1 score than a nontarget, with half credit for ties. Probe concatenates all validation-epoch scores before binary metrics. Report BAC and Cohen kappa too; single-class support cannot be silently accepted as a valid AUROC."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Evaluate the complete original PhysioP300 Table 4 task: all source subjects under LOSO, original EEGPT and BENDR/BIOT/LaBraM control conditions, and AUROC/BAC/Cohen kappa reporting. Unrelated S8 downstream tasks are not prerequisites for this selected panel win.",
-    "Resolve subject/recording/event support, epoch boundaries, scoring reduction, checkpoint and exposure protocol. Establish author-baseline calibration on the original population; protocol-equivalent stochastic reruns with recorded new seeds and justified calibration tolerance are valid.",
-    "Freeze candidate procedure, preprocessing and selection before final scoring; use training/development feedback during iteration, disclose historical public-test exposure, and pair candidate/reference comparisons on the same evaluated support.",
-    "Exceed the source EEGPT result under the original task with a justified predeclared effect and valid paired uncertainty rule, while retaining the complete source panel and reporting all original metrics and failures.",
-    "Keep changed preprocessing without source-parity evidence, new split rules, reduced cohorts and new adaptation regimes as separately labelled extensions. Local controls and successful reproduction alone cannot substitute for the published comparison.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "source_id": "paper-method-023",
   "canonical_position_one_based": 83,
@@ -282,59 +282,71 @@
     "known_local_scientific_runtime_seconds": null
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-paper-method-023/improvement.v1.json",
-      "bytes": 13861,
-      "sha256": "f49797676a76733d120b0afcf70a0c3c24ff0b4f3a285cfda58a99ff75833941"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-paper-method-023/historical/task.pre-improvement.v1.json",
-        "bytes": 19314,
-        "sha256": "8e2b7edffa105c95ac0cffdbbc3e2b4aa184d45c9236295a6084fca53ff1cd25"
-      },
-      "implementation_ids": [
-        "benchmarks-neuroscience-paper-paper-method-023"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "Inactive until preparation/protocol reconciliation. Once admitted, candidates may iterate on permitted original training/development subjects using fixed feedback and identical pretrained access; assessment metrics cannot guide subsequent revisions. Preserve the complete PhysioP300 panel and source control conditions.",
-    "candidate_freeze": "Commit the method, data/preprocessing manifest, pretrained state identity, adaptation/search procedure, stopping and selection rule, metric reduction, and resource/access limits before protected evaluation.",
-    "final_evaluation": "Evaluate all original PhysioP300 LOSO subjects and source repetition protocol against calibrated author/control reruns, allowing declared protocol-equivalent new randomness. Report the complete Table 4 metric panel and published scores separately. Preserve full S8 materials as history; unrelated datasets are outside this selected same-task win.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Use source-paper EEGPT as the success comparator. Author rerun is separately identified and must first calibrate against the published row. EEGNet, spectral ridge, fine-tuned variants and prospectively selected control mixtures remain secondary controls, never a replacement source-paper score."
+    "improvement": {
+      "improvement_loop": "Inactive until preparation/protocol reconciliation. Once admitted, candidates may iterate on permitted original training/development subjects using fixed feedback and identical pretrained access; assessment metrics cannot guide subsequent revisions. Preserve the complete PhysioP300 panel and source control conditions.",
+      "candidate_freeze": "Commit the method, data/preprocessing manifest, pretrained state identity, adaptation/search procedure, stopping and selection rule, metric reduction, and resource/access limits before protected evaluation.",
+      "final_evaluation": "Evaluate all original PhysioP300 LOSO subjects and source repetition protocol against calibrated author/control reruns, allowing declared protocol-equivalent new randomness. Report the complete Table 4 metric panel and published scores separately. Preserve full S8 materials as history; unrelated datasets are outside this selected same-task win.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Use source-paper EEGPT as the success comparator. Author rerun is separately identified and must first calibrate against the published row. EEGNet, spectral ridge, fine-tuned variants and prospectively selected control mixtures remain secondary controls, never a replacement source-paper score."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Paper and converter disagree on epoch length/onset; source-equivalent preparation has not been established.",
-    "Eight-subject converter and nine-subject probe conflict; biological identities, recordings and exclusions require reconciliation.",
-    "Converter output names may overwrite across recordings; complete source event support must be established.",
-    "The reporting epoch/selection semantics and fold-to-run reduction need source-supported reconciliation; exact historical seeds are not required for a documented protocol-equivalent rerun.",
-    "Checkpoint/pretraining exposure parity, calibrated author and original-control reruns, and an admitted working evaluator remain absent.",
-    "Meaningful effect, uncertainty assumptions, concrete access/resource budgets and protected evaluation episode remain unqualified."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Paper and converter disagree on epoch length/onset; source-equivalent preparation has not been established.",
       "Eight-subject converter and nine-subject probe conflict; biological identities, recordings and exclusions require reconciliation.",
       "Converter output names may overwrite across recordings; complete source event support must be established.",
       "The reporting epoch/selection semantics and fold-to-run reduction need source-supported reconciliation; exact historical seeds are not required for a documented protocol-equivalent rerun.",
       "Checkpoint/pretraining exposure parity, calibrated author and original-control reruns, and an admitted working evaluator remain absent.",
       "Meaningful effect, uncertainty assumptions, concrete access/resource budgets and protected evaluation episode remain unqualified."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Paper and converter disagree on epoch length/onset; source-equivalent preparation has not been established.",
+        "Eight-subject converter and nine-subject probe conflict; biological identities, recordings and exclusions require reconciliation.",
+        "Converter output names may overwrite across recordings; complete source event support must be established.",
+        "The reporting epoch/selection semantics and fold-to-run reduction need source-supported reconciliation; exact historical seeds are not required for a documented protocol-equivalent rerun.",
+        "Checkpoint/pretraining exposure parity, calibrated author and original-control reruns, and an admitted working evaluator remain absent.",
+        "Meaningful effect, uncertainty assumptions, concrete access/resource budgets and protected evaluation episode remain unqualified."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The complete original PhysioP300 Table 4 comparison panel is the selected same-task scope. Its published scores are recoverable, but the released preprocessing and training scripts disagree about subject membership and epoch boundaries, and the reporting/selection reduction is not sufficiently reconciled for a calibrated comparison. The broader S8 programme is preserved as history, without requiring unrelated downstream datasets for a PhysioP300 win. Paper and converter disagree on epoch length/onset; source-equivalent preparation has not been established. Eight-subject converter and nine-subject probe conflict; biological identities, recordings and exclusions require reconciliation. Converter output names may overwrite across recordings; complete source event support must be established. The reporting epoch/selection semantics and fold-to-run reduction need source-supported reconciliation; exact historical seeds are not required for a documented protocol-equivalent rerun. Checkpoint/pretraining exposure parity, calibrated author and original-control reruns, and an admitted working evaluator remain absent. Meaningful effect, uncertainty assumptions, concrete access/resource budgets and protected evaluation episode remain unqualified.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The complete original PhysioP300 Table 4 comparison panel is the selected same-task scope. Its published scores are recoverable, but the released preprocessing and training scripts disagree about subject membership and epoch boundaries, and the reporting/selection reduction is not sufficiently reconciled for a calibrated comparison. The broader S8 programme is preserved as history, without requiring unrelated downstream datasets for a PhysioP300 win. Paper and converter disagree on epoch length/onset; source-equivalent preparation has not been established. Eight-subject converter and nine-subject probe conflict; biological identities, recordings and exclusions require reconciliation. Converter output names may overwrite across recordings; complete source event support must be established. The reporting epoch/selection semantics and fold-to-run reduction need source-supported reconciliation; exact historical seeds are not required for a documented protocol-equivalent rerun. Checkpoint/pretraining exposure parity, calibrated author and original-control reruns, and an admitted working evaluator remain absent. Meaningful effect, uncertainty assumptions, concrete access/resource budgets and protected evaluation episode remain unqualified.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -349,8 +361,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

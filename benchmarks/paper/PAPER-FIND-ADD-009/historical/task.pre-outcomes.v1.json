@@ -1,0 +1,341 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-FIND-ADD-009",
+  "track": "paper",
+  "title": "An instantaneous voice-synthesis neuroprosthesis",
+  "status": "design_ready",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Causal synthesis of attempted cued speech from T15 neural activity, together with the source nonspeech/acoustic-contamination controls and cross-session generalization checks. Fig. 2b acoustic accuracy is the proposed primary prediction endpoint, not a complete replacement of the canonical task.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Causal synthesis of attempted cued speech from T15 neural activity, together with the source nonspeech/acoustic-contamination controls and cross-session generalization checks. Fig. 2b acoustic accuracy is the proposed primary prediction endpoint, not a complete replacement of the canonical task.",
+    "Source-paper comparison for Mean trial-level 40-Mel-band Pearson correlation on the original vocalized evaluation cohort: Per trial, compute Pearson correlation in each of 40 Mel bands after the paper-specified silence removal and dynamic-time-warp alignment; average across bands. Keep waveform sampling, spectrogram settings and alignment frozen."
+  ],
+  "success_criteria": [
+    "Bind every original vocalized evaluation trial, per-session training cutoff and original baseline decoder before candidate selection.",
+    "Use only causal neural inputs and matched non-neural resources; test text, target acoustic features and public reference predictions cannot be used to synthesize the answer.",
+    "Calibrate a source-matched evaluator against original decoder outputs, then exceed the published and reproduced author baselines by a justified effect under the predeclared uncertainty rule.",
+    "Report any replay result as an acoustic prediction comparison on recorded trials. A stronger claim about closed-loop communication additionally requires an equivalent closed-loop experiment; replay alone cannot satisfy that claim.",
+    "Day195-only, different-session, acausal, smaller-vocabulary, transcript-assisted and new-participant evaluations are separately labelled extensions, never the original paper win.",
+    "Bind and satisfy the original nonspeech checks (including cough, throat clearing, yawning and background speech) and acoustic-contamination/biosignal controls using their original cohorts and procedures; improved target correlation cannot excuse spurious or non-neural synthesis.",
+    "Recover the source fixed-decoder cross-session test (Extended Data Fig. 2b) and its original later-session population; report it as a mandatory generalization safeguard under a predeclared source-matched rule.",
+    "Fig. 2b correlation alone cannot establish success for this whole registration. Recover the original control/generalization results and approve a complete scope rule before any paper-win admission.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "FIND-ADD-009",
+  "canonical_position_one_based": 31,
+  "paper_identity": {
+    "url": "https://www.nature.com/articles/s41586-025-09127-3",
+    "publication_year": 2025,
+    "venue": "Nature"
+  },
+  "input_assets": {
+    "routes": [
+      "https://datadryad.org/dataset/doi:10.5061/dryad.2280gb64f"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/input_inventory/0",
+        "recorded_fields": {
+          "path": "README.md",
+          "size": 4635,
+          "digest": "f9d05e8a8390579e025489146ecc4d2334c42a531c1e66fd222dffe147f69d70",
+          "mimeType": "text/markdown"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "f9d05e8a8390579e025489146ecc4d2334c42a531c1e66fd222dffe147f69d70"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "source_record_id": "FIND-ADD-009"
+      },
+      {
+        "json_pointer": "/input_inventory/1",
+        "recorded_fields": {
+          "path": "t15_control_experiment.zip",
+          "size": 710843261,
+          "digest": "c1ed4ea95f552901cb3bfe9220600a0657d0bba81caed57950c49ed5479f09bc",
+          "mimeType": "application/zip"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "c1ed4ea95f552901cb3bfe9220600a0657d0bba81caed57950c49ed5479f09bc"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "source_record_id": "FIND-ADD-009"
+      },
+      {
+        "json_pointer": "/input_inventory/2",
+        "recorded_fields": {
+          "path": "t15_neural_data.zip",
+          "size": 26158469306,
+          "digest": "26e40f7aa693345a181ad175d9f0b3dbadadc45a82a9461711da2fdc0e1292dc",
+          "mimeType": "application/zip"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "26e40f7aa693345a181ad175d9f0b3dbadadc45a82a9461711da2fdc0e1292dc"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "source_record_id": "FIND-ADD-009"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/0",
+        "recorded_fields": {
+          "path": "README.md",
+          "size": 4635,
+          "digest": "f9d05e8a8390579e025489146ecc4d2334c42a531c1e66fd222dffe147f69d70",
+          "mimeType": "text/markdown"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "f9d05e8a8390579e025489146ecc4d2334c42a531c1e66fd222dffe147f69d70"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-ADD-009"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/1",
+        "recorded_fields": {
+          "path": "t15_control_experiment.zip",
+          "size": 710843261,
+          "digest": "c1ed4ea95f552901cb3bfe9220600a0657d0bba81caed57950c49ed5479f09bc",
+          "mimeType": "application/zip"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "c1ed4ea95f552901cb3bfe9220600a0657d0bba81caed57950c49ed5479f09bc"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-ADD-009"
+      },
+      {
+        "json_pointer": "/input_and_code_lineage/input_inventory_or_loader_evidence/representative_files/2",
+        "recorded_fields": {
+          "path": "t15_neural_data.zip",
+          "size": 26158469306,
+          "digest": "26e40f7aa693345a181ad175d9f0b3dbadadc45a82a9461711da2fdc0e1292dc",
+          "mimeType": "application/zip"
+        },
+        "checksum_fields_as_recorded": {
+          "digest": "26e40f7aa693345a181ad175d9f0b3dbadadc45a82a9461711da2fdc0e1292dc"
+        },
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-FIND-ADD-009"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "input_level": "Released T15 per-trial neural features, pretrained decoders and control trials; later2026 input release.",
+      "data_urls": [
+        "https://datadryad.org/dataset/doi:10.5061/dryad.2280gb64f"
+      ],
+      "input_version": "441124",
+      "input_inventory_or_loader_evidence": {
+        "listed_file_count": 3,
+        "representative_files": [
+          {
+            "path": "README.md",
+            "size": 4635,
+            "digest": "f9d05e8a8390579e025489146ecc4d2334c42a531c1e66fd222dffe147f69d70",
+            "mimeType": "text/markdown"
+          },
+          {
+            "path": "t15_control_experiment.zip",
+            "size": 710843261,
+            "digest": "c1ed4ea95f552901cb3bfe9220600a0657d0bba81caed57950c49ed5479f09bc",
+            "mimeType": "application/zip"
+          },
+          {
+            "path": "t15_neural_data.zip",
+            "size": 26158469306,
+            "digest": "26e40f7aa693345a181ad175d9f0b3dbadadc45a82a9461711da2fdc0e1292dc",
+            "mimeType": "application/zip"
+          }
+        ],
+        "limit": "Inventory examples; not payload/schema qualification."
+      },
+      "source_bridge": "Dryad version441124 now contains t15_neural_data.zip26.16GB plus t15_control_experiment.zip; author README and config point exactly to those directories and individual neural trials.",
+      "code_url": "https://github.com/Neuroprosthetics-Lab/brain-to-voice-2025",
+      "code_revision_or_archive_version": "cff4875decd35ff0f98a944035377a25b43ba79c",
+      "entrypoints": [
+        "training.ipynb",
+        "inference.ipynb",
+        "configs/config.yaml",
+        "configs/training_data_args.yaml"
+      ],
+      "missing_core_inputs_as_recorded": [],
+      "limit": "An empty missing-core-input list is not proof of schema compatibility, full-paper coverage or executable closure."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-ADD-009",
+        "versions_and_loader_contract": {
+          "input_version": "441124",
+          "input_code_bridge": "Dryad version441124 now contains t15_neural_data.zip26.16GB plus t15_control_experiment.zip; author README and config point exactly to those directories and individual neural trials.",
+          "readiness_scope": "Only the central empirical outputs listed here; no claim of reproducing every figure or acquisition/preprocessing stage.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "input_inventory",
+          "data_manifest",
+          "input_version",
+          "input_code_bridge"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/Neuroprosthetics-Lab/brain-to-voice-2025",
+    "revision_or_archive_version": "cff4875decd35ff0f98a944035377a25b43ba79c",
+    "entrypoints": [
+      "training.ipynb",
+      "inference.ipynb",
+      "configs/config.yaml",
+      "configs/training_data_args.yaml"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+        "record_id": "FIND-ADD-009",
+        "recorded": {
+          "code_url": "https://github.com/Neuroprosthetics-Lab/brain-to-voice-2025",
+          "code_revision": "cff4875decd35ff0f98a944035377a25b43ba79c",
+          "entrypoints": [
+            "training.ipynb",
+            "inference.ipynb",
+            "configs/config.yaml",
+            "configs/training_data_args.yaml"
+          ],
+          "dependencies": [
+            "Python/TensorFlow; requirements.yml",
+            "LPCNet vocoder from xiph/LPCNet"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "d0a35425faeefb15b6fdfc0b210d53f0da7f89f72891ef9aa8175f02b4c32210",
+    "audit_record_sha256": "28a38a19716f32060b6227a1d4217e77fe3f977f8d1a89a8f5b846dab82041b4",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/findings_readiness.json",
+          "bytes": 1654641,
+          "sha256": "3782e843842fd2848b653253a23db84053308427ce3b3246a918644f2e25fe3a"
+        },
+        "record_id": "FIND-ADD-009",
+        "declared_record_sha256": "07e8672557d5629201c5e087834cd58cbb37be5d56361101dede8221f02bfe80",
+        "role": "Saved primary-source/artifact inspection; source-material qualification is not runnable-reference qualification.",
+        "record_index": 58,
+        "record_sha256": "07e8672557d5629201c5e087834cd58cbb37be5d56361101dede8221f02bfe80"
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "source_roster_estimate_or_statement": {
+      "estimate": "GPU workstation (author tests RTX3090/A6000);26.87GB input release; hours to days estimated.",
+      "basis": "Source metadata/static inspection and author runtime statements where explicitly identified; not measured."
+    },
+    "measured_or_static_facts_from_existing_authoring": [],
+    "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-FIND-ADD-009/improvement.v1.json",
+      "bytes": 12598,
+      "sha256": "23778168217804124c502904a3dac6cd5e5cb59dce8fe2a64afdac14c3dece24"
+    },
+    "disposition": "design_ready",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-FIND-ADD-009/historical/task.pre-improvement.v1.json",
+        "bytes": 19354,
+        "sha256": "6407aa25a490bc29f256e5f8e063b1782e633c5c7ec5e4a409d0b864430c3a30"
+      },
+      "implementation_ids": [
+        "construction-paper-find-add-009-initial-evaluator-v1"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate causal decoder/feature choices using only the original eligible past-session training data and a declared validation allocation that preserves the paper chronology. Record every attempt and all auxiliary speech-model exposure.",
+    "candidate_freeze": "Freeze method, training recipe, seed policy, session decoder routing, vocoder, target-independent preprocessing and evaluator before the complete original evaluation is opened.",
+    "final_evaluation": "Evaluate one frozen candidate and the matched author baseline on all original evaluation trials. Preserve acoustic replay and closed-loop claims separately; no win is currently executable. The original control and fixed-decoder session-generalization requirements must also be evaluated; the primary acoustic score alone does not satisfy the canonical scope.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Use original per-session author decoders or a validated exact recipe replay; keep their measured score separate from the published 0.83. The repository demo and a local authored decoder cannot replace this comparator."
+  },
+  "blocking_issues": [
+    "Original 956-trial/session manifest and Supplementary Table 1 training cutoffs have not been bound to release files.",
+    "Source-matched speech waveform, silence-removal, DTW and aggregation equivalence are not validated against the author baseline.",
+    "The current initial evaluator accepts declared arrays/cohorts but does not establish authentic original-population coverage or a scientific win.",
+    "Public target/text/checkpoint exposure needs an enforced access manifest; resources and development/final-query budgets remain unset.",
+    "Meaningful effect, valid uncertainty decision and stochastic replication plan remain unregistered.",
+    "Offline replay cannot recover participant feedback responses under a changed closed-loop decoder.",
+    "Complete original control and session-generalization manifests/results and the full-registration success rule remain unresolved."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original 956-trial/session manifest and Supplementary Table 1 training cutoffs have not been bound to release files.",
+      "Source-matched speech waveform, silence-removal, DTW and aggregation equivalence are not validated against the author baseline.",
+      "The current initial evaluator accepts declared arrays/cohorts but does not establish authentic original-population coverage or a scientific win.",
+      "Public target/text/checkpoint exposure needs an enforced access manifest; resources and development/final-query budgets remain unset.",
+      "Meaningful effect, valid uncertainty decision and stochastic replication plan remain unregistered.",
+      "Offline replay cannot recover participant feedback responses under a changed closed-loop decoder.",
+      "Complete original control and session-generalization manifests/results and the full-registration success rule remain unresolved."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The final paper has an ordered causal neural-to-voice acoustic endpoint and the author release includes session-specific decoders. A same-task design is identifiable, but the original evaluation/session training manifest, matched evaluator, uncertainty rule and budgets are not qualified. The day195 offline demonstration and control-only archive cannot be substituted for the paper evaluation, and offline replay cannot establish improved closed-loop communication. The canonical scope also includes original control trials and cross-session generalization; Fig. 2b correlation alone is insufficient for a whole-registration win until the complete scope rule is bound. Original 956-trial/session manifest and Supplementary Table 1 training cutoffs have not been bound to release files. Source-matched speech waveform, silence-removal, DTW and aggregation equivalence are not validated against the author baseline. The current initial evaluator accepts declared arrays/cohorts but does not establish authentic original-population coverage or a scientific win. Public target/text/checkpoint exposure needs an enforced access manifest; resources and development/final-query budgets remain unset. Meaningful effect, valid uncertainty decision and stochastic replication plan remain unregistered. Offline replay cannot recover participant feedback responses under a changed closed-loop decoder. Complete original control and session-generalization manifests/results and the full-registration success rule remain unresolved.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-FIND-ADD-009/historical/task.pre-improvement.v1.json",
+      "bytes": 19354,
+      "sha256": "6407aa25a490bc29f256e5f8e063b1782e633c5c7ec5e4a409d0b864430c3a30"
+    },
+    "notes": "Preserve the initial acoustic and listener-transcription evaluator, its tests and all historical materials. Its array validity, transcription arithmetic and numerical reconstruction are calibration evidence, not surpassing the source paper."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

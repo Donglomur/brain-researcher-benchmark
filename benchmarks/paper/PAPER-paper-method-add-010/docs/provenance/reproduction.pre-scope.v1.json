@@ -1,0 +1,331 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-add-010",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Reproduction is an independent first-class outcome. The source-style scoring API is available, but the four inherited Fig. 3b/3c numerical claims could not be independently authenticated: the single authorized primary article open returned only a browser challenge. All expected targets are therefore unresolved/null. Authentic empirical/fold/measure identities, the complete finding/companion inventory, granular computation verification and justified criteria also remain unresolved.",
+  "source_paper": {
+    "title": "A data-driven approach to identifying and evaluating connectivity-based neural correlates of conscious visual perception",
+    "url": "https://doi.org/10.1093/nc/niag029"
+  },
+  "evidence": [
+    {
+      "id": "meg-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13338905/",
+      "locator": "Methods: Data-driven quantification of inter-areal coupling; Fitting classifiers; Results and Fig. 3b,c",
+      "supports": "Prior-review primary citation for the original classification family and Fig. 3b/c. The independent primary open in this rollout returned only a browser challenge, so the inherited numerical anchors are not treated as authenticated targets."
+    },
+    {
+      "id": "meg-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/anniegbryant/MEG_functional_connectivity/cab648bbe2eab7093f9ab7b9a5fcddabf28e60a0/classification/fit_pyspi_classifiers.py",
+      "locator": "classifier and scoring definitions; StratifiedGroupKFold; averaged classification branch, lines 63-100 and 185-291",
+      "supports": "Pinned source implements balanced L1 logistic regression, mixed-sigmoid scaling, group CV and unweighted mean test-fold accuracy."
+    },
+    {
+      "id": "meg-data-v1",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/15315238",
+      "locator": "Version v1, description and Files",
+      "supports": "Canonical registration points to the 811.0 MB data.zip; metadata alone does not establish equality to the publication analysis inputs."
+    },
+    {
+      "id": "meg-data-v2",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/18294156",
+      "locator": "Version v2, description and Files",
+      "supports": "Later author release instead lists empirical.zip and model.zip. This requires a deliberate publication-to-input join, not silent version replacement."
+    },
+    {
+      "id": "meg-correction",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13669618/",
+      "locator": "Correction notice, 15 October 2026, supplementary data and HTML corrections",
+      "supports": "The supplied final_supplement_AGB.pdf replaced an earlier version; the selected supplement has not been authenticated against that correction."
+    },
+    {
+      "id": "meg-local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/README.md",
+      "locator": "Scientific scope; two estimands; required complete inputs",
+      "supports": "The implementation is prospective nested evaluation; authentic feature extraction, historical 246-measure identity and corrected supplement remain held."
+    },
+    {
+      "id": "meg-extraction",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/anniegbryant/MEG_functional_connectivity/cab648bbe2eab7093f9ab7b9a5fcddabf28e60a0/functional_connectivity_analysis/run_pyspi_for_subject_averaged_epochs.py",
+      "locator": "Condition partitioning and run_pyspi_for_df: regional-time-series rows to participant/stimulus/relevance/period/measure/directed-ROI feature records",
+      "supports": "Original source features are computed from known-condition averages. Per-observation feature and preprocessing derivation must be independently checked; a printed accuracy is not evidence of that computation."
+    },
+    {
+      "id": "meg-source-guide",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/anniegbryant/MEG_functional_connectivity/cab648bbe2eab7093f9ab7b9a5fcddabf28e60a0/README.md",
+      "locator": "Functional connectivity and classification sections, lines 79-91; Neural mass modeling and visualization sections, lines 94-106",
+      "supports": "Source entrypoints for the connectivity family, three classification analysis types, barycenter empirical/model analyses and polarity/aggregation robustness. Entry-point presence does not authenticate numerical companion outputs."
+    },
+    {
+      "id": "meg-score-component",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-paper-method-add-010/implementations/original-fold-score-v1/score.py",
+      "locator": "expected_cells, score_cell, score_complete_matrix, read_author_matrix and compare_matrices",
+      "supports": "Accepted offline source-style scoring API checks exact probability support and public 94-ID roster; returns ten fold accuracies, counts, population SD and separately retained matrix cells. It does not fit source models, derive FC, authenticate folds or score all original companions."
+    },
+    {
+      "id": "meg-historical-controls",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-paper-method-add-010/historical/task.pre-improvement.v1.json",
+      "locator": "Original primary outputs, anti-leakage constraints, method-change and next-action requirements",
+      "supports": "Preserves per-participant connectivity, participant-held-out classification, surrogate/source-leakage controls and the requested connectivity-versus-nuisance comparison. Registration requirements do not establish corresponding published numerical findings."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Stimulus-pair decoding across source region pairs, relevance conditions and onset/offset periods; supplementary relevance and cross-task analyses remain distinct. This is not consciousness detection.",
+      "evidence_ids": [
+        "meg-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "COGITATE-derived regional MEG data. Resolve registered Zenodo v1 against author v2 and corrected publication before fixing immutable empirical inputs.",
+      "evidence_ids": [
+        "meg-data-v1",
+        "meg-data-v2",
+        "meg-correction"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Original analysis uses all 94 participants. An arbitrary smaller roster is not a same-task comparison.",
+      "evidence_ids": [
+        "meg-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original stimulus/relevance analysis uses ten stratified participant-group folds; pinned code shuffles with random_state=127. Exact input ordering and realized membership must be reconstructed. Prospective nested folds are not interchangeable.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code",
+        "meg-local"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source FC values derive from regional time series averaged by participant and event type. Preserve this condition-averaged input task and its exposure; do not relabel it as single-trial unknown-category prediction.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "The source z-scores and detrends time series, screens 262 FC measures to 246, then uses the pinned feature-quality and mixed-sigmoid classifier pipeline. Changing screening or train-only scaling must be declared as a method change, with identical evaluation support.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Accuracy at probability threshold 0.5: correct held-out predictions divided by held-out observations in each source fold. AUC and balanced accuracy are not replacement primary scores.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Arithmetic mean and SD across the ten test folds for each source endpoint; region pairs, relevance and stimulus periods stay separately identified. No prospective equal-person aggregation substitution.",
+      "evidence_ids": [
+        "meg-code"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Retain the full original per-participant connectivity output and post-QC 246-measure family across six directed ROI pairs, two relevance settings, two periods and six stimulus pairs: 144 endpoint combinations per eligible measure, with the original block-specific exclusions. Retain ten-fold accuracy and population SD, source AUC companions, original permutation/surrogate and connectivity controls, and separately identified relevance-decoding and cross-relevance analyses. Source-linked barycenter/robustness/model companion panels and historical nuisance/source-leakage controls require exact publication-to-output scope reconciliation. The four named Fig. 3b/3c inherited scalar claims below are neither independently authenticated targets nor a complete panel. Exact measure/cell identities and all required companion numeric outputs remain unresolved; no scalar or categorical surrogate stands in for their arrays.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code",
+        "meg-extraction",
+        "meg-source-guide",
+        "meg-historical-controls"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Original classifier inputs are regional functional-connectivity values computed after averaging by participant and known stimulus/event condition, including source relevance and onset/offset labels. Original participant-group folds control stimulus-decoding evaluation; the cross-relevance companion instead trains/tests relevance domains in the same participant cohort. These exposures are not single-trial unknown-category or consciousness-detection inputs. Paired paper+data and paper+data+author-code conditions must share the exact original scientific inputs and expose author code only in the second condition; authentic delivery and exposure manifests remain unbound.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code",
+        "meg-extraction"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "fig3b_cs_par_face_falsefont_accuracy",
+      "kind": "scalar",
+      "description": "Inherited reported-value claim from the unchanged improvement contract, not an independently authenticated primary target in this rollout: Printed Fig. 3b CS-PAR face versus false-font barycenter decoding anchor. Exact measure ID, ROI orientation and source relevance/period mapping must be joined to the original complete result matrix before admission. The inherited numerical claim is 0.670; expected remains null because the authorized primary-page check returned only a browser challenge.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "accuracy fraction",
+      "aggregation": "Arithmetic mean of the ten original held-out participant-fold accuracies for this source endpoint; no pooling across measures, regions, conditions or periods.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The primary numerical target has not been independently authenticated here. The inherited reported precision also does not justify a tolerance, rounding band or use of fold SD as an acceptance margin.",
+        "evidence_ids": [
+          "meg-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No inferential acceptance rule is frozen. First authenticate exact original input rows, realized participant folds and the source endpoint identity; source fold SD remains descriptive.",
+        "independent_unit": "participant; test folds have overlapping training sets and are not independent replicates",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original cohort has 94 participants, but cohort size does not justify an invented uncertainty rule or independence count. Original permutation/exchangeability and multiplicity details still require source authentication.",
+        "evidence_ids": [
+          "meg-paper",
+          "meg-code"
+        ]
+      }
+    },
+    {
+      "id": "fig3b_cs_par_face_falsefont_fold_sd",
+      "kind": "scalar",
+      "description": "Inherited reported-value claim from the unchanged improvement contract, not an independently authenticated primary target in this rollout: Printed Fig. 3b CS-PAR face versus false-font barycenter fold SD: 8.3 percentage points, represented as an accuracy fraction. This dispersion is a separate target, not the acceptance tolerance. The inherited numerical claim is 0.083; expected remains null because the authorized primary-page check returned only a browser challenge.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "accuracy fraction",
+      "aggregation": "Population standard deviation (ddof=0) of the same ten fold accuracies; not a standard error or participant confidence interval.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The primary numerical target has not been independently authenticated here. The inherited reported precision also does not justify a tolerance, rounding band or use of fold SD as an acceptance margin.",
+        "evidence_ids": [
+          "meg-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No inferential acceptance rule is frozen. First authenticate exact original input rows, realized participant folds and the source endpoint identity; source fold SD remains descriptive.",
+        "independent_unit": "participant; test folds have overlapping training sets and are not independent replicates",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original cohort has 94 participants, but cohort size does not justify an invented uncertainty rule or independence count. Original permutation/exchangeability and multiplicity details still require source authentication.",
+        "evidence_ids": [
+          "meg-paper",
+          "meg-code"
+        ]
+      }
+    },
+    {
+      "id": "fig3c_cs_pfc_face_object_accuracy",
+      "kind": "scalar",
+      "description": "Inherited reported-value claim from the unchanged improvement contract, not an independently authenticated primary target in this rollout: Printed Fig. 3c CS-PFC face versus object, task-irrelevant onset barycenter decoding anchor. Exact measure ID and source ROI orientation remain to be joined to the complete original matrix. The inherited numerical claim is 0.643; expected remains null because the authorized primary-page check returned only a browser challenge.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "accuracy fraction",
+      "aggregation": "Arithmetic mean of the ten original held-out participant-fold accuracies for the named task-irrelevant onset endpoint; no pooling across the endpoint family.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The primary numerical target has not been independently authenticated here. The inherited reported precision also does not justify a tolerance, rounding band or use of fold SD as an acceptance margin.",
+        "evidence_ids": [
+          "meg-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No inferential acceptance rule is frozen. First authenticate exact original input rows, realized participant folds and the source endpoint identity; source fold SD remains descriptive.",
+        "independent_unit": "participant; test folds have overlapping training sets and are not independent replicates",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original cohort has 94 participants, but cohort size does not justify an invented uncertainty rule or independence count. Original permutation/exchangeability and multiplicity details still require source authentication.",
+        "evidence_ids": [
+          "meg-paper",
+          "meg-code"
+        ]
+      }
+    },
+    {
+      "id": "fig3c_cs_pfc_face_object_fold_sd",
+      "kind": "scalar",
+      "description": "Inherited reported-value claim from the unchanged improvement contract, not an independently authenticated primary target in this rollout: Printed Fig. 3c CS-PFC face versus object, task-irrelevant onset barycenter fold SD: 9.4 percentage points, represented as an accuracy fraction. This dispersion is not a tolerance. The inherited numerical claim is 0.094; expected remains null because the authorized primary-page check returned only a browser challenge.",
+      "status": "unresolved",
+      "expected": null,
+      "units": "accuracy fraction",
+      "aggregation": "Population standard deviation (ddof=0) of the same ten fold accuracies; not a standard error or participant confidence interval.",
+      "evidence_ids": [
+        "meg-paper",
+        "meg-code"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The primary numerical target has not been independently authenticated here. The inherited reported precision also does not justify a tolerance, rounding band or use of fold SD as an acceptance margin.",
+        "evidence_ids": [
+          "meg-paper"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "No inferential acceptance rule is frozen. First authenticate exact original input rows, realized participant folds and the source endpoint identity; source fold SD remains descriptive.",
+        "independent_unit": "participant; test folds have overlapping training sets and are not independent replicates",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The original cohort has 94 participants, but cohort size does not justify an invented uncertainty rule or independence count. Original permutation/exchangeability and multiplicity details still require source authentication.",
+        "evidence_ids": [
+          "meg-paper",
+          "meg-code"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "The four inherited Fig. 3b/3c numerical claims are not independently authenticated targets or a full computational reproduction contract. All expected values remain null. The full measure-by-endpoint arrays cannot be encoded as a scalar surrogate; exact 246-measure IDs, eligibility and all original scalar-cell targets must first be authenticated and enumerated.",
+    "The sole authorized exact primary article open at PMC13338905 returned a three-line browser/reCAPTCHA challenge. Existing improvement.v1.json reports 0.670/0.083 and 0.643/0.094, but its prior verified label and the classifier code do not independently authenticate those printed source values. Preserve this primary reread gap; do not infer targets from code or retry the challenged route in this rollout.",
+    "Resolve canonical Zenodo v1 data.zip against article-linked v2 empirical.zip and bind the corrected supplement to an exact publisher-authenticated held version. Metadata, URLs and existing code pins do not establish empirical identity.",
+    "The public 94-ID list does not authenticate the empirical cohort/alias/row join. Freeze complete original observations, ordering, masks, source regions, preprocessing, block QC and realized ten participant folds; do not substitute prospective nested folds.",
+    "The original-fold-score API starts from supplied operator labels, folds and probabilities. It does not derive regional time series, connectivity features, fitted parameters or authentic model predictions; read_author_matrix imports summaries and cannot distinguish calculation from copied published aggregates.",
+    "Original permutation/surrogate/significance companions need exact tested contrasts, shuffle/exchangeability unit, null realizations, multiplicity and numerical targets. No test threshold, resampling count or significance target is inferred from absent source evidence.",
+    "Complete original connectivity/barycenter, polarity/aggregation robustness and source-linked model companions require exact scope, per-observation/per-parameter outputs and numerical source targets. Historical nuisance/Spearman/source-mixing requirements must remain explicit without being mislabeled as authenticated published findings.",
+    "Supplementary relevance-decoding and cross-relevance transfer outputs remain distinct from primary stimulus decoding. Their full measure/support identities, source-native predictions and targets are not handled by the accepted primary scorer or frozen here.",
+    "Justified numerical reproduction tolerances and uncertainty rules are unresolved. Printed precision and descriptive fold SD do not define an equivalence margin or independent confidence interval.",
+    "No authentic-data manifest, complete analysis interface, independent granular-output verification program or common paired-condition exposure/resource protocol is frozen. Omit admission_policy rather than manufacture identity hashes; both outcome pairing protocols remain unresolved."
+  ]
+}

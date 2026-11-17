@@ -10,9 +10,30 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: empirical\_method: Figure 1D direct/cross spatial-position decoding remains a separate source empirical prediction result with its complete chosen conditions and prediction-dependent exclusions. Lower RMSE does not establish sequence organization/replay improvement. distinct\_replay\_component: Burst-position outputs remain tied to their own original event support and temporal-order/null analyses; a position-error scalar does not exhaust replay evidence. prospective\_extension: New held-animal generalization, changed held-out clustering and template-recurrence designs remain prospective, not replacements for original source reconstruction. Reviewed source limits: Exact original numerical biological panel, reference outputs and agreement rules are not frozen; do not automatically enroll every figure, all 77 scalar descriptions or all Arena/Sleep branches. Original animal/session/cell identities and phase/task/correctness masks need authentication; four filename tokens alone do not establish full biological support. Recompute source clustering/templates with source count, behavior and phase matching; supplied fitted labels do not independently validate reconstruction. Replay event eligibility, temporal-order nulls, tested/selected/skipped denominators and aggregation must preserve source support. Paper/code mask, null and tail discrepancies remain unresolved. Source code-to-final-paper equivalence and separate decoder full phase/session support remain unresolved; prediction-dependent modal exclusions must remain visible. Raw calcium extraction remains outside the retained processed-observation scope. No explicit named-result replacement authority was found in inspected definitions/gates/handoffs; a deliberate Figure 1D replacement requires reviewed root scope authority. More clusters, larger replay effects, smaller p-values or improved unrelated decoding do not establish same-primary superiority. Mixed biological-reproduction/decoder-improvement admission remains unavailable; all scientific outcomes remain unknown.
+
+**Primary scientific scope:** Bounded four-mouse task/learning-phase neural sequence organization, recomputed clustering and replay from processed per-neuron observations, explicit masks and registered identities. The historical next action is one learning-phase replay comparison; no whole-paper or every-summary requirement.
+
+**Retained secondary policy:** empirical\_method: Figure 1D direct/cross spatial-position decoding remains a separate source empirical prediction result with its complete chosen conditions and prediction-dependent exclusions. Lower RMSE does not establish sequence organization/replay improvement. distinct\_replay\_component: Burst-position outputs remain tied to their own original event support and temporal-order/null analyses; a position-error scalar does not exhaust replay evidence. prospective\_extension: New held-animal generalization, changed held-out clustering and template-recurrence designs remain prospective, not replacements for original source reconstruction.
+
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. Source-native rebinding identifies an ordered original task: Bayesian position decoding evaluated by Fig. 1D RMSE across all animals/sessions and original arm conditions. The exact numerical source baseline, evaluation identities, split and reduction are not recovered, so the task is not admitted. Descriptive sequence/replay reconstruction remains calibration.
 
@@ -24,7 +45,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 48887 bytes; SHA-256 `174fd6aa242d39991602c5df2d539c9e173afea22a89a850b4982fa9e7e475d5`.
+- Specification identity: 56911 bytes; SHA-256 `ae99f67a95f5e662c231abadf0e2838800e1e3157518f308df6456c6e1302ee4`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

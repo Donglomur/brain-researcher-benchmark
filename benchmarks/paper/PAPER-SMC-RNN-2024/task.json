@@ -2,10 +2,10 @@
   "schema_version": 1,
   "id": "PAPER-SMC-RNN-2024",
   "track": "paper",
-  "title": "SMC-RNN: same-task improvement on the complete MC_Maze 20-ms panel",
+  "title": "SMC-RNN: reproduce source findings and exceed the original offline MC_Maze 20-ms endpoint",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "scientific_question": "Predict held-out neural activity and future activity on the complete standard MC_Maze20ms test panel; preserve both Table2 SMC-RNN proposal arms.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "scientific_question": "Predict held-out neural activity and unseen future activity on the complete original offline MC_Maze 20-ms NLB test panel. Preserve both Table 2 SMC-RNN source-method result rows for reproduction and author calibration; one primary offline candidate prediction set need not reproduce two source-specific temporal restrictions.",
   "paper_identity": {
     "title": "Inferring stochastic low-rank recurrent neural networks from neural data",
     "url": "https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf"
@@ -15,8 +15,8 @@
     "commit": "c808c76ad940491b0a14d2671e3884140aa61258"
   },
   "primary_outputs": [
-    "Complete predictions for both original causal-proposal and noncausal-proposal strata.",
-    "Original co-bps, velocity R2, PSTH R2 and forward bps for each arm."
+    "Reproduction: source-native complete-panel outputs for both original Table 2 author recipes and all eight metrics, under independently justified agreement criteria.",
+    "Improvement: one complete-panel offline candidate prediction set and all four original metrics, compared with the strongest qualified relevant source comparator frozen before candidate results."
   ],
   "input_assets": {
     "routes": [
@@ -24,7 +24,7 @@
       "https://github.com/mackelab/smc_rnns",
       "https://doi.org/10.48324/dandi.000128/0.220113.0400"
     ],
-    "observation_boundary": "Original training/validation spikes and permitted behavior, test held-in spikes. Original test held-out spikes/behavior remain evaluator-only locally and are publicly exposed sinceJanuary2026. With a fixed method fitted only on permitted training/validation information and fixed data-independent randomness, test observation-bin t (zero-based0..34) may depend only on the same trial held-in prefix0..max(t,13) for the causal-proposal arm and0..min(t+17,34) for the source-matched noncausal-proposal arm. Forward bins35..44 may use all35observed bins, never future spikes or test behavior. No test-wide fitting, normalization, adaptation or other test-trial information may bypass these bounds. Any architecture is allowed; the causal reflect-padding startup is not strictly online.",
+    "observation_boundary": "Original NLB permits all 35 supplied same-trial held-in observation bins for co-smoothing and for predicting the ten unseen future bins. Test held-out spikes, future spikes and test behavior remain evaluator-only locally; original test targets have been public since January 2026. Original supplied training/validation spikes and behavior may guide fitting or selection, but the actual delivered fields, validation feedback, adaptation policy and budgets must be frozen before execution; this declaration grants no additional fields, trials or test-wide adaptation. Disclose behavioral guidance and distinguish it from matched neural-only learning. Author prefix bounds 0..max(t,13) and 0..min(t+17,34) are method-specific or separately named matched-access conditions, not primary offline candidate restrictions.",
     "target_exposure": "Original test targets publicly exposedJanuary2026; never untouched.",
     "source_panels": [
       {
@@ -40,16 +40,76 @@
     ]
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.temporal-scope.v1.json"
+    },
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
+    },
+    "author_baseline_role": "calibration",
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false,
+    "retained_improvement_contract": {
       "path": "benchmarks/paper/PAPER-SMC-RNN-2024/improvement.v1.json",
       "bytes": 11750,
       "sha256": "e9f6630889c6be51513e917d4225d324d91e6a4de6582cc3860a8018bd4e5a2c"
     },
-    "disposition": "design_ready",
-    "reproduction_role": "not_applicable"
+    "candidate_interface": {
+      "delivery": {
+        "bytes": 12197,
+        "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/delivery.py",
+        "sha256": "3164b4c40c26cf025e749c00f325aff890c22737df2466369f60720770370273"
+      },
+      "policy": {
+        "bytes": 6723,
+        "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/policy.py",
+        "sha256": "1fbcca835f8a9bb09599168c25a8e680f20a6b8d04eceee7093036ff0e0d7d79"
+      },
+      "prediction_interface": "one_complete_offline_prediction_set",
+      "role": "primary_offline_candidate",
+      "scientific_outcome": "unknown",
+      "scorer": {
+        "bytes": 12664,
+        "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/offline-nlb-outcomes-v1/scorer.py",
+        "sha256": "4b47c00312c8a58a3a08afd832a3e75f313ba717e0ffffad50a990496955083f"
+      },
+      "selection_limit": "Source selectors do not authenticate an episode policy, source comparator, execution or scientific outcome."
+    },
+    "author_reproduction_routes": {
+      "delivery": {
+        "bytes": 23723,
+        "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/delivery.py",
+        "sha256": "bf63171f9737e6be6a0c6c7d575c727505f07208cfae6a460876746959a51cf8"
+      },
+      "protocol": {
+        "bytes": 5849,
+        "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/protocol.json",
+        "sha256": "c8d437ece9c57b9066c5167ad499eada673d425ea17a06a9a20d62410ecbd644"
+      },
+      "recipes": [
+        "causal-proposal",
+        "noncausal-proposal"
+      ],
+      "role": "author_source_reproduction_and_calibration",
+      "scientific_outcome": "unknown",
+      "scorer": {
+        "bytes": 15050,
+        "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/scorer.py",
+        "sha256": "48638a595755138b32ff9c228804fd8c19c9ff874cd254f135fc5245ee9a25f8"
+      },
+      "selection_limit": "Author calibration is not a qualified submitted AI reproduction; source-matched receipts cannot be relabeled as offline candidate receipts."
+    }
   },
-  "allowed_candidate_methods": "With a fixed method fitted only on permitted training/validation information and fixed data-independent randomness, test observation-bin t (zero-based0..34) may depend only on the same trial held-in prefix0..max(t,13) for the causal-proposal arm and0..min(t+17,34) for the source-matched noncausal-proposal arm. Forward bins35..44 may use all35observed bins, never future spikes or test behavior. No test-wide fitting, normalization, adaptation or other test-trial information may bypass these bounds. Any architecture is allowed; the causal reflect-padding startup is not strictly online.",
+  "allowed_candidate_methods": "Original NLB permits all 35 supplied same-trial held-in observation bins for co-smoothing and for predicting the ten unseen future bins. Test held-out spikes, future spikes and test behavior remain evaluator-only locally; original test targets have been public since January 2026. Original supplied training/validation spikes and behavior may guide fitting or selection, but the actual delivered fields, validation feedback, adaptation policy and budgets must be frozen before execution; this declaration grants no additional fields, trials or test-wide adaptation. Disclose behavioral guidance and distinguish it from matched neural-only learning. Author prefix bounds 0..max(t,13) and 0..min(t+17,34) are method-specific or separately named matched-access conditions, not primary offline candidate restrictions.",
   "resources": {
     "native_baseline_protocol": {
       "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/protocol.json",
@@ -60,20 +120,21 @@
     "participant_resource_budget": null
   },
   "holds": [
-    "No complete author192×32test-score calibration or printed-score linkage yet.",
-    "No justified improvement effect, uncertainty or companion non-regression policy.",
-    "Original targets are publicly exposed; local isolation does not create an untouched holdout.",
-    "Generic scalar result admission must not silently discard either original arm; joint two-arm admission remains unqualified.",
-    "Paired materials and source software controls do not establish participant/model performance.",
-    "Temporal-access enforcement is unqualified: complete-array H5 delivery and an arm label do not enforce the source information bounds. Both-arm admission requires a reviewed execution boundary exposing only permitted prefixes, or an equivalent enforceable boundary with fixed model/randomness and audit evidence. Unrestricted full-window output cannot qualify the causal arm; broadening noncausal access is a distinct offline-access policy."
+    "No complete author 192×32 source-score linkage or strongest qualified relevant comparator is established by this definition proposal.",
+    "No justified improvement effect, uncertainty or companion non-regression policy is frozen.",
+    "Actual delivered training/validation fields, behavior-guided fitting/selection, validation feedback, adaptation policy and equal participant budgets remain unqualified; original permission does not itself add materials or authorize a trial.",
+    "The existing source-matched-nlb-v1 exporter and candidate scorer label outputs causal/noncausal and encode the superseded primary restrictions. A separately reviewed offline participant interface and primary successor binding are required; historical materials/receipts cannot be relabeled.",
+    "Original targets are publicly exposed; local isolation cannot create an untouched holdout.",
+    "Source-matched and strict-online comparisons are separate optional claims requiring an enforced observation/state/latency boundary and appropriate comparator; neither is established by a primary offline result.",
+    "Paired metadata, source software controls and author calibration do not establish participant performance or either scientific outcome."
   ],
-  "next_implementation_action": "Qualify both complete original author baselines and freeze a joint two-arm effect, uncertainty, companion and participant-budget policy before candidate evaluation.",
+  "next_implementation_action": "Qualify both original author baselines without changing their frozen execution, bind the reviewed offline primary successor and participant interface, then freeze comparator, actual learning materials/conditions, equal budgets and outcome-specific agreement/superiority rules before any candidate execution.",
   "provenance": {
     "reviewed_implementation_commit": "5d63c9c2feda1243f23b791cbde949e11fa38aea",
     "scientific_contract": {
-      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/scientific-contract.json",
-      "bytes": 3718,
-      "sha256": "a05e587878bab6846ba416cc36b3686613b5e5bfe0802d5fb02a42a47145f7bf"
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/scientific-contract.temporal-scope.v1.json",
+      "bytes": 7276,
+      "sha256": "235c980c7a8c6db2176cd9f860f44f6634936295625c0e4f4b26ddcf14f47617"
     },
     "source_preparation_evidence": {
       "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/source-preparation-evidence.json",
@@ -85,11 +146,33 @@
       "bytes": 8060,
       "sha256": "fe533a72234262a8cb5e52bd9052d116d0bb0bf8f440ad44c3bb87d5493f4dd7"
     },
-    "registration_role": "Initial source-paper task with no prior benchmark definition."
+    "registration_role": "Initial source-paper task with no prior benchmark definition.",
+    "retained_pre_outcomes_scientific_contract": {
+      "bytes": 3718,
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/scientific-contract.json",
+      "sha256": "a05e587878bab6846ba416cc36b3686613b5e5bfe0802d5fb02a42a47145f7bf"
+    },
+    "primary_policy_revision": {
+      "bytes": 6921,
+      "path": "benchmarks/paper/PAPER-SMC-RNN-2024/primary-successor.v1.json",
+      "sha256": "9b4b13fe3b5bdeee0ac7bcbba9cdd9936c0472e8410b4345108425be53fd80e2"
+    }
   },
   "admission": {
     "runnable": false,
     "research_qualified": false,
-    "submission_ready": false
-  }
+    "submission_ready": false,
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Predict held-out neural activity and unseen future activity on the complete original offline MC_Maze 20-ms NLB test panel. Preserve both Table 2 SMC-RNN source-method result rows for reproduction and author calibration; one primary offline candidate prediction set need not reproduce two source-specific temporal restrictions.",
+  "status_basis": "The retained status describes design eligibility. The explicit offline primary successor and reproduction each require independent qualification.",
+  "success_criteria": [
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.temporal-scope.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the explicitly selected offline primary successor's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
+  ]
 }

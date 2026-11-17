@@ -1,0 +1,479 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-CANDIDATE-20261114-CONSENSUS",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Same-primary Figure 2a/b quantities now have an honest structured metadata representation, plus two actual statistical companions. No authentic full native member inventory/reference, cohort/occurrence identity, original final reduction, independent computation or justified comparison criteria is established. V2 representation support does not establish scientific readiness.",
+  "source_paper": {
+    "title": "Reciprocal connections dynamically build consensus between neocortical areas",
+    "url": "https://www.nature.com/articles/s41593-026-02437-3"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02437-3",
+      "locator": "Results: The model captures trial-by-trial variability; Figure 2a,b; Methods model fitting/selection",
+      "supports": "Held-neuron Poisson prediction against a same-condition PSTH; 246 active neurons in seven animals; constrained and unconstrained model comparisons."
+    },
+    {
+      "id": "analysis",
+      "kind": "author_code",
+      "url": "https://github.com/marineschimel/v1lm_nn/blob/eec6021e8b9f9031eb775fc1a10a07e583cf0e29/examples/analyze_fitted_model.ml",
+      "locator": "lines 59, 150–207, 736–774, 974–1093",
+      "supports": "Default cached heldout route, 5 ms binning, full-pool leave-current-trial-out PSTH, indexed splits and held-neuron evaluation."
+    },
+    {
+      "id": "fit",
+      "kind": "author_code",
+      "url": "https://github.com/marineschimel/v1lm_nn/blob/eec6021e8b9f9031eb775fc1a10a07e583cf0e29/examples/fit_single_animal.ml",
+      "locator": "trial_ids, select_condition, get_partial_prms and training split construction",
+      "supports": "Native fitting configuration and source trial ordering must match the analysis path."
+    },
+    {
+      "id": "loader",
+      "kind": "author_code",
+      "url": "https://github.com/marineschimel/v1lm_nn/blob/eec6021e8b9f9031eb775fc1a10a07e583cf0e29/lib/data.ml",
+      "locator": "split_and_distribute, lines 81–99",
+      "supports": "Training prefix and remaining test suffix are literal occurrence partitions."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://api.figshare.com/v2/articles/30983044/versions/1",
+      "locator": "article version 1; files and folder_structure metadata",
+      "supports": "Versioned seven-animal source deposit and native/NPY trial permutation companions; metadata only was acquired."
+    },
+    {
+      "id": "likelihood_source",
+      "kind": "author_code",
+      "url": "https://github.com/marineschimel/v1lm_nn/blob/eec6021e8b9f9031eb775fc1a10a07e583cf0e29/lib/analysis.ml",
+      "locator": "compute_LL, lines 72-235; compute_emp_LL, lines 243-307",
+      "supports": "Native prediction is dt times posterior mean firing rate (expected count per bin); ll_time is y*log(mu)-mu without factorial constants. Empirical same-condition prediction adds an explicit baseline. Per-trial exceptions can omit records."
+    },
+    {
+      "id": "cache_outputs",
+      "kind": "author_code",
+      "url": "https://github.com/marineschimel/v1lm_nn/blob/eec6021e8b9f9031eb775fc1a10a07e583cf0e29/examples/analyze_fitted_model.ml",
+      "locator": "heldout branch lines 736-884; eval_for_all_conditions lines 887-918; rerun_all and rerun_empirical lines 974-1093",
+      "supports": "Source-native outputs include trialids, mean_o, ll, ll_time, sample_o, var_o, mean_u, var_u and mean_z. Fresh heldout output is conditional on rerun_heldout; empirical caches expose several offset variants whose final paper selection remains unresolved. Cached fields have asymmetric row permutations."
+    },
+    {
+      "id": "fig2b_statistics",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41593-026-02437-3",
+      "locator": "Figure 2 caption paragraph b; Results: The model captures trial-by-trial variability. Previously inspected primary-source reading record PRIMARY_SOURCE_FIG2B_REVIEW.json; no immutable HTML-body hash is available.",
+      "supports": "Two-sided paired Wilcoxon signed-rank P=6e-7 and unpaired Wilcoxon rank-sum P=0.23 for the constrained/unconstrained per-neuron comparison; reported 246 neurons in seven animals. These are statistical companions, not scalar residual-LL baselines or equivalence criteria."
+    },
+    {
+      "id": "smoothed_diagnostic_source",
+      "kind": "author_code",
+      "url": "https://github.com/marineschimel/v1lm_nn/blob/eec6021e8b9f9031eb775fc1a10a07e583cf0e29/lib/analysis.ml",
+      "locator": "compute_smoothed_LL, lines 307-370; selected by analyze_fitted_model.ml mode `smoothed` at lines 688-707 and rerun_empirical lines 1053-1090.",
+      "supports": "smooth_preds is baseline plus smoothed current-trial target spikes, with smooth_ll and smooth_trialids companions. This is a target-derived diagnostic control, not a permissible held-neuron predictor or a leave-current-trial-out PSTH."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict the held neuron’s single-trial firing-rate trajectory from the other simultaneously observed V1/LM neurons; Figure 2b residual Poisson log-likelihood is the original ordered target.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Figshare article 30983044 version 1, DOI 10.6084/m9.figshare.30983044.v1; authenticate file IDs and folder identities before acquisition.",
+      "evidence_ids": [
+        "data"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain all seven animals and the paper’s active-cell criterion (reported 246 neurons); the exact deposited inclusion/window/mask has not been reconciled to that census.",
+      "evidence_ids": [
+        "paper",
+        "data"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Retain all three original folds and their source trial occurrences. The code indexes trial_ids before selection and partitions a training prefix; authentic native permutation/configuration parity remains unresolved. Do not repair or replace folds silently.",
+      "evidence_ids": [
+        "analysis",
+        "fit",
+        "loader"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Other-neuron spikes and original stimulus/condition timing are available for the query; the target’s current-trial spikes must be absent from recognition observations and all target-derived features.",
+      "evidence_ids": [
+        "paper",
+        "analysis"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source uses dt=0.005 and removes the first 500 ms. Exact native mask/slice semantics and historical analysis configuration need qualification before inferring the original fitted inputs.",
+      "evidence_ids": [
+        "analysis",
+        "fit"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Residual LL = sum_t[y_t log(mu_t)-mu_t-lgamma(y_t+1)] minus the same sum for the leave-current-trial-out condition PSTH; mu is expected count per 5 ms bin. Higher is better.",
+      "evidence_ids": [
+        "paper",
+        "analysis"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Reconcile trial/condition averaging and three-fold neuron summaries with Figure 2b, retaining every animal and active neuron; do not substitute bits/spike or an equal-animal score for the source figure statistic.",
+      "evidence_ids": [
+        "paper",
+        "analysis"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Complete original Figure 2b paired per-neuron constrained/unconstrained residual-LL vectors and their two reported statistical companions, supported by the original Figure 2a held-neuron expected-count trajectories and matched condition-average predictions. Retain all seven animals, three source folds, original two-stimulus/nine-condition mapping, source active-cell masks, trial occurrences and time bins. The reported 246 neurons must not be forced. Preserve native LL/spike/time totals, occurrence identities, all empirical offset/smoothing control variants and emitted auxiliary fields as derivation/verification obligations; exact archive member inventory, final reductions and authentic support remain unresolved. No extension to causal consensus or line-attractor claims.",
+      "evidence_ids": [
+        "paper",
+        "analysis",
+        "cache_outputs",
+        "likelihood_source",
+        "fig2b_statistics",
+        "smoothed_diagnostic_source"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "The candidate predicts from other simultaneous V1/LM neurons and original stimulus/condition timing. The held target current-trial spikes and target-derived recognition features are excluded from candidate observations. Evaluator-held target spikes support independent LL/PSTH and source diagnostic calculations; source smooth_preds directly uses the target trial and is diagnostic evidence only. Public printed figures/statistics are allowed information, so copying them does not prove computation. Both information conditions retain identical observations, support and budgets, differing only by authorized author code.",
+      "evidence_ids": [
+        "paper",
+        "analysis",
+        "likelihood_source",
+        "smoothed_diagnostic_source"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "figure2b_paired_neuron_residual_ll",
+      "kind": "indexed_array_family",
+      "description": "Complete paired per-neuron constrained/unconstrained residual Poisson likelihoods in Figure 2b, without an invented population mean, bits/spike normalization or equal-animal replacement.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure2b_paired_residual_likelihood",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "paired_residual_ll",
+            "manifest_key": "figure2b/paired_residual_ll",
+            "source_quantity": "Original per-neuron residual LL for both model variants. This is the semantic Figure 2b neuron-by-model quantity, not a claim about an already observed archive layout.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              2
+            ],
+            "axes": [
+              {
+                "name": "active_neuron",
+                "units": "source neuron identity with animal and V1/LM region",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Authenticate ordered source active-neuron IDs and masks; reported 246 is not an imposed measured dimension."
+                }
+              },
+              {
+                "name": "model_variant",
+                "units": "source model family",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "constrained",
+                    "unconstrained"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "natural-log likelihood units",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Sum per-bin Poisson terms on original time support; subtract matched leave-current-trial-out condition PSTH LL, then apply the original trial/condition/fold reductions. Final weighting and complete reference vector are unrecovered. Figure 2b names paired signed-rank and unpaired rank-sum two-sided tests, with p-values recorded separately; exact numerical test details still require reconciliation. No new across-neuron performance reduction is proposed.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "analysis",
+              "likelihood_source",
+              "fig2b_statistics"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "analysis",
+          "likelihood_source",
+          "fig2b_statistics"
+        ]
+      },
+      "required_granular_output_ids": [
+        "target_isolation_and_occurrence_support",
+        "native_expected_counts_and_ll_terms",
+        "empirical_offset_and_smoothing_controls",
+        "paired_neuron_reduction_intermediates",
+        "original_statistical_derivation"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recover and authenticate the full per-neuron reference, original support and final trial/condition/fold reductions before defining an independently justified complete-vector comparison. No across-neuron scalar reduction or elementwise-error scalar is supplied.",
+        "independent_unit": "Animal for biological inference; neurons, trial occurrences, time bins and folds are nested/repeated. Native simulation/posterior draws are not additional animals.",
+        "dependence": "Preserve original paired constrained/unconstrained neuron identities, shared observations/PSTH, fold overlap and all within-animal dependence. Do not treat bins, trials or 246 neurons as independent animals.",
+        "multiplicity": "Complete selected Figure 2a/b panel and required companions; simultaneous coverage and any numerical acceptance policy remain unresolved.",
+        "rationale": "Numerical reference equivalence is an unresolved reproduction comparison class, not an adopted norm, reduction, bitwise replay, tolerance or stochastic matching rule. Original reference/source equivalence and independently justified criteria must be recovered before comparison. A reported p-value is not a reproduction threshold.",
+        "evidence_ids": [
+          "paper",
+          "analysis",
+          "likelihood_source",
+          "fig2b_statistics"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "analysis",
+        "likelihood_source",
+        "fig2b_statistics"
+      ]
+    },
+    {
+      "id": "figure2a_complete_prediction_and_psth_support",
+      "kind": "indexed_array_family",
+      "description": "Complete held-neuron expected-count trajectories and original matched condition-average predictions supporting Figure 2a/b, with source-native controls and derivation outputs retained separately. The three members name scientific quantities, not an invented single padded native array; their exact archive-member expansion, shape and axes remain unresolved.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "figure2a_original_held_neuron_trajectory_quantities",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "constrained_expected_counts",
+            "manifest_key": "figure2a/constrained_expected_counts",
+            "source_quantity": "Fresh heldout mean_o under the constrained model on complete original source contexts. Required roles are animal, fold, condition, target neuron, source occurrence and time; native per-archive packing and exact archive partition are not authenticated.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "expected spikes per 5 ms bin",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "compute_LL returns dt times posterior mean observation rate exactly once. Preserve complete original trajectories; no trial average, selected example, padding or invented stacked tensor is admitted.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "analysis",
+              "likelihood_source",
+              "cache_outputs"
+            ]
+          },
+          {
+            "id": "unconstrained_expected_counts",
+            "manifest_key": "figure2a/unconstrained_expected_counts",
+            "source_quantity": "Fresh heldout mean_o under the unconstrained model on the matched complete original source contexts. The same source roles and independent occurrence joins are required; actual native packing remains unresolved.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "expected spikes per 5 ms bin",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Same dt conversion and original support as constrained output; do not infer matching rows from equal shapes or repeated trial IDs.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "analysis",
+              "likelihood_source",
+              "cache_outputs"
+            ]
+          },
+          {
+            "id": "matched_condition_average_counts",
+            "manifest_key": "figure2a/matched_condition_average_counts",
+            "source_quantity": "Original full-pool leave-current-trial-out same-condition PSTH expected-count trajectory matched to every model query. The final published offset/smoothing route and exact archive member mapping remain unrecovered.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "expected spikes per 5 ms bin",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve source condition/trial selection and offset route. Source empirical preds is specifically the unsmoothed baseline=0.0001 route; ll_2, ll_3, ll_4, ll_5 and smoothed diagnostics do not license selecting the best route after scoring.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "analysis",
+              "likelihood_source",
+              "cache_outputs"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "analysis",
+          "likelihood_source",
+          "cache_outputs",
+          "smoothed_diagnostic_source"
+        ]
+      },
+      "required_granular_output_ids": [
+        "target_isolation_and_occurrence_support",
+        "native_expected_counts_and_ll_terms",
+        "native_auxiliary_diagnostics",
+        "empirical_offset_and_smoothing_controls"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Authenticate original trajectory reference and complete keyed native support before defining scientific numerical equivalence. Native stochastic sample_o, auxiliary latent/input coordinates and target-derived smoothing are derivation/diagnostic obligations, not extra primary findings or a requirement for arbitrary latent-coordinate equality.",
+        "independent_unit": "Animal for biological inference; neurons, trial occurrences, time bins and folds are nested/repeated. Native simulation/posterior draws are not additional animals.",
+        "dependence": "Preserve original paired constrained/unconstrained neuron identities, shared observations/PSTH, fold overlap and all within-animal dependence. Do not treat bins, trials or 246 neurons as independent animals.",
+        "multiplicity": "Complete selected Figure 2a/b panel and required companions; simultaneous coverage and any numerical acceptance policy remain unresolved.",
+        "rationale": "Numerical reference equivalence is an unresolved reproduction comparison class, not an adopted norm, reduction, bitwise replay, tolerance or stochastic matching rule. Original reference/source equivalence and independently justified criteria must be recovered before comparison. A reported p-value is not a reproduction threshold.",
+        "evidence_ids": [
+          "paper",
+          "analysis",
+          "likelihood_source",
+          "cache_outputs",
+          "smoothed_diagnostic_source"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "analysis",
+        "likelihood_source",
+        "cache_outputs",
+        "smoothed_diagnostic_source"
+      ]
+    },
+    {
+      "id": "figure2b_paired_signed_rank_p",
+      "kind": "scalar",
+      "description": "two-sided Wilcoxon signed-rank p-value reported for Figure 2b. Paired constrained/unconstrained per-neuron residual log-likelihood values; caption reports 246 neurons across seven animals. Published statistical companion only; not a scalar performance baseline, numerical equivalence rule or evidence of an executed reproduction.",
+      "status": "verified",
+      "expected": 6e-07,
+      "units": "dimensionless p-value",
+      "aggregation": "two-sided Wilcoxon signed-rank; original statistical implementation/version, tie/zero handling and authentic paired/unpaired input lineage remain unresolved. Reconstruct from the full original vectors, not from the printed p-value.",
+      "evidence_ids": [
+        "fig2b_statistics",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical reproduction tolerance follows from a rounded reported p-value; source implementation and uncertainty must be recovered.",
+        "evidence_ids": [
+          "fig2b_statistics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original statistical procedure and independently justify reproduction uncertainty. P=.23 is nonrejection, not equivalence.",
+        "independent_unit": "Animal; paired neuron statistics and within-animal dependence must retain their original roles without claiming 246 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published inference and reproduction acceptance are distinct; no alpha, interval coverage, deterministic equality rule or effect margin is invented.",
+        "evidence_ids": [
+          "fig2b_statistics",
+          "paper"
+        ]
+      }
+    },
+    {
+      "id": "figure2b_unpaired_rank_sum_p",
+      "kind": "scalar",
+      "description": "two-sided Wilcoxon rank-sum p-value reported for Figure 2b. Unpaired comparison of the constrained/unconstrained per-neuron residual-log-likelihood distributions in the same Figure 2b panel. Published statistical companion only; not a scalar performance baseline, numerical equivalence rule or evidence of an executed reproduction.",
+      "status": "verified",
+      "expected": 0.23,
+      "units": "dimensionless p-value",
+      "aggregation": "two-sided Wilcoxon rank-sum; original statistical implementation/version, tie/zero handling and authentic paired/unpaired input lineage remain unresolved. Reconstruct from the full original vectors, not from the printed p-value.",
+      "evidence_ids": [
+        "fig2b_statistics",
+        "paper"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "No numerical reproduction tolerance follows from a rounded reported p-value; source implementation and uncertainty must be recovered.",
+        "evidence_ids": [
+          "fig2b_statistics"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Recover original statistical procedure and independently justify reproduction uncertainty. P=.23 is nonrejection, not equivalence.",
+        "independent_unit": "Animal; paired neuron statistics and within-animal dependence must retain their original roles without claiming 246 independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "Published inference and reproduction acceptance are distinct; no alpha, interval coverage, deterministic equality rule or effect margin is invented.",
+        "evidence_ids": [
+          "fig2b_statistics",
+          "paper"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Numeric Figure 2b complete constrained/unconstrained per-neuron reference vectors and exact final trial/condition/fold aggregation remain unrecovered. The two named two-sided tests and printed p-values are now known, but authentic input-vector lineage and exact original statistical implementation/tie/zero handling remain unresolved.",
+    "The reported 246 active neurons in seven animals require a source-authenticated identity/mask census, exact stimulus/control window and standard-deviation convention. Missing/repeated source trials, condition support and all 21 animal-fold records must be preserved rather than forcing the published count.",
+    "Native OCaml serialization versus NPY companion permutations, double-index occurrence order, condition selection, cross-neuron/MPI row identities and train/test support are unqualified. A dictionary keyed only by repeated source trial ID is insufficient.",
+    "The original held-neuron interior slice, matching likelihood-parameter slices and absent target-derived recognition features require pinned native Owl verification. Existing held-neuron and row-alignment successors are source corrections, not established historical parity.",
+    "analyze_fitted_model.ml defaults rerun_heldout=false and can reuse caches; default animal/fold/configuration is not the full published campaign. A fresh native fit/analyze route, complete constrained/unconstrained selections, dependencies and model-selection exposure must be frozen before execution.",
+    "Exact empirical PSTH offset/smoothing selection and source trial/condition/fold reduction remain unknown. compute_LL already returns expected counts per 5 ms bin; native LL omits factorial constants. Residual cancellation requires exactly identical observations/support, and zero-rate/nonfinite handling cannot silently produce favourable finite scores.",
+    "Required computation evidence must include authentic ordered source/mask manifests; complete animal/fold/model/target-neuron/source-trial/occurrence/condition/time-bin prediction keys; fresh expected-count trajectories; source-native ll_time and LL/spike/time totals; independently derived PSTH predictions and per-bin terms; paired contrasts and complete aggregation intermediates. Retain row-aligned variance/input/latent arrays when emitted. These output identities have not been frozen.",
+    "Independent operator verification must run the frozen submitted analysis on authentic permitted inputs, prove target absence in observations and parameter projections, reject missing/extra/duplicate occurrences or silent native failures, recompute PSTH/LL terms from evaluator-held target spikes, verify units and every reduction, and connect all source-native outputs to the original findings. Matching a printed aggregate or a program that prints it is insufficient.",
+    "No authentic data/panel/metric/aggregation identity manifests, independently qualified analysis/evaluator interface, numerical tolerance, uncertainty rule or execution/exposure/budget protocol exists. admission_policy is deliberately absent because its required hashes cannot truthfully be supplied.",
+    "Complete original Figure 2b figure/legend/notebook invocation and companion selection still require source reconciliation; this rollout does not claim a new complete full-paper review or extend the registered held-neuron task to causal consensus/line-attractor findings.",
+    "Upstream redistribution notice/scope and complete pinned OCaml/Owl/dune/MPI/BLAS runtime remain unresolved. Prior generated/source-text controls, author calibration and historical attempts cannot populate AI reproduction/improvement cells.",
+    "V2 represents the known structured quantities without scalarization, but the complete authentic native archive-member inventory is still absent. Trajectory member shapes/axes remain null rather than inventing a stack across ragged animals/folds/conditions; refine to exact separately keyed source members only after source recovery and review.",
+    "All structured family/semantic/support/domain/derivation/axis identities and reference manifests are null. Unknown nonfinite, missingness and native failure support must be recovered; no NaN deletion, zero replacement or convenient finite score is permitted.",
+    "Native auxiliary fields are computation/diagnostic obligations, not independent scientific findings. In particular sample_o is the separate one-sample pre=false route, var_o precedes dt scaling, mean_u/var_u use input-channel coordinates, and mean_z uses latent coordinates with unresolved packing.",
+    "The empirical archive has its own trialids in addition to heldout trialids. smooth_preds is baseline plus smoothed current-trial target spikes, not a heldout prediction or the same-condition leave-current-trial-out PSTH. Treat smooth_ll/smooth_preds/smooth_trialids as target-derived diagnostic controls.",
+    "The source-specific target is unchanged and same-primary supported. This external v2 draft still requires independent adoption review, its own later canonical task/registry identity release and explicit registry selection. The seven v1 task release, if supplied, cannot bind this task."
+  ]
+}

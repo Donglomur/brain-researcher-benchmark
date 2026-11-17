@@ -136,12 +136,14 @@ label does not create new evidence.
 ## Current implementation and transition
 
 The current registry contains 117 paper and 118 neural task entries. All 117 paper
-definitions currently bind the existing `paper-improvement/v1` contract and its
-same-task superiority objective. Those schemas, pins and historical roles remain
-unchanged while task-specific reproduction and improvement proposals are reviewed.
-The improvement catalog's 21 source-grounded designs, 87 unresolved comparisons,
-nine ineligible entries and zero improvement-ready tasks are **improvement-contract
-dispositions**, not a census of reproduction-outcome support.
+definitions now bind adopted outcome metadata: 66 normal reproduction/improvement
+pairs, 49 unavailable complete-primary pairings and two source-declaration gaps.
+The original definitions and improvement contracts remain preserved, with explicit
+selectors for reviewed current policy successors. All recorded paper scientific
+outcomes remain unknown. An unavailable complete-primary pairing does not make
+independent reproduction scientifically impossible; each claim retains its own
+source, scope and execution requirements. Improvement-contract dispositions are
+separate from reproduction support and scientific success.
 
 All 118 neural definitions bind current understanding contracts with separate
 access-mode descriptions. Their delivered-source dispositions do not qualify
@@ -149,19 +151,20 @@ native interpretation or tool/model building. Task-specific proposals must conne
 the two outcome definitions to the actual observations, controls and available
 execution paths; unsupported modes must remain visible.
 
-Existing CLI behavior remains meaningful and narrow. `paper-contract TASK_ID`
-returns the current improvement contract. Historical paper `score` and `run`
-adapters still require `--calibration`; their results do not automatically become
-qualified reproductions or improvements. `neural-contract TASK_ID` describes the
-current target and access modes. Task and runtime admission holds remain in force.
-There is no newly implemented reproduction command or four-outcome result schema
-created by this document.
+`paper-contract TASK_ID --outcome reproduction` inspects the explicitly selected
+reproduction declaration where one is bound; `paper-outcomes TASK_ID` reports the
+current paired-outcome metadata and remaining limits. `paper-contract TASK_ID`
+inspects the selected current improvement contract where available.
+These commands do not establish a reproduced finding or candidate improvement.
+Historical paper `score` and `run` adapters still require `--calibration`; their
+results do not automatically become qualified reproductions or improvements.
+`neural-contract TASK_ID` describes the current target and access modes. Task and
+runtime admission holds remain in force.
 
 The eight historical pilot attempts remain four scoped paper reconstructions and
-four neural programme attempts. The SMC-RNN author-model probes remain partial
-inference cost evidence. Source-preparation receipts, native software controls and
-scripted viewer collections retain their reported limits. None is retroactively
-renamed into a qualified outcome.
+four neural programme attempts. Source-preparation receipts, native software
+controls and scripted viewer collections retain their reported scope, dates and
+limits. None is retroactively renamed into a qualified outcome.
 
 Before admitting a new outcome, review its complete scientific definition, actual
 source and input support, comparator and decision rule, allowed participant access,

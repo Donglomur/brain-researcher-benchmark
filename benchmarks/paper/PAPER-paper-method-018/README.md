@@ -10,6 +10,55 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
+## Separate paper outcomes
+
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
+
+**Corrected primary scope; outcomes remain unqualified.** Both outcome contracts retain the same primary scientific task. Unresolved source criteria still limit receipt admission.
+
+**Primary goal:** Reproduce the ten-session Allen empirical neural-modeling results, including the matched source component-ablation comparisons and the supported coupling/dynamics outputs within the retained scope. Report the full-model Table S1 negative log-likelihood as a named empirical performance component. Assess any improvement on the same source-qualified observation conditions and metric; lower full-model NLL alone does not reproduce or establish improved coupling interpretation. Preserve target-conditioned inference. Keep the prospective equal-session interaction-gain comparison separate, and retain the original exclusions for unsupported anatomical/condition-specific subpanels.
+
+**Primary scientific scope:** Ten-session Allen empirical held-out neural modeling and matched original component comparisons, with supported coupling/dynamics outputs; the Table S1 full-model NLL is a named within-family performance component. No whole-paper, every-Figure-5-panel or simulation-column requirement.
+
+**Remaining source limits:**
+
+- Original ten-session/trial membership, source eligibility, source preprocessing and final split interpretation are not fully reconciled.
+- Published total NLL must be reconciled with released loss reduction, Poisson constants, KL handling, model flags, posterior access and uncertainty aggregation.
+- A no-coupling ablation retains trial-wise dynamics and post-spike history; the historical history-only phrase does not authorize relabeling it or imposing a different pure-history comparison.
+- Anatomical/condition-specific subpanels excluded in the retained task remain excluded until their required source artifacts are reconstructed and validated; exact supported coupling/dynamics outputs remain unbound.
+- Target-conditioned latent inference must remain explicit; blind forecasting and unseen-neuron generalization would change the task.
+- The saved notebook repacking/split issue is attributed to the earlier source-recovery handoff; neither independent scope reviewer nor peer reviewer performed a new raw-notebook audit.
+- Transcribing Table S1 means and standard errors is not independent reproduction. Lower full-model NLL alone does not establish complete-family success, stronger coupling interpretation or causal influence.
+- Exact outcome scope and all required comparisons must be represented faithfully before admission; same\_primary\_unqualified does not admit a full-family reproduction/one-scalar improvement bundle.
+- No numerical tolerance, superiority margin, scientific outcome or runtime qualification is established.
+
+**Retained source scope:** within\_primary\_empirical\_performance\_component: Retain full-model Table S1 Allen test NLL as a genuine performance component of the original empirical family. Its improvement does not establish completion or improvement of the complete ablation/coupling/dynamics family. prospective\_extension: The equal-session interaction-gain implementation and proposed neuron-subsampling/shared-input robustness comparisons remain separate prospective extensions, not recovered Table S1 arithmetic or an authenticated pure-history comparator. simulation\_context: The original Table S1 GLM and EIF simulation columns remain distinct source context; they are not replacements for the Allen empirical column or compulsory additions to this retained primary scope.
+
+**Retained source roles:**
+
+| Source field | Declared role |
+| --- | --- |
+| Item 1 / Role | Within primary empirical performance component |
+| Item 1 / Scope | Retain full model Table S1 Allen test NLL as a genuine performance component of the original empirical family. Its improvement does not establish completion or improvement of the complete ablation/coupling/dynamics family. |
+| Item 2 / Role | Prospective extension |
+| Item 2 / Scope | The equal session interaction gain implementation and proposed neuron subsampling/shared input robustness comparisons remain separate prospective extensions, not recovered Table S1 arithmetic or an authenticated pure history comparator. |
+| Item 3 / Role | Simulation context |
+| Item 3 / Scope | The original Table S1 GLM and EIF simulation columns remain distinct source context; they are not replacements for the Allen empirical column or compulsory additions to this retained primary scope. |
+
+- [Reviewed primary scope correction](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Original-finding reproduction contract](reproduction.v1.json)
+- [Paired outcome protocols](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
 ## Current paper-improvement objective
 
 **Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
@@ -24,7 +73,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 38435 bytes; SHA-256 `541a4d96a8edc6f04d39f3541c214d210ce2751481f03052482bd425b89e2cbf`.
+- Specification identity: 45187 bytes; SHA-256 `ad6cfd1138438c0c0267ef222de20d90ee82d49ca1573415a8b07eabe9b080c4`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

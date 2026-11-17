@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: The genuine empirical Supplementary Figure S11 linear decoder analysis, retaining stimulus prediction, behavioral-estimate prediction and predicted-stimulus/behavior readout as distinct measures with the source condition and consistency contrasts. Higher stimulus-decoding correlation alone does not establish the primary finding. Reviewed source limits: Authenticate the MI/II estimator and source-code/paper correspondence before primary scoring; the existing linear evaluator does not implement the primary information endpoint. Recover exact primary participant/parcel identities, source condition aggregation, reference arrays and justified reproduction tolerances; the supplementary decoder cohort must not replace the primary cohort. The secondary decoder still lacks authenticated fold realization, upstream source aggregation, numerical baseline and native parity; declared prospective repairs remain distinct from exact author reproduction. No ordered same-result primary superiority estimand or decision rule is established. Larger effects, smaller p-values or higher secondary decoding accuracy are insufficient. A mixed primary-reproduction/secondary-improvement bundle remains unavailable if the schema requires an identical target. Official indexed primary text and pinned regression code were inspected. No newly frozen complete article body or independent cached-article hash authentication is claimed.
+
+**Primary scientific scope:** The original empirical human MEG finding of consistency-dependent parietal information readout versus encoding and its participant-level association with behavioral evidence weighting, anchored to Figures 4-5 and their indispensable behavioral, Choice/Cue, consistency, sample-position and encoding controls. This is a named result family, not every figure or whole-paper reproduction.
+
+**Retained secondary policy:** The genuine empirical Supplementary Figure S11 linear decoder analysis, retaining stimulus prediction, behavioral-estimate prediction and predicted-stimulus/behavior readout as distinct measures with the source condition and consistency contrasts. Higher stimulus-decoding correlation alone does not establish the primary finding.
+
+- [Reproduction proposal (inspection only)](reproduction.v2.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The source paper explicitly defines ten-fold prediction of stimulus angles and behavioral estimates from neural PCs, with held-out Pearson correlation. This ordered source-native decoder is a valid overhaul route even though the main MI/II findings are descriptive. Exact original decoding baseline arrays, source participant/parcel aggregation and fold membership remain unrecovered, so no same-task win is currently admitted.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 97908 bytes; SHA-256 `986b79e0a660f3dcb7ce2847047eb250060ee2c4d0ddce7ecd0e90b47267e2f8`.
+- Specification identity: 103382 bytes; SHA-256 `023cadea4a627c35f2f787747303970f66d9f85061d60e4a5dab59d5f036eb1e`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

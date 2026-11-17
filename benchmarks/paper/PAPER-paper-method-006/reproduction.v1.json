@@ -1,0 +1,862 @@
+{
+  "schema_version": "paper-reproduction/v1",
+  "task_id": "PAPER-paper-method-006",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Computational reproduction is an independent original-task outcome,but complete source identities,publication-native computation and justified criteria remain unresolved. The18individually identified Kilosort4 Fig4j/k count coordinates below are genuine scalar findings; they do not close the remaining full121-obligation panel,including score curves and all original comparators. The validated nine-case reducer is downstream arithmetic only.",
+  "source_paper": {
+    "title": "Spike sorting with Kilosort4",
+    "url": "https://www.nature.com/articles/s41592-024-02232-7"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11093732/",
+      "locator": "Results: Hybrid and full simulations without drift; Simulations with realistic drift; Figs. 3c/e and 4e-l; Methods: Comparing spike sorting outputs",
+      "supports": "Original synthetic/hybrid populations, matching-score definition, recovery threshold and grouping; 80–90% is a descriptive range, not an exact per-condition numeric baseline."
+    },
+    {
+      "id": "bench",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/MouseLand/Kilosort/v4.0.2/kilosort/bench.py",
+      "locator": "nmatch, match_neuron, compare_recordings, load_GT, convert_ks_output",
+      "supports": "Released scorer uses dt=6 and n_check=20; event reuse and output-conversion signature must be reconciled with the publication."
+    },
+    {
+      "id": "reg",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-006/task.json",
+      "locator": "evaluation.current_source_profiles; holds; implementations/registered-runtime/payload/contracts/SOURCE_SEMANTICS.md",
+      "supports": "Existing R_source20/R_paper40/I_bijective_full distinctions and unqualified scientific status; source evidence is not inferred from registration."
+    },
+    {
+      "id": "paper_all",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11093732/",
+      "locator": "Main Figs.1-5; Extended Data Figs.1-7; Table1; Methods Sec10-Sec43. Captured primary XML SHA256 b9502322b819b5b0240bd2fa5c5df4d7e79b5c93868ffaf0f22f2fe702989162.",
+      "supports": "Complete original qualitative, numerical and companion panel, including waveform/drift/property, ablation/runtime, normal/twice-speed biophysical and other-probe controls; documentary metadata is not authentic output preparation."
+    },
+    {
+      "id": "si",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11093732/",
+      "locator": "Supplementary Note 41592_2024_2232_MOESM1_ESM.pdf pp.2-6; prior accepted complete-document SHA256 47ebfffd2a73d8182870f04930cc78d6280ae25f01dc04786d457b9742e7e5ff; SUP01-SUP13 inventory in COMPLETE_CATALOG.json.",
+      "supports": "Older Kilosort algorithm controls, source equations, configuration/iteration/support requirements and unresolved EQ01/EQ02/OPT01 distinctions; documentary acceptance is not numerical qualification."
+    },
+    {
+      "id": "scope",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/002a5092dfbedb497dde79b531d6695fff564f6b/benchmarks/paper/PAPER-paper-method-006/implementations/registered-runtime/payload/contracts/COMPLETE_CATALOG.json",
+      "locator": "scope, supplement, assessment and source_issues; 71 panel/GUI,34 Methods,13 supplement and3 whole-study obligations.",
+      "supports": "Exact retained obligation inventory and unresolved source-native constructors; no finding is silently removed because the nine-case reducer lacks a producer."
+    },
+    {
+      "id": "reducer",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/002a5092dfbedb497dde79b531d6695fff564f6b/benchmarks/paper/PAPER-paper-method-006/implementations/original-panel-reducer-v1/reducer.py",
+      "locator": "reduce_panel(manifest,exports), binary64 main recovery panel, source-profile guards, per-unit reproduction diagnostics; SHA256 fa3ba48f44b45ef2890ce670323446d59db858570f352cfa586ccb4bb0169086.",
+      "supports": "Accepted executable downstream reduction of operator-owned scoring exports; not an AI sorter interface, authentic-source issuer, publication verifier or completed paper result."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Recover the times and unit assignments of injected ground-truth spikes from extracellular voltages, including no-drift hybrids and the full simulation drift conditions used in Figs. 3–4.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original three IBL-background hybrids plus full simulations constructed from IBL waveforms/ISI statistics and measured drift. Publication-specific bytes, producer invocation, version and complete source-data identities are not authenticated by the reviewed metadata.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Fig. 3c pools 300 injected units from three hybrid recordings; full simulations use 600 ground-truth single units each. Fig. 4 includes no, medium, high, fast, step drift and step drift with aligned sites. Natural background neurons are not fully labeled truth.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The paper evaluates fixed simulation cases rather than a supervised train/test split. Exact development exposure, historical parameter tuning and waveform/ISI donor reuse are not recovered; a fresh generator seed or a held-out recording would be an extension.",
+      "evidence_ids": [
+        "paper",
+        "reg"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Extracellular voltage recordings and their probe geometry/sampling metadata; ground-truth spike trains and donor/generator parameters are scoring information, not candidate features.",
+      "evidence_ids": [
+        "paper",
+        "bench"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Paper source waveforms use 300-Hz high-pass filtering, whitening and pyKilosort estimates from 11 drifting recordings. Match the original voltage scaling, drift, waveform and comparator preprocessing; released defaults do not establish the publication invocation.",
+      "evidence_ids": [
+        "paper",
+        "bench"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Paper unit score is 1−FP−FN: FP is unmatched detected spikes divided by detected spikes and FN is missed truth spikes divided by truth spikes, with matching tolerance ≤0.2 ms and the best of 40 closest detected units. Recovery is score>0.8. Released bench.py checks 20 and its nmatch may reuse an event; paper-faithful bookkeeping remains unresolved.",
+      "evidence_ids": [
+        "paper",
+        "bench"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Retain per-unit score distributions and recovered-unit counts per original simulation, three-hybrid pooling in Fig. 3c, and false-positive/good-unit companions in Fig. 4k. A new equal-family composite is not the published aggregate.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Retain all121 existing original obligations:71 panels/GUI across Figs1-5 and Extended Data1-7,34 Methods sections Sec10-Sec43,13 Supplementary Note obligations SUP01-SUP13,and Table1,ReportingSummary,CompleteProducerInputs. This includes all original sorter comparisons,300 pooled hybrid targets,all six600-target/600-MUA simulations,512 drift sources,11 waveform/ISI parent recordings,597 waveform trajectories,1497 ISI donors,normal/twice-speed biophysical controls,all six ablations over six conditions,runtimes,property curves,other-probe and F1/F2 demonstrations. Exact source-file/unit/coordinate/comparator incidence and publication producers remain unadmitted; the nine-case3900-target reducer is not full-panel closure. The18declared scalar findings identify only one method/condition/count per row in Fig4j/k. They are not a complete original finding panel: all remaining source-native outputs and comparator coordinates remain mandatory and unresolved rather than being mislabeled scalar families.",
+      "evidence_ids": [
+        "paper_all",
+        "si",
+        "scope",
+        "reducer"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both conditions require identical paper and authentic original voltage/probe/sampling observations and the same frozen full-panel evaluation. Paper+data+author-code adds only the version-authenticated official author-code package. Ground-truth event trains,scoring arrays and operator verification outputs remain evaluation-side information; all public paper/source-target exposure and historical tuning/donor reuse must be disclosed. Complete common-input,code,exposure and budget manifests and enforceable paired delivery are not established.",
+      "evidence_ids": [
+        "paper_all",
+        "bench",
+        "scope",
+        "reducer"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "kilosort4_no_drift_recovered_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation no_drift; metric recovered_target_count. Number of ground-truth single-unit targets correctly identified by Kilosort4 at the original score strictly greater than0.8.",
+      "units": "ground-truth single units",
+      "aggregation": "Count recovered targets once each in the original600-target simulation. The denominator is600; no pooling with another condition,method,hybrid or MUA generator.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/no_drift/recovered_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4j; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original no_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_no_drift_good_matched_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation no_drift; metric good_matched_target_count. Number of recovered ground-truth targets whose selected best detected unit is classified good by the source quality rule for Kilosort4.",
+      "units": "ground-truth single units",
+      "aggregation": "Count ground-truth targets once each within the same original condition. This is the good-matched-target bar in Fig4k,not the number of distinct detected units; preserve original best-match incidence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/no_drift/good_matched_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k matched/good-matched bars; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original no_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_no_drift_unmatched_good_detected_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation no_drift; metric unmatched_good_detected_count. Number of Kilosort4 detected units classified good by the source quality rule that do not match any original ground-truth target.",
+      "units": "distinct detected units",
+      "aggregation": "Count each good unmatched detected unit once within the original condition. Keep the entire detected-unit roster; this source false-positive-unit quantity is distinct from spike-level FP rate and biological existence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/no_drift/unmatched_good_detected_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k false-positive good-unit bar; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original no_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_medium_drift_recovered_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation medium_drift; metric recovered_target_count. Number of ground-truth single-unit targets correctly identified by Kilosort4 at the original score strictly greater than0.8.",
+      "units": "ground-truth single units",
+      "aggregation": "Count recovered targets once each in the original600-target simulation. The denominator is600; no pooling with another condition,method,hybrid or MUA generator.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/medium_drift/recovered_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4j; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original medium_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_medium_drift_good_matched_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation medium_drift; metric good_matched_target_count. Number of recovered ground-truth targets whose selected best detected unit is classified good by the source quality rule for Kilosort4.",
+      "units": "ground-truth single units",
+      "aggregation": "Count ground-truth targets once each within the same original condition. This is the good-matched-target bar in Fig4k,not the number of distinct detected units; preserve original best-match incidence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/medium_drift/good_matched_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k matched/good-matched bars; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original medium_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_medium_drift_unmatched_good_detected_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation medium_drift; metric unmatched_good_detected_count. Number of Kilosort4 detected units classified good by the source quality rule that do not match any original ground-truth target.",
+      "units": "distinct detected units",
+      "aggregation": "Count each good unmatched detected unit once within the original condition. Keep the entire detected-unit roster; this source false-positive-unit quantity is distinct from spike-level FP rate and biological existence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/medium_drift/unmatched_good_detected_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k false-positive good-unit bar; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original medium_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_high_drift_recovered_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation high_drift; metric recovered_target_count. Number of ground-truth single-unit targets correctly identified by Kilosort4 at the original score strictly greater than0.8.",
+      "units": "ground-truth single units",
+      "aggregation": "Count recovered targets once each in the original600-target simulation. The denominator is600; no pooling with another condition,method,hybrid or MUA generator.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/high_drift/recovered_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4j; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original high_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_high_drift_good_matched_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation high_drift; metric good_matched_target_count. Number of recovered ground-truth targets whose selected best detected unit is classified good by the source quality rule for Kilosort4.",
+      "units": "ground-truth single units",
+      "aggregation": "Count ground-truth targets once each within the same original condition. This is the good-matched-target bar in Fig4k,not the number of distinct detected units; preserve original best-match incidence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/high_drift/good_matched_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k matched/good-matched bars; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original high_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_high_drift_unmatched_good_detected_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation high_drift; metric unmatched_good_detected_count. Number of Kilosort4 detected units classified good by the source quality rule that do not match any original ground-truth target.",
+      "units": "distinct detected units",
+      "aggregation": "Count each good unmatched detected unit once within the original condition. Keep the entire detected-unit roster; this source false-positive-unit quantity is distinct from spike-level FP rate and biological existence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/high_drift/unmatched_good_detected_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k false-positive good-unit bar; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original high_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_fast_drift_recovered_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation fast_drift; metric recovered_target_count. Number of ground-truth single-unit targets correctly identified by Kilosort4 at the original score strictly greater than0.8.",
+      "units": "ground-truth single units",
+      "aggregation": "Count recovered targets once each in the original600-target simulation. The denominator is600; no pooling with another condition,method,hybrid or MUA generator.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/fast_drift/recovered_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4j; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original fast_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_fast_drift_good_matched_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation fast_drift; metric good_matched_target_count. Number of recovered ground-truth targets whose selected best detected unit is classified good by the source quality rule for Kilosort4.",
+      "units": "ground-truth single units",
+      "aggregation": "Count ground-truth targets once each within the same original condition. This is the good-matched-target bar in Fig4k,not the number of distinct detected units; preserve original best-match incidence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/fast_drift/good_matched_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k matched/good-matched bars; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original fast_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_fast_drift_unmatched_good_detected_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation fast_drift; metric unmatched_good_detected_count. Number of Kilosort4 detected units classified good by the source quality rule that do not match any original ground-truth target.",
+      "units": "distinct detected units",
+      "aggregation": "Count each good unmatched detected unit once within the original condition. Keep the entire detected-unit roster; this source false-positive-unit quantity is distinct from spike-level FP rate and biological existence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/fast_drift/unmatched_good_detected_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k false-positive good-unit bar; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original fast_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_step_drift_recovered_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation step_drift; metric recovered_target_count. Number of ground-truth single-unit targets correctly identified by Kilosort4 at the original score strictly greater than0.8.",
+      "units": "ground-truth single units",
+      "aggregation": "Count recovered targets once each in the original600-target simulation. The denominator is600; no pooling with another condition,method,hybrid or MUA generator.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/step_drift/recovered_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4j; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original step_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_step_drift_good_matched_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation step_drift; metric good_matched_target_count. Number of recovered ground-truth targets whose selected best detected unit is classified good by the source quality rule for Kilosort4.",
+      "units": "ground-truth single units",
+      "aggregation": "Count ground-truth targets once each within the same original condition. This is the good-matched-target bar in Fig4k,not the number of distinct detected units; preserve original best-match incidence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/step_drift/good_matched_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k matched/good-matched bars; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original step_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_step_drift_unmatched_good_detected_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation step_drift; metric unmatched_good_detected_count. Number of Kilosort4 detected units classified good by the source quality rule that do not match any original ground-truth target.",
+      "units": "distinct detected units",
+      "aggregation": "Count each good unmatched detected unit once within the original condition. Keep the entire detected-unit roster; this source false-positive-unit quantity is distinct from spike-level FP rate and biological existence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/step_drift/unmatched_good_detected_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k false-positive good-unit bar; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original step_drift simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_step_aligned_recovered_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation step_aligned; metric recovered_target_count. Number of ground-truth single-unit targets correctly identified by Kilosort4 at the original score strictly greater than0.8.",
+      "units": "ground-truth single units",
+      "aggregation": "Count recovered targets once each in the original600-target simulation. The denominator is600; no pooling with another condition,method,hybrid or MUA generator.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/step_aligned/recovered_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4j; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original step_aligned simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_step_aligned_good_matched_target_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation step_aligned; metric good_matched_target_count. Number of recovered ground-truth targets whose selected best detected unit is classified good by the source quality rule for Kilosort4.",
+      "units": "ground-truth single units",
+      "aggregation": "Count ground-truth targets once each within the same original condition. This is the good-matched-target bar in Fig4k,not the number of distinct detected units; preserve original best-match incidence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/step_aligned/good_matched_target_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k matched/good-matched bars; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original step_aligned simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    },
+    {
+      "id": "kilosort4_step_aligned_unmatched_good_detected_count",
+      "kind": "scalar",
+      "status": "unresolved",
+      "expected": null,
+      "description": "One scalar source coordinate: method Kilosort4; simulation step_aligned; metric unmatched_good_detected_count. Number of Kilosort4 detected units classified good by the source quality rule that do not match any original ground-truth target.",
+      "units": "distinct detected units",
+      "aggregation": "Count each good unmatched detected unit once within the original condition. Keep the entire detected-unit roster; this source false-positive-unit quantity is distinct from spike-level FP rate and biological existence.",
+      "evidence_ids": [
+        "paper_all",
+        "paper",
+        "bench"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The exact published count for this one Kilosort4/step_aligned/unmatched_good_detected_count coordinate has not been authenticated. No zero-count tolerance or inferred rounded target is inserted. Original metric/quality policy and a source-supported reproduction criterion remain required. Source locator: Fig4k false-positive good-unit bar; Sec33 Performance metrics.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Resolve exact source-data/invocation and determine source-justified fixed-output parity or rerun uncertainty before admitting a criterion.",
+        "independent_unit": "Original step_aligned simulation; its nested units are not independent experiments and donor/step-aligned construction dependence remains explicit.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "A single original figure-cell count is an identifiable scalar,but its unavailable reference value and numerical/runtime provenance do not justify deterministic equality or an inferential rule. No new replicate minimum is inferred.",
+        "evidence_ids": [
+          "paper_all",
+          "bench"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate original complete source inputs,ordered cohort/unit/role identities,all121 obligation incidence and actual publication construction/invocation; existing counts and hashes of contracts are not data possession.",
+    "Recover the exact expected count for each of the18individually named Kilosort4 Fig4j/k scalar coordinates. Independently recover and represent all remaining original findings/companions and source coordinates from the full121-obligation inventory before eligibility; the18scalar rows are not complete-panel coverage. No score curve,mixed-unit family or vector average is a scalar finding.",
+    "Resolve40-neighbor paper matching versus20-neighbor release,event reuse,depth/clock/tie/empty/floor policies and good-unit definitions; the accepted release-profile reducer is not a publication evaluator.",
+    "Authenticate the complete original comparator/version/parameter/threshold-sweep incidence. Ten named comparators plus Kilosort4 versus ten-algorithm prose is unresolved and cannot be resolved by dropping methods.",
+    "Recover numerical reconstruction policies for every original waveform/drift/property/embedding/biophysical/ablation/runtime output and the older-method supplement,including EQ01/EQ02/OPT01,without choosing favorable repairs after results.",
+    "Justify coordinate-specific reproduction tolerances and uncertainty using original numerical precision,source variability or a reviewed scientific rule; do not transfer prospective I-profile tolerances or the0.02 improvement margin.",
+    "No complete runnable AI submitted-analysis interface,authentic common-data manifest,source-native independent verification program or immutable full-panel/output identities exists. Omit admission_policy rather than minting fake pins.",
+    "The accepted reduce_panel(manifest,exports) is executable downstream arithmetic over operator-supplied scores. It does not run sorting,verify voltage-derived spikes/authenticity or demonstrate AI computation. Printed values or an executable that prints them cannot qualify.",
+    "Matched paper_data and paper_data_author_code protocols,code-only information addition,exposure/access/resource budgets and independent execution/verification receipts are unresolved for both outcomes.",
+    "Current task/improvement historical wording treats reproduction only as calibration; latest user steering makes AI computational reproduction first-class. Preserve those files and resolve shared presentation/binding through the canonical outcome owner; do not relabel prior calibration or historical trials."
+  ]
+}

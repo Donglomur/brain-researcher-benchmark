@@ -1,0 +1,351 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-paper-signal-add-004",
+  "track": "paper",
+  "title": "osl-dynamics, a toolbox for modeling fast dynamic brain activity",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Fit source latent-state/network descriptions and assess their reproducibility under unchanged model hyperparameters; free-energy optimization is the potential ordered source route.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Fit source latent-state/network descriptions and assess their reproducibility under unchanged model hyperparameters; free-energy optimization is the potential ordered source route.",
+    "Source-paper comparison for Original within-branch fit-selection statistic: HMM free energy or DyNeMo final training loss; exact source parity unresolved: Paper describes variational free energy for fixed-hyperparameter fit ordering. Historical HMM free energy differs from DyNeMo final sampled training-epoch loss; exact criterion, branch normalization and reported values are not recovered."
+  ],
+  "success_criteria": [
+    "Recover numerical source free energy, exact representation/objective normalization, original branch coverage and historical runtime recipe.",
+    "Recover independently observed original DyNeMo training-trajectory loss; do not substitute post-fit free_energy() computed from final weights.",
+    "Preserve original cohort and fixed model capacity; never average incomparable HMM, DyNeMo, burst and static objectives into a victory score.",
+    "Predeclare an effect, uncertainty and equal access/compute policy including all attempted runs.",
+    "A new held-person split, stronger young/old significance or more attractive maps cannot establish surpassing this source result.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "paper-signal-add-004",
+  "canonical_position_one_based": 92,
+  "paper_identity": {
+    "url": "https://elifesciences.org/articles/91949",
+    "publication_year": 2024,
+    "venue": "eLife"
+  },
+  "input_assets": {
+    "routes": [
+      "https://osf.io/download/7qv9r/"
+    ],
+    "exact_asset_records": [
+      {
+        "json_pointer": "/tasks/91/input_and_code_lineage/saved_metadata/0",
+        "recorded_fields": {
+          "file": "notts_meguk_giles.zip",
+          "bytes": 684320829,
+          "url": "https://osf.io/download/7qv9r/",
+          "manifest_url": "https://api.osf.io/v2/nodes/by2tc/files/osfstorage/6411e0e728e5c50bf8937c50/",
+          "license": "CC BY 4.0"
+        },
+        "normalized_identity": {
+          "name": "notts_meguk_giles.zip",
+          "name_source_field": "file",
+          "interpretation": "Field-name alias only; original file field and value retained in recorded_fields."
+        },
+        "checksum_fields_as_recorded": {},
+        "content_sha256_explicit": null,
+        "role": "saved_inventory_item_not_automatically_selected_empirical_input",
+        "source_file": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+        "source_record_id": "PAPER-paper-signal-add-004",
+        "source_file_pin": {
+          "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+          "bytes": 879969,
+          "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+        },
+        "source_record_sha256": "9a97d6d5fc883d4b536e0b9f28e9a1e8fe7b571ae084cae124be39b4cc3ebe6b",
+        "accession_and_version": {
+          "provider": "OSF",
+          "node_id_from_recorded_metadata_url": "by2tc",
+          "storage_file_id_from_recorded_metadata_url": "6411e0e728e5c50bf8937c50",
+          "download_short_id_from_recorded_url": "7qv9r",
+          "version_as_recorded": null,
+          "version_status": "not_recorded"
+        },
+        "context_fields_as_recorded": {
+          "manifest_url": "https://api.osf.io/v2/nodes/by2tc/files/osfstorage/6411e0e728e5c50bf8937c50/",
+          "license": "CC BY 4.0"
+        },
+        "verification_scope": "Saved source metadata only; no network request, downloaded-file verification, computed payload digest, selected transfer, schema check or scientific execution."
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "paper_url": "https://elifesciences.org/articles/91949",
+      "data_urls": [
+        "https://osf.io/download/7qv9r/"
+      ],
+      "input_scope": "65-participant source-reconstructed resting MEG network NPYs plus demographics from OSF ZIP; raw sensor preprocessing/source reconstruction excluded.",
+      "saved_metadata": [
+        {
+          "url": "https://osf.io/download/7qv9r/",
+          "manifest_url": "https://api.osf.io/v2/nodes/by2tc/files/osfstorage/6411e0e728e5c50bf8937c50/",
+          "file": "notts_meguk_giles.zip",
+          "bytes": 684320829,
+          "subjects": 65,
+          "license": "CC BY 4.0",
+          "archive_entries": 133,
+          "structural_audit": "ZIP central directory read: 65 networks/subjectXX.npy plus 65 bursts/subjectXX.npy and demographics.csv; actual demographic CSV inspected (1,317 bytes). No signal members read."
+        }
+      ],
+      "code_url": "https://github.com/OHBA-analysis/osl-dynamics",
+      "revision_or_archive_version": "064104d74d96e26ee37cd3d13fa6ed693b483894",
+      "entrypoints": [
+        "examples/toolbox_paper/ctf_rest/get_data.py",
+        "examples/toolbox_paper/ctf_rest/tde_hmm_networks.py",
+        "examples/toolbox_paper/ctf_rest/tde_dynemo_networks.py"
+      ],
+      "array_payloads_read_in_this_audit": false
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-004",
+        "versions_and_loader_contract": {
+          "data_contract": {
+            "neural": "Per-participant multichannel source time series in networks/subjectXX.npy; separate single-channel bursts series. Author recipe: 250 Hz, 38-parcel Giles atlas.",
+            "labels": "demographics.csv actual columns name, age, gender, handedness; subject00 etc match signal filenames. Resting task has no trial labels.",
+            "split": "Reproduction uses author cohort. Extension freezes participant splits before fitting PCA/state models; repeated seeds assessed without choosing on held-out age effects.",
+            "controls": "Stationary surrogate preserving spectra; matched static covariance baseline; participant-level permutation and resampling; separate state label matching from substantive neural interpretation."
+          },
+          "scope_description": "Re-fit the paper TDE-HMM and TDE-DyNeMo network analyses from released 65-participant source-reconstructed resting MEG; start after source reconstruction, not raw-scanner preprocessing."
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-signal-add-004",
+        "versions_and_loader_contract": {
+          "declared_scope": "Re-fit the paper TDE-HMM and TDE-DyNeMo network analyses from released 65-participant source-reconstructed resting MEG; start after source reconstruction, not raw-scanner preprocessing."
+        },
+        "data_section_locators": []
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false
+  },
+  "official_code": {
+    "url": "https://github.com/OHBA-analysis/osl-dynamics",
+    "revision_or_archive_version": "064104d74d96e26ee37cd3d13fa6ed693b483894",
+    "entrypoints": [
+      "examples/toolbox_paper/ctf_rest/get_data.py",
+      "examples/toolbox_paper/ctf_rest/tde_hmm_networks.py",
+      "examples/toolbox_paper/ctf_rest/tde_dynemo_networks.py"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+        "record_id": "paper-signal-add-004",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/OHBA-analysis/osl-dynamics",
+            "commit": "064104d74d96e26ee37cd3d13fa6ed693b483894",
+            "license": "Apache-2.0",
+            "entrypoints": [
+              "examples/toolbox_paper/ctf_rest/get_data.py",
+              "examples/toolbox_paper/ctf_rest/tde_hmm_networks.py",
+              "examples/toolbox_paper/ctf_rest/tde_dynemo_networks.py"
+            ]
+          }
+        }
+      },
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+        "record_id": "paper-signal-add-004",
+        "recorded": {
+          "code_url": "https://github.com/OHBA-analysis/osl-dynamics",
+          "code_revision_or_archive_version": "064104d74d96e26ee37cd3d13fa6ed693b483894",
+          "entrypoints": [
+            "examples/toolbox_paper/ctf_rest/get_data.py",
+            "examples/toolbox_paper/ctf_rest/tde_hmm_networks.py",
+            "examples/toolbox_paper/ctf_rest/tde_dynemo_networks.py"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 350275,
+      "sha256": "461494287682e71875391f45c1fadec89b3301455f3277e41d10674f199e84a0"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "07dce900b1f1c92864286526d728311d451cdcab7d2974444e68378da7fe89e7",
+    "audit_record_sha256": "9a97d6d5fc883d4b536e0b9f28e9a1e8fe7b571ae084cae124be39b4cc3ebe6b",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/signals_paper_additions.json",
+          "bytes": 127035,
+          "sha256": "49a22e4974c8ed6c213582386153fff1fdf7b00755481b032ba865a57030ea06"
+        },
+        "record_id": "paper-signal-add-004",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 3,
+        "record_sha256": "09e25e8d8878c3f3e7e72c95449f6786b8f962870379e85bfe9ce05f681e8ec9"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/paper_projects.json",
+          "bytes": 500587,
+          "sha256": "8893618f482d8301b723a57e2758fef66ab560b84c95650f8ea92f4b37375c3a"
+        },
+        "record_id": "paper-signal-add-004",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 193,
+        "record_sha256": "89ca99c232e14a4d0e1077c04087811e3c1d901e6b78686c1b8ffead9361c241"
+      }
+    ],
+    "historical_pin_exceptions": [
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_aliases.json",
+          "bytes": 3519,
+          "sha256": "d9862c468c3ece0d0e0cfca975f8980cea6a9dfbb7abfe5d3b4b96ca76045ac7"
+        },
+        "current_pin": {
+          "bytes": 4544,
+          "sha256": "963f9e1b6d528573c1c321629a0ab2ba6e1fb25b3e0404e3882b483ea7207c5f"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      },
+      {
+        "type": "historical_pin_superseded",
+        "origin_batch": "c",
+        "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+        "original_declaration": {
+          "path": "docs/neuroscience-benchmarks/build/exposure_audit.json",
+          "bytes": 163669,
+          "sha256": "96c826360af4b8858cb33406e95242d27d7806e5896b98c211ccd3478a76661d"
+        },
+        "current_pin": {
+          "bytes": 166909,
+          "sha256": "974e56e839620059345f5b8ae1f5893e1d404c007864159dc84e6b330f49edca"
+        },
+        "reason": "Root-approved MICrONS family integration changed exposure aliases and audit from 55 to 57 cross-suite pairs. Original batch declarations retained; no biological-overlap verification inferred.",
+        "evidence": "authoring/paper-construction-audit/microns-route-reconciliation.json"
+      }
+    ],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise.",
+    "inventory_normalization_history": [
+      {
+        "checked_on": "2026-11-07",
+        "operation": "normalize_saved_file_identity_field",
+        "before_exact_asset_records_count": 0,
+        "after_exact_asset_records_count": 1,
+        "source_evidence": {
+          "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+          "bytes": 879969,
+          "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+        },
+        "historical_declared_canonical_roster": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "historical_declared_canonical_record_sha256": "a715b7fe3a9df255088df8ec67408a59fe852d98b42306398f3cd67657ea531e",
+        "current_before_canonical_roster": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 340247,
+          "sha256": "8c59d8d08d1dea4cad6b20ba695d0055ec70af840c34d487e67883430b21853b"
+        },
+        "current_before_canonical_record_sha256": "265ae890475ea5e2cf54406605c8e3d226456c19975d9f465b028d4be744cec4",
+        "raw_field_renamed_in_source": false,
+        "new_acquisition_or_scientific_qualification": false
+      }
+    ]
+  },
+  "resources": {
+    "roster_statement": "unmeasured",
+    "source_resource_evidence": null,
+    "measurement_status": "No project-specific runtime, peak-memory or full lifecycle storage measurement established. File sizes/HEAD lengths are source metadata; hardware guidance and time estimates are not measurements.",
+    "known_local_scientific_runtime_seconds": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-004/improvement.v1.json",
+      "bytes": 9707,
+      "sha256": "f2186a72b6c441393b8b6933482c458417c29306a56b50c75d4c4b082c41a317"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-paper-signal-add-004/historical/task.pre-improvement.v1.json",
+        "bytes": 19762,
+        "sha256": "d65de0882c3297ec0ae2479ded38cdb17ddc5e6ee8d7d72262bbbb1150772bdd"
+      },
+      "implementation_ids": [
+        "authoring-delivery-20261105-common-remaining-builds-wave19-paper-program-c",
+        "authoring-delivery-20261105-osl-dynamics-paper"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Recover the original per-branch fitting benchmark before candidate iteration. Any later development/final fitting sets must preserve the source protocol; newly held-out people remain a labelled extension.",
+    "candidate_freeze": "Freeze candidate optimization method, source hyperparameters, seed/attempt policy, objective normalization and branch requirements before final evaluation.",
+    "final_evaluation": "Evaluate against qualified source-author baselines per original branch with unchanged cohort and representation. No execution or substitute holdout is admitted here.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Source plotted free energies, rerun author values and prospective held-person likelihoods are separate; model capacity changes cannot exploit objective noncomparability."
+  },
+  "blocking_issues": [
+    "Original per-branch numeric baseline/normalization not recovered.",
+    "Native DyNeMo final training-epoch loss cannot be reconstructed from final weights; training-trajectory attestation and exact source-selection parity are missing.",
+    "Historical source revision and full six-branch preprocessing joins unresolved.",
+    "Fixed access/resource budgets, complete baseline execution, practical margin and valid optimization-set uncertainty missing.",
+    "Age-label inconsistency requires calibration repair; stronger age effects cannot be a success criterion."
+  ],
+  "holds": {
+    "task_specific": [
+      "Original per-branch numeric baseline/normalization not recovered.",
+      "Native DyNeMo final training-epoch loss cannot be reconstructed from final weights; training-trajectory attestation and exact source-selection parity are missing.",
+      "Historical source revision and full six-branch preprocessing joins unresolved.",
+      "Fixed access/resource budgets, complete baseline execution, practical margin and valid optimization-set uncertainty missing.",
+      "Age-label inconsistency requires calibration repair; stronger age effects cannot be a success criterion."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "The source orders fits within fixed models and representations and reports best of 10 reproducibility. Exact numeric baseline and historical objective/selection are not recovered: HMM free energy and DyNeMo final sampled training loss require different provenance. Age-effect significance and map similarity are not paper-win metrics; the held-person likelihood extension changes the original task. Original per-branch numeric baseline/normalization not recovered. Native DyNeMo final training-epoch loss cannot be reconstructed from final weights; training-trajectory attestation and exact source-selection parity are missing. Historical source revision and full six-branch preprocessing joins unresolved. Fixed access/resource budgets, complete baseline execution, practical margin and valid optimization-set uncertainty missing. Age-label inconsistency requires calibration repair; stronger age effects cannot be a success criterion.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-004/historical/task.pre-improvement.v1.json",
+      "bytes": 19762,
+      "sha256": "d65de0882c3297ec0ae2479ded38cdb17ddc5e6ee8d7d72262bbbb1150772bdd"
+    },
+    "notes": "Preserve the six-branch programme and all original state/map/summary reconstructions as calibration. The separately authored held-person likelihood programme is explicitly an extension and cannot satisfy this contract."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

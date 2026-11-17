@@ -4,20 +4,20 @@
   "track": "paper",
   "title": "Joint behavioral decoding and neural prediction from full spatial imaging fields",
   "status": "design_ready",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Joint prediction of neural images and behavior from neural image history: WFCI1 continuous behavior, WFCI2 binary contact traces, and fUS trial target direction. Neural/continuous predictions are one-step-ahead; fUS direction is decoded from the final trial latent state.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Recreate the original findings and separately exceed them on the same source-paper task: Joint prediction of neural images and behavior from neural image history: WFCI1 continuous behavior, WFCI2 binary contact traces, and fUS trial target direction. Neural/continuous predictions are one-step-ahead; fUS direction is decoded from the final trial latent state.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Joint prediction of neural images and behavior from neural image history: WFCI1 continuous behavior, WFCI2 binary contact traces, and fUS trial target direction. Neural/continuous predictions are one-step-ahead; fUS direction is decoded from the final trial latent state.",
-    "Source-paper comparison for WFCI1 behavioral MSE is a numeric anchor only; full Table 2–3 joint vector required: MSE is mean squared prediction error (lower); WFCI2 behavior uses F1 (higher); fUS accuracy is correctly decoded trials divided by evaluated trials (higher). Full source vector must be retained; one chosen favorable endpoint cannot establish the joint claim."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Reproduce all Table 2–3 SBIND cells on the original complete assays and thirteen fUS sessions before admitting a candidate comparison.",
-    "Recover original folds, preprocessing, trial masks, class metrics and aggregation; changed whole-trial/held-session/held-animal splits are extensions.",
-    "Predeclare a joint behavioral/neural rule with task-specific meaningful changes and uncertainty across the full vector; improving WFCI1 MSE alone does not establish this registered full-scope win.",
-    "Preserve original neural-history input and fUS supervised-sample restrictions with matched comparator budgets.",
-    "Separate published table scores, fresh author reruns and any independently sourced later SOTA scores.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v1.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results."
   ],
   "participant_inputs": "Full source-defined cropped128x128 widefield calcium fields with aligned behavior (248+412 trials) and all source-defined fUS sessions/conditions with2Hz Power Doppler fields; compressed factors only if exact input reconstruction is established.",
   "provenance": {
@@ -103,58 +103,69 @@
     "status": "not_recorded_in_historical_specification"
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/improvement.v1.json",
-      "bytes": 9995,
-      "sha256": "8ff6ac8095404170558cf906171d136abfb9ea650a6a62e092e6a8ae735123af"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v1.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "design_ready",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/historical/task.pre-improvement.v1.json",
-        "bytes": 9299,
-        "sha256": "edc73b054591ed5cc1a6a8f5710894c56968d1123982a18780ffa447b7e372b9"
-      },
-      "implementation_ids": [
-        "components-sbind-continuous-normalization",
-        "components-sbind-whole-trial-preparation"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
     "binary_reward_registered": false
   },
   "episode": {
-    "improvement_loop": "After source admission, iterate using the recovered original training/validation interface for both widefield assays and all fUS conditions; do not optimize on final table outcomes.",
-    "candidate_freeze": "Freeze code, selected architecture/hyperparameters, complete assay/session roster, transforms, folds, joint success rule and resource accounting before final scoring.",
-    "final_evaluation": "One admitted final evaluation emits every Table 2–3 metric with paired author-baseline predictions and all scope/mask receipts; preserve original input and split conditions.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Use the source SBIND procedure as the paper comparator; DPAD/CEBRA/TNDM and ablations remain controls. A newly corrected split has a separately rerun author baseline and is labelled an extension."
+    "improvement": {
+      "improvement_loop": "After source admission, iterate using the recovered original training/validation interface for both widefield assays and all fUS conditions; do not optimize on final table outcomes.",
+      "candidate_freeze": "Freeze code, selected architecture/hyperparameters, complete assay/session roster, transforms, folds, joint success rule and resource accounting before final scoring.",
+      "final_evaluation": "One admitted final evaluation emits every Table 2–3 metric with paired author-baseline predictions and all scope/mask receipts; preserve original input and split conditions.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Use the source SBIND procedure as the paper comparator; DPAD/CEBRA/TNDM and ablations remain controls. A newly corrected split has a separately rerun author baseline and is labelled an extension."
+    },
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Exact two widefield acquisition identities and all thirteen fUS session mappings are not authenticated.",
-    "Paper fold manifests are unrecovered; current author frame splitter differs from the local whole-trial preparation design.",
-    "Complete real-data preprocessing, metric aggregation/masks and original model-selection procedure lack replay parity.",
-    "No task-specific full-vector improvement/noninferiority rule, valid uncertainty or concrete attempt/access budgets is frozen.",
-    "No complete working model evaluator or author-baseline rerun exists in the reviewed local preparation-only implementations."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Exact two widefield acquisition identities and all thirteen fUS session mappings are not authenticated.",
       "Paper fold manifests are unrecovered; current author frame splitter differs from the local whole-trial preparation design.",
       "Complete real-data preprocessing, metric aggregation/masks and original model-selection procedure lack replay parity.",
       "No task-specific full-vector improvement/noninferiority rule, valid uncertainty or concrete attempt/access budgets is frozen.",
       "No complete working model evaluator or author-baseline rerun exists in the reviewed local preparation-only implementations."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v1.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Exact two widefield acquisition identities and all thirteen fUS session mappings are not authenticated.",
+        "Paper fold manifests are unrecovered; current author frame splitter differs from the local whole-trial preparation design.",
+        "Complete real-data preprocessing, metric aggregation/masks and original model-selection procedure lack replay parity.",
+        "No task-specific full-vector improvement/noninferiority rule, valid uncertainty or concrete attempt/access budgets is frozen.",
+        "No complete working model evaluator or author-baseline rerun exists in the reviewed local preparation-only implementations."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v1.json.",
+    "reproduction_contract": "reproduction.v1.json"
   },
   "next_implementation_action": {
-    "action": "The paper provides ordered behavioral and neural prediction results for both complete widefield assays and thirteen fUS sessions, including numerical Table 2–3 SBIND baselines. Exact data identities, published folds/preprocessing replay, full evaluator and a justified joint decision rule remain incomplete; no execution readiness or improvement is claimed. Exact two widefield acquisition identities and all thirteen fUS session mappings are not authenticated. Paper fold manifests are unrecovered; current author frame splitter differs from the local whole-trial preparation design. Complete real-data preprocessing, metric aggregation/masks and original model-selection procedure lack replay parity. No task-specific full-vector improvement/noninferiority rule, valid uncertainty or concrete attempt/access budgets is frozen. No complete working model evaluator or author-baseline rerun exists in the reviewed local preparation-only implementations.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The paper provides ordered behavioral and neural prediction results for both complete widefield assays and thirteen fUS sessions, including numerical Table 2–3 SBIND baselines. Exact data identities, published folds/preprocessing replay, full evaluator and a justified joint decision rule remain incomplete; no execution readiness or improvement is claimed. Exact two widefield acquisition identities and all thirteen fUS session mappings are not authenticated. Paper fold manifests are unrecovered; current author frame splitter differs from the local whole-trial preparation design. Complete real-data preprocessing, metric aggregation/masks and original model-selection procedure lack replay parity. No task-specific full-vector improvement/noninferiority rule, valid uncertainty or concrete attempt/access budgets is frozen. No complete working model evaluator or author-baseline rerun exists in the reviewed local preparation-only implementations.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v1.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -169,8 +180,9 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
-  }
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate."
 }

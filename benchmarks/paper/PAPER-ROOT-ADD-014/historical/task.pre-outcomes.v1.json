@@ -1,0 +1,516 @@
+{
+  "schema_version": 1,
+  "id": "PAPER-ROOT-ADD-014",
+  "track": "paper",
+  "title": "Precise spatial tuning of visually driven alpha oscillations in human visual cortex",
+  "status": "source_unresolved",
+  "objective": "surpass_source_paper_same_task",
+  "goal": "Surpass the source-paper result on the same task: Predict stimulus-location-dependent alpha and broadband amplitudes with population receptive-field models; the ordered comparison is original cross-validated prediction accuracy, including the source baseline-correction comparison. Larger alpha pRFs or stronger negative gain are descriptive checks, not win scores.",
+  "primary_outputs": [
+    "Candidate method and outputs for the source task: Predict stimulus-location-dependent alpha and broadband amplitudes with population receptive-field models; the ordered comparison is original cross-validated prediction accuracy, including the source baseline-correction comparison. Larger alpha pRFs or stronger negative gain are descriptive checks, not win scores.",
+    "Source-paper comparison for Original Fig.7 median cross-validated alpha pRF variance explained (%): Higher cross-validated variance explained is ordered. Reconcile literal paper1−SSE/sum(response²) with the source routine’s foldwise DC projection and exact gain constraints; report percent units and preserve both formulas until equivalence is established."
+  ],
+  "success_criteria": [
+    "Bind the original366-electrode population and exact figure-specific selections; keep all required alpha/broadband and baseline contrasts.",
+    "Reproduce the source metric/gain branch and original median before claiming improvement over43% and the author rerun.",
+    "Do not count a corrected implementation, portable-optimizer advantage, equal-person433-electrode mean or a new split as an original-paper win.",
+    "Freeze the method, spectral preprocessing, aperture geometry, selection and uncertainty policy before final predictions.",
+    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
+    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+  ],
+  "source_id": "ROOT-ADD-014",
+  "canonical_position_one_based": 62,
+  "paper_identity": {
+    "url": "https://elifesciences.org/articles/90387",
+    "publication_year": 2025,
+    "venue": "eLife"
+  },
+  "input_assets": {
+    "routes": [
+      "https://openneuro.org/datasets/ds004194/versions/3.0.0"
+    ],
+    "exact_asset_records": [
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/Spectrum/p01_freq_spectra.mat",
+        "bytes": 19195330,
+        "role": "spectral_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/0"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/Spectrum/p02_freq_spectra.mat",
+        "bytes": 21883758,
+        "role": "spectral_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/1"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/Spectrum/p05_freq_spectra.mat",
+        "bytes": 30624305,
+        "role": "spectral_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/2"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/Spectrum/p06_freq_spectra.mat",
+        "bytes": 33300127,
+        "role": "spectral_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/3"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/Spectrum/p07_freq_spectra.mat",
+        "bytes": 54188806,
+        "role": "spectral_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/4"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/Spectrum/p08_freq_spectra.mat",
+        "bytes": 8728191,
+        "role": "spectral_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/5"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/Spectrum/p09_freq_spectra.mat",
+        "bytes": 33054807,
+        "role": "spectral_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/6"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/Spectrum/p10_freq_spectra.mat",
+        "bytes": 355393135,
+        "role": "spectral_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/7"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/Spectrum/p11_freq_spectra.mat",
+        "bytes": 334889151,
+        "role": "spectral_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/8"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p01_freq_spectra-timeseries_avg-runs_FaCLb-decimate3.mat",
+        "bytes": 3095389,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/9"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p01_freq_spectra-timeseries_avg-runs_FaLb-decimate3.mat",
+        "bytes": 3095382,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/10"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p01_freq_spectra-timeseries_avg-runs_bbL-decimate3.mat",
+        "bytes": 3095419,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/11"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p01_freq_spectra-timeseries_avg-runs_bbS-decimate3.mat",
+        "bytes": 3095449,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/12"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p02_freq_spectra-timeseries_avg-runs_FaCLb-decimate3.mat",
+        "bytes": 3104535,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/13"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p02_freq_spectra-timeseries_avg-runs_FaLb-decimate3.mat",
+        "bytes": 3104526,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/14"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p02_freq_spectra-timeseries_avg-runs_bbL-decimate3.mat",
+        "bytes": 3104554,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/15"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p02_freq_spectra-timeseries_avg-runs_bbS-decimate3.mat",
+        "bytes": 3104592,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/16"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p05_freq_spectra-timeseries_avg-runs_FaCLb-decimate3.mat",
+        "bytes": 3111551,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/17"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p05_freq_spectra-timeseries_avg-runs_FaLb-decimate3.mat",
+        "bytes": 3111423,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/18"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p05_freq_spectra-timeseries_avg-runs_bbL-decimate3.mat",
+        "bytes": 3111492,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/19"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p05_freq_spectra-timeseries_avg-runs_bbS-decimate3.mat",
+        "bytes": 3111646,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/20"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p06_freq_spectra-timeseries_avg-runs_FaCLb-decimate3.mat",
+        "bytes": 3113390,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/21"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p06_freq_spectra-timeseries_avg-runs_FaLb-decimate3.mat",
+        "bytes": 3113383,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/22"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p06_freq_spectra-timeseries_avg-runs_bbL-decimate3.mat",
+        "bytes": 3113431,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/23"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p06_freq_spectra-timeseries_avg-runs_bbS-decimate3.mat",
+        "bytes": 3113486,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/24"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p07_freq_spectra-timeseries_avg-runs_FaCLb-decimate3.mat",
+        "bytes": 3108643,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/25"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p07_freq_spectra-timeseries_avg-runs_FaLb-decimate3.mat",
+        "bytes": 3108644,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/26"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p07_freq_spectra-timeseries_avg-runs_bbL-decimate3.mat",
+        "bytes": 3108754,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/27"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p07_freq_spectra-timeseries_avg-runs_bbS-decimate3.mat",
+        "bytes": 3108802,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/28"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p08_freq_spectra-timeseries_avg-runs_FaCLb-decimate3.mat",
+        "bytes": 3094844,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/29"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p08_freq_spectra-timeseries_avg-runs_FaLb-decimate3.mat",
+        "bytes": 3094832,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/30"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p08_freq_spectra-timeseries_avg-runs_bbL-decimate3.mat",
+        "bytes": 3094859,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/31"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p08_freq_spectra-timeseries_avg-runs_bbS-decimate3.mat",
+        "bytes": 3094881,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/32"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p09_freq_spectra-timeseries_avg-runs_FaCLb-decimate3.mat",
+        "bytes": 3100675,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/33"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p09_freq_spectra-timeseries_avg-runs_FaLb-decimate3.mat",
+        "bytes": 3100679,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/34"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p09_freq_spectra-timeseries_avg-runs_bbL-decimate3.mat",
+        "bytes": 3100721,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/35"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p09_freq_spectra-timeseries_avg-runs_bbS-decimate3.mat",
+        "bytes": 3100734,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/36"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p10_freq_spectra-timeseries_avg-runs_FaCLbBW-decimate3.mat",
+        "bytes": 3177632,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/37"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p10_freq_spectra-timeseries_avg-runs_FaLb-decimate3.mat",
+        "bytes": 3177884,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/38"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p10_freq_spectra-timeseries_avg-runs_bbL-decimate3.mat",
+        "bytes": 3178412,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/39"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p10_freq_spectra-timeseries_avg-runs_bbS-decimate3.mat",
+        "bytes": 3178376,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/40"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p11_freq_spectra-timeseries_avg-runs_FaCLbBW-decimate3.mat",
+        "bytes": 3171846,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/41"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p11_freq_spectra-timeseries_avg-runs_FaLb-decimate3.mat",
+        "bytes": 3171807,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/42"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p11_freq_spectra-timeseries_avg-runs_bbL-decimate3.mat",
+        "bytes": 3172191,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/43"
+      },
+      {
+        "path": "derivatives/Yuasa2023AlphaPRF/pRFmodel/p11_freq_spectra-timeseries_avg-runs_bbS-decimate3.mat",
+        "bytes": 3172504,
+        "role": "timecourse_input",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/44"
+      },
+      {
+        "path": "functions/Database/bar_apertures.mat",
+        "bytes": 1461329,
+        "role": "fixed_stimulus_aperture",
+        "inventory_pointer": "/scopes/PAPER-ROOT-ADD-014/files/45"
+      }
+    ],
+    "lineage_and_loader_evidence": {
+      "assessment": "OpenNeurods004194v3.0.0 BIDS ECoG, pRF apertures/events, QC/localization and derivatives; source subjectlist and analyzePRF pipeline identify the route.14patients is the source pool, not automatic paper sample.",
+      "official_code": {
+        "url": "https://github.com/KenYMB/ECoG_alphaPRF",
+        "commit": "4321eb4374db782d09f3f43362836f234a4e4f9b",
+        "entrypoints": [
+          "SampleScripts/s1_analyzePRF.m",
+          "scripts/ecog_APRFF_01a_preprocessing.m",
+          "scripts/ecog_APRFF_01b_analyzePRF.m",
+          "functions/Outline/ecog_prf_analyzePRF.m",
+          "Environment/subjectlist.tsv"
+        ],
+        "license": null
+      },
+      "input_routes": [
+        {
+          "url": "https://openneuro.org/datasets/ds004194/versions/3.0.0",
+          "version": "3.0.0",
+          "license": "CC0"
+        }
+      ],
+      "source_inspection_level": "Saved metadata, author documentation and selected source inspection; this audit did not newly read payloads."
+    },
+    "source_contract_locators": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "record_id": "ROOT-ADD-014",
+        "versions_and_loader_contract": {
+          "scope_description": "Fit cross-validated alpha and broadband population receptive-field models and reproduce spatial-scale, negative-gain and baseline-model comparisons on the author-specified visual electrodes.",
+          "missing_core_inputs": []
+        },
+        "data_section_locators": [
+          "data_inputs"
+        ]
+      }
+    ],
+    "selection_status": "inventory_items_require_claim_specific_selection_not_all_are_inputs",
+    "checksum_interpretation": "Explicit sha256 fields retained; checksum/digest/ETag names are not silently reinterpreted. None means unrecorded, not verified.",
+    "acquired_or_schema_validated_by_this_generator": false,
+    "exact_inventory_evidence": {
+      "inventory": {
+        "path": "authoring/delivery-20261105/common/paper-inventory-wave16-bids-metadata/review-v2/INVENTORY.json",
+        "bytes": 1810686,
+        "sha256": "4683d92b8356522e748007d25482a6e7ef39fee30297823567a1cbe341a1f379"
+      },
+      "scope_pointer": "/scopes/PAPER-ROOT-ADD-014",
+      "status": "exact_saved_source_metadata_only_not_payload_or_scientific_qualification",
+      "original_derivative_availability_separate_from_selected_inputs": false,
+      "checksums_and_immutable_revisions_resolve_through_inventory_pointer": true,
+      "historical_scope_access_holds_admission_unchanged": true
+    }
+  },
+  "official_code": {
+    "url": "https://github.com/KenYMB/ECoG_alphaPRF",
+    "revision_or_archive_version": "4321eb4374db782d09f3f43362836f234a4e4f9b",
+    "entrypoints": [
+      "SampleScripts/s1_analyzePRF.m",
+      "scripts/ecog_APRFF_01a_preprocessing.m",
+      "scripts/ecog_APRFF_01b_analyzePRF.m",
+      "functions/Outline/ecog_prf_analyzePRF.m",
+      "Environment/subjectlist.tsv"
+    ],
+    "source_details": [
+      {
+        "source_file": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+        "record_id": "ROOT-ADD-014",
+        "recorded": {
+          "official_code": {
+            "url": "https://github.com/KenYMB/ECoG_alphaPRF",
+            "commit": "4321eb4374db782d09f3f43362836f234a4e4f9b",
+            "entrypoints": [
+              "SampleScripts/s1_analyzePRF.m",
+              "scripts/ecog_APRFF_01a_preprocessing.m",
+              "scripts/ecog_APRFF_01b_analyzePRF.m",
+              "functions/Outline/ecog_prf_analyzePRF.m",
+              "Environment/subjectlist.tsv"
+            ],
+            "license": null,
+            "inspection": "Pinned file tree, README and named analysis/loader source read statically; no author code run"
+          },
+          "dependencies": [
+            "MATLAB",
+            "ECoG_utils pinned companion 1dd4ea481ff56f1f77db75aa886017ea30eaf940",
+            "analyzePRF/analyzePRFdog",
+            "FieldTrip",
+            "FreeSurfer",
+            "ToolboxToolbox optional"
+          ]
+        }
+      }
+    ],
+    "lineage_limit": "Author/source code meaning is preserved. A loader, demo, figure script and complete-paper implementation are not interchangeable."
+  },
+  "provenance": {
+    "canonical_roster": {
+      "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+      "bytes": 332066,
+      "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+    },
+    "construction_audit": {
+      "path": "docs/neuroscience-benchmarks/build/paper_construction_audit.json",
+      "bytes": 879969,
+      "sha256": "b3fd16d4e16e466a529c38f4b59de5ee7982a94458677e52c4295100b9da24a5"
+    },
+    "canonical_record_sha256": "f7293a04301a67a832345522ea0f04b22917a7c273e51550797caf9d783a903f",
+    "audit_record_sha256": "e457836eba012a68cfe8e4775f9670138e55b0aac95bda9abc258a78d7df43d2",
+    "source_records_and_files": [
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/readiness/root_readiness.json",
+          "bytes": 140656,
+          "sha256": "0cf7be08fe06c0b83492908e1ebb2c18eb5b9dd7a78fbd7ed8b10b2fb677bcb1"
+        },
+        "record_id": "ROOT-ADD-014",
+        "declared_record_sha256": null,
+        "role": null,
+        "record_index": 13,
+        "record_sha256": "d00bf5844d14728faeaeb41b20c0a02b4991a8b14c81b2a76354df9ee86f6dcf"
+      },
+      {
+        "file": {
+          "path": "docs/neuroscience-benchmarks/build/paper_100.json",
+          "bytes": 332066,
+          "sha256": "fbfe24af054312fe2a59dc50226fa1a48ca06c64cfd18799627239710b3cd3cd"
+        },
+        "record_id": "PAPER-ROOT-ADD-014",
+        "declared_record_sha256": null,
+        "role": null
+      }
+    ],
+    "historical_pin_exceptions": [],
+    "interpretation": "Pins bind saved local evidence. Asset hashes are source-reported unless an explicit acquisition receipt says otherwise."
+  },
+  "resources": {
+    "roster_resource_statement": "unmeasured",
+    "measurement_status": "No project runtime/peak-memory measurement found; archive byte counts/HEAD lengths are input metadata, not execution measurements.",
+    "source_basis": null
+  },
+  "evaluation": {
+    "objective": "surpass_source_paper_same_task",
+    "contract": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-014/improvement.v1.json",
+      "bytes": 10451,
+      "sha256": "d8f2608f23ed37612d0c848326ce64277a32648fc3f4925ddd486115dfd767d4"
+    },
+    "disposition": "source_unresolved",
+    "reproduction_role": "calibration_only",
+    "calibration": {
+      "historical_task": {
+        "path": "benchmarks/paper/PAPER-ROOT-ADD-014/historical/task.pre-improvement.v1.json",
+        "bytes": 25445,
+        "sha256": "6e490c1e30ca23159e0d3f475c0336ce9292c3cd6ce981620bf6e1b5d91cc8de"
+      },
+      "implementation_ids": [
+        "authoring-delivery-20261105-common-remaining-builds-wave16-visual-alpha-complete-program"
+      ],
+      "runtime_manifest": null
+    },
+    "executor_ref": null,
+    "scorer_ref": null,
+    "binary_reward_registered": false
+  },
+  "episode": {
+    "improvement_loop": "Once the original endpoint is recovered, develop pRF/spectral models using only training halves and declared validation feedback; no final-half response may influence fitting seeds or model selection.",
+    "candidate_freeze": "Freeze all preprocessing, model families, gain bounds, original electrode mask, fold membership, numerical scoring and resource/access budgets.",
+    "final_evaluation": "Evaluate both methods on identical original held halves and report the source aggregate plus participant-aware uncertainty; retain descriptive spatial-scale and gain checks without turning them into success scores.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Published43% median, native author rerun and local portable comparator remain separate. Only an authenticated original-task comparison supports a paper win."
+  },
+  "blocking_issues": [
+    "Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes.",
+    "Original metric centering and gain branch not reconciled with current scorer.",
+    "No source-equivalent raw-to-fit preprocessing and competent native author rerun.",
+    "Effect margin, clustered decision rule and concrete episode budgets not fixed."
+  ],
+  "holds": {
+    "task_specific": [
+      "Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes.",
+      "Original metric centering and gain branch not reconciled with current scorer.",
+      "No source-equivalent raw-to-fit preprocessing and competent native author rerun.",
+      "Effect margin, clustered decision rule and concrete episode budgets not fixed."
+    ]
+  },
+  "next_implementation_action": {
+    "action": "A real ordered source endpoint exists: alpha pRF heldout prediction, including the reported43% median with baseline correction in Fig.7. The original electrode mask and metric implementation are not reconciled with the433-electrode local programme, its prospective equal-person mean, or the portable optimizer. Those local comparisons cannot certify surpassing the original source result. Historical366-electrode mask and Fig.7 membership unresolved against433 released electrodes. Original metric centering and gain branch not reconciled with current scorer. No source-equivalent raw-to-fit preprocessing and competent native author rerun. Effect margin, clustered decision rule and concrete episode budgets not fixed.",
+    "basis": "Current source-paper improvement contract disposition and blockers",
+    "execution_authorized_by_manifest": false
+  },
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-014/historical/task.pre-improvement.v1.json",
+      "bytes": 25445,
+      "sha256": "6e490c1e30ca23159e0d3f475c0336ce9292c3cd6ce981620bf6e1b5d91cc8de"
+    },
+    "notes": "Retain spectral/spatial reconstruction and all original grading materials as calibration. The local prospective equal-person corrected-alpha score and SciPy comparator are extensions until the historical source estimand is recovered."
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "full_contract_complete": false,
+    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "new_scientific_runs": 0,
+    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+  }
+}

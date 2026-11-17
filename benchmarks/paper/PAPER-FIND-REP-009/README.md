@@ -10,9 +10,31 @@
 
 The `task.json` in this folder is the authoritative registered definition. Implementation artifacts below are assigned explicitly by the registry; their scope may be narrower or alternative, as described in each scope note. Source presence is not evidence of successful execution or complete scientific qualification.
 
-## Current paper-improvement objective
+## Separate paper outcomes
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: secondary\_empirical\_method\_extension: Candidate-versus-author decoder ROC-AUC comparison on authenticated original inputs and support. This is genuine empirical methodology; higher decoding AUC alone does not establish reproduction or improvement of the perturbation-versus-control biological finding. \[coverage: source\_supported\_measurement\_path\_native\_qualification\_unresolved\] prospective\_extension: New temporal or session-held-out evaluation remains separately labeled unless authenticated as the original source protocol. It cannot silently replace the original paired comparison. Reviewed source limits: Resolve the reported 20 versus released 18 Figure 3G session support discrepancy, original session-to-animal joins, panel-specific neural-input support and original train/test partitions. Both author scripts explicitly set seed 101; the seed is source-supported. Input ordering, runtime versions and original paper-run partition provenance remain unverified. Native AUC vectors, paired statistics, shuffled-label controls and independently qualified numerical agreement criteria remain unresolved. Adaptation, arousal/time/drift and sensory-identity controls in S6M/N and S7A constrain broader mechanistic interpretation. Do not claim them reproduced or automatically require every surrounding panel; broader claims require their relevant control evidence. No ordered primary superiority criterion is qualified. Higher decoder AUC, a larger perturbation difference or a smaller p-value alone does not establish an improved biological explanation. All primary and secondary superiority outcomes remain unresolved; preserving the decoder extension does not establish a qualified candidate-versus-author improvement comparison. No task-specific prior authority to replace the biological primary with decoder superiority was established in the bounded exact-artifact, commit and source-owner review. A deliberate method-primary revision needs an explicit recorded scope decision. Do not admit mixed biological reproduction and decoder-method improvement as a same-primary bundle. Source recovery does not establish executed parity, scientific outcomes, qualification or SOTA.
+
+**Primary scientific scope:** Original empirical paired perturbation-versus-control prevalence-decoding contrasts in Figures 3C and 3G: both condition AUCs and paired differences for each source session, with panel-specific neural inputs, six tone identities, session/condition/animal identities, original training procedure and shuffled-label comparator. Preserve the source session-level reproduction and distinguish it from a new animal-level inferential claim. This named result does not imply every surrounding figure or whole-paper reproduction.
+
+**Retained secondary policy:** secondary\_empirical\_method\_extension: Candidate-versus-author decoder ROC-AUC comparison on authenticated original inputs and support. This is genuine empirical methodology; higher decoding AUC alone does not establish reproduction or improvement of the perturbation-versus-control biological finding. \[coverage: source\_supported\_measurement\_path\_native\_qualification\_unresolved\] prospective\_extension: New temporal or session-held-out evaluation remains separately labeled unless authenticated as the original source protocol. It cannot silently replace the original paired comparison.
+
+- [Reproduction proposal (inspection only)](reproduction.v1.json)
+- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
+- [Primary-outcome unavailability record](outcomes.v1.json)
+- [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
+
+| Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
+| --- | --- | --- | --- | --- | --- |
+| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
+| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+
+Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
+
+## Retained secondary improvement policy
+
+This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
 
 **Disposition:** source\_unresolved. The author release contains ordered rare/common-context decoding analyses, but the published Figure 3C/3G score vectors, exact source partitions and animal-to-session mapping are not recovered. The existing 17-session fixed-reference probability reconstruction is explicitly calibrated to locally declared conventions and cannot stand in for the paper baseline. Both perturbation panels in the registered target must remain in scope.
 
@@ -24,7 +46,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 71924 bytes; SHA-256 `5e19b9d4699311613657c80ff55289708ee49ae348719226141c9ae665a537d6`.
+- Specification identity: 79918 bytes; SHA-256 `4ee769b7c748348adbd59d4ea16a05c50261e2d8188231a724d3df8753ca0a46`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

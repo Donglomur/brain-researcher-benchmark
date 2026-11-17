@@ -4,20 +4,21 @@
   "track": "paper",
   "title": "A brain-wide map of neural activity during complex behaviour",
   "status": "source_unresolved",
-  "objective": "surpass_source_paper_same_task",
-  "goal": "Surpass the source-paper result on the same task: Decode source stimulus side, choice, feedback and wheel variables by brain region; keep endpoint identities separate and preserve the complete registered regional representation scope.",
+  "objective": "recreate_and_surpass_source_paper_same_task",
+  "goal": "Reproduce and improve the original five-target regional population-decoding result for stimulus side, choice, feedback, wheel speed and wheel velocity, preserving every target's original source cohort, input windows, masks, within-session validation, real/null controls and session/regional summaries. Keep target identities and metrics separate. Improved decoding does not establish unique or causal representation, and original significance is not a superiority rule.",
   "primary_outputs": [
-    "Candidate method and outputs for the source task: Decode source stimulus side, choice, feedback and wheel variables by brain region; keep endpoint identities separate and preserve the complete registered regional representation scope.",
-    "Source-paper comparison for Original per-target regional decoding effect vector: balanced accuracy or R-squared, with source session-null correction: Binary balanced accuracy is the mean of class recalls; continuous wheel R-squared is 1-SSE/SST. Use each original target metric and source null correction without replacing them with significance or fraction-responsive scores."
+    "Reproduction: executable submitted analysis and source-native outputs for the complete original finding and companion panel.",
+    "Improvement: candidate outputs and a comparison on the same original task under improvement.v1.json.",
+    "Separate evidence for both outcomes under matched paper+data and paper+data+author-code conditions."
   ],
   "success_criteria": [
-    "Recover and pin the original numerical per-target/per-region baseline, masks, folds and coverage before admitting an improvement episode.",
-    "Replay the source decoder on its original within-session task and distinguish that rerun score from the published values.",
-    "Candidate and author comparator must share inputs, preprocessing, split, metric, aggregation and declared budgets; no dropped regions, easier target subsets or newly pooled score can establish paper superiority.",
-    "Freeze the candidate before final comparison and satisfy a justified meaningful-effect and uncertainty rule. More significant regions or smaller p-values alone do not qualify.",
-    "Treat new mouse-held-out splits and the local single-cell evaluator as separately labelled extensions/calibration, never as original-decoder wins.",
-    "The bound improvement contract must be improvement_ready and its complete same-task comparison and admission requirements must pass.",
-    "Reproduction is calibration only; reconstructing a numerical result, changing the task or split, or achieving stronger significance alone is not success."
+    "Assess reproduction and improvement independently under reproduction.v2.json and improvement.v1.json; do not combine their scores.",
+    "Preserve the original task, full panel, permitted observations, metrics, aggregation and required companion controls.",
+    "Reproduction requires a source-grounded computation and independently verified granular outputs; copying published findings alone is insufficient.",
+    "Improvement requires the unchanged improvement contract's same-task comparison, uncertainty and admission rules.",
+    "Use outcomes.v1.json for the matched information conditions and budgets; a declared contract or admitted receipt is not scientific qualification.",
+    "Author-baseline replay remains calibration. Historical reconstruction attempts retain their original scope and are not promoted to new qualified AI reproduction results.",
+    "Apply the reviewed same-primary scope correction. A partial component or a prospective extension cannot alone establish the complete primary result; unchanged improvement criteria still apply."
   ],
   "source_id": "FIND-005",
   "canonical_position_one_based": 26,
@@ -175,55 +176,79 @@
     "interpretation": "Archive sizes and author runtime reports are source facts where recorded; planning estimates and source allocation bounds are not measured end-to-end costs. No new measurements in this audit."
   },
   "evaluation": {
-    "objective": "surpass_source_paper_same_task",
-    "contract": {
-      "path": "benchmarks/paper/PAPER-FIND-005/improvement.v1.json",
-      "bytes": 10845,
-      "sha256": "bd5d664c2ad3c3087597dfaa3d58d3c28c2e2aba4202bee675a22b0b00576ed2"
+    "objective": "recreate_and_surpass_source_paper_same_task",
+    "contracts": {
+      "reproduction": "reproduction.v2.json",
+      "improvement": "improvement.v1.json"
     },
-    "disposition": "source_unresolved",
-    "reproduction_role": "calibration_only",
-    "calibration": {
-      "historical_task": {
-        "path": "benchmarks/paper/PAPER-FIND-005/historical/task.pre-improvement.v1.json",
-        "bytes": 15756,
-        "sha256": "e3871b4438eeb026643dd24f74f8730a706a67b85d70f36c56e9d55838f41174"
-      },
-      "implementation_ids": [
-        "construction-paper-find-005-initial-evaluator-v1"
-      ],
-      "runtime_manifest": null
+    "paired_protocol": "outcomes.v1.json",
+    "information_conditions": [
+      "paper_data",
+      "paper_data_author_code"
+    ],
+    "outcome_roles": {
+      "reproduction": "first_class_outcome",
+      "improvement": "first_class_outcome"
     },
+    "author_baseline_role": "calibration",
     "executor_ref": null,
     "scorer_ref": null,
-    "binary_reward_registered": false
+    "binary_reward_registered": false,
+    "scope_disposition": "same_primary_unqualified"
   },
   "episode": {
-    "improvement_loop": "Blocked pending baseline/source reconciliation. Once admitted, iterate only on the declared source training and validation folds with fixed full regional coverage.",
-    "candidate_freeze": "Before final outer-test replay, freeze method, feature windows, hyperparameters, source revision, fold manifest and access/resource ledger.",
-    "final_evaluation": "One protected comparison under the exact original nested-CV scoring contract after competent author replay; public historical targets are not newly blind.",
-    "access_budget": null,
-    "resource_budget": null,
-    "baseline_policy": "Published regional scores, reproduced author decoder scores and candidate scores remain distinct. Initial-evaluator-v1 single-cell sensitivity is calibration only."
+    "improvement": {
+      "improvement_loop": "Blocked pending baseline/source reconciliation. Once admitted, iterate only on the declared source training and validation folds with fixed full regional coverage.",
+      "candidate_freeze": "Before final outer-test replay, freeze method, feature windows, hyperparameters, source revision, fold manifest and access/resource ledger.",
+      "final_evaluation": "One protected comparison under the exact original nested-CV scoring contract after competent author replay; public historical targets are not newly blind.",
+      "access_budget": null,
+      "resource_budget": null,
+      "baseline_policy": "Published regional scores, reproduced author decoder scores and candidate scores remain distinct. Initial-evaluator-v1 single-cell sensitivity is calibration only."
+    },
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
   },
-  "blocking_issues": [
-    "Original numerical per-target regional effect vector is not recovered.",
-    "Complete source cohort, endpoint-specific masks and region coverage remain unfrozen.",
-    "Manuscript versus pinned logistic configuration and unit/region filtering require adjudication.",
-    "No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established."
-  ],
-  "holds": {
-    "task_specific": [
+  "blocking_issues": {
+    "improvement": [
       "Original numerical per-target regional effect vector is not recovered.",
       "Complete source cohort, endpoint-specific masks and region coverage remain unfrozen.",
       "Manuscript versus pinned logistic configuration and unit/region filtering require adjudication.",
       "No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established."
-    ]
+    ],
+    "reproduction_contract": "reproduction.v2.json",
+    "paired_protocol": "outcomes.v1.json"
+  },
+  "holds": {
+    "preserved_limits": {
+      "task_specific": [
+        "Original numerical per-target regional effect vector is not recovered.",
+        "Complete source cohort, endpoint-specific masks and region coverage remain unfrozen.",
+        "Manuscript versus pinned logistic configuration and unit/region filtering require adjudication.",
+        "No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established."
+      ]
+    },
+    "interpretation": "Source, observation, exposure and execution limits remain in force. Improvement-only criteria apply only to improvement; reproduction-specific gaps are declared in reproduction.v2.json.",
+    "reproduction_contract": "reproduction.v2.json",
+    "current_primary_source_limits": [
+      "Authentic target-specific animal/session/unit/region identities, input masks/windows, complete eligible coverage and exact numerical reference vectors remain unqualified.",
+      "Resolve manuscript versus pinned-source logistic settings without choosing a favorable recipe or silently repairing source.",
+      "Retain the real-score-in-null discrepancy and regional difference-of-medians versus median-of-session-differences branches until original source/version provenance is established.",
+      "The wheel figure-caption metric discrepancy versus Methods/source remains unresolved; binary balanced accuracy and continuous wheel R-squared must not be conflated.",
+      "Independent source replay, trusted output verification, full structured coverage and justified reproduction criteria remain unavailable; source metadata and example predictions do not establish reproduction.",
+      "A defensible paired improvement rule across the complete target/region family with original animal/session dependence remains unavailable. More significant regions, smaller p-values or a new cross-target scalar do not establish superiority.",
+      "Correlated task variables and feedback/consumption confounding limit representation claims. Stronger prediction does not establish unique or causal computation.",
+      "The selected scope preserves original within-session nested validation. New cross-mouse evaluation remains separately named and cannot retroactively replace the paper task."
+    ],
+    "scope_correction_limit": "This scope correction grants no new observation access and changes no improvement metric, criterion or tolerance."
   },
   "next_implementation_action": {
-    "action": "The broad regional representation registration includes genuine original decoding endpoints. However, the reviewed paper/code do not establish the exact original regional score vector and complete cohort/scoring manifest needed for a paper comparison. The local single-cell significance/fraction evaluator cannot substitute for source population decoding. A new cross-mouse split or pooled scalar would be an extension. Original numerical per-target regional effect vector is not recovered. Complete source cohort, endpoint-specific masks and region coverage remain unfrozen. Manuscript versus pinned logistic configuration and unit/region filtering require adjudication. No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established.",
-    "basis": "Current source-paper improvement contract disposition and blockers",
-    "execution_authorized_by_manifest": false
+    "improvement": {
+      "action": "The broad regional representation registration includes genuine original decoding endpoints. However, the reviewed paper/code do not establish the exact original regional score vector and complete cohort/scoring manifest needed for a paper comparison. The local single-cell significance/fraction evaluator cannot substitute for source population decoding. A new cross-mouse split or pooled scalar would be an extension. Original numerical per-target regional effect vector is not recovered. Complete source cohort, endpoint-specific masks and region coverage remain unfrozen. Manuscript versus pinned logistic configuration and unit/region filtering require adjudication. No qualified author replay, working protected decoder evaluator, meaningful effect rule, paired uncertainty contract or concrete episode budgets is established.",
+      "basis": "Current source-paper improvement contract disposition and blockers",
+      "execution_authorized_by_manifest": false
+    },
+    "reproduction": "Resolve the task-specific source and execution gaps declared in reproduction.v2.json.",
+    "paired_access": "Verify the matched information conditions and budgets declared in outcomes.v1.json."
   },
   "legacy": {
     "role": "calibration_only",
@@ -238,8 +263,31 @@
     "runnable": false,
     "research_qualified": false,
     "full_contract_complete": false,
-    "delivery_unit": "one_registered_source_paper_improvement_contract",
+    "delivery_unit": "one_registered_paper_task_two_independent_outcomes",
     "new_scientific_runs": 0,
-    "reason": "Binding metadata does not execute or qualify an improvement evaluator."
+    "reason": "Source definitions and binding metadata do not establish execution or either scientific outcome."
+  },
+  "status_basis": "The retained status describes the improvement contract; reproduction eligibility is separate.",
+  "primary_scope": "The complete original five-target regional population-decoding family in Figures 4a, 5a, 6a and 7a,c, with source controls needed to interpret full session/regional results. Preserve each target's original metric, cohort, window, masks, within-session validation, real/null comparisons and complete eligible effect vector. This is an explicit named selection now, not a historically frozen panel or an all-paper requirement.",
+  "scope_decision": {
+    "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
+    "task_entry_id": "PAPER-FIND-005"
+  },
+  "source_scope_correction": {
+    "disposition": "same_primary_unqualified",
+    "retained_scope_notes": "Other source single-cell, GLM, trajectory and latency results remain separately named empirical evidence, not automatic primary obligations. Original decoder examples and significance/session summaries retain their actual source roles but cannot replace complete effect vectors or serve as superiority tests. Cross-mouse evaluation is a prospective extension, not a substitute for the selected within-session result. Preserve all useful source components within these limits.",
+    "retained_source_roles": null,
+    "remaining_source_limits": [
+      "Authentic target-specific animal/session/unit/region identities, input masks/windows, complete eligible coverage and exact numerical reference vectors remain unqualified.",
+      "Resolve manuscript versus pinned-source logistic settings without choosing a favorable recipe or silently repairing source.",
+      "Retain the real-score-in-null discrepancy and regional difference-of-medians versus median-of-session-differences branches until original source/version provenance is established.",
+      "The wheel figure-caption metric discrepancy versus Methods/source remains unresolved; binary balanced accuracy and continuous wheel R-squared must not be conflated.",
+      "Independent source replay, trusted output verification, full structured coverage and justified reproduction criteria remain unavailable; source metadata and example predictions do not establish reproduction.",
+      "A defensible paired improvement rule across the complete target/region family with original animal/session dependence remains unavailable. More significant regions, smaller p-values or a new cross-target scalar do not establish superiority.",
+      "Correlated task variables and feedback/consumption confounding limit representation claims. Stronger prediction does not establish unique or causal computation.",
+      "The selected scope preserves original within-session nested validation. New cross-mouse evaluation remains separately named and cannot retroactively replace the paper task."
+    ],
+    "scientific_outcome": "unknown",
+    "source_disposition": "explicit_primary_selection"
   }
 }
