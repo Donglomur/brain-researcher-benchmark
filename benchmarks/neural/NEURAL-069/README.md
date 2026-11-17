@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Programme response grade v1](implementations/programme-response-grade-v1) — Reviewed task source component.
+  Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Response scorer v1](implementations/response-scorer-v1) — Reviewed source component.
   Scope: Complete response scoring for NEURAL-069. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

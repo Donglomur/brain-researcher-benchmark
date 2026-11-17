@@ -21,6 +21,11 @@ PARALLEL_CONTROL_MANIFEST = "benchmarks/integrity/parallel-source-controls.v1.js
 PARALLEL_CONTROL_SOURCES = (PARALLEL_CONTROL_MANIFEST,
                             "scripts/maintenance/run_parallel_source_controls.py",
                             "tests/maintenance/test_parallel_source_controls.py")
+EXP003_CONTROL_MANIFEST = "benchmarks/integrity/exp003-generated-r.environment.v1.json"
+EXP003_CONTROL_WORKFLOW = ".github/workflows/exp003-generated-r-controls.yml"
+EXP003_CONTROL_SOURCES = (EXP003_CONTROL_MANIFEST,
+                         "scripts/maintenance/run_exp003_generated_r.py",
+                         "tests/maintenance/test_exp003_generated_r.py")
 CANONICAL_PER_TRACK = 100
 MAX_FILE_BYTES = 8 * 1024 * 1024
 # Finite allowance for the reviewed November 17 source enrollment.
@@ -734,7 +739,8 @@ def prepare(reader):
     # Hash JSON descriptors and their exact README.md guides without following
     # any source or private-payload locators.
     check_namespace(root, "benchmarks/integrity", {CURRENT_CLOSURES},
-                    {CURRENT_BINDINGS, INVENTORY, PARALLEL_CONTROL_MANIFEST})
+                    {CURRENT_BINDINGS, INVENTORY, PARALLEL_CONTROL_MANIFEST,
+                     EXP003_CONTROL_MANIFEST})
     checked_path(root, CURRENT_BINDINGS)
     binding_files = artifact_members(root, [{"path": CURRENT_CLOSURES, "id": "current-bindings"}], binding_metadata_only=True)
     binding_files[CURRENT_BINDINGS] = "current-binding-metadata"
@@ -746,6 +752,15 @@ def prepare(reader):
     for path in PARALLEL_CONTROL_SOURCES:
         checked_path(root, path)
         members[path] = "generated-source-controls"
+    # This optional workflow has one closed source group. Its presence, or any
+    # group member, requires the complete group; locators are never followed.
+    if any(info_or_none(root / path) is not None
+           for path in (*EXP003_CONTROL_SOURCES, EXP003_CONTROL_WORKFLOW)):
+        need(not set(members) & set(EXP003_CONTROL_SOURCES),
+             "EXP003 control source overlaps owned source")
+        for path in EXP003_CONTROL_SOURCES:
+            checked_path(root, path)
+            members[path] = "generated-exp003-r-controls"
     need(len(members) <= MAX_FILES, "Source file count limit exceeded")
     ledger, ledger_pin = reader.document(RELOCATIONS)
     need(ledger.get("schema_version") == 1 and isinstance(ledger.get("files"), list)

@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Full cohort program v2](implementations/full-cohort-program-v2) — Reviewed task source component.
+  Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Hierarchy scorer v2](implementations/hierarchy-scorer-v2) — Reviewed source component.
   Scope: NEURAL-076 hierarchy scorer, version 2. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
