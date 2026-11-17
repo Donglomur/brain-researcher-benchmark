@@ -39,9 +39,11 @@ all 234 task definitions and 290 source relationships. Its
 [machine-readable census](audits/2026-11-16.json) preserves the review scope,
 findings and unreviewed areas for each item. The resulting repairs address input
 validation, numerical stability, source resolution, process cleanup and CI
-coverage. One confirmed clock-boundary defect in NEURAL-047 remains open; the
-proposed normalization was withdrawn because no defensible timestamp-precision
-policy had been established.
+coverage. The audit recorded a clock-boundary defect in NEURAL-047 and withdrew
+an initial normalization because timestamp precision had not been established.
+The subsequent [clock arithmetic repair](clock-arithmetic-2026-11-17.md) fixes
+comparisons of the supplied values without inventing a tolerance. Authentic native
+clock lineage remains unresolved.
 
 The audit does not establish scientific readiness. At its baseline, 164 tasks had
 owned source relationships and 70 had none. Authentic-data validation, protected
