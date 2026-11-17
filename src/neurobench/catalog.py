@@ -24,7 +24,7 @@ COMMON = {'schema_version', 'id', 'track', 'title', 'status', 'primary_outputs',
           'next_implementation_action', 'provenance', 'admission'}
 # Covers both tracks' versioned contracts plus exact preserved predecessors.
 # Per-member bounds and the cumulative refusal remain independent controls.
-READ_LIMIT = 32 * 1024 * 1024
+READ_LIMIT = 80 * 1024 * 1024
 PAPER_PRE_IMPROVEMENT_COUNT = 116
 PRIMARY_SUCCESSOR_PUBLIC_FIELDS = (
     'improvement_disposition', 'retained_improvement_contract', 'retained_improvement_role',
