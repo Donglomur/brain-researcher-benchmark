@@ -30,6 +30,12 @@ network request, image pull or provider call is performed. Exact original packet
 must already be available; source bindings pin the unchanged viewer, renderer,
 source facts, raster and original candidate validator.
 
+Select a direct installed client interpreter inside the sandbox's allowed runtime
+roots and supply it as `CLIENT_PYTHON`. On macOS, the system Python launcher may
+require developer-tool files outside those roots. The recorded control used a
+version-specific Python framework executable. Freeze and verify the chosen
+interpreter before a full run.
+
 Run each person separately with fresh output and fresh participant state. The
 example limits below illustrate syntax; they are not an approved or executed
 model-study budget:
@@ -37,7 +43,7 @@ model-study budget:
 ```sh
 OPERATOR_PYTHON -I -B transport.py person \
   --case development-001 --packet /operator/person1/packet \
-  --client /operator/trusted-provider-bridge.py --python /usr/bin/python3 \
+  --client /operator/trusted-provider-bridge.py --python CLIENT_PYTHON \
   --sandbox macos --max-actions 20000 --max-images 6000 \
   --max-output-bytes 1073741824 --wall-seconds 9000 \
   --output /operator/evidence/person1-transport
@@ -142,6 +148,15 @@ operator forging a transcript. Exact source and runtime version checks do not
 prove binary environment identity or hostile-code containment. No untouched test
 population, generalization inference, competent reference, model accuracy or full
 canonical 153-night scientific qualification follows from this component.
+
+[SCRIPTED_CONTROL.json](SCRIPTED_CONTROL.json) records a separately reviewed full
+5,450-epoch software control at the stated source commit: two fresh scripted
+clients, six sandbox checks and the complete collector path passed. It preserves
+the earlier interpreter-startup failure and records the required 21,800 rendered
+views, measured costs and evidence hashes. The receipt publishes metadata only.
+Fixed uniform responses establish no model interpretation, provider capacity,
+scientific accuracy or full 153-night qualification. Earlier renderer evidence
+is not substituted for this source-specific execution.
 
 Tests use explicitly invented packets and lightweight generated images for protocol
 controls, plus the original complete submission validator. They are independent
