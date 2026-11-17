@@ -1,0 +1,333 @@
+{
+  "schema": "paper_panel_source_examples_review_v1",
+  "review_scope": "Read-only local source metadata. No authentic score table, neural array, source model, evaluator, test, network request or shared repository mutation.",
+  "baseline_source_commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630",
+  "source_files": [
+    {
+      "id": "cardiac_recovery",
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/published-decoding-panel-v1/SOURCE_RECOVERY.json",
+      "bytes": 4730,
+      "sha256": "1f2902cb7b6fd2e9c4853213c9c0d87c9aa022169817f0fd41b9c229c903f0b0"
+    },
+    {
+      "id": "cardiac_readme",
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/published-decoding-panel-v1/README.md",
+      "bytes": 4736,
+      "sha256": "8023862517da77064fbee142022c4b5b28096aebfb143881f3c311ed44120291"
+    },
+    {
+      "id": "neds_improvement",
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/improvement.v1.json",
+      "bytes": 12936,
+      "sha256": "8ff082fb4c8bd7cb5ee74d049d606c07acffd8a53479c6e51b2051c6cbd538af"
+    },
+    {
+      "id": "neds_reproduction",
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/reproduction.v1.json",
+      "bytes": 32956,
+      "sha256": "4b47bbf83808a6ae5e825094a4ed191c667adcbb51cac00f44c9241f4ce39d4f"
+    },
+    {
+      "id": "neds_evaluator_provenance",
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/provenance.json",
+      "bytes": 13369,
+      "sha256": "995b819043680def7bde397145392081475b3a03bb0b4ddbb857e6186da5a3b3"
+    },
+    {
+      "id": "neds_evaluator_readme",
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/README.md",
+      "bytes": 9548,
+      "sha256": "9b8efc6b491e4330ff87c86246ed299221e7015d3f7024afa1bb94b4437b06df"
+    },
+    {
+      "id": "neds_cohort",
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/cohort.json",
+      "bytes": 4098,
+      "sha256": "2f68e7934f7b7c5071c8e8e4763a0f3503669fe0671fd7a0ad3349fe8e0ecda5"
+    }
+  ],
+  "examples": [
+    {
+      "task_id": "PAPER-ROOT-ADD-016",
+      "paper": "https://doi.org/10.7554/eLife.100605.3",
+      "paper_locator": "Original Figure 3C,D ECG reconstruction",
+      "status": "non_executable_source_to_endpoint_mapping_unresolved",
+      "independent_unit": "Participant, pending recording identity join; not a participant-condition row or a time sample.",
+      "required_support_per_group": {
+        "released_participant_ids": [
+          "0",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "10",
+          "11",
+          "12",
+          "13",
+          "14",
+          "15",
+          "16",
+          "17",
+          "18",
+          "19"
+        ],
+        "support_kind": "Released numeric table identifiers; mapping to original recordings is unrecovered.",
+        "coordinate_identity": [
+          "source_group_id",
+          "released_participant_id"
+        ],
+        "no_missing_or_duplicate_coordinates": true
+      },
+      "metric": {
+        "name": "Pearson correlation r of reconstructed ECG",
+        "units": "dimensionless Pearson r",
+        "direction": "higher",
+        "domain": {
+          "minimum": -1,
+          "maximum": 1
+        },
+        "source_definition": "Backward EEG/MEG model .r per participant and ICA condition; the original partition-to-.r reduction remains unresolved.",
+        "source_evidence_ids": [
+          "cardiac_recovery",
+          "cardiac_readme"
+        ]
+      },
+      "published_vector_source": {
+        "name": "dec_r_ecg.csv",
+        "version": 1,
+        "bytes": 5222,
+        "sha256": "97ce1f3546cbc7cf447cdc6efa785b87037853039d0df88bc4de62d475797368",
+        "url": "https://osf.io/download/fm5t8/?revision=1",
+        "rows": 120,
+        "contents_read_in_this_review": false,
+        "values": null,
+        "role": "Recovered public author scores; not decoder input recordings or candidate ground-truth labels."
+      },
+      "source_summary_semantics": "All120 score rows form six participant vectors. Importer means/SD are descriptive and do not establish the original reported group statistic, contrast, confidence interval or executable comparison endpoint.",
+      "candidate_comparison_policy": {
+        "status": "unresolved_non_executable",
+        "comparison_targets": null,
+        "role_of120_rows": "Mandatory cohort/audit/paired-uncertainty support, not120 improvement targets.",
+        "required_default": "Recover and compare the exact original author-reported group statistics or contrasts and reduction; keep complete original participant support.",
+        "pointwise_nonregression_required": false,
+        "automatic_six_group_pareto_adopted": false,
+        "pooled_mean_or_win_count_adopted": false,
+        "reproduction_tolerances": null,
+        "meaningful_effects": null,
+        "uncertainty_rule": null,
+        "strongest_published_comparator_qualified": false,
+        "reproduced_author_comparator": null
+      },
+      "required_original_protocol": "20-person simultaneous Salzburg M/EEG/ECG cohort, original modality channels and ECG-informed ICA, 100-Hz sampling, four-fold nested temporal CV, -250 to250-ms integration window and50-ms Hamming basis. Preserve all six conditions and preprocessing ECG exposure.",
+      "blocking_issues": [
+        "The exact original group statistic or contrast defining improvement is unresolved. Neither120 pointwise score objectives nor an automatic six-group Pareto rule is adopted.",
+        "Join numeric released IDs to immutable original recordings/channels and authenticate the exact CSV exporter.",
+        "Recover original temporal fold identities, artifact exclusions and partition-to-r aggregation.",
+        "Resolve plain versus filter/threshold-suffixed source filenames and historical library/environment parity.",
+        "Qualify native author replay and strongest relevant comparator, source-based reproduction tolerances, meaningful gain and paired six-group inference.",
+        "An additive selected-endpoint scope and prospective comparison policy need explicit adoption; old age/slope biological reproduction remains separate."
+      ],
+      "source_group_count": 6,
+      "required_source_support_row_count": 120,
+      "source_groups": [
+        {
+          "id": "eeg__ECG_components",
+          "modality": "eeg",
+          "condition": "ECG_components"
+        },
+        {
+          "id": "eeg__ECG_not_rejected",
+          "modality": "eeg",
+          "condition": "ECG_not_rejected"
+        },
+        {
+          "id": "eeg__ECG_rejected",
+          "modality": "eeg",
+          "condition": "ECG_rejected"
+        },
+        {
+          "id": "meg__ECG_components",
+          "modality": "meg",
+          "condition": "ECG_components"
+        },
+        {
+          "id": "meg__ECG_not_rejected",
+          "modality": "meg",
+          "condition": "ECG_not_rejected"
+        },
+        {
+          "id": "meg__ECG_rejected",
+          "modality": "meg",
+          "condition": "ECG_rejected"
+        }
+      ]
+    },
+    {
+      "task_id": "PAPER-paper-method-replacement-005",
+      "paper": "https://proceedings.mlr.press/v267/zhang25bw.html",
+      "paper_locator": "Original NEDS Table1 and AppendixE Table10",
+      "status": "source_defined_nine_endpoint_example_blocked_for_comparison",
+      "scientific_endpoint_group_count": 9,
+      "summary_coordinate_count": 9,
+      "complete_source_support": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+      "cohort_source_evidence_id": "neds_cohort",
+      "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+      "endpoint_groups": [
+        {
+          "id": "encode_all",
+          "metric": "source neural encoding bits_per_spike",
+          "units": "bits per spike",
+          "direction": "higher",
+          "published_NEDS_mean": 0.27,
+          "published_NEDS_SEM": 0.03,
+          "source_locator": "Table1",
+          "domain": {
+            "minimum": null,
+            "maximum": null
+          }
+        },
+        {
+          "id": "encode_choice",
+          "metric": "source neural encoding bits_per_spike",
+          "units": "bits per spike",
+          "direction": "higher",
+          "published_NEDS_mean": 0.06,
+          "published_NEDS_SEM": 0.02,
+          "source_locator": "Table1",
+          "domain": {
+            "minimum": null,
+            "maximum": null
+          }
+        },
+        {
+          "id": "encode_block",
+          "metric": "source neural encoding bits_per_spike",
+          "units": "bits per spike",
+          "direction": "higher",
+          "published_NEDS_mean": 0.1,
+          "published_NEDS_SEM": 0.02,
+          "source_locator": "Table1",
+          "domain": {
+            "minimum": null,
+            "maximum": null
+          }
+        },
+        {
+          "id": "encode_wheel",
+          "metric": "source neural encoding bits_per_spike",
+          "units": "bits per spike",
+          "direction": "higher",
+          "published_NEDS_mean": 0.12,
+          "published_NEDS_SEM": 0.02,
+          "source_locator": "Table1",
+          "domain": {
+            "minimum": null,
+            "maximum": null
+          }
+        },
+        {
+          "id": "encode_whisker",
+          "metric": "source neural encoding bits_per_spike",
+          "units": "bits per spike",
+          "direction": "higher",
+          "published_NEDS_mean": 0.11,
+          "published_NEDS_SEM": 0.02,
+          "source_locator": "Table1",
+          "domain": {
+            "minimum": null,
+            "maximum": null
+          }
+        },
+        {
+          "id": "decode_choice",
+          "metric": "ordinary classification accuracy",
+          "units": "fraction correct",
+          "direction": "higher",
+          "published_NEDS_mean": 0.91,
+          "published_NEDS_SEM": null,
+          "source_locator": "Table10",
+          "domain": {
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        {
+          "id": "decode_block",
+          "metric": "ordinary classification accuracy",
+          "units": "fraction correct",
+          "direction": "higher",
+          "published_NEDS_mean": 0.86,
+          "published_NEDS_SEM": null,
+          "source_locator": "Table10",
+          "domain": {
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        {
+          "id": "decode_wheel",
+          "metric": "unclipped flattened trial/time R2",
+          "units": "dimensionless R2",
+          "direction": "higher",
+          "published_NEDS_mean": 0.64,
+          "published_NEDS_SEM": null,
+          "source_locator": "Table10",
+          "domain": {
+            "minimum": null,
+            "maximum": 1
+          }
+        },
+        {
+          "id": "decode_whisker",
+          "metric": "unclipped flattened trial/time R2",
+          "units": "dimensionless R2",
+          "direction": "higher",
+          "published_NEDS_mean": 0.59,
+          "published_NEDS_SEM": null,
+          "source_locator": "Table10",
+          "domain": {
+            "minimum": null,
+            "maximum": 1
+          }
+        }
+      ],
+      "numeric_source_evidence_ids": [
+        "neds_reproduction",
+        "neds_improvement"
+      ],
+      "known_anchor_qualification": "These are rounded published NEDS summary anchors copied from already reviewed local metadata. They are neither new author reruns nor a fully authenticated strongest-comparator vector. Decoding SEMs and alternative-model values are not supplied by the inspected metadata snippets and remain null rather than guessed.",
+      "metric_definition": "Each encoding coordinate is the source per-neuron Poisson log-likelihood gain over that neuron's evaluation-mean-null divided by total spikes and ln2; average defined neurons within each session, then retain the original ten-session summary. Choice/block use ordinary accuracy. Wheel/whisker R2 flattens all evaluated trials/time, without clipping negative values.",
+      "source_zero_and_undefined_behavior": "Zero predicted/null rates map to1e-9 in source; source zero-spike/undefined-neuron behavior and any changed complete-population rejection rule require explicit parity qualification.",
+      "strongest_comparator": {
+        "value": null,
+        "status": "unresolved",
+        "reason": "Table10 includes RRR,NDT2,POYO+ decoding references; no encoding results for those decoder comparators. Do not invent absent model-by-endpoint cells or assume NEDS is strongest in every metric. Exact comparable source models and matched author rerun must be bound per endpoint."
+      },
+      "reproduced_author_comparator": null,
+      "reproduction_tolerances": null,
+      "meaningful_effects": null,
+      "uncertainty_rule": null,
+      "scalarization": null,
+      "forbidden_substitutions": [
+        "No average of bits/spike, accuracy andR2, no win-count score and no dropping a regressing endpoint.",
+        "Published SEM or printing precision is not a reproduction tolerance or meaningful-effect threshold.",
+        "No train-only local ridge as NEDS, source RRR or strongest source baseline.",
+        "No same-architecture or equal-compute causal pretraining claim from absolute Table1/Table10 scores.",
+        "No source Figure2 annotation reconstructed as percentage change of unrelated table means."
+      ],
+      "blocking_issues": [
+        "Authenticate original ONE object versions, eligible units/trials and actual74/10-session data lineage.",
+        "Resolve paper2-Hz versus code>5-Hz neuron filtering, presplit scaling, list-valued validity-mask behavior and camera lineage against original results.",
+        "Recover original ordered eligibility-dependent70/10/20 partitions and process-wide seed42/RNG history.",
+        "Qualify full-trial native author execution, training masks/checkpoints and matched resource/exposure conditions.",
+        "Bind all nine endpoint source comparators, justified reproduction tolerances, meaningful gains and selection-aware paired animal-level inference.",
+        "Explicitly adopt the selected Table1/Table10 primary as an additive version; broader Figure2 training/transfer findings remain separate reproduction."
+      ]
+    }
+  ]
+}

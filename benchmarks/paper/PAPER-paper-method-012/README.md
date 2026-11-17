@@ -12,33 +12,46 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Poisson known-truth estimator experiments, including the eight synthetic analytical reference values, remain separate source components and cannot substitute for empirical CA1. Other simulation branches are not selected. The linear/RBF real/shuffled empirical decoder contrasts belong to the PRIMARY result family; a standalone decoder optimization score is only partial evidence and cannot establish complete primary reproduction or improvement. Reviewed source limits: The primary panel is selected now, but authentic payload identity, animal/FOV/session membership, complete original reference outputs and trusted computation remain unresolved. Preserve and reconcile the source spatial-bin and dataset-label discrepancies without silently selecting a favorable interpretation. Resolve five-versus-two outer decoding folds separately from the source optimization-fold settings; exact original partitions and nested-validation provenance remain unresolved. The retained author source comments out direct MI while later reading its output cells, and swaps shuffled linear/RBF result assignments. No silent repair or source-parity claim is authorized. Numerical reproduction tolerances and a defensible same-result superiority criterion remain unresolved. Larger empirical MI, stronger significance, larger biological effects or lower variance alone do not establish improvement. Incomplete scalar or structured evidence cannot establish the complete selected family; keep affected outcome admission unavailable until source, representation and comparison requirements are satisfied. Reviewed hashes identify retained article/Appendix text extractions and a CA1 rawLines transcription, not newly authenticated original PDF or Git transport bytes.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The complete named Figure 2C empirical CA1 correlation-coding family, including direct pair/single-neuron information, redundancy/synergy and information breakdown, together with the original linear/RBF population comparisons using real versus conditionally shuffled responses. Preserve the source-defined animal/field-of-view support, discretization, corrections and nested validation. This is an explicit selection now, not a retroactive historical selection or an all-paper requirement.
+### Current selected paper endpoint
 
-**Retained secondary policy:** Poisson known-truth estimator experiments, including the eight synthetic analytical reference values, remain separate source components and cannot substitute for empirical CA1. Other simulation branches are not selected. The linear/RBF real/shuffled empirical decoder contrasts belong to the PRIMARY result family; a standalone decoder optimization score is only partial evidence and cannot establish complete primary reproduction or improvement.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v1.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate S1 payload and original animal/session/response/stimulus membership and spatial-bin conventions.
+- Resolve fivefold paper versus twofold source and exact nested optimization/outer trial partitions.
+- Resolve swapped shuffled-linear/RBF assignments and caption stimulus-column inconsistency; direct-MI commented call must not silently supply decoder outputs.
+- Recover native confusion counts, all session/fold outputs and exact original aggregate/reference vectors.
+- Qualify source-matched reproduction tolerance, strongest comparator selection, meaningful gain and dependence-aware joint decision; budgets and independent execution remain unqualified.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. MINT contains original ordered synthetic-estimator and held-out population-decoder comparisons, so the paper is not categorically ineligible. The current CA1 direct-information reference is descriptive calibration only. The exact original improvement branch, numeric author baseline, binning and fold correspondence must be recovered before admission; larger empirical direct MI or stronger significance cannot substitute for that recovery.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +59,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 44278 bytes; SHA-256 `ab98fef914e47985d6d4a15d6c94430fe8a77349930c4b7e68f3974a41a30b2d`.
+- Specification identity: 41909 bytes; SHA-256 `b69c8d25ccb63216a00fee480aa4770f5ecc51d376fa43d98ac7725e13af330c`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

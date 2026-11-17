@@ -70,6 +70,7 @@ def validate_contract(document, task_id=None):
 
 
 class NeuralCatalogBindingTests(unittest.TestCase):
+    @fixture.pre_endpoint_selection_fixture
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(dir=Path(tempfile.gettempdir()).resolve())
         self.addCleanup(temporary.cleanup)

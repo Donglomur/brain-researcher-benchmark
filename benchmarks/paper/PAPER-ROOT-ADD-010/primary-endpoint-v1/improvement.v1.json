@@ -1,0 +1,179 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-010",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The selected original Figure4B method endpoint is scientifically ordered, but original data/protocol parity, numerical strongest-author comparator, complete-support decision, runtime and paired execution are unresolved.",
+  "source_paper": {
+    "title": "A geometric shape regularity effect in the human brain",
+    "url": "https://doi.org/10.7554/eLife.106464.3"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12795501/",
+      "locator": "Experiment 4 (MEG): Participants; Preprocessing of MEG signals; Decoding; RSA in sensor space; Fig. 4",
+      "supports": "Original run-held-out reference-versus-oddball AUROC and descriptive regularity/RSA analyses, including six directional run splits and participant-wise results."
+    },
+    {
+      "id": "code",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/POGS_MEG_config.py",
+      "locator": "Configuration: channels, Maxwell filter, l_freq, h_freq, resample_sfreq",
+      "supports": "Source configuration uses MEG channels, Maxwell filtering, 0.1\u201340 Hz filtering and 250-Hz resampling."
+    },
+    {
+      "id": "legacy_component",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-010/implementations/initial-evaluator-v1/README.md",
+      "locator": "Sensor RSA construction component scope and holds",
+      "supports": "Existing implementation covers sensor RSA, not the historical oddball decoder or an authenticated numeric reference."
+    },
+    {
+      "id": "source_decoder",
+      "kind": "author_code",
+      "url": "https://github.com/mathias-sm/AGeometricShapeRegularityEffectHumanBrain/blob/133669b577b5ae341cd0842dfb0e7f0af85c0020/MEG/mne-bids-pipeline.zip",
+      "locator": "scripts/msm/_04_sliding_estimator_ref_out_decode_per_shapes.py; retained SHA256 f7504b075616926adb2a33c3c8f8d27218ff74ccb71638beeb0f1f504733ed69; source scoring recovery in implementations/oddball-auroc-v1/source-pins.json",
+      "supports": "Original late-epoch support, reference-positive polarity, all-shape training, six directional folds, per-shape AUROC and equal-fold/participant reduction. Cached source authentication does not establish final-paper parity or a scientific run."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 4B shared all-shape-trained reference-versus-oddball MEG decoding, assessed by the complete original participant/fold/shape/time ROC AUROC arrays for both source smoothing branches. Preserve all twenty sensor participants, 158 original runs, eleven shapes and six directional held-run folds. No source-space participant subset, new shape/participant split, favorable temporal subset, regularity magnitude or RSA correlation substitutes for this endpoint.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original POGS human MEG recordings and event metadata from OpenNeuro ds006012 version 1.0.1. Keep the registered exact asset inventory unchanged. Publication-version equivalence, native file identity, retained epochs and final source output provenance remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "source_decoder"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "All twenty original sensor participants sub-01 through sub-20; run01..08 except run08 absent for sub-10 and sub-11, totaling158 runs. The nineteen-person source-space subset cannot replace this sensor cohort. Authentic biological and retained-observation joins remain required.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Six original directional run folds:1357->2468 and reverse;1256->3478 and reverse;1234->5678 and reverse. Train jointly on all eleven shapes, test each shape separately on every eligible late epoch of the held runs. Preserve actual missing run08 for sub-10/sub-11. Source formula is recovered; authentic retained-epoch membership and publication-version parity are unresolved. No new held-shape or held-participant split.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Original direct-magnetometer epochs are the decoder features. Original run/trial/shape/rotation/scaling/miniblock metadata serve identity joins, source selection, fold scheduling and shape-specific evaluation only; they are not extra prediction covariates unless exact original source use is separately established. Reference=1 and outlier=0; scores increase toward reference without post-hoc inversion. Exclude first six miniblock trials using early/late metadata assigned before Epochs.selection and retain complete lineage. Held-run reference/outlier conditions, event codes or metadata encoding those labels remain evaluator-only; candidates receive only source-permitted training-fold labels and necessary opaque row/split identities. Source-fold isolation across reused directional folds is required. Exact prepared-input identity and exposure boundaries remain unresolved.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "source_decoder"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source bad-channel/Maxwell/SSS,0.1-40Hz filtering,250Hz resampling,SSP/autoreject and retained epochs. Cached shared decoder uses direct magnetometers, training-fold StandardScaler and liblinear logistic regression on unsmoothed epochs. Commented uniform_filter1d25 does not authenticate the published smoothed branch. Source -0.1..1.1s conflicts with -0.15..1.15s paper description and fold scaling with stated epoch normalization. Resolve before original-author comparison; do not silently choose a branch or grid.",
+      "evidence_ids": [
+        "paper",
+        "code",
+        "source_decoder"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Shape/time ROC AUROC for reference-positive scores, using average ranks for ties; preserve below-chance values. Undefined single-class cells are not filled with chance. Original decoder fits jointly over shapes and evaluates each shape separately. Full support is20x6x11x301 code-axis cells per branch, with final-paper axis equivalence unresolved. Higher matched-source AUROC is ordered predictive improvement; regularity correlations, p-values and peak timing are separate biological summaries.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Compute AUROC independently per participant/fold/shape/time, arithmetic mean across six folds, then equal mean across twenty participants; never pool overlapping-fold predictions or weight by trial count. Preserve both smoothing branches and all curves/class counts. Source plotting additionally averages over a union of significant positive regularity clusters; its authentic fixed union, numeric baseline and a defensible complete-support improvement decision remain unresolved. One source display SEM uses sqrt(19) despite twenty people; preserve and report rather than silently changing it or using it as independent uncertainty.",
+      "evidence_ids": [
+        "paper",
+        "source_decoder"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure4B complete shape/time reference-positive ROC AUROC, both smoothing branches, with source temporal-summary and complete-support superiority decision unresolved",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Exact original full author AUROC/prediction arrays and source fixed temporal summary are not recovered. Source source-pins identify a StandardScaler/liblinear-logistic comparator, not the strongest final-paper configuration or a qualified score. No numeric baseline is invented;428-ms peak latency is not AUROC.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No authenticated original author fit, full prediction panel or numerical reference-equivalence run is established. The prediction-to-AUROC scorer is a source component, not an author baseline.",
+      "evidence_ids": []
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful oddball-decoding gain requires a recovered exact author comparator and an endpoint-specific justification; no arbitrary AUROC increment is supplied.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired participant-level comparison retaining all run folds and shapes after recovering the source endpoint; its confidence procedure and decision rule are not yet specified.",
+      "independent_unit": "Original human sensor participant; twenty participants, with overlapping folds, shapes, branches and times dependent within participant.",
+      "rationale": "The six overlapping run contrasts and repeated time points are dependent; participants, not folds or epochs, supply biological replication.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "paper_win_requires": [
+      "Recover and reproduce the strongest relevant author Figure4B comparator on the same twenty-person/158-run/eleven-shape/six-fold/two-branch support and information regime.",
+      "Compare complete original AUROC support under a predeclared meaningful-effect and paired participant-level uncertainty/multiplicity rule; source descriptive cluster windows cannot be reselected for the candidate.",
+      "Keep broad biological regularity, separate-training Figure4C and RSA/model findings as separately retained reproduction, not claims established by a decoder improvement.",
+      "Do not substitute a smaller cohort, new split, different preprocessing branch, peak/latency, stronger correlation, smaller p-value or local baseline for the original task.",
+      "Do not admit superiority until a source-faithful complete-array comparison and admission policy exists; improvement/v1 scalar compatibility is not sufficient."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was performed; source results, any future author rerun, and current SOTA are separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked until exact source baseline and summary endpoint are recovered. Then expose only declared original training folds and development feedback; keep final source-test access evaluator-owned.",
+    "candidate_freeze": "Freeze preprocessing, model, hyperparameters, source-fold handling and summary rule before final original-task evaluation.",
+    "final_evaluation": "Unqualified until all source and protocol gaps close. Final evaluation preserves the complete original Figure4B support and same information regime in both assistance conditions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Do not turn agreement with the existing reconstruction evaluator, stronger statistical significance, a new split, or a local implementation baseline into a source-paper win."
+  },
+  "blocking_issues": [
+    "Authenticate final Version-of-Record Figure 4B/code/data correspondence and the exact retained-epoch identities for all twenty participants and 158 runs; inventory entries do not establish authentic prepared data.",
+    "Resolve source -0.1..1.1 second/301-point code grid versus paper -0.15..1.15 second description, training-fold StandardScaler versus stated per-epoch normalization, and the actual published smoothed producer. Do not crop, interpolate or invent either branch.",
+    "Recover complete original author AUROC/reference-prediction arrays and strongest relevant same-endpoint author configuration. The 428-ms latency and a new local baseline are not accuracy comparators.",
+    "Recover and fix the original descriptive temporal aggregation before candidate comparison; source regularity-selected cluster unions cannot be reselected for a favorable candidate. A meaningful complete-support improvement decision, participant-level dependence/multiplicity policy and numerical reproduction tolerances remain unresolved.",
+    "Authenticate all-shape training, label and preprocessing access, source exclusions and epoch lineage; complete producer/runtime/isolation and independent full-output verification remain unqualified. Matched access/resource budgets are unspecified, not assumed.",
+    "The source endpoint is a complete AUROC array family, not one scalar. Existing improvement/v1 can retain unresolved source declarations but cannot yet express/admit the exact paired full-panel superiority decision. A source-faithful vector comparison/admission policy and meaningful participant-level uncertainty must be implemented and independently justified before any win; do not invent a mean, win-count, selected cell/window or arbitrary tolerance.",
+    "Restrict model covariates to source-authorized MEG features. Metadata for run/trial/shape/rotation/scaling/miniblock joins or scoring is not an extra decoder feature. Authenticate a file/column-level exposure manifest and keep held-run conditions/event-code label proxies evaluator-only, with isolation across reused directional folds."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Old root improvement.v1.json and broad reproduction.v2.json remain unchanged and separately identified by the endpoint scope record. Source sensor-RSA calibration and display reconstruction are not selected-endpoint improvement results."
+  }
+}

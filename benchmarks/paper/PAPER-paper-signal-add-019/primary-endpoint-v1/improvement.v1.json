@@ -1,0 +1,301 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-signal-add-019",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Explicit versioned original Table1 performance task. Reproduce all126 source reference findings; improve one arbitrary candidate method across all18 matched target×instruction errors, using preselected strongest author comparators. Source support, native references, runtime and valid joint comparison remain unqualified.",
+  "source_paper": {
+    "title": "Decision-making components and times revealed by the single-trial electroencephalogram",
+    "url": "https://elifesciences.org/articles/108049"
+  },
+  "evidence": [
+    {
+      "id": "table",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/108049/figures",
+      "locator": "Table1 caption and rows; Fig4 caption",
+      "supports": "Published contrast-left-out RMSE and distinct encoding/decision intervals;40.10ms is the accuracy-condition Fechner decision row, not an overall paper score."
+    },
+    {
+      "id": "utilities",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/utils.py",
+      "locator": "individual_fits; latency_model_fit lines80-97",
+      "supports": "Leave-one-contrast-out fitting within each participant; pooled observed-trial mean vs equal-participant predicted mean; root mean over contrast squared errors."
+    },
+    {
+      "id": "equations",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/models.py",
+      "locator": "latency.lm_func; pieron_func; wf_diffusion; fit",
+      "supports": "Published model equations, bounds, seconds/fraction inputs and in-sample fitting loss distinct from cross-validation score."
+    },
+    {
+      "id": "hmp",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/1-HMP_analyses.ipynb",
+      "locator": "loader/preprocessing cells; behavioral-data creation; latency-law calls with loocv=True; combined-stage cells",
+      "supports": "512Hz source recipe,15 PCs,participant scaling,25ms half-sine; responded-trial selection differs from canonical correct-only primary."
+    },
+    {
+      "id": "data",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/data/README.md",
+      "locator": "preprocessed/ data route",
+      "supports": "OSF preprocessed directory is the author analysis input route; metadata route is not downloaded-payload validation."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-019/docs/initial-evaluator-v1.md",
+      "locator": "Source and semantic decisions; Calculations and outputs",
+      "supports": "Exporter scorer distinguishes correct-only and all-responded sensitivity; no native HMP fit or numerical source qualification."
+    },
+    {
+      "id": "previous-reproduction-table",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/108049/figures",
+      "locator": "Table1 caption and rows; Fig4 caption",
+      "supports": "Published contrast-left-out RMSE and distinct encoding/decision intervals;40.10ms is the accuracy-condition Fechner decision row, not an overall paper score."
+    },
+    {
+      "id": "previous-reproduction-utilities",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/utils.py",
+      "locator": "individual_fits; latency_model_fit lines80-97",
+      "supports": "Leave-one-contrast-out fitting within each participant; pooled observed-trial mean vs equal-participant predicted mean; root mean over contrast squared errors."
+    },
+    {
+      "id": "previous-reproduction-equations",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/models.py",
+      "locator": "latency.lm_func; pieron_func; wf_diffusion; fit",
+      "supports": "Published model equations, bounds, seconds/fraction inputs and in-sample fitting loss distinct from cross-validation score."
+    },
+    {
+      "id": "previous-reproduction-hmp",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/1-HMP_analyses.ipynb",
+      "locator": "loader/preprocessing cells; behavioral-data creation; latency-law calls with loocv=True; combined-stage cells",
+      "supports": "512Hz source recipe,15 PCs,participant scaling,25ms half-sine; responded-trial selection differs from canonical correct-only primary."
+    },
+    {
+      "id": "previous-reproduction-data",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/data/README.md",
+      "locator": "preprocessed/ data route",
+      "supports": "OSF preprocessed directory is the author analysis input route; metadata route is not downloaded-payload validation."
+    },
+    {
+      "id": "previous-reproduction-legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-signal-add-019/docs/initial-evaluator-v1.md",
+      "locator": "Source and semantic decisions; Calculations and outputs",
+      "supports": "Exporter scorer distinguishes correct-only and all-responded sensitivity; no native HMP fit or numerical source qualification."
+    },
+    {
+      "id": "previous-reproduction-published_table_complete",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/108049/figures#table1",
+      "locator": "Table 1 complete Accuracy and Speed rows, nine columns; retained publisher article version 1, Version of Record, DOI version 10.7554/eLife.108049.3; /body/1/content/1/content/2/assets/0; article SHA256 ed73af8a6bd78e51217269db9801f28eaa4a5cf56f58a5b94e9350355f4b9ec4",
+      "supports": "All 54 printed contrast-left-out RMSE values, 54 parenthesized full-data latency R2 values and 18 Fechner proportion-correct R2 values. Published targets are allowed known answers and do not attest execution or authentic target lineage."
+    },
+    {
+      "id": "previous-reproduction-panel_component",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-signal-add-019/implementations/contrast-panel-v2/panel.py",
+      "locator": "prepare, _predictions, score_method, evaluate, main; source SHA256 7ad801136f12e66c477ab96270159ffd6c4723465af9a684edbd020e51cbdbec",
+      "supports": "Reviewed runnable exported-value scorer for nine targets, two conditions and three source models, with separate behavioral B/HMP H inputs, complete global participant prediction grid, fixed-target digest and separate reproduction/improvement reports. It does not execute or authenticate native HMP preprocessing, fitting, model coefficients or upstream provenance."
+    },
+    {
+      "id": "previous-reproduction-source_native_lineage",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/1-HMP_analyses.ipynb",
+      "locator": "Source cells 0,5,9,10,11,16,19,21,26,27,28; complete source-cell artifact SHA256 81af3d8915b57e94e883e30b4dce330b168e9aefe61aa6d8fa8c59e035785ae5; cached outputs excluded",
+      "supports": "Original behavioral B is formed from accepted epoch metadata before HMP, while interval H is joined to event durations later. Reproduction needs actual keyed B/H linkage, authentic retained/excluded epochs and fixed five-event targets with six intervals; RT is not replaced by the model-support endpoint. Source target generation is descriptive full-data HMP, not a participant-held-out extension."
+    },
+    {
+      "id": "previous-reproduction-source_native_fits",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/utils.py",
+      "locator": "individual_fits and latency_model_fit; full source SHA256 2ee7dddea1f0b3faeb74fc0042723737f4b9a05ef093ae1f8299ba4cd8297bf0",
+      "supports": "Granular evidence must include each participant/condition/target/model fit on trial rows, all global held-contrast folds, full-data fits, coefficients and optimizer status, predictions for participants lacking an observed held-contrast row, fit contrasts and trial identities. Independently derive source pooled-observation/equal-participant-prediction RMSE and the distinct full-data R2 companions."
+    },
+    {
+      "id": "previous-reproduction-scope_authority",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark",
+      "locator": "Accepted external round02 paper-outcome-scope-decisions.v1.json entryPAPER-paper-signal-add-019; SHA256c64fe8be51bb8fe5237a97e4e7c71b4bb8f02081de63333b4b0b53d435e3f7cd; independent SIGNAL019_INDEPENDENT_REVIEW.md SHA256d3fb48d9c4562bc56c0263e49d08c35de1213c10989aac0e5a30145d0abc0c87",
+      "supports": "Explicit delegated restoration of retained empirical family; exact primary_scope binds target.description. External authority artifacts, not a claim these draft paths are published at this URL."
+    },
+    {
+      "id": "previous-reproduction-primary_events",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/108049#fig3",
+      "locator": "/abstract/content/0; /body/1/content/2; /body/3/content/3/content/1 and /2; retained publisher API version1,VOR,doiVersion10.7554/eLife.108049.3; SHA256ed73af8a6bd78e51217269db9801f28eaa4a5cf56f58a5b94e9350355f4b9ec4",
+      "supports": "Five-event cumulative-fit result, event probabilities/times/topographies and participant asymmetry; pooled covariance/PCA, participant scaling and full-data source discovery. Count alone is insufficient."
+    },
+    {
+      "id": "previous-reproduction-primary_latency_effects",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/108049#table2",
+      "locator": "/body/1/content/3/content/2/assets/0 Table2; /body/1/content/3/content/3-5; /body/3/content/3/content/3",
+      "supports": "Six original interval mixed models, four fixed-effect terms each, printed point summaries and95%CrI; contrast0..1, speed0/accuracy1, maximum random-effects structure. Caption mean vs Methods MAP disagreement and Results/Table1 encodingR2 discrepancy remain unresolved."
+    },
+    {
+      "id": "previous-reproduction-primary_erp_cpp",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/108049#fig5",
+      "locator": "/body/1/content/4 Figure5 and Box1; /body/3/content/3/content/4",
+      "supports": "Stimulus/event-aligned ERP and topographic-match waveforms, source low/high contrast participant cluster procedures,250ms prepeak CPP trial regressions and accuracy relationships. Paper reports correlation range0.38..0.61, not an authenticated four-cell numerical target vector."
+    },
+    {
+      "id": "previous-reproduction-source_mixed_models",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/GWeindel/decision-times/76464a9ca15564897e58256081af4b99d08ae8db/1-HMP_analyses.ipynb",
+      "locator": "Source-only cells9,10,16,23,24; retained cell artifact SHA25681af3d8915b57e94e883e30b4dce330b168e9aefe61aa6d8fa8c59e035785ae5; no cached outputs read",
+      "supports": "CumulativeMethod fit/transform, trial duration keys, exact rec_cont/rec_sat coding, bambi duration~rec_cont+rec_sat+interaction+(same|participant), az.summary hdi_prob=.95. Runtime defaults/posterior conventions require qualification."
+    },
+    {
+      "id": "selected-original-performance-endpoint",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/108049",
+      "locator": "eLife 108049 Table1; decision-times 76464a9ca15564897e58256081af4b99d08ae8db models.py, utils.py and 1-HMP_analyses.ipynb.",
+      "supports": "Original Table 1 fixed-HMP-target prediction task across all nine targets and both instructions. Reproduction recreates the complete three-author-law panel: 54 held-contrast RMSE references, 54 full-fit latency R² references and 18 Fechner accuracy R² companions. Improvement evaluates one arbitrary candidate method on the 18 target×instruction cells against the strongest relevant original author law preselected separately for each cell before inspecting candidate performance; three candidate law variants are not required. Original fixed targets, B/H populations, source contrast folds and complete support are unchanged. Broader EEG event discovery, mixed effects and ERP/CPP findings remain separately named reproduction. Exact numeric/identity/runtime qualification remains blocked as stated in this contract."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Table 1 fixed-HMP-target prediction task across all nine targets and both instructions. Reproduction recreates the complete three-author-law panel: 54 held-contrast RMSE references, 54 full-fit latency R² references and 18 Fechner accuracy R² companions. Improvement evaluates one arbitrary candidate method on the 18 target×instruction cells against the strongest relevant original author law preselected separately for each cell before inspecting candidate performance; three candidate law variants are not required. Original fixed targets, B/H populations, source contrast folds and complete support are unchanged. Broader EEG event discovery, mixed effects and ERP/CPP findings remain separately named reproduction.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original author OSF j6xuv preprocessed EEG and source 512-Hz HMP-derived durations. Candidate law inputs are participant, contrast, instruction and fit-contrast durations/accuracy under original table recipe; omitted-contrast targets are protected. Fixed HMP target arrays and their exact provenance are common declared algorithm-derived artifacts in both assistance conditions, not silently paper-only raw observations.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "All original 26 participants and native behavioral B versus HMP H populations, both speed and accuracy instructions, original responded/correct trial selections and complete global contrast grids. Native cleaned-epoch and target membership remain unauthenticated; historical correct-only wording must not override actual source all-responded selections.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "For each omitted contrast, fit each participant law to other contrasts and predict omitted contrast separately by interval/instruction. Preserve source full-data fits for R² companions; no participant holdout, 100-Hz alternative, changed HMP event model or redefined latent target.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Original author OSF j6xuv preprocessed EEG and source 512-Hz HMP-derived durations. Candidate law inputs are participant, contrast, instruction and fit-contrast durations/accuracy under original table recipe; omitted-contrast targets are protected. Fixed HMP target arrays and their exact provenance are common declared algorithm-derived artifacts in both assistance conditions, not silently paper-only raw observations.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Original author OSF j6xuv preprocessed EEG and source 512-Hz HMP-derived durations. Candidate law inputs are participant, contrast, instruction and fit-contrast durations/accuracy under original table recipe; omitted-contrast targets are protected. Fixed HMP target arrays and their exact provenance are common declared algorithm-derived artifacts in both assistance conditions, not silently paper-only raw observations. Authenticate original512-Hz fixed HMP targets and cleaned epochs, participant identities and B/H responded/correct masks; no alternative target fitting.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original held-contrast latency RMSE in milliseconds, computed for each of nine targets × two instructions: sqrt(mean over omitted contrasts of (pooled observed-trial mean minus equal-participant mean prediction)²). Reproduction retains all three original laws, hence 54 author RMSE values plus 54 author full-fit latency R² and 18 Fechner accuracy R² companions. Improvement has 18 matched candidate RMSE values, one per target/instruction, not 54 candidate-method variants. Report comparisons with every source law, then use the strongest relevant original comparator preselected per cell; lower RMSE is better. No invented scalar aggregate or joint victory rule.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Original held-contrast latency RMSE in milliseconds, computed for each of nine targets × two instructions: sqrt(mean over omitted contrasts of (pooled observed-trial mean minus equal-participant mean prediction)²). Reproduction retains all three original laws, hence 54 author RMSE values plus 54 author full-fit latency R² and 18 Fechner accuracy R² companions. Improvement has 18 matched candidate RMSE values, one per target/instruction, not 54 candidate-method variants. Report comparisons with every source law, then use the strongest relevant original comparator preselected per cell; lower RMSE is better. No invented scalar aggregate or joint victory rule. Reconstruct all original linear/Pieron/Fechner reference laws on the identical fixed HMP targets, B/H populations and source folds. Preselect the strongest relevant source author comparator separately for each of18 target×instruction cells before seeing candidate predictions or errors, preserving published versus qualified native-rerun provenance and a declared tie policy. An arbitrary candidate supplies one18-cell error vector; its18×3 comparison matrix is54 reported contrasts, not54 required candidate outputs. Full-panel superiority and uncertainty policy remain unresolved.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original held-contrast latency RMSE in milliseconds, computed for each of nine targets × two instructions: sqrt(mean over omitted contrasts of (pooled observed-trial mean minus equal-participant mean prediction)²). Reproduction retains all three original laws, hence 54 author RMSE values plus 54 author full-fit latency R² and 18 Fechner accuracy R² companions. Improvement has 18 matched candidate RMSE values, one per target/instruction, not 54 candidate-method variants. Report comparisons with every source law, then use the strongest relevant original comparator preselected per cell; lower RMSE is better. No invented scalar aggregate or joint victory rule.",
+    "direction": "lower",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No single scalar represents this complete task. Retain the126 published Table1 references in reproduction; reconstruct54 author RMSE values and preselect one strongest relevant author law for each of18 target×instruction cells. Compare the arbitrary candidate18-cell vector without requiring three candidate variants. Reconstruct all original linear/Pieron/Fechner reference laws on the identical fixed HMP targets, B/H populations and source folds. Preselect the strongest relevant source author comparator separately for each of18 target×instruction cells before seeing candidate predictions or errors, preserving published versus qualified native-rerun provenance and a declared tie policy. An arbitrary candidate supplies one18-cell error vector; its18×3 comparison matrix is54 reported contrasts, not54 required candidate outputs. Full-panel superiority and uncertainty policy remain unresolved.",
+      "evidence_ids": [
+        "table"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Native source target identity and complete three-law author reproduction remain unqualified. Reconstruct all original linear/Pieron/Fechner reference laws on the identical fixed HMP targets, B/H populations and source folds. Preselect the strongest relevant source author comparator separately for each of18 target×instruction cells before seeing candidate predictions or errors, preserving published versus qualified native-rerun provenance and a declared tie policy. An arbitrary candidate supplies one18-cell error vector; its18×3 comparison matrix is54 reported contrasts, not54 required candidate outputs. Full-panel superiority and uncertainty policy remain unresolved.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Freeze a meaningful gain on the selected complete original metric/support after native reference recovery. No generic margin or stronger biological effect counts.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare paired source-matched candidate/author comparison across complete selected outputs, preserving original dependence and selection; no confidence threshold is admitted.",
+      "independent_unit": "All original26 participants; B/H populations, trials, contrasts and inferred targets are nested/dependent.",
+      "rationale": "Original mean/SEM, repeated folds and printed significance are not a superiority rule. Source-native reproduction, meaningful effect and complete-panel decision remain unresolved.",
+      "evidence_ids": [
+        "selected-original-performance-endpoint"
+      ]
+    },
+    "paper_win_requires": [
+      "Original Table 1 fixed-HMP-target prediction task across all nine targets and both instructions. Reproduction recreates the complete three-author-law panel: 54 held-contrast RMSE references, 54 full-fit latency R² references and 18 Fechner accuracy R² companions. Improvement evaluates one arbitrary candidate method on the 18 target×instruction cells against the strongest relevant original author law preselected separately for each cell before inspecting candidate performance; three candidate law variants are not required. Original fixed targets, B/H populations, source contrast folds and complete support are unchanged. Broader EEG event discovery, mixed effects and ERP/CPP findings remain separately named reproduction.",
+      "Reconstruct all original linear/Pieron/Fechner reference laws on the identical fixed HMP targets, B/H populations and source folds. Preselect the strongest relevant source author comparator separately for each of18 target×instruction cells before seeing candidate predictions or errors, preserving published versus qualified native-rerun provenance and a declared tie policy. An arbitrary candidate supplies one18-cell error vector; its18×3 comparison matrix is54 reported contrasts, not54 required candidate outputs. Full-panel superiority and uncertainty policy remain unresolved.",
+      "Authenticate original512-Hz fixed HMP targets and cleaned epochs, participant identities and B/H responded/correct masks; no alternative target fitting.",
+      "Reconstruct all source global contrast grids and per-participant fits/reductions and compare complete126reference panel.",
+      "Retain Table1/Results encoding R² discrepancy with table-specific numeric provenance; do not choose favorable values.",
+      "Predeclare the strongest original comparator for each of18 target×instruction cells and a valid joint18-cell improvement rule. Preserve all126 author reproduction references;54 author RMSE cells and72 source R² companions do not require three candidate-method variants.",
+      "Qualify native target/runtime parity, reproduced law baseline, scientifically justified tolerance/meaningful effect/paired participant uncertainty, budgets and independent complete support execution.",
+      "Full-panel comparator and improvement admission require a source-faithful multi-endpoint comparison route; current scalar improvement engine cannot admit this vector. No invented mean, win count or easy source cell may replace complete support.",
+      "Freeze the per-cell strongest relevant author comparators and valid joint18-cell decision before candidate final evaluation; no invented average, win count or easy selected target.",
+      "Candidate and author references use identical fixedHMP targets, complete original B/H support and source folds. Report all126 source reproduction references separately from candidate improvement; candidate need not reproduce three author-law forms.",
+      "Paper_data and paper_data_author_code have identical common targets/exposure except declared official implementation access. Paper-relative success is not current SOTA."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison was reviewed or established.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Inactive pending source and baseline qualification. Once admitted, use only original permitted training/validation feedback. For each omitted contrast, fit each participant law to other contrasts and predict omitted contrast separately by interval/instruction. Preserve source full-data fits for R² companions; no participant holdout, 100-Hz alternative, changed HMP event model or redefined latent target.",
+    "candidate_freeze": "Freeze candidate method, original fixedHMP target identity, B/H populations, all source contrast folds, preselected per-cell strongest author comparator and tie policy, valid joint18-cell improvement/uncertainty rule and budgets before candidate final errors are inspected.",
+    "final_evaluation": "Score the arbitrary candidate on all18 matched target×instruction errors; report its difference against all three source laws and compare against the preselected strongest relevant original law for each cell. Preserve all126 author reproduction references and complete source-interface prediction outputs. No full-panel paper win is admitted without a justified joint policy.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Reconstruct all original linear/Pieron/Fechner reference laws on the identical fixed HMP targets, B/H populations and source folds. Preselect the strongest relevant source author comparator separately for each of18 target×instruction cells before seeing candidate predictions or errors, preserving published versus qualified native-rerun provenance and a declared tie policy. An arbitrary candidate supplies one18-cell error vector; its18×3 comparison matrix is54 reported contrasts, not54 required candidate outputs. Full-panel superiority and uncertainty policy remain unresolved. Published numbers, qualified native rerun and local engineering controls remain distinct."
+  },
+  "blocking_issues": [
+    "Authenticate original512-Hz fixed HMP targets and cleaned epochs, participant identities and B/H responded/correct masks; no alternative target fitting.",
+    "Reconstruct all source global contrast grids and per-participant fits/reductions and compare complete126reference panel.",
+    "Retain Table1/Results encoding R² discrepancy with table-specific numeric provenance; do not choose favorable values.",
+    "Predeclare the strongest original comparator for each of18 target×instruction cells and a valid joint18-cell improvement rule. Preserve all126 author reproduction references;54 author RMSE cells and72 source R² companions do not require three candidate-method variants.",
+    "Qualify native target/runtime parity, reproduced law baseline, scientifically justified tolerance/meaningful effect/paired participant uncertainty, budgets and independent complete support execution.",
+    "Full-panel comparator and improvement admission require a source-faithful multi-endpoint comparison route; current scalar improvement engine cannot admit this vector. No invented mean, win count or easy source cell may replace complete support."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Previous contracts at task root are immutable historical/retained-scope definitions. Original five-event discovery, timing/topography, Table2 mixed effects, ERP and CPP/decision-accuracy findings. Preserve Table1 encoding Pieron R² speed0.57/accuracy0.30 versus Results speed0.53/accuracy0.34 discrepancy; never mix references."
+  }
+}

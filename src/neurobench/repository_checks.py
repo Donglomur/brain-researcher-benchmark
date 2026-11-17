@@ -29,7 +29,7 @@ EXP003_CONTROL_SOURCES = (EXP003_CONTROL_MANIFEST,
 CANONICAL_PER_TRACK = 100
 MAX_FILE_BYTES = 8 * 1024 * 1024
 # Finite allowance for the reviewed November 17 source enrollment.
-MAX_READ_BYTES = 192 * 1024 * 1024
+MAX_READ_BYTES = 224 * 1024 * 1024
 MAX_FILES = 16384
 MAX_TREE_ENTRIES = 30000
 MAX_DEPTH = 32
@@ -760,6 +760,15 @@ def prepare(reader):
             need(gap_path not in members, "Duplicate paper source-declaration provenance")
             members[gap_path] = "registration-provenance"
             expected_pins[gap_path] = prior_outcome_rows.source_declaration_gap_pin
+        selected_endpoints = getattr(prior_outcome_rows, "endpoint_selections", None)
+        if selected_endpoints is not None:
+            # The new selection and its portable policy are shared provenance;
+            # retained per-task contracts keep their original distinct owners.
+            for endpoint_pin in (selected_endpoints.pin, selected_endpoints.policy_pin):
+                endpoint_path = endpoint_pin["path"]
+                need(endpoint_path not in members, "Duplicate paper endpoint-selection provenance")
+                members[endpoint_path] = "registration-provenance"
+                expected_pins[endpoint_path] = endpoint_pin
     artifact_files = artifact_members(root, artifacts)
     need(not set(members) & set(artifact_files), "Artifact overlaps task or provenance metadata")
     members.update(artifact_files)

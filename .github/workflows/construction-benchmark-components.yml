@@ -51,8 +51,8 @@ jobs:
           rows = [
               {
                   "path": "benchmarks/integrity/current-closures/construction-cardiac-admission/SOURCE_BINDINGS.json",
-                  "bytes": 5723,
-                  "sha256": "3b20350e7d0682d456b59327087fd9099821b20c79d900acdf8c165f1bdd667e"
+                  "bytes": 6013,
+                  "sha256": "f3a8fe348fa4799553b6c607a7edd5af8ed3fd022e19928cf28feede1588fed4"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-dosei-v2/SOURCE_BINDINGS.json",
@@ -378,7 +378,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1"
           ]
           assert len(rows) == 64 > 0
-          assert sum(row['bytes'] for row in rows) == 871309 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 871599 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -421,7 +421,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 871309,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 871599,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

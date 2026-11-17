@@ -1,0 +1,241 @@
+{
+  "schema_version": "paper-primary-endpoint-selection/v1",
+  "task_id": "PAPER-paper-method-replacement-009",
+  "scope_version": 1,
+  "base_commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630",
+  "disposition": "explicit_original_performance_endpoint_selection",
+  "adoption_status": "candidate_for_integrator_review",
+  "policy": {
+    "path": "completion7-v1/paper-primary-recovery/SCOPE_POLICY.json",
+    "sha256": "1f1781fb0dff7e53a4d6827122b55634c1c27fa5016ac81e75c2e8c2fb3e1702"
+  },
+  "selected_endpoint": {
+    "title": "Original Figure 5A choice decoding across sessions and regions",
+    "source_locator": "Neuron 10.1016/j.neuron.2025.10.026 Figure 5A; original source release 1508b1ac5a95af2f8627f0c304ee0a750cb36e77 and NEURON release provenance must be reconciled.",
+    "scope": "Complete original Figure 5A choice-decoding AUC comparison across the original ten IBL sessions and PO, LP, DG, CA1 and VISa, retaining every actually applicable source author-model condition and original incidence. Reproduce source choice-AUC results and improve the same choice prediction task against the strongest applicable original non-oracle comparator. This explicitly selected panel does not claim full Figure 5A–D improvement.",
+    "same_task": {
+      "target": {
+        "status": "verified",
+        "description": "Original Figure 5A choice prediction from neural activity under every actually applicable original author condition. Reproduce original choice-AUC profiles and compare candidate choice scores with the strongest relevant source non-oracle model on identical supported cases; Figures 5B–D are separately retained reproduction scopes.",
+        "evidence_ids": [
+          "paper"
+        ]
+      },
+      "dataset": {
+        "status": "unresolved",
+        "description": "IBL Reproducible Electrophysiology original Figure 5A recordings. Immutable original release objects and choice-panel input manifests remain unauthenticated. Zenodo 17317498 is author software, not the complete empirical inputs or numerical result vector.",
+        "evidence_ids": [
+          "paper",
+          "release",
+          "registration"
+        ]
+      },
+      "cohort": {
+        "status": "unresolved",
+        "description": "Original ten sessions and PO, LP, DG, CA1 and VISa choice-decoding regions. Authenticate exact session/animal/unit identities and all applicable method-by-region/session incidence; neither a rectangular 10-by-5-by-method table, the released example selection nor prospective40 proves the original census.",
+        "evidence_ids": [
+          "paper",
+          "cache",
+          "registration"
+        ]
+      },
+      "split": {
+        "status": "unresolved",
+        "description": "Released examples use randomized within-session 70/10/20 train/validation/test trial partitions. Recover the original Figure 5A stochastic protocol and state-space sequence semantics. A source-faithful documented rerun can use recorded new seeds; exact historical seed identity is not intrinsically required. New animal-held-out/chronological splits are extensions.",
+        "evidence_ids": [
+          "cache",
+          "registration"
+        ]
+      },
+      "inputs": {
+        "status": "verified",
+        "description": "Use the source choice condition neural context and only its permitted training-session behavior/decoder-sequence information. Applicable BMM-HMM/LG-AR1 or combined routes require authenticated condition incidence and priors. Target-session oracle behavior is excluded. This retrospective choice decoding is not an online-prediction claim.",
+        "evidence_ids": [
+          "paper"
+        ]
+      },
+      "preprocessing": {
+        "status": "unresolved",
+        "description": "Recover the original stimulus-aligned choice window, unit eligibility, masks, fitted-prior preparation when applicable, scaling and exact scored rows. The common 20-ms example cache, recomputed normalization, behavior filling and drop_last paths require reconciliation to the choice panel; silent repairs define an altered task.",
+        "evidence_ids": [
+          "paper",
+          "cache",
+          "loader"
+        ]
+      },
+      "metric": {
+        "status": "unresolved",
+        "description": "Original Figure 5A choice AUC from continuous prediction scores and original class orientation. Recover original probability orientation, ties, undefined single-class cases and scored support. Example argmax accuracy, including the NEURON release evaluator, is not AUC and cannot calibrate the published panel.",
+        "evidence_ids": [
+          "paper",
+          "metrics",
+          "neuron_metrics"
+        ]
+      },
+      "aggregation": {
+        "status": "unresolved",
+        "description": "Retain all original supported choice session/region/author-condition scores and exact Figure 5A summaries/uncertainty. Recover original incidence, masks and denominators without available-case omission or a favorable pooled AUC. Missing/undefined cases remain explicit.",
+        "evidence_ids": [
+          "paper",
+          "metrics"
+        ]
+      }
+    },
+    "metric": "Complete original Figure 5A continuous-score choice AUC profile on actual source session/region/condition incidence",
+    "comparator": "Strongest applicable original non-oracle single-session, multi-session, multi-region and combined source author model for each original choice condition; retain weaker linear/MLP/RRR and applicable state-space comparisons. Exact numeric AUC vector is unavailable."
+  },
+  "retained_broader_reproduction": {
+    "description": "Original Figures 5B–D fitted-prior Pearson correlation, wheel-speed and whisker-motion-energy R2, their dynamic metric ambiguities, and the wider F1–F8/S1–S8 programme remain separately named reproduction scopes. Prospective40 remains an extension. Choice AUC cannot stand in for these outcomes.",
+    "predecessors": [
+      {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-009/task.json",
+        "bytes": 37729,
+        "sha256": "d74484fb6db56aeafe29c176af793ad0ece6b6fc197a6b41cdbe18e459854ce8",
+        "base_commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630"
+      },
+      {
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-009/improvement.v1.json",
+        "bytes": 15740,
+        "sha256": "2fdce4731e371107f6b3e6f5d12897e41f61e1cc65996142a29654e1244cbc44",
+        "base_commit": "9953b581a9c3a8c1b38b2a961ce6723f10739630"
+      }
+    ],
+    "old_primary": "Recreate the original findings and separately exceed them on the same source-paper task: Complete original Figure 5A-D comparison: decode choice, prior, wheel speed and whisker motion energy with all applicable single-session, multi-session, multi-region and combined author-model conditions and reported baselines.",
+    "legacy_source_declaration_gap": {
+      "record": {
+        "bytes": 27831,
+        "path": "docs/provenance/paper-outcome-source-declaration-gaps.v1.json",
+        "sha256": "5e990248b79841bba0d5aa6099c71d357d29e6ba61f70c75a0f2cf63acbdc53a"
+      },
+      "task_entry_id": "PAPER-paper-method-replacement-009",
+      "reason_code": "source_declaration_unavailable",
+      "reason": "The retained evidence supports a source-specific unresolved structured proposal for complete Figure 5A–D, but not a complete exact-member adoption declaration. Original method-by-target/region/session incidence, fitted-prior preparation, dynamic R2 meaning and author-vector provenance remain partly unknown. A rectangular target-by-region-by-session-by-method tensor or a generic Figure 5 wrapper would invent support rather than recover the missing declaration.",
+      "source_relation": "same_primary_source_compatible",
+      "original_task": {
+        "bytes": 29997,
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-009/task.json",
+        "sha256": "6980d89c75ef3ed7566f4e860761946caaa4d6892119ce75095e3fb0961105c5"
+      },
+      "retained_improvement": {
+        "bytes": 15740,
+        "contract_digest": "3d5e3f5989971c2f480c090f2fd430706e6a73e247f2fca0f40344b6577127e4",
+        "path": "benchmarks/paper/PAPER-paper-method-replacement-009/improvement.v1.json",
+        "sha256": "2fdce4731e371107f6b3e6f5d12897e41f61e1cc65996142a29654e1244cbc44"
+      },
+      "remaining_source_limits": [
+        "Exact source method-by-target/region/session incidence and original trial, temporal, session, animal and region support are not recovered. Ten sessions and twenty target/region families are inventory descriptions, not authenticated axes, complete scalar findings or separate tasks.",
+        "Choice requires source continuous-prediction AUC and original class orientation; the fitted behavioral prior requires its authentic preparation and Pearson correlation. Argmax accuracy and block probability are not substitutes.",
+        "Original wheel-speed and whisker-motion-energy R2 reduction is unresolved. Flattened and uniform-output recipes remain separate diagnostics, not two authenticated original endpoints or permission to select one.",
+        "Complete masks, denominators, native author result vectors and plotted aggregation/uncertainty remain unverified. Combined/state-space conditions must not be invented for dynamic targets, and failed or undefined cases cannot disappear through available-case averaging.",
+        "The score_case and summarize_group component operates on caller-supplied values and a supplied census. It neither authenticates original data, fits source decoders nor independently executes and verifies submitted analysis. Its software hash is not an input, native producer or scientific verifier identity.",
+        "The authentic full-panel input manifest, submitted-analysis interface/runtime/invocation, source-native derivation verifier, publication-equivalent reference and independently justified scientific comparison remain absent. Paired access and final current-task binding remain unresolved."
+      ],
+      "reproduction_contract": null,
+      "outcomes_contract": null,
+      "scientific_outcome": "unknown",
+      "paired_outcome_admission": "unavailable"
+    }
+  },
+  "contracts": {
+    "task": "benchmarks/paper/PAPER-paper-method-replacement-009/task.json",
+    "reproduction": "benchmarks/paper/PAPER-paper-method-replacement-009/primary-endpoint-v1/reproduction.v2.json",
+    "improvement": "benchmarks/paper/PAPER-paper-method-replacement-009/primary-endpoint-v1/improvement.v1.json",
+    "outcomes": "benchmarks/paper/PAPER-paper-method-replacement-009/primary-endpoint-v1/outcomes.v1.json",
+    "selection": "benchmarks/paper/PAPER-paper-method-replacement-009/primary-endpoint-v1/selection.v1.json",
+    "paired_source_conditions": "benchmarks/paper/PAPER-paper-method-replacement-009/primary-endpoint-v1/access-conditions.v1.json"
+  },
+  "source_recovery_blocks": [
+    "Authenticate original Figure 5A immutable RE objects, ten-session animal/unit/trial identities and every supported author-condition/region incidence; no synthetic rectangular census.",
+    "Recover complete published author choice-AUC vectors and original class orientation, continuous-score implementation, undefined policy and panel aggregation. Released argmax accuracy is a proven incompatible endpoint.",
+    "Reconcile original static window, eligibility, scaling, missing-value handling and full scored-trial coverage with example cache/loader/drop_last behavior.",
+    "Recover source-permitted choice prior/sequence/model incidence and original stochastic split/training settings; do not use target-session oracle behavior or demand historical RNG identity without a scientific reason.",
+    "Qualify native original author-model replay and independent prediction-to-AUC verification, calibrated reproduction tolerance and strongest applicable source comparator.",
+    "Freeze meaningful AUC gain, original animal/session-aware paired inference, region/method multiplicity, complete-panel decision and common assistance/resource budgets before final scoring.",
+    "The current improvement/v1 comparator admits a single numeric score. This selected original endpoint is a full profile without a source-defined scalar aggregate; no mean, win-count or other scalar is invented. A source-grounded full-panel comparison/admission route is required before improvement activation."
+  ],
+  "scientific_state": {
+    "reproduction": "unknown",
+    "improvement": "unknown",
+    "current_sota": "not_claimed",
+    "runnable": false,
+    "research_qualified": false,
+    "new_scientific_runs": 0
+  },
+  "integration_requirement": "Integrator must add an authenticated versioned selector for this explicit endpoint; this candidate does not bypass old deterministic binding or revise predecessor files. No admission or scientific result is asserted.",
+  "central_scope_decision": {
+    "path": "docs/provenance/paper-primary-endpoint-selections.v2.json",
+    "task_entry_id": "PAPER-paper-method-replacement-009"
+  },
+  "audit_output_obligations": [
+    {
+      "output_id": "choice_prediction_support",
+      "component": "observation_level_prediction_and_original_support",
+      "mandatory": true,
+      "role": "audit_and_metric_recomputation",
+      "numerical_reference_equivalence_target": false,
+      "applies_to": [
+        "original_author_reproduction",
+        "candidate_same_task_improvement"
+      ],
+      "source_specification_preserved": {
+        "id": "choice_prediction_support",
+        "manifest_key": "choice_prediction_support",
+        "source_quantity": "Original reference prediction scores, labels, masks and original trial/sequence joins",
+        "membership": "fixed",
+        "shape": [
+          null
+        ],
+        "axes": [
+          {
+            "name": "source_row",
+            "units": "source-defined ordered output record",
+            "identity_sha256": null,
+            "coordinates": {
+              "kind": "unresolved",
+              "description": "Complete source-supported prediction records keyed by session, region, condition and original evaluation row; reference labels remain operator-held."
+            }
+          }
+        ],
+        "allowed_dtypes": null,
+        "units": "continuous choice score and source binary label",
+        "semantic_identity_sha256": null,
+        "support_manifest_sha256": null,
+        "domain_policy_sha256": null,
+        "source_aggregation": "Scores originate from native source producer on original inputs; target labels are verification inputs, not candidate assistance.",
+        "derivation_policy_sha256": null,
+        "collection": null,
+        "evidence_ids": [
+          "paper",
+          "release",
+          "cache",
+          "loader",
+          "metrics",
+          "training",
+          "neuron_metrics",
+          "registration"
+        ]
+      },
+      "verification_requirement": "Independently authenticate original evaluation identities, labels, masks, class/target ordering and split membership; verify complete submitted prediction coverage and recompute the retained source metrics from each submission. Predicted values are method-specific audit evidence and are not required to equal author predictions element by element.",
+      "observation_boundary": "Original labels and protected reference predictions remain operator-side; this role correction does not expand participant input access."
+    }
+  ],
+  "output_role_revision": {
+    "version": "reported_target_vs_audit_support-20261117-v2",
+    "reason": "Independent cross-case review separated mandatory computation evidence from author-value-equivalence targets.",
+    "previous_reproduction_sha256": "9a8c2998c4f50642bb89fa6a6db37f8a106d7d0b24c9a1f8628e89ddfdab225b",
+    "previous_selection_sha256": "6cefde714473946314674c0b924084f9c6f9f0a307e7410ea064227233ca9800",
+    "previous_aggregate_manifest_sha256": "258b36631ec49174169e59f4891bb4eced3eb76ef16a67a5cd39fe8014a8f606",
+    "reported_metric_and_full_support_unchanged": true,
+    "required_granular_output_ids_preserved": [
+      "choice_auc_cases",
+      "choice_panel_summaries",
+      "choice_prediction_support"
+    ],
+    "reference_target_member_ids": [
+      "choice_auc_cases",
+      "choice_panel_summaries"
+    ],
+    "runtime_results_and_admission_promoted": false,
+    "same_task_and_access_conditions": "The existing eight shared same-task anchors, task and access-conditions files remain unchanged; audit evidence is operator-only, not extra candidate information."
+  }
+}

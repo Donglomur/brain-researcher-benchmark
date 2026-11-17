@@ -1,0 +1,284 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-replacement-011",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Explicit selected original endpoint construction with full source output families. Authentic original references, complete identity joins and numerical acceptance criteria remain unresolved. No published aggregate match or source wrapper constitutes a computational reproduction.",
+  "source_paper": {
+    "title": "Brain Treebank: Large-scale intracranial recordings from naturalistic language stimuli",
+    "url": "https://proceedings.nips.cc/paper_files/paper/2024/hash/aefa2385b3f33abf1526ae4e2c208cd9-Abstract-Datasets_and_Benchmarks_Track.html"
+  },
+  "evidence": [
+    {
+      "id": "treebank-paper",
+      "kind": "paper",
+      "url": "https://arxiv.org/html/2411.08343v1",
+      "locator": "Section 4, Fig. 4 and Appendix A.4-A.9; supplementary Figs. 5-7",
+      "supports": "Separates descriptive word responsiveness from held-out single-electrode sentence/word/POS decoding and defines data, preprocessing, split and ROC-AUC display conventions."
+    },
+    {
+      "id": "treebank-identity",
+      "kind": "paper",
+      "url": "https://proceedings.nips.cc/paper_files/paper/2024/hash/aefa2385b3f33abf1526ae4e2c208cd9-Abstract-Datasets_and_Benchmarks_Track.html",
+      "locator": "Abstract and proceedings metadata",
+      "supports": "Identifies the NeurIPS 2024 dataset paper and original ten-participant cohort."
+    },
+    {
+      "id": "treebank-runner",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/regression_runner.py",
+      "locator": "RegressionRunnerTestSet.split_and_train_and_test, lines 31-55",
+      "supports": "Decimates by ten, applies StandardScaler in the logistic-regression pipeline, cross-validates training ROC-AUC and returns test ROC-AUC."
+    },
+    {
+      "id": "treebank-time",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/czlwang/brain_treebank_code_release/c54ba38eab7814538bc03b1b6d29a3f50f034e12/run_time_tests.py",
+      "locator": "get_crossval_indices; run_electrode_test; run_subject_test; write_summary",
+      "supports": "Different runner paths exist; neural-runner train/validation list appends are reversed and the generic all-ROC summary is not automatically the paper top-ten figure aggregation."
+    },
+    {
+      "id": "treebank-legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1/provenance.json",
+      "locator": "policies; incomplete_task_scope",
+      "supports": "Existing evaluator is a word-responsiveness t-test component with prospective corrections, not the source held-out decoder or a published-score reference."
+    },
+    {
+      "id": "treebank-producer-source",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/9953b581a9c3a8c1b38b2a961ce6723f10739630/benchmarks/paper/PAPER-paper-method-replacement-011/implementations/treebank-figure4-producer-v2/SOURCE_BINDINGS.json",
+      "locator": "selected_primary, published_metadata, new_implementation_roles, remaining_qualification",
+      "supports": "Delivered source-grounded wrapper and exact example/metadata supports; published exclusion wrapper is explicit reconstruction and no authentic source execution is claimed."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Complete Figure 4a–c sentence-onset versus no-speech decoding from the original Brain Treebank cohort and recorded movies: source linear contact/time outputs, eligible-contact peak map, source example curve and training-selected temporal/frontal held-out curves. Preserve the original ten-participant population, remove the source 114 corrupted contacts, retain subject 5 in nonregional analyses while excluding that subject from atlas-region analyses and brain plots. Preserve source single-electrode inputs, balanced examples and speech-free buffers, original shared splits, training-fitted preprocessing and five-fold training-CV contact selection. Exact window endpoints and identities remain subject to source verification, not a presumed count.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Original 2024 Brain Treebank release and movie-aligned annotations are identified, but exact versioned recording, transcript, electrode and example inventories that produced the published decoding panels are not frozen. A later expanded release is not interchangeable.",
+      "evidence_ids": [
+        "treebank-identity",
+        "treebank-paper"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Retain all ten original participants and 26 original recordings. Source-metadata reconstruction records 1,707 recording labels including 19 controls and 1,688 neural labels; 114 neural exclusions plus 19 controls leave 1,574 nominal eligible contacts. Subject 5 remains in prediction support but not anatomical map/regional analysis. Published 133 exclusions were applied by an explicit new wrapper; the author caller default was all contacts. These metadata counts do not authenticate native recordings or prove historical eligibility equivalence.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original source samples balanced pooled sentence/no-speech examples and then an unstratified 80/20 test split shared nominally within participant, with five training folds. Preserve observed source examples, negative selection, >=500-ms speech buffer, source seed/caller and actual split identity. The paper balanced-test prose is not enforced by silently stratifying; source contact/window sampling identity must be observed and compared.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-time"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Only original single-electrode neural activity supplies predictions. Original nominal 250-ms windows step by 100 ms over -1 to +1 second; authenticate exact NumPy grid and integer slices, including shortened terminal extents. Transcript/audio labels construct operator-side examples, not model features; no multichannel input or new window grid.",
+      "evidence_ids": [
+        "treebank-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Recorded sEEG is 2048 Hz. Decoder decimates by ten and uses training-fitted zero-mean/unit-variance scaling. Sentence-positive examples are two-second centered epochs; negatives are drawn from speech-free three-second segments, with balanced classes and the specified temporal buffer. Exact native reconstruction still needs validation.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Higher ROC-AUC on held-out examples for each electrode/time window; probabilistic ranking AUC = P(score_positive > score_negative) + 0.5 P(tie). Chance is 0.5. Preserve score curves and source peak-over-time summaries rather than substituting accuracy or significance.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Complete original Figure 4a-c: per-contact held-out ROC-AUC time courses and peak map; subject 10/T1cIf8 example; temporal/frontal curves from top-ten contacts selected using mean fivefold training-CV AUC, not pooled out-of-fold AUC. Preserve source region membership, cutoff ties, source 95% display intervals and anatomical projection conventions. Exact original DK grouping, tie rule, interval formula and projection artifacts remain unresolved; no generic all-ROC average or fixed invented 21-window roster.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-time"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Complete Figure 4a–c sentence-onset versus no-speech decoding from the original Brain Treebank cohort and recorded movies: source linear contact/time outputs, eligible-contact peak map, source example curve and training-selected temporal/frontal held-out curves. Preserve the original ten-participant population, remove the source 114 corrupted contacts, retain subject 5 in nonregional analyses while excluding that subject from atlas-region analyses and brain plots. Preserve source single-electrode inputs, balanced examples and speech-free buffers, original shared splits, training-fitted preprocessing and five-fold training-CV contact selection. Exact window endpoints and identities remain subject to source verification, not a presumed count. Required outputs: Native original single-contact/window training-CV and held-out AUC values for all eligible original subjects and recordings.; All original eligible contact peak AUCs and source anatomical coordinates with separate subject-5 and missing-coordinate omission records.; Original Figure 4b subject 10/T1cIf8 example curve with exact original window identity.; Complete training-selected temporal/frontal Figure 4c curves and source display intervals.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner",
+        "treebank-time"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Original 2024 Brain Treebank neural recordings from all ten participants and original 26 recordings, with authentic operator-built sentence/no-speech labels and original split identities. Candidate observations are the same single-contact windows and training-label support in both arms. Official logistic-regression implementation or algorithm-bearing derived solution in paper+data; author fitted classifiers and source predictions are owner/reference material. treebank-figure4-producer-v2 source checkout, preparation/replay/observer recipe and private observations.jsonl.gz are owner/reference-only, not common participant tools. Test labels, processed transcript indices that disclose targets, private selection/reference outputs, and held-out source probabilities remain operator-only.",
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner",
+        "treebank-time"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "original_figure4_complete_panel",
+      "kind": "indexed_array_family",
+      "description": "Complete Figure 4a–c sentence-onset versus no-speech decoding from the original Brain Treebank cohort and recorded movies: source linear contact/time outputs, eligible-contact peak map, source example curve and training-selected temporal/frontal held-out curves. Preserve the original ten-participant population, remove the source 114 corrupted contacts, retain subject 5 in nonregional analyses while excluding that subject from atlas-region analyses and brain plots. Preserve source single-electrode inputs, balanced examples and speech-free buffers, original shared splits, training-fitted preprocessing and five-fold training-CV contact selection. Exact window endpoints and identities remain subject to source verification, not a presumed count.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "original_figure4_complete_panel",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "contact_time_auc",
+            "manifest_key": "contact_time_auc",
+            "source_quantity": "Native original single-contact/window training-CV and held-out AUC values for all eligible original subjects and recordings.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "ROC-AUC",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Training score is arithmetic mean of five fold AUCs; held-out score preserves actual source positive probability, ties and original test examples.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "treebank-paper",
+              "treebank-runner",
+              "treebank-time"
+            ]
+          },
+          {
+            "id": "contact_peak_map",
+            "manifest_key": "contact_peak_map",
+            "source_quantity": "All original eligible contact peak AUCs and source anatomical coordinates with separate subject-5 and missing-coordinate omission records.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "ROC-AUC and original map coordinates",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Peak over complete original source windows; original pial/fsaverage projection and region exclusions remain to be authenticated.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "treebank-paper",
+              "treebank-producer-source"
+            ]
+          },
+          {
+            "id": "subject10_T1cIf8_example",
+            "manifest_key": "subject10_T1cIf8_example",
+            "source_quantity": "Original Figure 4b subject 10/T1cIf8 example curve with exact original window identity.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "ROC-AUC",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original example and source interval/display conventions; no new selected best contact.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "treebank-paper",
+              "treebank-producer-source"
+            ]
+          },
+          {
+            "id": "temporal_frontal_curves",
+            "manifest_key": "temporal_frontal_curves",
+            "source_quantity": "Complete training-selected temporal/frontal Figure 4c curves and source display intervals.",
+            "membership": "fixed",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "ROC-AUC and source interval bounds",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Complete original Figure 4a-c: per-contact held-out ROC-AUC time courses and peak map; subject 10/T1cIf8 example; temporal/frontal curves from top-ten contacts selected using mean fivefold training-CV AUC, not pooled out-of-fold AUC. Preserve source region membership, cutoff ties, source 95% display intervals and anatomical projection conventions. Exact original DK grouping, tie rule, interval formula and projection artifacts remain unresolved; no generic all-ROC average or fixed invented 21-window roster.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "treebank-paper",
+              "treebank-runner",
+              "treebank-time"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "treebank-paper",
+          "treebank-runner",
+          "treebank-time"
+        ]
+      },
+      "required_granular_output_ids": [
+        "source_recording_contact_and_window_identity",
+        "source_samples_labels_and_original_splits",
+        "native_training_cv_and_test_probabilities",
+        "source_contact_time_scores_and_peaks",
+        "source_region_selection_example_and_map_joins"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recompute the original author analysis and independently compare every declared original endpoint and companion with authenticated source reference artifacts; source-specific numeric equivalence criteria remain unqualified.",
+        "independent_unit": "Original participant; source electrode display intervals retain their original descriptive interpretation.",
+        "dependence": "Movies, contacts, examples, overlapping windows and folds are dependent within participant. Training-based contact selection and time maxima must remain part of the comparison.",
+        "multiplicity": "Complete source panel coverage is mandatory; no post-hoc selection of successful cells. A justified joint inference policy remains unresolved.",
+        "rationale": "No exact original full-panel numerical reference or independently justified equivalence criterion has been recovered. Published timing scalars and chance AUC cannot supply the missing reference.",
+        "evidence_ids": [
+          "treebank-paper",
+          "treebank-runner",
+          "treebank-time"
+        ]
+      },
+      "evidence_ids": [
+        "treebank-paper",
+        "treebank-runner",
+        "treebank-time"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Recover source ROC-AUC arrays or an independently reproduced exact author baseline for the full original panel.",
+    "Freeze original recording/transcript/example and electrode inventories, negative-sample selection, split seeds and the correct regression runner configuration.",
+    "Verify train-only top-ten electrode selection, complete time-window coverage and paper panel aggregation; generic all-ROC averaging is not equivalent.",
+    "Validate native alignment/preprocessing and retain documented corrupted-contact and subject-5 region exclusions.",
+    "Define meaningful effect, participant-aware uncertainty, fixed access/resource budgets and a working protected decoding evaluator.",
+    "Authenticate exact original temporal/frontal DK grouping, top-ten cutoff tie convention, source 95% display interval formula and nearest-pial/fsaverage projection artifacts.",
+    "Preserve explicit author-all-contact versus new 133-exclusion wrapper distinction; authenticate historical source result lineage rather than declaring reconstructed mask automatically equivalent.",
+    "Resolve paper balanced-test versus native unstratified split, exact terminal-window support and actual source samples across contact/window calls; no silent repairs.",
+    "Source figure4-producer-v2 is delivered owner/reference code with generated controls only; native recordings, runtime and complete original panel agreement remain unexecuted/unqualified.",
+    "Pending full-panel comparison/admission implementation: improvement/v1 scalar fields cannot alone admit this original vector or curve panel. Preserve source-defined metrics and full support; do not invent a pooled scalar. An additive panel comparator is being constructed separately and is not bound here.",
+    "No authentic computation/admission policy or immutable result identity is fabricated. All four AI outcome/assistance cells remain unknown."
+  ]
+}

@@ -1,0 +1,340 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-ROOT-ADD-026",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Explicit selected original endpoint, with complete-support numerical reproduction separated from superiority. Category-input-scaled DN(S), with unscaled DN as required source comparison; beating only the weaker unscaled model does not qualify. Exact complete Figure 3C numerical region/electrode reference arrays are missing. Output-scaled P and full-fit R² are different quantities. Missing original input/support/reference/comparison evidence is not supplied by this construction.",
+  "source_paper": {
+    "title": "Temporal dynamics of short-term neural adaptation across human visual cortex",
+    "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012161"
+  },
+  "evidence": [
+    {
+      "id": "adapt-paper",
+      "kind": "paper",
+      "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1012161",
+      "locator": "Materials and methods: Subjects, Data preprocessing, Data selection, Data summary, Model fitting and Model evaluation; Figure 3C",
+      "supports": "Defines four participants, 79 responsive electrodes, 72 category-by-temporal response conditions, 12-fold condition cross-validation, and region-wise prediction performance."
+    },
+    {
+      "id": "adapt-readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/README.md",
+      "locator": "Repository description and Structure",
+      "supports": "Links the publication to the Visual ECoG dataset ds004194 and identifies preprocessing, modelling and figure scripts."
+    },
+    {
+      "id": "adapt-fit",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/modelling_modelFit.py",
+      "locator": "model_fit: pseudo-random test selection, fold scoring and output writing; lines 180–246 in reviewed source",
+      "supports": "Each fold takes one condition per category with random.sample, fits the remaining conditions, averages rounded per-condition R², and writes scores without test-index identities. Active scaling default P differs from Figure 3 scaling S and must not be silently substituted."
+    },
+    {
+      "id": "adapt-score",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/utils.py",
+      "locator": "r_squared(data, fit)",
+      "supports": "Computes R² as 1 minus residual sum of squares divided by variance about the observed trace mean, using NaN-aware sums."
+    },
+    {
+      "id": "adapt-figure",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/ABra1993/tAdaptation_ECoG/09cd778fac545d406cba39ba408f0f00fbe39975/mkFigure3.py",
+      "locator": "VA, scaling, per-electrode param_DN_* loading and bootstrap summaries; lines 28–115",
+      "supports": "Figure 3 uses all responsive electrodes, scaling none/S, region-specific bootstrap medians and 68% intervals over 1000 resamples; no single whole-cohort scalar is supplied."
+    },
+    {
+      "id": "delivered-component",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/9953b581a9c3a8c1b38b2a961ce6723f10739630/benchmarks/paper/PAPER-ROOT-ADD-026/implementations/source-model-producer-v1/README.md",
+      "locator": "Source basis, complete support and remaining qualification; fixed snapshot 9953b581a9c3a8c1b38b2a961ce6723f10739630",
+      "supports": "Existing supplied-input source component and its exact limitations; no authentic data, native author result or AI outcome is established by source delivery."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict each selected visual electrode’s broadband response time course to single and repeated image presentations from stimulus timing and image category. The original performance comparator is the category-scaled DN model used in Figure 3C.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Visual ECoG dataset OpenNeuro ds004194 is author-linked. Registration names version 3.0.0, but the reviewed primary sources do not pin that version’s exact processed files to the published Figure 3 fit inputs. Freeze the source release, trial manifest and preprocessing lineage before comparison.",
+      "evidence_ids": [
+        "adapt-readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Four participants p11–p14; all 79 visually responsive electrodes and their V1–V3/VOTC/LOTC memberships must be preserved. The Data summary gives 17/15/47, while Figure 2C reverses the first two counts; exact electrode-to-area identities require source-roster reconciliation, not selection of whichever grouping favors a candidate.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original stochastic rule:12 folds over72 conditions,66 training/six test traces per fold with one test condition per image category and12 temporal conditions per category. Published assignments are absent from the inspected unseeded random.sample implementation. Recover them if available, or reproduce this exact source-authorized stochastic recipe with a logged seed and immutable fold manifest. Candidate and author must share rerun folds; source-protocol parity and a predeclared justified tolerance to published results are required. A changed split unit, altered condition allocation or new participant holdout is an extension.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Binary stimulus-presence time course and image-category identity; target traces comprise six image categories crossed with six single-stimulus durations and six repeated-stimulus ISIs. Fitted parameters, published target traces and assessment labels are not candidate prediction inputs.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source common-average rereferencing, broadband extraction, artifact/trial/responsiveness selection, run-wise prestimulus correction and averages for all 72 conditions. Original full fits use named response samples 0..818; source CV positional columns2:821 include temp_cond and omit the last response. Resolve publication lineage before choosing source_positional_cv versus corrected named_response_columns. Figure3 responsive/none/S and active category-selective/P callers are not interchangeable.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-figure",
+        "adapt-score"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "For each held-out trace, R² = 1 − sum_t(y_t−prediction_t)² / sum_t(y_t−mean(y))², using the pinned NaN handling; higher is better. Code rounds condition values to three decimals and fold means to four.",
+      "evidence_ids": [
+        "adapt-score",
+        "adapt-fit"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "For each held condition compute original trace R² with source NaN behavior, round to three decimals; average six conditions and round fold to four; average all twelve folds and round electrode to four. Retain every electrode and separately summarize V1–V3, VOTC and LOTC using source 1,000 electrode-resample medians, median of medians and16th/84th percentiles. These descriptive electrode bootstraps are not independent-participant superiority inference.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-figure",
+        "adapt-score"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Complete original Figure 3C broadband-response prediction under source condition cross-validation for all 79 responsive electrodes in four participants, 72 conditions and 12 folds per electrode. Reproduce unscaled DN and category-input-scaled DN(S); compare candidates against the stronger DN(S) comparator while retaining both model families and all three original regional summaries. All support identities and complete numerical reference arrays must be authenticated before reproduction admission. Numerical-reference equivalence applies only to the retained scientific members in findings.representation.members. Raw predictions and source-support records remain mandatory through unchanged required_granular_output_ids and selection.v1.json audit_output_obligations; independently recompute the reported metrics from them without requiring author prediction equality. Authentic original labels, folds, inputs and eligibility remain fixed. Original figure curves, reported score matrices and expressly selected scientific companions remain targets.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-figure",
+        "adapt-score"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Original prepared broadband condition-response traces with authenticated electrode/participant/area identities and source stimulus/category/time variables, 72 conditions and819 samples. The same original condition means and source preprocessing/selection exposure are declared common assistance. Training condition traces are available according to the original folds; query traces remain operator targets. A corrected column branch cannot be mixed with the source-reference branch. Only the code condition receives author revision09cd778fac545d406cba39ba408f0f00fbe39975 DN/fit/Figure3 implementations. Original prepared condition arrays and documented source folds are common; fitted parameters, reference predictions and operator diagnostics are withheld. Equations in the paper remain visible in both conditions. Source-derived local producer code is algorithm-bearing assistance, not automatically common data. Exact delivery manifests and exposure enforcement remain unresolved.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-figure",
+        "adapt-score"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "selected-original-endpoint",
+      "kind": "indexed_array_family",
+      "description": "Complete original Figure 3C broadband-response prediction under source condition cross-validation for all 79 responsive electrodes in four participants, 72 conditions and 12 folds per electrode. Reproduce unscaled DN and category-input-scaled DN(S); compare candidates against the stronger DN(S) comparator while retaining both model families and all three original regional summaries.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "selected-original-endpoint-v1",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "held_condition_r2",
+            "manifest_key": "held_condition_r2",
+            "source_quantity": "Complete source DN and DN(S) held-condition scores",
+            "membership": "fixed",
+            "shape": [
+              2,
+              79,
+              12,
+              6
+            ],
+            "axes": [
+              {
+                "name": "author_model",
+                "units": "category",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "DN-none",
+                    "DN-S"
+                  ]
+                }
+              },
+              {
+                "name": "electrode",
+                "units": "source identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "All79 source IDs with participant/area join"
+                }
+              },
+              {
+                "name": "fold",
+                "units": "ordinal",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "arithmetic",
+                  "start": 0,
+                  "step": 1,
+                  "count": 12
+                }
+              },
+              {
+                "name": "held_condition",
+                "units": "source identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Six source fold-specific conditions, one/category"
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "R²",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Condition scores rounded3decimals, fold mean rounded4,12-fold electrode mean rounded4; all failed/undefined coordinates retained.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-paper",
+              "adapt-fit",
+              "adapt-figure",
+              "adapt-score"
+            ]
+          },
+          {
+            "id": "region_summaries",
+            "manifest_key": "region_summaries",
+            "source_quantity": "Complete Figure3C model by region point/band values",
+            "membership": "fixed",
+            "shape": [
+              2,
+              3,
+              3
+            ],
+            "axes": [
+              {
+                "name": "author_model",
+                "units": "category",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "DN-none",
+                    "DN-S"
+                  ]
+                }
+              },
+              {
+                "name": "region",
+                "units": "category",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "V1-V3",
+                    "VOTC",
+                    "LOTC"
+                  ]
+                }
+              },
+              {
+                "name": "summary",
+                "units": "category",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "median_of_bootstrap_medians",
+                    "16th_percentile",
+                    "84th_percentile"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "R²",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source1000 electrode-resample medians and their median/16th/84th percentiles, separately by region. Exact original reference and bootstrap calibration unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "adapt-paper",
+              "adapt-fit",
+              "adapt-figure",
+              "adapt-score"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "adapt-paper",
+          "adapt-fit",
+          "adapt-figure",
+          "adapt-score"
+        ]
+      },
+      "required_granular_output_ids": [
+        "held_condition_r2",
+        "region_summaries",
+        "prediction_traces"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Independently recompute the selected original source metrics and compare only the scientific score, curve or reported-summary members retained in representation.members with authenticated publication-equivalent references. Required granular prediction/support outputs and selection.audit_output_obligations are mandatory audit evidence for coverage, provenance and metric recomputation; their prediction values, raw confusion counts and intermediate model-selection settings are not numerical-reference-equivalence targets. Original support identities, labels, folds and source-permitted information remain authenticated requirements. Numeric tolerances and uncertainty criteria remain unresolved.",
+        "independent_unit": "Four participants, with79 electrodes nested within participants and72 conditions/reused training folds within electrodes; source electrode-bootstrap bands are descriptive.",
+        "dependence": "Retain all source repeated and nested observations; never convert folds/windows/cells into independent biological units.",
+        "multiplicity": "Preserve every selected source condition and companion; a complete-support decision policy must be fixed before candidate results.",
+        "rationale": "Source support, reference arrays and comparison policy remain unresolved. Metadata construction and matching shapes cannot establish reproduction. The separation of reported scientific targets from mandatory computation evidence does not waive original data/support authentication, native analysis verification or any retained source control.",
+        "evidence_ids": [
+          "adapt-paper",
+          "adapt-fit",
+          "adapt-figure",
+          "adapt-score"
+        ]
+      },
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-figure",
+        "adapt-score"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Bind publication-equivalent processed response inputs and the exact 79-electrode/four-participant/area roster, resolving the 17/15 caption reversal without selecting a favorable area assignment.",
+    "Resolve source positional CV columns2:821 versus named response0..818 and active P/category-selective versus Figure3 none/S/responsive callers against result-producing evidence. Corrected columns are a separate branch until parity is justified.",
+    "Authenticate historical 12-fold/72-condition assignments or qualify the exact source stochastic recipe with logged folds, paired candidate/author exposure and justified published-result calibration; preserve66 train/six query conditions with one query per category.",
+    "Recover complete native DN and DN(S) Figure3C reference outputs, original runtime/numerical parity including scalar-SSE least_squares objective, source rounding and source region reduction. No authentic fits have been run by this construction.",
+    "Specify full-region superiority and participant/electrode dependence, meaningful effect and reproduction tolerance; freeze common artifacts, exact author-code package, finite episode/search/resource limits and protected final scoring.",
+    "The selected source endpoint retains a complete metric array without an authenticated original scalar reduction. Existing improvement/v1 scalar admission cannot qualify this full-panel comparison; an additive full-panel comparator/admission engine and reviewed complete-support criterion remain required. No new mean, win count or convenient scalar is substituted."
+  ]
+}

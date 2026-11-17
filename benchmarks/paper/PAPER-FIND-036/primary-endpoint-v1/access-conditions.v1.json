@@ -1,0 +1,70 @@
+{
+  "schema_version": "paper-endpoint-access-conditions/v1-proposal",
+  "task_id": "PAPER-FIND-036",
+  "status": "source_unresolved",
+  "policy_sha256": "1f1781fb0dff7e53a4d6827122b55634c1c27fa5016ac81e75c2e8c2fb3e1702",
+  "common_policy_conditions_pointer": "/source_assistance_conditions",
+  "common": {
+    "paper": {
+      "title": "Population analyses reveal heterogenous encoding in the medial prefrontal cortex during naturalistic foraging",
+      "url": "https://elifesciences.org/articles/93994"
+    },
+    "original_data": "Complete original EventClassificationData_4C processed X/y representation, all40 sessions/allHW rows/all40bins perunit. Training labels are phase-specific; full labels, original label-revealing source order and rat/session joins stay evaluator-owned.",
+    "support": "All 40 source sessions, all label-3/4 HW rows, all units × 40 peri-event bins, all five OOF folds, both class recalls, per-session balanced accuracy, complete probabilities and source-shuffle companions. Historical unseeded shuffle 0.5162 and newly seeded engineering controls remain separately labelled.",
+    "split": "Author code specifies within-session StratifiedKFold(5, shuffle=True, random_state=622), each original HW row held out once. Preserve seed 622, source row ordering and the original stratification protocol. Authenticate inputs and record package/version provenance when regenerating folds; a documented source-conformant rerun with paired candidate-author folds and predeclared justified calibration tolerance does not require an archived historical membership file. Animal/episode/time-based holdouts change the task.",
+    "preprocessing": "Preserve source whole-session standardized, Gaussian-smoothed peri-event features and clipping to [-5,5]; BernoulliNB binarizes at zero. Whole-session normalization and symmetric smoothing remain disclosed; training-only preprocessing cannot undo this original transductive representation.",
+    "metric": "Balanced accuracy per session = 0.5*(avoidance recall + escape recall), after pooling all five out-of-fold predictions and thresholding escape probability at >=0.5. Do not average fold accuracies or substitute probability reconstruction error.",
+    "aggregation": "Arithmetic mean of complete session balanced accuracies across all 40 original sessions; the author batch routine computes the mean of its per-session HW accuracies. Session weighting and animal-level uncertainty are distinct.",
+    "permitted_observations": "Only phase-appropriate training labels within the original outer fold; test labels and label-revealing class-block row order/indices are evaluator-only. Source whole-session normalization, symmetric smoothing and post-event information remain disclosed. Private row presentation must preserve original fold identities while removing target-revealing order.",
+    "published_scalar_role": "Printed paper anchors may be common; they never substitute for protected complete native references.",
+    "input_manifest_sha256": null,
+    "paper_manifest_sha256": null,
+    "shared_preparation_and_tools_manifest_sha256": null,
+    "evaluation_identity_sha256": null,
+    "exposure_policy_sha256": null,
+    "access_budget": null,
+    "resource_budget": null
+  },
+  "conditions": {
+    "paper_data": {
+      "available": "Common paper, complete selected original data in declared representation, task contract and explicitly common preparation/tools.",
+      "excluded": "Official algorithm-bearing author method implementation or author-derived solutions, except preparation explicitly declared common.",
+      "preparation_boundary": "Original processed inputs are common; exact permitted common preparation manifest is pending. Operator-only preprocessing must not expose withheld method or protected answers."
+    },
+    "paper_data_author_code": {
+      "available": "Exactly the same common paper/data/tools plus pinned official endpoint implementation and authenticated dependencies.",
+      "author_code": {
+        "repository": "https://github.com/knowblesse/Lobster",
+        "revision": "2b74d2c2f8d6574b6a1b75c0feb99af5e18bb678",
+        "endpoint_files": [
+          "PythonCode/EventClassification/HierarchicalEventClassifier.py",
+          "MatlabCode/ML/generateEventClassifierDataset.m",
+          "MatlabCode/ML/Batch_generateEventClassifierDataset.m"
+        ]
+      },
+      "author_code_manifest_sha256": null
+    }
+  },
+  "paired_design": {
+    "author_code_is_intended_only_information_difference": true,
+    "identical_original_support": true,
+    "identical_split_and_metric": true,
+    "resource_accounting": "Same declared accounting and finite budgets, exact values remain unfrozen.",
+    "independent_candidate_freezes": "Separate code per outcome/condition; no final-test feedback transfer.",
+    "outcomes": "Reproduction and improvement independently scored in each condition.",
+    "score_control_roles": "Real-label native endpoint only for superiority; full source-shuffle outputs remain mandatory control/fidelity companions, never rewarded for increasing."
+  },
+  "protected_evaluator_only": [
+    "Outer-test labels and original class-block ordering/indices",
+    "Private author/reference/control predictions and fitted state",
+    "Cross-condition final-test numerical feedback"
+  ],
+  "authenticity_holds": [
+    "Authenticate EventClassificationData_4C.zip (15,089,711 bytes), all original 40 session members and rat/session mapping; archive body is not admitted.",
+    "Regenerate source StratifiedKFold(5,shuffle=True,random_state=622) from authenticated source rows and record package environment; lack of archived historical memberships alone is not disqualifying.",
+    "Qualify complete source-author BNB replay and published0.7271 calibration. Audit original SVC explorations and all relevant same-endpoint comparators before deciding which original result is strongest.",
+    "Freeze justified effect/paired uncertainty with equal-session metric and rat dependence; retain complete original shuffle companions and distinguish unseeded historical from seeded engineering controls.",
+    "Authentic input/source custody, independent qualified references and replay, protected paired participant execution, frozen candidate interface, exact exposure manifests and finite access/compute budgets remain unresolved. No scientific/model execution is claimed."
+  ],
+  "readiness_claim": false
+}

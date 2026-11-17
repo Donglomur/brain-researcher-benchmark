@@ -12,33 +12,46 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Complete original Figure 5b,c Dataset-1 awake versus loss-of-responsiveness prediction across 19 participants under leave-one-subject-out evaluation, retaining source model and feature controls. This is a separate empirical prediction result; transition and cross-dataset panels remain separate original results. Improved classification cannot establish reproduction or improvement of the primary state-contrast finding. Reviewed source limits: Exact complete original state-contrast panel, participant joins, aggregation, source reference outputs and acceptance criteria remain unresolved; this correction does not select a convenient contrast. Dataset-3/4 Supplementary Figure 6 and Source Data must be mapped to released condition arrays. Dataset-4 Methods specify baseline and general anesthesia for the current study; available light-sedation columns do not establish inclusion in an original scored panel. Dataset-5 integration/segregation/ISD analysis uses 28 eligible participants with awake/N1/N2, not all 33 source participants or N3. The separate metastability/complexity population must not be substituted. Primary improvement needs an independently justified same-result criterion; greater state separation or smaller p-values are not superiority criteria. Figure 5 classification still needs qualified behavioral labels, timing/window identities, source classifier and control replay, stochastic sampling and ROC aggregation. Static ISD implementations do not establish classifier reproduction. Mixed primary-reproduction and secondary-improvement bundles remain unavailable if their distinct targets cannot be represented faithfully. No numerical tolerance, superiority margin or scientific outcome is established.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The retained initial static integration, segregation and ISD state-contrast family in labeled sedation/sleep Datasets 3–5. Preserve original panel-specific participant and condition eligibility; the exact complete contrast panel and aggregation remain unresolved. Do not expand this scope to Dataset-1/2 temporal findings, HCP or every paper figure, and do not treat every released condition column as an original scored condition.
+### Current selected paper endpoint
 
-**Retained secondary policy:** Complete original Figure 5b,c Dataset-1 awake versus loss-of-responsiveness prediction across 19 participants under leave-one-subject-out evaluation, retaining source model and feature controls. This is a separate empirical prediction result; transition and cross-dataset panels remain separate original results. Improved classification cannot establish reproduction or improvement of the primary state-contrast finding.
+**Disposition:** design\_ready.
 
-- [Reproduction proposal (inspection only)](reproduction.v2.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate all19 participant/window identities, behavioral awake/LOR labels and responsiveness times; preserve stable-state/deep-LOR boundary exclusions and complete source evaluation support.
+- Bind original paired GSR/noGSR450-ROI inputs and18 feature preparation, 4-minute windows stepping oneTR, network identities and source non-overlapping sampling semantics.
+- Recover original20,000-per-class training sampling and random forest recipe or a documented original-protocol rerun with fixed provenance, paired candidate/author draws and justified published-result calibration.
+- Recover precision of0.93 balanced accuracy and0.984 AUC plus original ROC-curve aggregation, source controls and native classifier replay. The existing scorer subject-macro AUC does not prove parity with the displayed source curve.
+- Predeclare numerical reproduction and same-paper superiority criteria above the actual published target and calibrated reference, with meaningful effect and paired participant uncertainty accounting for overlapping LOSO fits; freeze source assistance and finite resource/search budgets.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | design\_ready | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | design\_ready | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** design\_ready. The paper contains an ordered consciousness-state prediction task in Figure 5 with a published random-forest baseline. This design scopes the comparison to the complete original Dataset-1 leave-one-subject-out result in Figure 5b,c, including all 19 subjects and its required source controls/companion metrics. Original label/timing bindings, classifier replay and calibrated sampling remain unresolved; the local state-contrast evaluator does not implement this task. No readiness is claimed.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +59,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 29985 bytes; SHA-256 `5ffb1106b7ba42dbb1426d5397744fd8b4fdb7a76fa9a43126f68bdcffbdc9fb`.
+- Specification identity: 36020 bytes; SHA-256 `60b00ff9b924785dd0ad9fce9e153f63c66b1a0b6c41eb08f7e5c721ae702c20`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

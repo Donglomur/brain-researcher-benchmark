@@ -150,6 +150,29 @@ def primary_successor_module(task_id=PRIMARY_SUCCESSOR_TASK):
     return sys.modules[name]
 
 
+def endpoint_selection_module():
+    """Load only the fixed reviewed metadata-only endpoint selection sibling."""
+    path = Path(__file__).resolve().with_name("paper_endpoint_selection.py")
+    name = "_neurobench_endpoint_selection_" + hashlib.sha256(str(path).encode()).hexdigest()[:16]
+    if name not in sys.modules:
+        need(path.is_file() and not path.is_symlink() and path.stat().st_size <= 1024 * 1024,
+             "Expected bounded endpoint selection framework source")
+        spec = importlib.util.spec_from_file_location(name, path)
+        need(spec is not None, "Cannot load endpoint selection framework source")
+        module = importlib.util.module_from_spec(spec)
+        exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
+        sys.modules[name] = module
+    return sys.modules[name]
+
+
+def has_endpoint_selection(row):
+    return endpoint_selection_module().has_endpoint_selection(row)
+
+
+def endpoint_selection_ids(previous_rows):
+    return endpoint_selection_module().selection_ids(getattr(previous_rows, "endpoint_selections", None))
+
+
 def has_primary_successor(row):
     """Check selector shape only; full context must authenticate its content.
 
@@ -216,6 +239,10 @@ def has_source_declaration_gap(row):
     if declared is None:
         return False
     need(type(declared) is dict, "Paper outcome binding must be an object")
+    if has_endpoint_selection(row):
+        # coverage/context authenticate the new selection before this former
+        # gap can cease being the active primary. Its source record is retained.
+        return False
     if row.get("id") not in SOURCE_DECLARATION_GAP_IDS:
         need("source_declaration_gap" not in declared,
              "Source declaration gap selector is restricted to the reviewed two tasks")
@@ -389,6 +416,7 @@ class PreviousRows(dict):
     scope_pin = None
     source_declaration_gaps = None
     source_declaration_gap_pin = None
+    endpoint_selections = None
 
 
 def read_reproduction(member_pin, home, read_pin):
@@ -476,6 +504,8 @@ def coverage(registry, read_pin):
     need(type(rows) is list and all(type(row) is dict for row in rows), "Invalid task roster for paper outcomes")
     meta = registry.get("paper_outcomes")
     if meta is None:
+        need(endpoint_selection_module().AUTHORITY_PIN is None,
+             "Adopted endpoint authority cannot be omitted from coverage")
         need(not any("paper_outcomes" in row for row in rows), "Paper outcome rows require coverage metadata")
         histories = registry.get("historical_registries", [])
         need(not (type(histories) is list and any(type(item) is dict and item.get("path") == SNAPSHOT
@@ -484,7 +514,7 @@ def coverage(registry, read_pin):
         return None
     base_keys = {"schema_version", "coverage_required", "registered_count", "pre_outcomes_registry"}
     need(type(meta) is dict and base_keys <= set(meta)
-         and set(meta) <= base_keys | {"scope_decisions", "source_declaration_gaps"}
+         and set(meta) <= base_keys | {"scope_decisions", "source_declaration_gaps", "endpoint_selections"}
          and meta["schema_version"] == VERSION and meta["coverage_required"] is True
          and type(meta["registered_count"]) is int,
          "Invalid paper outcome coverage metadata")
@@ -518,17 +548,24 @@ def coverage(registry, read_pin):
          "Adopted source declaration gaps require their exact public record")
     if "source_declaration_gaps" in meta:
         bind_source_declaration_gaps(old, meta["source_declaration_gaps"], read_pin)
+    old.endpoint_selections = endpoint_selection_module().authenticate_authority(
+        meta.get("endpoint_selections"), old, rows, read_pin)
+    selected_endpoint_ids = endpoint_selection_ids(old)
     need(all("paper_outcomes" in row for row in papers)
          and all("paper_outcomes" not in row for row in rows if row.get("track") != "paper"),
          "Paper outcome binding requires exactly every registered paper task")
     for row in papers:
         prior = old[row["id"]]
         need("paper_outcomes" not in prior, "Pre-outcomes row must precede outcome adoption")
-        need(has_source_declaration_gap(row) == (row["id"] in required_gaps),
+        need(has_source_declaration_gap(row) == (row["id"] in required_gaps - selected_endpoint_ids),
              "Original source declaration gap task cannot omit its adopted route")
         successor_selected = has_primary_successor(row)
         has_continuous_outcomes(row)
         for field in PRESERVED_ROW_FIELDS:
+            if field == "title" and row["id"] in selected_endpoint_ids:
+                # The sealed authority already authenticated the selected task
+                # raw/canonical identity and exact current registration title.
+                continue
             if field == "title" and successor_selected and row["id"] == PRIMARY_SUCCESSOR_TASK:
                 # This one title is deferred, not accepted: context() must prove
                 # the exact reviewed projection after authenticating all pins.
@@ -609,6 +646,13 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     identifier, home = row["id"], row["task_directory"]
     need(home == "benchmarks/paper/" + identifier, "Paper outcome task home mismatch")
     binding = row.get("paper_outcomes")
+    selected_endpoint_ids = endpoint_selection_ids(previous_rows)
+    endpoint_selected = has_endpoint_selection(row)
+    need(endpoint_selected == (identifier in selected_endpoint_ids),
+         "Endpoint selection cannot be omitted, substituted, or used without its authority")
+    if endpoint_selected:
+        return endpoint_selection_module().context(row, document, previous_rows, read_pin, engine,
+                                                  improvement_contract=improvement_contract)
     gap_selected = has_source_declaration_gap(row)
     if identifier in SOURCE_DECLARATION_GAP_IDS:
         need(gap_selected, "Original source declaration gap task cannot omit its adopted route")

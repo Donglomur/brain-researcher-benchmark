@@ -17,6 +17,7 @@ checks = fixture.checks
 
 
 class NeuralRepositoryLineageTests(unittest.TestCase):
+    @fixture.pre_endpoint_selection_fixture
     def setUp(self):
         temporary = tempfile.TemporaryDirectory()
         self.addCleanup(temporary.cleanup)

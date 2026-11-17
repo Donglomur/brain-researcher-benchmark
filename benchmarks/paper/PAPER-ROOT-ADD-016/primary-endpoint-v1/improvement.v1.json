@@ -1,0 +1,232 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-ROOT-ADD-016",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Explicitly selected original performance endpoint. Definition construction is complete enough for review, but source/runtime/reference/decision gaps below prevent qualification; no scientific result is claimed.",
+  "source_paper": {
+    "title": "Age-related changes in cortical 1/f dynamics are linked to cardiac activity",
+    "url": "https://elifesciences.org/articles/100605"
+  },
+  "evidence": [
+    {
+      "id": "cardiac-paper",
+      "kind": "paper",
+      "url": "https://doi.org/10.7554/eLife.100605.3",
+      "locator": "Version of Record; Abstract, Results on age-related aperiodic activity and Methods: Participants",
+      "supports": "Physiological confound question; original CamCAN and Salzburg cohorts; inference varies with frequency and sensor rather than forming a performance leaderboard."
+    },
+    {
+      "id": "cardiac-cohort",
+      "kind": "paper",
+      "url": "https://elifesciences.org/articles/100605.pdf",
+      "locator": "Methods: Participants; Figure 4—figure supplement 4",
+      "supports": "655 analyzed Salzburg participants from 684 collected; 627 analyzed CamCAN recordings are a different cohort."
+    },
+    {
+      "id": "cardiac-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/schmidtfa/cardiac_1_f/4562c0dc318930c46b77732b73d85504b2b471c4/README.md",
+      "locator": "Repository paper link and data sources",
+      "supports": "Author code targets the final paper and identifies CamCAN and PhysioNet as distinct source datasets."
+    },
+    {
+      "id": "cardiac-salzburg-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/schmidtfa/cardiac_1_f/4562c0dc318930c46b77732b73d85504b2b471c4/notebooks/%20c_1_f_age_sbg.ipynb",
+      "locator": "First source cell: 655 input files, heart_thresh/eye_thresh and brms_kwargs; Salzburg analysis notebook",
+      "supports": "Full analyzed Salzburg cohort and source Bayesian fitting prescription; these are association estimation and reconstruction inputs, not a protected performance split."
+    },
+    {
+      "id": "cardiac-trf-paper",
+      "kind": "paper",
+      "url": "https://cdn.elifesciences.org/articles/100605/elife-100605-v1.xml",
+      "locator": "Final Version of Record; Figure 3C,D and Results cardiac reconstruction; Methods: MEG/EEG processing - temporal response functions",
+      "supports": "Original ECG decoding from all M/EEG channels in 20 simultaneous Salzburg recordings, four-fold nested temporal CV, Pearson reconstruction accuracy and source lag/basis/filter settings. The CDN v1 filename does not designate the earlier preprint."
+    },
+    {
+      "id": "cardiac-trf-preprocessing",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12490856/",
+      "locator": "Methods: MEG/EEG recordings; MEG/EEG processing - pre-processing; Figure 3 caption",
+      "supports": "Concurrent Salzburg acquisition, EEG average reference, original ICA conditions and ECG-informed component selection, and Figure 3 mean-confidence-interval reporting."
+    },
+    {
+      "id": "cardiac-trf-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/schmidtfa/cardiac_1_f/4562c0dc318930c46b77732b73d85504b2b471c4/notebooks/eeg_meg_1f_trf.py",
+      "locator": "boosting_kwargs and run_boosting block lines 41-76; .r extraction lines 83-95; plotting lines 158-201",
+      "supports": "Author backward ECG reconstruction for each EEG/MEG and pure/removed/present condition, selection requiring ECG scores above 0.4 in both modalities, and per-subject score extraction. Exact source outputs and underlying library defaults are not authenticated."
+    },
+    {
+      "id": "cardiac-trf-helper",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/schmidtfa/cardiac_1_f/4562c0dc318930c46b77732b73d85504b2b471c4/utils/trf_utils.py",
+      "locator": "do_boosting lines 8-25",
+      "supports": "Eelbrain boosting uses ECG003 as reconstruction target, 0.01-second time step, and columns after ECG003 as M/EEG predictors; source data column ordering and library version must be verified."
+    },
+    {
+      "id": "cardiac-trf-preprocess-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/schmidtfa/cardiac_1_f/4562c0dc318930c46b77732b73d85504b2b471c4/notebooks/eeg_meg_1f_preprocessing.py",
+      "locator": "subject selection lines 9-15; run_ica lines 17-45; filtering/resampling and modality selection lines 47-108",
+      "supports": "Source selection from gw_sleep_pred recordings, per-subject first record, separate EEG and magnetometer preprocessing, 45-Hz low-pass, 100-Hz resampling, and three ICA-derived input conditions."
+    },
+    {
+      "id": "selected-published-120-panel",
+      "kind": "author_data",
+      "url": "https://osf.io/download/fm5t8/?revision=1",
+      "locator": "dec_r_ecg.csv revision1;5222bytes;SHA256 97ce1f3546cbc7cf447cdc6efa785b87037853039d0df88bc4de62d475797368; source recovery benchmarks/paper/PAPER-ROOT-ADD-016/implementations/published-decoding-panel-v1/SOURCE_RECOVERY.json SHA256 1f2902cb7b6fd2e9c4853213c9c0d87c9aa022169817f0fd41b9c229c903f0b0",
+      "supports": "All120published r scores:20numeric IDs0..19 x2modalities x3ICAconditions recovered. Recording identity, source exporter and temporal-fold joins remain unresolved; existence is not a source-fit execution."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 3C,D ECG reconstruction Pearson r for all 20 original simultaneous-recording participants, both MEG/EEG modalities and all three source ICA conditions, retaining the complete 120-score panel.",
+      "evidence_ids": [
+        "cardiac-trf-paper",
+        "cardiac-trf-code",
+        "selected-published-120-panel"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Use the original simultaneous Salzburg resting-state M/EEG/ECG recordings for Figure 3, not the processed 655-person slope table, CamCAN or ECG-only PhysioNet data. The immutable raw/preprocessed file manifest, availability and exact published data-to-code mapping are not yet recovered.",
+      "evidence_ids": [
+        "cardiac-trf-paper",
+        "cardiac-trf-preprocessing",
+        "cardiac-trf-preprocess-code"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "The paper specifies 20 subjects with concurrent MEG, EEG and ECG. The author preprocessing script selects gw_sleep_pred records and deduplicates subjects, while the TRF script additionally requires ECG-component scores above 0.4 for both modalities. Recover the exact original 20 subject/session identities and reconcile these selection steps before admission; this source-native subset must not be replaced by an arbitrary subset of the historical 655-person cohort.",
+      "evidence_ids": [
+        "cardiac-trf-paper",
+        "cardiac-trf-code",
+        "cardiac-trf-preprocess-code"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The source specifies four-fold nested cross-validation: two training folds, one validation fold and one test fold, with each partition serving as test once. Exact temporal boundaries, membership, edge handling and author library realization remain unbound. Participant-held-out or newly blocked CV would be an extension, not the original Figure 3 task.",
+      "evidence_ids": [
+        "cardiac-trf-paper",
+        "cardiac-trf-code",
+        "cardiac-trf-helper"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Source decoder predictors are all original M/EEG channels within each modality/ICA condition; ECG is the training/evaluation target and also informs the source ICA preprocessing. The pinned preprocessing selects MEG magnetometers, and the helper takes predictor columns after ECG003. Authenticate channel identities/order and the original ECG-informed preprocessing exposure; direct test-ECG input to the candidate decoder is not permitted.",
+      "evidence_ids": [
+        "cardiac-trf-paper",
+        "cardiac-trf-helper",
+        "cardiac-trf-preprocess-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve original channel repair, EEG common-average reference and ECG/EOG ICA conditions. TRF processing low-pass filters at 45 Hz, downsamples to 100 Hz, z-scores signals, and uses lags from -250 to 250 ms with 50-ms Hamming basis windows. Exact artifact masks, source data-dependent transformation scope and author library defaults require binding; train-only ICA, causal-only lags or altered cleaning are distinct comparisons unless original-task equivalence is established.",
+      "evidence_ids": [
+        "cardiac-trf-paper",
+        "cardiac-trf-preprocessing",
+        "cardiac-trf-preprocess-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Source reconstruction accuracy is Pearson r between predicted and measured ECG time series on the original test support: covariance divided by the product of standard deviations. Retain six modality-by-ICA-condition scores; zero-variance series must not receive an invented success score. Standardized EEG-versus-MEG contrasts and their significance are not decoder-accuracy baselines.",
+      "evidence_ids": [
+        "cardiac-trf-paper",
+        "cardiac-trf-code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain all120source participant-condition Pearson-r scores with released numeric IDs0..19, devices eeg/meg and conditions ECG_components/ECG_not_rejected/ECG_rejected. Preserve author extraction of one backward-model .r per person/condition. Published score vectors are recovered, but numeric-ID-to-recording, temporal-partition-to-.r and source summary/CI joins remain unresolved. Do not invent a pooled120-row mean or treat sixconditions as independent people.",
+      "evidence_ids": [
+        "cardiac-trf-paper",
+        "cardiac-trf-code",
+        "selected-published-120-panel"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 3C,D held-out ECG reconstruction Pearson r, separately for MEG/EEG and the three source ICA conditions",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The published120-row dec_r_ecg.csv revision1 is recovered:5222bytes,SHA256 97ce1f3546cbc7cf447cdc6efa785b87037853039d0df88bc4de62d475797368. Its complete20x2x3Pearson-r panel is the published numerical reference. Source recording/partition/export/aggregation equivalence remains unresolved, so baseline qualification stays unresolved and no scalar value is invented.",
+      "evidence_ids": [
+        "cardiac-trf-paper",
+        "cardiac-trf-code",
+        "selected-published-120-panel"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Source TRF/boosting and the120-row published reference are recovered. An independently checked source-matched author execution, original recording/partition identity and executed library/default equivalence remain unresolved; historical655-person association calibration is a different task.",
+      "evidence_ids": [
+        "cardiac-trf-code",
+        "cardiac-trf-helper",
+        "cardiac-salzburg-code"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Justify a meaningful gain in ECG reconstruction r on the original fixed-condition task after recovering original score variation and measurement limits. A larger residual-artifact signal, stronger physiological association or smaller posterior discrepancy is not a decoder improvement margin.",
+      "evidence_ids": [
+        "cardiac-trf-paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired candidate-minus-author procedure across the same original subjects and conditions, accounting for reused temporal folds and within-subject time dependence; specify a full six-condition decision and multiplicity rule before final scoring.",
+      "independent_unit": "Participant; time samples, channels and cross-validation folds are nested/dependent observations.",
+      "rationale": "The source uses a 20-subject paired recording design. Its mean-confidence intervals and modality contrasts are not automatically a test of candidate superiority, and millions of samples cannot substitute for independent subjects.",
+      "evidence_ids": [
+        "cardiac-trf-paper",
+        "cardiac-trf-preprocessing"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate the original 20-person simultaneous Salzburg cohort, recordings, condition-specific channels, preprocessing and four-fold nested partitions for Figure 3C,D.",
+      "Bind the recovered complete120-row published reference to original recordings/partitions and independently execute the strongest relevant source-author decoder on identical support before candidate comparison.",
+      "Retain both modalities and all three original ICA conditions under a predeclared comparison rule; improved performance on one easier condition cannot silently replace the source task.",
+      "Match and disclose the original ECG-informed ICA/preprocessing exposure. Do not supply final ECG targets directly as decoder inputs, alter the permitted lag window, or claim a prospective causal predictor from the original acausal reconstruction.",
+      "Require a justified effect and valid paired subject-level uncertainty under fixed access and resource budgets; tighter posterior reconstruction or stronger modality/age significance cannot count as success.",
+      "Label new participant splits, new cohorts, changed cleaning targets or a different artifact-removal ground truth as extensions. An admitted win here concerns the source ECG reconstruction task, not improved removal of cardiac activity or a whole-paper physiological conclusion."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No separately verified current-SOTA ECG reconstruction comparator has been reviewed. Published TRF scores, a future authenticated author rerun and the historical age-association calibration remain distinct.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Blocked pending source-native TRF baseline and information-boundary recovery. A future episode may iterate on only the original training/validation portions, preserving the source condition-specific preprocessing and explicit ECG exposure policy.",
+    "candidate_freeze": "Freeze decoder code, channel mapping, data-dependent preprocessing policy, lag/basis access, tuning procedure and the six-condition comparison rule before owner-controlled final scoring.",
+    "final_evaluation": "Evaluate against authenticated original ECG targets on the exact original test partitions and subjects; report per-subject and modality/condition results plus paired candidate-minus-author uncertainty. The existing 655-person posterior grader remains a separate calibration component.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Use original Eelbrain boosting/TRF implementation and the recovered120-row published panel; independently reproduce source fit/extraction with exact original identities and temporal folds. An age-association fit, arbitrary newfold decoder or savedscore replay is not an author execution."
+  },
+  "blocking_issues": [
+    "Map recovered published numeric subjectIDs0..19 to exact original20simultaneous recordings/sessions; authenticate immutable files, channel selection/order and all three condition membership.",
+    "Recover exact original nested-fourfold temporal partitions, artifacts/edges, preprocessing exposure and fold-to-.r reduction; preserve100Hz,+/-250mslags and50msHammingbasis.",
+    "The published120score panel is recovered; its source exporter, recording/partition joins and verified independently executed author comparator remain unresolved.",
+    "Authenticate executed Eelbrain/library defaults and source plain/filtered filename mapping; declared environment versions alone do not prove source execution parity.",
+    "Bind identical common inputs plus code-only assistance, source ECG-informed ICA exposure, protected finalECG targets, full120candidate outputs and six-condition paired decision with meaningful subject-level uncertainty.",
+    "The current improvement/v1 admission engine accepts one scalar score and cannot yet qualify a complete120-coordinate original panel decision. The assigned additive panel-comparison builder must bind a source-faithful all-condition decision and paired participant uncertainty; do not invent a global mean, win count, numeric margin or tolerance. This is an implementation gap, not a reason to change the paper metric."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Prior broad biological reproduction and historical calibration remain unchanged in canonical files outside primary-endpoint-v1; this selected source endpoint does not assert they were already reproduced or exceeded."
+  }
+}

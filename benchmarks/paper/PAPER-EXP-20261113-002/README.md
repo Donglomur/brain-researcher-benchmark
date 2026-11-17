@@ -12,33 +12,47 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Preserve source-native state-specific six-class decoding accuracy and cross-time generalization as a legitimate, separately named empirical method-performance comparison on the original inputs, support and protocols. It is not preprocessing or simulation; a qualified method-performance gain must not automatically become improved biological explanation or current SOTA. Preserve the chronological pooled-state calibration/decoding protocol as a distinct prospective adaptation. Preserve scientific opportunities to challenge the original state/time finding; do not require a candidate to increase the locomotion effect or force agreement with its direction. Reviewed source limits: Exact original partitions, seeds, population settings, trial/unit identities and figure-producing invocation remain unbound. Preserve the distinct within-time three-fold/five-repeat diagonal-covariance route and cross-time half-split/five-repeat route; the chronological pooled-state extension is not interchangeable. Retain full original state/time/class support and mouse-level outputs, including cross-time numerator and within-time denominator. Four published mean/SEM scalars do not establish the complete panel, an authentic computational reference or agreement of submitted analysis with it. The independent biological unit remains the mouse: five primary animals. Trials, neurons, time windows and CV repeats are repeated measurements. No arbitrary scalar aggregate, numerical agreement tolerance, meaningful superiority margin or simultaneous state/time decision rule is established. A higher-accuracy candidate can preserve, attenuate or challenge the biological state/time pattern. Primary scientific superiority is unavailable until a justified interpretation and comparison is established; neither a larger state effect nor a ratio gain obtained by weakening the denominator establishes it. Existing reducers and structured-output proposals remain useful source/engineering evidence. Authentic native-array/run linkage, independent submitted-analysis execution, input-use proof, granular verification and paired delivery/budget manifests remain unresolved. Correct calibration-only current wording for first-class reproduction. Where the schema cannot distinguish primary biological outcomes from secondary decoder-method outcomes, keep the mixed bundle unavailable rather than allowing higher generic accuracy to satisfy the primary scientific claim. All scientific outcomes remain unknown.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The complete original five-mouse Figure 2h/4d,e empirical state/time decoding finding, preserving within-time curves, state/train/test-time matrices, relative cross-time generalization and its numerator/denominator, paired mouse-level effects and source-required controls. The Allen extension and other figures remain outside this task.
+### Current selected paper endpoint
 
-**Retained secondary policy:** Preserve source-native state-specific six-class decoding accuracy and cross-time generalization as a legitimate, separately named empirical method-performance comparison on the original inputs, support and protocols. It is not preprocessing or simulation; a qualified method-performance gain must not automatically become improved biological explanation or current SOTA. Preserve the chronological pooled-state calibration/decoding protocol as a distinct prospective adaptation. Preserve scientific opportunities to challenge the original state/time finding; do not require a candidate to increase the locomotion effect or force agreement with its direction.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v1.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate the complete original five-mouse trial/unit identities, inclusion masks, class order, full-population figure-producing configuration and nTrials workspace dependency in CrossTimeDecodingAnalysis.m; source code recovery alone is not a native-array receipt.
+- Recover complete Figure2h/4d accuracy arrays and Figure4e ratios plus numerator/denominator, independently linked to authentic observations and source splits. Four published relative-performance mean/SEM scalars are companions, not a full accuracy reference.
+- Preserve within-time threefold/five-repeat diagonal-covariance GammaOne decoding and cross-time half-split/five-repeat decoding. Where historic random state is absent, justify a recorded source-protocol-equivalent replay with calibrated agreement tolerance and paired candidate/author draws; do not require an unobtainable exact historical seed as an independent gate.
+- The delivered source\_metrics.py reduces operator accuracy exports and held-fold predictions; it does not prepare authentic observations, fit either decoder, prove training access or independently verify a submitted full-panel analysis.
+- Define source-supported reference equivalence, meaningful accuracy gain, full-panel comparison/multiplicity, mouse-level uncertainty and denominator-protection rules without selecting favorable cells. Current improvement/v1 final-result schema is scalar-only; no arbitrary scalarization or numerical threshold is authorized for this panel.
+- Freeze exact common participant allowlists, official-code-only delta, private evaluator/ref output boundaries, exposure manifests and finite cumulative access/resource budgets. All readiness and scientific outcome states remain unqualified.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The original six-speed decoding task is ordered, but complete Figure 2h/4d,e accuracy matrices, original split realizations and exact figure-producing settings are not recovered. The source correctly uses different within-time and cross-time CV protocols. The existing chronological pooled-state protocol changes source splits and input permissions and remains an extension.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +60,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18499 bytes; SHA-256 `2445fbe65c82ab17b943efa6d7808fb595dc3705216dc5acc1c26ea066e74d9d`.
+- Specification identity: 16744 bytes; SHA-256 `8e14e8bbf90348f9b9c652ab118f71fd54f7ff27a848b301c7e2673b3b1e7191`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261113/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

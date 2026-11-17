@@ -1,0 +1,210 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-CANDIDATE-20261114-PLEXUS",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Authentic final-paper source equivalence, original representation/classifier fitting, complete score/reference vector and independent comparison remain unresolved. Existing original-fold construction scores supplied predictions only; whole-plate prospective evaluation remains separately named.",
+  "source_paper": {
+    "title": "Network-aware self-supervised learning enables high-content phenotypic screening for genetic modifiers of neuronal activity dynamics",
+    "url": "https://www.nature.com/articles/s42256-025-01156-x"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s42256-025-01156-x",
+      "locator": "Public article metadata, Code availability, dataset references",
+      "supports": "Final paper identity and official Plexus repository/archive relationship; full methods were not accessible in this review."
+    },
+    {
+      "id": "figure4-code",
+      "kind": "author_code",
+      "url": "https://github.com/pgrosjean/plexus/blob/69ccecbcc00f8462c8ce2a9d699be09f4c53ed66/figure_scripts/Figure4/figure_4.py",
+      "locator": "compute_auroc_for_guides and main",
+      "supports": "Per-guide binary AUROC, half-well complementary folds, scaler and classifier semantics, WT WTC11/Patient comparison."
+    },
+    {
+      "id": "data-v2",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/15809433",
+      "locator": "Version v2; Description; Files",
+      "supports": "Archive provides plate statistics, treatment mappings, checkpoints, embeddings/manual features and processed plate/well/FOV Zarr traces."
+    },
+    {
+      "id": "registration",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/task.json",
+      "locator": "complete_scope, prospective_improvement; implementations/initial-evaluator-v1/plexus_evaluator.py and sources.json",
+      "supports": "Current registration requires 52 genes/four lines, whereas local evaluator explicitly implements prospective whole-plate policy; no authentic reference run."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Recreate and improve the original source Figure 4 guide-versus-non-targeting-control discrimination endpoint: complete guide-by-donor-by-fold AUROC outputs for Plexus and manual features in WT WTC11 and WT Patient strata, under the original source well-split and preprocessing protocol. Final-paper/archive equivalence remains unresolved.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Zenodo 15809433 v2 and predecessor 14714574 are source data references; authenticate the selected release and final-paper Figure 4 equivalence before admission. Do not silently substitute one version or a convenient subset. Original plate/well/FOV/treatment/trace and representation artifacts require exact provenance.",
+      "evidence_ids": [
+        "data-v2",
+        "paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Retain all Figure 4 eligible guides/wells in WT WTC11 and WT Patient donor strata, including source-defined skipped/insufficient-support cases with reasons. The complete authentic roster is unresolved; neither all four lines nor all 52 registered genes is assumed to be the Figure 4 cohort.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Pinned Figure 4 source resets legacy NumPy seed 0 for each of four representation-family/donor calls, draws half non-targeting well locations and then half each sorted guide locations. First-fold training is class-balanced by downsampling; its model scores the complete held-out set. Reciprocal training uses the unbalanced held-out set and scores only the balanced first-fold training subset. Discarded training rows do not reappear. Balancing consumes the same RNG stream as later well draws. Preserve >8 first-training observations per class, source one-class reciprocal skip behavior and literal non-targeting self-exclusion. Authentic ordered identities and final-publication equivalence are unresolved.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original processed neuronal traces/spikes/masks and plate/well/FOV/treatment metadata, with the same declared representation and algorithm-bearing-artifact exposure in both conditions. Official embeddings/checkpoints are not raw neural observations; if shared, freeze identical bytes and source/training provenance as explicit common assisted inputs before either candidate. Otherwise neither condition receives them implicitly.",
+      "evidence_ids": [
+        "data-v2",
+        "figure4-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve original typical-variation normalization, aggregation and full-input StandardScaler before well splitting, including its transductive exposure. Manual loc_id=well_id+\"_\"+zarr_file; Plexus loc_id uses first two aggregate_by underscore tokens plus well_id. Authenticate representation/checkpoint training exposure, preprocessing receipts, original input ordering and final-paper equivalence. Training-only scaling or corrected folds constitute a separately named extension.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Original guide-positive AUROC from sklearn roc_curve and auc over source classifier probabilities, preserving both complementary but asymmetric well-fold evaluations, donor strata and all eligible guides. 0.8 is a plotted display cutoff, not the author performance baseline. Control-only/null diagnostic outputs have fidelity roles, not independent maximize targets.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Preserve the complete original per-guide, donor-stratified, two-fold AUROC vectors for Plexus and manual features with source eligibility/skip states and shared controls. No complete final-publication vector, exact panel contrast or defensible full-screen scalar has yet been authenticated. Do not substitute a new mean, count above 0.8 or significant-gene count.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Complete source Figure 4 eligible guides, non-targeting-control rows, both WT donor strata, both Plexus/manual feature representations and both original reciprocal fold outcomes, preserving source skipped/insufficient-support cases, controls and authentic ordered identities. Do not infer complete 52-gene/four-line coverage from the broader prior registration.",
+      "evidence_ids": [
+        "figure4-code",
+        "paper"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Same complete original observations, source preprocessing/representation exposure profile and budgets in paper_data and paper_data_author_code. Original pre-split normalization exposure is disclosed and retained; only the latter adds pinned author implementation. Weights/embeddings are algorithm-bearing assistance: explicitly common and identical with provenance/training-overlap disclosure, or withheld from both. Hidden fitted reference predictions/score answers remain evaluator-held.",
+      "evidence_ids": [
+        "figure4-code"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "plexus-original-method-panel",
+      "kind": "indexed_array_family",
+      "description": "Numerical reproduction of only the complete original source-reported Figure 4 guide-by-WT-donor-by-fold Plexus and manual-feature AUROC performance panels. Complete source support and mandatory audit/recompute artifacts remain required, but intermediate fitted quantities are not numerical reference targets.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "plexus-original-method-panel-v1",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "plexus-auroc-panel",
+            "manifest_key": "plexus-auroc-panel",
+            "source_quantity": "Complete original guide-by-WT-donor-by-fold AUROC performance vectors for Plexus and manual features.",
+            "membership": "data_dependent",
+            "shape": null,
+            "axes": null,
+            "allowed_dtypes": null,
+            "units": "Source-native; exact numeric/string representation and units manifest unresolved.",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Original sklearn roc_curve/auc and source guide/donor/fold ordering. No new mean, 0.8-threshold count, guide subset or significant-gene count.",
+            "derivation_policy_sha256": null,
+            "collection": {
+              "record_key_fields": [
+                "representation_family",
+                "donor",
+                "guide_id",
+                "fold_id"
+              ],
+              "zero_records_allowed": false,
+              "correspondence": {
+                "status": "unresolved",
+                "policy_sha256": null,
+                "rationale": "Authenticate complete ordered source identities and explicit exclusions against the original release before freezing this collection. Semantic key names do not prove observed membership.",
+                "evidence_ids": [
+                  "figure4-code"
+                ]
+              }
+            },
+            "evidence_ids": [
+              "figure4-code"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "figure4-code",
+          "paper"
+        ]
+      },
+      "required_granular_output_ids": [
+        "plexus-source-support",
+        "plexus-fold-assignments",
+        "plexus-guide-probabilities",
+        "plexus-auroc-panel",
+        "plexus-preprocessing-controls"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recover the authentic complete source-reported performance reference panel and original protocol, then justify numerical/uncertainty comparison of that panel only. Audit/recompute artifacts retained in selection.audit_output_obligations must establish source identities, protocol compliance, genuine computation and correct derivation; they are not separately required to equal the author fitted intermediate values. Matching an aggregate or copying publication values is insufficient.",
+        "independent_unit": "Biological plate/batch; wells nested within these; cells and reciprocal folds are not independent replicates.",
+        "dependence": "The original fold results share source data and controls. Biological independence and a predeclared familywise comparison rule must be established.",
+        "multiplicity": "Freeze the complete source-reported numerical performance panel and justified family-level reproduction decision before final comparison; no selective successful members. Mandatory audit/control artifacts separately establish fidelity/full support and are neither maximize objectives nor numerical-equivalence targets.",
+        "rationale": "Authentic source identities, complete reported reference panels, original computation policy and justified comparison bindings remain unresolved. required_granular_output_ids retains every mandatory audit/recompute output; selection.audit_output_obligations preserves its complete typed specification for later computation.required_outputs binding. Source-specific intermediate predictions/densities may differ while the reported endpoint is reproduced; missing audit verification is not waived.",
+        "evidence_ids": [
+          "figure4-code",
+          "paper"
+        ]
+      },
+      "evidence_ids": [
+        "figure4-code",
+        "paper"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Map the immutable Figure 4 code and Zenodo release to the final published Figure 4 endpoint; archive/version correspondence remains unresolved.",
+    "Authenticate ordered WT WTC11/Patient guide/well roster, source-specific preprocessing and asymmetric reciprocal fold identities, complete eligible score support and skip states.",
+    "Recover original representation/classifier producer and independently verified publication-equivalent Plexus/manual-feature reference vectors; a supplied-score split scorer is insufficient.",
+    "Freeze one common observation and checkpoint/embedding assistance profile, with exact artifacts and training/exposure provenance, for both code-access conditions.",
+    "Justify reproduction tolerance, full-panel superiority/effect and dependence-aware uncertainty; bind measured cumulative access/compute budgets.",
+    "Panel improvement admission/interface is pending. Preserve the full source performance vector and mandatory controls; do not invent a scalar mean, favorable subgroup, win count or significance objective. No new AI/model study is required to finish source construction; an AI outcome requires a separate subsequent qualifying execution.",
+    "Bind every retained audit/recompute output to an authentic computation.required_outputs and independent source-protocol/derivation verifier. These outputs remain mandatory but are not numerical-reference targets. Any additional exact source-reported numerical companion must first be identified and source-bound; unresolved diagnostic groups do not imply author-intermediate equality."
+  ]
+}

@@ -153,7 +153,7 @@ CONTRACT_SCHEMA = {
 
 
 def _json_errors(value, path="$", active=None):
-    """Reject Python-only values, nonfinite numbers and cycles before schema use."""
+    """Reject non-JSON values, invalid Unicode, nonfinite numbers and cycles."""
     active = set() if active is None else active
     errors = []
     if type(value) in (dict, list):
@@ -161,10 +161,24 @@ def _json_errors(value, path="$", active=None):
             return [f"{path}: cyclic value is not JSON"]
         active.add(id(value))
         for key, item in (value.items() if type(value) is dict else enumerate(value)):
-            if type(value) is dict and type(key) is not str:
-                errors.append(f"{path}: object keys must be strings")
-            errors.extend(_json_errors(item, f"{path}.{key}", active))
+            child_path = f"{path}.{key}"
+            if type(value) is dict:
+                if type(key) is not str:
+                    errors.append(f"{path}: object keys must be strings")
+                else:
+                    try:
+                        key.encode("utf-8", errors="strict")
+                    except UnicodeEncodeError:
+                        errors.append(f"{path}: object key contains an unpaired Unicode surrogate")
+                        # Keep rejection diagnostics themselves valid UTF-8.
+                        child_path = f"{path}.{ascii(key)}"
+            errors.extend(_json_errors(item, child_path, active))
         active.remove(id(value))
+    elif type(value) is str:
+        try:
+            value.encode("utf-8", errors="strict")
+        except UnicodeEncodeError:
+            errors.append(f"{path}: string contains an unpaired Unicode surrogate")
     elif type(value) in (int, float) and not _finite_number(value):
         errors.append(f"{path}: number must be finite and within evaluator numeric range")
     elif type(value) not in (str, int, float, bool, type(None)):

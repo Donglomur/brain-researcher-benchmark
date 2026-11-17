@@ -19,6 +19,7 @@ legacy = support["fixtures"]["fixtures"]
 
 
 class DeclarationGapFixture(unittest.TestCase):
+    @legacy["pre_endpoint_selection_fixture"]
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(prefix="invented-declaration-gap-binding-")
         self.addCleanup(temporary.cleanup)

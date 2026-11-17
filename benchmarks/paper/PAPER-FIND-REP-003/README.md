@@ -12,33 +12,50 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed source coverage. Retained source scope and coverage: Preserve the scientifically reviewed Figure 5 scorer/exporter, source-fold/VE provenance and reproduction proposal as partial primary coverage and a possible source-qualified result-level decoding comparison; it is not an unrelated secondary surrogate. Preserve the distinct intervention component without treating its conditional histogram or representative trajectories as a complete causal estimator. Keep new held-animal/session evaluation, local phase-template deltas and redesigned aggregates explicitly prospective. A Figure 5-only replacement primary would require a new explicit scope decision; none is selected here. Reviewed source limits: The prior Figure 5 source-native review is scientifically substantive, but the bounded authority audit found no explicit decision removing the second historical intervention output. Preserve that review, exact predecessor definitions and components while consistently correcting current task/outcome/catalog/CLI/admission semantics. Figure 5 still lacks authenticated complete numeric references, original trial/fold identities and authentic computation/verification. Preserve all 24 joints, five mice/ten M1-S1 sessions, source top-cell/RADICaL and pre-CV PCA exposure, variance-based VE rather than uncentered SSE R-squared, original fold/median reductions and relevant partial/residual controls. Joints and repeated folds do not increase the animal sample size. Intervention eligibility and source joins remain unresolved: two VGAT-ChR2 mice are distinct from the five imaging mice. Preserve source stimulation/control assignments, source event alignment and necessary controls. Methods specifies stimulation from 150 ms before cue through 3 seconds afterward; caption/text panel and event wording need reconciliation rather than silent normalization. The source optogenetic histogram selects successful trials with additional problem/contact/lift/wrong-grab masks and normalizes contact-time histograms. That conditional display cannot alone verify the paper's overall within-3-second contact percentages; original denominators and computational provenance remain unbound. The original trajectory display uses right-target stimulation trials and control trials with source index below 60. Preserve original example identities and display selections; do not relabel them as an all-trial quantitative kinematic effect. Source timing/trajectory numeric criteria, independent verification and animal-level uncertainty remain unfrozen. A qualified same-task Figure 5 decoding gain can only support that named result-level comparison. Decoding accuracy is not causal motor control, and stronger disruption or smaller p-values do not establish intervention superiority. No arbitrary global threshold or whole-task superiority rule is created. Scalar Figure 5 summaries do not cover complete decoder arrays/companions or the intervention family. Keep any mixed or incomplete whole-primary bundle unavailable if the schema cannot represent coverage and result-specific comparisons faithfully. No new task ID, execution, scientific outcome, source access, readiness or current SOTA is established.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** Both expressly retained empirical result families: M1-fl/S1-fl joint-motion and reach/grasp encoding/decoding, and supplied M1-fl cortical-inactivation timing/trajectory disruption. Preserve source-specific populations and indispensable controls. Figure 5 provides genuine nested coverage of the first family. No all-figure/whole-paper requirement, S1 intervention, high-level target-decoding task, raw pose/segmentation revalidation or across-learning perturbation study is added.
+### Current selected paper endpoint
 
-**Retained improvement contract coverage:** Preserve the scientifically reviewed Figure 5 scorer/exporter, source-fold/VE provenance and reproduction proposal as partial primary coverage and a possible source-qualified result-level decoding comparison; it is not an unrelated secondary surrogate. Preserve the distinct intervention component without treating its conditional histogram or representative trajectories as a complete causal estimator. Keep new held-animal/session evaluation, local phase-template deltas and redesigned aggregates explicitly prospective. A Figure 5-only replacement primary would require a new explicit scope decision; none is selected here.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v2.json)
-- [Primary outcome pairing decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate all ten original session inputs, RADICaL rates, eligible trial order, date/area joins, ZETA selection and pre-CV PCA exposure.
+- Recover original 50-fit trial manifests and shared-RNG/source configuration ordering; seed 240926 alone does not reconstruct publication folds.
+- Recover complete published/source-author VE and prediction references and independently qualify original MATLAB/dependency/runtime parity; no numeric author baseline is established.
+- Resolve the strongest relevant original-author comparator under the same instantaneous observation scope. Keep main ridge/RADICaL, bagged reconstruction, lagged and partial/residual branches distinct; a local phase template is not the paper method.
+- Authenticate granular trajectory/posture/control/scatter provenance and source display selections; reconcile the supplement-3 caption/source left-right ordering discrepancy.
+- Justify numerical reproduction tolerance and meaningful complete-family improvement/uncertainty under five paired mice and dependent joints/folds; no arbitrary scalar, any-positive-delta or significance-maximization rule.
+- Bind protected source-compatible per-fit execution, common scientific input/exposure and official-code allowlists, independent verification and cumulative budgets. Existing scorer/exporter code is not an admitted end-to-end runtime.
+- Existing improvement/v1 admits one scalar candidate/published value. This vector endpoint requires future full-panel comparison/admission support; no global mean or win count is invented. Central versioned-directory adoption remains pending.
+- Granular prediction/observation bodies are mandatory computation evidence, not full-array author parity targets. Bind the granular-evidence requirements to protected execution/independent derivation before either outcome is eligible.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained improvement contract
+## Retained predecessor improvement policy
 
-This preserved contract retains the declared coverage described above. Complete primary-outcome pairing remains unavailable, so the contract cannot admit a primary outcome under this marker.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. Figure 5 defines a defensible original 24-joint decoding task and author code fixes its variance-explained calculation, but the published per-joint/per-mouse numerical baseline has not been recovered or rerun. The current scorer compares to a newly authored phase template and aggregates differently from the paper; beating that template is not beating the paper.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +63,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 35962 bytes; SHA-256 `e3b6139afe9e7b2afd9c8bf3c77e877c04c162637a93074811db2013f0f4d85b`.
+- Specification identity: 31716 bytes; SHA-256 `464f9227e3a7cc6165982de22bf55c84fd38b192b6af57a045c54db6e2b5cc80`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

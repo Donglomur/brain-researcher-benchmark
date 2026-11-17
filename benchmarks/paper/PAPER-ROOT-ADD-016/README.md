@@ -12,33 +12,47 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Retain the genuine Figure 3A–D empirical result: original 20-person concurrent M/EEG/ECG forward TRFs and backward ECG reconstruction, preserving modality, cardiac-component condition and original temporal cross-validation. Report this separately; it cannot satisfy primary age-confound reproduction or improvement. Reviewed source limits: The historical definition leaves the exact age-model formula, condition-column mapping and participant eligibility unbound; restore its named result without pretending those details are already qualified. The paper reports 655 analyzed Salzburg recordings from 684 collected; the cohort is not age-diverse, with 423 participants younger than 30. Preserve its source population and interpretation. Original numerical reference outputs, source-code/model parity and defensible reproduction acceptance criteria remain to be bound for the age analysis. No authenticated ordered superiority criterion for the primary age-confound analysis is established. Larger coefficients, smaller p-values or better ECG decoding do not themselves demonstrate improvement. Existing Figure 3 source components and reviewed scalar bookkeeping remain useful secondary evidence; their identity, native execution and verifier limitations remain. No accepted explicit authority replacing the original primary was found in the inspected records. Current improvement rationale and REVIEW-rep014.json demonstrate a retargeting and internally reviewed TRF draft, not continuity with the retained original primary.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The original Salzburg statistical confound analysis represented by Figure 4—figure supplement 4: retain source-eligible participant identities and the ECG-retained, ECG-rejected and isolated cardiac-component conditions; reconstruct the source Bayesian age–slope models and the complete source-defined condition contrast. Bind the released measurements to source model columns and inferential outputs. This does not require raw ICA/spectral preprocessing or the separate full CamCAN analysis.
+### Current selected paper endpoint
 
-**Retained secondary policy:** Retain the genuine Figure 3A–D empirical result: original 20-person concurrent M/EEG/ECG forward TRFs and backward ECG reconstruction, preserving modality, cardiac-component condition and original temporal cross-validation. Report this separately; it cannot satisfy primary age-confound reproduction or improvement.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v1.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Map recovered published numeric subjectIDs0..19 to exact original20simultaneous recordings/sessions; authenticate immutable files, channel selection/order and all three condition membership.
+- Recover exact original nested-fourfold temporal partitions, artifacts/edges, preprocessing exposure and fold-to-.r reduction; preserve100Hz,+/-250mslags and50msHammingbasis.
+- The published120score panel is recovered; its source exporter, recording/partition joins and verified independently executed author comparator remain unresolved.
+- Authenticate executed Eelbrain/library defaults and source plain/filtered filename mapping; declared environment versions alone do not prove source execution parity.
+- Bind identical common inputs plus code-only assistance, source ECG-informed ICA exposure, protected finalECG targets, full120candidate outputs and six-condition paired decision with meaningful subject-level uncertainty.
+- The current improvement/v1 admission engine accepts one scalar score and cannot yet qualify a complete120-coordinate original panel decision. The assigned additive panel-comparison builder must bind a source-faithful all-condition decision and paired participant uncertainty; do not invent a global mean, win count, numeric margin or tolerance. This is an implementation gap, not a reason to change the paper metric.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The source paper contains an ordered ECG time-series reconstruction task in Figure 3C,D, using temporal response functions and the original 20-person simultaneous Salzburg M/EEG/ECG subset. This source-native task can supply the improvement route even though the historical registration emphasized descriptive age associations. Exact original decoder scores, source participant/file and fold identities, preprocessing exposure and runtime parity remain unrecovered; no active paper-win evaluator is admitted.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +60,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 26152 bytes; SHA-256 `c4a01e268f1c2534fd572a717c469e61b9fa6d9441b8a2c450b4cc97725a73de`.
+- Specification identity: 20907 bytes; SHA-256 `dcb4566c1b9d8e7fb5520d78db36a2880a37cdbd81dca8732ed68ec861b3c105`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

@@ -12,33 +12,46 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Retain Figure 3 sentence-response prediction as a separately named empirical comparison related to the encoding component; baseline-only and condition-specific results retain their source roles. A higher pooled correlation alone does not establish the whole original finding family or improved biological stimulus control. Preserve the broader source-report inventory as evidence rather than mandatory primary scope. Keep the model-conditioned noise simulation distinct from empirical prediction. Reviewed source limits: Final-typeset numerical identity and complete source-defined linguistic output mapping remain unresolved; the inspected author-final manuscript does not automatically establish final-paper numeric parity. The original registration did not freeze one scalar primary, a complete joint success rule or an authenticated ordered superiority criterion for the entire finding family. Relevant cohort eligibility, participant/item mappings, original inferential recipes, native references and defensible scientific acceptance criteria remain to be bound. Baseline texts recur across training and evaluation cohorts; pooled prediction correlation is not within-condition ranking or entirely new-item generalization. The historical mixed-model participant-dependence limitation remains visible. Improved responses to candidate-selected stimuli require source-protocol neural measurements for those selections; fixed observations from author-selected stimuli do not establish the intervention. The draft's 184-handle, six-main/24-supplementary requirement is not authorized merely by source existence or earlier semantic review. Preserve useful wider evidence without expanding the original primary. No explicit accepted authority selecting Figure 3 as the exclusive primary was found in inspected records. A deliberate narrower revision is a genuine scope choice; mixed-family outcome bundles remain unavailable if the schema cannot express their relationship.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** Retain the original five-person/1,000-baseline-item encoding design, three-person/1,500-item event-related search response analysis, its distinct blocked robustness companion, and the source-defined linguistic-feature relationships and controls with their own participant/item support. Preserve original normalization, raw-effect definitions, model controls and participant dependence. Do not infer every figure, all 14 people, all 29 sessions, raw acquisition or new stimulus intervention from the broader report inventory.
+### Current selected paper endpoint
 
-**Retained secondary policy:** Retain Figure 3 sentence-response prediction as a separately named empirical comparison related to the encoding component; baseline-only and condition-specific results retain their source roles. A higher pooled correlation alone does not establish the whole original finding family or improved biological stimulus control. Preserve the broader source-report inventory as evidence rather than mandatory primary scope. Keep the model-conditioned noise simulation distinct from empirical prediction.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v1.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Confirm author-final Figure3 r0.43(all1500) and r0.30(baseline1000) against final publication; rounded values are not exact acceptance thresholds.
+- Authenticate complete original training responses/feature rows, response normalization, official model-selection and strongest relevant author predictor/reference on this exact panel; saved author predictions are not an independent refit.
+- Bind authentic candidate prediction/output manifests, original item/condition rows, runtime and a source-matched author fit/apply execution; no qualifying execution is supplied here.
+- Finalize common source inputs and code-only assistance manifests, paired budgets, candidate freeze and evaluator-owned target isolation. Original public responses/predictions are historically exposed.
+- Predeclare meaningful prediction gain and participant/stimulus-aware uncertainty with a joint pooled/baseline/condition reporting rule; no effect-size, significance or simulation-ceiling substitution.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The final-paper Fig. 3 prediction task and author-code cohort are recoverable, but the exact numerical final-publication baseline has not been independently confirmed in this review. The primary author preprint reports a candidate value, which is recorded as version-specific evidence rather than silently promoted to the final-paper target. Existing prescribed reconstruction and a new two-person modify panel cannot establish a same-task win. The canonical scope also contains held-out-participant drive/suppress effects and linguistic-feature controls; Fig. 3 alone cannot establish whole-registration success until that complete scope rule is resolved.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +59,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 32464 bytes; SHA-256 `d7419a434b737ebca9818bcf05399a6dc6429869e6fee5c11bbfdd7d314cffe1`.
+- Specification identity: 26139 bytes; SHA-256 `fd4c7a210a744db46fec141dab981ad4aa41f244a5d50e962bc5d41a020ff3a6`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

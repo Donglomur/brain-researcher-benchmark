@@ -1,0 +1,132 @@
+{
+  "schema_version": "paper-source-endpoint-mapping/v1",
+  "task_id": "PAPER-ROOT-ADD-016",
+  "status": "source_to_endpoint_mapping_unresolved",
+  "executable": false,
+  "comparison_contract": null,
+  "comparison_targets": null,
+  "source_paper": {
+    "url": "https://doi.org/10.7554/eLife.100605.3",
+    "locator": "Original Figure 3C,D ECG reconstruction"
+  },
+  "source_result_unit": {
+    "atomic_score": "One exported backward-model Pearson r per released participant ID, recording modality and ICA condition.",
+    "original_grouping": "Six modality-by-ICA source groups, each containing20 participant-score rows. Grouping alone does not specify an inferential endpoint.",
+    "reported_group_statistic_or_contrast": "Unresolved: recover the exact original reported statistic, contrast and reduction before defining any comparison target.",
+    "independent_unit": "Participant, pending recording identity join; not a participant-condition row or a time sample."
+  },
+  "mandatory_support": {
+    "role": "cohort_audit_and_paired_uncertainty_support",
+    "source_row_count": 120,
+    "source_group_count": 6,
+    "groups": [
+      {
+        "id": "eeg__ECG_components",
+        "modality": "eeg",
+        "condition": "ECG_components"
+      },
+      {
+        "id": "eeg__ECG_not_rejected",
+        "modality": "eeg",
+        "condition": "ECG_not_rejected"
+      },
+      {
+        "id": "eeg__ECG_rejected",
+        "modality": "eeg",
+        "condition": "ECG_rejected"
+      },
+      {
+        "id": "meg__ECG_components",
+        "modality": "meg",
+        "condition": "ECG_components"
+      },
+      {
+        "id": "meg__ECG_not_rejected",
+        "modality": "meg",
+        "condition": "ECG_not_rejected"
+      },
+      {
+        "id": "meg__ECG_rejected",
+        "modality": "meg",
+        "condition": "ECG_rejected"
+      }
+    ],
+    "released_participant_ids": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19"
+    ],
+    "recording_identity_join": "unresolved",
+    "published_score_table": {
+      "name": "dec_r_ecg.csv",
+      "version": 1,
+      "bytes": 5222,
+      "sha256": "97ce1f3546cbc7cf447cdc6efa785b87037853039d0df88bc4de62d475797368",
+      "url": "https://osf.io/download/fm5t8/?revision=1",
+      "rows": 120,
+      "contents_read_in_this_review": false,
+      "values": null
+    },
+    "coverage_requirement": "Retain all original participant-condition rows and their grouping for cohort checks, faithful reduction and paired uncertainty. These rows are not automatically independent tests or improvement objectives."
+  },
+  "comparison_mapping": {
+    "status": "unresolved",
+    "row_role": "Audit and uncertainty support; not pointwise improvement constraints.",
+    "target_rule": "Recover and use the exact original reported group statistics or contrasts, their numerical references and source reduction. Do not replace them with an invented aggregate.",
+    "nonregression_policy": null,
+    "meaningful_gain_policy": null,
+    "uncertainty_policy": null,
+    "explicitly_not_adopted": [
+      "No requirement that every participant-condition r must improve or be nonregressing.",
+      "No automatic six-group Pareto rule.",
+      "No pooled120-row mean or win-count objective.",
+      "No inference that20 released numeric IDs have already been joined to20 independent recording identities."
+    ]
+  },
+  "source_protocol_preserved": "20-person simultaneous Salzburg M/EEG/ECG cohort, original modality channels and ECG-informed ICA, 100-Hz sampling, four-fold nested temporal CV, -250 to250-ms integration window and50-ms Hamming basis. Preserve all six conditions and preprocessing ECG exposure.",
+  "recovery_required_before_any_executable_comparison": [
+    "Recover exact author-reported group statistics or paired contrasts for Figure3C,D; source distributions alone do not identify an aggregate objective.",
+    "Recover temporal-fold-to-r reduction, original confidence-interval/test procedure and participant pairing.",
+    "Join the120 source rows to original recordings, channels, splits and complete population support.",
+    "Bind the appropriate published and replayed author reference to those exact recovered endpoints.",
+    "Explicitly declare justified reproduction tolerances, meaningful gains and source-aligned inferential/admission rules; do not derive them from convenient rounding or imported descriptive means."
+  ],
+  "source_metadata_pins": [
+    {
+      "id": "cardiac_recovery",
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/published-decoding-panel-v1/SOURCE_RECOVERY.json",
+      "bytes": 4730,
+      "sha256": "1f2902cb7b6fd2e9c4853213c9c0d87c9aa022169817f0fd41b9c229c903f0b0"
+    },
+    {
+      "id": "cardiac_readme",
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/published-decoding-panel-v1/README.md",
+      "bytes": 4736,
+      "sha256": "8023862517da77064fbee142022c4b5b28096aebfb143881f3c311ed44120291"
+    }
+  ],
+  "qualification": {
+    "task_activated": false,
+    "numeric_comparison_admitted": false,
+    "scientific_superiority": null,
+    "ready_count_increment": 0,
+    "scientific_payload_read_for_this_correction": false
+  }
+}

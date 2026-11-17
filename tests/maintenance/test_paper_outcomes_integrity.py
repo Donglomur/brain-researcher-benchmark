@@ -12,6 +12,8 @@ import unittest
 
 
 ROOT = Path(__file__).resolve().parents[2]
+pre_endpoint_selection_fixture = runpy.run_path(
+    str(ROOT / "tests/framework/test_catalog.py"))["pre_endpoint_selection_fixture"]
 source = runpy.run_path(str(ROOT / "tests/framework/test_source_integrity.py"))
 scientific = runpy.run_path(str(ROOT / "tests/framework/test_paper_reproduction.py"))
 legacy = runpy.run_path(str(ROOT / "tests/maintenance/test_paper_improvement_bindings.py"))
@@ -21,6 +23,7 @@ binding = checker.outcome_binding_module()
 
 
 class PaperOutcomesIntegrityTests(unittest.TestCase):
+    @pre_endpoint_selection_fixture
     def setUp(self):
         original = source["SourceIntegrityTests"]("test_valid_bundle_is_checked_without_execution")
         original.setUp()
@@ -366,10 +369,16 @@ class PaperOutcomesIntegrityTests(unittest.TestCase):
         for registry in (self.registry, self.prior_registry):
             registry["paper_improvement"]["pre_improvement_registry"] = original_pin
         raw = self.put(binding.SNAPSHOT, self.prior_registry)
-        self.registry["paper_outcomes"]["pre_outcomes_registry"] = binding.pin(binding.SNAPSHOT, raw)
+        snapshot_pin = binding.pin(binding.SNAPSHOT, raw)
+        self.registry["paper_outcomes"]["pre_outcomes_registry"] = snapshot_pin
+        enrolled = [index for index, item in enumerate(self.registry["historical_registries"])
+                    if item["path"] == binding.SNAPSHOT]
+        self.assertEqual(len(enrolled), 1)
+        self.registry["historical_registries"][enrolled[0]] = copy.deepcopy(snapshot_pin)
         self.save_registry()
         before = self.read(self.task_path)
-        with self.assertRaisesRegex(ValueError, "identity|historical"):
+        with self.assertRaisesRegex(ValueError,
+                "historical registry identity/pin changed: " + self.identifier + "/specification_id$"):
             old_binder.write_or_check(self.root, expected_count=1)
         self.assertEqual(self.read(self.task_path), before)
 

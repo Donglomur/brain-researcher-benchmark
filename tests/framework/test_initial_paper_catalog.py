@@ -31,6 +31,7 @@ put = fixtures.binding_fixture.put
 
 
 class InitialPaperCatalogTests(unittest.TestCase):
+    @fixtures.catalog_fixture.pre_endpoint_selection_fixture
     def setUp(self):
         temporary = tempfile.TemporaryDirectory(dir=Path(tempfile.gettempdir()).resolve())
         self.addCleanup(temporary.cleanup)

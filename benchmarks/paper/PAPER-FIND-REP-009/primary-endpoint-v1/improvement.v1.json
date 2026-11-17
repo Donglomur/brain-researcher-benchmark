@@ -1,0 +1,200 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-FIND-REP-009",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "A named original computational result supports meaningful method improvement, but original support/reference/runtime and a justified complete-family comparison remain unqualified. Existing scalar improvement admission cannot represent the full required panel; scope selection is not improvement readiness.",
+  "source_paper": {
+    "title": "Control of representation updating by higher-order thalamus enables history-based decision-making",
+    "url": "https://doi.org/10.1016/j.neuron.2026.04.045"
+  },
+  "evidence": [
+    {
+      "id": "author_deposit",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/19465617",
+      "locator": "Version 0, Figure 3.zip; task implementations/source-evidence-recovery-v1/evidence.json.",
+      "supports": "Existing selected-member intake identifies 3C data/script. The full-archive advertised MD5 is not independently verified and source identity does not establish original paper-run parity."
+    },
+    {
+      "id": "paper_fig3_panels",
+      "kind": "paper",
+      "url": "https://doi.org/10.1016/j.neuron.2026.04.045",
+      "locator": "Figure 3C and legend; article/supplement SHA256 364b3322e8798e77e00007a26af1fdf73261c5d3fe0c5b420f550ddc1d175674; text SHA256 cf7fa2ea0947c70d7e7a2d18c1c2386f0ef56fa9f3be1cea491360064dc46fb1.",
+      "supports": "Original Figure 3C context-decoding AUCs for 17 sessions, both conditions and four reported animals. Biological perturbation direction/significance remains retained context, not a decoder-improvement target."
+    },
+    {
+      "id": "paper_decoding_methods",
+      "kind": "paper",
+      "url": "https://doi.org/10.1016/j.neuron.2026.04.045",
+      "locator": "STAR Methods: Boosted decision-tree decoding; Figure 3C; Table S1; same pinned article.",
+      "supports": "Original 1.5-second neural window, 20-ms bins, six tones, neural predictors, held-trial decoder and training-label shuffle comparator. Original numeric AUCs, shuffle execution details and animal joins are unresolved."
+    },
+    {
+      "id": "original_scripts",
+      "kind": "author_code",
+      "url": "https://zenodo.org/api/records/19465617/files/Figure%203.zip/content",
+      "locator": "Version 0 Figure 3/3C/Figure3C_analysis.R; SHA256 4a52c0b0e57a6206fbdf9415ebbda485d99eddbc2f13f2e4b709bcba36687a54; grouping/split lines 20-83 and fitting/output lines 87-169.",
+      "supports": "Source experiment/laser loops, spk.st/uuid_tb pivot and zero-fill, seed 101 before partition/training, adaptive-CV/random-search caret xgbTree and source pROC on Randomised probabilities without explicit levels/direction. Paper-run ordering/partitions/runtime remain unresolved."
+    },
+    {
+      "id": "released_support",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/19465617",
+      "locator": "Figure 3/3C/Figure3C_data.RData; SHA256 9346505621a11d2704126b1e9c2b45dd02d3f645487effd4ab719c1978c19bea; 46260209 bytes. Historical 3C census SHA256 cc7416e68da0ae92b70deaf2681632f1f554cda47a09d19b77b8662a7bc4d05e.",
+      "supports": "Historical selected-member/census evidence identifies 17 experiment groups and 34 condition groups, without saved author models/AUCs. Original point/session/animal joins are unresolved. No new payload read or whole-archive verification is claimed."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Explicit versioned selection: original Figure 3C PPC neural decoding of recent-tone context/prevalence, all 17 source sessions, six tones and both laser conditions, with source-native held-trial probabilities/AUCs and indispensable shuffled-label control. Both outcomes address this original computational result. Biological laser-condition effects and Figure 3G remain retained context, not superiority targets.",
+      "evidence_ids": [
+        "paper_fig3_panels",
+        "paper_decoding_methods",
+        "original_scripts"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Author Zenodo record 19465617 Version 0; Figure 3/3C/Figure3C_data.RData, historical SHA256 9346505621a11d2704126b1e9c2b45dd02d3f645487effd4ab719c1978c19bea, 46260209 bytes; paired Figure3C_analysis.R SHA256 4a52c0b0e57a6206fbdf9415ebbda485d99eddbc2f13f2e4b709bcba36687a54. Existing selected-member/census evidence identifies a source route, not complete original-run or protected delivery equivalence. Advertised whole-archive MD5 remains unverified.",
+      "evidence_ids": [
+        "author_deposit",
+        "released_support",
+        "original_scripts"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "All 17 original Figure 3C recording sessions from four reported animals, both laser conditions (34 groups) and all six tones. Released census identifies 17 experiment groups, but original figure-point/session/animal joins and Table S1 discrepancies remain unresolved. UUID tokens/counts do not prove animal identities; sessions are not independent animals. No 3G rows are substituted or required in this explicit 3C selection.",
+      "evidence_ids": [
+        "paper_fig3_panels",
+        "paper_decoding_methods",
+        "released_support"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Retain source per-experiment/per-laser-condition stratified 70% training and held 30% trial partition via caret::createDataPartition, with set.seed(101) before partition and training. Source seed is established; original input order, R/package/RNG/runtime and paper-run trial manifests are not. Preserve source adaptive-CV/random-search tuning; its default recipe provenance remains unresolved. No new session-held, animal-held or temporal split substitutes.",
+      "evidence_ids": [
+        "original_scripts",
+        "paper_decoding_methods"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Use original preprocessed Figure 3C PPC neural firing features for all six tones and both conditions. Context is the target; tone, laser, trial/session and animal identities define support and pairing, not extra decoder predictors. Source pivots spk.st by uuid_tb and uses neural UUID feature columns. Exact anatomical feature membership remains unresolved.",
+      "evidence_ids": [
+        "paper_fig3_panels",
+        "original_scripts",
+        "released_support"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve Methods 1.5-second neural windows excluding optogenetic manipulation and 20-ms bins, original experiment/laser grouping and trial-feature pivot, and source zero-fill for absent long-table entries. Scripts start from preprocessed tables: upstream window/bin construction, anatomical selection, feature ordering and absent-entry semantics require authentication. Zero-filled absent entries are not proven biological silence.",
+      "evidence_ids": [
+        "paper_decoding_methods",
+        "original_scripts",
+        "released_support"
+      ]
+    },
+    "metric": {
+      "status": "unresolved",
+      "description": "Original Figure 3C per-session/per-laser-condition held-trial ROC-AUC from Randomised probabilities. pROC source calls omit explicit levels/direction: recover source-auto orientation and reconcile its predictive meaning before qualification. Do not silently replace it with fixed Randomised-positive AUC, reverse predictions after seeing outcomes or maximize a biological laser effect/P value. Native numeric AUC references and source-equivalent agreement criteria remain unresolved.",
+      "evidence_ids": [
+        "original_scripts",
+        "paper_fig3_panels"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Keep the complete original 17-session x 2-condition AUC panel, per-trial probabilities/support and source shuffled-label comparator, preserving OFF/ON pairing, animal nesting and six-tone support. Compare candidate and author on the identical original held trials; qualify a full-panel decision before iteration. No cross-condition scalar, favorable session subset or perturbation-difference magnitude becomes the primary score.",
+      "evidence_ids": [
+        "paper_fig3_panels",
+        "original_scripts",
+        "paper_decoding_methods",
+        "released_support"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Original Figure 3C held-trial context-decoding ROC-AUC for all 17 sessions and both laser conditions",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "No full-precision original 17x2 Figure 3C AUC vector or qualified source trial probabilities have been recovered. Printed biological direction/P value and local reconstruction outputs are not the original predictive baseline.",
+      "evidence_ids": [
+        "paper_fig3_panels",
+        "paper_decoding_methods",
+        "original_scripts",
+        "released_support"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Figure3C_analysis.R uses set.seed(101), source caret adaptive-CV/random-search xgbTree and source pROC. Original ordering/partitions/runtime/tuning and numeric parity remain unresolved. The local 17-session probability-MAE reference is calibration, not a source-equivalent published-method baseline.",
+      "evidence_ids": [
+        "paper_fig3_panels",
+        "paper_decoding_methods",
+        "original_scripts",
+        "released_support"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "Recover source performance/reference variability and justify meaningful improvement on the complete original panel before selecting a threshold. No new scalar, universal positive delta or maximized biological effect is supplied.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Qualify a complete 17x2-panel candidate-versus-author comparison with paired held trials, OFF/ON conditions and original animal/session dependence. Recover animal joins and handle multiplicity/tuning; original biological Wilcoxon significance is not predictive superiority.",
+      "independent_unit": "Four reported animals with unverified original animal/session mapping; paired sessions, laser conditions and trials are nested, not independent animals.",
+      "rationale": "Original structured support and dependence must be preserved; decision criteria may not be chosen after seeing final candidate outputs.",
+      "evidence_ids": [
+        "paper_fig3_panels",
+        "paper_decoding_methods",
+        "original_scripts",
+        "released_support"
+      ]
+    },
+    "paper_win_requires": [
+      "Authenticate original task support, observations/exposure, splits, metric and aggregation without a convenient new endpoint.",
+      "Independently calibrate complete published and strongest relevant source-author reference performance on identical original support.",
+      "Freeze candidate/code, source identities, meaningful complete-family comparison policy and cumulative budgets before final evaluation. Candidate reproduction success is not an improvement prerequisite.",
+      "Execute and independently verify original-input predictions with protected final targets and equal scientific inputs across paper_data and paper_data_author_code.",
+      "No local-control win, probability reconstruction, larger biological effect, smaller P value, new split/metric or favorable subset establishes this improvement."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "Comparison targets a named original-paper result; no current frontier comparison or SOTA result is claimed.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "No final-test feedback under this unqualified proposal. After qualification, iterate using source-matched training and declared validation feedback with cumulative accounting.",
+    "candidate_freeze": "Freeze method/code, source support and preprocessing exposure, original partitions, author baseline, complete-family scientific comparison and cumulative budgets before final evaluation.",
+    "final_evaluation": "Independently execute the frozen candidate on complete original held support and compare source-native output/metric families with qualified published and strongest relevant author references; report both outcomes independently for each information condition.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Calibrate the complete published Figure 3C prediction/AUC result and the strongest relevant original-author rerun on the same original inputs/partitions. Resolve source-auto pROC semantics explicitly; probability-MAE, fixed-positive substitutions and new splits do not establish paper improvement."
+  },
+  "blocking_issues": [
+    "Authenticate all 17 Figure 3C figure-point/session/animal joins, both conditions and complete six-tone support, including the four-animal claim/Table S1 discrepancy.",
+    "Recover source input order, exact original trial partitions, R/package/RNG versions, caret adaptive-CV/random-search defaults, training controls and XGBoost settings. Seed 101 is already source-supported.",
+    "Recover published full-precision 34-cell AUC and held-trial prediction vectors and source-equivalent strongest relevant author rerun provenance; no original numeric baseline is established.",
+    "Resolve original source-auto pROC levels/orientation and predictive interpretation before evaluator selection. Fixed-positive or corrected AUC is a separate protocol unless exact source equivalence is demonstrated.",
+    "Authenticate original PPC feature membership, upstream 1.5-second/20-ms construction, zero-fill semantics and original training-label shuffle procedure/support/output identities.",
+    "Justify numerical reproduction tolerance and meaningful full-panel AUC improvement/uncertainty with paired held trials, laser conditions and animal nesting. Do not maximize biological differences or significance.",
+    "Implement protected original-trial fitting/evaluation with independent granular verification, matched information conditions and cumulative budgets; historical exposed-label probability reconstruction is not predictive benchmarking.",
+    "Existing improvement/v1 admits one scalar candidate/published value. This vector endpoint requires future full-panel comparison/admission support; do not invent a global mean/win count. Coordinated primary-directory/central bindings remain pending."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve prior Figure 3C/3G biological-contrast definitions and source-recovery evidence at the exact base commit and unchanged canonical contracts. The Figure 3G 20-reported versus 18-released session discrepancy stays unresolved in that separate scope; it is not a prerequisite for this explicit complete Figure 3C selection. Biological ON/OFF effects, directions and P values are context, not values to maximize. Existing exposed-label probability-MAE is calibration, not predictive performance. No whole-paper or current-SOTA claim follows."
+  }
+}

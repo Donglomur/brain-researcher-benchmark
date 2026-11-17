@@ -237,6 +237,7 @@ class UnavailablePaperOutcomeBinderTests(unittest.TestCase):
     snapshot = PaperOutcomeBinderTests.snapshot
     reject_without_writes = PaperOutcomeBinderTests.reject_without_writes
 
+    @fixtures["pre_endpoint_selection_fixture"]
     def setUp(self, identifier="PAPER-FIND-013"):
         temporary = tempfile.TemporaryDirectory(prefix="invented-unavailable-paper-")
         self.addCleanup(temporary.cleanup)
@@ -495,6 +496,347 @@ class UnavailablePaperOutcomeBinderTests(unittest.TestCase):
         }
         self.save_marker()
         self.reject_without_writes("retain its source paper identity")
+
+
+class EndpointSelectionPreservationTests(unittest.TestCase):
+    def test_authenticated_endpoint_is_idempotent_and_rejects_drift(self):
+        """Preserve an adopted endpoint; this is not full26 source acceptance.
+
+        The accepted endpoint Fixture has deliberately small scope/gap records.
+        The adapter below validates real original coverage first, authenticates
+        those synthetic records through the real Reader, and calls the real
+        endpoint authority/context. Production authority is never disabled.
+        """
+        import ast
+        import hashlib
+        import json
+
+        original = fixtures["PaperOutcomesIntegrityTests"](
+            "test_three_definition_chain_preserves_original_source_without_execution")
+        self.addCleanup(original.doCleanups)
+        old_build = fixtures["old_binder"].build_outputs
+        validator = fixtures["old_binder"].load_validator(ROOT)
+        original_put = original.put
+
+        def legacy_build(*args, **kwargs):
+            kwargs["validator"] = validator
+            return old_build(*args, **kwargs)
+
+        def metadata_put(name, value):
+            # The old fixture normally copies its validator. Its explicit
+            # validator API lets this test reuse the real installed validator.
+            if name == "src/neurobench/paper_improvement.py":
+                return value
+            return original_put(name, value)
+
+        with mock.patch.object(original, "put", metadata_put), mock.patch.object(
+                fixtures["old_binder"], "build_outputs", legacy_build):
+            original.setUp()
+        root = original.root
+        selector = binding.endpoint_selection_module()
+        old_registry = copy.deepcopy(original.registry)
+        old_row = copy.deepcopy(original.row)
+        old_current = original.read(original.task_path)
+
+        fixture_path = ROOT / "tests/test_paper_endpoint_selection.py"
+        parsed = ast.parse(fixture_path.read_bytes())
+        classes = ast.Module(body=[node for node in parsed.body
+                                   if isinstance(node, ast.ClassDef)
+                                   and node.name in ("Rows", "Fixture", "EndpointSelectionControls")],
+                             type_ignores=[])
+        namespace = {"binding": binding, "selector": selector, "IDENTIFIER": original.identifier,
+                     "copy": copy, "hashlib": hashlib, "json": json,
+                     "unittest": unittest, "patch": mock.patch}
+        exec(compile(classes, str(fixture_path), "exec"), namespace)
+        endpoint = namespace["Fixture"]()
+        endpoint.oldrow = copy.deepcopy(old_row)
+        endpoint.entry["previous_registry_row"] = copy.deepcopy(old_row)
+        endpoint.entry["predecessor_task"]["identity"] = {
+            "pin": copy.deepcopy(old_row["specification"]),
+            "canonical_sha256": selector.canonical(json.loads(old_current))}
+        endpoint.entry["retained_documents"] = []
+        for role, pin in (
+                ("prior_improvement", old_row["specification_revision"]["improvement_contract"]),
+                ("prior_outcomes", old_row["paper_outcomes"]["outcomes"]),
+                ("prior_reproduction", old_row["paper_outcomes"]["reproduction_contract"])):
+            endpoint.entry["retained_documents"].append({
+                "role": role, "scope": "Retained invented original fixture",
+                "identity": {"pin": copy.deepcopy(pin),
+                             "canonical_sha256": selector.canonical(original.load(pin["path"]))}})
+        endpoint.refresh()
+        for name, data in endpoint.files.items():
+            if (name.startswith(endpoint.endpoint) or name.startswith("docs/provenance/")
+                    or name == original.task_path):
+                original.put(name, data)
+        registry = copy.deepcopy(old_registry)
+        registry["tasks"][0] = copy.deepcopy(endpoint.row)
+        registry["paper_outcomes"].update({
+            "scope_decisions": endpoint.previous.scope_pin,
+            "source_declaration_gaps": endpoint.previous.source_declaration_gap_pin,
+            "endpoint_selections": endpoint.authority_identity["pin"]})
+        original.put(binding.REGISTRY, registry)
+        source_control = namespace["EndpointSelectionControls"]("test_positive_declared_only_cells")
+        source_control.f, source_control.stack = endpoint, []
+        source_control.allow_fixture()
+        self.addCleanup(source_control.tearDown)
+        real_coverage = binding.coverage
+
+        def historical_fixture_coverage(current, read_pin):
+            # Only the old, generated roster uses the existing pre-adoption
+            # fixture opt-out. Selected current rows still pass the real fixed
+            # authority validator; do not use this adapter on repository data.
+            with mock.patch.object(selector, "AUTHORITY_PIN", None):
+                previous = real_coverage(old_registry, read_pin)
+            for pin_name, document_name in (
+                    ("scope_pin", "scope_decisions"),
+                    ("source_declaration_gap_pin", "source_declaration_gaps")):
+                pin = copy.deepcopy(getattr(endpoint.previous, pin_name))
+                setattr(previous, pin_name, pin)
+                setattr(previous, document_name, read_pin(pin, "Invented source authority"))
+            previous.endpoint_selections = selector.authenticate_authority(
+                current["paper_outcomes"].get("endpoint_selections"),
+                previous, current["tasks"], read_pin)
+            return previous
+
+        def snapshot():
+            return {path.relative_to(root).as_posix(): path.read_bytes()
+                    for path in root.rglob("*") if path.is_file()}
+
+        with mock.patch.object(binding, "coverage", historical_fixture_coverage):
+            before = snapshot()
+            outputs, report = binder.build_outputs(root)
+            for name in (original.task_path, binding.REGISTRY, binding.SNAPSHOT,
+                         original.home + "/" + binding.HISTORY):
+                self.assertEqual(outputs[name], before[name], name)
+            self.assertEqual(json.loads(outputs[binding.REGISTRY])["paper_outcomes"]["endpoint_selections"],
+                             endpoint.authority_identity["pin"])
+            self.assertFalse(report["scientific_qualification"])
+            self.assertEqual(binder.write_or_check(root, check=True)["changed_files"], 0)
+            self.assertEqual(binder.write_or_check(root, write=True)["changed_files"], 0)
+            self.assertEqual(snapshot(), before)
+
+            registry_raw = before[binding.REGISTRY]
+            key_offset = registry_raw.index(b'"endpoint_selection":') + 1
+            digest = endpoint.row["paper_outcomes"]["endpoint_selection"]["sha256"].encode()
+            self.assertEqual(registry_raw.count(digest), 1)
+            mutations = [
+                ("missing selector", binding.REGISTRY, key_offset, b"X"),
+                ("replaced selector pin", binding.REGISTRY, registry_raw.index(digest),
+                 b"0" if digest[:1] != b"0" else b"1"),
+                ("stale raw task", original.task_path, len(before[original.task_path]), b" ")]
+            for label, name, offset, replacement in mutations:
+                with self.subTest(label=label):
+                    path = root / name
+                    prior = path.read_bytes()
+                    try:
+                        with path.open("r+b") as handle:
+                            handle.seek(offset)
+                            self.assertEqual(handle.write(replacement), 1)
+                        mutated = snapshot()
+                        with self.assertRaises(ValueError):
+                            binder.write_or_check(root, write=True)
+                        self.assertEqual(snapshot(), mutated)
+                    finally:
+                        with path.open("r+b") as handle:
+                            if offset < len(prior):
+                                handle.seek(offset)
+                                handle.write(prior[offset:offset + 1])
+                            else:
+                                handle.truncate(len(prior))
+                    self.assertEqual(path.read_bytes(), prior)
+            self.assertEqual(snapshot(), before)
+
+
+    def test_legacy_main_preserves_only_authenticated_endpoint_titles(self):
+        """Actual old CLI with the existing bounded endpoint fixture only."""
+        import ast
+        import hashlib
+        import json
+
+        original = fixtures["PaperOutcomesIntegrityTests"](
+            "test_three_definition_chain_preserves_original_source_without_execution")
+        self.addCleanup(original.doCleanups)
+        old_build = fixtures["old_binder"].build_outputs
+        validator = fixtures["old_binder"].load_validator(ROOT)
+        original_put = original.put
+
+        def legacy_build(*args, **kwargs):
+            kwargs["validator"] = validator
+            return old_build(*args, **kwargs)
+
+        def metadata_put(name, value):
+            # The old fixture normally copies its validator. Its explicit
+            # validator API lets this test reuse the real installed validator.
+            if name == "src/neurobench/paper_improvement.py":
+                return value
+            return original_put(name, value)
+
+        with mock.patch.object(original, "put", metadata_put), mock.patch.object(
+                fixtures["old_binder"], "build_outputs", legacy_build):
+            original.setUp()
+        root = original.root
+        selector = binding.endpoint_selection_module()
+        old_registry = copy.deepcopy(original.registry)
+        old_row = copy.deepcopy(original.row)
+        old_current = original.read(original.task_path)
+
+        fixture_path = ROOT / "tests/test_paper_endpoint_selection.py"
+        parsed = ast.parse(fixture_path.read_bytes())
+        classes = ast.Module(body=[node for node in parsed.body
+                                   if isinstance(node, ast.ClassDef)
+                                   and node.name in ("Rows", "Fixture", "EndpointSelectionControls")],
+                             type_ignores=[])
+        namespace = {"binding": binding, "selector": selector, "IDENTIFIER": original.identifier,
+                     "copy": copy, "hashlib": hashlib, "json": json,
+                     "unittest": unittest, "patch": mock.patch}
+        exec(compile(classes, str(fixture_path), "exec"), namespace)
+        endpoint = namespace["Fixture"]()
+        endpoint.oldrow = copy.deepcopy(old_row)
+        endpoint.entry["previous_registry_row"] = copy.deepcopy(old_row)
+        endpoint.entry["predecessor_task"]["identity"] = {
+            "pin": copy.deepcopy(old_row["specification"]),
+            "canonical_sha256": selector.canonical(json.loads(old_current))}
+        endpoint.entry["retained_documents"] = []
+        for role, pin in (
+                ("prior_improvement", old_row["specification_revision"]["improvement_contract"]),
+                ("prior_outcomes", old_row["paper_outcomes"]["outcomes"]),
+                ("prior_reproduction", old_row["paper_outcomes"]["reproduction_contract"])):
+            endpoint.entry["retained_documents"].append({
+                "role": role, "scope": "Retained invented original fixture",
+                "identity": {"pin": copy.deepcopy(pin),
+                             "canonical_sha256": selector.canonical(original.load(pin["path"]))}})
+        endpoint.refresh()
+        for name, data in endpoint.files.items():
+            if (name.startswith(endpoint.endpoint) or name.startswith("docs/provenance/")
+                    or name == original.task_path):
+                original.put(name, data)
+        registry = copy.deepcopy(old_registry)
+        registry["tasks"][0] = copy.deepcopy(endpoint.row)
+        registry["paper_outcomes"].update({
+            "scope_decisions": endpoint.previous.scope_pin,
+            "source_declaration_gaps": endpoint.previous.source_declaration_gap_pin,
+            "endpoint_selections": endpoint.authority_identity["pin"]})
+        original.put(binding.REGISTRY, registry)
+        source_control = namespace["EndpointSelectionControls"]("test_positive_declared_only_cells")
+        source_control.f, source_control.stack = endpoint, []
+        source_control.allow_fixture()
+        self.addCleanup(source_control.tearDown)
+        real_coverage = binding.coverage
+
+        def historical_fixture_coverage(current, read_pin):
+            # Only the old, generated roster uses the existing pre-adoption
+            # fixture opt-out. Selected current rows still pass the real fixed
+            # authority validator; do not use this adapter on repository data.
+            with mock.patch.object(selector, "AUTHORITY_PIN", None):
+                previous = real_coverage(old_registry, read_pin)
+            for pin_name, document_name in (
+                    ("scope_pin", "scope_decisions"),
+                    ("source_declaration_gap_pin", "source_declaration_gaps")):
+                pin = copy.deepcopy(getattr(endpoint.previous, pin_name))
+                setattr(previous, pin_name, pin)
+                setattr(previous, document_name, read_pin(pin, "Invented source authority"))
+            previous.endpoint_selections = selector.authenticate_authority(
+                current["paper_outcomes"].get("endpoint_selections"),
+                previous, current["tasks"], read_pin)
+            return previous
+
+        def snapshot():
+            return {path.relative_to(root).as_posix(): path.read_bytes()
+                    for path in root.rglob("*") if path.is_file()}
+
+        import io
+        import sys
+        from contextlib import redirect_stdout, redirect_stderr
+
+        legacy = fixtures["old_binder"]
+        real_write = legacy.write_or_check
+        compatibility_name = "_paper_outcomes_compatibility"
+        absent = object()
+        prior_cache = sys.modules.get(compatibility_name, absent)
+
+        def restore_cache():
+            if prior_cache is absent:
+                sys.modules.pop(compatibility_name, None)
+            else:
+                sys.modules[compatibility_name] = prior_cache
+        self.addCleanup(restore_cache)
+
+        def one_historical_registration(root, check=False):
+            return real_write(root, check=check, expected_count=1)
+
+        def exact_fixture_api(module, name, default=None):
+            # The old CLI still loads the real production source. Select only
+            # the equivalent already-loaded real API instance so it shares the
+            # existing small-fixture coverage adapter. Never fabricate a report
+            # or replace Reader, authority, context or historical validation.
+            self.assertEqual(name, "validate_existing")
+            self.assertEqual(module.__name__, compatibility_name)
+            self.assertEqual(Path(module.__file__).resolve(),
+                             ROOT / "scripts/maintenance/bind_paper_outcomes.py")
+            return binder.validate_existing
+
+        def invoke():
+            output, errors = io.StringIO(), io.StringIO()
+            with redirect_stdout(output), redirect_stderr(errors):
+                status = legacy.main(["--root", str(root), "--check"])
+            return status, output.getvalue(), errors.getvalue()
+
+        with mock.patch.object(legacy, "write_or_check", one_historical_registration), \
+             mock.patch.object(legacy, "getattr", exact_fixture_api, create=True), \
+             mock.patch.object(binding, "coverage", historical_fixture_coverage):
+            selected_bytes = snapshot()
+            self.assertNotEqual(endpoint.row["title"], old_row["title"])
+            status, output, errors = invoke()
+            self.assertEqual((status, errors), (0, ""))
+            report = json.loads(output)
+            self.assertEqual((report["status"], report["changed_files"], report["paper_registrations"]),
+                             ("current", 0, 1))
+            self.assertEqual(snapshot(), selected_bytes)
+
+            registry_raw = selected_bytes[binding.REGISTRY]
+            title = endpoint.row["title"].encode()
+            self.assertEqual(registry_raw.count(title), 1)
+            cases = [("selected wrong title", registry_raw.index(title), b"X", "registration title"),
+                     ("missing authority", registry_raw.index(b'"endpoint_selections"') + 1,
+                      b"X", "cannot omit"),
+                     ("other registration field", registry_raw.index(b'"specification_alias": false')
+                      + len(b'"specification_alias": '), b"true ", "registration identity")]
+            for label, offset, replacement, message in cases:
+                with self.subTest(label=label):
+                    path = root / binding.REGISTRY
+                    try:
+                        with path.open("r+b") as handle:
+                            handle.seek(offset); handle.write(replacement)
+                        changed = snapshot()
+                        status, _, errors = invoke()
+                        self.assertEqual(status, 1)
+                        self.assertIn(message, errors)
+                        self.assertEqual(snapshot(), changed)
+                    finally:
+                        with path.open("r+b") as handle:
+                            handle.seek(offset)
+                            handle.write(registry_raw[offset:offset + len(replacement)])
+
+            # Restore the authentic preselection fixture and use its REAL
+            # unadapted coverage. An ordinary paper never gets the title waiver.
+            original.put(binding.REGISTRY, old_registry)
+            original.put(original.task_path, old_current)
+            normal_raw = original.read(binding.REGISTRY)
+            offset = normal_raw.index(old_row["title"].encode())
+            try:
+                with (root / binding.REGISTRY).open("r+b") as handle:
+                    handle.seek(offset); handle.write(b"X")
+                changed = snapshot()
+                with mock.patch.object(binding, "coverage", real_coverage), \
+                     mock.patch.object(selector, "AUTHORITY_PIN", None):
+                    status, _, errors = invoke()
+                self.assertEqual(status, 1)
+                self.assertIn("changed prior title", errors)
+                self.assertEqual(snapshot(), changed)
+            finally:
+                original.put(binding.REGISTRY, selected_bytes[binding.REGISTRY])
+                original.put(original.task_path, selected_bytes[original.task_path])
+            self.assertEqual(snapshot(), selected_bytes)
 
 
 if __name__ == "__main__":

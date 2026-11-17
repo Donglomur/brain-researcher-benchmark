@@ -12,33 +12,48 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: New-candidate representational alignment against the original reference models under the source metric and layer-selection rule, retained as a separate empirical performance outcome. Higher candidate RSA may be scientifically useful but does not establish reproduction or improvement of the original comparative findings. An explicit revision to the original model-ranking question would be a legitimate alternative primary choice, not a decision inferred from this entry. Reviewed source limits: Authentic derivative/video/checkpoint, participant/ROI and source layer identities remain unqualified. Historical preprocessing, reduction, dependency settings and exact original numerical profiles remain unresolved. The existing candidate/reference comparator is descriptive and does not independently authenticate input observations, source feature extraction, RDMs, RSA or original reference values. Candidate freeze, permitted public-panel feedback, selection-aware uncertainty, meaningful effect and a predeclared across-ROI decision rule remain unresolved; the public panel is not an unseen test. Stronger family contrasts, smaller p-values or higher candidate fit do not by themselves establish improvement of the comparative scientific findings or a biological mechanism. Scalar summaries do not cover the retained profile and curve families. Mixed primary-reproduction and separate candidate-performance targets remain unavailable as a same-target bundle when the schema cannot represent the distinction. The official pinned ICLR PDF was inspected through a bounded web read; no local manuscript content digest is claimed. Prior component reviews and the assistant-derived all-figure inventory do not establish named-result revision authority.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The retained comparative participant/regional RSA profiles and declared temporal-model versus classification-task and architecture/layer findings on the original ten-participant, 102 repeated-test-video panel. Preserve complete source-defined support for each named result and its necessary controls; do not infer a requirement for all 22 figures or substitute the separate training-video analysis.
+### Current selected paper endpoint
 
-**Retained secondary policy:** New-candidate representational alignment against the original reference models under the source metric and layer-selection rule, retained as a separate empirical performance outcome. Higher candidate RSA may be scientifically useful but does not establish reproduction or improvement of the original comparative findings. An explicit revision to the original model-ranking question would be a legitimate alternative primary choice, not a decision inferred from this entry.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v2.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate original versionB derivatives, repeated videos, ROI/participant identities, all 99 main source model checkpoints and complete emitted-layer catalogues.
+- Recover authentic original participant/layer/ROI RSA arrays, mean-then-layer-max profiles and test noise ceilings; no exact numerical reference vector is available.
+- Resolve historical feature/subclip aggregation, PCA100 without standardization, 102-row estimator and dependency settings from result-producing source evidence.
+- The existing original-panel comparator requires a larger 335-condition record with separate controls/training scopes. A selected-main-panel evaluator must preserve every 99-model/17-ROI reference, required test companions and exact layer selection without manufacturing absent 335-condition inputs or dropping genuine required main companions.
+- Freeze candidate representations and complete layer catalog, permitted public-panel feedback and pretrained exposure before final evaluation; do not call the public panel unseen.
+- Qualify authentic feature/RDM/RSA derivation and independent source-reference replay; predeclare meaningful effect, selection-aware participant/stimulus inference and across-ROI superiority rule.
+- Paired data/weights/common preprocessing assistance, official alignment-code manifest and resource allowances remain uninstantiated. No fitted brain readout or target reweighting is allowed as the same task.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. Original model-brain RSA is ordered, but the exact paper model/layer/ROI result vectors and historical native settings are not recovered. Descriptive temporal-model family differences and figure assembly are not themselves improvable performance endpoints. A prospective candidate must be compared against the original full reference catalog, not an arbitrary local model or selected ROI.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +61,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 492743 bytes; SHA-256 `ef10bae655a6e895870be85e631f5604e25331c34984f9f051e602e301ae7f57`.
+- Specification identity: 403516 bytes; SHA-256 `a0c4a6ac34f7e14e97caae80076b8d81bea61dff55732df75ff50bf5b51aa120`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

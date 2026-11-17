@@ -1,0 +1,266 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-ROOT-ADD-003",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "Selected original performance result; exact source membership, reference/runtime equivalence and justified full-support reproduction comparison remain unresolved.",
+  "source_paper": {
+    "title": "Driving and suppressing the human language network using large language models",
+    "url": "https://www.nature.com/articles/s41562-023-01783-7"
+  },
+  "evidence": [
+    {
+      "id": "language-final-task",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41562-023-01783-7/figures/3",
+      "locator": "Fig. 3 caption",
+      "supports": "Predicted sentence responses compared with the average language-network response of three evaluation participants."
+    },
+    {
+      "id": "language-final-design",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41562-023-01783-7/figures/1",
+      "locator": "Fig. 1a and b caption",
+      "supports": "Original train cohort, 1,000 baseline sentences, ridge/GPT2-XL encoding and prospective corpus-selected stimulus evaluation."
+    },
+    {
+      "id": "language-final-control",
+      "kind": "paper",
+      "url": "https://www.nature.com/articles/s41562-023-01783-7/figures/2",
+      "locator": "Fig. 2b and c caption",
+      "supports": "Distinct event-related three-person and blocked four-person experiments; response normalization and source condition contrasts."
+    },
+    {
+      "id": "language-preprint",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10120732/",
+      "locator": "Author preprint version 4, 30 October 2023; Results: Model captures most explainable variance in new participants",
+      "supports": "Version-specific report of Pearson r=0.43 over 1,500 stimuli and r=0.30 over baseline stimuli; this review has not independently confirmed final-publication numerical identity."
+    },
+    {
+      "id": "language-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/gretatuckute/drive_suppress_brains/7175a12dc25f8765e2fb2196d71c2ea98e97604b/README.md",
+      "locator": "Repository organization; Downloading data; Analyzing data and generating plots",
+      "supports": "Named event-related data release, train/evaluation participant distinction, model activations and fit/apply entrypoints."
+    },
+    {
+      "id": "language-figure-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/gretatuckute/drive_suppress_brains/7175a12dc25f8765e2fb2196d71c2ea98e97604b/src/plot_data/Figure3.ipynb",
+      "locator": "Settings and Figure 3 input-selection source cells",
+      "supports": "Original Fig. 3 participants 797, 841 and 880; lang_LH_netw; bySessVoxZ; 1,000 baseline plus 250 drive plus 250 suppress sentences."
+    },
+    {
+      "id": "language-fit-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/gretatuckute/drive_suppress_brains/7175a12dc25f8765e2fb2196d71c2ea98e97604b/src/run_analyses/fit_mapping.py",
+      "locator": "Argument defaults and LOAD NEURAL TARGET block",
+      "supports": "Original training IDs, last-token GPT2-XL layer 22, ridgeCV, Pearson metric, participant averaging and declared fMRI processing parameters."
+    },
+    {
+      "id": "language-aggregation-code",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/gretatuckute/drive_suppress_brains/7175a12dc25f8765e2fb2196d71c2ea98e97604b/src/plot_data/plot_utils.py",
+      "locator": "groupby_coord; item_scatter",
+      "supports": "Author item-level averaging and Pearson plotting calculation route; run not executed."
+    },
+    {
+      "id": "language-canonical-scope",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-ROOT-ADD-003/task.json",
+      "locator": "primary_outputs[0]; evaluation.observable_endpoints",
+      "supports": "The canonical source task includes held-out-participant drive/suppress response effects and linguistic-feature controls; Fig.3 correlation alone does not cover that registered scope."
+    },
+    {
+      "id": "selected-original-fig3-binding",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/gretatuckute/drive_suppress_brains/7175a12dc25f8765e2fb2196d71c2ea98e97604b/src/plot_data/plot_utils.py",
+      "locator": "Pinned source_binding.json at 9953b581a9c3a8c1b38b2a961ce6723f10739630; SHA256 61bab5c0afe2cc8ae1e013d3f890bdefb9364306539b3c76244f873cb2597482; item_scatter and fit_mapping.py source roles",
+      "supports": "Original participant/item membership, bySessVoxZ responses and participant-mean Pearson reduction; author-final r0.43/r0.30 is not separately confirmed final-typeset parity."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 3 sentence-response prediction on all 1500 sentences and three original evaluation participants, preserving the baseline1000 companion and original participant-mean Pearson reduction.",
+      "evidence_ids": [
+        "language-final-task",
+        "language-figure-code",
+        "selected-original-fig3-binding"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Author OSF ru38b release as loaded by brain-lang-data_participant_20230728.csv and associated GPT2-XL last-token activations; raw fMRI, blocked data and supplementary modify data are distinct assets.",
+      "evidence_ids": [
+        "language-code",
+        "language-figure-code"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Train IDs 848, 853, 865, 875 and 876; original main evaluation IDs 797, 841 and 880. The two other released event-related evaluation participants and four blocked-design participants are not interchangeable with this cohort.",
+      "evidence_ids": [
+        "language-fit-code",
+        "language-figure-code",
+        "language-final-control"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Train the encoding map on the original five-person 1,000-sentence baseline response set; evaluate on the original three-person 1,500-sentence search set. The 1,000 baseline sentences recur across people; only the 500 drive/suppress sentences are new stimuli. New nested splits are extensions.",
+      "evidence_ids": [
+        "language-final-design",
+        "language-figure-code",
+        "language-preprint"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Predictor inputs are the original sentence text/source representations and permitted original training-participant responses. Author comparator uses GPT2-XL last-token layer22 plus ridge. Item IDs are joining identifiers only, not model covariates. B/D/S condition labels and any metadata revealing heldout response-selection condition are evaluator-side companion-scoring metadata, not additional prediction features. Final response columns and saved author predictions remain evaluator-owned; historical public exposure is disclosed.",
+      "evidence_ids": [
+        "language-fit-code",
+        "language-code"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Match the released GLMsingle response extraction and bySessVoxZ normalization; retain the functionally localized lang_LH_netw target rather than switching to an anatomical ROI or a voxel subset. Source script records the exact extraction parameter identifiers.",
+      "evidence_ids": [
+        "language-fit-code",
+        "language-figure-code"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Pearson correlation r=sum((prediction-mean(prediction))*(response-mean(response)))/sqrt(sum((prediction-mean(prediction))^2)*sum((response-mean(response))^2)) across the original 1,500 sentence items.",
+      "evidence_ids": [
+        "language-preprint",
+        "language-aggregation-code"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Select lang_LH_netw, participants797,841,880 and every original item1..1500 exactly once per person. Average normalized response_target over the three people for each item, then Pearson-correlate with one candidate prediction per item. Retain baseline1..1000 and original drive/suppress subsets as source companions and participant diagnostics. Do not pool4500rows as independent observations.",
+      "evidence_ids": [
+        "language-final-task",
+        "language-figure-code",
+        "selected-original-fig3-binding"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "All5original training people x1000baselineitems; all3evaluation people x1500items, ROIlang_LH_netw. Exactly1500candidate predictions,4500original response cells; baseline1000 repeated across people plus250drive/250suppress new sentences. Preserve source companions without importing the distinct modify or blocked cohorts.",
+      "evidence_ids": [
+        "language-final-task",
+        "language-figure-code",
+        "selected-original-fig3-binding"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Both arms receive the same source-permitted sentence text/representations and original five-person/1000baseline training responses. Item IDs are joining keys only. Original B/D/S condition labels are reserved for evaluator-side companion scoring and are not predictor inputs. If source GPT2-XL activations are supplied as common representations, pin/disclose their exact provenance and rows; trained ridge weights are an author solution, not neutral common inputs. The three-person/1500item final response_target rows and saved author prediction columns stay evaluator-owned. Public historical exposure is recorded. Candidate must output exactly one finite prediction per item1..1500; no target/reference readback or model fitting on final responses. B/D/S labels and response-selection event metadata are evaluator-side scoring fields, not candidate features; item identifiers cannot be used as surrogate condition covariates.",
+      "evidence_ids": [
+        "language-final-task",
+        "language-figure-code",
+        "selected-original-fig3-binding"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "selected-original-performance-family",
+      "kind": "indexed_array_family",
+      "description": "Original Figure3 pooled1500 and baseline1000 prediction correlations, recomputed from mandatory complete candidate predictions and original three-person item means; no pointwise author-prediction equivalence requirement.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "selected-original-performance-family",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "original-prediction-correlations",
+            "manifest_key": "original-prediction-correlations",
+            "source_quantity": "Original pooled1500 and baseline1000 Pearson r; drive/suppress and person diagnostics separately named.",
+            "membership": "fixed",
+            "shape": [
+              2
+            ],
+            "axes": [
+              {
+                "name": "panel",
+                "units": "identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "labels",
+                  "values": [
+                    "all1500",
+                    "baseline1000"
+                  ]
+                }
+              }
+            ],
+            "allowed_dtypes": [
+              "float64"
+            ],
+            "units": "Pearson r",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Calculate independently on each declared complete source subset using the same three-person item means; companion reductions never replace primary pooledr.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "language-final-task",
+              "language-figure-code",
+              "selected-original-fig3-binding"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "language-final-task",
+          "language-figure-code",
+          "selected-original-fig3-binding"
+        ]
+      },
+      "required_granular_output_ids": [
+        "all1500-item-predictions",
+        "full-support-accounting"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Require all1500 finite source-keyed predictions and complete three-person source-response support for auditable evaluator recomputation. Assess reproduction on the original pooled1500 and baseline1000 Pearson correlations with justified reference/tolerance/uncertainty; submitted predictions are supporting outputs, not required to match author predictions pointwise. Any separately named algorithm-faithful replication with prediction parity would be a distinct claim. Preserve source condition/participant diagnostics without changing the primary metric.",
+        "independent_unit": "Sentence stimulus crossed with participant; three independent evaluation people, repeated item responses and training/evaluation baseline stimuli are dependent.",
+        "dependence": "Sentence stimulus crossed with participant; three independent evaluation people, repeated item responses and training/evaluation baseline stimuli are dependent.",
+        "multiplicity": "All declared primary outputs and companions must pass the predeclared complete-family rule; no posthoc successful subset. Exact rule unresolved.",
+        "rationale": "Source structured output is known but authentic identity/reference linkage and justified comparison are incomplete. No arbitrary tolerance is supplied.",
+        "evidence_ids": [
+          "language-final-task",
+          "language-figure-code",
+          "selected-original-fig3-binding"
+        ]
+      },
+      "evidence_ids": [
+        "language-final-task",
+        "language-figure-code",
+        "selected-original-fig3-binding"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Confirm author-final Figure3 r0.43(all1500) and r0.30(baseline1000) against final publication; rounded values are not exact acceptance thresholds.",
+    "Authenticate complete original training responses/feature rows, response normalization, official model-selection and strongest relevant author predictor/reference on this exact panel; saved author predictions are not an independent refit.",
+    "Bind authentic candidate prediction/output manifests, original item/condition rows, runtime and a source-matched author fit/apply execution; no qualifying execution is supplied here.",
+    "Finalize common source inputs and code-only assistance manifests, paired budgets, candidate freeze and evaluator-owned target isolation. Original public responses/predictions are historically exposed.",
+    "Predeclare meaningful prediction gain and participant/stimulus-aware uncertainty with a joint pooled/baseline/condition reporting rule; no effect-size, significance or simulation-ceiling substitution."
+  ]
+}

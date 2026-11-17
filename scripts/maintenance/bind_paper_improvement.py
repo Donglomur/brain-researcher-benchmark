@@ -301,9 +301,27 @@ def preserved_outcome_outputs(root, current_bytes, current, expected_count):
     require([row["id"] for row in originals] == [row["id"] for row in rows if not is_initial(row)],
             "paper registration IDs/order changed from historical registry")
     current_rows = {row["id"]: row for row in rows}
+    path = safe_path(ROOT, "scripts/maintenance/bind_paper_outcomes.py")
+    require(path.is_file(), "paper outcome binder is required to preserve a newer projection")
+    spec = importlib.util.spec_from_file_location("_paper_outcomes_compatibility", path)
+    require(spec is not None, "cannot load the paper outcome binder")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
+    validate_existing = getattr(module, "validate_existing", None)
+    require(callable(validate_existing), "validate_existing API is required for paper outcomes")
+    authenticated_endpoint_ids = validate_existing(root)["authenticated_endpoint_ids"]
+    require(type(authenticated_endpoint_ids) is list
+            and all(type(identifier) is str for identifier in authenticated_endpoint_ids)
+            and set(authenticated_endpoint_ids) <= set(current_rows),
+            "invalid authenticated endpoint identity report")
     for prior in originals:
         row = current_rows[prior["id"]]
         for key in ("id", "title", "track", "task_directory", "specification_id", "specification_alias", "original_specification"):
+            if key == "title" and prior["id"] in authenticated_endpoint_ids:
+                # The newer validator proved this current title against the
+                # complete accepted endpoint authority and selected task bytes.
+                continue
             require(row.get(key) == prior.get(key),
                     "historical registry identity/pin changed: " + prior["id"] + "/" + key)
     task_root = root / "benchmarks/paper"
@@ -335,16 +353,6 @@ def preserved_outcome_outputs(root, current_bytes, current, expected_count):
                 "Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.").strip()
             require(row.get("role") == "calibration_only" and row.get("scope_notes") == expected_notes,
                     "historical implementation calibration classification changed: " + row["id"])
-    path = safe_path(ROOT, "scripts/maintenance/bind_paper_outcomes.py")
-    require(path.is_file(), "paper outcome binder is required to preserve a newer projection")
-    spec = importlib.util.spec_from_file_location("_paper_outcomes_compatibility", path)
-    require(spec is not None, "cannot load the paper outcome binder")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
-    validate_existing = getattr(module, "validate_existing", None)
-    require(callable(validate_existing), "validate_existing API is required for paper outcomes")
-    validate_existing(root)
     return {SNAPSHOT: snapshot_bytes, REGISTRY: current_bytes}
 
 

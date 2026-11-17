@@ -141,6 +141,7 @@ def validate_existing(root=ROOT):
     previous_registry = read_pin(registry["paper_outcomes"]["pre_outcomes_registry"], "Pre-outcomes registry")
     prior_lineage(reader, previous_registry, papers, contexts)
     return {"status": "current", "registered_tasks": len(registry["tasks"]), "paper_tasks": len(papers),
+            "authenticated_endpoint_ids": sorted(binding.endpoint_selection_ids(previous)),
             "scientific_qualification": False, "bytes_read": reader.bytes_read}
 
 
@@ -193,6 +194,16 @@ def build_outputs(root=ROOT):
             contexts[identifier] = context
             archived_raw, archive_pin = raw(reader, home + "/" + binding.HISTORY)
             previous_document = context["previous_document"]
+            if binding.has_endpoint_selection(row):
+                # coverage/context authenticate the complete fixed authority and
+                # all selected documents. Retain its exact reviewed current bytes;
+                # the legacy projection below describes the preceding scope.
+                current_raw, current_pin = raw(reader, row["specification"]["path"])
+                binding.need(current_pin == row["specification"],
+                             "Selected endpoint current task identity changed")
+                outputs[archive_pin["path"]] = archived_raw
+                outputs[current_pin["path"]] = current_raw
+                continue
         else:
             archived_raw, current_pin = raw(reader, home + "/task.json")
             binding.need(current_pin == prior["specification"], "Current paper bytes changed before outcome binding")
@@ -344,6 +355,8 @@ def build_outputs(root=ROOT):
         updated["paper_outcomes"]["scope_decisions"] = previous.scope_pin
     if previous.source_declaration_gap_pin is not None:
         updated["paper_outcomes"]["source_declaration_gaps"] = previous.source_declaration_gap_pin
+    if previous.endpoint_selections is not None:
+        updated["paper_outcomes"]["endpoint_selections"] = copy.deepcopy(registry["paper_outcomes"]["endpoint_selections"])
     outputs[binding.REGISTRY] = binding.encode(updated)
     for relative in outputs:
         checker.checked_path(root, relative, missing=True)

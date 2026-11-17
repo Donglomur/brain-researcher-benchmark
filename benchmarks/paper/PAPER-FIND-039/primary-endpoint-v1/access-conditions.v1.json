@@ -1,0 +1,69 @@
+{
+  "schema_version": "paper-endpoint-access-conditions/v1-proposal",
+  "task_id": "PAPER-FIND-039",
+  "status": "source_unresolved",
+  "policy_sha256": "1f1781fb0dff7e53a4d6827122b55634c1c27fa5016ac81e75c2e8c2fb3e1702",
+  "common_policy_conditions_pointer": "/source_assistance_conditions",
+  "common": {
+    "paper": {
+      "title": "Spatial coding dysfunction and network instability in the aging medial entorhinal cortex",
+      "url": "https://doi.org/10.1038/s41467-025-63229-0"
+    },
+    "original_data": "Original Figure5i RF prepared activity and source eligibility/downsampling on all61 sessions; identical original source folds and phase-specific training target exposure. Source-derived preparation must be explicitly common; source answer/shuffle files are protected, not participant data.",
+    "support": "All61 original RF sessions (34young,27aged), eligible cells/maps, original downsampled indices, ten real-arm train/test partitions, original spike-shuffle training memberships, complete candidate/author/shuffle predictions and fold scores, complete age-specific session vectors and separate original summaries. No age-pooled scalar or selected favorable sessions.",
+    "split": "Preserve train_vs_test_blocks: ten array_split test partitions in original downsampled order; random training selection without replacement from the complement, size int(n*0.9). Candidate and author share original real-arm train/test memberships. Source spike-shuffle separately draws training membership from the same eligible complement; preserve its own realization. Original downsampling/RNG/memberships are unrecovered; newly drawn or mouse-held-out splits cannot silently replace them.",
+    "preprocessing": "Preserve spatialcell99, non-single-map/SilN==2 eligibility, smoothing, map clustering and spike-number/position/speed/count matching/downsampling. Resolve paper5cm versus notebook sigma5bins×2cm smoothing correspondence; no convenient kernel is substituted.",
+    "metric": "Decoder score is the mean of cos(true track angle minus predicted angle) over original test observations; higher is better, with 1 for perfect prediction.",
+    "aggregation": "Average the ten decoder scores within each original session, then retain separate young and aged stratum summaries. Source Figure 5i uses the both-map/random-selection score; no pooled scalar is substituted.",
+    "permitted_observations": "Only declared original input activity and phase-appropriate training targets; held-out VR target angles and downstream decoding/shuffle answer files stay evaluator-only. Disclose original target-derived eligibility/preparation while preserving original representation; no cross-fold/cross-condition final-test feedback.",
+    "published_scalar_role": "Printed paper anchors may be common; they never substitute for protected complete native references.",
+    "input_manifest_sha256": null,
+    "paper_manifest_sha256": null,
+    "shared_preparation_and_tools_manifest_sha256": null,
+    "evaluation_identity_sha256": null,
+    "exposure_policy_sha256": null,
+    "access_budget": null,
+    "resource_budget": null
+  },
+  "conditions": {
+    "paper_data": {
+      "available": "Common paper, complete selected original data in declared representation, task contract and explicitly common preparation/tools.",
+      "excluded": "Official algorithm-bearing author method implementation or author-derived solutions, except preparation explicitly declared common.",
+      "preparation_boundary": "Original processed inputs are common; exact permitted common preparation manifest is pending. Operator-only preprocessing must not expose withheld method or protected answers."
+    },
+    "paper_data_author_code": {
+      "available": "Exactly the same common paper/data/tools plus pinned official endpoint implementation and authenticated dependencies.",
+      "author_code": {
+        "repository": "https://github.com/GiocomoLab/Herber2024",
+        "revision": "1a9dd3040c9f77662caf26a34c9452403579087a",
+        "endpoint_files": [
+          "Figure 5.ipynb",
+          "pipeline/process_spikes.py"
+        ]
+      },
+      "author_code_manifest_sha256": null
+    }
+  },
+  "paired_design": {
+    "author_code_is_intended_only_information_difference": true,
+    "identical_original_support": true,
+    "identical_split_and_metric": true,
+    "resource_accounting": "Same declared accounting and finite budgets, exact values remain unfrozen.",
+    "independent_candidate_freezes": "Separate code per outcome/condition; no final-test feedback transfer.",
+    "outcomes": "Reproduction and improvement independently scored in each condition.",
+    "score_control_roles": "Real-label native endpoint only for superiority; full source-shuffle outputs remain mandatory control/fidelity companions, never rewarded for increasing."
+  },
+  "protected_evaluator_only": [
+    "Held-out VR target angles and saved author/shuffle decoding answers",
+    "Private original score vectors and fitted author replay state",
+    "Cross-condition/final-test feedback before candidate freeze"
+  ],
+  "authenticity_holds": [
+    "Authenticate exact61-session mouse/age/cell roster, >10spatialcell99/non-single-map/SilN==2 selection.",
+    "Recover original downsampling, real and spike-shuffle train/test memberships and RNG provenance; newly drawn folds do not establish historical same-task parity.",
+    "Resolve paper/notebook smoothing and preprocessing correspondence; recover complete original score vectors and qualify strongest original decoder replay.",
+    "Freeze source-native real-label vector comparison across both age strata with justified effect/mouse-dependent uncertainty. Panel-admission/interface construction is pending; no pooled scalar invented.",
+    "Authentic input/source custody, independent qualified references and replay, protected paired participant execution, frozen candidate interface, exact exposure manifests and finite access/compute budgets remain unresolved. No scientific/model execution is claimed."
+  ],
+  "readiness_claim": false
+}

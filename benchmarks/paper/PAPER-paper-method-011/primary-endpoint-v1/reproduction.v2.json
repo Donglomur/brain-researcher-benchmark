@@ -1,0 +1,344 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-011",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "An explicit new source-defined endpoint is selected; original authentic reference, exact support/recipe, native producer and scientific equivalence rule remain unresolved. Original Figure 5 behavioral decoding comparison on all 15 behavioral groups over Area2_Bump, MC_Cycle, MC_Maze and MC_RTT, using all source-eligible author decoders and their runs, original causal neural histories and 5-ms evaluation. Reproduce the complete author panel; compare a candidate against MINT and the strongest relevant original comparator on the same group support. No whole-paper superiority is implied.",
+  "source_paper": {
+    "title": "An emerging view of neural geometry in motor cortex supports high-performance decoding",
+    "url": "https://elifesciences.org/articles/89421"
+  },
+  "evidence": [
+    {
+      "id": "mint-paper-task",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11790250/",
+      "locator": "Results: Behavioral decoding across multiple datasets; Comparison to other decoders; Figures 4–5; Methods Datasets and Tables 2–4",
+      "supports": "Four-dataset primary behavioral panel uses 15 behavioral groups and causal neural history. The paper also analyzes nine empirical datasets, simulations, a multitask network, limited data, neuron loss, and NLB neural-state estimation."
+    },
+    {
+      "id": "mint-paper-metric",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11790250/",
+      "locator": "Methods: Decoding R2; Hyperparameter optimization; Neural Latents Benchmark; Table 5",
+      "supports": "Defines 5-ms behavioral coefficient of determination, circular treatment of phase, averaging within groups, ten network initializations, training-only model selection, and separate NLB endpoints."
+    },
+    {
+      "id": "mint-code-scope",
+      "kind": "author_code",
+      "url": "https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/README.md",
+      "locator": "Getting Started; Running MINT; Repository Structure",
+      "supports": "Author release is explicitly a basic implementation; some paper variants and search automation are omitted. Provides Area2_Bump, MC_Maze, and MC_RTT examples and a separate comparator repository."
+    },
+    {
+      "id": "mint-code-score",
+      "kind": "author_code",
+      "url": "https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/run/utils/evaluate_and_save.m",
+      "locator": "evaluate_and_save and compute_R2",
+      "supports": "Bins reference/prediction traces to 5 ms, concatenates trial samples, removes insufficient-history NaN predictions, and computes 1−SSE/SST for each behavior dimension."
+    },
+    {
+      "id": "mint-code-area2",
+      "kind": "author_code",
+      "url": "https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/run/%2Bconfig/area2_bump.m",
+      "locator": "trial_alignment; test_alignment; trajectory settings; causal/history configuration",
+      "supports": "Area2 example uses movement-aligned evaluation −100 to +500 ms, 25-ms smoothing, 20-ms spike bins, and a 240-ms causal history. This verifies one example, not all paper variants."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original Figure 5 prediction of all 15 source behavioral groups from simultaneous neural spikes over Area2_Bump, MC_Cycle, MC_Maze and MC_RTT. Reproduction covers original source-eligible method/run outputs; candidate improvement uses identical behavioral targets and information boundaries against the strongest relevant author comparator. Other paper families remain separate.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "The four original Figure 5 datasets are Area2_Bump, MC_Cycle, MC_Maze and MC_RTT. Paper-cited DANDI versions and MC_Cycle Zenodo route are retained in source SCOPE.json. Immutable original payload equivalence and trajectory-library provenance are unbound; other paper datasets and newly generated simulations cannot substitute.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-code-scope"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "Table 2 reports Area2_Bump 65 neurons/364 trials; MC_Cycle 112/273; MC_Maze 182/2295; MC_RTT 130/1080. Retain all 15 group definitions and source method eligibility. Original unit/trial identities, animal/session joins and scored-row masks are not authenticated by these counts.",
+      "evidence_ids": [
+        "mint-paper-task"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original Table 4 train/test counts are Area2_Bump 272/92, MC_Cycle 174/99, MC_Maze 1721/574 and MC_RTT 810/268. MC_RTT excludes the first two of 270 candidate test segments for common history. Recover original trial order, membership and training-only validation folds; do not use NLB splits or a newly easier split.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "All candidates and author baselines receive the same permitted training data and causal trailing spike observations with 20-ms bins. Source MINT histories are 240/200/300/480 ms for Area2_Bump/MC_Cycle/MC_Maze/MC_RTT. Future neural observations and final-test behavioral labels are unavailable to candidate fitting. Acausal factorial cells remain separate.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-area2"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve Tables 3–4 dataset-specific alignments, smoothing, trajectory averaging/dimensionality and evaluation epochs. Authenticate MC_RTT behavioral AutoLFADS libraries, MC_Cycle phase units/period/branch cut and original 5-ms phase aggregation. A basic three-dataset MATLAB example does not prove the complete source recipe.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-scope",
+        "mint-code-area2"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Evaluate original 5-ms behavior R2, 1 minus summed squared prediction error divided by summed squared deviations about the original target mean, with circular distances and circular mean for MC_Cycle phase. Insufficient-history masks and original eligible samples must match. Do not substitute Pearson correlation, MAE, linear phase R2 or an invented pooled scalar.",
+      "evidence_ids": [
+        "mint-paper-metric",
+        "mint-code-score"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Average per-dimension R2 within each source behavioral group and groups within each dataset, retaining all 15 groups and per-dimension outputs. Original feedforward/GRU results average ten initializations. Preserve source method eligibility, all original method/run bundles and undefined cases; no invented overall scalar or averaging over a favorable subset.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Original Figure 5 behavioral decoding comparison on all 15 behavioral groups over Area2_Bump, MC_Cycle, MC_Maze and MC_RTT, using all source-eligible author decoders and their runs, original causal neural histories and 5-ms evaluation. Reproduce the complete author panel; compare a candidate against MINT and the strongest relevant original comparator on the same group support. No whole-paper superiority is implied. The members below declare original source quantities, not authenticated arrays; unknown row/layer/method incidence is left unresolved rather than filled with nominal identities.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-scope",
+        "mint-code-score",
+        "mint-code-area2"
+      ]
+    },
+    "permitted_observations": {
+      "status": "unresolved",
+      "description": "Original Figure 5 training/validation data and matched causal spike input; evaluation behavioral truth is operator-held. Any AutoLFADS-derived trajectory library provided in common must be source-pinned and disclosed in both assistance conditions; it is not raw-data-only access. Both assistance conditions share the exact admitted original observations; only the code condition additionally receives the pinned official method implementation. Common artifact and exposure manifests remain unresolved.",
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-scope",
+        "mint-code-score",
+        "mint-code-area2"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "selected_original_endpoint",
+      "kind": "indexed_array_family",
+      "description": "Original Figure 5 behavioral decoding comparison on all 15 behavioral groups over Area2_Bump, MC_Cycle, MC_Maze and MC_RTT, using all source-eligible author decoders and their runs, original causal neural histories and 5-ms evaluation. Reproduce the complete author panel; compare a candidate against MINT and the strongest relevant original comparator on the same group support. No whole-paper superiority is implied.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "selected_original_endpoint",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "original_method_group_r2",
+            "manifest_key": "original_method_group_r2",
+            "source_quantity": "Original Figure 5 method/dataset/group R2 profiles retaining source eligibility and network runs",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_row",
+                "units": "source-defined ordered output record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Ordered original eligible method, dataset, group and run rows; all 15 groups; exact row/seed identities remain unresolved."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless R2",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Per-dimension then within-group mean, ten-run means only where source requires; retain undefined cases and original support.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "mint-paper-task",
+              "mint-paper-metric",
+              "mint-code-scope",
+              "mint-code-score",
+              "mint-code-area2"
+            ]
+          },
+          {
+            "id": "per_dimension_run_r2",
+            "manifest_key": "per_dimension_run_r2",
+            "source_quantity": "Every eligible behavioral dimension and source method/run R2",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_row",
+                "units": "source-defined ordered output record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original method/dataset/behavior-dimension/run records; phase retained as circular."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless R2",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Native source 5-ms sample and insufficient-history masks; no linear phase substitution.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "mint-paper-task",
+              "mint-paper-metric",
+              "mint-code-scope",
+              "mint-code-score",
+              "mint-code-area2"
+            ]
+          },
+          {
+            "id": "dataset_r2",
+            "manifest_key": "dataset_r2",
+            "source_quantity": "Original four-dataset method summaries",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_row",
+                "units": "source-defined ordered output record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Original eligible method/dataset records, not a padded method-by-dataset rectangle."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "dimensionless R2",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Source group averaging within datasets, with source method eligibility preserved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "mint-paper-task",
+              "mint-paper-metric",
+              "mint-code-scope",
+              "mint-code-score",
+              "mint-code-area2"
+            ]
+          },
+          {
+            "id": "reported_trace_companions",
+            "manifest_key": "reported_trace_companions",
+            "source_quantity": "Source primary_behavior Figure 4c reported prediction traces and named MAE/correlation companions",
+            "membership": "fixed",
+            "shape": [
+              null
+            ],
+            "axes": [
+              {
+                "name": "source_row",
+                "units": "source-defined ordered output record",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact source trace and companion member roster requires recovery; they do not replace Figure 5 R2."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "source-defined trace units, MAE and correlation",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Preserve original trace support and source companion metric; no aggregate across unlike units.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "mint-paper-task",
+              "mint-paper-metric",
+              "mint-code-scope",
+              "mint-code-score",
+              "mint-code-area2"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "mint-paper-task",
+          "mint-paper-metric",
+          "mint-code-scope",
+          "mint-code-score",
+          "mint-code-area2"
+        ]
+      },
+      "required_granular_output_ids": [
+        "original_method_group_r2",
+        "per_dimension_run_r2",
+        "dataset_r2",
+        "reported_trace_companions"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Recreate every declared selected-endpoint array from authentic original observations and source-equivalent methods; compare against authenticated historical author outputs or independently calibrated publication-equivalent author replay. Tolerance and comparison policy remain unresolved.",
+        "independent_unit": "Original held-out trials; contiguous temporal blocks for MC_RTT. Runs, behavioral dimensions and groups are not independent biological replicates.",
+        "dependence": "Preserve paired inputs and original unit/session/trial or participant dependencies; model runs and array cells are not independent biological samples.",
+        "multiplicity": "All declared members and required companions must be covered; no favorable member or reduced-support pass. Exact simultaneous equivalence rule is unresolved.",
+        "rationale": "Published narrative and software signatures do not prove original source reference identity or numerical reproduction. No synthetic coordinates, value hashes or tolerances are supplied.",
+        "evidence_ids": [
+          "mint-paper-task",
+          "mint-paper-metric",
+          "mint-code-scope",
+          "mint-code-score",
+          "mint-code-area2"
+        ]
+      },
+      "evidence_ids": [
+        "mint-paper-task",
+        "mint-paper-metric",
+        "mint-code-scope",
+        "mint-code-score",
+        "mint-code-area2"
+      ]
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate all four original payloads, unit/trial/order/animal identities, Table 4 membership, source validation folds and every scored sample/mask.",
+    "Recover all 15-group author R2 profiles and per-dimension/method/run outputs; 11/15 best groups and 37/42 comparison counts are not numeric baselines. MINT/Wiener/Kalman/feedforward/GRU eligibility and the extra MC_Maze naive-Bayes condition must match source; the retained 93 bundle inventory is a support obligation, not authenticated results.",
+    "Resolve MC_Cycle circular phase units/period and native aggregation; retain source histories and dataset-specific recipes. MC_RTT behavioral AutoLFADS trajectory-library provenance and complete native comparator implementation remain unqualified.",
+    "The basic official MATLAB release omits variants/search automation and its native bridge excludes MC_Cycle. Complete selected-panel source producers and independent derivation verification are still required.",
+    "Freeze original-panel reproduction tolerance, meaningful R2 effect, paired trial/contiguous-block uncertainty, seed treatment and full 15-group improvement decision before final scoring.",
+    "Paired input representations, any common pretrained trajectory artifacts, original author-code manifest, candidate access/resource budgets and executable scorer/runtime are not admitted."
+  ]
+}

@@ -12,33 +12,52 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: Figure 5 regional-distribution results, Figures 6–7 word-onset and noun-versus-verb decoding, and Figures 2–3 confound-adjusted responsiveness/modulation remain separately named original empirical components. Preserve their implementations and prior broader definitions. They are neither silently claimed nor automatic prerequisites for the selected Figure 4a–c primary. Reviewed source limits: Original recording, transcript/annotation, example, contact and release-version manifests remain unqualified. The reviewed arXiv v1 source is not asserted to be byte/content equivalent to a separate proceedings version. Exact source negative sampling and buffers, original split identities/seeds and correct configured regression runner remain unresolved. A later release, new split or multichannel input cannot silently replace the selected source task. Source window endpoint handling and identities remain unresolved; nominal 250-ms windows, 100-ms steps and a −1 to +1 second interval do not justify inventing a 21-window manifest. Original contact selection/tie policies, reference curves, map and example identities, source numerical arrays and justified reproduction tolerances remain unresolved. Published timing scalars cannot represent the complete selected panel. Independent authentication of source observations, original training and native evaluation remains unresolved; supplied-score software components alone do not establish it. A candidate may change decoder architecture for the same qualified prediction task, while retaining the independently reproduced original linear baseline. Nonlinear AUC gains do not establish the original linear-specific timing interpretation or language-specificity beyond acoustic correlates. Meaningful effect, participant-aware and selection-aware superiority uncertainty, access/exposure and resource policies remain unresolved. Original electrode-level display intervals do not establish new confirmatory participant-level superiority uncertainty. No AUC margin, original array identity, held-out score, runtime readiness, scientific success or additional task count is established by the selection. Canonical task, outcome, catalog/CLI and admission wording require consistent bounded adoption with predecessor preservation.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** Complete Figure 4a–c sentence-onset versus no-speech decoding from the original Brain Treebank cohort and recorded movies: source linear contact/time outputs, eligible-contact peak map, source example curve and training-selected temporal/frontal held-out curves. Preserve the original ten-participant population, remove the source 114 corrupted contacts, retain subject 5 in nonregional analyses while excluding that subject from atlas-region analyses and brain plots. Preserve source single-electrode inputs, balanced examples and speech-free buffers, original shared splits, training-fitted preprocessing and five-fold training-CV contact selection. Exact window endpoints and identities remain subject to source verification, not a presumed count.
+### Current selected paper endpoint
 
-**Retained secondary policy:** Figure 5 regional-distribution results, Figures 6–7 word-onset and noun-versus-verb decoding, and Figures 2–3 confound-adjusted responsiveness/modulation remain separately named original empirical components. Preserve their implementations and prior broader definitions. They are neither silently claimed nor automatic prerequisites for the selected Figure 4a–c primary.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v1.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Recover source ROC-AUC arrays or an independently reproduced exact author baseline for the full original panel.
+- Freeze original recording/transcript/example and electrode inventories, negative-sample selection, split seeds and the correct regression runner configuration.
+- Verify train-only top-ten electrode selection, complete time-window coverage and paper panel aggregation; generic all-ROC averaging is not equivalent.
+- Validate native alignment/preprocessing and retain documented corrupted-contact and subject-5 region exclusions.
+- Define meaningful effect, participant-aware uncertainty, fixed access/resource budgets and a working protected decoding evaluator.
+- Authenticate exact original temporal/frontal DK grouping, top-ten cutoff tie convention, source 95% display interval formula and nearest-pial/fsaverage projection artifacts.
+- Preserve explicit author-all-contact versus new 133-exclusion wrapper distinction; authenticate historical source result lineage rather than declaring reconstructed mask automatically equivalent.
+- Resolve paper balanced-test versus native unstratified split, exact terminal-window support and actual source samples across contact/window calls; no silent repairs.
+- Source figure4-producer-v2 is delivered owner/reference code with generated controls only; native recordings, runtime and complete original panel agreement remain unexecuted/unqualified.
+- Pending full-panel comparison/admission implementation: improvement/v1 scalar fields cannot alone admit this original vector or curve panel. Preserve source-defined metrics and full support; do not invent a pooled scalar. An additive panel comparator is being constructed separately and is not bound here.
+- No authentic computation/admission policy or immutable result identity is fabricated. All four AI outcome/assistance cells remain unknown.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The paper has an ordered decoding task, but the original release/splits, exact ROC-AUC panel numbers and full source aggregation have not been recovered. The registered implementation tests word responsiveness and cannot stand in for that baseline.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +65,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 47497 bytes; SHA-256 `c030ea3ebca0be88e291a1903de891d0b0570d5fb22786a819202ad24bc6e53d`.
+- Specification identity: 59104 bytes; SHA-256 `247b5f7bffeb4b8c5301e4e9532139912f9b0cf0b49efd0461818830ad7fee66`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

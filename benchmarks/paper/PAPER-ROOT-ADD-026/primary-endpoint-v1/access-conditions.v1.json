@@ -1,0 +1,110 @@
+{
+  "schema_version": "paper-selected-endpoint-paired-source-conditions/v1",
+  "task_id": "PAPER-ROOT-ADD-026",
+  "selection_version": "selected-original-endpoint/v1",
+  "status": "unresolved",
+  "common_input_representation": "Original prepared broadband condition-response traces with authenticated electrode/participant/area identities and source stimulus/category/time variables, 72 conditions and819 samples. The same original condition means and source preprocessing/selection exposure are declared common assistance. Training condition traces are available according to the original folds; query traces remain operator targets. A corrected column branch cannot be mixed with the source-reference branch.",
+  "author_code_boundary": "Only the code condition receives author revision09cd778fac545d406cba39ba408f0f00fbe39975 DN/fit/Figure3 implementations. Original prepared condition arrays and documented source folds are common; fitted parameters, reference predictions and operator diagnostics are withheld. Equations in the paper remain visible in both conditions. Source-derived local producer code is algorithm-bearing assistance, not automatically common data.",
+  "conditions": {
+    "paper_data": {
+      "available": "Original paper, exact selected-task data/common representation, public task contract and explicitly common preparation artifacts.",
+      "excluded": "Official implementation, algorithm-bearing author solutions and native reference output artifacts except explicitly common prepared representations listed above."
+    },
+    "paper_data_author_code": {
+      "available": "Exactly the same common materials plus the authenticated source-pinned author implementation for this selected endpoint.",
+      "comparison": "Same observations, train/evaluation support, metric and complete companion policy. Author code is the intended access difference."
+    }
+  },
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Predict each selected visual electrode’s broadband response time course to single and repeated image presentations from stimulus timing and image category. The original performance comparator is the category-scaled DN model used in Figure 3C.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Visual ECoG dataset OpenNeuro ds004194 is author-linked. Registration names version 3.0.0, but the reviewed primary sources do not pin that version’s exact processed files to the published Figure 3 fit inputs. Freeze the source release, trial manifest and preprocessing lineage before comparison.",
+      "evidence_ids": [
+        "adapt-readme"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "Four participants p11–p14; all 79 visually responsive electrodes and their V1–V3/VOTC/LOTC memberships must be preserved. The Data summary gives 17/15/47, while Figure 2C reverses the first two counts; exact electrode-to-area identities require source-roster reconciliation, not selection of whichever grouping favors a candidate.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-figure"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Original stochastic rule:12 folds over72 conditions,66 training/six test traces per fold with one test condition per image category and12 temporal conditions per category. Published assignments are absent from the inspected unseeded random.sample implementation. Recover them if available, or reproduce this exact source-authorized stochastic recipe with a logged seed and immutable fold manifest. Candidate and author must share rerun folds; source-protocol parity and a predeclared justified tolerance to published results are required. A changed split unit, altered condition allocation or new participant holdout is an extension.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Binary stimulus-presence time course and image-category identity; target traces comprise six image categories crossed with six single-stimulus durations and six repeated-stimulus ISIs. Fitted parameters, published target traces and assessment labels are not candidate prediction inputs.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Preserve source common-average rereferencing, broadband extraction, artifact/trial/responsiveness selection, run-wise prestimulus correction and averages for all 72 conditions. Original full fits use named response samples 0..818; source CV positional columns2:821 include temp_cond and omit the last response. Resolve publication lineage before choosing source_positional_cv versus corrected named_response_columns. Figure3 responsive/none/S and active category-selective/P callers are not interchangeable.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-figure",
+        "adapt-score"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "For each held-out trace, R² = 1 − sum_t(y_t−prediction_t)² / sum_t(y_t−mean(y))², using the pinned NaN handling; higher is better. Code rounds condition values to three decimals and fold means to four.",
+      "evidence_ids": [
+        "adapt-score",
+        "adapt-fit"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "For each held condition compute original trace R² with source NaN behavior, round to three decimals; average six conditions and round fold to four; average all twelve folds and round electrode to four. Retain every electrode and separately summarize V1–V3, VOTC and LOTC using source 1,000 electrode-resample medians, median of medians and16th/84th percentiles. These descriptive electrode bootstraps are not independent-participant superiority inference.",
+      "evidence_ids": [
+        "adapt-paper",
+        "adapt-fit",
+        "adapt-figure",
+        "adapt-score"
+      ]
+    }
+  },
+  "common_input_manifest_sha256": null,
+  "author_code_manifest_sha256": null,
+  "evaluation_identity_manifest_sha256": null,
+  "exposure_policy_sha256": null,
+  "resource_budget": null,
+  "access_budget": null,
+  "official_code_source": {
+    "url": "https://github.com/ABra1993/tAdaptation_ECoG",
+    "revision_or_archive_version": "09cd778fac545d406cba39ba408f0f00fbe39975",
+    "limit": "Source metadata only; the exact permitted file/member package and publication-equivalent endpoint implementation are not yet authenticated."
+  },
+  "publication_exposure": "Original published data/protocol may already be public; disclose historical and common-representation exposure. Do not claim adversarial isolation or prospective unseen-data generalization from an operator library.",
+  "outputs": "Independent reproduction/improvement cells for both conditions. Reference outputs and final target diagnostics are evaluator-owned; any leakage or new assistance must be disclosed and cannot silently preserve the condition label.",
+  "activation_blocks": [
+    "Bind publication-equivalent processed response inputs and the exact 79-electrode/four-participant/area roster, resolving the 17/15 caption reversal without selecting a favorable area assignment.",
+    "Resolve source positional CV columns2:821 versus named response0..818 and active P/category-selective versus Figure3 none/S/responsive callers against result-producing evidence. Corrected columns are a separate branch until parity is justified.",
+    "Authenticate historical 12-fold/72-condition assignments or qualify the exact source stochastic recipe with logged folds, paired candidate/author exposure and justified published-result calibration; preserve66 train/six query conditions with one query per category.",
+    "Recover complete native DN and DN(S) Figure3C reference outputs, original runtime/numerical parity including scalar-SSE least_squares objective, source rounding and source region reduction. No authentic fits have been run by this construction.",
+    "Specify full-region superiority and participant/electrode dependence, meaningful effect and reproduction tolerance; freeze common artifacts, exact author-code package, finite episode/search/resource limits and protected final scoring.",
+    "The selected source endpoint retains a complete metric array without an authenticated original scalar reduction. Existing improvement/v1 scalar admission cannot qualify this full-panel comparison; an additive full-panel comparator/admission engine and reviewed complete-support criterion remain required. No new mean, win count or convenient scalar is substituted."
+  ],
+  "runtime_qualified": false,
+  "scientific_outcome": "unknown"
+}

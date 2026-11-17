@@ -1,0 +1,824 @@
+{
+  "schema_version": "paper-panel-comparison/v1",
+  "task_id": "PAPER-paper-method-replacement-005",
+  "objective": "reproduce_and_surpass_source_paper_same_panel",
+  "disposition": "source_unresolved",
+  "disposition_reason": "Blocked documentation example, not an activated benchmark contract or a verified strongest-reference comparison.",
+  "source_paper": {
+    "title": "Neural Encoding and Decoding at Scale",
+    "url": "https://proceedings.mlr.press/v267/zhang25bw.html"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://raw.githubusercontent.com/mlresearch/v267/main/assets/zhang25bw/zhang25bw.pdf",
+      "locator": "Final ICML paper Sections 3.1, 4.1, 5.2; Table 1; Appendices A, C and E Table 10",
+      "supports": "Original cohort, task masks, transfer/fine-tuning design, score definitions and reported NEDS baselines; final publisher PDF inspected through an existing primary-source recovery receipt."
+    },
+    {
+      "id": "author_readme",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/README.md",
+      "locator": "Datasets and Models; training/evaluation script instructions",
+      "supports": "Author baseline route and distinction between pretraining and held-out session lists."
+    },
+    {
+      "id": "train_roster",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/train_eids.txt",
+      "locator": "Complete 74-line session roster at pinned revision",
+      "supports": "Original source pretraining session membership."
+    },
+    {
+      "id": "test_roster",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/data/test_eids.txt",
+      "locator": "Complete 10-line session roster at pinned revision",
+      "supports": "Original source held-out session membership."
+    },
+    {
+      "id": "prepare",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/prepare_data.py",
+      "locator": "params; mean_fr/keep_unit_idxs; Data partition block",
+      "supports": "20-ms bins, stimulus-aligned two-second windows, code unit threshold and seeded 70/10/20 trial allocation."
+    },
+    {
+      "id": "evaluation",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/utils/eval_utils.py",
+      "locator": "co_smoothing_eval; neg_log_likelihood; bits_per_spike; plot_psth",
+      "supports": "Evaluation modality masks, Poisson-gain metric, neuron mean, classification accuracy and flattened un-clipped trial R2."
+    },
+    {
+      "id": "preprocess",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/yzhang511/NEDS/61d2ef65556dbbc2b828d542f19bd4e7134c92f3/src/utils/ibl_data_utils.py",
+      "locator": "load_trials_and_mask; align_data",
+      "supports": "Eligibility, alignment, validity-mask and scaling provenance requiring paper/code reconciliation."
+    },
+    {
+      "id": "panel-paper",
+      "kind": "paper",
+      "url": "https://proceedings.mlr.press/v267/zhang25bw.html",
+      "locator": "Original NEDS Table1 and AppendixE Table10",
+      "supports": "Original complete endpoint groups; no new runtime, strongest-reference, tolerance or inference qualification."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original NEDS Table1 and AppendixE Table10",
+      "evidence_ids": [
+        "panel-paper"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source facts are retained in the pinned source metadata; exact original dataset identity remains unqualified.",
+      "evidence_ids": [
+        "panel-paper"
+      ]
+    },
+    "cohort": {
+      "status": "unresolved",
+      "description": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+      "evidence_ids": [
+        "panel-paper"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "Source facts are retained in the pinned source metadata; exact original split identity remains unqualified.",
+      "evidence_ids": [
+        "panel-paper"
+      ]
+    },
+    "inputs": {
+      "status": "unresolved",
+      "description": "Source facts are retained in the pinned source metadata; exact original inputs identity remains unqualified.",
+      "evidence_ids": [
+        "panel-paper"
+      ]
+    },
+    "preprocessing": {
+      "status": "unresolved",
+      "description": "Source facts are retained in the pinned source metadata; exact original preprocessing identity remains unqualified.",
+      "evidence_ids": [
+        "panel-paper"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Each encoding coordinate is the source per-neuron Poisson log-likelihood gain over that neuron's evaluation-mean-null divided by total spikes and ln2; average defined neurons within each session, then retain the original ten-session summary. Choice/block use ordinary accuracy. Wheel/whisker R2 flattens all evaluated trials/time, without clipping negative values.",
+      "evidence_ids": [
+        "panel-paper"
+      ]
+    },
+    "aggregation": {
+      "status": "unresolved",
+      "description": "Retain complete original groups and coordinates; no mixed-unit pooled score.",
+      "evidence_ids": [
+        "panel-paper"
+      ]
+    }
+  },
+  "episode": {
+    "improvement_loop": "After admission, iterate with the original source pretraining sessions and target-session training/validation partitions, preserving task masks. Use validation to select methods and hyperparameters; maintain explicit separate neural and behavioral feedback.",
+    "candidate_freeze": "Freeze candidate and author implementations, original-object/unit/trial manifests, mask contract, preprocessing resolution, hyperparameters, seeds, pretrained exposure, resources and joint endpoint decision before final scoring.",
+    "final_evaluation": "Evaluate all original held-out test trials for the same ten target animals after source-permitted fine-tuning; compare the complete endpoint vector with the authentic author baseline. Preserve per-animal results and disclose original public test exposure. A different split remains an extension.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep final published NEDS scores, a future native rerun, local engineering ridge scores and any separately verified current-SOTA results distinct. A rerun with repaired preprocessing cannot be attributed to the published paper without provenance."
+  },
+  "lineage": {
+    "scalar_contract": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/improvement.v1.json",
+      "bytes": 12936,
+      "sha256": "8ff082fb4c8bd7cb5ee74d049d606c07acffd8a53479c6e51b2051c6cbd538af"
+    },
+    "selected_endpoint_contract": null,
+    "notes": "Original scalar contract remains unchanged. Selected endpoint adoption and per-task panel binding are separate."
+  },
+  "panel": {
+    "source_manifest": {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-005/reproduction.v1.json",
+      "bytes": 32956,
+      "sha256": "4b47bbf83808a6ae5e825094a4ed191c667adcbb51cac00f44c9241f4ce39d4f"
+    },
+    "support_scope": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning. Allnine original metrics remain separate; no fabricated absent model-by-endpoint cells.",
+    "groups": [
+      {
+        "id": "encode_all",
+        "role": "score",
+        "description": "Original NEDS Table1 and AppendixE Table10 / encode_all",
+        "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+        "support_description": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "encode_choice",
+        "role": "score",
+        "description": "Original NEDS Table1 and AppendixE Table10 / encode_choice",
+        "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+        "support_description": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "encode_block",
+        "role": "score",
+        "description": "Original NEDS Table1 and AppendixE Table10 / encode_block",
+        "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+        "support_description": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "encode_wheel",
+        "role": "score",
+        "description": "Original NEDS Table1 and AppendixE Table10 / encode_wheel",
+        "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+        "support_description": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "encode_whisker",
+        "role": "score",
+        "description": "Original NEDS Table1 and AppendixE Table10 / encode_whisker",
+        "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+        "support_description": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "decode_choice",
+        "role": "score",
+        "description": "Original NEDS Table1 and AppendixE Table10 / decode_choice",
+        "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+        "support_description": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "decode_block",
+        "role": "score",
+        "description": "Original NEDS Table1 and AppendixE Table10 / decode_block",
+        "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+        "support_description": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "decode_wheel",
+        "role": "score",
+        "description": "Original NEDS Table1 and AppendixE Table10 / decode_wheel",
+        "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+        "support_description": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "decode_whisker",
+        "role": "score",
+        "description": "Original NEDS Table1 and AppendixE Table10 / decode_whisker",
+        "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+        "support_description": "All74 source pretraining sessions and10 source held-out sessions; original70/10/20 target-session training/validation/test trial protocol. The published summaries concern ten held-out animals/sessions after source-permitted fine-tuning.",
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      }
+    ],
+    "coordinates": [
+      {
+        "id": "encode_all::original-published-summary",
+        "group_id": "encode_all",
+        "role": "score",
+        "support_key": "original-published-summary",
+        "metric": "source neural encoding bits_per_spike",
+        "unit": "bits per spike",
+        "direction": "higher",
+        "published_baseline": {
+          "status": "verified",
+          "value": 0.27,
+          "description": "Rounded published NEDS summary anchor; NOT qualified as strongest relevant author comparator.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduced_author_baseline": {
+          "status": "unresolved",
+          "value": null,
+          "description": "Native matched strongest-author replay remains unqualified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduction_tolerance": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "No justified tolerance recovered; neither SEM nor printing precision is substituted.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "minimum_gain": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "Meaningful gain for this source coordinate is not predeclared or justified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "gain_eligible": true,
+        "gain_operator": ">=",
+        "control_rule": {
+          "status": "not_applicable",
+          "minimum": null,
+          "maximum": null,
+          "rationale": "This source coordinate is a score, not a negative control.",
+          "evidence_ids": []
+        },
+        "metric_domain": {
+          "minimum": null,
+          "maximum": null,
+          "rationale": "Mathematical metric domain, not a performance or effect criterion.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "encode_choice::original-published-summary",
+        "group_id": "encode_choice",
+        "role": "score",
+        "support_key": "original-published-summary",
+        "metric": "source neural encoding bits_per_spike",
+        "unit": "bits per spike",
+        "direction": "higher",
+        "published_baseline": {
+          "status": "verified",
+          "value": 0.06,
+          "description": "Rounded published NEDS summary anchor; NOT qualified as strongest relevant author comparator.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduced_author_baseline": {
+          "status": "unresolved",
+          "value": null,
+          "description": "Native matched strongest-author replay remains unqualified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduction_tolerance": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "No justified tolerance recovered; neither SEM nor printing precision is substituted.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "minimum_gain": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "Meaningful gain for this source coordinate is not predeclared or justified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "gain_eligible": true,
+        "gain_operator": ">=",
+        "control_rule": {
+          "status": "not_applicable",
+          "minimum": null,
+          "maximum": null,
+          "rationale": "This source coordinate is a score, not a negative control.",
+          "evidence_ids": []
+        },
+        "metric_domain": {
+          "minimum": null,
+          "maximum": null,
+          "rationale": "Mathematical metric domain, not a performance or effect criterion.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "encode_block::original-published-summary",
+        "group_id": "encode_block",
+        "role": "score",
+        "support_key": "original-published-summary",
+        "metric": "source neural encoding bits_per_spike",
+        "unit": "bits per spike",
+        "direction": "higher",
+        "published_baseline": {
+          "status": "verified",
+          "value": 0.1,
+          "description": "Rounded published NEDS summary anchor; NOT qualified as strongest relevant author comparator.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduced_author_baseline": {
+          "status": "unresolved",
+          "value": null,
+          "description": "Native matched strongest-author replay remains unqualified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduction_tolerance": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "No justified tolerance recovered; neither SEM nor printing precision is substituted.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "minimum_gain": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "Meaningful gain for this source coordinate is not predeclared or justified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "gain_eligible": true,
+        "gain_operator": ">=",
+        "control_rule": {
+          "status": "not_applicable",
+          "minimum": null,
+          "maximum": null,
+          "rationale": "This source coordinate is a score, not a negative control.",
+          "evidence_ids": []
+        },
+        "metric_domain": {
+          "minimum": null,
+          "maximum": null,
+          "rationale": "Mathematical metric domain, not a performance or effect criterion.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "encode_wheel::original-published-summary",
+        "group_id": "encode_wheel",
+        "role": "score",
+        "support_key": "original-published-summary",
+        "metric": "source neural encoding bits_per_spike",
+        "unit": "bits per spike",
+        "direction": "higher",
+        "published_baseline": {
+          "status": "verified",
+          "value": 0.12,
+          "description": "Rounded published NEDS summary anchor; NOT qualified as strongest relevant author comparator.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduced_author_baseline": {
+          "status": "unresolved",
+          "value": null,
+          "description": "Native matched strongest-author replay remains unqualified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduction_tolerance": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "No justified tolerance recovered; neither SEM nor printing precision is substituted.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "minimum_gain": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "Meaningful gain for this source coordinate is not predeclared or justified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "gain_eligible": true,
+        "gain_operator": ">=",
+        "control_rule": {
+          "status": "not_applicable",
+          "minimum": null,
+          "maximum": null,
+          "rationale": "This source coordinate is a score, not a negative control.",
+          "evidence_ids": []
+        },
+        "metric_domain": {
+          "minimum": null,
+          "maximum": null,
+          "rationale": "Mathematical metric domain, not a performance or effect criterion.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "encode_whisker::original-published-summary",
+        "group_id": "encode_whisker",
+        "role": "score",
+        "support_key": "original-published-summary",
+        "metric": "source neural encoding bits_per_spike",
+        "unit": "bits per spike",
+        "direction": "higher",
+        "published_baseline": {
+          "status": "verified",
+          "value": 0.11,
+          "description": "Rounded published NEDS summary anchor; NOT qualified as strongest relevant author comparator.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduced_author_baseline": {
+          "status": "unresolved",
+          "value": null,
+          "description": "Native matched strongest-author replay remains unqualified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduction_tolerance": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "No justified tolerance recovered; neither SEM nor printing precision is substituted.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "minimum_gain": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "Meaningful gain for this source coordinate is not predeclared or justified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "gain_eligible": true,
+        "gain_operator": ">=",
+        "control_rule": {
+          "status": "not_applicable",
+          "minimum": null,
+          "maximum": null,
+          "rationale": "This source coordinate is a score, not a negative control.",
+          "evidence_ids": []
+        },
+        "metric_domain": {
+          "minimum": null,
+          "maximum": null,
+          "rationale": "Mathematical metric domain, not a performance or effect criterion.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "decode_choice::original-published-summary",
+        "group_id": "decode_choice",
+        "role": "score",
+        "support_key": "original-published-summary",
+        "metric": "ordinary classification accuracy",
+        "unit": "fraction correct",
+        "direction": "higher",
+        "published_baseline": {
+          "status": "verified",
+          "value": 0.91,
+          "description": "Rounded published NEDS summary anchor; NOT qualified as strongest relevant author comparator.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduced_author_baseline": {
+          "status": "unresolved",
+          "value": null,
+          "description": "Native matched strongest-author replay remains unqualified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduction_tolerance": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "No justified tolerance recovered; neither SEM nor printing precision is substituted.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "minimum_gain": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "Meaningful gain for this source coordinate is not predeclared or justified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "gain_eligible": true,
+        "gain_operator": ">=",
+        "control_rule": {
+          "status": "not_applicable",
+          "minimum": null,
+          "maximum": null,
+          "rationale": "This source coordinate is a score, not a negative control.",
+          "evidence_ids": []
+        },
+        "metric_domain": {
+          "minimum": 0,
+          "maximum": 1,
+          "rationale": "Mathematical metric domain, not a performance or effect criterion.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "decode_block::original-published-summary",
+        "group_id": "decode_block",
+        "role": "score",
+        "support_key": "original-published-summary",
+        "metric": "ordinary classification accuracy",
+        "unit": "fraction correct",
+        "direction": "higher",
+        "published_baseline": {
+          "status": "verified",
+          "value": 0.86,
+          "description": "Rounded published NEDS summary anchor; NOT qualified as strongest relevant author comparator.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduced_author_baseline": {
+          "status": "unresolved",
+          "value": null,
+          "description": "Native matched strongest-author replay remains unqualified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduction_tolerance": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "No justified tolerance recovered; neither SEM nor printing precision is substituted.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "minimum_gain": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "Meaningful gain for this source coordinate is not predeclared or justified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "gain_eligible": true,
+        "gain_operator": ">=",
+        "control_rule": {
+          "status": "not_applicable",
+          "minimum": null,
+          "maximum": null,
+          "rationale": "This source coordinate is a score, not a negative control.",
+          "evidence_ids": []
+        },
+        "metric_domain": {
+          "minimum": 0,
+          "maximum": 1,
+          "rationale": "Mathematical metric domain, not a performance or effect criterion.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "decode_wheel::original-published-summary",
+        "group_id": "decode_wheel",
+        "role": "score",
+        "support_key": "original-published-summary",
+        "metric": "unclipped flattened trial/time R2",
+        "unit": "dimensionless R2",
+        "direction": "higher",
+        "published_baseline": {
+          "status": "verified",
+          "value": 0.64,
+          "description": "Rounded published NEDS summary anchor; NOT qualified as strongest relevant author comparator.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduced_author_baseline": {
+          "status": "unresolved",
+          "value": null,
+          "description": "Native matched strongest-author replay remains unqualified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduction_tolerance": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "No justified tolerance recovered; neither SEM nor printing precision is substituted.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "minimum_gain": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "Meaningful gain for this source coordinate is not predeclared or justified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "gain_eligible": true,
+        "gain_operator": ">=",
+        "control_rule": {
+          "status": "not_applicable",
+          "minimum": null,
+          "maximum": null,
+          "rationale": "This source coordinate is a score, not a negative control.",
+          "evidence_ids": []
+        },
+        "metric_domain": {
+          "minimum": null,
+          "maximum": 1,
+          "rationale": "Mathematical metric domain, not a performance or effect criterion.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      },
+      {
+        "id": "decode_whisker::original-published-summary",
+        "group_id": "decode_whisker",
+        "role": "score",
+        "support_key": "original-published-summary",
+        "metric": "unclipped flattened trial/time R2",
+        "unit": "dimensionless R2",
+        "direction": "higher",
+        "published_baseline": {
+          "status": "verified",
+          "value": 0.59,
+          "description": "Rounded published NEDS summary anchor; NOT qualified as strongest relevant author comparator.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduced_author_baseline": {
+          "status": "unresolved",
+          "value": null,
+          "description": "Native matched strongest-author replay remains unqualified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "reproduction_tolerance": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "No justified tolerance recovered; neither SEM nor printing precision is substituted.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "minimum_gain": {
+          "status": "unresolved",
+          "value": null,
+          "rationale": "Meaningful gain for this source coordinate is not predeclared or justified.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "gain_eligible": true,
+        "gain_operator": ">=",
+        "control_rule": {
+          "status": "not_applicable",
+          "minimum": null,
+          "maximum": null,
+          "rationale": "This source coordinate is a score, not a negative control.",
+          "evidence_ids": []
+        },
+        "metric_domain": {
+          "minimum": null,
+          "maximum": 1,
+          "rationale": "Mathematical metric domain, not a performance or effect criterion.",
+          "evidence_ids": [
+            "panel-paper"
+          ]
+        },
+        "evidence_ids": [
+          "panel-paper"
+        ]
+      }
+    ],
+    "reference_selection": {
+      "status": "unresolved",
+      "description": "Strongest relevant source comparator and matched native author replay are not qualified for every coordinate.",
+      "evidence_ids": [
+        "panel-paper"
+      ]
+    },
+    "comparison_target": "stronger_of_published_and_reproduced_author_per_score_coordinate",
+    "score_rule": "no_regression_on_every_score_coordinate_and_meaningful_gain_on_at_least_one_eligible_score_coordinate",
+    "control_rule": "all_required_controls_pass_their_frozen_constraints_without_contributing_improvement",
+    "scalar_aggregation": "none"
+  },
+  "scientific_inference": {
+    "status": "unresolved",
+    "method": "Source inference and new paired improvement inference remain unresolved. Atomic finite dominance is not population superiority.",
+    "independent_unit": "Held-out animal after authenticated EID/probe/animal join. Ten session summaries are not automatically ten independent animals; neurons/trials/time bins are nested observations.",
+    "multiplicity_policy": "No joint or selection-aware inferential rule is qualified.",
+    "evidence_ids": [
+      "panel-paper"
+    ]
+  },
+  "blocking_issues": [
+    "Authenticate original ONE object versions, eligible units/trials and actual74/10-session data lineage.",
+    "Resolve paper2-Hz versus code>5-Hz neuron filtering, presplit scaling, list-valued validity-mask behavior and camera lineage against original results.",
+    "Recover original ordered eligibility-dependent70/10/20 partitions and process-wide seed42/RNG history.",
+    "Qualify full-trial native author execution, training masks/checkpoints and matched resource/exposure conditions.",
+    "Bind all nine endpoint source comparators, justified reproduction tolerances, meaningful gains and selection-aware paired animal-level inference.",
+    "Explicitly adopt the selected Table1/Table10 primary as an additive version; broader Figure2 training/transfer findings remain separate reproduction.",
+    "No complete frozen evaluator/assistance/budget policy; this example cannot admit a numerical result."
+  ]
+}

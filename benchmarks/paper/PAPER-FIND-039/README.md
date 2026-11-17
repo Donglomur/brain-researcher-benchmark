@@ -12,33 +12,46 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Separate paper outcomes
 
-**Current complete-primary paired-outcome admission is unavailable.** Independent reproduction remains separately assessable under the stated source limits. Complete primary pairing is unavailable under the reviewed primary and retained source scopes. Retained source scope and coverage: The genuine empirical Figure 5i RF position-decoding result in its original young and aged session strata, with its source-defined companion analyses and controls. Improved position decoding alone cannot establish the primary spatial/context coding or remapping findings. Reviewed source limits: Complete primary panel identities, source numerical references and justified reproduction tolerances remain unrecovered. The historical alternative-threshold robustness phrase does not authenticate a complete sensitivity grid; exact alternatives, panel mappings and required outputs remain unresolved and must not be invented. The secondary decoder retains unresolved cohort/fold realization, full score vectors, qualified author replay, paper/notebook correlation correspondence, submitted-analysis interface and comparison criteria. No ordered same-result primary superiority estimand or decision rule is established. Larger age effects, stronger correlations, smaller p-values or higher secondary decoding accuracy are insufficient. A mixed primary-reproduction/secondary-improvement bundle remains unavailable if the schema requires an identical target. Official indexed primary text was inspected. Direct article access was limited; no complete local paper body was newly acquired or hashed, and the immutable Figure 5 notebook body was not independently re-retrieved in this adjudication.
+The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
-**Primary scientific scope:** The original empirical age-associated MEC spatial/context coding and remapping/context-alignment relationships with behavior, anchored to the Figure 2-3 result family with each result's actual age cohorts, task phases, shuffled cell typing and indispensable map/session construction and alignment controls. No every-figure or universal-cohort requirement is inferred.
+### Current selected paper endpoint
 
-**Retained secondary policy:** The genuine empirical Figure 5i RF position-decoding result in its original young and aged session strata, with its source-defined companion analyses and controls. Improved position decoding alone cannot establish the primary spatial/context coding or remapping findings.
+**Disposition:** source\_unresolved.
 
-- [Reproduction proposal (inspection only)](reproduction.v2.json)
-- [Primary and retained secondary scope decision](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Primary-outcome unavailability record](outcomes.v1.json)
+This version selects an exact author-reported computational result as the primary benchmark endpoint. The broader biological finding and prior contracts retain their original scope. The source selection does not establish runnable delivery, an AI evaluation, reproduction or improvement; both access conditions remain uninstantiated.
+
+- [Selected current improvement contract](primary-endpoint-v1/improvement.v1.json)
+- [Authenticated endpoint selection](primary-endpoint-v1/selection.v1.json)
+- [Reviewed endpoint selection authority](../../../docs/provenance/paper-primary-endpoint-selections.v2.json)
+
+**Remaining reproduction/source limits:**
+
+- Authenticate exact61-session mouse/age/cell roster, \>10spatialcell99/non-single-map/SilN==2 selection.
+- Recover original downsampling, real and spike-shuffle train/test memberships and RNG provenance; newly drawn folds do not establish historical same-task parity.
+- Resolve paper/notebook smoothing and preprocessing correspondence; recover complete original score vectors and qualify strongest original decoder replay.
+- Freeze source-native real-label vector comparison across both age strata with justified effect/mouse-dependent uncertainty. Panel-admission/interface construction is pending; no pooled scalar invented.
+- Authentic input/source custody, independent qualified references and replay, protected paired participant execution, frozen candidate interface, exact exposure manifests and finite access/compute budgets remain unresolved. No scientific/model execution is claimed.
+
+- [Selected-endpoint reproduction contract](primary-endpoint-v1/reproduction.v2.json)
+- [Paired outcome protocols](primary-endpoint-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
 | --- | --- | --- | --- | --- | --- |
-| Reproduction | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Reproduction | Paper data author code | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data | unavailable | unavailable | unavailable | Unknown |
-| Improvement | Paper data author code | unavailable | unavailable | unavailable | Unknown |
+| Reproduction | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Reproduction | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data | source\_unresolved | unresolved | unresolved | Unknown |
+| Improvement | Paper data author code | source\_unresolved | unresolved | unresolved | Unknown |
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Retained secondary improvement policy
+## Retained predecessor improvement policy
 
-This preserved policy remains source evidence for a different or narrower scientific question. It is unavailable for primary outcome admission and does not define primary paper success.
+This original contract preserves the predecessor scientific instructions and source scope. The selected primary policy above governs current improvement.
 
 **Disposition:** source\_unresolved. The original paper contains an ordered Figure 5i RF position-decoding task with published young and aged score strata. This source-native route is retained for the authorized canonical overhaul, while the old Figure 2 stability contrasts remain calibration. Exact original session/cell and fold bindings, the complete source score vector, author replay and a qualified decoder evaluator are unresolved; no convenient scalar or new split replaces the source comparison.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -46,7 +59,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 89977 bytes; SHA-256 `467ef1b7c3a2850df7845e4e5f6d04346f2417141059bab6bfc278ec06de746e`.
+- Specification identity: 87174 bytes; SHA-256 `23c5f90c7c8fbd06af7cf4ebd8fdd1da2e9fe3e26b3fb2abe97ee85a22ac7fcc`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
