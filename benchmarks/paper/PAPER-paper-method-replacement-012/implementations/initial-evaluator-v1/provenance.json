@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "task_id": "PAPER-paper-method-replacement-012",
+  "component": "initial-evaluator-v1",
+  "contract": {
+    "path": "benchmarks/paper/PAPER-paper-method-replacement-012/task.json",
+    "bytes": 30426,
+    "sha256": "f754a7dba9f43a270143fe1bcd0654a29d4d660626724a07e81593d50dde1bff",
+    "modified": false
+  },
+  "paper": {
+    "url": "https://papers.nips.cc/paper_files/paper/2025/file/8f7dc9855bb4ae8ae4f2d649f3f4efe6-Paper-Conference.pdf",
+    "identity_url": "https://openreview.net/forum?id=zt3RKc6VBp",
+    "locators": [
+      "section 3.2",
+      "Appendix A.8",
+      "Appendix D.4"
+    ],
+    "mapping": "Three Bugeon evaluation settings; 2/5/11 label families; subject folds and development exclusions."
+  },
+  "official_code": {
+    "repository": "https://github.com/nerdslab/nuclr",
+    "commit": "0fa409b304147ace00507063d44f03155691af62",
+    "license": "Apache-2.0",
+    "sources": [
+      {
+        "path": "eval_scripts/multi_split_eval.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/multi_split_eval.py",
+        "components": [
+          "_fit_predict",
+          "evaluate",
+          "classification_metrics"
+        ],
+        "semantics": "Train-only scaling; weighted or resampled logistic readout; pooled CV macro F1; earliest tied checkpoint; pooled selected test predictions."
+      },
+      {
+        "path": "eval_scripts/single_split_eval.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/single_split_eval.py",
+        "components": [
+          "evaluate"
+        ],
+        "semantics": "Single validation split refits on train union val before selected test scoring."
+      },
+      {
+        "path": "eval_scripts/utils.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/utils.py",
+        "components": [
+          "validate_packet"
+        ],
+        "semantics": "Checkpoint epoch ordering and identical unit ordering; label-map and split objects. Strict ID coverage is prospective and replaces permissive omission."
+      },
+      {
+        "path": "preprocess/bugeon/prepare_data.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/prepare_data.py",
+        "components": [
+          "session_metadata"
+        ],
+        "semantics": "Session-local unit ID and EI/subclass derivation. neuron.UniqueID ingestion is commented out; no repeated-cell proof."
+      },
+      {
+        "path": "preprocess/bugeon/experiments.txt",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/experiments.txt",
+        "components": [
+          "SOURCE_SESSIONS"
+        ],
+        "semantics": "17-session, four-mouse source roster."
+      },
+      {
+        "path": "configs/data/bugeon_inductive.yaml",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/configs/data/bugeon_inductive.yaml",
+        "components": [
+          "SB028_SESSIONS",
+          "INDUCTIVE_TEST_SESSIONS",
+          "validate_packet"
+        ],
+        "semantics": "Five SB028 sessions excluded from pretraining; four non-development sessions in evaluation."
+      },
+      {
+        "path": "configs/data/bugeon_transductive.yaml",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/configs/data/bugeon_transductive.yaml",
+        "components": [
+          "DEV_SESSIONS",
+          "validate_packet"
+        ],
+        "semantics": "Four development sessions excluded from evaluation, not globally forbidden in training."
+      },
+      {
+        "path": "configs/data/train_dataset/bugeon_all.yaml",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/configs/data/train_dataset/bugeon_all.yaml",
+        "components": [
+          "validate_packet"
+        ],
+        "semantics": "All source sessions available in transductive representation training."
+      },
+      {
+        "path": "src/evaluators/bugeon.py",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/src/evaluators/bugeon.py",
+        "components": [],
+        "semantics": "Online evaluator inspected only to distinguish its subclass exclusions from authoritative offline split labels; no online filtering transplanted."
+      }
+    ]
+  },
+  "retrieval": {
+    "method": "Connected web source text/PDF retrieval; raw HTTPS source requests failed SSL EOF; OpenReview browser challenge, official NeurIPS paper used.",
+    "raw_upstream_file_sha256_verified": false,
+    "evidence_hash_interpretation": "External SHA256s identify browser-rendered retrieval receipts, not original upstream file bytes. Immutable commit and source paths pin code provenance.",
+    "external_evidence": "benchmark-construction-20261117-v2/expansion/d/PAPER-paper-method-replacement-012/reference and review"
+  },
+  "prospective_policies": [
+    "Owner-controlled JSON projection instead of unsafe deserialization or candidate-controlled labels.",
+    "Require exact complete labeled-unit identities, explicit source exclusions and source-label encoding bijection.",
+    "Require distinct source-session and representation exposure manifests; do not require each label family to occur in every source session.",
+    "Validate all three evaluation topologies, epoch order and finite embedding dimensions.",
+    "Delay test fitting until selection; compute no scores for unselected test checkpoints.",
+    "Fail on nonconvergence or missing resampling dependency; no silent fallback.",
+    "Report subject-level paired diagnostics without statistical improvement inference."
+  ],
+  "scope": {
+    "implemented": [
+      "Session/label count join and identity derivation",
+      "Complete split/checkpoint/metadata validation",
+      "Source linear readout on supplied embeddings",
+      "CV checkpoint selection and pooled classification metrics",
+      "Matched population-context versus ablated-context comparison"
+    ],
+    "not_implemented_or_not_qualified": [
+      "Authentic data acquisition and split identity validation",
+      "Native NuCLR or ablation representation fitting",
+      "Paper-era split equivalence",
+      "Complete repeated-cell linkage",
+      "Protected service/process isolation",
+      "Author metadata/split redistribution rights",
+      "Native reference outputs and tolerances",
+      "Multi-seed reproduction and improvement inference",
+      "Native runtime/memory envelope",
+      "Calibration and label-efficiency curves"
+    ],
+    "new_scientific_runs": 0,
+    "research_qualified": false,
+    "full_contract_complete": false
+  },
+  "rights": {
+    "original_bugeon_data": "CC BY 4.0 as canonical inventory records",
+    "metadata_and_splits": "Unresolved redistribution terms retained",
+    "redistributed_upstream_payloads": false
+  }
+}

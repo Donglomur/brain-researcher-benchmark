@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "task_id": "PAPER-paper-method-020",
+  "implementation": "initial-evaluator-v1",
+  "status": "construction_components_only_not_full_benchmark",
+  "contract": {
+    "path": "../../task.json",
+    "sha256": "263ea4a405bdee13a1003048c883293b224589ebce6e4816e7a3e5e4b8248182",
+    "bytes": 2231796
+  },
+  "source_code_revision": "8071fb42c3ddac0355f2c0b5977baa32e33f6e14",
+  "source_data_revision": "36c60313218c0fbf7c381294b81469f8d085ff46",
+  "source_urls": [
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/loader/fqa.py",
+      "locator": "FQADataset; get_npy_paths",
+      "basis": "native folders, full-record passthrough, pickle load, all queries by default",
+      "retrieval": "primary rendered text via search_service after terminal TLS failure",
+      "raw_content_sha256": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/create_dataset/create_bold5000_fqa.py",
+      "locator": "lines 175-272",
+      "basis": "source filenames are enumeration indices; config.rep selects split; explicit fields and merged config",
+      "retrieval": "primary rendered text via search_service after terminal TLS failure",
+      "raw_content_sha256": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/train_bold5000.py",
+      "locator": "lines 31-99,165-193",
+      "basis": "train/test query domain, skipped untrained concepts, test-based checkpoint selection",
+      "retrieval": "primary rendered text via search_service after terminal TLS failure",
+      "raw_content_sha256": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/models/left/models/losses.py",
+      "locator": "QALoss lines 130-198",
+      "basis": "strict bool positivity, ties-to-even integer round, first argmax vocabulary, exact equality, failed execution zero",
+      "retrieval": "primary rendered text via search_service after terminal TLS failure",
+      "raw_content_sha256": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/src/models/fmri/simple_cnn.py",
+      "locator": "SimplefMRIModel.forward_sng",
+      "basis": "model consumes brain_region; query execution consumes queries",
+      "retrieval": "primary rendered text via search_service after terminal TLS failure",
+      "raw_content_sha256": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/PPWangyc/neurona/8071fb42c3ddac0355f2c0b5977baa32e33f6e14/configs/neurona_bold5000.yaml",
+      "locator": "subject and atlas",
+      "basis": "CSI1; yeo17 source config",
+      "retrieval": "primary rendered text via search_service after terminal TLS failure",
+      "raw_content_sha256": null
+    }
+  ],
+  "paper": {
+    "url": "https://proceedings.iclr.cc/paper_files/paper/2026/hash/33c069ac8440595724bcc373c9a52852-Abstract-Conference.html",
+    "pdf": "https://proceedings.iclr.cc/paper_files/paper/2026/file/33c069ac8440595724bcc373c9a52852-Paper-Conference.pdf",
+    "locators": "Appendices F/G; independently reviewed source describes CSI1 and 5x1024 inputs",
+    "whole_paper_coverage": false
+  },
+  "source_population": {
+    "inventory_records_including_duplicate_evidence": 4891,
+    "unique_names_including_nondata": 4888,
+    "unique_npy": 4886,
+    "CSI1_train": 4802,
+    "CSI1_test": 84,
+    "path_list_sha256": "8d6625c56d58c289f7a1fbded9730233eaf3ea203f9dab8cde5dbee6dfa8167a",
+    "payloads_acquired": false,
+    "filenames_are_verified_stimulus_ids": false,
+    "test_path_list_sha256": "fca1becad9f02f509729c8de8a61becde3fcb0e2ba50712c1ceb7357bc9ddceb"
+  },
+  "implemented_endpoints": [
+    "hash-bound official source inventory",
+    "label-blind complete stimulus/person identity audit",
+    "strict query/brain_region model allowlist and separate supervised training interface",
+    "isolated neural/zero-ablation/image-shuffled inference packet construction",
+    "full-query source-derived QA decoding and exact accuracy",
+    "paired query/image/person accuracy contrasts"
+  ],
+  "prospective_policies": {
+    "protocol": "prospective_within_person_all_queries_v1",
+    "denominator": "all declared test queries, no concept or execution skips",
+    "no_neural": "all-zero 5x1024 test tensor; same trained model and training access; inference ablation, not retrained text-only baseline",
+    "shuffle": "label-blind whole-image group bijection within subject, source split, and repeated-record count; reject infeasible groups",
+    "identity_groups": "connected components of source image ID or source image SHA256; explicit trusted sidecar required",
+    "selection": "train/validation only; train-only symbolic domain; new prospective policy distinct from native source",
+    "aggregation": "QA micro primary diagnostic, image macro/person macro secondary diagnostics; no thresholds or uncertainty claims",
+    "baseline_parser": "structured NEURONA execution only; generated-language paper baseline parser not implemented",
+    "security": "operator retains combined inputs/protected targets; one condition packet per isolated run; hashes are bindings, not runtime attestations"
+  },
+  "canonical_holds_unchanged": [
+    "Specify neural contribution to compositional QA, exact image/person partition and language-model checkpoint; source directory split alone does not establish independence.",
+    "Compare identical prompts/models against no-neural and shuffled-neural inputs. Answer-bearing text, shared image identity and pretrained-language priors can dominate QA accuracy.",
+    "NPY contents not deserialized in this audit; schema checked through author loader and manifest.",
+    "Shared image identity and answer-bearing text must be controlled; require subject/image split and text-only baseline before model benchmarking.",
+    "Does not establish the entire paper across all neural sources.",
+    "Freeze paper-specific central claims, input/assessment manifest and information boundary.",
+    "Execute and independently audit references, controls, grading and measured resources.",
+    "Qualify harness, meaningful difficulty, scientific review and target submission requirements."
+  ],
+  "canonical_rights_unchanged": {
+    "recorded_terms": [
+      "HF PPWangyc/BOLD5000-QA is ungated at inspected commit; card MIT.",
+      "Underlying BOLD5000 and image/stimulus rights remain separate; data-card license is not a blanket waiver."
+    ],
+    "record_conflicts": [],
+    "scope_note": "Retain source-specific data, code, stimulus/model and manuscript terms. Known paper results, public targets, checkpoints and saved notebook outputs require a versioned access policy; a local private packet cannot erase public exposure.",
+    "overlap_group": null
+  },
+  "scientifically_qualified": false,
+  "native_reference_executed": false,
+  "full_contract_complete": false,
+  "independent_reference": "tests/independent_reference_fixture.json",
+  "engineering_control_scope": "bounded generated tensors and independently rational-calculated QA outcomes only",
+  "dependencies": "Python 3.10+ standard library; no installation"
+}
