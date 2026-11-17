@@ -1,0 +1,100 @@
+{
+  "schema": "meg_prospective_design_proposal_v1",
+  "task_id": "PAPER-paper-method-add-010",
+  "status": "recommended_design_not_frozen_scientific_benchmark",
+  "source_scope": "Conditional analysis of the historical 246-measure domain; whole-cohort historical QC is not nested feature eligibility and public data are not globally unseen.",
+  "population": {
+    "target_participants": 94,
+    "exact_biological_roster": "unestablished",
+    "missing_participant_policy": "refuse; no removal or silent denominator change",
+    "published_roster": {
+      "path": "published_participants.txt",
+      "sha256": "6e0970cb1a1a9aab53a35c43c3bcf84af527131631418bfd00594528e43bf70a",
+      "published_identifiers": 94,
+      "pinned_git_blob_sha1": "6cb873cbe3dabf0c5d6b481ed95f64b214176b35",
+      "authentic_biological_and_feature_join_verified": false
+    }
+  },
+  "observational_unit": "Label-independent observation features. Author known-category averages are inadmissible for unknown-category prediction; an authentic acquisition/derivation route is unverified.",
+  "estimand": "Equal-participant balanced accuracy of the nested selected scalar-FC classifier for the declared primary benchmark endpoint, conditional on the supplied historical domain and source provenance.",
+  "metric": {
+    "name": "participant_mean_balanced_accuracy",
+    "formula": "For every participant, (TP_class0/N_class0 + TP_class1/N_class1)/2; average over all 94 participants.",
+    "missing_class_policy": "undefined/refuse; no omitted participant",
+    "inference": "descriptive; ten fold scores are not independent samples for a t test or confidence interval"
+  },
+  "folds": {
+    "outer": 10,
+    "inner": 5,
+    "label_usage": "none in fold construction",
+    "outer_sort": "SHA256(UTF8('meg-policy-v1|outer|' + canonical_id)), then canonical_id",
+    "outer_assignment": "round robin into ten folds; IDs outer-00 through outer-09",
+    "inner_sort": "SHA256(UTF8('meg-policy-v1|' + outer_id + '|inner|' + canonical_id)), then canonical_id, restricted to the outer training participants",
+    "inner_assignment": "round robin into five folds",
+    "source": "design.py creates the proposal; actual participant maps must be saved and independently admitted"
+  },
+  "estimator": {
+    "family": "one scalar feature, balanced L1 logistic, liblinear",
+    "C": [
+      1.0
+    ],
+    "normalization": "training-only population mean/standard deviation",
+    "class_order": [
+      "face",
+      "object"
+    ],
+    "prediction_tie": "score zero / probability 0.5 chooses class0",
+    "model_selection": "All supplied 246 measures; each candidate scored on exhaustive inner out-of-fold predictions with the primary metric. Exact ties retain externally frozen measure order. Refit selected candidate on all outer training observations.",
+    "seed": 127,
+    "tol": 1e-08,
+    "max_iter": 1000,
+    "nonconvergence": "refuse",
+    "training_weighting": "Source-style balanced weights over training rows/classes; not equal-participant training influence when participants have unequal observation counts. Equal-participant weighting applies to selection and evaluation. Matched comparators must use the same declared training weighting."
+  },
+  "comparison_not_implemented": {
+    "required": [
+      "Matched local-amplitude or power nuisance baseline on identical observations, endpoints and folds",
+      "Fixed Spearman connectivity anchor after verifying its membership in the actual246 roster",
+      "Source-mixing robustness with independently defined physical transformation"
+    ],
+    "missing_definitions": [
+      "Exact nuisance amplitude/power frequency band, spatial/time aggregation and feature schema are absent from the canonical contract",
+      "Authenticated label-independent and aligned FC/nuisance input observations are absent",
+      "Exact source-mixing transformation and acceptance criterion are not frozen"
+    ],
+    "rule": "Do not synthesize nuisance inputs from the FC columns or treat absence of comparator as improvement evidence"
+  },
+  "separate_future_condition": {
+    "domain": 262,
+    "eligibility": "Independently preconfigured candidate domain with train-fold-only QC; a separately versioned prospective condition, not silently substituted for the canonical246 scope"
+  },
+  "source_holds": [
+    "Exact post-QC246-measure roster and its selection provenance",
+    "Exact94-participant biological identity and observation ledger",
+    "Canonical Zenodo15315238v1 vs current article18294156v2 selection: no silent upgrade",
+    "Corrected publisher supplement identity joined to selected held file by hash",
+    "Regional time series to FC extraction identity and numerical agreement",
+    "Lawful packet access, competent references, protected candidate execution and full resource qualification"
+  ],
+  "root_review_required": "Root may approve the proposal as construction design; only exact source/cohort/fold/feature and comparator admission can establish a frozen benchmark.",
+  "scientific_qualification": false,
+  "primary_benchmark_endpoint": {
+    "region_pair": [
+      "Category_Selective",
+      "Prefrontal_Cortex"
+    ],
+    "task_relevance": "Irrelevant",
+    "time_window": "onset [0, 1000 ms)",
+    "classes": [
+      "face",
+      "object"
+    ],
+    "other_endpoints": "descriptive; not pooled into the primary benchmark endpoint"
+  },
+  "claim_limits": [
+    "Measures face/object category decodability among consciously seen stimuli; not consciousness detection or a necessary/sufficient neural correlate of consciousness.",
+    "Directed region-pair feature orientation does not establish physiological or causal connectivity.",
+    "No adjudication of GNWT versus IIT follows from this component.",
+    "This primary benchmark endpoint is proposed after the paper, data and results are public. It is not an independent confirmatory scientific test on the same public cohort."
+  ]
+}

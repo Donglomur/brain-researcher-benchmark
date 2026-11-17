@@ -20,7 +20,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-006](NEURAL-006/README.md) | Reward versus emotion prediction-error physiology | 2 | not linked |
 | [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 3 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
 | [NEURAL-008](NEURAL-008/README.md) | EOG information beyond EEG and sleep timing | 2 | [manifest](NEURAL-008/implementations/registered-runtime/manifest.json) |
-| [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 0 | not linked |
+| [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 1 | not linked |
 | [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 1 | not linked |
 | [NEURAL-011](NEURAL-011/README.md) | Adult clinical seizure-event detection | 0 | not linked |
 | [NEURAL-012](NEURAL-012/README.md) | Cross-cohort seizure robustness | 1 | [manifest](NEURAL-012/implementations/registered-runtime/manifest.json) |
@@ -36,7 +36,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-022](NEURAL-022/README.md) | Active-versus-passive sensory coding | 1 | not linked |
 | [NEURAL-023](NEURAL-023/README.md) | Continuous reaching across recording days | 2 | [manifest](NEURAL-023/implementations/registered-runtime/manifest.json) |
 | [NEURAL-024](NEURAL-024/README.md) | Stable population dynamics across days | 2 | [manifest](NEURAL-024/implementations/registered-runtime/manifest.json) |
-| [NEURAL-025](NEURAL-025/README.md) | Fine reach-kinematics decoding from calcium | 0 | not linked |
+| [NEURAL-025](NEURAL-025/README.md) | Fine reach-kinematics decoding from calcium | 1 | not linked |
 | [NEURAL-026](NEURAL-026/README.md) | Fine-joint information beyond reach phase | 2 | not linked |
 | [NEURAL-027](NEURAL-027/README.md) | Visual stimulus decoding across learning phases | 0 | not linked |
 | [NEURAL-028](NEURAL-028/README.md) | Reward-free versus rewarded cortical learning | 0 | not linked |
@@ -124,14 +124,14 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-SCOPE-20261114-AASD-REPORT](NEURAL-SCOPE-20261114-AASD-REPORT/README.md) | Reported attention-state decoding with explicit motor controls | 0 | not linked |
 | [NEURAL-SCOPE-20261114-ABR-TRANSFER](NEURAL-SCOPE-20261114-ABR-TRANSFER/README.md) | Cross-laboratory auditory brainstem threshold inference from complete waveform stacks | 0 | not linked |
 | [NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY](NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY/README.md) | Retrospective held-horizon prediction of goal-aligned movement from odor-memory dynamics | 2 | not linked |
-| [NEURAL-SCOPE-20261114-FUS-DIRECTION](NEURAL-SCOPE-20261114-FUS-DIRECTION/README.md) | Calibrated target-direction inference from complete memory-period functional-ultrasound response fields | 3 | not linked |
+| [NEURAL-SCOPE-20261114-FUS-DIRECTION](NEURAL-SCOPE-20261114-FUS-DIRECTION/README.md) | Calibrated target-direction inference from complete memory-period functional-ultrasound response fields | 4 | not linked |
 | [NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT](NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/README.md) | Predicting longitudinal state-selective calcium activity across identified neurons | 1 | not linked |
 | [NEURAL-SCOPE-20261114-LASER-EEG-REPORT](NEURAL-SCOPE-20261114-LASER-EEG-REPORT/README.md) | Calibrated cross-experiment reported-pain inference from complete laser-evoked EEG epochs | 2 | not linked |
 | [NEURAL-SCOPE-20261114-LOCALIZATION](NEURAL-SCOPE-20261114-LOCALIZATION/README.md) | Patch-identified neuron localization under channel degradation | 1 | not linked |
 | [NEURAL-SCOPE-20261114-STROOP](NEURAL-SCOPE-20261114-STROOP/README.md) | Cross-person, unseen-session Stroop condition inference from frontal fNIRS | 2 | not linked |
 | [apcx-odor-pulse-evidence](apcx-odor-pulse-evidence/README.md) | Recover odor-pulse quantity and temporal sensory evidence from anterior piriform spike trains | 1 | not linked |
 | [clinical-ccep-stimulation-attribution](clinical-ccep-stimulation-attribution/README.md) | Anatomical stimulation-site attribution from complete VTC evoked responses | 3 | not linked |
-| [clinical-dosei-responsiveness](clinical-dosei-responsiveness/README.md) | Observed bedside responsiveness from causal pre-assessment EEG | 1 | not linked |
+| [clinical-dosei-responsiveness](clinical-dosei-responsiveness/README.md) | Observed bedside responsiveness from causal pre-assessment EEG | 2 | not linked |
 | [clinical-sensefog-stn-state](clinical-sensefog-stn-state/README.md) | Participant-held gait-state inference from bilateral STN LFP | 1 | not linked |
 | [marmoset-retinal-contrast-generalization](marmoset-retinal-contrast-generalization/README.md) | Marmoset retinal nonlinear contrast encoding and cross-stimulus generalization | 1 | not linked |
 

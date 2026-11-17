@@ -1,0 +1,146 @@
+{
+  "schema": "isttc_empirical_endpoint_policy_v1",
+  "task_id": "PAPER-paper-method-add-004",
+  "status": "prospectively_selected_construction_policy_not_scientifically_qualified",
+  "source_revision": "e78cfd2b2ea79b7a7e707db7b79e218212497e43",
+  "source_selection": {
+    "population_units": 5775,
+    "mice": 26,
+    "areas": 8,
+    "fs_hz": 30000,
+    "source_duration_minutes": 30,
+    "duration_minutes": [
+      1,
+      5,
+      10,
+      20
+    ],
+    "reference_minutes": 30,
+    "trial_counts": [
+      40,
+      60,
+      80,
+      100
+    ],
+    "trial_seconds": 1,
+    "bin_and_lag_ms": 50,
+    "isttc_tolerance_ms": 25,
+    "n_lags_argument": 20,
+    "fit_start_index": 1,
+    "full_curve_points": 21,
+    "trial_curve_points": 20
+  },
+  "prospective_windows": {
+    "seed": 20261117004,
+    "rng": "Python random.Random.randrange",
+    "iteration_order": "frozen cohort units, then counts40/60/80/100, then trial index",
+    "start_support_ticks": [
+      0,
+      53970000
+    ],
+    "replacement": true,
+    "overlap_permitted": true,
+    "endpoints": "half-open, reset each trial to its start",
+    "methods_share_same_windows_within_count": true,
+    "cross_count_draws": "independent draws from the declared sequential RNG stream; no nesting",
+    "historical_rng_recovered": false,
+    "source_identity_requirement": "Freeze runtime/version, seed, cohort order and realized window hashes before candidate or outcome access."
+  },
+  "sensitivity": {
+    "primary_reference_policy": "method_specific_full",
+    "mandatory_diagnostic_reference_policy": "all_full_isttc",
+    "reference_pairing": {
+      "method_specific_full": {
+        "acf_full": "acf_full",
+        "isttc_full": "isttc_full",
+        "pearsonr_trial_avg": "acf_full",
+        "sttc_trial_concat": "isttc_full"
+      },
+      "all_full_isttc": "isttc_full for both methods"
+    },
+    "support": "Separate panel-specific shared tau-only mask: all eight condition coordinates and both30min reference taus must be finite. Both policies use identical support.",
+    "r_squared_and_covariates": "No R-squared sign/availability or covariate exclusion in sensitivity; preserve diagnostic failures.",
+    "nonpositive_reference": "Retain tau-available unit in denominator; suppress every affected median/percentage instead of dropping undefined errors.",
+    "error": "100*abs(condition_tau-reference_tau)/reference_tau; pseudo-error, not biological truth.",
+    "log_zero": "Explicit undefined log10; no epsilon.",
+    "thresholds_inclusive_percent": [
+      100,
+      75,
+      50,
+      25
+    ],
+    "interpretation": "Conditional stability on common fit success and fixed realized windows. All original-population success/failure/retention companions are mandatory. No unconditional robustness/accuracy claim.",
+    "mandatory_companions": [
+      "Per-method/per-level original-denominator tau availability and complete-fit counts",
+      "Per-method/per-level missingR2 and negativeR2 diagnostics; every failed coordinate with original reason",
+      "Original and tau-complete-case unit counts per biological mouse and area for each panel",
+      "Full original-unit eligibility and undefined-error ledger under both reference policies"
+    ]
+  },
+  "figure7c": {
+    "model": "Gaussian random-unit-intercept linear mixed model, REML",
+    "formula": "response ~ method*(fr_s+alpha_s)+(1|unit_id)",
+    "full_response": "log10(tau_ms)",
+    "trial_response": "log10(pseudo_ree_percent) with method-specific references",
+    "methods": [
+      "acf_full",
+      "isttc_full",
+      "pearsonr_trial_avg",
+      "sttc_trial_concat"
+    ],
+    "trial_methods": [
+      "pearsonr_trial_avg",
+      "sttc_trial_concat"
+    ],
+    "baselines": {
+      "full": "acf_full",
+      "trial": "pearsonr_trial_avg"
+    },
+    "covariates": [
+      "fr_hz from lv_df.pkl.fr_hz_spont_30min",
+      "lv from lv_df.pkl.lv"
+    ],
+    "standardization": "R scale sampleSD over the expanded four- or two-method long table",
+    "eligibility": "Unchanged Figure7C common four-method missing-fit/covariate union, then any negativeR2 exclusion. ZeroR2 retained.",
+    "undefined_log": "Keep original selected-unit ledger; withhold whole affected model on any zero/nonpositive/undefined log argument. No additional favorable row selection.",
+    "numerical_specialization": "Complete balanced methods share three predictors; fixed effects are multivariateOLS and REML covariance has common/within eigenspaces. This is not a generic GLM/LMM solver.",
+    "source_p_values": null,
+    "source_profile_confidence_intervals": null,
+    "native_lme4_parity_qualified": false
+  },
+  "prospective_animal_uncertainty": {
+    "primary": "whole-mouse percentile bootstrap of fixed effects",
+    "seed": 20261117005,
+    "repetitions": 1000,
+    "quantiles": [
+      0.025,
+      0.975
+    ],
+    "quantile_method": "linear/type7",
+    "sampling": "Draw G biological mice with replacement; retain all selected units/methods in each mouse, including duplicates from repeated mouse draws.",
+    "estimand": "Neuron-weighted regression coefficients under the declared model; not equal-mouse effects.",
+    "scaling": "Fixed original model-table covariate centering/scaling in every draw.",
+    "failed_draws": "Record each rank-deficient/nonfinite replicate; no redraw or silent omission. Any failed draw withholds all percentile intervals.",
+    "conditioning": "Conditional on admitted cohort, fitted taus, realized windows and original scaling; not window-resampling uncertainty.",
+    "diagnostic": "Mouse-cluster CR1 covariance with G/(G-1)*(N_long-1)/(N_long-P_fixed), no p-values or joint Wald test.",
+    "coverage_qualified": false,
+    "rng": "Python random.Random(seed).randrange(G)",
+    "mouse_order": "First occurrence among retained source-model units, retaining the admitted cohort order",
+    "G": "Number of distinct biological mouse IDs among retained model units; original and retained counts are reported for every original mouse and area",
+    "draw_order": "Replicates0..999; within each replicate draw G mouse indices in order with replacement",
+    "runtime_and_draw_identity": "Record Python and NumPy versions and exact sampled-index sequence/hash; prospective input admission must freeze runtime, source identity and seed before outcomes."
+  },
+  "unimplemented_or_unqualified": [
+    "Authentic5775unit/26mouse/eight-area roster and object identities",
+    "Literal paperQC amplitude_cutoff0.01 versus retained loader0.1 reconciliation",
+    "Historical window realizations and source/table execution state",
+    "Source-reference and common-mask conflicts resolved as a prospective policy only",
+    "Figure7D/F fitted source-model curves and their coefficient/inference endpoints",
+    "Figure7B pooled-area ACF fits with50 sampling repetitions",
+    "NativeR/lme4/lmerTest numerical parity and publishedp-values/profileintervals",
+    "Protected trial-only improvement population, candidate-independent reference mask and access controls",
+    "Independent scientific qualification and credible interval coverage"
+  ],
+  "no_new_benchmark_ids": true,
+  "scientifically_qualified": false
+}

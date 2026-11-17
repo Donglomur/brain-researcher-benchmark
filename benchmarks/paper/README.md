@@ -44,7 +44,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-FIND-REP-014](PAPER-FIND-REP-014/README.md) | Predictive and instructive cerebellar encoding of dopamine reward drives motivated behavior | 1 | not linked |
 | [PAPER-FIND-REP-015](PAPER-FIND-REP-015/README.md) | Cerebellar neural populations orchestrate dopamine reward signaling with single-trial precision | 1 | not linked |
 | [PAPER-ROOT-ADD-001](PAPER-ROOT-ADD-001/README.md) | Mapping the neuronal building blocks of human language with language models | 2 | not linked |
-| [PAPER-ROOT-ADD-002](PAPER-ROOT-ADD-002/README.md) | Non-invasive decoding of typed sentences from human brain activity | 0 | not linked |
+| [PAPER-ROOT-ADD-002](PAPER-ROOT-ADD-002/README.md) | Non-invasive decoding of typed sentences from human brain activity | 1 | not linked |
 | [PAPER-ROOT-ADD-003](PAPER-ROOT-ADD-003/README.md) | Driving and suppressing the human language network using large language models | 2 | [manifest](PAPER-ROOT-ADD-003/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-004](PAPER-ROOT-ADD-004/README.md) | Respiration shapes the neural dynamics of successful remembering in humans | 0 | not linked |
 | [PAPER-ROOT-ADD-005](PAPER-ROOT-ADD-005/README.md) | Distributed representations of behaviour-derived object dimensions in the human visual system | 0 | not linked |
@@ -53,7 +53,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-ROOT-ADD-010](PAPER-ROOT-ADD-010/README.md) | A geometric shape regularity effect in the human brain | 0 | not linked |
 | [PAPER-ROOT-ADD-013](PAPER-ROOT-ADD-013/README.md) | Food intake enhances hippocampal sharp wave-ripples | 1 | [manifest](PAPER-ROOT-ADD-013/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-014](PAPER-ROOT-ADD-014/README.md) | Precise spatial tuning of visually driven alpha oscillations in human visual cortex | 1 | not linked |
-| [PAPER-ROOT-ADD-016](PAPER-ROOT-ADD-016/README.md) | Age-related changes in cortical 1/f dynamics are linked to cardiac activity | 4 | [manifest](PAPER-ROOT-ADD-016/implementations/registered-runtime/manifest.json) |
+| [PAPER-ROOT-ADD-016](PAPER-ROOT-ADD-016/README.md) | Age-related changes in cortical 1/f dynamics are linked to cardiac activity | 5 | [manifest](PAPER-ROOT-ADD-016/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-018](PAPER-ROOT-ADD-018/README.md) | The orbitofrontal cortex updates beliefs for state inference | 3 | [manifest](PAPER-ROOT-ADD-018/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-019](PAPER-ROOT-ADD-019/README.md) | Acetylcholine demixes heterogeneous dopamine signals for learning and moving | 3 | [manifest](PAPER-ROOT-ADD-019/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-020](PAPER-ROOT-ADD-020/README.md) | Temporal multiplexing of perception and memory codes in IT cortex | 2 | [manifest](PAPER-ROOT-ADD-020/implementations/registered-runtime/manifest.json) |
@@ -87,11 +87,11 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-method-add-001](PAPER-paper-method-add-001/README.md) | Stabilizing brain-computer interfaces through alignment of latent dynamics | 1 | not linked |
 | [PAPER-paper-method-add-002](PAPER-paper-method-add-002/README.md) | Dimensionality reduction beyond neural subspaces with slice tensor component analysis | 1 | [manifest](PAPER-paper-method-add-002/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-add-003](PAPER-paper-method-add-003/README.md) | DREDge: robust motion correction for high-density extracellular recordings across species | 0 | not linked |
-| [PAPER-paper-method-add-004](PAPER-paper-method-add-004/README.md) | iSTTC: A robust method for accurate estimation of intrinsic neural timescales from single-unit recordings | 4 | not linked |
+| [PAPER-paper-method-add-004](PAPER-paper-method-add-004/README.md) | iSTTC: A robust method for accurate estimation of intrinsic neural timescales from single-unit recordings | 5 | not linked |
 | [PAPER-paper-method-add-005](PAPER-paper-method-add-005/README.md) | Generating realistic neurophysiological time series with denoising diffusion probabilistic models | 0 | not linked |
 | [PAPER-paper-method-add-006](PAPER-paper-method-add-006/README.md) | Neural population geometry and optimal coding of tasks with shared latent structure | 0 | not linked |
 | [PAPER-paper-method-add-008](PAPER-paper-method-add-008/README.md) | Opening the black box toward a modular approach to spike sorting | 0 | not linked |
-| [PAPER-paper-method-add-010](PAPER-paper-method-add-010/README.md) | A data-driven approach to identifying and evaluating connectivity-based neural correlates of conscious visual perception | 0 | not linked |
+| [PAPER-paper-method-add-010](PAPER-paper-method-add-010/README.md) | A data-driven approach to identifying and evaluating connectivity-based neural correlates of conscious visual perception | 1 | not linked |
 | [PAPER-paper-method-replacement-003](PAPER-paper-method-replacement-003/README.md) | A deep learning strategy to identify cell types across species from high-density extracellular recordings | 1 | not linked |
 | [PAPER-paper-method-replacement-005](PAPER-paper-method-replacement-005/README.md) | Neural Encoding and Decoding at Scale | 0 | not linked |
 | [PAPER-paper-method-replacement-006](PAPER-paper-method-replacement-006/README.md) | Population Transformer: Learning Population-level Representations of Neural Activity | 0 | not linked |

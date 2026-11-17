@@ -1,0 +1,1024 @@
+name: Construction benchmark components
+
+on:
+  pull_request:
+    branches: [publish/neuroscience-200]
+  push:
+    branches: [publish/neuroscience-200]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: construction-components-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  OPENBLAS_NUM_THREADS: '1'
+  OMP_NUM_THREADS: '1'
+  MKL_NUM_THREADS: '1'
+
+jobs:
+  construction-source-identities:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Verify current source identities and complete namespaces (1/2)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/integrity/current-closures/construction-cardiac-admission/SOURCE_BINDINGS.json",
+                  "bytes": 4037,
+                  "sha256": "bc8655590abf6e577579464af43ec8125344f6a28230a6713db9ca389ccce7f6"
+              },
+              {
+                  "path": "benchmarks/integrity/current-closures/construction-dosei-v2/SOURCE_BINDINGS.json",
+                  "bytes": 2690,
+                  "sha256": "2444a0508c36cce063ccaf7ce125185bfee075a40ada3c9bc194bd75dca4dd2f"
+              },
+              {
+                  "path": "benchmarks/integrity/current-closures/construction-fus-delivery/SOURCE.json",
+                  "bytes": 3371,
+                  "sha256": "30ed0193892732b8ebe2ac90c15a4370bc28f6ad7b784cf094a4da302525537f"
+              },
+              {
+                  "path": "benchmarks/integrity/current-closures/construction-isttc-endpoints/SOURCE_PINS.json",
+                  "bytes": 4885,
+                  "sha256": "ff90e035e920b254a05a98427a7aaa52ce0150163c409e076bee3f4060c14700"
+              },
+              {
+                  "path": "benchmarks/integrity/current-closures/construction-seizure-events/SOURCE_PINS.json",
+                  "bytes": 4085,
+                  "sha256": "49677cdaf1480755d6581891a2cfb8d4accc882b8a91e72424c2c34fa5658c1a"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/docs/seizure-events-v1.md",
+                  "bytes": 1668,
+                  "sha256": "84daad613539d5122a384b43c5e0402eac3415a6fd7e215eb31003089169fd39"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/README.md",
+                  "bytes": 11606,
+                  "sha256": "8c98015c07dc2fc5a1afb29040c8953162bc6e031273826d87bac539c432809e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/cli.py",
+                  "bytes": 7746,
+                  "sha256": "3b5ca6fe922a5f674a0598cd6912bae62ca139524466c42f5603c5684ae77dca"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/core.py",
+                  "bytes": 27361,
+                  "sha256": "5b92def65bbfb75368986dff72f66b8a511b077a9f6343b4c5732ab80805b834"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/recommended_policy.json",
+                  "bytes": 720,
+                  "sha256": "b05ea7b363f4969fd5f1d1230686e6dea391393637028701f9f9f7785469588e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/record_index.json",
+                  "bytes": 165558,
+                  "sha256": "17cf3eabacbea67e8275ee062e8f1376460b9c35c4e1e1499ce709999d5e1fd5"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/source_manifest.json",
+                  "bytes": 1616,
+                  "sha256": "5a1601b8a977a4a73774d633f49701d148820bacabc0c99f1cf70aa8f28d26f2"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/source_provenance.json",
+                  "bytes": 4364,
+                  "sha256": "9c97527fc435f0470c91f888b01c3098e01db0bb4a6f1467e3d0c67c0074589e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/vendor/timescoring/LICENSE",
+                  "bytes": 1090,
+                  "sha256": "a53fae91ae89056b5554ecde81123d5344a6c0b42bec5bca3823d6f924f2a295"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/vendor/timescoring/annotations.py",
+                  "bytes": 3995,
+                  "sha256": "0e7c5b05f257251a986e28c92ed2cb1d1a2532e0c28eae489f85d1c6b0f24928"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/vendor/timescoring/scoring.py",
+                  "bytes": 9092,
+                  "sha256": "0cb3b685c2d7add8d0cb2376d2021ace6d551591a2a31bfbd44a0281efe187c7"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-009/task.json",
+                  "bytes": 13457,
+                  "sha256": "8bd8201341b714bcbe4c3a11caf68a9cc375eb73a5b11886d24e5a79ff1d7b7f"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/docs/fullfield-delivery-v1.md",
+                  "bytes": 1175,
+                  "sha256": "4cf00f69b1ba0606fb9cf3755aa44d72350b10228bfe2fe10004efca9234c2d5"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/implementations/fullfield-delivery-v1/README.md",
+                  "bytes": 8858,
+                  "sha256": "0957be4304d2891ab17b294dab9f6d416bf5961e9387643021be68a0bf092e7f"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/implementations/fullfield-delivery-v1/SOURCE_CONTEXT.json",
+                  "bytes": 20622,
+                  "sha256": "c1820ecfeff6263fc9207cda9eba9549c5a1cf265b89b7c625441e770f1d3abd"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/implementations/fullfield-delivery-v1/delivery.py",
+                  "bytes": 16104,
+                  "sha256": "ec555899123ff0b5732f77489f96508c755f1fe7fa79e6accb6e7d21e4f28a3e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/implementations/fullfield-preparation/fullfield.py",
+                  "bytes": 12927,
+                  "sha256": "20fe65ee870ae6a7a18c8534e3b935cdd30b75b49993adb9a644ff0f9b1422d6"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/implementations/fullfield-preparation/roster.py",
+                  "bytes": 2755,
+                  "sha256": "0f1ac943d56edc5305be4ba74f5d27c8cfa626e555092b7a51a1f6f2641dd4c9"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/implementations/fullfield-preparation/scorer.py",
+                  "bytes": 14394,
+                  "sha256": "6956a375c850a21abab2febc99cb3579900e74606cf3dd199ac2661ab0270dc7"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/task.json",
+                  "bytes": 40630,
+                  "sha256": "115934ec062e5760e2fabc5f46faa6adc789076dad77fab99a3e79c36ef7fe6d"
+              },
+              {
+                  "path": "benchmarks/neural/clinical-dosei-responsiveness/docs/ordinal-metrics-v2.md",
+                  "bytes": 1721,
+                  "sha256": "ba3770063d7323e84395b4d903175152e9787d840d4bd961d9da9f754c58a5e0"
+              },
+              {
+                  "path": "benchmarks/neural/clinical-dosei-responsiveness/implementations/ordinal-and-paired/dosei_score.py",
+                  "bytes": 15749,
+                  "sha256": "09560538d472f0b99c65532bf371c8e9af56635e1ec437f68dd2f83b5f7bde77"
+              },
+              {
+                  "path": "benchmarks/neural/clinical-dosei-responsiveness/implementations/ordinal-metrics-v2/INTERFACE.json",
+                  "bytes": 4456,
+                  "sha256": "66958249c8aab07b674edbb6f2fa632037d9c8ede2c0a09fe7b3e08f8add723f"
+              },
+              {
+                  "path": "benchmarks/neural/clinical-dosei-responsiveness/implementations/ordinal-metrics-v2/PROVENANCE.json",
+                  "bytes": 2022,
+                  "sha256": "18dda9b3a591c1389854797039a387004b11e8699603082b85a98c4da1310ade"
+              },
+              {
+                  "path": "benchmarks/neural/clinical-dosei-responsiveness/implementations/ordinal-metrics-v2/README.md",
+                  "bytes": 10326,
+                  "sha256": "1d2800422940d105702330ca42ee3ef1cd9a17cacc0f52ca3b346c2bb5d1fdbf"
+              },
+              {
+                  "path": "benchmarks/neural/clinical-dosei-responsiveness/implementations/ordinal-metrics-v2/RECOMMENDED_PROFILE.json",
+                  "bytes": 3790,
+                  "sha256": "4e651f32f38d4e8a7c342f4e85e8f3e34dd9d103151a97adeb3bddde474342ce"
+              },
+              {
+                  "path": "benchmarks/neural/clinical-dosei-responsiveness/implementations/ordinal-metrics-v2/dosei_metrics.py",
+                  "bytes": 22045,
+                  "sha256": "39c7dd0080244a35bbb9ca157dabe7827fc9a0977abc9353b8f334baff45934d"
+              },
+              {
+                  "path": "benchmarks/neural/clinical-dosei-responsiveness/task.json",
+                  "bytes": 19691,
+                  "sha256": "745b4798914bfbdd763c0e4cf81bac1d894fc4448c99fa422e50b96921a6f1e8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/docs/full-cohort-admission-v1.md",
+                  "bytes": 1210,
+                  "sha256": "5ae5d134e3102ab68c6057968bc2a318835936354c53feb5be9b4936f48bfca8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/PROTOCOL.json",
+                  "bytes": 3371,
+                  "sha256": "a3929d14671a581e75fdb93585f7980a0ded0fc4329b3cff780a466754696c22"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/README.md",
+                  "bytes": 10649,
+                  "sha256": "50484b817debb48c612f8dbeb81759fa433ccd9021ae5888cc3410693b79b74c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/admission.py",
+                  "bytes": 22735,
+                  "sha256": "82d048f99da42230508ed3ca8b042fbcce0e0a67921fd028b3ba5434956d653d"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/test_admission.py",
+                  "bytes": 13222,
+                  "sha256": "6ba32b587d5760b324f7d0c8079f3f78bba92fcc4337c2813c416333ca8f3a85"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/matched-artifacts/MATH_SPEC.md",
+                  "bytes": 1485,
+                  "sha256": "b814c48c52ac61f895293112d00e927c30faa95c7c11a10a622734076f6cb7c1"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/matched-artifacts/MODEL_CONTRACT.json",
+                  "bytes": 1894,
+                  "sha256": "ce1b65e4434f6b3237671b0a3c141f75ea4817af264282a9a3f25efac0027701"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/TASK.md",
+                  "bytes": 3941,
+                  "sha256": "0f5f2213b512c59dab9d2a4858d600b3fc5bf78c585aa00275e7058611a94ff0"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/six-model-summary/summary_score.py",
+                  "bytes": 9874,
+                  "sha256": "3d40ba1ff118059cf6df88e0a8bd29688486a1b6b57d3cfbcdf597cae04696b9"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-016/task.json",
+                  "bytes": 19324,
+                  "sha256": "bed3f79d97c1ded8380e92e1ef6f6387d8910a37c890c8d2d4ed9d7477e8ab04"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/docs/sensitivity-glm-v1.md",
+                  "bytes": 1324,
+                  "sha256": "eb25ad4f89ed008a3ec37669516b8351adcf17f99db1dd8d468dd19d0bbd4209"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-diagnostics/COVARIATE_MAPPING.json",
+                  "bytes": 1482,
+                  "sha256": "8812662ddd5403f138e024cfb8df48e84d7706430df7d0a96483685e4480c5a4"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-diagnostics/cohort.schema.json",
+                  "bytes": 1759,
+                  "sha256": "8328e24df005e0567bd2b1d1f4b720a65ea34f8e0c787bbb15149a66582041ae"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-diagnostics/empirical_bridge.py",
+                  "bytes": 13442,
+                  "sha256": "802c08a03ef262d810e78b69bba72c0a8b4ef48e196cee0f179f97ae11756516"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-diagnostics/estimates.schema.json",
+                  "bytes": 2579,
+                  "sha256": "07423f064ec1b1fb0466537cc2ebb6fd0e16617ed7bf68f17f094a145ed214de"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-estimation/SOURCE_BINDING.json",
+                  "bytes": 4496,
+                  "sha256": "9857418d87ba9f129f36d8c25ff0060c44031306f3f24662ecbfccc7b309a2ff"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-estimation/producer.py",
+                  "bytes": 14594,
+                  "sha256": "b271ad830ea58a1bf7815ffee029dc9a81898c547ec92eda1ed448c68f8f9c3a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/LICENSE",
+                  "bytes": 35149,
+                  "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/NOTICE.md",
+                  "bytes": 1103,
+                  "sha256": "4570abb66adbcb908cd13534217fed729cfcddcfbaf9a25a109ce8c5b749a0f9"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/POLICY.json",
+                  "bytes": 7176,
+                  "sha256": "5dbf111108829d57d76138233fbcf008b798bc7e95fb247b7b26c7c5723421b6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/README.md",
+                  "bytes": 10824,
+                  "sha256": "92ef1484e947211991463b6b873c876428eae9d4b71d32e515fb0ab9af11f463"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/SOURCE_BINDING.json",
+                  "bytes": 22084,
+                  "sha256": "9d334fe196f74dd2e06534f9864dbf72c8815ce7a50b88714f3951ddd1a5fac7"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/endpoints.py",
+                  "bytes": 32348,
+                  "sha256": "17291182be93ba603d86359080e8159156a81d6b29800358e0d3f2ecedbfe8e8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/models.py",
+                  "bytes": 11900,
+                  "sha256": "a5ef9412e00a9c488dc170bfcfd502a5280afabfbdf1a492a273287ffc652fe8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/test_protocol.py",
+                  "bytes": 17249,
+                  "sha256": "fb74906c301ab11a36ab65688fd94eb75e6efcbfc1e2b9a4fd01177700c346bc"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-004/task.json",
+                  "bytes": 30897,
+                  "sha256": "ae45457700ada5d9a9f578ad4e1eb9bf5825e94850f52753d9b2f9f0d07b0a54"
+              },
+              {
+                  "path": "tests/construction/test_cardiac_admission.py",
+                  "bytes": 12761,
+                  "sha256": "6984c62ff9c8b12ff99f8cce4d819dabfc060255ea656d2ef6732c7ace1abcbb"
+              },
+              {
+                  "path": "tests/construction/test_dosei_v2.py",
+                  "bytes": 18414,
+                  "sha256": "7e16b54d4dcff336f14cd383aab589d645e80665c12cb01bede938e91521c6b6"
+              },
+              {
+                  "path": "tests/construction/test_fus_delivery.py",
+                  "bytes": 21830,
+                  "sha256": "88718b419f8cb99006c05edc5a5bbde862cd2523ced7444ac476e20578aea356"
+              },
+              {
+                  "path": "tests/construction/test_isttc_endpoints.py",
+                  "bytes": 21485,
+                  "sha256": "b2b5a928f3090ffca35dbce3f7d44bb7a804afe1d0127e2765a2a0e79089f13d"
+              },
+              {
+                  "path": "tests/construction/test_seizure_events.py",
+                  "bytes": 29782,
+                  "sha256": "0ea080b78de2744a697740ea8f84c7ddb06aa35f22dcff1d0a741cc6ff54fde0"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1",
+              "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/implementations/fullfield-delivery-v1",
+              "benchmarks/neural/clinical-dosei-responsiveness/implementations/ordinal-metrics-v2",
+              "benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1",
+              "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1"
+          ]
+          assert len(rows) == 64 > 0
+          assert sum(row['bytes'] for row in rows) == 864989 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 864989,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+      - name: Verify current source identities and complete namespaces (2/2)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path, PurePosixPath
+          import stat
+
+          root = Path('.').absolute()
+          rows = [
+              {
+                  "path": "benchmarks/integrity/current-closures/construction-calcium-pipeline/SOURCE.json",
+                  "bytes": 2414,
+                  "sha256": "10f6ddcafddcf2c5df36cb21df776bc1dc118c90e2ab504798348ed78cb04965"
+              },
+              {
+                  "path": "benchmarks/integrity/current-closures/construction-meg-nested/SOURCE_BINDINGS.json",
+                  "bytes": 5362,
+                  "sha256": "66bece09722e8be166a94399cc7e3dec7f697f8522cf3234c1649cad1cdb0e11"
+              },
+              {
+                  "path": "benchmarks/integrity/current-closures/construction-typing-v1/SOURCE_BINDINGS.json",
+                  "bytes": 2669,
+                  "sha256": "ea934cad864d239141e76b7fb6efe6d70a08f48a667440ffd7c3d01e7be0ff49"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-025/docs/train-only-decoding-v1.md",
+                  "bytes": 1604,
+                  "sha256": "46a94aa946e006ecfa984605993b6d6b38e743c218eb9bd1d00ba54077c06693"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v1/PROVENANCE.json",
+                  "bytes": 29644,
+                  "sha256": "f9a1a12abe12e67f6152a43072b5730568c0555c51c2a5298ab9e4904ef12abc"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v1/README.md",
+                  "bytes": 12300,
+                  "sha256": "5dfa1d761e5576fc65761ae0a0b9f41e184994c2826de13190395370d1bf2e23"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v1/SCHEMA.md",
+                  "bytes": 8818,
+                  "sha256": "d258282b8d3593aae210da16a98f34d28fc8260d934cf3c9bb240cfd1d8317d6"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v1/pipeline.py",
+                  "bytes": 48166,
+                  "sha256": "f950ae7a4885471e0cc0aaabfa94e2c582aea4f25f5a4d16b6ee61473f8f11f8"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v1/verify_source.py",
+                  "bytes": 4153,
+                  "sha256": "2b70eb5d7fda84aeb375efd06af70cedd8d9161f91926fb999b7cc14b52436eb"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-025/task.json",
+                  "bytes": 25265,
+                  "sha256": "4791d12573c04b19cac2f29b849771b363cc0b5463172d6c88af16e747471b33"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-002/docs/v1-transcript-evaluation-v1.md",
+                  "bytes": 1252,
+                  "sha256": "3bc674c17d44e77da9bd7ce68fea612735a3b208c3531a9c16c744e8669e6e23"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-002/implementations/v1-transcript-evaluation-v1/PROVENANCE.json",
+                  "bytes": 8832,
+                  "sha256": "3a7b8fe396f865068d9f52d2f1149d7615edf32809bf56ffaba9bc7d91e1bc79"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-002/implementations/v1-transcript-evaluation-v1/README.md",
+                  "bytes": 12572,
+                  "sha256": "70097e20c9233c28f72a8545a3cad13ac034b85c160e279d1f4328f4584ef237"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-002/implementations/v1-transcript-evaluation-v1/evaluator.py",
+                  "bytes": 26166,
+                  "sha256": "55916e0c191c94d480f18aff1dd587faffe71802c5802a75a1a09153f75f1f92"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-002/implementations/v1-transcript-evaluation-v1/source_contract.json",
+                  "bytes": 95797,
+                  "sha256": "36eafec00f096a5ef22c4e271e61429901369989e72248543643f28913c9e0b6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-002/task.json",
+                  "bytes": 111905,
+                  "sha256": "8ab32cd773f3ac22132a9ffe33ad8325594af7af311a70b0040ab068d9f58bf9"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/docs/nested-connectivity-v1.md",
+                  "bytes": 1344,
+                  "sha256": "04414a3bfe9281be03e43a0a72dafbefe701c413992bcb0e8ab47a914c0190a5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/PROSPECTIVE_DESIGN.json",
+                  "bytes": 5931,
+                  "sha256": "7d04daa03aee306dae0479be5ff5720d17ffb514ae07592292998b0730413313"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/PROSPECTIVE_FOLDS.json",
+                  "bytes": 20210,
+                  "sha256": "9c37527858f13b13532d706ceb1a7265e3f4011e21d104e15d8e712a761470a8"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/PROVENANCE.json",
+                  "bytes": 7260,
+                  "sha256": "c1dc472c56db43d41e7525557f212e3c889c90cb927d4e7c4dc849c46d125a45"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/README.md",
+                  "bytes": 12145,
+                  "sha256": "3e67f0a5f0a620cfc92d9b729ccb52756135498fa9904d371d7b33a767b9ea91"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/core.py",
+                  "bytes": 24749,
+                  "sha256": "19bed711030cdd8032bd9398f4ff508979c653093ffd8240ef7f88606b0c391c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/design.py",
+                  "bytes": 1754,
+                  "sha256": "bb0052ad7d6bf90723edab56a2bd31d162d7042a2a4d3009d25c98e54c639037"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/make_generated_example.py",
+                  "bytes": 3461,
+                  "sha256": "a5eb22b288a5c5324e8522c9960d916ed4eab6b5384a88bd2965013bf18c84c2"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/published_participants.txt",
+                  "bytes": 563,
+                  "sha256": "6e0970cb1a1a9aab53a35c43c3bcf84af527131631418bfd00594528e43bf70a"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/requirements.txt",
+                  "bytes": 99,
+                  "sha256": "c5deeda5b37dd2797e4e802810c4ba3f58f80236a3369a6aad611e1da0ebb3d0"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1/run.py",
+                  "bytes": 6553,
+                  "sha256": "0acaa103779e64dde48260780f004fb7f10bdf13a337a29d3c7ad3cb5931d169"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-010/task.json",
+                  "bytes": 76435,
+                  "sha256": "4a30ed061c0a4dcafbf7a67f24c67df98cfffda9d55cd6a6dd3fb88819e77062"
+              },
+              {
+                  "path": "tests/construction/test_calcium_pipeline.py",
+                  "bytes": 48149,
+                  "sha256": "6630ac4468773d61550e193eaef820fa54a9524ee94d8169f32b0781458fb7a0"
+              },
+              {
+                  "path": "tests/construction/test_meg_nested.py",
+                  "bytes": 35906,
+                  "sha256": "3f59988324fb23b92a2b7d9abdcdef16aa8deefd5795f91cf52d172f0e6cc7fe"
+              },
+              {
+                  "path": "tests/construction/test_typing_v1.py",
+                  "bytes": 26713,
+                  "sha256": "005fedc38371f6b63794cba58b30ae5978488995b9ccb14cd5b24fecdaa97983"
+              }
+          ]
+          packages = [
+              "benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v1",
+              "benchmarks/paper/PAPER-ROOT-ADD-002/implementations/v1-transcript-evaluation-v1",
+              "benchmarks/paper/PAPER-paper-method-add-010/implementations/nested-connectivity-v1"
+          ]
+          assert len(rows) == 31 > 0
+          assert sum(row['bytes'] for row in rows) == 668191 <= 33554432
+          expected = {}
+          def path_for(relative, *, directory=False):
+              p = PurePosixPath(relative)
+              assert str(p) == relative and not p.is_absolute()
+              assert '\\' not in relative and all(x not in ('', '.', '..') for x in relative.split('/'))
+              current = root
+              for part in p.parts:
+                  current = current / part
+                  assert not current.is_symlink(), relative
+              info = current.lstat()
+              assert stat.S_ISDIR(info.st_mode) if directory else stat.S_ISREG(info.st_mode), relative
+              return current
+          def stamp(info):
+              return info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns
+          for row in rows:
+              assert set(row) == {'path', 'bytes', 'sha256'}
+              assert row['path'] not in expected
+              assert type(row['bytes']) is int and 0 <= row['bytes'] <= 8388608
+              assert len(row['sha256']) == 64 and set(row['sha256']) <= set('0123456789abcdef')
+              path = path_for(row['path'])
+              before = path.lstat()
+              assert before.st_nlink == 1 and before.st_size == row['bytes'], row['path']
+              fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW)
+              with os.fdopen(fd, 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  assert stamp(opened) == stamp(before)
+                  body = stream.read(row['bytes'] + 1)
+                  assert stamp(os.fstat(stream.fileno())) == stamp(opened)
+              assert stamp(path_for(row['path']).lstat()) == stamp(before)
+              assert len(body) == row['bytes'] and hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+              expected[row['path']] = row
+          for package in packages:
+              path_for(package, directory=True)
+              observed = set()
+              for directory, directories, files in os.walk(root / package, followlinks=False):
+                  for name in directories:
+                      path_for((Path(directory) / name).relative_to(root).as_posix(), directory=True)
+                  for name in files:
+                      relative = (Path(directory) / name).relative_to(root).as_posix()
+                      path_for(relative)
+                      observed.add(relative)
+              assert observed == {p for p in expected if p.startswith(package + '/')}, package
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 668191,
+                            'complete_new_packages': len(packages), 'generated_controls_only': True,
+                            'authentic_data_read': False, 'scientific_qualification': False}))
+          PY
+
+  construction-dosei-controls:
+    needs: construction-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls (test_dosei_v2.py)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('tests/construction', pattern='test_dosei_v2.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 13, f"Expected 13 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 13, f"Expected 13 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'tests/construction/test_dosei_v2.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  construction-isttc-controls:
+    needs: construction-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install exact control dependencies from authenticated binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-isttc-controls-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-isttc-controls-requirements.txt"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Generated controls (test_isttc_endpoints.py)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('tests/construction', pattern='test_isttc_endpoints.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 25, f"Expected 25 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 25, f"Expected 25 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'tests/construction/test_isttc_endpoints.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+      - name: Generated controls (test_protocol.py)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1', pattern='test_protocol.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 14, f"Expected 14 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 14, f"Expected 14 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/test_protocol.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  construction-cardiac-controls:
+    needs: construction-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls (test_cardiac_admission.py)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('tests/construction', pattern='test_cardiac_admission.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 19, f"Expected 19 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 19, f"Expected 19 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'tests/construction/test_cardiac_admission.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+      - name: Generated controls (test_admission.py)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1', pattern='test_admission.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 25, f"Expected 25 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 25, f"Expected 25 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'benchmarks/paper/PAPER-ROOT-ADD-016/implementations/full-cohort-admission-v1/test_admission.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  construction-fus-delivery-controls:
+    needs: construction-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls (test_fus_delivery.py)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('tests/construction', pattern='test_fus_delivery.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 21, f"Expected 21 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 21, f"Expected 21 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'tests/construction/test_fus_delivery.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  construction-seizure-controls:
+    needs: construction-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install exact control dependencies from authenticated binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-seizure-controls-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-seizure-controls-requirements.txt"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Generated controls (test_seizure_events.py)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('tests/construction', pattern='test_seizure_events.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 39, f"Expected 39 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 39, f"Expected 39 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'tests/construction/test_seizure_events.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  construction-meg-controls:
+    needs: construction-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install exact control dependencies from authenticated binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-meg-controls-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          scikit-learn==1.9.1 --hash=sha256:52a0703bbc07ad27f560fa63fa68e4c54dd735bfbbf65b4dd3c225dc7547b6df
+          joblib==1.5.3 --hash=sha256:5fc3c5039fc5ca8c0276333a188bbd59d6b7ab37fe6632daa76bc7f9ec18e713
+          narwhals==2.23.0 --hash=sha256:769e7b9ab102c93d8fa019f6b4cd1a657909b04a20bf6210e5a35aae06814ae9
+          threadpoolctl==3.6.0 --hash=sha256:43a0b8fd5a2928500110039e43a5eed8480b918967083ea48dc3ab9f13c4a7fb
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-meg-controls-requirements.txt"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1', 'scikit-learn': '1.9.1', 'joblib': '1.5.3', 'narwhals': '2.23.0', 'threadpoolctl': '3.6.0'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Generated controls (test_meg_nested.py)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('tests/construction', pattern='test_meg_nested.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 35, f"Expected 35 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 35, f"Expected 35 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'tests/construction/test_meg_nested.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  construction-calcium-controls:
+    needs: construction-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Install exact control dependencies from authenticated binary wheels
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "${RUNNER_TEMP}/construction-calcium-controls-requirements.txt" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 120s python -I -m pip install --disable-pip-version-check --no-cache-dir --force-reinstall --only-binary=:all: --no-deps --require-hashes -r "${RUNNER_TEMP}/construction-calcium-controls-requirements.txt"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PY'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_dependency_versions': actual}))
+          PY
+      - name: Inspect the component's current source descriptor
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -I -S -B 'benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v1/verify_source.py' --expected-sha256 '10f6ddcafddcf2c5df36cb21df776bc1dc118c90e2ab504798348ed78cb04965'
+      - name: Generated controls (test_calcium_pipeline.py)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('tests/construction', pattern='test_calcium_pipeline.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 57, f"Expected 57 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 57, f"Expected 57 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'tests/construction/test_calcium_pipeline.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
+
+  construction-typing-controls:
+    needs: construction-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated controls (test_typing_v1.py)
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - <<'PY'
+          import json
+          import sys
+          import unittest
+          suite = unittest.defaultTestLoader.discover('tests/construction', pattern='test_typing_v1.py')
+          actual_count = suite.countTestCases()
+          assert actual_count == 18, f"Expected 18 cases, discovered {actual_count}"
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 18, f"Expected 18 executed cases, ran {result.testsRun}"
+          assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
+          actual_skips = sorted(case.id() for case, _ in result.skipped)
+          assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
+          print(json.dumps({'test_file': 'tests/construction/test_typing_v1.py', 'tests_run': result.testsRun,
+                            'skipped': actual_skips, 'generated_controls_only': True,
+                            'scientific_qualification': False}))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY

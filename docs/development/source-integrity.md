@@ -9,8 +9,8 @@ scientific qualification.
 python3 -I -S -B scripts/check_repository.py
 ```
 
-This checker validates the declared ownership and current layout of all 290
-implementation/source records against
+This checker validates the declared ownership and current layout of all 298
+implementation artifact records against
 [benchmarks/integrity/source-ownership.json](../../benchmarks/integrity/source-ownership.json)
 and the task registry. It checks the published source organization; it does not
 make external dependencies available or turn historical source into a deployable
@@ -37,7 +37,11 @@ The current enrollment comprises four registered-runtime source packages, with
 This is not coverage of all implementation/source relationships in the task registry.
 Other [source CI jobs](../../.github/workflows/neuroscience-source-integrity.yml)
 run separate package-specific controls, including generated-input checks. Each
-job's commands define its tested scope.
+job's commands define its tested scope. The additive
+[construction workflow](../../.github/workflows/construction-benchmark-components.yml)
+checks eight reviewed components and 95 unique source pins, then runs their 266
+generated test cases. These source and engineering checks preserve the stated
+authentic-data and scientific qualification limits.
 
 Run both commands from the repository root using Python 3.11 or later.
 

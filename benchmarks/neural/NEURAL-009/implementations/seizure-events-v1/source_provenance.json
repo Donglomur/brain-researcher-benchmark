@@ -1,0 +1,82 @@
+{
+  "schema": "neural009_source_provenance_v1",
+  "task_id": "NEURAL-009",
+  "retrieved_utc": "2026-11-17T02:36:05.805775+00:00",
+  "sources": [
+    {
+      "url": "https://raw.githubusercontent.com/esl-epfl/timescoring/426f8d2b77974641dc9db71884e0812b249ba93b/src/timescoring/scoring.py",
+      "bytes": 9092,
+      "sha256": "0cb3b685c2d7add8d0cb2376d2021ace6d551591a2a31bfbd44a0281efe187c7"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/esl-epfl/timescoring/426f8d2b77974641dc9db71884e0812b249ba93b/src/timescoring/annotations.py",
+      "bytes": 3995,
+      "sha256": "0e7c5b05f257251a986e28c92ed2cb1d1a2532e0c28eae489f85d1c6b0f24928"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/esl-epfl/timescoring/426f8d2b77974641dc9db71884e0812b249ba93b/README.md",
+      "bytes": 6316,
+      "sha256": "e5399eb275ef26d6e16108dcb7c8b9caf51f792222ff50b67f302b858627be34"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/esl-epfl/timescoring/426f8d2b77974641dc9db71884e0812b249ba93b/LICENSE",
+      "bytes": 1090,
+      "sha256": "a53fae91ae89056b5554ecde81123d5344a6c0b42bec5bca3823d6f924f2a295"
+    },
+    {
+      "url": "https://physionet.org/files/chbmit/1.0.0/RECORDS",
+      "bytes": 13056,
+      "sha256": "72b640d6a3fef4b40de255933d1403823d1655c56f93d69761105a653798fc08"
+    },
+    {
+      "url": "https://physionet.org/files/chbmit/1.0.0/SUBJECT-INFO",
+      "bytes": 284,
+      "sha256": "351eaea5e090265d422fac595fa5fb8e8edfb0232091e623c852c505697fd66b"
+    },
+    {
+      "url": "https://physionet.org/files/chbmit/1.0.0/chb01/chb01-summary.txt",
+      "bytes": 5355,
+      "sha256": "77e86183845192d147c88a9bb4263c2b4a32e936c6236029770f86ca2ea023db"
+    },
+    {
+      "url": "https://physionet.org/files/chbmit/1.0.0/SHA256SUMS.txt",
+      "bytes": 73298,
+      "sha256": "f1698efeb9fef887e55cedf6eda13386d9a888db663aec48b2aa194b7b753d2b"
+    },
+    {
+      "url": "https://physionet.org/content/chbmit/view-license/1.0.0/",
+      "bytes": 35678,
+      "sha256": "326af87b265116427ad2389f3ec2607d3e7087ea5c472eac7452df6fdf6e2a9c"
+    },
+    {
+      "url": "https://api.github.com/repos/esl-epfl/epilepsy2bids/contents/src/epilepsy2bids/bids/chbmit/convert2bids.py?ref=d3fb17526b8a483e292ae9ba2e51b02d5f9128ff",
+      "bytes": 4103,
+      "sha256": "94a6bd9021799909d4a0eb8b1e8b1bdfe762e5b0fab211e2d24ce1a8bb7a360a"
+    },
+    {
+      "url": "https://api.github.com/repos/esl-epfl/epilepsy2bids/contents/src/epilepsy2bids/load_annotations/chbmit.py?ref=d3fb17526b8a483e292ae9ba2e51b02d5f9128ff",
+      "bytes": 3090,
+      "sha256": "19bf5e68877866c51a563f4be0808134a7f54cf0b29e94f4497563dec5563133"
+    }
+  ],
+  "vendored_code_commit": "426f8d2b77974641dc9db71884e0812b249ba93b",
+  "vendored_license": "MIT; exact license retained in vendor/timescoring/LICENSE",
+  "dataset_metadata_terms": "CHB-MIT and PhysioNet attribution; ODC-By 1.0 source terms remain applicable",
+  "signal_payloads_redistributed": false,
+  "record_index_derivation": "Exact ordered RECORDS paths; each publisher EDF digest joined by exact filename; biological folder identity corrected by pinned epilepsy2bids chb21 to chb01 mapping. Every one of the 686 entries independently reconciled against both source metadata files.",
+  "source_facts": [
+    "686 EDF recording identities from exact manifest; 24 folders correspond to 23 biological people.",
+    "EventScoring source uses 10 Hz masks, source-default tolerances30/60s, merge-gap<90s, split duration300s and minOverlap0 withstrict+1e-6.",
+    "Source event matching is not one-to-one; false-alarm exposure is all observedtime.",
+    "Annotation mask construction rounds timestamps; component admits exactinteger10Hzticks and does not normalize native clocks."
+  ],
+  "prospective_design_choices": [
+    "Full23-fold leave-one-biological-person-out comparison.",
+    "Completeprobabilityscore support on explicit10Hzoutputgrid with fixed>=0.5 threshold.",
+    "Perrecord reset without gaps counted asobservedtime or inferredcrossfilecontinuity.",
+    "Causalcontextthroughprediction-bin endpoint; training-onlyfitting and innerpersonheldout tuning.",
+    "Undefinedpersonmetric makes corresponding macro null; no silentpersonexclusion."
+  ],
+  "interpretation": "Reviewed prospective component scope, not a source-paper optimum or scientific qualification.",
+  "qualification": false
+}

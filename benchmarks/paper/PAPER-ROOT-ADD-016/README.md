@@ -19,12 +19,18 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 This preserved declaration is lineage, not current execution qualification. Its historical paths may describe the source snapshot.
 
+## Task documentation
+
+- [Complete cohort and saved-draw reference preparation](docs/full-cohort-admission-v1.md)
+
 ## Implementation artifacts
 
 - [Paired execution](implementations/paired-execution) — Task implementation.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Full cohort admission v1](implementations/full-cohort-admission-v1) — Task implementation.
+  Scope: Operator-only preparation of the complete 655-row source population and six separate raw/standardized models, plus complete saved-draw summary reconstruction. No fitting, accepted independent reference, candidate execution or scientific qualification; authentic inputs, native numerical agreement, convergence and protected custody remain unverified. Existing candidate grading rules are unchanged.
 - [Matched artifacts](implementations/matched-artifacts) — Matched artifacts.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Six model summary](implementations/six-model-summary) — Six model summary.

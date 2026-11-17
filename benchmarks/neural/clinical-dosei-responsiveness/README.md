@@ -18,10 +18,16 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Secondary ordinal metrics and paired participant uncertainty](docs/ordinal-metrics-v2.md)
+
 ## Implementation artifacts
 
 - [Ordinal and paired](implementations/ordinal-and-paired) — Ordinal and paired.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Ordinal metrics v2](implementations/ordinal-metrics-v2) — Task implementation.
+  Scope: Conditional secondary ordinal reports and original-arm paired participant intervals under explicit prospective policy. Exact unchanged primary dependency; no authentic inputs, competent reference, protected execution, clinical validity or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
