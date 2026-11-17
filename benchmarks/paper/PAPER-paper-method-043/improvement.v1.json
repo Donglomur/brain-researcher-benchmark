@@ -2,8 +2,8 @@
   "schema_version": "paper-improvement/v1",
   "task_id": "PAPER-paper-method-043",
   "objective": "surpass_source_paper_same_task",
-  "disposition": "design_ready",
-  "disposition_reason": "NeuroPictor has an ordered, source-recoverable fMRI-to-image reconstruction task and Table 1 scores for the complete four-subject test population. The paper reports eight metrics without a single primary endpoint. Inception identification is a proposed primary for this design, not a paper-declared primary; panel guardrails, effect size, uncertainty, exact image membership, checkpoint lineage and native evaluator qualification must be fixed before admission.",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The original fMRI-to-image prediction task, Table 1 scores and Inception identification formula are recovered, but the complete eight-metric source panel remains unresolved because historical SSIM environment and grayscale multichannel semantics are unqualified. The paper specifies no single primary endpoint; selecting Inception alone cannot establish full source metric recovery. Preserve its verified published 0.945 component, all four subjects and all eight metrics while resolving metric parity, image membership, checkpoint lineage and the full-panel decision before design admission.",
   "source_paper": {
     "title": "NeuroPictor: Refining fMRI-to-Image Reconstruction via Multi-individual Pretraining and Multi-level Modulation",
     "url": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf"
@@ -166,7 +166,7 @@
     }
   },
   "episode": {
-    "improvement_loop": "After source/evaluator qualification, tune on original training data with a declared development partition derived from training only; use development reconstruction feedback and retain all attempts. Original shared test stimuli receive no iterative feedback.",
+    "improvement_loop": "Blocked pending complete original metric-panel recovery, including historical SSIM semantics. After source/evaluator qualification, tune on original training data with a declared development partition derived from training only; use development reconstruction feedback and retain all attempts. Original shared test stimuli receive no iterative feedback.",
     "candidate_freeze": "Freeze model/code/weights, all four subject recipes, inference seed policy, one-sample rule, preprocessing, feature extractor versions, selected primary/guardrails, complete cohorts and budgets before final scoring.",
     "final_evaluation": "Run frozen candidate and authenticated author reference on every original subject-stimulus pair; report the complete eight-metric panel, paired uncertainty and source-score comparison. A changed split or low-data condition is separately labeled extension.",
     "access_budget": null,
