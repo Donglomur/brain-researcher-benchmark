@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
+- [Source admission v1](implementations/source-admission-v1) — Original cohort edf annotation admission.
+  Scope: Original-file admission for all 686 pinned CHB-MIT recordings and 23 people, including streamed EDF hashes and header geometry, annotations, montage and existing-evaluator public support. Metadata coverage was checked; ten inferred negative records and the positive-list discrepancy remain explicit. Authentic EDF preparation, signal normalization, competent reference and protected participant execution remain separate construction requirements.
 - [Seizure events v1](implementations/seizure-events-v1) — Task implementation.
   Scope: Complete normalized event evaluator over 686 recordings and 23 biological people with an explicit prospective policy and alias-safe leave-one-person-out support. Authentic signals, clocks, native normalization, competent EEG-derived references, patient-paired uncertainty, protected execution and scientific qualification remain unestablished; tolerant processed-event coverage is not original clinical event count or onset timeliness.
 - [Seizure diagnostics v1](implementations/seizure-diagnostics-v1) — Reviewed source component.

@@ -83,9 +83,13 @@ reports current source coverage and target mismatches; these are separate from
 scientific qualification.
 
 The [whole-night sleep viewer](benchmarks/neural/NEURAL-007/implementations/whole-night-viewer-v1/README.md)
-adds reviewed source for all 5,450 development epochs. Its authentic viewer
-preparation and rendering, provider image delivery and model performance remain
-unqualified; the canonical unsupported direct/viewer status is unchanged. This
+provides observations for all 5,450 development epochs. Its [historical scripted
+preparation, delivery and replay](docs/science/sleep007-viewer-delivery-20261117.md)
+completed under the original renderer with fixed uniform responses, without an AI
+participant or scientific score. The later renderer correction has generated-only
+evidence and does not inherit that execution proof. Provider image delivery,
+participant isolation and model performance remain unqualified; the canonical
+unsupported direct/viewer status is unchanged. This
 zero-shot waveform viewer and the feature programme that can learn from six
 training people's labels use different information budgets. Shared task and query
 IDs alone cannot establish an information-matched tool effect.

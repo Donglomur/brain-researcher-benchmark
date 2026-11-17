@@ -68,6 +68,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Complete-person sleep waveform viewer with bounded navigation, PNG rendering and original-scorer response collection. Registration covers reviewed source and generated controls. Historical scripted delivery and replay completed for all 5,450 exposed-development epochs with fixed uniform responses under source 1c9357d1fa652d4d2ed9e501f32e707a5452c39a. The later renderer correction 39a1f84c17fd01a4595b47e999ce668510c31bd0 has generated-only evidence and does not inherit that authentic execution proof. Provider/model interpretation, participant isolation, model performance and scientific qualification remain unestablished.
 - [Finite probability diagnostics v1](implementations/finite-probability-diagnostics-v1) — Reviewed source component.
   Scope: Finite sleep probability diagnostics. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
+- [Viewer transport v1](implementations/viewer-transport-v1) — Complete person waveform participant transport.
+  Scope: Fresh per-person image/action participant transport with exact capture, audit and complete original response collection. Generated controls only; authentic full-panel throughput, sandbox/provider delivery, model interpretation and scientific qualification remain unestablished.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

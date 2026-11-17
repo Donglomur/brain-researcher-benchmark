@@ -61,6 +61,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Post-assembly mask and trace evaluation across ten fixed recordings using strict IoU greater than 0.5 segmentation metrics, common-detected-neuron trace correlations and paired runtime summaries, plus a tile geometry planner. Native frame/crop mapping, patch assembly, checkpoint/reference identity, donor/tuning partitions, rights and operational protected-reference isolation remain held. Scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Streaming input v1](implementations/streaming-input-v1) — Source movie input and released output adapter.
+  Scope: Bounded original-movie slab input, complete ten-recording tile traversal and released output-field decoding. Generated controls support source construction; raw crop/origin authentication, paper-equivalent checkpoint linkage, authentic model execution and scientific reproduction or improvement remain unestablished.
 - [Source panel v1](implementations/source-panel-v1) — Original panel source preparation and scoring.
   Scope: Original ten-video Allen ROI conversion and full named-panel scoring with 1563 source ROIs and eight unique donors. Repeated recordings from the same donor remain clustered for uncertainty. Source inspection exposes the available checkpoint architecture mismatch and unresolved crop/frame origin; conversion and fixed software controls do not establish the original author baseline, model inference or same-task paper superiority.
 

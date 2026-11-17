@@ -81,7 +81,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-method-010](PAPER-paper-method-010/README.md) | Rastermap: a discovery method for neural population recordings | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-paper-method-011](PAPER-paper-method-011/README.md) | An emerging view of neural geometry in motor cortex supports high-performance decoding | source_declaration_unavailable | source_unresolved | 2 | not linked |
 | [PAPER-paper-method-012](PAPER-paper-method-012/README.md) | MINT: A toolbox for the analysis of multivariate neural information coding and transmission | unavailable | unavailable | 2 | not linked |
-| [PAPER-paper-method-013](PAPER-paper-method-013/README.md) | An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data | source_unresolved | design_ready | 2 | not linked |
+| [PAPER-paper-method-013](PAPER-paper-method-013/README.md) | An end-to-end recurrent compressed sensing method to denoise, detect and demix calcium imaging data | source_unresolved | design_ready | 3 | not linked |
 | [PAPER-paper-method-018](PAPER-paper-method-018/README.md) | Identifying interactions across brain areas while accounting for individual-neuron dynamics with a Transformer-based variational autoencoder | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-paper-method-020](PAPER-paper-method-020/README.md) | Neuro-Symbolic Decoding of Neural Activity | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-paper-method-023](PAPER-paper-method-023/README.md) | EEGPT: Pretrained Transformer for Universal and Reliable Representation of EEG Signals | source_unresolved | source_unresolved | 2 | not linked |
@@ -143,7 +143,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-EXP-20261113-005](PAPER-EXP-20261113-005/README.md) | A prefrontal cortex map based on single-neuron activity | unavailable | unavailable | 7 | not linked |
 | [PAPER-SCOPE-20261114-LATENTCIRCUIT](PAPER-SCOPE-20261114-LATENTCIRCUIT/README.md) | Latent circuit inference from heterogeneous neural responses during cognitive tasks | source_unresolved | source_unresolved | 1 | not linked |
 | [PAPER-SCOPE-20261114-REM-DYNAMICS](PAPER-SCOPE-20261114-REM-DYNAMICS/README.md) | Low-dimensional population dynamics in the brainstem gate REM sleep | source_unresolved | source_unresolved | 2 | not linked |
-| [PAPER-SMC-RNN-2024](PAPER-SMC-RNN-2024/README.md) | SMC-RNN: reproduce source findings and exceed the original offline MC\_Maze 20-ms endpoint | source_unresolved | design_ready | 2 | not linked |
+| [PAPER-SMC-RNN-2024](PAPER-SMC-RNN-2024/README.md) | SMC-RNN: reproduce source findings and exceed the original offline MC\_Maze 20-ms endpoint | source_unresolved | design_ready | 3 | not linked |
 | [paper-pcca-fa-bilateral-pfc-arousal-2026](paper-pcca-fa-bilateral-pfc-arousal-2026/README.md) | Reproduce bilateral prefrontal covariance decomposition and pupil-linked arousal, then test protected neural-to-pupil prediction | unavailable | unavailable | 2 | not linked |
 
 Generated with `python3 scripts/catalog.py` from the repository root. Edit authoritative task definitions, then regenerate; do not edit these browse pages directly.
