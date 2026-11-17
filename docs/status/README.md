@@ -12,6 +12,8 @@ From the repository root:
 python3 -I -S -B scripts/neurobench.py status
 python3 -I -S -B scripts/neurobench.py evidence
 python3 -I -S -B scripts/neurobench.py evidence NEURAL-077
+python3 -I -S -B scripts/neurobench.py evidence PAPER-paper-method-003
+python3 -I -S -B scripts/neurobench.py evidence PAPER-paper-method-013
 python3 -I -S -B scripts/neurobench.py neural-contract NEURAL-077
 python3 -I -S -B scripts/neurobench.py implementations NEURAL-007
 python3 -I -S -B scripts/neurobench.py operator routes
@@ -40,10 +42,12 @@ evidence.
 | [NEURAL-077 viewer rendering](../../benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json) | Full packet authentication and rendering of selected query ordinals | Authentic image-generation behavior; no evaluated viewer-model episode |
 | [NEURAL-077 restricted viewer transport](../../benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/EVIDENCE.json) | All 400 authentic queries delivered to fresh scripted clients, complete unscored response collection and 15 authentic boundary checks | Local image/action transport and collection behavior; no model/provider delivery qualification or neural interpretation result |
 | [Native EEG/sleep operator controls](operator-controls-20261116.json) and [fresh-checkout repair validation](operator-controls-rename-20261116.json) | 16 fixed-output controls across two reports, covering the complete 400-trial EEG and 5,450-epoch sleep development panels | Input preparation, validation, grading, incomplete-submission rejection and target-pin failure, including the repaired public entry point; no new solver attempts, model calls or fits |
+| [REVE source preparation](reve-source-preparation-20261116.json) | All 654 official EDFs, 109 participants and 9,837 prepared epochs; fixed-output software controls on the complete original test-event panel | Released-code input preparation and scorer behavior; no author-model inference, with historical preprocessing, downstream classifier and run-aggregation identity unresolved |
+| [DeepCaImX source preparation](deepcaimx-source-preparation-20261116.json) | All ten original manual ROI files, 1,563 ROIs and eight donors; target-backed arithmetic controls | Reference conversion and segmentation scorer behavior; no movie-to-mask model, with crop/frame mapping, checkpoint equivalence and native assembly unresolved |
 | [Historical execution projections](../provenance/execution/historical-evidence-v1/README.md) | Three profiles, including four NEURAL-023 programme controls | Retained historical execution and interface-control evidence; current environments and complete scientific scope remain unqualified |
 
-These reports overlap. Together they reference **five distinct registered task
-IDs**; historical profiles, engineering reports and native controls are not
+These reports overlap. Together they reference **seven distinct registered task
+IDs**; historical profiles, source preparation, engineering reports and native controls are not
 additional benchmarks or agent attempts. Within the selected reports, there are
 **no direct-interpretation or viewer-interpretation model attempts**. The neural
 pilot evaluated programmes on exposed development people, so its results do not
@@ -107,12 +111,20 @@ epochs under the pinned released-code preprocessing profile. Complete-test-event
 constant-output scorer controls passed; no model inference ran. The released
 preprocessing differs from the paper's filtering description, and the original
 downstream classifier checkpoint and run-aggregation identity remain unresolved.
+The [sanitized preparation report](reve-source-preparation-20261116.json) records
+the source identities, panel accounting and software-control scope separately from
+current source bindings; `evidence PAPER-paper-method-003` exposes that report.
 
 The [DeepCaImX source-panel route](../../benchmarks/paper/PAPER-paper-method-013/implementations/source-panel-v1/SOURCE_RECOVERY.md)
 authenticated and converted all ten original manual ROI files: 1,563 ROIs across
 ten videos from eight donors. Full-panel arithmetic controls exercised segmentation
 scoring. Movie-to-mask inference has not run: exact crop/frame mapping,
 paper-equivalent checkpoint identity and native assembly remain unresolved. The
+[sanitized ROI preparation report](deepcaimx-source-preparation-20261116.json) keeps
+the authenticated source and arithmetic-control evidence separate from model
+performance; inspect it with `evidence PAPER-paper-method-013`. Its source identity
+was reviewed after execution; the control receipt did not capture a contemporaneous
+source commit or executable hashes. The
 [implementation guide](../usage/implementations.md#prepare-original-paper-endpoints)
 links both executable preparation paths and their required boundaries. Neither
 preparation result establishes source-paper reproduction or improvement.

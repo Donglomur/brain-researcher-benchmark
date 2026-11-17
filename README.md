@@ -79,7 +79,9 @@ establish no empirical paper improvement. A changed split, easier subset or diff
 metric is an extension; current SOTA requires its own verified comparison.
 Concrete [paper-preparation routes](docs/usage/implementations.md#prepare-original-paper-endpoints)
 now cover the complete REVE PhysioNet input panel and DeepCaImX manual ROI panel.
-Author-model equivalence and paper improvement remain unresolved.
+Their preparation and software-control reports are available through `evidence
+PAPER-paper-method-003` and `evidence PAPER-paper-method-013`; neither reports model
+inference. Author-model equivalence and paper improvement remain unresolved.
 
 ## Find source and understand the counts
 
