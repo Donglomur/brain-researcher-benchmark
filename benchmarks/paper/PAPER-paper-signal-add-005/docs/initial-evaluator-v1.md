@@ -38,13 +38,13 @@ The following are prospective robustness policies required by the contract, not 
 
 ## Run
 
-No dependencies are installed by the package. It uses Python 3.11+, NumPy and SciPy already present in the execution environment. Verified runtime here: `/opt/homebrew/bin/python3.11`, NumPy 2.4.6, SciPy 1.17.1. A different system `python3` lacked SciPy and failed import; this was not a scientific failure.
+No dependencies are installed by the package. It uses Python 3.11+, NumPy and SciPy already present in the execution environment. Select an existing compatible environment where `python3.11` resolves with NumPy and SciPy available, or substitute that environment’s compatible `python3` command. Validation used Python 3.11, NumPy 2.4.6 and SciPy 1.17.1; the actual host interpreter and failed environment check are recorded only in external validation evidence.
 
 From repository root:
 
 ```sh
-PYTHONDONTWRITEBYTECODE=1 /opt/homebrew/bin/python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/tests -v
-/opt/homebrew/bin/python3.11 benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/beta_evaluator.py /absolute/input/manifest.json /absolute/output/report.json
+PYTHONDONTWRITEBYTECODE=1 python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/tests -v
+python3.11 benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/beta_evaluator.py /absolute/input/manifest.json /absolute/output/report.json
 ```
 
 The manifest must have `schema_version: 1`, the exact `task_id` and `source_revision`, `band_hz: [13,30]`, `quantity: "hilbert_amplitude"`, `sampling_frequency_hz: 1200`, nonnegative integer `seed`, positive `event_shift_repeats`, `bootstrap_repeats >= 2`, and `matched_trial_count >= 2`. It also requires nonempty strings for `preprocessing_provenance`, `artifact_policy_provenance`, `source_peak_provenance`, `envelope_extraction_provenance`, and `metadata_provenance`. These are provenance declarations, not independent attestations.

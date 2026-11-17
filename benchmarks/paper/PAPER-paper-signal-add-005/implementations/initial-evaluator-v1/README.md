@@ -7,14 +7,14 @@ Read [the complete boundary, interface, scientific semantics and holds](../../do
 Dependencies: Python 3.11+, NumPy and SciPy; use existing installations. Run the generated controls from the repository root:
 
 ```sh
-PYTHONDONTWRITEBYTECODE=1 /opt/homebrew/bin/python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/tests -v
+PYTHONDONTWRITEBYTECODE=1 python3.11 -m unittest discover -s benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/tests -v
 ```
 
 From the repository root, inspect the interface or evaluate an existing manifest:
 
 ```sh
-/opt/homebrew/bin/python3.11 benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/beta_evaluator.py --help
-/opt/homebrew/bin/python3.11 benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/beta_evaluator.py /absolute/input/manifest.json /absolute/output/report.json
+python3.11 benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/beta_evaluator.py --help
+python3.11 benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/beta_evaluator.py /absolute/input/manifest.json /absolute/output/report.json
 ```
 
-Use the existing Python interpreter with NumPy and SciPy if its path differs. The manifest must list all 53 participant dispositions and pin the 51 included participants' NPZ envelopes; see the linked documentation for the exact schema and scientific prerequisites.
+The `python3.11` command must resolve to an existing environment with NumPy and SciPy; substitute a compatible `python3` command if needed. The manifest must list all 53 participant dispositions and pin the 51 included participants' NPZ envelopes; see the linked documentation for the exact schema and scientific prerequisites.
