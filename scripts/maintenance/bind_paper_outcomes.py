@@ -256,27 +256,43 @@ def build_outputs(root=ROOT):
             new_binding["reproduction_contract"] = reproduction_pin
         selected_improvement = improvement
         successor = None
-        if identifier == binding.PRIMARY_SUCCESSOR_TASK:
-            # This one adopted task requires the reviewed offline policy. Missing
-            # descriptors or policies fail; the old policy is never a fallback.
-            module = binding.primary_successor_module()
+        if identifier == binding.PRIMARY_SUCCESSOR_TASK or identifier in binding.SCOPE_POLICY_SUCCESSOR_TASKS:
+            # These fixed tasks require their reviewed current policies. Missing
+            # descriptors or policies fail; retained policy is never a fallback.
+            module = binding.primary_successor_module(identifier)
             if already_bound:
                 selected = row["paper_outcomes"]
                 revision_pin = selected["primary_policy_revision"]
                 primary_pin = selected["primary_improvement_contract"]
             else:
-                _, revision_pin = raw(reader, module.DESCRIPTOR)
-                _, primary_pin = raw(reader, home + "/improvement.temporal-scope.v1.json")
+                if identifier == binding.PRIMARY_SUCCESSOR_TASK:
+                    _, revision_pin = raw(reader, module.DESCRIPTOR)
+                    _, primary_pin = raw(reader, home + "/improvement.temporal-scope.v1.json")
+                else:
+                    _, revision_pin = raw(reader, home + "/" + module.REVISION_FILE)
+                    _, primary_pin = raw(reader, home + "/" + module.CURRENT_FILE)
             new_binding.update(primary_policy_revision=revision_pin, primary_improvement_contract=primary_pin)
             binding.has_primary_successor({**row, "paper_outcomes": new_binding})
-            binding.need(not scopes or (identifier not in scopes["entries"]
-                         and identifier not in scopes.get("same_primary_corrections", {})),
-                         "SMC temporal successor cannot combine another primary scope projection")
-            successor = module.authenticate(revision_pin=revision_pin, primary_pin=primary_pin,
+            arguments = dict(revision_pin=revision_pin, primary_pin=primary_pin,
                 reproduction_pin=reproduction_pin, previous_pin=archive_pin,
                 retained_improvement_pin=improvement_pin, read_pin=planned_read)
+            if identifier == binding.PRIMARY_SUCCESSOR_TASK:
+                binding.need(not scopes or (identifier not in scopes["entries"]
+                             and identifier not in scopes.get("same_primary_corrections", {})),
+                             "SMC temporal successor cannot combine another primary scope projection")
+            else:
+                binding.need(scopes is not None and identifier not in scopes["entries"]
+                             and identifier in scopes.get("same_primary_corrections", {}),
+                             "Scope policy successor requires its reviewed normal scope correction")
+                binding.need(reproduction is not None and reproduction.get("schema_version") == "paper-reproduction/v2",
+                             "Scope policy successor requires the reviewed v2 reproduction")
+                binding.require_pin(previous.scope_pin, binding.SCOPE_PATH, "scope policy authority")
+                binding.need(previous.scope_pin == module.SCOPE_PIN,
+                             "Scope policy successor requires the exact reviewed scope authority")
+                arguments["task_id"] = identifier
+            successor = module.authenticate(**arguments)
             binding.need(binding.engine().contract_digest(improvement) == binding.engine().contract_digest(successor.retained_improvement),
-                         "Retained improvement differs from authenticated SMC lineage")
+                         "Retained improvement differs from authenticated successor lineage")
             selected_improvement = successor.primary_improvement
         projected = binding.project_task(previous_document, prior, selected_improvement,
                                          scopes["entries"].get(identifier) if scopes else None,
