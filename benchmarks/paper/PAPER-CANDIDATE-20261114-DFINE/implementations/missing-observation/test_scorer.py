@@ -2,9 +2,12 @@
 
 import copy
 from decimal import Decimal, localcontext
+from fractions import Fraction
 import hashlib
 import importlib.util
+import itertools
 import json
+import math
 from pathlib import Path
 import subprocess
 import sys
@@ -47,12 +50,18 @@ def fixture():
 
 
 def decimal_pearson(x, y):
+    # Exact rational centering keeps the oracle independent of floating-point
+    # subtraction, including tiny representable differences at large offsets.
+    x, y = [Fraction(v) for v in x], [Fraction(v) for v in y]
+    mx, my = sum(x) / len(x), sum(y) / len(y)
+    a, b = [v - mx for v in x], [v - my for v in y]
+    covariance = sum(u * v for u, v in zip(a, b))
+    variance_product = sum(u * u for u in a) * sum(v * v for v in b)
     with localcontext() as ctx:
         ctx.prec = 80
-        x, y = [Decimal(v) for v in x], [Decimal(v) for v in y]
-        mx, my = sum(x) / len(x), sum(y) / len(y)
-        a, b = [v - mx for v in x], [v - my for v in y]
-        return float(sum(u * v for u, v in zip(a, b)) / (sum(u * u for u in a) * sum(v * v for v in b)).sqrt())
+        cov = Decimal(covariance.numerator) / Decimal(covariance.denominator)
+        var = Decimal(variance_product.numerator) / Decimal(variance_product.denominator)
+        return float(cov / var.sqrt())
 
 
 class Controls(unittest.TestCase):
@@ -117,6 +126,74 @@ class Controls(unittest.TestCase):
             self.assertAlmostEqual(value, decimal_pearson(x, y), places=14)
         self.assertEqual(s.pearson_cc([1, 2, 3], [0, 0, 0]), (0.0, True))
         self.assertEqual(s.pearson_cc([2, 2, 2], [1, 2, 3]), (0.0, True))
+
+    def test_pearson_near_offset_translation_sign_and_scale(self):
+        for exponent in (-1000, -500, 0, 500, 1000):
+            origin = math.ldexp(1.0, exponent)
+            step = math.ulp(origin)
+            for sign in (-1, 1):
+                x = [sign * origin + i * step for i in range(3)]
+                for direction in (-1, 1):
+                    y = [direction * v for v in (-1, 0, 1)]
+                    with self.subTest(exponent=exponent, sign=sign, direction=direction):
+                        value, constant = s.pearson_cc(x, y)
+                        self.assertFalse(constant)
+                        self.assertAlmostEqual(value, direction, places=14)
+
+    def test_pearson_near_offset_non_affine_and_anchor_permutations(self):
+        residuals, y = [0, 1, 2, 4, 9], [3, -1, 2, 0, 4]
+        for origin in (1.0, -1.0, 1e300, -1e300):
+            x = [origin + i * math.ulp(origin) for i in residuals]
+            expected = decimal_pearson(x, y)
+            for order in itertools.permutations(range(len(x))):
+                with self.subTest(origin=origin, order=order):
+                    value, constant = s.pearson_cc([x[i] for i in order], [y[i] for i in order])
+                    self.assertFalse(constant)
+                    self.assertAlmostEqual(value, expected, places=14)
+
+    def test_pearson_extreme_spans_and_subnormal_variation(self):
+        largest = sys.float_info.max
+        smallest = math.ulp(0.0)
+        for x, y in [([largest, -largest, 0.0, largest / 2], [3, 2, -1, 4]),
+                     ([-largest, largest, smallest, -largest / 2], [-1, 2, 0, 3]),
+                     ([largest, math.nextafter(largest, 0), math.nextafter(math.nextafter(largest, 0), 0)], [0, 2, 1]),
+                     ([smallest, 2 * smallest, 4 * smallest, 9 * smallest], [3, -2, 4, 1]),
+                     ([-smallest, 0, smallest], [1, 0, -1])]:
+            with self.subTest(x=x):
+                value, constant = s.pearson_cc(x, y)
+                self.assertFalse(constant)
+                self.assertTrue(math.isfinite(value))
+                self.assertAlmostEqual(value, decimal_pearson(x, y), places=14)
+        for constant in (0.0, -0.0, largest, -largest, smallest, -smallest):
+            self.assertEqual(s.pearson_cc([constant] * 3, [1, 2, 3]), (0.0, True))
+            self.assertEqual(s.pearson_cc([1, 2, 3], [constant] * 3), (0.0, True))
+
+    def test_pearson_invalid_support_and_values(self):
+        for x, y in [([], []), ([1], [2]), ([1, 2], [1, 2, 3])]:
+            with self.assertRaises(s.Invalid):
+                s.pearson_cc(x, y)
+        for invalid in (float("nan"), float("inf"), -float("inf"), True, "1", 10 ** 400):
+            for x, y in (([invalid, 1], [0, 1]), ([0, 1], [invalid, 1])):
+                with self.assertRaises(s.Invalid):
+                    s.pearson_cc(x, y)
+
+    def test_near_offset_columns_propagate_through_complete_grade(self):
+        p, candidate, reference, targets = fixture()
+        translated = [[1.0 + i * math.ulp(1.0)] * 4 for i in range(100)]
+        predictions = [[i] * 4 for i in range(100)]
+        for target in targets:
+            target["values"] = translated
+        for row in candidate:
+            row["values"] = predictions
+        result = s.grade(p, candidate, reference, lambda: targets)
+        for cell in result["cells"]:
+            self.assertEqual(cell["candidate_constant_dimensions"], [])
+            self.assertEqual(cell["reference_constant_dimensions"], [0, 1, 2, 3])
+            for value in cell["candidate_dimension_cc"]:
+                self.assertAlmostEqual(value, 1.0, places=14)
+        for curve in result["curves"]:
+            self.assertAlmostEqual(curve["candidate_cc"], 1.0, places=14)
+            self.assertAlmostEqual(curve["delta_cc"], 1.0, places=14)
 
     def test_missing_timepoints_still_scored(self):
         truth = list(range(100))

@@ -139,7 +139,7 @@ def admit_predictions(records, expected):
 
 
 def pearson_cc(x, y):
-    """Pearson r in scaled float64 arithmetic; constant columns contribute zero.
+    """Pearson r in shifted/scaled float64 arithmetic; constants contribute zero.
 
     Zero is the current author's NaN-to-zero convention, not an estimated r.
     This is not a claim of Torch/SciPy float32 reduction bitwise parity.
@@ -147,10 +147,19 @@ def pearson_cc(x, y):
     require(len(x) == len(y) and len(x) >= 2, "Pearson support mismatch")
     def center(v):
         v = [finite(a) for a in v]
-        scale = max(map(abs, v))
+        # Remove the common offset before dividing: raw-value scaling can erase
+        # representable variation in almost-constant columns. Nearby values
+        # subtract exactly (Sterbenz's lemma), even at subnormal magnitudes.
+        origin = v[0]
+        shifted = [a - origin for a in v]
+        if not all(math.isfinite(a) for a in shifted):
+            # Opposite finite extremes can overflow their difference. Halving
+            # first bounds it; such a wide span cannot be almost constant.
+            shifted = [a * 0.5 - origin * 0.5 for a in v]
+        scale = max(map(abs, shifted))
         if scale == 0:
             return [0.0] * len(v)
-        v = [a / scale for a in v]
+        v = [a / scale for a in shifted]
         mean = math.fsum(v) / len(v)
         return [a - mean for a in v]
     a, b = center(x), center(y)
