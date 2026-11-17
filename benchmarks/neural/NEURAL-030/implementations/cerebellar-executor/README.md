@@ -41,7 +41,7 @@ python -I -B entry.py inspect
 python -I -B entry.py run --request /absolute/REQUEST.json --request-pin '{"bytes": ..., "sha256": "..."}' --authority /absolute/AUTHORITY.json --authority-pin '{"bytes": ..., "sha256": "..."}'
 ```
 
-The literal entry script and selected interpreter are the launcher's trust anchor. It pins and captures the closed loader, which captures all 15 component bodies before module imports. Imports use a unique closed namespace; there is no runtime dependency on an authoring directory, mutable global `candidate_views`/`score` alias, or installed shared transport. Standard-library and NumPy identities remain part of host qualification. The unchanged transport checks its own complete source identity again when used.
+The literal entry script and selected interpreter are the launcher's trust anchor. It pins and captures the closed loader, which captures all 15 component bodies before module imports. Imports use a unique closed namespace; there is no runtime dependency on an authoring directory, mutable global `candidate_views`/`score` alias, or installed shared transport. Standard-library and NumPy identities remain part of host qualification. The transport checks its own complete source identity again when used.
 
 `REQUEST.json` has exactly the fields enforced by `controller.preflight`: schema, mode, mismatch, fresh absolute root, public, procedure, sources, commitment, private_evaluation, clock, io, native, phase_limits, stdout_bytes, stderr_bytes and public_bytes_limit. The public operand is the already prepared `neural030_cerebellar_public_v1` object, not a raw-data loader. `private_evaluation` contains exact body operands for expected, mouse_binding and fixed_reference. These are validated as descriptors during preparation and opened only after the complete prediction panel. The authority must come from the trusted launcher, outside candidate control.
 
@@ -51,7 +51,26 @@ All resource operands must be selected explicitly. `io` specifies host read/writ
 
 ## Source dependencies and checks
 
-`SOURCE_MANIFEST.json` pins the 15 component bodies. The eight `vendor_transport` bodies total exactly 86,954 bytes and remain unchanged. The accepted candidate view builder (12,449 bytes), candidate contract/evaluator (10,311 bytes) and original count scorer (8,568 bytes) are also exact copies. `PROVENANCE.json` records these body identities. They are repository-owned benchmark source; this component does not redistribute study datasets, neural measurements, subject mappings, weights or third-party paper/GitHub corpora. Retain these notices and the provenance record when distributing the companion. The original benchmark's data and upstream-code terms still govern separately provisioned authentic inputs; this source packet grants no additional rights to them.
+`SOURCE_MANIFEST.json` and `PROVENANCE.json` retain the historical body identities unchanged, including the original eight transport files totaling 86,954 bytes. The separately pinned current descriptor authenticates the reviewed successor bodies. The accepted candidate view builder (12,449 bytes), candidate contract/evaluator (10,311 bytes) and original count scorer (8,568 bytes) remain exact copies. They are repository-owned benchmark source; this component does not redistribute study datasets, neural measurements, subject mappings, weights or third-party paper/GitHub corpora. Retain these notices and the provenance record when distributing the companion. The original benchmark's data and upstream-code terms still govern separately provisioned authentic inputs; this source packet grants no additional rights to them.
+
+The narrow public-mode repair in `vendor_transport/bounds.py` finalizes explicitly
+requested mode 0444 on the owned descriptor after complete writes and before
+fsync. REQUEST/POLICY metadata therefore retain public read bits under umask 077.
+The private 0600 default, explicitly private 0400 mode, 0700 parents, umask,
+resource guards and scientific code are unchanged. `PUBLIC_MODE_REPAIR.json`
+records the exact successor pins and historical identities. The launcher pins and
+shared current descriptor require coordinated adoption; generated test descriptors
+do not substitute for that adoption or confer native authority.
+
+Run the focused source controls with
+`python -I -B test_public_modes.py`. They exercise complete partial writes,
+permission-finalization failure cleanup, private modes, and actual Provider
+request/exposure validation and REQUEST/POLICY publication. The provider test uses
+an inert Docker boundary and intentionally reaches the existing non-socket refusal
+before any native dispatch; it also reads the generated policy through the actual
+holder parser. A temporary generated current descriptor authenticates the edited
+source in these controls. No original arrays, models, containers or scientific
+work are exercised, and existing input-provisioning holds remain in force.
 
 Host evaluation requires `numpy==2.4.6`; `inspect` is standard-library only. Python 3.11 is the exercised host interpreter. The complete invented control command is `python -I -B test_executor.py` from this portable directory after installing the already selected dependencies. It uses generated ordinary JSON fixtures, inert Provider calls and the actual phase worker with an inert runner. It never executes the candidate source. Those fixture resource values are test operands, not suggested production compute defaults. Source inspection is `python -I -B entry.py inspect` and does not run the controls or any candidate.
 
