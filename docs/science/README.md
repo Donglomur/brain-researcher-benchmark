@@ -20,6 +20,8 @@ access conditions.
 - [Authentic delivery and prospective freezing](benchmark-construction-wave-20261116.md) describes the four existing endpoints improved after the difficulty pilot, including source discrepancies and runtime limits.
 - [SMC original-author calibration](smc-author-calibration-20261117.md) reports author-reference scores, including recovered output from a failed supervised stage. It does not establish an AI outcome or accepted reproduction.
 - [MegNIST input preparation](megnist-input-preparation-20261117.md) records authenticated preparation of the complete released inputs for one participant across four sessions. No model or scientific score was run.
+- [Sleep007 viewer delivery](sleep007-viewer-delivery-20261117.md) records complete delivery and replay under the original source; the later display correction has generated-only evidence.
+- [NEURAL-095 count-viewer delivery](neural095-count-viewer-delivery-20261117.md) records complete fixed-response delivery and replay, with resource and runtime-qualification limits kept explicit.
 
 The [paper scope assessment](paper-scope/SCIENTIFIC_SCOPE.md) describes the
 100 original paper candidates, the examined evidence and remaining gaps. It is a

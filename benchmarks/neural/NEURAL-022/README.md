@@ -39,6 +39,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Artifact grading](implementations/artifact-grading) — Artifact grading.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Numerical observation v1](implementations/numerical-observation-v1) — Reviewed task source component.
+  Scope: Numerical observation delivery source for the existing NEURAL-022 task, with the explicitly reviewed dependency on repaired producer 34f900. Retrospective binned counts, complete training/query access and original metric scope are preserved. Registration does not qualify provider delivery, model budgets, participant isolation, authentic execution or scientific performance; both predecessor dependency identities and histories are retained.
 - [Submitted program v1](implementations/submitted-program-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Public control v1](implementations/public-control-v1) — Reviewed source component.

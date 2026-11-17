@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Condition viewer v1](implementations/condition-viewer-v1) — Reviewed task source component.
+  Scope: Condition-viewer observation and response-collection source for the existing NEURAL-037 task. Registration covers the accepted source and its generated controls only; original task, comparison, runtime and scientific limits remain. Authentic input delivery, provider/model execution, participant isolation and scientific performance are unqualified.
 - [Condition endpoint v1](implementations/condition-endpoint-v1) — Reviewed source component.
   Scope: Recovered complete-condition endpoint. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

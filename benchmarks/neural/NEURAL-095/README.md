@@ -57,6 +57,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Case investigator v1](implementations/case-investigator-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Count viewer v1](implementations/count-viewer-v1) — Reviewed task source component.
+  Scope: Count-viewer observation and response-collection source for the existing NEURAL-095 task. Complete query order and original metrics remain; this viewer pair explicitly selects the reviewed paired-arithmetic-v2 source. Registration does not activate the canonical protected runtime or qualify authentic delivery, participant isolation, neural-information use or model performance.
 - [Paired arithmetic v2](implementations/paired-arithmetic-v2) — Reviewed source component.
   Scope: Paired MAE arithmetic successor. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

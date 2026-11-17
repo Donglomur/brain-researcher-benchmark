@@ -115,13 +115,13 @@ uses the full original 35-bin held-in observation window and one complete candid
 prediction set for co-smoothing and ten-bin future prediction. Its improvement
 successor preserves the original panel and four metrics. The retained
 [source-matched author routes](benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/README.md)
-serve author reproduction and calibration. At the 2026-11-17 08:49 UTC checkpoint,
-author calibration was partial: the
-complete causal author reference has produced and frozen predictions using the
-original 192 particles × 32 repeats on the full MC_Maze 20-ms panel. The noncausal
-author run is in progress; both scores remain pending. This is author-reference
-execution evidence; no paper-reproduction, candidate-improvement, AI-study or SOTA
-outcome is established. A paper-win claim still requires a qualified strongest
+serve author reproduction and calibration. The [completed author calibration](docs/science/smc-author-calibration-20261117.md)
+records both full MC_Maze 20-ms prediction runs at the original 192 particles ×
+32 repeats and both four-metric aggregates. The noncausal supervisor remains
+failed; its authenticated scalar output was accepted as recovered calibration
+evidence without a rerun. These author-reference results do not establish a
+paper-reproduction, candidate-improvement, AI-study or SOTA outcome.
+A paper-win claim still requires a qualified strongest
 retained published/reproduced comparator and matched participant budgets.
 Historical author-checkpoint probes measured native cost without producing a
 complete prediction set or scientific score. Source delivery does not discharge

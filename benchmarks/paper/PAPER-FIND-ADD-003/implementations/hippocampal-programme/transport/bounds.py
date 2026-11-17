@@ -79,6 +79,8 @@ def publish(file,raw,meter,mode=0o600):
         s=os.fstat(fd);need(stat.S_ISREG(s.st_mode),'Owned ordinary output inode');identity=(s.st_dev,s.st_ino);at=0
         while at<len(raw):
             meter.tick();n=os.write(fd,memoryview(raw)[at:]);need(type(n) is int and 0<n<=len(raw)-at,'Checked complete write');at+=n;meter.wrote(n)
+        # Restore only explicit public metadata after umask and complete writes.
+        if mode==0o444:os.fchmod(fd,mode)
         os.fsync(fd);closing,fd=fd,None;os.close(closing);fsync_dir(file.parent)
         return pin(raw)
     except BaseException as primary:
