@@ -36,7 +36,7 @@ MAX_DEPTH = 32
 SOURCE_SUFFIXES = {"", ".py", ".json", ".md", ".txt", ".m", ".r", ".yaml", ".yml",
                    ".sh", ".lock", ".toml", ".in", ".author", ".list", ".template",
                    ".rst", ".c", ".dockerignore", ".patch"}
-# Explicit reviewed resource identity; this does not admit a general font suffix.
+# Explicit reviewed resource identities; no general binary suffix is admitted.
 PINNED_SOURCE_RESOURCES = {
     "benchmarks/neural/NEURAL-019/implementations/png-transport-dejavu-v1/assets/DejaVuSansMono.ttf": {
         "mode": "100644",
@@ -47,6 +47,11 @@ PINNED_SOURCE_RESOURCES = {
         "mode": "100644",
         "bytes": 340240,
         "sha256": "602ec86b8948cfcd956482fe64f94c36c867770149ef2f791d4613f443bcecb3",
+    },
+    "benchmarks/neural/NEURAL-063/implementations/original-qualifier-v1/tests/fixtures/omission_generated.nwb": {
+        "mode": "100644",
+        "bytes": 25721,
+        "sha256": "56e99301faa09b2ef4f583e75a200d5473193d87a2b57f7dde1146f837b94a72",
     },
 }
 RETIRED_ROOTS = ("authoring", "components", "artifacts-build", "verification", "results", "tools",
