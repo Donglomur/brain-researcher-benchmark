@@ -38,6 +38,11 @@ SOURCE_SUFFIXES = {"", ".py", ".json", ".md", ".txt", ".m", ".r", ".yaml", ".yml
                    ".rst", ".c", ".dockerignore", ".patch"}
 # Explicit reviewed resource identity; this does not admit a general font suffix.
 PINNED_SOURCE_RESOURCES = {
+    "benchmarks/neural/NEURAL-019/implementations/png-transport-dejavu-v1/assets/DejaVuSansMono.ttf": {
+        "mode": "100644",
+        "bytes": 340240,
+        "sha256": "602ec86b8948cfcd956482fe64f94c36c867770149ef2f791d4613f443bcecb3",
+    },
     "benchmarks/neural/NEURAL-021/implementations/raster-participant-v1/assets/DejaVuSansMono.ttf": {
         "mode": "100644",
         "bytes": 340240,
@@ -184,6 +189,15 @@ def metadata_pin(reader, pin, expected_path, label):
          and isinstance(pin["sha256"], str) and re.fullmatch(r"[0-9a-f]{64}", pin["sha256"]),
          "Invalid " + label + " pin")
     document, actual = reader.document(expected_path)
+    if not all(actual[k] == pin[k] for k in ("path", "bytes", "sha256")):
+        retained = paper_outcome_module().reve_retained_improvement(
+            pin, lambda member, purpose: metadata_pin(reader, member, member["path"], purpose))
+        if retained is not None:
+            return retained
+        retained = paper_outcome_module().nuclr_retained_improvement(
+            pin, lambda member, purpose: metadata_pin(reader, member, member["path"], purpose))
+        if retained is not None:
+            return retained
     need(all(actual[k] == pin[k] for k in ("path", "bytes", "sha256")), label + " pin mismatch")
     return document
 
@@ -562,6 +576,19 @@ def artifact_members(root, artifacts, *, binding_metadata_only=False, reader=Non
     return members
 
 
+def task_artifact_path_allowed(row, home):
+    path = row["path"]
+    return path.startswith((home + "/implementations/", home + "/contracts/")) or (
+        home == "benchmarks/neural/NEURAL-039"
+        and row["scope"] == "task"
+        and row["owner_ids"] == ["NEURAL-039"]
+        and row["id"] == "neural-039-stage-a-metadata-v1"
+        and path == "benchmarks/neural/NEURAL-039/acquisition"
+        and row.get("status") == "constructed_source"
+        and row.get("role") == "reviewed_source_component"
+        and row.get("related_task_ids", []) == [])
+
+
 def prepare(reader):
     root = reader.root
     for relative in RETIRED_ROOTS:
@@ -675,7 +702,7 @@ def prepare(reader):
         if scope == "task":
             need(len(owners) == 1, "Task artifact must have one owner")
             home = by_id[owners[0]]["task_directory"]
-            need(path.startswith((home + "/implementations/", home + "/contracts/")),
+            need(task_artifact_path_allowed(row, home),
                  "Task artifact is outside its owner home")
         else:
             framework_source = (scope == "shared" and row.get("status") == "shared_framework_source"

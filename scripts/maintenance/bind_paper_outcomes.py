@@ -217,9 +217,10 @@ def build_outputs(root=ROOT, *, adopt_language_figure3b=False):
                     continue
             archived_raw, archive_pin = raw(reader, home + "/" + binding.HISTORY)
             previous_document = context["previous_document"]
-            if binding.has_endpoint_selection(row):
+            if binding.has_endpoint_selection(row) or binding.has_root004_scope(row):
                 # coverage/context authenticate the complete fixed authority and
-                # all selected documents. Retain its exact reviewed current bytes;
+                # all selected documents, including the fixed ROOT004 manuscript correction.
+                # Retain its exact reviewed current bytes;
                 # the legacy projection below describes the preceding scope.
                 current_raw, current_pin = raw(reader, row["specification"]["path"])
                 binding.need(current_pin == row["specification"],
@@ -288,7 +289,9 @@ def build_outputs(root=ROOT, *, adopt_language_figure3b=False):
                        "outcomes": outcomes_pin}
         if reproduction_pin is not None:
             new_binding["reproduction_contract"] = reproduction_pin
-        selected_improvement = improvement
+        selected_improvement = (context["improvement_contract"]
+                                if already_bound and (context.get("reve_reporting_selected")
+                                    or context.get("nuclr_reporting_selected")) else improvement)
         successor = None
         if (identifier == binding.PRIMARY_SUCCESSOR_TASK
                 or identifier in binding.SCOPE_POLICY_SUCCESSOR_TASKS | binding.REFERENCE_SUCCESSOR_TASKS):

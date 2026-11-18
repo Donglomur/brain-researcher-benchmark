@@ -1,6 +1,6 @@
-"""Invented metadata controls for original, improvement and dual-outcome lineage.
+"""Metadata controls for original, improvement and dual-outcome lineage.
 
-The fixture's implementation raises if executed.  No paper, native input, model,
+The invented fixture's implementation raises if executed. ROOT018 controls use exact retained metadata.  No paper, native input, model,
 scientific result or task implementation is executed by these controls.
 """
 import copy
@@ -400,6 +400,183 @@ class PaperOutcomesIntegrityTests(unittest.TestCase):
         self.assertEqual(rows[2]["role"], "neural_runtime")
         self.assertEqual(rows[2]["evaluation_roles"], {self.neural_id: "active_evaluation"})
         self.assertEqual(rows[-1]["role"], "improvement_evaluator")
+
+
+class Root018ReportingIntegrityTests(unittest.TestCase):
+    """Exact ROOT018 metadata controls; no observations or scientific execution.
+
+    The positive case uses retained real metadata and the reviewed reporting
+    postimages. Only rejection/unrelated-route mutations are invented. Constants
+    and semantic validators are never patched to accept a fictional fixture.
+    """
+
+    identifier = "PAPER-ROOT-ADD-018"
+    home = "benchmarks/paper/PAPER-ROOT-ADD-018"
+
+    @classmethod
+    def setUpClass(cls):
+        paths = [binding.REGISTRY, binding.SNAPSHOT, binding.SCOPE_PATH,
+                 cls.home + "/historical/task.pre-outcomes.v1.json",
+                 cls.home + "/improvement.v1.json", cls.home + "/reproduction.v2.json",
+                 cls.home + "/task.json", cls.home + "/outcomes.v1.json"]
+        cls.source_bodies = {path: (ROOT / path).read_bytes() for path in paths}
+        expected = {
+            cls.home + "/historical/task.pre-outcomes.v1.json":
+                (18547, "17ba1586e6e164350bb6d9a6c9346cec4aec9e1dcfe0b312945e6ef65ececf12"),
+            cls.home + "/improvement.v1.json":
+                (11757, "25db16fa1f6872298d80034d01419bc0922878ce6e6d6eefb04fe84081efc193"),
+            cls.home + "/reproduction.v2.json":
+                (78648, "de6344d2df11bedc6a9ac0981341c729079d311d503b118eb7e30aa4027933d6"),
+            cls.home + "/task.json":
+                (27454, "e1fd8bf5ea3970defca67bc992e879d660957f7362fd6476474b6d132b70e5e2"),
+            cls.home + "/outcomes.v1.json":
+                (4745, "8bd7bc3479aa808556ae84858b06e3f990744d52d71f1f99778c658feeb89ab8"),
+        }
+        for path, (size, digest) in expected.items():
+            if binding.pin(path, cls.source_bodies[path]) != {
+                    "path": path, "bytes": size, "sha256": digest}:
+                raise AssertionError("Exact ROOT018 fixture source changed: " + path)
+        scope = json.loads(cls.source_bodies[binding.SCOPE_PATH])["entries"][cls.identifier]
+        raw = binding.encode(scope)
+        if binding.pin("scope-entry", raw) != {
+                "path": "scope-entry", "bytes": 6233,
+                "sha256": "ac542fdc331f83ba3165f29abf65e4efa75202278bb9141c230a0e765371ea71"}:
+            raise AssertionError("Exact ROOT018 fixture scope entry changed")
+
+    def setUp(self):
+        self.bodies = dict(self.source_bodies)
+        prior_registry = json.loads(self.bodies[binding.SNAPSHOT])
+        self.prior = next(copy.deepcopy(row) for row in prior_registry["tasks"]
+                          if row["id"] == self.identifier)
+        current_registry = json.loads(self.bodies[binding.REGISTRY])
+        self.row = next(copy.deepcopy(row) for row in current_registry["tasks"]
+                        if row["id"] == self.identifier)
+        self.previous = json.loads(self.bodies[self.home + "/historical/task.pre-outcomes.v1.json"])
+        self.improvement = json.loads(self.bodies[self.home + "/improvement.v1.json"])
+        self.current_task = json.loads(self.bodies[self.home + "/task.json"])
+        self.scopes = json.loads(self.bodies[binding.SCOPE_PATH])
+        self.scope = self.scopes["entries"][self.identifier]
+        self.row["specification"] = binding.pin(self.home + "/task.json", self.bodies[self.home + "/task.json"])
+        self.row["paper_outcomes"]["outcomes"] = binding.pin(
+            self.home + "/outcomes.v1.json", self.bodies[self.home + "/outcomes.v1.json"])
+        self.previous_rows = binding.PreviousRows({self.identifier: self.prior})
+        self.previous_rows.scope_decisions = self.scopes
+        self.previous_rows.scope_pin = binding.pin(binding.SCOPE_PATH, self.bodies[binding.SCOPE_PATH])
+
+    def read_pin(self, member, label):
+        raw = self.bodies[member["path"]]
+        if binding.pin(member["path"], raw) != member:
+            raise ValueError(label + " fixture source pin mismatch")
+        return json.loads(raw)
+
+    def project(self, **changes):
+        arguments = {"previous": self.previous, "row": self.prior,
+                     "improvement": self.improvement, "scope_entry": self.scope,
+                     "reproduction_version": "paper-reproduction/v2"}
+        arguments.update(changes)
+        return binding.project_task(**arguments)
+
+    def context(self):
+        return binding.context(self.row, self.current_task, self.previous_rows, self.read_pin)
+
+    def test_exact_projection_matches_reviewed_bytes_without_mutating_inputs(self):
+        before = binding.encode([self.previous, self.prior, self.improvement, self.scope])
+        result = self.project()
+        self.assertEqual(binding.encode(result), self.bodies[self.home + "/task.json"])
+        self.assertEqual(binding.encode([self.previous, self.prior, self.improvement, self.scope]), before)
+        self.assertEqual(result["status"], "source_unresolved")
+        self.assertFalse(result["admission"]["runnable"])
+        self.assertFalse(result["admission"]["research_qualified"])
+
+    def test_exact_context_retains_history_and_four_unavailable_cells(self):
+        bound = self.context()
+        self.assertEqual(binding.encode(bound["previous_document"]),
+                         self.bodies[self.home + "/historical/task.pre-outcomes.v1.json"])
+        self.assertEqual(bound["retained_improvement_contract"], self.improvement)
+        self.assertFalse(bound["reve_reporting_selected"])
+        self.assertEqual(bound["availability"], "unavailable")
+        self.assertEqual(len(bound["summary"]["cells"]), 4)
+        for cell in bound["summary"]["cells"]:
+            self.assertEqual(cell["scientific_outcome"], "unknown")
+            self.assertFalse(cell["endpoint_eligible"])
+        public = binding.public_summary(self.row, bound)
+        self.assertIn("Figure 4 is not eligible", public["reason"])
+        self.assertEqual(public["scientific_outcomes"],
+                         {"reproduction": "unknown", "improvement": "unknown"})
+
+    def test_rehashed_historical_scientific_change_fails(self):
+        changed = copy.deepcopy(self.previous)
+        changed["goal"] += " invented replacement"
+        with self.assertRaisesRegex(ValueError, "ROOT018 reporting changed its historical task"):
+            self.project(previous=changed)
+
+    def test_rehashed_retained_improvement_change_fails(self):
+        changed = copy.deepcopy(self.improvement)
+        changed["disposition_reason"] += " invented interpretation"
+        with self.assertRaisesRegex(ValueError, "ROOT018 reporting changed its retained improvement"):
+            self.project(improvement=changed)
+
+    def test_scope_source_or_limit_changes_fail(self):
+        for name in ("remaining_source_limits", "source_citations"):
+            changed = copy.deepcopy(self.scope)
+            changed[name] = []
+            with self.subTest(field=name), self.assertRaisesRegex(ValueError, "retained scope entry"):
+                self.project(scope_entry=changed)
+
+    def test_wrong_scope_route_or_reproduction_version_fails(self):
+        for changes in ({"scope_entry": None}, {"reproduction_version": "paper-reproduction/v1"}):
+            with self.subTest(changes=changes), self.assertRaisesRegex(ValueError, "retained unavailable-scope route"):
+                self.project(**changes)
+
+    def test_stale_or_rehashed_outcomes_reason_fails(self):
+        path = self.home + "/outcomes.v1.json"
+        original = self.row["paper_outcomes"]["outcomes"]
+        for change in ("stale", "reason", "status"):
+            with self.subTest(change=change):
+                if change == "stale":
+                    self.row["paper_outcomes"]["outcomes"] = {
+                        "path": path, "bytes": 3850,
+                        "sha256": "f3bc025dcc52832b07996ed51af957bbb2ed2e3e635127aa3627b528504f1384"}
+                else:
+                    document = json.loads(self.source_bodies[path])
+                    document[change] = "invented internally repinned value"
+                    self.bodies[path] = binding.encode(document)
+                    self.row["paper_outcomes"]["outcomes"] = binding.pin(path, self.bodies[path])
+                with self.assertRaisesRegex(ValueError, "ROOT018 reporting changed its selected outcomes"):
+                    self.context()
+                self.row["paper_outcomes"]["outcomes"] = original
+                self.bodies[path] = self.source_bodies[path]
+
+    def test_rehashed_current_scientific_or_reporting_change_fails(self):
+        for field in ("goal", "status_basis"):
+            with self.subTest(field=field):
+                self.current_task = json.loads(self.source_bodies[self.home + "/task.json"])
+                self.current_task[field] += " invented change"
+                self.row["specification"] = binding.pin(self.home + "/task.json", binding.encode(self.current_task))
+                with self.assertRaisesRegex(ValueError, "deterministic dual-outcome projection"):
+                    self.context()
+
+    def test_unrelated_scope_row_does_not_change_root018_projection(self):
+        self.scopes["entries"]["PAPER-INVENTED-UNRELATED-CONTROL"] = {"note": "engineering only"}
+        self.assertEqual(binding.encode(self.project()), self.source_bodies[self.home + "/task.json"])
+
+    def test_unrelated_task_does_not_receive_root018_reporting(self):
+        identifier = "PAPER-INVENTED-UNRELATED-CONTROL"
+        result = binding.project_task(
+            {"id": identifier, "objective": "surpass_source_paper_same_task"},
+            {"id": identifier, "track": "paper"},
+            {"task_id": identifier, "same_task": {"target": {"description": "invented control"}}})
+        self.assertNotIn("Figure 4", binding.encode(result).decode())
+
+    def test_root018_never_uses_closed_reve_resolver(self):
+        observed = []
+        result = binding.reve_retained_improvement(
+            binding.pin(self.home + "/improvement.v1.json", self.source_bodies[self.home + "/improvement.v1.json"]),
+            lambda *args: observed.append(args))
+        self.assertIsNone(result)
+        self.assertEqual(observed, [])
+        self.assertFalse(binding.has_reve_reporting(self.row))
+
 
 
 if __name__ == "__main__":

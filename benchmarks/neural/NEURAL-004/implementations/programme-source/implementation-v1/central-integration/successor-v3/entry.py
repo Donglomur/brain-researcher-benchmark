@@ -36,7 +36,7 @@ REL='authoring/delivery-20261105/common/remaining-builds-wave27/neural004-comple
 IO_PIN={'bytes': 11967, 'sha256': '60751688732dcbc426e0b1290e17fe90c2af95ce027ce8a541df06c79efa04e7'}
 ADMISSION_PIN={'bytes': 15484, 'sha256': '6af9561feafb77c19b6f8065a89a1a8e30acd975145011d9f70af51713166f25'}
 LOADER_PIN={'bytes': 2007, 'sha256': 'a56fa8c33eddddc8d8a91b69a43b1f4632f8e7b407d32befe1ad82d426b03cd3'}
-BINDINGS_PIN={'bytes': 29368, 'sha256': '4f16634647c0f4289778f723e4cc2dc8f0c12e387bf79dc3f27a436c0560e2d3'}
+BINDINGS_PIN={'bytes': 29368, 'sha256': '7a14d52ae8634261f9478397a98ace8f34cc78582d117f5fed6a0c515fca8424'}
 BOOT_READ=0
 
 def boot(path,expected):

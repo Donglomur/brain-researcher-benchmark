@@ -22,8 +22,9 @@ import urllib.request
 
 MAX_MANIFEST_BYTES = 2 * 1024 * 1024
 MAX_LOG_BYTES = 4 * 1024 * 1024
-MAX_COMMANDS = 536
+MAX_COMMANDS = 556
 MAX_SECONDS = 180
+ARTIFACT_TOKEN = '${ARTIFACT_DIR}'
 THREAD_ENV = ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS',
               'VECLIB_MAXIMUM_THREADS', 'NUMEXPR_NUM_THREADS', 'BLIS_NUM_THREADS',
               'POLARS_MAX_THREADS', 'RAYON_NUM_THREADS')
@@ -263,10 +264,12 @@ def run(root, manifest, group, output, fixtures=None):
             pinned_read(local(root, name), pins[name])
         for value in row['argv'] + list(row.get('environment', {}).values()):
             need(not value.startswith('/Users/') and not value.startswith('/home/'), 'private path in manifest')
-            need('${' not in value or value == '${PYTHON}' or value in fixture_paths,
+            need('${' not in value or value == '${PYTHON}' or value in fixture_paths or value == ARTIFACT_TOKEN,
                  'unresolved command placeholder: ' + value)
         working_directories[row['id']] = local(root,row['cwd'],directory=True)
-    output.mkdir(parents=True)
+    for parent in (output, *output.parents):
+        need(not parent.is_symlink(), 'symlink in output path')
+    output.mkdir(mode=0o700, parents=True)
     environment = dict(os.environ)
     for name in ('PYTHONPATH','PYTHONHOME','PYTEST_ADDOPTS','PYTEST_PLUGINS'):
         environment.pop(name,None)
@@ -278,9 +281,16 @@ def run(root, manifest, group, output, fixtures=None):
     for row in selected:
         # -u also applies under -I, unlike PYTHONUNBUFFERED. Keep nested mutant
         # stdout in actual order relative to the outer framework's stderr.
-        argv = [sys.executable, '-u'] + [fixture_paths.get(x, x) for x in row['argv'][1:]]
+        substitutions = dict(fixture_paths)
+        artifact = None
+        if ARTIFACT_TOKEN in row['argv'] + list(row.get('environment', {}).values()):
+            artifact = output / (row['id'] + '.artifacts')
+            need(not artifact.exists() and not artifact.is_symlink(), 'fresh control artifacts required')
+            # The task adapter creates this exact directory exclusively.
+            substitutions[ARTIFACT_TOKEN] = str(artifact.resolve())
+        argv = [sys.executable, '-u'] + [substitutions.get(x, x) for x in row['argv'][1:]]
         child_env = dict(environment)
-        child_env.update({k:fixture_paths.get(v, v) for k,v in row.get('environment', {}).items()})
+        child_env.update({k:substitutions.get(v, v) for k,v in row.get('environment', {}).items()})
         started = time.monotonic()
         problem = None
         try:
@@ -301,6 +311,8 @@ def run(root, manifest, group, output, fixtures=None):
                       'error':str(problem),'log':row['id']+'.log',
                       'wall_seconds':time.monotonic()-started}
             failures.append(record)
+        if artifact is not None:
+            record['artifact_directory'] = artifact.name
         attempted = len(results)+len(failures)
         status = 'failed' if failures else ('passed' if attempted == len(selected) else 'running')
         (output/'results.json').write_text(json.dumps({'scope':'generated_software_controls_only',

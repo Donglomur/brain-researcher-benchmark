@@ -50,10 +50,11 @@ decision is inferred from the units.
 
 The paper does not establish the executable variance divisor in the recovered
 evidence. `variance_ddof` therefore has no default: 0 and 1 are supported and
-recorded. In equation (4), MSE always uses its literal population mean. Native
-source parity must resolve the choice before paper comparison. The mathematical
-component is useful under either convention; neither is asserted to be the
-author implementation.
+recorded. In equation (4), MSE always uses its literal population mean. Use the same explicit divisor for both models in a prospective comparison.
+Historical numeric parity still requires the original convention; its absence
+does not erase the defined endpoint vector. Pearson correlation and the null
+diagnostics above are implementation conventions, not recovered historical
+algorithm choices. Neither supported divisor is asserted to be the author default.
 
 ## Recovered author interface pitfalls
 
@@ -135,11 +136,72 @@ versus averaging, both variance conventions, trial/expected-count separation,
 masking, alignment and unit mismatch controls, undefined values, complete panel
 coverage and payload failures. These checks cannot establish model accuracy.
 
-Remaining gaps are the original reliability-mask identities, exact crop and
-measurement-time preparation, source variance convention, the textual per-sound
-score reduction, authenticated author checkpoint replay, LNP companion replay,
-original development access, stochastic prediction policy and an animal-aware
-full-panel improvement decision. The output intentionally has no scalar score or
-paper-win decision. It reports `source_equation_component_only`, with native
-author reproduction, reproduction evaluation and improvement evaluation false. No source baseline,
-scientific improvement, readiness upgrade or SOTA claim is made.
+The accepted retained-source adjudication establishes the Fig. 4d time-only
+per-MUA explained-correlation and explained-variance vector, both higher-is-better,
+for the same units compared with a single-layer Poisson LNP. Fig. 4b separately
+flattens eligible units and time within each animal. A universal scalar is not
+required. Historical textual summaries, source boxplot implementation details
+and exact stochastic replay remain separate reconciliation questions. The panel
+report now carries this endpoint binding; numerical Eq. 3–5 kernels are unchanged.
+
+Actual masks and original time/crop joins, authentic ICNet and LNP fits/rates,
+source-reference predictions, development access, model selection and protected
+exposure remain gates. A prospective comparison must state its common variance
+divisor and stochastic policy. Historical numeric parity additionally requires
+original conventions. The component makes no reproduction or improvement decision.
+
+## Poisson LNP comparison
+
+`lnp_comparison.py` adds a partial route from externally supplied LNP rates to the
+same source metrics. It does not train the LNP, construct its acoustic features,
+or authenticate a rate as the output of an original fit. The source comparator
+has one convolutional layer (512 filters, size 64, stride 1, no bias), exponential
+activation, a 96-band log-Mel/sigmoid front end and L2 factor 1e-5. Exact retained
+source locators and the Methods Fig. 3d versus Results Fig. 4d citation conflict
+are preserved in `source-pins.json` and the accepted adjudication.
+
+The source LNP has no ICNet time module. A single rate matrix for a given animal
+and sound is used as the expected count in both repeated trials. Two genuine
+Poisson count draws use separately declared seeds. Counts retain int64 support;
+they are never clipped to 0–4, normalized as five categories or cast through the
+original int8 categorical adapter. PCG64/NumPy sampling is an explicit prospective
+choice. It is not historical TensorFlow sampling or source-author seed recovery.
+The underlying NumPy Poisson generator rejects rates beyond its numeric range.
+
+`compare_case` accepts the six aligned arrays used by `score_case` plus the LNP
+rate matrix, original mask/IDs, a common explicit `variance_ddof`, and two LNP
+trial seeds. Its full same-unit vector preserves both models' metric values,
+intermediates and diagnostics, with ICNet-minus-LNP differences in percentage
+points. Undefined values remain present. The separate flattened output is
+labelled as a Fig. 4b companion; flattened LNP values are a derived companion,
+not a claim that the paper directly compared LNP in Fig. 4b.
+
+The full-panel API consumes schema `icnet-fig4-lnp-comparison-input/v1`:
+
+- `icnet_panel`: the existing complete `icnet-source-equations-input/v1` manifest.
+- `lnp.model_sha256_by_animal`: one declared model hash for each animal 3–9.
+- `lnp.training_split_evidence_sha256`: declared original training-split evidence.
+- `lnp.sampling`: `prospective_NumPy_PCG64_Poisson_two_explicit_trial_seeds`.
+- `lnp.cases`: all 28 animal/sound cases, each with `animal`, `sound`, `time_bins`,
+  `rates` (relative NPY path/SHA256) and `trial_seeds` (two required integers).
+
+LNP rates must align with all 512 original columns and the declared temporal
+support. The same observed trials, source mask and unit identities feed both
+models. Hashes bind rate bytes and preserve model/evidence declarations; the
+module does not verify the model architecture, training split or authentic joins.
+Full source temporal support remains an external gate, as in the existing scorer.
+
+A future admitted run uses `python lnp_comparison.py --manifest PANEL.json
+--input-root OPERATOR_ROOT --output NEW_REPORT.json`. The output contains all
+four sounds, seven animals and 3,476 units per sound, plus distinct flattened
+companions. Units remain nested within animals. No bootstrap or inferential
+superiority decision is implemented. ICNet exceeding LNP reproduces the paper's
+comparator contrast; it cannot establish that a candidate improves over ICNet.
+Candidate improvement still requires comparison with the authentic ICNet baseline
+under the separately admitted full-vector uncertainty and exposure policy.
+
+The source's early/late sampled-count RMSE and probability log-likelihood belong
+to Figs. 1–3 and are not calculated by this Fig. 4 component. A missing likelihood
+log base cannot block the defined Fig. 4 vector. Historical printed-summary
+reduction and source plotting conventions likewise remain separate from the
+ability to retain granular endpoint values.

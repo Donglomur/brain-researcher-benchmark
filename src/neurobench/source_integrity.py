@@ -283,7 +283,19 @@ def checked_paper_revision(reader, task_id, task_pin, task_doc, registered):
             and historical_doc.get("track", "paper") == "paper"
             and historical_doc.get("objective") != PAPER_OBJECTIVE,
             "Historical paper specification identity or revision mismatch")
-    contract = strict_json(reader.checked(contract_pin["path"], contract_pin))
+    contract = None
+    if task_id == "PAPER-paper-method-003":
+        current_body = reader.read(contract_pin["path"])
+        if (len(current_body) != contract_pin["bytes"]
+                or hashlib.sha256(current_body).hexdigest() != contract_pin["sha256"]):
+            binding = outcome_binding_module()
+            try:
+                contract = binding.reve_retained_improvement(
+                    contract_pin, lambda member, label: outcome_read_pin(reader, member, label))
+            except ValueError as error:
+                raise InvalidSource(str(error)) from error
+    if contract is None:
+        contract = strict_json(reader.checked(contract_pin["path"], contract_pin))
     require(type(contract) is dict and contract.get("schema_version") == PAPER_REVISION
             and contract.get("task_id") == task_id and contract.get("objective") == PAPER_OBJECTIVE,
             "Paper improvement contract identity mismatch")

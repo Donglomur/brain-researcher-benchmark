@@ -1,0 +1,43 @@
+{
+  "schema": "find013-source-lineage-observation/v1",
+  "revision": "7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c",
+  "evidence_kind": "Official commit-pinned GitHub browser source observation; no newly authenticated raw body, authentic CSV or array capture",
+  "inputs": {
+    "source": "COMtraj/Opto/data/all_PFs_lap45_NewCriteriaNominDF.csv",
+    "first_timing": "COMtraj/Opto/data/opto_length_animals.csv",
+    "later_timing": "COMtraj/Opto/data/optoLater_length_animals.csv",
+    "first_export": "Toptofirst.csv",
+    "later_export": "Toptolater.csv"
+  },
+  "sources": [
+    {
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/COMtraj/Opto/OptoCOMtraj.m",
+      "observed_rendered_lines": [1683, 2090],
+      "facts": "Released restrict=1; minimum15 laps; 5cm bins. Mouse joins timing. Opto-first or control onset must not exceed first timing endpoint. Positional lap columns begin at22. Center at onset; interpolate interior missingness only. Regress raw full window and interpolated window before saving first15 laps. Native COM_slope and COM_pval come from raw regress. A >=15 span failing the 0.3 find-count guard has no matrix append although PFopto=1. Tall uses PFopto; Tok uses the matrix first-column mask; Opto_ON tracks accepted rows. Native producer shiftDir uses strict p<.05, whereas pooled masks use inclusive .05. Saved MAT filename says10laps despite current15 setting."
+    },
+    {
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/COMtraj/Opto/OptoCOMtraj_OptoLater_PFinOpto.m",
+      "observed_rendered_lines": [1315, 1666],
+      "facts": "Same scaling, minimum span, raw/interpolated regression separation and row filtering. Later or control onset lies from opto_on through opto_off-10 inclusive and must be below44. End lap is min(opto_off,44). Native output preserves selected original table rows. The same missing density-failure branch requires explicit refusal before any guessed row mapping."
+    },
+    {
+      "url": "https://github.com/antoinemadar/BTSPvsSTDP/blob/7a6ecc2bbf8f1e1fbca3b769a0db53299ee8171c/COMtraj/Opto/OptoCOMtraj_Pooled.m",
+      "observed_rendered_lines": [1337, 1450],
+      "facts": "First matrix/table precedes later matrix/table. Pooling is positional. COM_slope is consumed from native tables, not refitted from the saved15-column matrices. Exact directional and denominator rules remain in the immutable reviewed aggregation dependency."
+    },
+    {
+      "url": "https://www.mathworks.com/help/matlab/ref/find.html",
+      "facts": "find returns nonzero element indices. The adapter retains the source operation, including NaN entries, instead of replacing it with an observed-point count. No MATLAB execution occurred."
+    }
+  ],
+  "inferences": [
+    "The missing density-failure append can desynchronize the PFopto-filtered table and matrix mask. The adapter refuses that domain rather than selecting a repair.",
+    "Source-to-statistic correspondence can be checked by comparing complete original row cells against native exported rows in recovered selection order. This does not independently establish native inference correctness."
+  ],
+  "unresolved": [
+    "Authentic source CSV headers/bytes, mouse identity roster and native output bytes have not been admitted here.",
+    "MATLAB regress numerical parity, nonlinear-fit completion and native MAT exports are not established by this adapter.",
+    "No source correction, primary endpoint change, paper reproduction or scientific improvement is adopted."
+  ],
+  "readiness_promoted": false
+}
