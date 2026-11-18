@@ -278,11 +278,17 @@ def open_versioned(asset, budget, runtime_versions):
 
     asset.validate()
     fs = stream = None
+    gc_was_enabled = None
     trace = aiohttp.TraceConfig()
     async def before(session, context, params):
         budget.begin(asset, params.method, params.url, params.headers)
     async def checked(response):
-        budget.response(asset, response.status, response.url, response.headers, response.history)
+        try:
+            budget.response(asset, response.status, response.url, response.headers, response.history)
+        except BaseException:
+            # aiohttp has not returned ownership to its request context yet.
+            response.close()
+            raise
     async def body(session, context, params):
         budget.body(asset, params.chunk)
     async def failed(session, context, params):
@@ -320,17 +326,13 @@ def open_versioned(asset, budget, runtime_versions):
         bounded = BoundedFile(stream, asset, budget)
         # h5py documents that service-thread cyclic GC can deadlock against its
         # global lock during file-object callbacks. The operator uses a serial,
-        # dedicated process: suspend process-global cyclic GC through HDF5 close
+        # dedicated process: suspend cyclic GC through all owned reader cleanup
         # and preserve the entering state. Never collect on the service thread.
         gc_was_enabled = gc.isenabled()
         if gc_was_enabled:
             gc.disable()
-        try:
-            with h5py.File(bounded, "r", rdcc_nbytes=budget.limits.hdf5_cache_bytes) as file:
-                yield file
-        finally:
-            if gc_was_enabled:
-                gc.enable()
+        with h5py.File(bounded, "r", rdcc_nbytes=budget.limits.hdf5_cache_bytes) as file:
+            yield file
         if budget.pending is not None or budget.failed:
             raise RangeContractError("unclosed or failed range request")
     except BaseException:
@@ -341,4 +343,8 @@ def open_versioned(asset, budget, runtime_versions):
         def close_session():
             if fs is not None and fs._session is not None:
                 sync(fs.loop, fs._session.close)
-        close_runtime(stream, close_session)
+        try:
+            close_runtime(stream, close_session)
+        finally:
+            if gc_was_enabled:
+                gc.enable()
