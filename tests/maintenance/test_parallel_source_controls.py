@@ -85,15 +85,15 @@ class ProcessControls(unittest.TestCase):
 
 
 class ManifestControls(unittest.TestCase):
-    def test_command_capacity_592_accepts_and_593_refuses(self):
+    def test_command_capacity_593_accepts_and_594_refuses(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);_,_,document=self.fixture(root)
             template=document['commands'][0]
-            document['commands']=[{**template,'id':'control%d'%index} for index in range(592)]
+            document['commands']=[{**template,'id':'control%d'%index} for index in range(593)]
             _,selected=launcher.validate_document(document,'stdlib')
             self.assertEqual(selected,document['commands'])
-            self.assertEqual(len(selected),592)
-            document['commands'].append({**template,'id':'control592','group':'other'})
+            self.assertEqual(len(selected),593)
+            document['commands'].append({**template,'id':'control593','group':'other'})
             with self.assertRaisesRegex(ValueError,'bounded command list required'):
                 launcher.validate_document(document,'stdlib')
 
@@ -154,6 +154,34 @@ class ManifestControls(unittest.TestCase):
             _,manifest,_=self.fixture(root)
             result=launcher.run(root,manifest,'stdlib',base/'results')
             self.assertEqual((result[0]['tests'],result[0]['skips']),(1,0))
+
+    def test_python_token_binds_nested_argument_and_environment(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp);root=base/'repo';root.mkdir()
+            source,manifest,document=self.fixture(root)
+            source.write_text('import argparse, os, sys, unittest\nfrom pathlib import Path\n'
+                'parser=argparse.ArgumentParser()\nparser.add_argument("--python",required=True)\n'
+                'args=parser.parse_args()\nclass Checks(unittest.TestCase):\n'
+                ' def test_selected_interpreter(self):\n'
+                '  selected=Path(args.python).resolve(strict=True)\n'
+                '  self.assertEqual(selected,Path(sys.executable).resolve(strict=True))\n'
+                '  self.assertEqual(os.environ["CONTROL_PYTHON"],args.python)\n'
+                'if __name__=="__main__": unittest.main(argv=[sys.argv[0]])\n')
+            raw=source.read_bytes();path=source.relative_to(root).as_posix()
+            (root/'benchmarks/integrity/source-ownership.json').write_text(json.dumps({'files':[
+                {'path':path,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}]}))
+            document['commands'][0]['argv'] += ['--python','${PYTHON}']
+            document['commands'][0]['environment']={'CONTROL_PYTHON':'${PYTHON}'}
+            manifest.write_text(json.dumps(document))
+            result=launcher.run(root,manifest,'stdlib',base/'results')
+            self.assertEqual((result[0]['tests'],result[0]['skips']),(1,0))
+            document['commands'][0]['argv'][-1]='prefix-${PYTHON}'
+            manifest.write_text(json.dumps(document))
+            with patch.object(launcher,'run_command') as execute,self.assertRaisesRegex(
+                    ValueError,'unresolved command placeholder'):
+                launcher.run(root,manifest,'stdlib',base/'refused-results')
+            execute.assert_not_called()
+            self.assertFalse((base/'refused-results').exists())
 
     def test_mixed_stream_mutant_summary_keeps_actual_order_under_isolation(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -316,8 +344,8 @@ class Opener:
 
 
 class FixtureControls(unittest.TestCase):
-    def test_command_capacity_592_without_fixtures_and_593_refuses(self):
-        self.document={'fixtures':{},'commands':[{'group':'stdlib','fixtures':[]} for _ in range(592)]}
+    def test_command_capacity_593_without_fixtures_and_594_refuses(self):
+        self.document={'fixtures':{},'commands':[{'group':'stdlib','fixtures':[]} for _ in range(593)]}
         result,opener,_=self.run_fetch([])
         self.assertEqual(result['status'],'succeeded')
         self.assertEqual(result['response_bytes_read'],0)

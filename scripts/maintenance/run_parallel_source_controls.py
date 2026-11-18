@@ -22,7 +22,7 @@ import urllib.request
 
 MAX_MANIFEST_BYTES = 2 * 1024 * 1024
 MAX_LOG_BYTES = 4 * 1024 * 1024
-MAX_COMMANDS = 592
+MAX_COMMANDS = 593
 MAX_SECONDS = 180
 ARTIFACT_TOKEN = '${ARTIFACT_DIR}'
 THREAD_ENV = ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS',
@@ -282,6 +282,7 @@ def run(root, manifest, group, output, fixtures=None):
         # -u also applies under -I, unlike PYTHONUNBUFFERED. Keep nested mutant
         # stdout in actual order relative to the outer framework's stderr.
         substitutions = dict(fixture_paths)
+        substitutions['${PYTHON}'] = sys.executable
         artifact = None
         if ARTIFACT_TOKEN in row['argv'] + list(row.get('environment', {}).values()):
             artifact = output / (row['id'] + '.artifacts')
