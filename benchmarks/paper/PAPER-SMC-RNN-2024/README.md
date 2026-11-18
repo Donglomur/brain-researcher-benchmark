@@ -113,6 +113,10 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
+- [Aggregate episode v1](implementations/aggregate-episode-v1) — Reviewed source component.
+  Scope: Aggregate episode source now selects the accepted5658-byte paired-material manifest a88725a6d3b8c7509826d7c9a4034c796a04635e4bce80cb887468e688f976bc. Existing scientific endpoint, schemas, scorer and access-condition budgets are preserved. Deployment binding remains unresolved; source selection does not qualify image/cgroup/PID limits or launch, and does not establish reproduction, improvement or SOTA.
+- [Aggregate owner v1](implementations/aggregate-owner-v1) — Reviewed source component.
+  Scope: Trusted aggregate-owner source and its existing process/cgroup/transport dependencies align to the selected material binding. The source status sentence and dependency/legacy pins change, without execution-policy or numerical changes. Genuine deployment, private material admission and benchmark execution remain unresolved; no model or scientific result is inferred.
 - [Offline nlb outcomes v1](implementations/offline-nlb-outcomes-v1) — Offline whole trial outcome policy delivery and scoring source.
   Scope: Reviewed source for the offline whole-trial NLB outcome successor, including policy, delivery, scoring and generated controls. It reuses retained source-matched scorer, delivery and protocol dependencies. Registration does not activate a runtime or qualify reproduction or improvement; trusted episode policy, authentic execution, receipt provenance and numerical scientific outcomes remain separately required and unestablished. Existing task definitions, histories and retained source artifacts are preserved.
 - [Source matched nlb v1](implementations/source-matched-nlb-v1) — Original panel preparation, paired materials and frozen prediction scoring.

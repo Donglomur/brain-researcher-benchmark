@@ -1072,3 +1072,93 @@ jobs:
                             'scientific_qualification': False}))
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
+
+  construction-smc-material-binding-controls:
+    needs: construction-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    # Planning declaration only; this is not an OS-enforced RAM ceiling.
+    env:
+      SMC_CONTROL_DECLARED_MEMORY_BYTES: '1073741824'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated SMC accepted-material binding controls (8)
+        timeout-minutes: 4
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B - . <<'PY'
+          # Authenticate both directly imported test sources before the unchanged tested loader.
+          import hashlib
+          import os
+          from pathlib import Path
+          import stat
+          
+          source_root = Path('.').absolute()
+          source_rows = [
+              {
+                  "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/aggregate-episode-v1/test_episode.py",
+                  "bytes": 19275,
+                  "sha256": "80b0ce2b91dd398db95fccc26dc63e233bdb6d0c87dad90a41e9912f3a586aa5"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/aggregate-owner-v1/test_aggregate_owner.py",
+                  "bytes": 29974,
+                  "sha256": "ae1b6d9a1e003007c8b4667a91ddcd15b8741b797b120fcb576b57bff9b7c959"
+              }
+          ]
+          for row in source_rows:
+              path = source_root / row['path']
+              if any(parent.is_symlink() for parent in (path, *path.parents)):
+                  raise ValueError('symlink in selected control source path')
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), 'rb') as stream:
+                  before = os.fstat(stream.fileno())
+                  if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != row['bytes']:
+                      raise ValueError('selected control source type/extent differs')
+                  body = stream.read(row['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              fields = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              if any(getattr(before, field) != getattr(after, field) for field in fields):
+                  raise ValueError('selected control source changed during read')
+              if len(body) != row['bytes'] or hashlib.sha256(body).hexdigest() != row['sha256']:
+                  raise ValueError('selected control source identity differs')
+          
+          """Exact eight stdlib source controls; no data or native execution."""
+          import importlib.util
+          from pathlib import Path
+          import sys
+          import unittest
+          
+          root = Path(sys.argv[1]).resolve()
+          base = root / 'benchmarks/paper/PAPER-SMC-RNN-2024/implementations'
+          selection = {
+              'aggregate-episode-v1/test_episode.py': [
+                  'EpisodeControls.test_exact_source_and_compact_transport_encoding',
+                  'EpisodeControls.test_selected_material_binds_accepted_actual_pair',
+                  'EpisodeControls.test_selected_material_rejects_wrong_pair_pin',
+                  'EpisodeControls.test_unresolved_material_refuses_before_caller_path_read',
+                  'EpisodeControls.test_caller_qualification_flags_cannot_select_deployment',
+                  'EpisodeControls.test_old_pair_resource_profile_refused_before_condition_files',
+              ],
+              'aggregate-owner-v1/test_aggregate_owner.py': [
+                  'MaterialBindingControls.test_owner_source_closes_over_selected_material_and_unresolved_deployment',
+                  'MaterialBindingControls.test_owner_source_rejects_stale_episode_dependency',
+              ],
+          }
+          suite = unittest.TestSuite()
+          for index, (relative, names) in enumerate(selection.items()):
+              spec = importlib.util.spec_from_file_location('smc_material_binding_controls_' + str(index), base / relative)
+              module = importlib.util.module_from_spec(spec)
+              spec.loader.exec_module(module)
+              for name in names:
+                  cls, method = name.split('.')
+                  suite.addTest(getattr(module, cls)(method))
+          assert suite.countTestCases() == 8
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 8 and not result.skipped and result.wasSuccessful()
+          PY
