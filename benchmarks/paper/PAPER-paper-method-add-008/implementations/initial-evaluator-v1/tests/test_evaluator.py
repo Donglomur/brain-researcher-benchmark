@@ -173,5 +173,24 @@ class CurationTests(unittest.TestCase):
             with self.assertRaises(e.ContractError): e._load(path)
 
 
+class RetainedContractBindingTests(unittest.TestCase):
+    def test_declared_contract_file_matches_the_executable_policy(self):
+        # An old digest must resolve to the retained contract, not a later task.
+        implementation = Path(__file__).resolve().parents[1]
+        repository = Path(__file__).resolve().parents[6]
+        provenance = json.loads((implementation / "source-provenance.json").read_text(encoding="utf-8"))
+        declaration = provenance["contract"]
+        relative = Path(declaration["path"])
+        self.assertFalse(relative.is_absolute())
+        self.assertNotIn("..", relative.parts)
+        payload = (repository / relative).read_bytes()
+        actual_digest = hashlib.sha256(payload).hexdigest()
+        self.assertEqual(actual_digest, declaration["sha256"],
+                         "declared contract path must resolve to the pinned bytes")
+        self.assertEqual(actual_digest, e.CONTRACT_SHA256)
+        self.assertEqual(json.loads(payload)["id"], e.TASK_ID)
+        self.assertEqual(provenance["task_id"], e.TASK_ID)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,48 @@
+{
+  "schema": "dunl_smoothed_raster_source_v1",
+  "task_id": "PAPER-CANDIDATE-20261114-DUNL",
+  "scope": "current-code-default mathematical raster comparator; not original-paper parity",
+  "official_commit": "23a34f40b122c3ccf3715995f0dd19fcbbcb46a2",
+  "observations": [
+    {
+      "url": "https://github.com/btolooshams/dunl-compneuro/blob/23a34f40b122c3ccf3715995f0dd19fcbbcb46a2/dunl/postprocess_scripts/plot_hitrate_whisker_thalamus_groupneuralfiringsp.py",
+      "locator": "init_params lines55-72; plot_miss_false157-221; get_data238-253",
+      "supports": "Four smoothing defaults;20 threshold grid; peak detection before event-axis cropping; raw comparator remains per-neuron while grouped candidate is repeated.",
+      "acquisition": "Browser-observed official pinned source; no raw payload captured or newly authenticated."
+    },
+    {
+      "url": "https://github.com/btolooshams/dunl-compneuro/blob/23a34f40b122c3ccf3715995f0dd19fcbbcb46a2/dunl/utils.py",
+      "locator": "get_smooth_kernel104-105;smooth_raster107-131;predict_event195-204;compute_hit_rate207-234",
+      "supports": "Odd-length normalized convolution kernel, flipped same-padding orientation, height-only local maxima, current historical event metric.",
+      "acquisition": "Browser-observed official pinned source; earlier task SOURCE_PINS records raw source digest, not reauthenticated here."
+    },
+    {
+      "url": "https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html",
+      "locator": "Notes and height parameter",
+      "supports": "Interior local maxima, flat-peak midpoint rounded down, inclusive height border.",
+      "acquisition": "Official SciPy1.18 documentation observed; actual historical SciPy version remains unresolved."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12006907/",
+      "outcome": "Browser challenge; no paper body inspected in this wave."
+    }
+  ],
+  "unchanged_dependencies": [
+    {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/implementations/dunl-historical-events-v1/historical_events.py",
+      "bytes": 9780,
+      "sha256": "ddfa29861f8d942b4dd37bac4ca8163c084e7be476bdf5ddee2e31c40b619df0"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/implementations/dunl-historical-events-v1/SOURCE_PINS.json",
+      "bytes": 3260,
+      "sha256": "12f684c49af9b61b94c57a88892851ee1c79cd0848c9297ae969fa078409065e"
+    }
+  ],
+  "limitations": [
+    "Publication-specific smoothing/threshold settings and original Figure4F operating point unresolved.",
+    "Python binary64 calculation is not Torch/NumPy dtype or threshold-tie parity.",
+    "Current50-trial/11-allocation geometry is not authenticated original10-neuron cohort.",
+    "No source arrays, native outputs, AI fits, biological uncertainty or same-task improvement result."
+  ]
+}

@@ -4,7 +4,8 @@ This component connects the exact released data representation to explicit
 preprocessing and original-row bindings. It preserves the original Figure5d
 endpoint in the sibling `figure5d-endpoint-v1` component: rat1, 32-dimensional
 embeddings, 36 uniform cosine neighbors, and mean absolute position error in
-metres over **all 2,000 query observations**. That scorer is unchanged.
+metres over **all 2,000 query observations**. Its numerical endpoint is unchanged; the later CLI target-admission ordering
+revision is described in that component and bound by the current source pin.
 
 The released MARBLE decoding recipe produces **7,999 training and 1,999 query
 anchors**. This component reports that result and refuses its admission to the
@@ -158,8 +159,7 @@ original support declaration. Its support digest is SHA256 of UTF-8 JSON with
 sorted keys and separators `(',', ':')`. It requires exact embedding order,
 explicit original source row IDs, complete2,000-row query support and declared
 preprocessing/model/exposure pins. It joins labels by those source identities
-without reordering embeddings. `score_complete` calls the unchanged source
-scorer. A 1,999-row artifact fails before decoding. A valid digest and2,000 rows
+without reordering embeddings. `score_complete` calls the same numerical scorer API. A 1,999-row artifact fails before decoding. A valid digest and2,000 rows
 still do not prove historical source provenance; returned scientific
 qualification remains false.
 

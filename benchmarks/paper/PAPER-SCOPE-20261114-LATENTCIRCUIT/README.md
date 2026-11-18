@@ -55,6 +55,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Owner-side fixed-neuron held-trial loss arithmetic for both monkeys and all 72 conditions, train-only normalization, declared-census/split audits and a condition-mean control. Native timing/objective correspondence, authentic unit census, full 200-start reference, behavioral non-inferiority and protected execution remain held, including residual correctness inference from eligibility/counts. Scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Calibration scope view v1](implementations/calibration-scope-view-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

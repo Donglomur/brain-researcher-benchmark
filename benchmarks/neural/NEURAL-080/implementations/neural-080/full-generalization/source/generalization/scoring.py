@@ -207,7 +207,7 @@ def compare(plan, captured_panel, private_pool_root, private_pool_manifest, outp
              "Protected pool identity must equal the pool bound before prediction capture")
         pool, target_contract, targets = _pool(private_pool_root, private_pool_manifest, owner)
         import numpy as np
-        from .models import family_weights, fit_target_scale, array_identity
+        from .models import family_weights, verify_captured_target_scale, array_identity
         writer = Writer(output, owner)
         label_count, family_count = len(SCORE_LABELS), len(plan.components)
         owner.reserve("retained_bytes", label_count * len(PERSONS) * len(VIDEO_IDS) * 8 +
@@ -231,13 +231,10 @@ def compare(plan, captured_panel, private_pool_root, private_pool_manifest, outp
                  admitted.fit_supports[case.case_id]["target_values_identity"],
                  "Actual reference TRAIN values must equal private pool values in exact person/video order")
             weights = family_weights(plan, coordinates, owner)
-            exact_scale, standardized = fit_target_scale(raw_targets, weights, owner)
             mean = read_operand(admitted, case.case_id, "scale:mean", owner)
             sigma = read_operand(admitted, case.case_id, "scale:sigma", owner)
-            need(np.array_equal(exact_scale.mean.reshape(TARGET_SHAPE), mean) and
-                 np.array_equal(exact_scale.sigma.reshape(TARGET_SHAPE), sigma),
-                 "Captured mean/sigma must equal the exact selected outer TRAIN-only transform")
-            del standardized, raw_targets, weights, exact_scale
+            verify_captured_target_scale(raw_targets, weights, mean, sigma, owner)
+            del raw_targets, weights
             person_index = PERSONS.index(case.query_person)
             query_ids = np.asarray(case.query_video_ids, dtype=np.int64) - 1
             owner.reserve("retained_bytes", len(query_ids) * math.prod(TARGET_SHAPE) * 8 * 4 +

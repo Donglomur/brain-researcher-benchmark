@@ -8,6 +8,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -259,6 +260,92 @@ class CorrelationTests(unittest.TestCase):
             m["participants"][0]["source"]["sha256"] = "0" * 64
             (root / "manifest.json").write_text(json.dumps(m))
             with self.assertRaises(e.ContractError): e.load_input(root / "manifest.json")
+
+
+    def test_loaded_arrays_are_bound_to_captured_npz_after_path_replacement(self):
+        m, arrays = fixture()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            path = root / "timecourses.npz"
+            np.savez(path, **arrays["p1"])
+            original = path.read_bytes()
+            m["participants"][0]["source"] = {"role": "empirical_electrode_timecourses",
+                "npz_path": path.name, "sha256": hashlib.sha256(original).hexdigest()}
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps(m))
+            read_bytes = Path.read_bytes
+            observed = []
+
+            def capture_then_replace(selected):
+                payload = read_bytes(selected)
+                if selected == path:
+                    observed.append(selected)
+                    # A valid but different archive replaces the pathname after
+                    # capture. The verified snapshot must still be consumed.
+                    np.savez(path, D=arrays["p1"]["D"] + 100., t=arrays["p1"]["t"])
+                return payload
+
+            with mock.patch.object(Path, "read_bytes", capture_then_replace):
+                _, loaded, receipts = e.load_input(manifest)
+            self.assertEqual(observed, [path])
+            np.testing.assert_array_equal(loaded["p1"]["D"], arrays["p1"]["D"])
+            self.assertNotEqual(path.read_bytes(), original)
+            self.assertEqual(receipts, [{"participant_id": "p1",
+                "sha256": hashlib.sha256(original).hexdigest(), "bytes": len(original)}])
+
+    def test_loaded_snapshot_survives_path_unlink_after_capture(self):
+        m, arrays = fixture()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            path = root / "timecourses.npz"
+            np.savez(path, **arrays["p1"])
+            original = path.read_bytes()
+            m["participants"][0]["source"] = {"role": "empirical_electrode_timecourses",
+                "npz_path": path.name, "sha256": hashlib.sha256(original).hexdigest()}
+            manifest = root / "manifest.json"
+            manifest.write_text(json.dumps(m))
+            read_bytes = Path.read_bytes
+
+            def capture_then_unlink(selected):
+                payload = read_bytes(selected)
+                if selected == path:
+                    path.unlink()
+                return payload
+
+            with mock.patch.object(Path, "read_bytes", capture_then_unlink):
+                _, loaded, receipts = e.load_input(manifest)
+            self.assertFalse(path.exists())
+            np.testing.assert_array_equal(loaded["p1"]["t"], arrays["p1"]["t"])
+            self.assertEqual(receipts[0]["bytes"], len(original))
+
+    def test_cli_manifest_receipt_binds_evaluated_snapshot(self):
+        m, arrays = fixture()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            path = root / "timecourses.npz"
+            np.savez(path, **arrays["p1"])
+            m["participants"][0]["source"] = {"role": "empirical_electrode_timecourses",
+                "npz_path": path.name, "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}
+            manifest, output = root / "manifest.json", root / "result.json"
+            payload = json.dumps(m).encode()
+            manifest.write_bytes(payload)
+            actual_evaluate = e.evaluate
+
+            def evaluate_then_replace(selected_manifest, selected_arrays):
+                result = actual_evaluate(selected_manifest, selected_arrays)
+                # The output hash must still identify the manifest evaluated,
+                # even if a concurrent writer changes or removes the pathname.
+                manifest.unlink()
+                return result
+
+            with mock.patch.object(sys, "argv", ["evaluator.py", str(manifest), str(output)]):
+                with mock.patch.object(e, "evaluate", evaluate_then_replace):
+                    e.main()
+            result = json.loads(output.read_text())
+            self.assertFalse(manifest.exists())
+            self.assertEqual(result["manifest_sha256"], hashlib.sha256(payload).hexdigest())
+            self.assertEqual(result["cohort_id"], m["cohort_id"])
+            self.assertEqual(len(result["rows"]), 4)
 
 if __name__ == "__main__":
     unittest.main()

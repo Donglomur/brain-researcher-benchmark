@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Signal-array stimulus and reward-location selectivity, behavior-standardized contrasts, paired animal uncertainty, trial nulls and a before-only held-animal explanatory reference. Native cohort/session mapping, interpolation and cross-session calibration, the behavior-matched reward endpoint, authentic comparator execution and protected assessment remain held. Scientific qualification is unknown.
+- [Source label bridge v1](implementations/source-label-bridge-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Numerical claims v1](implementations/numerical-claims-v1) — Reviewed source component.
   Scope: NEURAL-028 numerical investigation claims. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

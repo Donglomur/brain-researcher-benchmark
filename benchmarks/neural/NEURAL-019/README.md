@@ -43,6 +43,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Submitted program v1](implementations/submitted-program-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Typed count viewer v1](implementations/typed-count-viewer-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Portable score v2](implementations/portable-score-v2) — Reviewed source component.
   Scope: Portable NEURAL-019 artifact scoring. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

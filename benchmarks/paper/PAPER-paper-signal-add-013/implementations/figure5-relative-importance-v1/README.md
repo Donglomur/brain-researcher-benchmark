@@ -1,0 +1,19 @@
+# Figure 5 baseline relative contributions
+
+This component supplies the missing contribution calculation for the two baseline Figure 5 models. It reuses the existing, hash-pinned `figure5-baseline-v1/baseline.py` preparation and full-fit implementation. It preserves the original 40 participants, all eight masks, task-ordered voxel repetitions, CBF scaling, source exclusions and predictor centering. It does not prepare or authenticate physiological maps.
+
+The authenticated author notebook `F_Fig4_5.ipynb`, cells 13 and 16, requests Pingouin `relimp` and `relimp_perc`. [Pingouin's current documentation](https://pingouin-stats.org/generated/pingouin.linear_regression.html) defines the former as contributions to model R², including shared information between correlated predictors. Its [current implementation](https://github.com/raphaelvallat/pingouin/blob/main/src/pingouin/regression.py) averages incremental subset-model R² and divides each contribution by their sum for percentages. This independent implementation fits all eight intercept-containing subsets and averages the six predictor orders. It does not derive contributions from coefficient magnitude. The author's installed Pingouin version is unknown; current documentation is not historical environment authentication.
+
+`evaluate_baseline_contributions(subject_ids, voxel_indices, maps, masks)` takes the accepted baseline input ABI. It returns separate concordant and discordant cells containing every subset's fit, six ordered increments, absolute contributions, percentage contributions, full-fit reconciliation, retained row identities and centered predictor/target rows. Cross-task repetitions remain separate observations. Percentages are undefined when explained variance is nonpositive. No printed paper values are repaired or normalized. The roundoff threshold checks arithmetic consistency only; it is not a scientific reproduction tolerance.
+
+The source contribution branch initializes a frame with nonmissing targets, aligns centered predictor series, then independently drops missing predictor and target rows. If a valid target lacks a predictor, the resulting source inputs do not have the same row set. This component refuses that case. Silently adopting the existing statsmodels companion's joint complete-case behavior would change the contribution branch. Target-only missingness, whole-row source exclusions and centering before target-row removal retain their original distinction.
+
+The test suite uses analytical factorial and correlated-predictor designs, including a zero conditional coefficient with positive shared contribution. It also checks repeated task voxels, missingness alignment, changed cohorts, source dependency identity, incomplete subset families, inconsistent nested scores and undefined percentages. Run the new maintained test beside the existing baseline implementation:
+
+```sh
+python -B benchmarks/paper/PAPER-paper-signal-add-013/implementations/figure5-relative-importance-v1/tests/test_contributions.py
+```
+
+Integration must enroll this component and command in the repository's component validation metadata; this private package is not already CI-enrolled. NumPy is required; Pingouin is not installed or executed by this component.
+
+Task-change models remain unimplemented here: the paper's CALC40/MEM30 support conflicts with the recovered notebook's first30/first30 branch, and map lineage and row-index handling remain unresolved. No authentic map, mask or native fit was evaluated. Significance, historical numerical parity, all-four-fit reproduction, participant delivery and meaningful physiological improvement are not established. CMRO2 remains a Fick-derived target; a contribution or fitted-R² increase is not independent evidence of better oxygen-metabolism estimation.

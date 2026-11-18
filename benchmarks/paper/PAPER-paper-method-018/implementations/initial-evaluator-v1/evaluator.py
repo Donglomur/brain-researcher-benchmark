@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import itertools
+import io
 import json
 import math
 from pathlib import Path
@@ -67,7 +68,8 @@ def file_sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _json(path: Path) -> dict:
+def _json_snapshot(path: Path) -> tuple[dict, str]:
+    """Parse and commit the same captured bytes, never a later pathname read."""
     def pairs(items):
         result = {}
         for key, value in items:
@@ -77,12 +79,18 @@ def _json(path: Path) -> dict:
     def reject_constant(value):
         raise EvaluationError(f"nonfinite JSON constant: {value}")
     try:
-        value = json.loads(path.read_text(), object_pairs_hook=pairs,
+        raw = path.read_bytes()
+        value = json.loads(raw.decode("utf-8"), object_pairs_hook=pairs,
                            parse_constant=reject_constant)
     except (OSError, UnicodeError, json.JSONDecodeError) as exc:
         raise EvaluationError(f"cannot read manifest {path}: {exc}") from exc
     _need(isinstance(value, dict), "manifest root must be an object")
-    return value
+    return value, hashlib.sha256(raw).hexdigest()
+
+
+def _json(path: Path) -> dict:
+    """Retain the existing parser interface for callers that need no receipt."""
+    return _json_snapshot(path)[0]
 
 
 def _ids(value: Any, name: str, nonempty: bool = True) -> list[str]:
@@ -104,7 +112,7 @@ def _number(value: Any, name: str, positive: bool = False) -> float:
     return converted
 
 
-def _artifact(base: Path, record: Any, name: str) -> Path:
+def _artifact(base: Path, record: Any, name: str) -> tuple[Path, bytes]:
     _keys(record, {"path", "sha256"}, name)
     _digest(record["sha256"], name)
     _need(isinstance(record["path"], str), f"{name}: path must be string")
@@ -112,13 +120,24 @@ def _artifact(base: Path, record: Any, name: str) -> Path:
     _need(not raw.is_absolute() and ".." not in raw.parts, f"{name}: expected relative confined path")
     path = (base / raw).resolve()
     _need(path.is_relative_to(base.resolve()) and path.is_file(), f"{name}: missing or unconfined file")
-    _need(file_sha256(path) == record["sha256"], f"{name}: content digest mismatch")
-    return path
-
-
-def _arrays(path: Path, expected: set[str]) -> dict[str, np.ndarray]:
     try:
-        with np.load(path, allow_pickle=False) as bundle:
+        raw = path.read_bytes()
+    except OSError as exc:
+        raise EvaluationError(f"{name}: cannot capture numeric artifact: {exc}") from exc
+    _need(hashlib.sha256(raw).hexdigest() == record["sha256"], f"{name}: content digest mismatch")
+    return path, raw
+
+
+def _arrays(snapshot: tuple[Path, bytes], expected: set[str]) -> dict[str, np.ndarray]:
+    """Decode only the NPZ bytes authenticated by _artifact.
+
+    The compressed input snapshot remains in memory during decoding; a pathname
+    replacement after capture cannot alter the evaluated observations/predictions.
+    This is content binding, not filesystem or process isolation.
+    """
+    path, raw = snapshot
+    try:
+        with np.load(io.BytesIO(raw), allow_pickle=False) as bundle:
             _need(set(bundle.files) == expected and len(bundle.files) == len(expected),
                   f"{path.name}: wrong or duplicate array keys")
             result = {key: bundle[key] for key in expected}
@@ -287,11 +306,12 @@ def _validate_reference(reference: dict, root: Path) -> dict[str, dict]:
 
 def evaluate(reference_path: str | Path, submission_path: str | Path) -> dict:
     reference_path, submission_path = Path(reference_path).resolve(), Path(submission_path).resolve()
-    reference, submission = _json(reference_path), _json(submission_path)
+    reference, reference_sha256 = _json_snapshot(reference_path)
+    submission, submission_sha256 = _json_snapshot(submission_path)
     expected = _validate_reference(reference, reference_path.parent)
     _keys(submission, {"schema_version", "task_id", "reference_sha256", "arms"}, "submission")
     _need(type(submission["schema_version"]) is int and submission["schema_version"] == 1 and submission["task_id"] == TASK_ID, "wrong submission schema/task")
-    _need(submission["reference_sha256"] == file_sha256(reference_path), "reference digest mismatch")
+    _need(submission["reference_sha256"] == reference_sha256, "reference digest mismatch")
     _keys(submission["arms"], set(ARMS), "arms")
     arm_sessions = {}
     for arm in ARMS:
@@ -349,8 +369,8 @@ def evaluate(reference_path: str | Path, submission_path: str | Path) -> dict:
             "status": "prospective_evaluator_engineering_output",
             "scientifically_qualified": False, "full_contract_complete": False,
             "inference_policy": INFERENCE_POLICY,
-            "reference_sha256": file_sha256(reference_path),
-            "submission_sha256": file_sha256(submission_path),
+            "reference_sha256": reference_sha256,
+            "submission_sha256": submission_sha256,
             "primary_endpoint": "equal_session_interaction_gain_nats_per_observation",
             "primary_value": _weighted_mean(gains),
             "secondary_exact_session_sign_flip_two_sided_p": exact_session_sign_flip(gains),

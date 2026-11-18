@@ -1,0 +1,80 @@
+{
+  "schema": "motormint-primary-profile-source/v1",
+  "task_id": "PAPER-paper-method-011",
+  "source_revision": "c41df9037da0c2831b7657e114cecdafa3802ce4",
+  "retained_authorities": [
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/primary-endpoint-v1/selection.v1.json",
+      "bytes": 12103,
+      "sha256": "e05bb77e5e6644defbc9f9be7118bf9acb70bf19cfa847996e0253b55854997f"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/primary-endpoint-v1/improvement.v1.json",
+      "bytes": 14775,
+      "sha256": "6e973e88fdb0de549ce39173238db35edf4f707d648dddd23ad2aebc12b71022"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/implementations/paper-method-011/full-motormint-v1/runtime/SCOPE.json",
+      "bytes": 32395,
+      "sha256": "7acfe45cb7d1cb380d8b39a5fd898ef6fd2123d3818215bf573e56bf2b32103c"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/implementations/paper-method-011/full-motormint-v1/runtime/mintbench/catalog.py",
+      "bytes": 5591,
+      "sha256": "da38d1ee8a1114838b7013bbc3fa038bb7f6c2db45a349399a67ee73cbd5a4bf"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/implementations/paper-method-011/full-motormint-v1/runtime/mintbench/bindings.py",
+      "bytes": 15992,
+      "sha256": "e5c62ff7f95c525df54326c76131992d992f191626c1462b50e4a923243cb681"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/implementations/paper-method-011/full-motormint-v1/runtime/mintbench/scoring.py",
+      "bytes": 16828,
+      "sha256": "f29e57bd7ab408f1e257ba80a23174bf3af6658fd4b8ba6ea932e16ea10f7535"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/implementations/paper-method-011/full-motormint-v1/runtime/mintbench/report.py",
+      "bytes": 5043,
+      "sha256": "33f66781a31404e62bc83204cc5e0b2e0f8bc7b1a52c270a01286544c52fe4a8"
+    }
+  ],
+  "derivation": {
+    "roster": "catalog.primary_slots: four datasets, MINT/Wiener/Kalman once and feedforward/GRU ten times; MC_Maze naive Bayes once =93.",
+    "groups": "SCOPE dataset behavior.groups,15 total; bindings.validate_identity restricts Kalman to position and velocity.",
+    "aggregation": "selection.selected_endpoint.same_task.aggregation: arithmetic mean per dimension within group, then mean groups within dataset; ten network runs averaged, no best-seed selection.",
+    "existing_assessment_interface": "scoring.assess_case returns original full behavior reference values and status; this additive reducer never invokes its scorer or any model.",
+    "assessment_commitments": "Numeric output commitments.input_index/recipe/source_recipe must exactly match current case input_index_sha256/metric_recipe_sha256/source_recipe_sha256. Existing artifacts field is retained; no source authentication is inferred."
+  },
+  "tool_observations": [
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11790250/",
+      "result": "Browser challenge; no paper text recovered."
+    },
+    {
+      "url": "https://elifesciences.org/articles/89421",
+      "result": "Client challenge; no paper text recovered."
+    },
+    {
+      "url": "https://zenodo.org/records/14769761",
+      "result": "Official v1 metadata still describes8cyclingconditions and mc_cycle.pkl MD5 98a464a18bc8e35cf826be1080a244ac. No numeric phase unit/period or decoder source recovered; no payload acquired."
+    },
+    {
+      "url": "https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/run/utils/evaluate_and_save.m",
+      "result": "Tool-rendered pinned author source uses5ms mean bins, concatenates trials and masks NaN-predicted samples before linear per-dimension R2. Does not supply Cycle circular native semantics or historical15group values. This is a tool observation, not raw-blob acquisition."
+    }
+  ],
+  "new_implementation": [
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/implementations/primary-profile-v1/panel.py",
+      "bytes": 13054,
+      "sha256": "7fe917adceff130724b4a56a19110e73d3221349ff7d35c93aeb14d8f45c1b10"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-011/implementations/primary-profile-v1/test_panel.py",
+      "bytes": 11093,
+      "sha256": "68037cddc34682a3ff80416e93095651d34d4378d8f858bdf3481c30ea90585c"
+    }
+  ],
+  "qualification": "Source-level profile projection only. Existing sources are local retained evidence; no authentic data/reference or full source-method execution was newly authenticated."
+}

@@ -9,7 +9,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent / 'neural-080' / 'full-generalization' / 'source'))
 from stable_scale import fit_target_scale, TARGET_WIDTH
-from generalization import models as predecessor
+import legacy_rounded_scale as predecessor
 
 
 class Owner:

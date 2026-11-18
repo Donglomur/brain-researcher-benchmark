@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Typed viewer v1](implementations/typed-viewer-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Content identity v1](implementations/content-identity-v1) — Reviewed source component.
   Scope: MorseEEG content identity preparation. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

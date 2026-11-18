@@ -576,8 +576,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-008/docs/initial-evaluator-v1.md",
-                  "bytes": 8585,
-                  "sha256": "293cfc2db35672c9dc49bf8961604467b0cc6179e040b68f4d971a662719a03e"
+                  "bytes": 8859,
+                  "sha256": "8233c172974d6895865ebfa0362ac5db4df92e960259b3c71b92f2c1f6bf2fde"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-008/implementations/initial-evaluator-v1/README.md",
@@ -596,13 +596,13 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-008/implementations/initial-evaluator-v1/source-provenance.json",
-                  "bytes": 4446,
-                  "sha256": "920afa6472b486b14a4073ea13330be8e38f43f4c466e9c43ff1ad537b74b3c5"
+                  "bytes": 4476,
+                  "sha256": "e22bbe7815e94d6be89dfc2052ebc7b4a8ef6481b03326feb71d39925959bcf9"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-008/implementations/initial-evaluator-v1/tests/test_evaluator.py",
-                  "bytes": 8837,
-                  "sha256": "36b494a87dfce6ba778419c0ee765f97afbe22207e2ed27b1ca2bcd9d28c6497"
+                  "bytes": 9900,
+                  "sha256": "39abdd5e5669b6b4ab74a1e85d44e7b5f9a2ee8747b4f2a90cc016802407e7db"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-008/historical/task.pre-improvement.v1.json",
@@ -686,7 +686,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-signal-add-013/implementations/initial-evaluator-v1"
           ]
           assert len(rows) == 53 > 0
-          assert sum(row['bytes'] for row in rows) == 3028703 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 3030070 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -729,7 +729,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 3028703,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 3030070,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -1615,13 +1615,13 @@ jobs:
                       yield from flatten(case)
                   else:
                       yield case
-          expected_ids = ['test_evaluator.CurationTests.test_cli_complete_outputs_and_failure_is_atomic', 'test_evaluator.CurationTests.test_drift_duplicate_frame_rejected', 'test_evaluator.CurationTests.test_drift_filter_exactly_good_not_non_somatic_good', 'test_evaluator.CurationTests.test_drift_missing_nonretained_spike_still_rejected', 'test_evaluator.CurationTests.test_drift_nonfinite_coordinate_rejected', 'test_evaluator.CurationTests.test_drift_out_of_recording_rejected', 'test_evaluator.CurationTests.test_duplicate_json_keys_rejected', 'test_evaluator.CurationTests.test_duplicate_unit_rejected', 'test_evaluator.CurationTests.test_finite_sampling_rate_with_infinite_derived_duration_rejected', 'test_evaluator.CurationTests.test_independent_five_label_count_oracle', 'test_evaluator.CurationTests.test_missing_comparator_rejected', 'test_evaluator.CurationTests.test_missing_unit_rejected', 'test_evaluator.CurationTests.test_native_artifact_identity_bound', 'test_evaluator.CurationTests.test_native_kilosort_version_must_match_pinned_source', 'test_evaluator.CurationTests.test_native_label_does_not_promote_qualification', 'test_evaluator.CurationTests.test_other_asset_not_silently_substituted', 'test_evaluator.CurationTests.test_overlapping_merge_groups_rejected', 'test_evaluator.CurationTests.test_owner_manifest_mutation_rejected', 'test_evaluator.CurationTests.test_paired_differences_keep_fixed_four_comparators', 'test_evaluator.CurationTests.test_resource_claims_must_be_finite', 'test_evaluator.CurationTests.test_source_analyzer_order_preserved_as_unresolved_comparability', 'test_evaluator.CurationTests.test_unknown_label_rejected', 'test_evaluator.CurationTests.test_zero_units_retained_with_undefined_fractions']
+          expected_ids = ['test_evaluator.CurationTests.test_cli_complete_outputs_and_failure_is_atomic', 'test_evaluator.CurationTests.test_drift_duplicate_frame_rejected', 'test_evaluator.CurationTests.test_drift_filter_exactly_good_not_non_somatic_good', 'test_evaluator.CurationTests.test_drift_missing_nonretained_spike_still_rejected', 'test_evaluator.CurationTests.test_drift_nonfinite_coordinate_rejected', 'test_evaluator.CurationTests.test_drift_out_of_recording_rejected', 'test_evaluator.CurationTests.test_duplicate_json_keys_rejected', 'test_evaluator.CurationTests.test_duplicate_unit_rejected', 'test_evaluator.CurationTests.test_finite_sampling_rate_with_infinite_derived_duration_rejected', 'test_evaluator.CurationTests.test_independent_five_label_count_oracle', 'test_evaluator.CurationTests.test_missing_comparator_rejected', 'test_evaluator.CurationTests.test_missing_unit_rejected', 'test_evaluator.CurationTests.test_native_artifact_identity_bound', 'test_evaluator.CurationTests.test_native_kilosort_version_must_match_pinned_source', 'test_evaluator.CurationTests.test_native_label_does_not_promote_qualification', 'test_evaluator.CurationTests.test_other_asset_not_silently_substituted', 'test_evaluator.CurationTests.test_overlapping_merge_groups_rejected', 'test_evaluator.CurationTests.test_owner_manifest_mutation_rejected', 'test_evaluator.CurationTests.test_paired_differences_keep_fixed_four_comparators', 'test_evaluator.CurationTests.test_resource_claims_must_be_finite', 'test_evaluator.CurationTests.test_source_analyzer_order_preserved_as_unresolved_comparability', 'test_evaluator.CurationTests.test_unknown_label_rejected', 'test_evaluator.CurationTests.test_zero_units_retained_with_undefined_fractions', 'test_evaluator.RetainedContractBindingTests.test_declared_contract_file_matches_the_executable_policy']
           actual_ids = sorted(case.id() for case in flatten(suite))
           assert actual_ids == expected_ids, (actual_ids, expected_ids)
           actual_count = suite.countTestCases()
-          assert actual_count == 23 > 0, actual_count
+          assert actual_count == 24 > 0, actual_count
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 23, result.testsRun
+          assert result.testsRun == 24, result.testsRun
           assert not result.skipped, result.skipped
           assert not result.expectedFailures, result.expectedFailures
           assert not result.unexpectedSuccesses, result.unexpectedSuccesses

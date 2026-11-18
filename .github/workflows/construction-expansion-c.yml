@@ -459,18 +459,23 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1617,
-                  "sha256": "2a749d6bcffe440d4cd3ce26e5ea4abf8de5977b2c2051368ce35bb9ffa56d75"
+                  "bytes": 2177,
+                  "sha256": "aa68514c5d0438a905f8ed98db3dfd15a2d54b75800a552c92e7f0bcfb4eaaa9"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 22698,
-                  "sha256": "938a4234138f10c8e6a1ecd4e5e361b4b7854e8eb150573028ce11b262a9c90c"
+                  "bytes": 23597,
+                  "sha256": "942eaa1577b985eb7502c3d0c0420b5d35c6a05cf510d3f3e2000f47d8c31468"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/tests/test_evaluator.py",
                   "bytes": 16127,
                   "sha256": "6e459701d6368069c350be35baf2138456f283afc24ac0adcb47d099285e3854"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/tests/test_snapshot_commitments.py",
+                  "bytes": 4029,
+                  "sha256": "0446f5b32d7e891389454ddc95160fe737b8db90fcd389b2115424243266ca09"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-018/historical/task.pre-improvement.v1.json",
@@ -653,8 +658,8 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1",
               "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 53 > 0
-          assert sum(row['bytes'] for row in rows) == 867894 <= 33554432
+          assert len(rows) == 54 > 0
+          assert sum(row['bytes'] for row in rows) == 873382 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -697,7 +702,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 867894,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 873382,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -2409,18 +2414,23 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1617,
-                  "sha256": "2a749d6bcffe440d4cd3ce26e5ea4abf8de5977b2c2051368ce35bb9ffa56d75"
+                  "bytes": 2177,
+                  "sha256": "aa68514c5d0438a905f8ed98db3dfd15a2d54b75800a552c92e7f0bcfb4eaaa9"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 22698,
-                  "sha256": "938a4234138f10c8e6a1ecd4e5e361b4b7854e8eb150573028ce11b262a9c90c"
+                  "bytes": 23597,
+                  "sha256": "942eaa1577b985eb7502c3d0c0420b5d35c6a05cf510d3f3e2000f47d8c31468"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/tests/test_evaluator.py",
                   "bytes": 16127,
                   "sha256": "6e459701d6368069c350be35baf2138456f283afc24ac0adcb47d099285e3854"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1/tests/test_snapshot_commitments.py",
+                  "bytes": 4029,
+                  "sha256": "0446f5b32d7e891389454ddc95160fe737b8db90fcd389b2115424243266ca09"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-018/historical/task.pre-improvement.v1.json",
@@ -2431,8 +2441,8 @@ jobs:
           packages = [
               "benchmarks/paper/PAPER-paper-method-018/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 5 > 0
-          assert sum(row['bytes'] for row in rows) == 94036 <= 33554432
+          assert len(rows) == 6 > 0
+          assert sum(row['bytes'] for row in rows) == 99524 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -2475,7 +2485,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 94036,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 99524,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -2520,10 +2530,10 @@ jobs:
                       yield case
           collected = list(flatten(suite))
           case_ids = [case.id() for case in collected]
-          assert len(case_ids) == len(set(case_ids)) == 23 > 0, case_ids
-          assert suite.countTestCases() == 23
+          assert len(case_ids) == len(set(case_ids)) == 28 > 0, case_ids
+          assert suite.countTestCases() == 28
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 23, result.testsRun
+          assert result.testsRun == 28, result.testsRun
           assert not result.skipped, result.skipped
           assert not result.expectedFailures, result.expectedFailures
           assert not result.unexpectedSuccesses, result.unexpectedSuccesses

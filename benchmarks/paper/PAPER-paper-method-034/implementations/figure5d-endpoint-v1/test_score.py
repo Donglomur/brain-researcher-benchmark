@@ -8,6 +8,7 @@ import math
 from pathlib import Path
 import tempfile
 import unittest
+from unittest import mock
 
 HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("figure5d_score", HERE / "score.py")
@@ -118,6 +119,89 @@ class EndpointTests(unittest.TestCase):
                 m.read_json(path, 1024)
             with self.assertRaisesRegex(ValueError, "byte bound"):
                 m.read_json(path, 1)
+
+
+class TargetAdmissionTests(unittest.TestCase):
+    """Exercise the real CLI/parser/JSON reader using in-memory file bodies."""
+    def invoke(self, operands, *, support_pin=None, decode_failure=False):
+        bodies = {key: json.dumps(value).encode() for key, value in operands.items()}
+        events = []
+
+        class MemoryPath:
+            def __init__(self, name):
+                self.name = name.name if isinstance(name, MemoryPath) else str(name)
+
+            def open(self, mode):
+                if mode != "rb":
+                    raise AssertionError("only bounded JSON reads are expected")
+                events.append("read:" + self.name)
+                return io.BytesIO(bodies[self.name])
+
+        original_decode = m.decode
+
+        def observed_decode(*args):
+            events.append("decode:start")
+            if decode_failure:
+                raise ValueError("generated decoder failure")
+            result = original_decode(*args)
+            events.append("decode:complete")
+            return result
+
+        args = []
+        for name in ("support", "training", "query", "targets"):
+            args += ["--" + name, name]
+        args += ["--support-sha256", support_pin or m.sha256(bodies["support"])]
+        with mock.patch.object(m, "Path", MemoryPath), \
+                mock.patch.object(m, "decode", observed_decode), \
+                contextlib.redirect_stdout(io.StringIO()) as stdout:
+            code = m.main(args)
+        return code, json.loads(stdout.getvalue()), events
+
+    def test_support_digest_refusal_precedes_all_other_reads(self):
+        operands = dict(zip(("support", "training", "query", "targets"), fixture()))
+        code, report, events = self.invoke(operands, support_pin="b" * 64)
+        self.assertEqual(code, 1)
+        self.assertIn("support digest mismatch", report["error"])
+        self.assertEqual(events, ["read:support"])
+
+    def test_invalid_public_operands_never_open_targets(self):
+        for mutation in ("1999", "label-in-query", "wrong-order", "boolean-position", "nonfinite"):
+            operands = dict(zip(("support", "training", "query", "targets"), fixture()))
+            if mutation == "1999":
+                operands["support"]["query_row_ids"].pop()
+            elif mutation == "label-in-query":
+                operands["query"]["position_m"] = [0.0] * 2000
+            elif mutation == "wrong-order":
+                operands["query"]["row_ids"].reverse()
+            elif mutation == "boolean-position":
+                operands["training"]["position_m"][0] = True
+            else:
+                operands["query"]["embedding"][0][0] = float("nan")
+            with self.subTest(mutation=mutation):
+                code, report, events = self.invoke(operands)
+                self.assertEqual(code, 1)
+                self.assertIn("error", report)
+                self.assertNotIn("read:targets", events)
+                self.assertNotIn("decode:complete", events)
+
+    def test_decoder_failure_does_not_open_targets(self):
+        operands = dict(zip(("support", "training", "query", "targets"), fixture()))
+        code, report, events = self.invoke(operands, decode_failure=True)
+        self.assertEqual(code, 1)
+        self.assertEqual(report["error"], "generated decoder failure")
+        self.assertNotIn("read:targets", events)
+
+    def test_complete_prediction_precedes_target_read_and_is_not_repeated(self):
+        operands = dict(zip(("support", "training", "query", "targets"), fixture()))
+        code, report, events = self.invoke(operands)
+        self.assertEqual(code, 0)
+        self.assertEqual(events, ["read:support", "read:training", "read:query",
+                                  "decode:start", "decode:complete", "read:targets"])
+        self.assertEqual(report["score"]["samples"], 2000)
+        self.assertEqual(report["score"]["mean_absolute_error_m"], 1.0)
+        self.assertEqual(set(report["input_pins"]), {"support", "training", "query", "targets"})
+        self.assertFalse(report["historical_source_support_verified"])
+        self.assertIsNone(report["scientific_improvement_awarded"])
 
 
 if __name__ == "__main__":

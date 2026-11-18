@@ -4,12 +4,12 @@
   "title": "Acquisition-local held-condition calcium response prediction",
   "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
   "disposition": "partial_delivery",
-  "disposition_reason": "The historical full12 route predicts acquisition-local condition means over native frames, which is narrower than visual/opto-combination and animal-transfer generalization. Its source and grader are absent here; unknown mouse mapping and physical timing preclude the broader claim.",
+  "disposition_reason": "Executable complete-condition preparation, scoring and an exploratory typed viewer are now present as source. They preserve six acquisition-local condition-mean holdouts in both orders. Authentic runtime, provider feasibility, context isolation and model performance remain unqualified; unknown mouse/session mapping and physical timing still preclude animal-transfer and evoked-response claims.",
   "scientific_target": {
-    "question": "Within each of six source acquisitions, can the permitted eleven conditions predict the withheld ABC/CBA condition response profile better than additive/order-agnostic models?",
+    "question": "For each of six acquisitions and both ABC/CBA query orders, can the eleven permitted condition means across the six acquisitions predict the withheld acquisition/order trajectory on its complete native frame grid?",
     "target_kind": "neural_response_prediction",
-    "known_answer": "Measured held-condition calcium response values on each acquisition’s native frame grid, aggregated only by the original declared target rule. The exact mean/trajectory reduction must be recovered from its absent scorer; test-condition means cannot be supplied as predictors.",
-    "answer_origin": "Source sequenceFiltering.zip record18726362 contains figure2/3 condition arrays and trial/summary forms. The historical finite task declares acquisition-local condition means, not all single-trial visual/opto response combinations.",
+    "known_answer": "For every original ROI and native frame of the withheld acquisition/order, the finite-sample mean across all50 released trials, with finite-observation counts retained separately. Zero means with zero counts are missing-data placeholders, not observed zeros; withheld means and counts remain private.",
+    "answer_origin": "All twelve panelDE_expt{1..6}_F_{abc,cba} tensors in the pinned Figure2 source NPZ; recovered preparation averages finite trials at each ROI/frame and retains every original row. This is condition-mean prediction, not single-trial visual/opto-combination or animal-transfer evaluation.",
     "case_unit": "One held condition for one acquisition, with ROI rows and native frames nested inside;12 contexts represent six acquisitions×two order conditions.",
     "independent_unit": "Acquisition for descriptive finite results; independent animal/session mapping is unresolved, so six acquisitions cannot be asserted to be six mice.",
     "inference_scope": "Retrospective within-acquisition condition generalization only. Full native-frame means may include baseline/artifact structure; physical stimulus onset and animal transfer are outside the delivered claim.",
@@ -21,24 +21,24 @@
   },
   "observation_contract": {
     "inputs": [
-      "Training measurements from the eleven permitted conditions in the same acquisition, with condition/order/stimulation metadata allowed by the source task.",
-      "Acquisition-local ROI axes and native frame grids; permitted stimulus identity/history and optical power/timing descriptors."
+      "Eleven training condition-mean/count tensors across six acquisitions: the query acquisition’s opposite order, and both orders from each of the other five acquisitions. ROI indices align only between orders within the same acquisition.",
+      "Sanitized acquisition/order/ROI identifiers, complete native frame indices and the training-only normalization scale. Physical timestamps, onset windows, optical-dose features and animal/session identities have not been established by this delivered input contract."
     ],
     "forbidden_inputs": [
       "Any withheld-condition response, trial average or summary computed from query observations.",
       "Pooling different acquisition ROI indices as if they were the same cells.",
       "Answer-bearing source-condition filenames outside the sanitized public mapping."
     ],
-    "case_identity": "Historical declaration: six acquisitions,12 contexts,1132 original ROI rows,2264 query-ROI occurrences, native frame lengths240/240/240/240/200/200 and seven source-empty rows per order. Concrete query IDs and complete missing-row map are not distributed.",
-    "split": "Hold out the complete declared order/condition response within each acquisition; all duplicated panels from the same acquisition stay grouped. Biological train/test split awaits experiment→mouse/session map and cannot be inferred from expt1…6.",
-    "coverage": "Complete selected acquisition-local condition-means declaration only; broader single-trial visual/opto-combination and animal-transfer objective remains unimplemented. Two order conditions do not create two new cohorts."
+    "case_identity": "Six acquisitions × two query orders give12 contexts, with1132 original ROI rows and2264 query-row occurrences. Native frame lengths are240/240/240/240/200/200. Public PANEL.json fixes all query IDs and geometry; all509360 predictions are required, including positions later found unobserved. The historical source census reports seven wholly absent ROI rows per order, but the target availability mask is not participant input.",
+    "split": "Hold out one complete acquisition/order condition per context. Freeze the participant programme/protocol before exposure and provide fresh externally isolated state for each of the12 reciprocal contexts: a query condition in one context is training data in another. Never mount or share the union of contexts. No animal/session split or independent-animal generalization is established.",
+    "coverage": "Complete selected acquisition-local condition means: six acquisitions, both orders, every original ROI and native frame. The broader single-trial visual/opto-combination and animal-transfer objective remains unimplemented; two orders do not create separate cohorts."
   },
   "evaluation": {
     "primary": {
       "name": "acquisition_macro_normalized_response_rmse",
       "direction": "lower",
-      "aggregation": "Compute response RMSE on the frozen measured target support within each acquisition, normalize using training-only scale, and average acquisitions equally; retain ROI/frame support and native units.",
-      "rationale": "Measures held-condition neural prediction. Normalizer, target reduction and empty-row handling must be frozen from recovered source before use; do not reward copied published panel summaries."
+      "aggregation": "For each query cell, compute MSE over target frames with positive finite-observation counts. Divide by the squared training-only scale: square root of the equal-cell mean of within-cell population temporal variances over observed frames of that acquisition’s visible opposite order. Average normalized cell MSE equally over observed target cells, then take the square root for that context. Average all12 context RMSEs equally; equivalently, average the two order RMSEs within each acquisition and then average six acquisitions. Do not pool cells/frames or take a square root after averaging order MSEs.",
+      "rationale": "Recovered complete-support condition-mean prediction metric; original mean reduction, missingness policy and opposite-order normalizer are executable source. Dense trajectory reconstruction alone does not establish neural understanding. Source availability does not establish authentic evaluator or reference competence."
     },
     "secondary": [
       "Unnormalized native-unit RMSE and all per-acquisition/order errors.",
@@ -48,43 +48,54 @@
     "comparators": [
       {
         "name": "Training-condition mean",
-        "inputs": "Permitted same-acquisition training responses only.",
-        "procedure": "Fixed mean predictor establishes condition-independent response baseline; never average withheld condition."
+        "inputs": "Visible same-acquisition opposite-order means/counts only; no query-condition values or target availability masks.",
+        "procedure": "A fixed training-only mean comparator remains a planned control; its fitting/fallback rules and authentic competence must be frozen before evaluation. Do not treat the eleven cross-acquisition conditions as eleven matched conditions of the same cells."
       },
       {
         "name": "Additive stimulus/history model",
-        "inputs": "Allowed stimulus components, order/history and optical-dose metadata plus training responses.",
-        "procedure": "Training-only fitted additive model with fixed regularization; same inputs/budget as richer candidate."
+        "inputs": "Prospective stimulus/history or optical-dose features only if separately source-verified and added under a declared condition; these covariates are not established by the current condition-mean packet.",
+        "procedure": "Planned scientific comparator, not a delivered competent reference. Freeze features and training-only fitting before query access, preserve acquisition-local ROI identity, and compare all12 contexts on identical support. Do not invent unrecorded covariates."
       },
       {
         "name": "Sequence interaction model",
-        "inputs": "Same allowed inputs with declared sequence/order terms.",
-        "procedure": "Predict withheld order using training data only; evaluate all acquisition/order cells rather than favorable subsets."
+        "inputs": "Prospective stimulus/history or optical-dose features only if separately source-verified and added under a declared condition; these covariates are not established by the current condition-mean packet.",
+        "procedure": "Planned scientific comparator, not a delivered competent reference. Freeze features and training-only fitting before query access, preserve acquisition-local ROI identity, and compare all12 contexts on identical support. Do not invent unrecorded covariates."
       }
     ],
     "nuisance_controls": [
-      "Keep optical power, timing and stimulated/nonstimulated support matched.",
-      "Freeze exact target mean/trajectory reduction and handling of seven empty rows per order.",
+      "Do not interpret full-frame condition means as dose-matched evoked responses: optical power/timing and physical onset remain unresolved.",
+      "Preserve the recovered finite-trial mean, training-only scale and explicit empty-row handling; prediction support stays complete even where evaluator targets are unavailable.",
       "Prevent leakage through averaged test responses or repeated panels of the same acquisition.",
       "Separate source-summary prediction from trial variability and physical evoked-response claims."
     ],
     "uncertainty": "Descriptive acquisition-level differences only until mouse/session independence is established.1132 ROI rows and2264 occurrences are not biological replicate counts; unknown reused acquisitions prohibit pooled animal intervals.",
-    "failure_policy": "Require complete12-context identity and defined support before private grading; preserve empty source rows as declared invalid/undefined rather than silently dropping them. Reject shape/unit/frame mismatches and nonfinite outputs. No score from the unscored producer manifest alone."
+    "failure_policy": "Require all12 exact contexts and complete finite predictions for every original ROI/frame before any private target read. Entirely absent target conditions or zero/undefined training scales block the panel. Cells with no observed target frames have null errors and explicit absence reasons, while their prediction rows remain required. Missing contexts, malformed predictions or an abstention yield no complete-panel score; unrepresentable required arithmetic yields numeric_error. No score is inferred from an unscored producer or retained viewer capture."
   },
   "implementation": {
     "reviewed_paths": [
       "benchmarks/neural/NEURAL-037/historical/task.pre-understanding.v1.json",
-      "benchmarks/neural/NEURAL-037/implementations/registered-runtime/manifest.json"
+      "benchmarks/neural/NEURAL-037/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-037/implementations/condition-endpoint-v1/SOURCE_RECOVERY.json",
+      "benchmarks/neural/NEURAL-037/implementations/condition-endpoint-v1/prepare.py",
+      "benchmarks/neural/NEURAL-037/implementations/condition-endpoint-v1/preparation_core.py",
+      "benchmarks/neural/NEURAL-037/implementations/condition-endpoint-v1/scorer_core.py",
+      "benchmarks/neural/NEURAL-037/implementations/condition-viewer-v1/SOURCE_BINDINGS.json",
+      "benchmarks/neural/NEURAL-037/implementations/condition-viewer-v1/viewer.py",
+      "benchmarks/neural/NEURAL-037/implementations/condition-viewer-v1/collect.py",
+      "benchmarks/neural/NEURAL-037/implementations/condition-viewer-v1/INSTRUCTIONS.md",
+      "benchmarks/neural/NEURAL-037/implementations/condition-viewer-v1/source/PANEL.json"
     ],
-    "scorer_target": "No executable scorer is present. Retained metadata declares one_complete12_collection_unscored and a separate original private grader, so exact response reduction/normalization are unverified despite source scope counts.",
-    "target_fidelity": "unresolved",
-    "delivered_scope": "Manifest-only full12 acquisition-local condition-mean declaration. Original code/data audit supports source availability but does not provide the finite producer/grader in this checkout.",
+    "scorer_target": "The restored condition-endpoint-v1 preparation and delayed-private-read scorer implement full native-frame finite-trial mean prediction with explicit counts, exact12-context geometry, opposite-order training normalization and equal-context RMSE aggregation.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Task-local complete-condition preparation/scoring source and an exploratory typed viewer with exact numeric readout and all509360 explicit answer values. These are source components, not an admitted runtime, isolated programme engine, provider study or original-paper reproduction.",
     "missing": [
-      "Recover finite response target, normalization/empty-row policy, exact IDs, producer and grader.",
-      "Resolve acquisition→mouse/session identity and source physical time axis.",
-      "Implement separate broader visual/opto-combination condition only if its actual observations and outcomes are available."
+      "Qualify authentic complete-source preparation or reuse a matching independently accepted preparation; authenticate the exact selected public/private packets without exposing reciprocal-context targets.",
+      "Qualify externally isolated fresh participant state for each reciprocal context, frozen programme/provider protocol, complete-support budgets, observed process closure and independent scoring.",
+      "Establish feasible full-panel provider capacity before any viewer study:509360 explicit values and the declared18,546,688-token reservation are not measured feasibility.",
+      "Resolve acquisition→mouse/session identity and physical frame/onset/units lineage before animal-transfer, evoked-response or population-uncertainty claims.",
+      "Freeze and qualify competent matched comparators; broader stimulus/history or optical-dose models require separately verified inputs."
     ],
-    "execution_evidence": "Exact full12 adapter is marked not_run; source controls do not establish native execution, measured scores or population uncertainty."
+    "execution_evidence": "Recovered endpoint and viewer source include generated controls only. This reconciliation performs metadata/source checks, with no authentic array preparation, candidate/model execution, provider interaction, scoring or scientific qualification."
   },
   "access_modes": {
     "direct_observation": {
@@ -99,14 +110,18 @@
       ]
     },
     "typed_viewer": {
-      "status": "not_delivered",
-      "representation": "Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer.",
-      "boundary": "Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable.",
+      "status": "source_available",
+      "representation": "Exploratory fixed native-frame PNG plus exact mean/count numeric readout through describe/observe/submit/finish/abstain actions, preserving all12 contexts and509360 explicit predictions. This is a typed viewer with numeric readout, not visual-only perception or a no-tools condition.",
+      "boundary": "Broker supplies one selected original context and no private targets. External fresh model/process/filesystem state is required across reciprocal contexts; broker objects and source hashes do not prove that isolation. No arbitrary code, fitting, prediction autofill or source retrieval is provided by the typed interface.",
       "evidence_ids": [
-        "source_audit"
+        "condition-viewer-bindings",
+        "condition-viewer-session",
+        "condition-viewer-collector",
+        "condition-viewer-instructions"
       ],
       "missing": [
-        "Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here."
+        "Authentic input/renderer/runtime qualification, complete-support provider feasibility and externally enforced state isolation.",
+        "No viewer model run, native-understanding result or scientific qualification."
       ]
     },
     "tool_assisted": {
@@ -117,18 +132,22 @@
         "source_audit"
       ],
       "missing": [
-        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+        "No matched interactive investigator transport is delivered. The typed viewer supplies fixed display actions only; recovered numerical source does not implement a case-adaptive Python/model-tool engine."
       ]
     },
     "frozen_program": {
-      "status": "not_delivered",
-      "representation": "A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout.",
-      "boundary": "Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode.",
+      "status": "source_available",
+      "representation": "Restored task-local preparation and complete delayed-private-read scoring source plus the exact public input/prediction contract. The historical frozen-program declaration remains lineage; an isolated executable programme engine is not qualified by these components.",
+      "boundary": "Freeze programme before any query; provide only one selected context to each fresh externally isolated execution, collect all12 complete outcomes, and grade only after public admission. Never expose the union of reciprocal contexts or evaluator feedback.",
       "evidence_ids": [
-        "declaration"
+        "condition-endpoint-recovery",
+        "condition-preparation",
+        "condition-normalization",
+        "condition-scorer"
       ],
       "missing": [
-        "Recover the named source/dependency closure and exact public input contract before executing or scoring."
+        "Current isolated programme execution/staging and actual environment/resource qualification.",
+        "Authentic complete-support reference/control evaluation and independent scoring remain unperformed."
       ]
     }
   },
@@ -145,7 +164,7 @@
       "kind": "local_source",
       "path": "benchmarks/neural/NEURAL-037/implementations/registered-runtime/manifest.json",
       "sha256": "e2f12d8e3a3437a83b288ac86434b729e8e3e428132bddb82aae3ebcf938aa8e",
-      "supports": "Historical declared scope, score/run status and actual external-source prerequisites; current tree inspection confirms which executable paths are absent."
+      "supports": "Historical complete12 programme declaration and its external-source/runtime prerequisites; not proof of current programme execution. Task-local preparation/scoring and viewer source are pinned separately below."
     },
     {
       "id": "source_paper",
@@ -160,13 +179,76 @@
       "url": "https://zenodo.org/records/18726362",
       "locator": "Versioned author archive metadata; record checked2026-11-16 without fetching biological payloads",
       "supports": "Current primary author-data record and immutable archive identity; code/data content claims use preserved original audits and inspected local implementation."
+    },
+    {
+      "id": "condition-endpoint-recovery",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-037/implementations/condition-endpoint-v1/SOURCE_RECOVERY.json",
+      "sha256": "cf69b6c66248647b28dc91e3a9685f876d931cf06984bd287767f2aebedc0a21",
+      "supports": "Recovered authored-source lineage, target/support interpretation and explicit source-only limits."
+    },
+    {
+      "id": "condition-preparation",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-037/implementations/condition-endpoint-v1/prepare.py",
+      "sha256": "9caea6bcf40fc020d3390c1d868620e9b77132f08ddee4199a4a433bb5b446d5",
+      "supports": "Complete twelve-tensor source selection and finite-trial mean/count preparation; no authentic execution is claimed."
+    },
+    {
+      "id": "condition-normalization",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-037/implementations/condition-endpoint-v1/preparation_core.py",
+      "sha256": "7c42d79ccf07a550ebcfa94270dda2948900fd732ea078d2237602c56dc9f620",
+      "supports": "Finite-trial means, complete twelve-condition selection and training-only opposite-order scale."
+    },
+    {
+      "id": "condition-scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-037/implementations/condition-endpoint-v1/scorer_core.py",
+      "sha256": "943068643f388048bcb91b6b5df5c4a04dd9d3e98a9248c8e01dbca01ad1a558",
+      "supports": "Complete public admission, delayed private target access, observed-frame/equal-cell/equal-context aggregation and explicit numeric limits."
+    },
+    {
+      "id": "condition-viewer-bindings",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-037/implementations/condition-viewer-v1/SOURCE_BINDINGS.json",
+      "sha256": "f7ab5909c94c015641b9b16b932b9d74d06d4f8b121472c84c45c5360036b9bc",
+      "supports": "Pinned viewer implementation/dependency/metadata closure with no native-study admission."
+    },
+    {
+      "id": "condition-viewer-session",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-037/implementations/condition-viewer-v1/viewer.py",
+      "sha256": "82c6954bd9cf19f123771d7659e77158344b853cf20c0ed078b0bca77e8b0472",
+      "supports": "Restricted display actions, explicit complete-row responses and immutable terminal session outcome."
+    },
+    {
+      "id": "condition-viewer-collector",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-037/implementations/condition-viewer-v1/collect.py",
+      "sha256": "58accb1d90d90ca6ed8dd215c94038ac5c4401db834e481a8e712d68cdbfd91a",
+      "supports": "All twelve captured contexts, original public admission and unscored export; no private targets."
+    },
+    {
+      "id": "condition-viewer-instructions",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-037/implementations/condition-viewer-v1/INSTRUCTIONS.md",
+      "sha256": "e51bdbb8bd580869a71f6d6656967840f61aeceeb296fb6bd8addf78aebc911d",
+      "supports": "Participant access, exact complete support, reciprocal-context state boundary and non-native scientific limits."
+    },
+    {
+      "id": "condition-panel",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-037/implementations/condition-viewer-v1/source/PANEL.json",
+      "sha256": "3602842d9a18f2b786d3539ec08e09e314d9f008dd513474ad215b87ba810e90",
+      "supports": "Original complete twelve-context public IDs and geometry without response arrays."
     }
   ],
   "empirical_claims": {
     "new_model_trials": 0,
     "new_human_results": 0,
     "scientific_qualification": "not_established_by_this_revision",
-    "historical_evidence": "Exact full12 adapter is marked not_run; source controls do not establish native execution, measured scores or population uncertainty.",
+    "historical_evidence": "Recovered endpoint and viewer source include generated controls only. This reconciliation performs metadata/source checks, with no authentic array preparation, candidate/model execution, provider interaction, scoring or scientific qualification.",
     "excluded_claims": [
       "No cross-animal generalization or independent-animal uncertainty.",
       "No full visual/opto catalogue completion.",
@@ -175,12 +257,12 @@
     ]
   },
   "revision": {
-    "date": "2026-11-16",
+    "date": "2026-11-18",
     "summary": [
-      "Replace broad visual/opto/animal-transfer wording with the declared within-acquisition condition endpoint.",
-      "Separate native-frame response prediction from physical onset inference.",
-      "Retain full1132-row lineage and explicit empty-row uncertainty without pretending the absent scorer is delivered."
+      "Bind the already recovered complete-condition target, missingness, normalizer and scorer to the current scientific contract.",
+      "Correct eleven-condition access to span six acquisitions, and make reciprocal-context leakage restrictions explicit.",
+      "Recognize exploratory typed-viewer and programme preparation/scoring source without promoting runtime, provider feasibility, native understanding or scientific readiness."
     ],
-    "source_review": "Read original definition/source audit, assigned README and exact current registry-owned implementation inventory; inspected actual scorer/loader where delivered and searched task/shared source for missing declared paths. Rechecked primary author-data metadata only; no biological payload or model run."
+    "source_review": "Read task-local preparation/reducer/scorer/viewer/collector/instructions and original metadata/source pins; no source arrays, private targets, external source acquisition, model run or score. Historical evidence remains preserved."
   }
 }

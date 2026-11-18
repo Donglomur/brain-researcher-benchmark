@@ -135,3 +135,44 @@ paired mouse uncertainty, and episode budgets remain unresolved. Canonical
 `task.json`, `improvement.v1.json`, historical evidence and initial evaluator are
 unchanged. Registering this importer as a component is an integration proposal;
 the task remains `source_unresolved`.
+
+## Optional complete indexed scalar export
+
+Pass `--include-indexed` (or `evaluate(..., include_indexed=True)`) to add
+`indexed_collections` with schema `brainwide-decoder-indexed-collections/v1`.
+The default report and all existing numerical reductions are unchanged. The
+optional operator report exposes all14 scalar members declared for each of the
+five endpoint families in `reproduction.v2.json`: observed/null run scores,
+observed session means, per-pseudo run means, both null medians, corrected session
+effects, session p-values, both regional effects, Fisher/BH statistics, significant
+session fractions and regional calls. It does not emit ragged prediction/time
+course companions or constitute the full reproduction contract.
+
+Each collection key is its existing `endpoint.member` manifest key. Records retain
+exact `eid`, `region`, `pseudo_id` and/or one-based `run_id` coordinates as declared
+for that member. Endpoint-specific region support remains separate; no rectangular
+region-by-endpoint grid is invented. Records are deterministically ordered and
+carry a digest of their key fields/support. These digests bind the supplied
+validated roster only; they do not establish authentic original-paper membership.
+
+Observed run `value` preserves the formatted source score, alongside the
+`recomputed_value` from existing prediction rechecks. They may differ within the
+existing relative1e-9/absolute1e-10 tolerance. Existing session/regional outputs
+continue to use the recomputed real scores. Null `value` remains a recorded source
+scalar and per-pseudo means average its original repetitions before median
+reductions. Neither those leaves nor their derived means become independently
+rescored or authenticated predictions. Boolean regional calls remain booleans.
+
+This closes an output-export gap explicitly noted in the current reproduction
+declaration, without selecting between conflicting source/paper reductions,
+recovering any original observations or result vector, adopting a reproduction
+criterion, or qualifying a candidate comparison. Canonical authority/pin updates
+remain an integration step. The complete output can be large; empirical execution
+needs separately admitted input and resource bounds. No original data run occurred.
+
+The new `IndexedExport` methods in the existing test module cover all70 collection
+identities, original repetition counts, heterogeneous region support, retained
+negative wheel scores, recorded-versus-recomputed precision, original validation,
+deterministic ordering and unchanged legacy summaries. Run just those methods with
+`python3 -I -B tests/test_scorer.py IndexedExport`; the existing full test command
+also discovers them. Generated controls are software checks, not paper results.

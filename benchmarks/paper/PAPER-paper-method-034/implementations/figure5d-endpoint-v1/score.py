@@ -111,8 +111,8 @@ def error_summary(support, prediction, targets):
             "absolute_error_sd_sample_m": math.sqrt(squares / (QUERY_COUNT - 1))}
 
 
-def score(support, training, query, targets):
-    prediction = decode(support, training, query)
+def _prediction_report(support, prediction, targets):
+    """Report already decoded outputs; only this final step consumes targets."""
     return {"schema": "marble_figure5d_endpoint_v1", "task_id": TASK_ID,
             "panel": "Figure 5d", "animal": "rat1", "unit": "m",
             "decoder": {"neighbors": NEIGHBORS, "metric": "cosine",
@@ -123,6 +123,11 @@ def score(support, training, query, targets):
             "historical_source_support_verified": False,
             "author_baseline_qualified": False,
             "scientific_improvement_awarded": None}
+
+
+def score(support, training, query, targets):
+    # In-process callers already hold targets and must enforce their own custody.
+    return _prediction_report(support, decode(support, training, query), targets)
 
 
 def read_json(path, limit):
@@ -152,12 +157,17 @@ def main(argv=None):
     try:
         digest(args.support_sha256)
         values, pins = {}, {}
-        for name, limit in (("support", 4 << 20), ("training", 32 << 20),
-                            ("query", 16 << 20), ("targets", 1 << 20)):
-            values[name], pins[name] = read_json(getattr(args, name), limit)
+        values["support"], pins["support"] = read_json(args.support, 4 << 20)
         require(pins["support"]["sha256"] == args.support_sha256,
                 "support digest mismatch")
-        result = score(**values)
+        support_check(values["support"])
+        for name, limit in (("training", 32 << 20), ("query", 16 << 20)):
+            values[name], pins[name] = read_json(getattr(args, name), limit)
+        # Validate and decode complete admitted public operands before the first
+        # protected-target read. Never rerun a decoder after target access.
+        prediction = decode(values["support"], values["training"], values["query"])
+        values["targets"], pins["targets"] = read_json(args.targets, 1 << 20)
+        result = _prediction_report(values["support"], prediction, values["targets"])
         import numpy
         import sklearn
         result["input_pins"] = pins

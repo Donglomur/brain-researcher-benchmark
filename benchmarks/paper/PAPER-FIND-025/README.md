@@ -49,6 +49,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Submission comparison](implementations/submission-comparison) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Normalized variance v1](implementations/normalized-variance-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Artifact evaluator v1](implementations/artifact-evaluator-v1) — Reviewed source component.
   Scope: FIND025 artifact evaluator, version 1. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

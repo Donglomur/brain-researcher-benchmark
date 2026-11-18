@@ -46,6 +46,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Voltron native frame events v1](implementations/voltron-native-frame-events-v1) — Task implementation source.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Voltron optical viewer v1](implementations/voltron-optical-viewer-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Voltron clock ephys units v2](implementations/voltron-clock-ephys-units-v2) — Reviewed source component.
   Scope: Voltron electrical NPZ decoder with explicit units. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

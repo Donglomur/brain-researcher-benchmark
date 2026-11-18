@@ -1,0 +1,49 @@
+{
+  "schema": "physiop300_source_lineage_component_evidence_v1",
+  "task_id": "PAPER-paper-method-023",
+  "purpose": "Conditional recording/event/legacy-key reconciliation for the documented cross-recording output collision blocker; no source recipe repair or scientific admission.",
+  "browser_observations": [
+    {
+      "url": "https://physionet.org/content/erpbci/1.0.0/",
+      "locator": "Experimental Protocol and Data format",
+      "supports": "One character run per recording; target and flash-set annotations; provider participant summary is not a biological mapping of directory tokens.",
+      "raw_bytes_locally_authenticated": false
+    },
+    {
+      "url": "https://physionet.org/content/erpbci/1.0.0/README",
+      "locator": "Data format",
+      "supports": "Provider-declared EDF annotation and .event correspondence. No binary annotation decoding is implemented or qualified here.",
+      "raw_bytes_locally_authenticated": false
+    },
+    {
+      "url": "https://github.com/BINE022/EEGPT/blob/ea7282f698c406cd423ccbedbe9960853761144c/datasets/downstream/prepare_PhysioNetP300.py",
+      "locator": "source lines15-50",
+      "supports": "Eight-token iteration; target character extraction; MNE epochs selection; metadata excluded only in export loop; label directory and per-recording retained ordinal in the output filename.",
+      "raw_bytes_locally_authenticated": false,
+      "previously_recorded_raw_identity": {
+        "bytes": 2087,
+        "sha256": "ac09445f2bd5cfb5605de8a86b0976be7ef12b34f3eef0d48959147c2cfa6fa8",
+        "basis": "Existing implementations/physiop300-panel-v1/SOURCE_PINS.json, not a new raw-source authentication by this component."
+      }
+    },
+    {
+      "url": "https://mne.tools/stable/generated/mne.Epochs.html",
+      "viewed_documentation_version": "1.13.2",
+      "locator": "selection, drop_log, event_repeated and reset_index documentation",
+      "supports": "Normalized metadata contract requires original event indices, exact empty-drop-log correspondence and no surviving duplicate samples under event_repeated=drop. Resetting indices destroys the original lineage.",
+      "raw_bytes_locally_authenticated": false,
+      "historical_paper_environment_equivalence": false
+    }
+  ],
+  "implementation_scope": {
+    "source_metadata_inputs_used": "generated fixtures only",
+    "signal_or_authentic_label_payloads_read": false,
+    "mne_or_author_converter_executed": false,
+    "model_or_scientific_runs": 0,
+    "source_selection_authenticated": false,
+    "scientific_readiness_promoted": false,
+    "historical_surviving_events_recovered": false,
+    "source_recipe_repaired": false,
+    "canonical_contracts_changed": false
+  }
+}

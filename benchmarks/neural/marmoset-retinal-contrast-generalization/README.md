@@ -40,6 +40,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Training response](implementations/training-response) — Training response.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Constant rate v1](implementations/constant-rate-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Protected scoring v1](implementations/protected-scoring-v1) — Reviewed source component.
   Scope: Protected response scoring. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

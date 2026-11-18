@@ -1,0 +1,26 @@
+{
+  "authentic_data_included": false,
+  "browser_observations": [
+    {
+      "finding": "Prediction inspects behavior shape, initializes only its first batch and calls the model with neural input. Observed source, not historical caller recovery.",
+      "locator": "predict, lines472-561",
+      "url": "https://raw.githubusercontent.com/ShanechiLab/SBIND/c00e006dd298cb8c51d1543641fb3be77cc585ae/sbind/sbind_trainer.py"
+    },
+    {
+      "finding": "The model interface accepts neural input and initialization, emits y/z predictions, and its optional multi-step mode changes recurrent extent. Observed interface does not prove causal information flow.",
+      "locator": "SBIND.forward and SBIND_SingleStage.forward",
+      "url": "https://raw.githubusercontent.com/ShanechiLab/SBIND/c00e006dd298cb8c51d1543641fb3be77cc585ae/sbind/sbind.py"
+    }
+  ],
+  "historical_reproduction_qualified": false,
+  "improvement_qualified": false,
+  "native_torch_bridge_executed": false,
+  "new_task_count": 0,
+  "official_commit": "c00e006dd298cb8c51d1543641fb3be77cc585ae",
+  "policy": "Existing prospective whole-trial continuous WFCI1 policy; not original historical folds",
+  "raw_source_authentication_claimed": false,
+  "runtime_isolation_qualified": false,
+  "schema": "sbind-whole-trial-inference-provenance-v1",
+  "task_id": "PAPER-CANDIDATE-20261114-SBIND",
+  "upstream_code_copied": false
+}

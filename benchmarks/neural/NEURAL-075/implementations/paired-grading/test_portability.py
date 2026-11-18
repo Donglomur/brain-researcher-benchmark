@@ -150,5 +150,90 @@ class SourcePortability(unittest.TestCase):
         self.assertFalse((ROOT / 'absent_prepared').exists())
 
 
+class ProducerDependencyPortability(unittest.TestCase):
+    """Load the actual pinned producer helpers, without invoking a producer."""
+    @classmethod
+    def setUpClass(cls):
+        import tempfile
+        cls.finder = ForbidNumerical()
+        sys.meta_path.insert(0, cls.finder)
+        cls.patches = [patch.object(subprocess, 'Popen', forbidden),
+                       patch.object(socket, 'socket', forbidden),
+                       patch.object(socket, 'create_connection', forbidden)]
+        for item in cls.patches:
+            item.start()
+        producer = SOURCE_REPOSITORY / 'authoring/delivery-20261105/neural075/full-cohort-program-v1'
+        cls.invoke = load('neural075_producer_source_only', producer / 'invoke.py')
+        cls.lock = json.loads((producer / 'LOCK.json').read_bytes())
+        cls.scratch = tempfile.TemporaryDirectory(prefix='neural075-source-only-')
+        # Resolve macOS /var aliases; production capture deliberately refuses symlinks.
+        cls.repository = Path(cls.scratch.name).resolve()
+        cls.bodies = {}
+        for name in ('transport', 'docker', 'child', 'lifecycle'):
+            selected = cls.lock['pins'][name]
+            raw = (SOURCE_REPOSITORY / selected['path']).read_bytes()
+            if cls.invoke.pin(raw) != {k: selected[k] for k in ('bytes', 'sha256')}:
+                raise AssertionError('Producer dependency differs from original LOCK: ' + name)
+            destination = cls.repository / selected['path']
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_bytes(raw)
+            cls.bodies[name] = raw
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.scratch.cleanup()
+        for item in reversed(cls.patches):
+            item.stop()
+        sys.meta_path.remove(cls.finder)
+        if FORBIDDEN.intersection(sys.modules):
+            raise AssertionError('Producer source test imported a numerical/native dependency')
+
+    def test_actual_producer_dependency_loader_preserves_task_adaptations(self):
+        dependencies = self.invoke.dependencies(self.repository)
+        self.assertEqual(dependencies.lock['task_id'], 'NEURAL-075')
+        self.assertEqual(len(dependencies.lock['cases']), 30)
+        self.assertEqual(dependencies.r.LABEL, 'org.neurobench.neural075-program-owner')
+        self.assertEqual(dependencies.r.VOLUME_BYTES, 16 * 1024 ** 2)
+        self.assertTrue(callable(dependencies.r.Docker))
+        self.assertTrue(callable(dependencies.ch.child))
+        self.assertTrue(callable(dependencies.life))
+        self.assertTrue(callable(dependencies.closed))
+        # No freeze, staging, Docker constructor, lifecycle, candidate, scorer or gold call.
+
+    def test_each_new_dependency_mutation_is_rejected(self):
+        for name in ('transport', 'child', 'docker'):
+            with self.subTest(dependency=name):
+                destination = self.repository / self.lock['pins'][name]['path']
+                raw = self.bodies[name]
+                destination.write_bytes(b'X' + raw[1:])
+                try:
+                    with self.assertRaisesRegex(ValueError, 'NEURAL075 invocation boundary'):
+                        self.invoke.dependencies(self.repository)
+                finally:
+                    destination.write_bytes(raw)
+
+    def test_missing_child_refuses_instead_of_importing_an_alternative(self):
+        destination = self.repository / self.lock['pins']['child']['path']
+        saved = destination.with_suffix('.held')
+        destination.rename(saved)
+        try:
+            with self.assertRaises(FileNotFoundError):
+                self.invoke.dependencies(self.repository)
+        finally:
+            saved.rename(destination)
+
+    def test_symlinked_child_refuses_even_when_target_bytes_match(self):
+        destination = self.repository / self.lock['pins']['child']['path']
+        saved = destination.with_suffix('.held')
+        destination.rename(saved)
+        destination.symlink_to(saved)
+        try:
+            with self.assertRaisesRegex(ValueError, 'NEURAL075 invocation boundary'):
+                self.invoke.dependencies(self.repository)
+        finally:
+            destination.unlink()
+            saved.rename(destination)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

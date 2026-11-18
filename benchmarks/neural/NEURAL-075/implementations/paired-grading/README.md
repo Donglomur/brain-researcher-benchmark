@@ -8,19 +8,19 @@ Those exact captured guides retain their historical engineering evidence and ori
 
 ## Included ordinary source
 
-source_repository mirrors only the eighteen complete ordinary files named by paired_grading/DEPENDENCIES.json. Its original relative repository locators preserve the fixed registration/controller/scorer identities and original receipt joins. They are source roles, not personal machine paths or a private Git checkout. The scorer bodies named private/score.py and private/scorer_core.py contain code, not hidden targets. No broader export tree is included.
+source_repository mirrors the eighteen ordinary files named by paired_grading/DEPENDENCIES.json and three additional unchanged invocation dependencies selected by the producer LOCK.json: the transport helper, child observer and Docker executor source. Its original relative repository locators preserve the fixed registration/controller/scorer identities and original receipt joins. They are source roles, not personal machine paths or a private Git checkout. The scorer bodies named private/score.py and private/scorer_core.py contain code, not hidden targets. No broader export tree is included.
 
-The grading component captures selected original function declarations from those bodies. The retained producer and standalone scorer entrypoints are supporting source references, not advertised public execution routes. Their independent runtime dependencies and original native environment are not bundled. A trusted host can use source_repository as the source-repository operand only while separately supplying genuine authority, source-bound complete producer records, both frozen programmes, enclosing observations and protected preparation. The new source-only test does not grant any of these.
+The grading component captures selected original function declarations from those bodies. The retained producer and standalone scorer entrypoints are supporting source references, not advertised public execution routes. The actual producer dependencies() loader can now authenticate and load its four ordinary helper bodies from this mirror (the lifecycle source was already present). The protected collection operator, binding, preparation, authentic observations and original native environment remain separate prerequisites; this is not a complete executable producer closure. A trusted host can use source_repository as the source-repository operand only while separately supplying genuine authority, source-bound complete producer records, both frozen programmes, enclosing observations and protected preparation. The new source-only test does not grant any of these.
 
 ## Ordinary checkout check
 
 With Python 3.11, from the public repository root:
 
 ```sh
-python3 -I -S -B benchmarks/scientific_components/neural075_paired_grading/test_portability.py
+python3 -I -S -B benchmarks/neural/NEURAL-075/implementations/paired-grading/test_portability.py
 ```
 
-This standard-library check authenticates the ordinary inventory, calls the actual inspection API, loads the complete fixed ordinary dependency chain, authenticates selected scorer declarations, refuses a changed source pin and exercises the real boolean-authority refusal before producer/design/target capture. It creates no score matrix and calls no metric, numerical admission or evaluator. Numerical/native imports, subprocesses and sockets are forbidden during the check. Normal 0644 files and 0755 directories are supported. No dependency is installed.
+This standard-library check authenticates the ordinary inventory, calls the actual inspection API, loads the complete fixed ordinary dependency chain, authenticates selected scorer declarations, refuses a changed source pin and exercises the real boolean-authority refusal before producer/design/target capture. It also exercises the unchanged producer dependencies() loader with its pinned ordinary helpers, rejects changed helper bytes and missing or symlinked child source, and preserves the existing task namespace and volume adaptation. It creates no score matrix and calls no metric, numerical admission, evaluator, staging or producer lifecycle. Numerical/native imports, subprocesses and sockets are forbidden during the check. Normal 0644 files and 0755 directories are supported. No dependency is installed.
 
 The original source inspection CLI also remains available from paired_grading/ with its exact explicit source pin, read/write and deadline operands as documented there. Never import operator.py as the standard-library operator module or place its directory on sys.path. Use the described unique authenticated loader in a dedicated trusted, serialized host.
 

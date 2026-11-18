@@ -1,0 +1,40 @@
+{
+  "schema": "paper-find020-common-input-reduction-source/v1",
+  "task_id": "PAPER-FIND-020",
+  "scope": "Independent downstream biological common-input arithmetic only",
+  "source_observation_kind": "Primary pages inspected with the web tool; no newly authenticated raw author-code or article body",
+  "source_pages": [
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11981947/",
+      "locator": "Methods: Functional similarity among all postsynaptic neurons sharing one common input; Estimation of rho expected by pairwise like-to-like connectivity rules; Figure5 and Extended Data14",
+      "supports": "Weighted reduction algebra and distinction between observed graph and pairwise-model expectation; original within-volume biological interpretation."
+    },
+    {
+      "url": "https://github.com/cajal/microns-funconn-2025/blob/bc9302a21443453b1f39819676f2388e91bd43a3/funconnect/compute/common_inputs.py",
+      "revision": "bc9302a21443453b1f39819676f2388e91bd43a3",
+      "locators": [
+        "analyze_connectivity",
+        "perform_statistical_analysis",
+        "setup_variables",
+        "fit_models",
+        "main"
+      ],
+      "supports": "Five weight families, Connected count eligibility, positive-weight selection, distinct-pair products, pre-post means and three within-group contrasts."
+    }
+  ],
+  "source_model_ambiguity": {
+    "observation": "The pinned setup_variables includes IN_VIVO_SIG_CORR alongside IN_SILICO_SIG_CORR_CVT, READOUT_SIMILARITY_CVT and READOUT_LOCATION_DISTANCE_CVT; main passes the list to fit_models. The common-input Methods names three functional features.",
+    "disposition": "Unresolved original-model parity; no choice of fit recipe made here."
+  },
+  "implementation_differences": [
+    "Strict operator support/identity validation is a benchmark interface decision, not source-cohort authentication.",
+    "Only built-in int/float scalars are admitted; booleans, other numeric types and lossy integer coercion fail. No implicit library-scalar conversion is source-qualified.",
+    "Undefined positive-weight support is retained explicitly instead of relying on NumPy failure or disappearing groups.",
+    "Log normalization avoids overflow while preserving reduction algebra; no bitwise parity claim.",
+    "No signed-rank test, multiplicity adjustment, GLMM fit, reference tolerance or superiority decision is implemented."
+  ],
+  "scientific_qualification": false,
+  "canonical_changes": false,
+  "authentic_data_used": false,
+  "new_benchmark_count": 0
+}

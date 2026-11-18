@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Prospective full-cohort word-onset fixed-grid scoring with source-informed trigger alignment, participant summaries and an operator-provided acoustic/visual comparison interface. Authentic HDF5/cohort alignment, frozen grid and tolerance policy, competent signal-derived references, code/media rights and protected execution remain held. Generated controls establish construction behavior only; scientific qualification is unknown.
+- [Opaque query v1](implementations/opaque-query-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Transcript preparation v1](implementations/transcript-preparation-v1) — Reviewed source component.
   Scope: Complete-row private word-start preparation. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -38,6 +38,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
+- [Typed count viewer v1](implementations/typed-count-viewer-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Deposited label](implementations/deposited-label) — Conditional deposited label prediction and complete source conversion.
   Scope: Deposited Total\_pulse labels,43-session support and unresolved physical/QC lineage are retained; this does not implement the preferred authenticated physical-target primary.
 - [Deposited label score v2](implementations/deposited-label-score-v2) — Reviewed source component.

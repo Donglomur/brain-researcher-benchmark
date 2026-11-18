@@ -43,6 +43,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: NEURAL-056 is a documented dependency, not a new primary runtime registration. CriticalInit is named in the notice, but its exact registered-ID relationship is not inferred here. Keep combined-distribution license and provenance records attached to the closed source tree.
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Raw event evidence v1](implementations/raw-event-evidence-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Window preparation v2](implementations/window-preparation-v2) — Reviewed source component.
   Scope: Complete native-window preparation. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

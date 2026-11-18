@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "task_id": "PAPER-FIND-046",
+  "component": "gain-alpha-recursion-v1",
+  "qualification": "conditional_source_recurrence_only",
+  "current_contract_pins": [
+    {
+      "path": "benchmarks/paper/PAPER-FIND-046/task.json",
+      "bytes": 16548,
+      "sha256": "380bf31846530f8e60fd7df41d85f02829eae806893478fad252782d8b41dcf1"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-046/reproduction.v1.json",
+      "bytes": 409024,
+      "sha256": "cd896c5c651d97155cf3b67e96dc8e78993b073c390037eedf4f952a9a92e330"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-046/improvement.v1.json",
+      "bytes": 8173,
+      "sha256": "9fcc4b60121dd28378d26ede07f43d972f8ba2e853bf29f4e099a4214acb63f1"
+    }
+  ],
+  "source_revision": "b7b68ca8c107d8ce4a061e16da214307f175c3e5",
+  "source_observations": [
+    {
+      "path": "EstrousRPEPaper/process/model/GenerateLatencyData_VanillaAlpha_cg.m",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/EstrousRPEPaper/process/model/GenerateLatencyData_VanillaAlpha_cg.m",
+      "recorded_bytes": 2578,
+      "recorded_sha256": "3e068999e1970587d0d1ae01ca6fd1ea4771370d361c90a9dbadfff6fe39e081",
+      "observation": "Pinned official hosted source inspected; raw-body hash reused from existing source record, not newly authenticated."
+    },
+    {
+      "path": "EstrousRPEPaper/process/ProcessData_Figure3.m",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/EstrousRPEPaper/process/ProcessData_Figure3.m",
+      "recorded_bytes": 7714,
+      "recorded_sha256": "3256dfe1a5767e057854e6a66924d71d84c310de5a6643ab2a04466f34681adb",
+      "observation": "Pinned official hosted source inspected; raw-body hash reused from existing source record, not newly authenticated."
+    },
+    {
+      "path": "EstrousRPEPaper/process/photometry/DA_by_RPE_estrous.m",
+      "url": "https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/EstrousRPEPaper/process/photometry/DA_by_RPE_estrous.m",
+      "role": "Inspected to distinguish supplied-fit photometry/RPE panels; that larger join/binner is not implemented here."
+    }
+  ],
+  "unresolved_official_lookup": {
+    "url": "https://www.mathworks.com/help/stats/prctile.html",
+    "outcome": "web open failed404; no percentile algorithm inferred"
+  },
+  "statistics_policy": "Exact percentile operands exported; externally supplied values bound to request. Hash identity does not authenticate MATLAB or establish numerical parity.",
+  "preserved_source_behavior": [
+    "First pass initial1 and source-session resets; second initial median of complete first-pass kappa per alpha.",
+    "Both loops end at retained length minus1; final RPE missing and final-row session reset may not execute.",
+    "Strict threshold gain condition; no active latency floor.",
+    "Five fixed Figure3 caller conditions, opto_arg0 only; missingITI row reinsertion."
+  ],
+  "not_implemented": [
+    "Source reward conversion and99th-percentile preprocessing",
+    "Native percentile evaluation/authentication",
+    "Source-native cohort/row/export and MATLAB parity",
+    "Random opto and Figure4 modes",
+    "BestFits fitting/provenance and photometry/RPE joins",
+    "Downstream block dynamics/regressions or complete paper panel"
+  ],
+  "scientific_runs": 0,
+  "model_fits": 0,
+  "raw_data_download_bytes": 0,
+  "readiness_promoted": false,
+  "ci_enrollment_required": true,
+  "proposed_ci_command": "python3 -B -m unittest discover -s benchmarks/paper/PAPER-FIND-046/implementations/gain-alpha-recursion-v1/tests -v"
+}

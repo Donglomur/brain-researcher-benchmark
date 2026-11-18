@@ -79,3 +79,20 @@ exercise cosine versus Euclidean geometry, fixed neighbor count, query-label
 rejection, reordered/overlapping identities, units, dimensions, nonfinite values,
 JSON ambiguity and frozen-support tampering. Run only through the shared test pool.
 These are software controls, not authentic data preparation or scientific evidence.
+
+## Protected-target admission order
+
+The CLI authenticates the frozen support before opening training or query files,
+then validates their complete support and computes the fixed decoder prediction
+before opening the protected target JSON. A malformed public operand or decoder
+failure therefore cannot trigger target access through this entry point. The
+decoder is called once, and the final report retains the same numerical endpoint
+and input pins. The in-process `score` API is unchanged; its caller already holds
+the target object and is responsible for custody. This ordering is not an OS
+sandbox, a defense against a malicious decoder implementation, an exposure-history
+certificate or evidence of historical scientific comparability.
+
+Four additional generated controls exercise actual CLI read ordering, tampered
+support, malformed/label-bearing public inputs, decoder failure and the complete
+2,000-row result. The source and original-preprocessing consumer pins were advanced
+together; prior `TESTING.json` receipts describe their historical source version.

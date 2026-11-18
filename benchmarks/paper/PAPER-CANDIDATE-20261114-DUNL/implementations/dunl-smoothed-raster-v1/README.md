@@ -1,0 +1,19 @@
+# DUNL smoothed-raster comparison grid
+
+This operator-side component adds the missing raster comparator to the existing historical event endpoint. It computes all **four smoothing settings × twenty thresholds × two splits** on the complete current-code geometry: 30/20 trials, eleven allocated channels, 600 observation bins and 576 event bins. It neither identifies the original Figure 4F settings nor qualifies reproduction or improvement. The ten-neuron versus eleven-allocation issue remains unresolved.
+
+The [pinned plotting caller](https://github.com/btolooshams/dunl-compneuro/blob/23a34f40b122c3ccf3715995f0dd19fcbbcb46a2/dunl/postprocess_scripts/plot_hitrate_whisker_thalamus_groupneuralfiringsp.py) specifies smoothing parameters 1, 10, 20 and 30, with twenty linearly spaced thresholds from 0.025 through 0.3. This component preserves those defaults as a grid; it does not select the best test point, pool train and test, or infer publication settings. The registered event tolerance remains two 5 ms bins. The smoothing parameters are source grid parameters, not independently verified millisecond time constants.
+
+The [source helper](https://github.com/btolooshams/dunl-compneuro/blob/23a34f40b122c3ccf3715995f0dd19fcbbcb46a2/dunl/utils.py) constructs an odd-length normalized kernel proportional to `(1-exp(-t))*exp(-t/tau)`, then applies a reversed kernel with centered zero padding. No phase correction or edge renormalization is added. Peak finding happens on all 600 smoothed bins **before** retaining indices below 576. This matters at the crop boundary. The raw-raster comparator remains per-channel even when the DUNL candidate uses a grouped code norm.
+
+`peak_indices` implements the [documented SciPy height-only rule](https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.find_peaks.html): interior maxima, plateau midpoint rounded down, inclusive minimum height, and no extra distance/prominence criterion. It rejects nonfinite input. Python arithmetic is not a claim of Torch/NumPy dtype, threshold-tie or historical runtime parity.
+
+## Interface
+
+Call `baseline.curves(owner, rasters)` with two operator-selected in-memory dictionaries. `owner` is the unchanged `dunl-historical-events-v1` owner schema. `rasters` contains exactly `profile`, `context_id`, `channel_ids`, `trial_ids` and `observations`. Identities and context match the owner; observations are split → trial → eleven channels → one channel axis → all 600 normalized values in `[0,1]`. No pickle, Torch model, file fetch or candidate code is executed.
+
+The result retains every grid point and separate 330/220-row means. Each point uses the existing endpoint's neighborhood counts and clip-after-mean rule, with an ordered-row-count digest. Public context excludes target values; separate canonical input digests bind the actual owner and raster values without asserting file provenance. The endpoint dependency is checked against its exact published byte count and SHA-256 before captured bytes execute. No threshold winner, paper-win scalar, uncertainty estimate or new benchmark is produced.
+
+Generated checks use invented values only. Run `python3.11 -I -S -B test_baseline.py` from this directory through the approved construction pool. For integration, enroll that exact command and both source files plus the pinned sibling dependency in the existing component checks. This private construction package is **not yet CI-enrolled**.
+
+Still required: original file/cohort/split joins, native exports and producer/checkpoint provenance, original smoothing settings, full paper output panel, source-runtime parity, admitted execution, biological grouping, agreement/uncertainty rules and a protected same-task comparison. The disclosed periodic schedule remains available to both information conditions. A perfect schedule-only result does not show neural understanding.

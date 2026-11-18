@@ -1429,7 +1429,7 @@
         "-v"
       ],
       "cwd": ".",
-      "expected_tests": 9,
+      "expected_tests": 17,
       "expected_skips": 0,
       "runner": "unittest",
       "timeout_seconds": 180,
@@ -1614,7 +1614,7 @@
         "-v"
       ],
       "cwd": ".",
-      "expected_tests": 14,
+      "expected_tests": 20,
       "expected_skips": 0,
       "runner": "unittest",
       "timeout_seconds": 180,
@@ -1937,13 +1937,17 @@
     {
       "argv": [
         "${PYTHON}",
-        "-I",
         "-B",
-        "benchmarks/neural/NEURAL-080/implementations/stable-target-scale-v1/test_stable_scale.py",
-        "-v"
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        ".",
+        "-p",
+        "test_*scale.py"
       ],
-      "cwd": ".",
-      "expected_tests": 6,
+      "cwd": "benchmarks/neural/NEURAL-080/implementations/stable-target-scale-v1",
+      "expected_tests": 12,
       "expected_skips": 0,
       "runner": "unittest",
       "timeout_seconds": 180,
@@ -1951,7 +1955,8 @@
       "task_id": "NEURAL-080",
       "group": "numpy",
       "test_paths": [
-        "benchmarks/neural/NEURAL-080/implementations/stable-target-scale-v1/test_stable_scale.py"
+        "benchmarks/neural/NEURAL-080/implementations/stable-target-scale-v1/test_stable_scale.py",
+        "benchmarks/neural/NEURAL-080/implementations/stable-target-scale-v1/test_selected_scale.py"
       ],
       "fixtures": []
     },
@@ -2890,7 +2895,7 @@
         "benchmarks/paper/PAPER-FIND-005/implementations/decoder-score-import-v1/tests/test_scorer.py"
       ],
       "cwd": ".",
-      "expected_tests": 17,
+      "expected_tests": 27,
       "expected_skips": 0,
       "runner": "unittest",
       "timeout_seconds": 180,
@@ -4030,7 +4035,7 @@
         "benchmarks/paper/PAPER-paper-method-032/implementations/bounded-retrieval-v2/test_streaming.py"
       ],
       "cwd": ".",
-      "expected_tests": 9,
+      "expected_tests": 18,
       "expected_skips": 0,
       "runner": "unittest",
       "timeout_seconds": 180,
@@ -4071,7 +4076,7 @@
         "benchmarks/paper/PAPER-paper-method-034/implementations/figure5d-endpoint-v1/test_score.py"
       ],
       "cwd": ".",
-      "expected_tests": 7,
+      "expected_tests": 11,
       "expected_skips": 0,
       "runner": "unittest",
       "timeout_seconds": 180,
@@ -5396,7 +5401,7 @@
         "benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/tests/generated_controls.py"
       ],
       "cwd": ".",
-      "expected_tests": 18,
+      "expected_tests": 25,
       "expected_skips": 0,
       "timeout_seconds": 90,
       "test_paths": [
@@ -9379,6 +9384,2650 @@
         "benchmarks/neural/NEURAL-021/implementations/participant-transport-v1/test_transport.py"
       ],
       "timeout_seconds": 90
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/neural/NEURAL-015/implementations/opaque-query-v1/tests",
+        "-p",
+        "test_delivery.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 15,
+      "fixtures": [],
+      "group": "stdlib-a",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-015/implementations/opaque-query-v1/tests/test_delivery.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "NEURAL-015",
+      "id": "NEURAL-015.command-02"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/neural/NEURAL-028/implementations/source-label-bridge-v1/tests",
+        "-p",
+        "test_label_bridge.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 11,
+      "fixtures": [],
+      "group": "stdlib-a",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-028/implementations/source-label-bridge-v1/tests/test_label_bridge.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "NEURAL-028",
+      "id": "NEURAL-028.command-02"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/neural/NEURAL-048/implementations/halfcycle-support-v1/tests",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 12,
+      "fixtures": [],
+      "group": "stdlib-a",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-048/implementations/halfcycle-support-v1/tests/test_support.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "NEURAL-048",
+      "id": "NEURAL-048.command-02"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-069/implementations/fixed-reference-programmes-v1/test_programs.py",
+        "-q"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 15,
+      "fixtures": [],
+      "group": "numpy",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-069/implementations/fixed-reference-programmes-v1/test_programs.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "NEURAL-069",
+      "id": "NEURAL-069.command-03"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "benchmarks/neural/NEURAL-094/implementations/stable-loss-runtime-v1/test_successor.py"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 11,
+      "fixtures": [],
+      "group": "stdlib-b",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-094/implementations/stable-loss-runtime-v1/test_successor.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "NEURAL-094",
+      "id": "NEURAL-094.command-02"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-paper-method-009/implementations/pala-prospective-entrypoint-v1/tests",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 13,
+      "fixtures": [],
+      "group": "scientific",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-009/implementations/pala-prospective-entrypoint-v1/tests/test_entrypoint.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "PAPER-paper-method-009",
+      "id": "PAPER-paper-method-009.command-02"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-098/implementations/raw-event-evidence-v1/test_raw_event_evidence.py"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 15,
+      "fixtures": [],
+      "group": "stdlib-a",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-098/implementations/raw-event-evidence-v1/test_raw_event_evidence.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "NEURAL-098",
+      "id": "NEURAL-098.command-02"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-079/implementations/neural-079/source-map-renderer-v1/test_render_source_maps.py"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 16,
+      "fixtures": [],
+      "group": "stdlib-a",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-079/implementations/neural-079/source-map-renderer-v1/test_render_source_maps.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "NEURAL-079",
+      "id": "NEURAL-079.command-02"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-FIND-REP-014/implementations/cerebellar-paper-programme/test_native_compare_v3.py"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 13,
+      "fixtures": [],
+      "group": "stdlib-b",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-REP-014/implementations/cerebellar-paper-programme/test_native_compare_v3.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "PAPER-FIND-REP-014",
+      "id": "PAPER-FIND-REP-014.command-03"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-092/implementations/stable-deviance-integration-v1/test_solver_integration.py"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 10,
+      "fixtures": [],
+      "group": "stdlib-b",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-092/implementations/stable-deviance-integration-v1/test_solver_integration.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "NEURAL-092",
+      "id": "NEURAL-092.command-02"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-054/implementations/frozen-capture-v1/tests/test_runtime_source_identity.py"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 11,
+      "fixtures": [],
+      "group": "stdlib-a",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-054/implementations/frozen-capture-v1/tests/test_runtime_source_identity.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "NEURAL-054",
+      "id": "NEURAL-054.command-03"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-add-002/implementations/submission-bridge-v1/tests/test_operator_input_snapshot.py"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 13,
+      "fixtures": [],
+      "group": "scientific",
+      "runner": "unittest",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-add-002/implementations/submission-bridge-v1/tests/test_operator_input_snapshot.py"
+      ],
+      "timeout_seconds": 180,
+      "task_id": "PAPER-paper-method-add-002",
+      "id": "PAPER-paper-method-add-002.command-05"
+    },
+    {
+      "task_id": "NEURAL-056",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-056/implementations/precision-v1/tests/test_reconciliation.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 7,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-056/implementations/precision-v1/tests/test_reconciliation.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "NEURAL-056.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-ADD-005",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_decode_replay.py",
+        "-v"
+      ],
+      "cwd": "benchmarks/paper/PAPER-FIND-ADD-005/implementations/decoder-score-replay-v1",
+      "expected_tests": 12,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-ADD-005/implementations/decoder-score-replay-v1/tests/test_decode_replay.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-ADD-005.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-replacement-016",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-replacement-016/implementations/selected-main-comparison-v1/test_compare_main.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-replacement-016/implementations/selected-main-comparison-v1/test_compare_main.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-paper-method-replacement-016.command-02"
+    },
+    {
+      "task_id": "marmoset-retinal-contrast-generalization",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/constant-rate-v1/test_constant.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/constant-rate-v1/test_constant.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "marmoset-retinal-contrast-generalization.command-02"
+    },
+    {
+      "task_id": "PAPER-CANDIDATE-20261114-NPVC",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-NPVC/implementations/paired-support-v1/test_paired.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 18,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-NPVC/implementations/paired-support-v1/test_paired.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-CANDIDATE-20261114-NPVC.command-02"
+    },
+    {
+      "task_id": "PAPER-EXP-20261113-004",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-EXP-20261113-004/implementations/fig3c-profiles-v1/tests",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-EXP-20261113-004/implementations/fig3c-profiles-v1/tests/test_fig3c_profiles.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-EXP-20261113-004.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-020",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-FIND-020/implementations/common-input-reduction-v1/test_common_input.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-020/implementations/common-input-reduction-v1/test_common_input.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-020.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-039",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-FIND-039/implementations/figure5i-support-v1/tests",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-039/implementations/figure5i-support-v1/tests/test_support.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-039.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-ADD-006",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-FIND-ADD-006/implementations/figure4d-paired-draws-v1/test_paired_draws.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 12,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-ADD-006/implementations/figure4d-paired-draws-v1/test_paired_draws.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-ADD-006.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-002",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/checkpoint-correspondence-v1/test_audit.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 12,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-002/implementations/checkpoint-correspondence-v1/test_audit.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-paper-method-002.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-011",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-011/implementations/primary-profile-v1/test_panel.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-011/implementations/primary-profile-v1/test_panel.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-paper-method-011.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-031",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "tests/test_correlations.py"
+      ],
+      "cwd": "benchmarks/paper/PAPER-paper-method-031/implementations/original-correlation-panels-v1",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-031/implementations/original-correlation-panels-v1/tests/test_correlations.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-paper-method-031.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-047",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-047/implementations/figure1e-family-v1/test_family.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-047/implementations/figure1e-family-v1/test_family.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "scientific",
+      "id": "PAPER-paper-method-047.command-03"
+    },
+    {
+      "task_id": "PAPER-paper-method-replacement-008",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "test_score.py"
+      ],
+      "cwd": "benchmarks/paper/PAPER-paper-method-replacement-008/implementations/selected-primary-v1",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-replacement-008/implementations/selected-primary-v1/test_score.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-paper-method-replacement-008.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-signal-add-017",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-v"
+      ],
+      "cwd": "benchmarks/paper/PAPER-paper-signal-add-017/implementations/recorded-panel-v1",
+      "expected_tests": 16,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-signal-add-017/implementations/recorded-panel-v1/tests/test_figure2a_panel.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-paper-signal-add-017.command-02"
+    },
+    {
+      "task_id": "PAPER-ROOT-ADD-007",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/replay-source-statistics-v1/tests/test_replay_statistics.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/replay-source-statistics-v1/tests/test_replay_statistics.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-ROOT-ADD-007.command-02"
+    },
+    {
+      "task_id": "PAPER-ROOT-ADD-020",
+      "argv": [
+        "${PYTHON}",
+        "benchmarks/paper/PAPER-ROOT-ADD-020/implementations/panel-comparison-v1/test_panel.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 6,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-ROOT-ADD-020/implementations/panel-comparison-v1/test_panel.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-ROOT-ADD-020.command-02"
+    },
+    {
+      "task_id": "NEURAL-100",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-100/implementations/claims-contract-controls-v1/test_claims_contract.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 19,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-100/implementations/claims-contract-controls-v1/test_claims_contract.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "NEURAL-100.command-04"
+    },
+    {
+      "task_id": "PAPER-FIND-REP-003",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-FIND-REP-003/implementations/variance-scatter-v1/tests",
+        "-p",
+        "test_scatter.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 7,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-REP-003/implementations/variance-scatter-v1/tests/test_scatter.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-REP-003.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-replacement-009",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "test_choice_records.py"
+      ],
+      "cwd": "benchmarks/paper/PAPER-paper-method-replacement-009/implementations/figure5a-choice-record-audit-v1",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-replacement-009/implementations/figure5a-choice-record-audit-v1/test_choice_records.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "PAPER-paper-method-replacement-009.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-006",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-006/implementations/original-threshold-sweep-v1/test_selector.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-006/implementations/original-threshold-sweep-v1/test_selector.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "PAPER-paper-method-006.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-033",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-033/implementations/selection-features-v1/tests/test_selection_features.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-033/implementations/selection-features-v1/tests/test_selection_features.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-paper-method-033.command-04"
+    },
+    {
+      "task_id": "NEURAL-044",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "benchmarks/neural/NEURAL-044/implementations/response-transport-v1/test_response_transport.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-044/implementations/response-transport-v1/test_response_transport.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "NEURAL-044.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-003",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-FIND-003/implementations/source-learnr-v1/tests",
+        "-p",
+        "test_learnr.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-003/implementations/source-learnr-v1/tests/test_learnr.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-003.command-01"
+    },
+    {
+      "task_id": "PAPER-FIND-046",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-FIND-046/implementations/gain-alpha-recursion-v1/tests",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-046/implementations/gain-alpha-recursion-v1/tests/test_model.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-046.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-REP-007",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-FIND-REP-007/implementations/coding-direction-v1/tests/test_coding_direction.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-REP-007/implementations/coding-direction-v1/tests/test_coding_direction.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-FIND-REP-007.command-01"
+    },
+    {
+      "task_id": "PAPER-ROOT-ADD-025",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-ROOT-ADD-025/implementations/paired-panel-v1/test_panel.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 7,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-ROOT-ADD-025/implementations/paired-panel-v1/test_panel.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-ROOT-ADD-025.command-02"
+    },
+    {
+      "task_id": "NEURAL-039",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/neural/NEURAL-039/implementations/movie10-evaluator-v1",
+        "-p",
+        "test_prepare_panel.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 9,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-039/implementations/movie10-evaluator-v1/test_prepare_panel.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "scientific",
+      "id": "NEURAL-039.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-020",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-paper-method-020/implementations/six-cell-suite-v1/tests",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 12,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-020/implementations/six-cell-suite-v1/tests/test_suite.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "PAPER-paper-method-020.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-replacement-011",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/treebank-observation-verification-v1/test_verify.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 16,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/treebank-observation-verification-v1/test_verify.py"
+      ],
+      "timeout_seconds": 120,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "PAPER-paper-method-replacement-011.command-04"
+    },
+    {
+      "task_id": "PAPER-paper-signal-add-005",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-paper-signal-add-005/implementations/spatial-source-kernel-v1/tests",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-signal-add-005/implementations/spatial-source-kernel-v1/tests/test_spatial.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "scientific",
+      "id": "PAPER-paper-signal-add-005.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-signal-add-020",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-paper-signal-add-020/implementations/companion-designs-v1/test_prepare.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-signal-add-020/implementations/companion-designs-v1/test_prepare.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "PAPER-paper-signal-add-020.command-02"
+    },
+    {
+      "task_id": "NEURAL-012",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-012/implementations/montage-diagnostics-v1/test_montage_diagnostics.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 9,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-012/implementations/montage-diagnostics-v1/test_montage_diagnostics.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "NEURAL-012.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-050",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-050/implementations/figure5-peth-v2/tests/test_pair_audit.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-050/implementations/figure5-peth-v2/tests/test_pair_audit.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-paper-method-050.command-02"
+    },
+    {
+      "task_id": "NEURAL-051",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-051/implementations/metadata-design-v1/test_design.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-051/implementations/metadata-design-v1/test_design.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "NEURAL-051.command-02"
+    },
+    {
+      "task_id": "NEURAL-085",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-085/implementations/presentation-content-v1/test_presentation_content.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-085/implementations/presentation-content-v1/test_presentation_content.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "scientific",
+      "id": "NEURAL-085.command-02"
+    },
+    {
+      "task_id": "PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "benchmarks/paper/PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113/implementations/original-fold-bridge-v1/tests/test_bridge.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113/implementations/original-fold-bridge-v1/tests/test_bridge.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113.command-02"
+    },
+    {
+      "task_id": "PAPER-CANDIDATE-20261114-PLEXUS",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "tests/test_producer.py"
+      ],
+      "cwd": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/implementations/original-classifier-producer-v1",
+      "expected_tests": 12,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/implementations/original-classifier-producer-v1/tests/test_producer.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-CANDIDATE-20261114-PLEXUS.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-signal-add-004",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "benchmarks/paper/PAPER-paper-signal-add-004/implementations/latent-state-programme/tests/test_primary_ctf_inputs.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-signal-add-004/implementations/latent-state-programme/tests/test_primary_ctf_inputs.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-paper-signal-add-004.command-03"
+    },
+    {
+      "task_id": "PAPER-ROOT-ADD-010",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/retained-epoch-lineage-v1/tests",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-ROOT-ADD-010/implementations/retained-epoch-lineage-v1/tests/test_epoch_lineage.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-ROOT-ADD-010.command-02"
+    },
+    {
+      "task_id": "NEURAL-014",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-014/implementations/source-count-reconciliation/tests/test_neural014_source_count_reconciliation.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-014/implementations/source-count-reconciliation/tests/test_neural014_source_count_reconciliation.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "NEURAL-014.command-02"
+    },
+    {
+      "task_id": "NEURAL-047",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-047/implementations/neural-047/history-delivery-v1/test_audit_collection.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-047/implementations/neural-047/history-delivery-v1/test_audit_collection.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "NEURAL-047.command-02"
+    },
+    {
+      "task_id": "NEURAL-068",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-068/implementations/paired-session-v1/test_legacy_import.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 7,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-068/implementations/paired-session-v1/test_legacy_import.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "NEURAL-068.command-02"
+    },
+    {
+      "task_id": "NEURAL-087",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-087/implementations/binary-scorer-v1/test_reference_compare.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-087/implementations/binary-scorer-v1/test_reference_compare.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "NEURAL-087.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-004",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-FIND-004/implementations/journal-metrics-v2/tests/test_native_export.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 12,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-004/implementations/journal-metrics-v2/tests/test_native_export.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-004.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-032",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-FIND-032/implementations/source-bundle-preflight-v1/test_preflight.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-032/implementations/source-bundle-preflight-v1/test_preflight.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-032.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-REP-009",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-FIND-REP-009/implementations/protected-panel-intake-v1/test_intake.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 18,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-REP-009/implementations/protected-panel-intake-v1/test_intake.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-REP-009.command-01"
+    },
+    {
+      "task_id": "PAPER-SCOPE-20261114-LATENTCIRCUIT",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/implementations/calibration-scope-view-v1/tests/test_scope_view.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 12,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-SCOPE-20261114-LATENTCIRCUIT/implementations/calibration-scope-view-v1/tests/test_scope_view.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-SCOPE-20261114-LATENTCIRCUIT.command-01"
+    },
+    {
+      "task_id": "PAPER-paper-method-023",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-023/implementations/physiop300-source-lineage-v1/test_audit_export.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-023/implementations/physiop300-source-lineage-v1/test_audit_export.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-paper-method-023.command-02"
+    },
+    {
+      "task_id": "NEURAL-027",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-027/implementations/exposure-matched-reference-v1/tests/test_reference.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-027/implementations/exposure-matched-reference-v1/tests/test_reference.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "NEURAL-027.command-02"
+    },
+    {
+      "task_id": "NEURAL-093",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "test_packet.py"
+      ],
+      "cwd": "benchmarks/neural/NEURAL-093/implementations/four-arm-scoring-v1",
+      "expected_tests": 12,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-093/implementations/four-arm-scoring-v1/test_packet.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "NEURAL-093.command-02"
+    },
+    {
+      "task_id": "PAPER-CANDIDATE-20261114-SBIND",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "test_trial_inference.py"
+      ],
+      "cwd": "benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/implementations/whole-trial-inference-v1",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-SBIND/implementations/whole-trial-inference-v1/test_trial_inference.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-CANDIDATE-20261114-SBIND.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-signal-add-007",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "tests/test_author_bridge.py",
+        "-v"
+      ],
+      "cwd": "benchmarks/paper/PAPER-paper-signal-add-007/implementations/original-inputs-v1",
+      "expected_tests": 7,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-signal-add-007/implementations/original-inputs-v1/tests/test_author_bridge.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-paper-signal-add-007.command-03"
+    },
+    {
+      "task_id": "NEURAL-008",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-008/implementations/historical-fixed-rf-v1/tests/test_fixed_rf.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-008/implementations/historical-fixed-rf-v1/tests/test_fixed_rf.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "NEURAL-008.command-03"
+    },
+    {
+      "task_id": "NEURAL-042",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/neural/NEURAL-042/implementations/trial-support-preflight-v1/tests",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-042/implementations/trial-support-preflight-v1/tests/test_support.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "NEURAL-042.command-02"
+    },
+    {
+      "task_id": "PAPER-EXP-20261113-002",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-EXP-20261113-002/implementations/cross-time-prediction-audit-v1/test_cross_time_audit.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-EXP-20261113-002/implementations/cross-time-prediction-audit-v1/test_cross_time_audit.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-EXP-20261113-002.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-036",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-FIND-036/implementations/foraging-programme/author-replay-controls",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-036/implementations/foraging-programme/author-replay-controls/test_author_replay.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-FIND-036.command-01"
+    },
+    {
+      "task_id": "PAPER-FIND-ADD-003",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-FIND-ADD-003/implementations/original-time-opaque-v1",
+        "-p",
+        "test_mapping.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-ADD-003/implementations/original-time-opaque-v1/test_mapping.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-ADD-003.command-03"
+    },
+    {
+      "task_id": "PAPER-FIND-NEW-002",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-FIND-NEW-002/implementations/context-response-v1",
+        "-p",
+        "test_context_response.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-NEW-002/implementations/context-response-v1/test_context_response.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-FIND-NEW-002.command-02"
+    },
+    {
+      "task_id": "PAPER-ROOT-ADD-018",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-ROOT-ADD-018/implementations/tca-decoded-projection-v1/test_tca_decoded_projection.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-ROOT-ADD-018/implementations/tca-decoded-projection-v1/test_tca_decoded_projection.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "scientific",
+      "id": "PAPER-ROOT-ADD-018.command-01",
+      "environment": {
+        "OFC_TCA_INPUTS_PATH": "benchmarks/paper/PAPER-ROOT-ADD-018/implementations/tensor-source-analysis/ofc_tca_inputs.py"
+      }
+    },
+    {
+      "task_id": "PAPER-paper-method-042",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-paper-method-042/implementations/raw-response-parser-v1/tests",
+        "-p",
+        "test_raw_response.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-042/implementations/raw-response-parser-v1/tests/test_raw_response.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "PAPER-paper-method-042.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-replacement-005",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "test_native_output_bridge.py",
+        "-v"
+      ],
+      "cwd": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/native-output-bridge-v1",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/native-output-bridge-v1/test_native_output_bridge.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-paper-method-replacement-005.command-02"
+    },
+    {
+      "task_id": "NEURAL-016",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-016/implementations/feature-availability-v1/test_evaluator.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-016/implementations/feature-availability-v1/test_evaluator.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "NEURAL-016.command-02"
+    },
+    {
+      "task_id": "NEURAL-077",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/neural/NEURAL-077/implementations/channel-declaration-v1",
+        "-p",
+        "test_verify_channels.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 9,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-077/implementations/channel-declaration-v1/test_verify_channels.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "NEURAL-077.command-07"
+    },
+    {
+      "task_id": "PAPER-FIND-013",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "benchmarks/paper/PAPER-FIND-013/implementations/opto-linear-aggregation-v1/test_aggregation.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-013/implementations/opto-linear-aggregation-v1/test_aggregation.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "PAPER-FIND-013.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-037",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_lineage"
+      ],
+      "cwd": "benchmarks/paper/PAPER-FIND-037/implementations/neural-epoch-lineage-v1",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-037/implementations/neural-epoch-lineage-v1/test_lineage.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "PAPER-FIND-037.command-02"
+    },
+    {
+      "task_id": "PAPER-ROOT-ADD-019",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-ROOT-ADD-019/implementations/figure6h-source-projection-v1/test_project.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 9,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-ROOT-ADD-019/implementations/figure6h-source-projection-v1/test_project.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "PAPER-ROOT-ADD-019.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-010",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-010/implementations/figure1-reference-panel-v1/tests/test_reference_panel.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-010/implementations/figure1-reference-panel-v1/tests/test_reference_panel.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-paper-method-010.command-03"
+    },
+    {
+      "task_id": "PAPER-paper-method-043",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-paper-method-043/implementations/ssim-semantics-probe-v1/tests",
+        "-q"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-043/implementations/ssim-semantics-probe-v1/tests/test_fingerprint.py",
+        "benchmarks/paper/PAPER-paper-method-043/implementations/ssim-semantics-probe-v1/tests/test_probe.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "scientific",
+      "id": "PAPER-paper-method-043.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-add-005",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-add-005/implementations/original-rf-endpoint-v1/tests/test_preparation.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-add-005/implementations/original-rf-endpoint-v1/tests/test_preparation.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-paper-method-add-005.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-signal-add-013",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "benchmarks/paper/PAPER-paper-signal-add-013/implementations/figure5-relative-importance-v1/tests/test_contributions.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 9,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-signal-add-013/implementations/figure5-relative-importance-v1/tests/test_contributions.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "numpy",
+      "id": "PAPER-paper-signal-add-013.command-02"
+    },
+    {
+      "task_id": "clinical-sensefog-stn-state",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/clinical-sensefog-stn-state/implementations/signal-packets-v1/test_packets.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/clinical-sensefog-stn-state/implementations/signal-packets-v1/test_packets.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "clinical-sensefog-stn-state.command-02"
+    },
+    {
+      "task_id": "NEURAL-019",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-019/implementations/typed-count-viewer-v1/test_viewer.py"
+      ],
+      "cwd": ".",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-019/implementations/typed-count-viewer-v1/test_viewer.py"
+      ],
+      "expected_tests": 16,
+      "group": "numpy",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "NEURAL-019.command-04"
+    },
+    {
+      "task_id": "NEURAL-022",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-022/implementations/typed-count-viewer-v1/test_viewer.py"
+      ],
+      "cwd": ".",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-022/implementations/typed-count-viewer-v1/test_viewer.py"
+      ],
+      "expected_tests": 13,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "NEURAL-022.command-04"
+    },
+    {
+      "task_id": "NEURAL-026",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "test_controls.py"
+      ],
+      "cwd": "benchmarks/neural/NEURAL-026/implementations/matched-input-controls-v1",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-026/implementations/matched-input-controls-v1/test_controls.py"
+      ],
+      "expected_tests": 8,
+      "group": "numpy",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "NEURAL-026.command-02"
+    },
+    {
+      "task_id": "NEURAL-086",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-086/implementations/released-summary-response-v1/test_response.py"
+      ],
+      "cwd": ".",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-086/implementations/released-summary-response-v1/test_response.py"
+      ],
+      "expected_tests": 15,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "NEURAL-086.command-02"
+    },
+    {
+      "task_id": "NEURAL-DISC-20261114-VOLTRON-SPIKES",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "test_viewer.py"
+      ],
+      "cwd": "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-optical-viewer-v1",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-optical-viewer-v1/test_viewer.py"
+      ],
+      "expected_tests": 14,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "NEURAL-DISC-20261114-VOLTRON-SPIKES.command-02"
+    },
+    {
+      "task_id": "NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/implementations/paired-mouse-resampling-v1/test_uncertainty.py"
+      ],
+      "cwd": ".",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/implementations/paired-mouse-resampling-v1/test_uncertainty.py"
+      ],
+      "expected_tests": 10,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-025",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-FIND-025/implementations/normalized-variance-v1",
+        "-p",
+        "test_variance_panel.py"
+      ],
+      "cwd": ".",
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-025/implementations/normalized-variance-v1/test_variance_panel.py"
+      ],
+      "expected_tests": 15,
+      "group": "numpy",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "PAPER-FIND-025.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-ADD-015",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-FIND-ADD-015/implementations/fig5-coefficient-alignment-v1/test_coefficient_alignment.py"
+      ],
+      "cwd": ".",
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-ADD-015/implementations/fig5-coefficient-alignment-v1/test_coefficient_alignment.py"
+      ],
+      "expected_tests": 14,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "PAPER-FIND-ADD-015.command-01"
+    },
+    {
+      "task_id": "PAPER-ROOT-ADD-013",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-ROOT-ADD-013/implementations/source-workbook-lineage-v1/test_metadata.py"
+      ],
+      "cwd": ".",
+      "test_paths": [
+        "benchmarks/paper/PAPER-ROOT-ADD-013/implementations/source-workbook-lineage-v1/test_metadata.py"
+      ],
+      "expected_tests": 12,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "PAPER-ROOT-ADD-013.command-01"
+    },
+    {
+      "task_id": "PAPER-paper-method-replacement-013",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "test_generation_roster.py",
+        "-v"
+      ],
+      "cwd": "benchmarks/paper/PAPER-paper-method-replacement-013/implementations/paired-generation-admission-v1",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-replacement-013/implementations/paired-generation-admission-v1/test_generation_roster.py"
+      ],
+      "expected_tests": 16,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "PAPER-paper-method-replacement-013.command-02"
+    },
+    {
+      "task_id": "apcx-odor-pulse-evidence",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "test_viewer.py"
+      ],
+      "cwd": "benchmarks/neural/apcx-odor-pulse-evidence/implementations/typed-count-viewer-v1",
+      "test_paths": [
+        "benchmarks/neural/apcx-odor-pulse-evidence/implementations/typed-count-viewer-v1/test_viewer.py"
+      ],
+      "expected_tests": 12,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "apcx-odor-pulse-evidence.command-02"
+    },
+    {
+      "task_id": "NEURAL-034",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-034/implementations/viewer-grading-memory512-v1/tests/test_telemetry.py"
+      ],
+      "cwd": ".",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-034/implementations/viewer-grading-memory512-v1/tests/test_telemetry.py"
+      ],
+      "expected_tests": 7,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "NEURAL-034.command-11"
+    },
+    {
+      "task_id": "NEURAL-034",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-034/implementations/viewer-grading-memory512-v1/tests/test_recipe.py"
+      ],
+      "cwd": ".",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-034/implementations/viewer-grading-memory512-v1/tests/test_recipe.py"
+      ],
+      "expected_tests": 7,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "NEURAL-034.command-12"
+    },
+    {
+      "task_id": "NEURAL-034",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-034/implementations/viewer-grading-memory512-v1/tests/test_host_observation.py"
+      ],
+      "cwd": ".",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-034/implementations/viewer-grading-memory512-v1/tests/test_host_observation.py"
+      ],
+      "expected_tests": 4,
+      "group": "stdlib-a",
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "NEURAL-034.command-13"
+    },
+    {
+      "task_id": "PAPER-FIND-ADD-003",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "test_transport.py",
+        "--fixtures",
+        "/tmp/neurobench-b15-find-add-003-query-transport-v1"
+      ],
+      "cwd": "benchmarks/paper/PAPER-FIND-ADD-003/implementations/original-time-query-transport-v1",
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-ADD-003/implementations/original-time-query-transport-v1/test_transport.py"
+      ],
+      "expected_tests": 11,
+      "group": "stdlib-b",
+      "timeout_seconds": 90,
+      "runner": "unittest",
+      "expected_skips": 0,
+      "fixtures": [],
+      "id": "PAPER-FIND-ADD-003.command-04"
+    },
+    {
+      "task_id": "NEURAL-013",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "test_sequence_prior.py"
+      ],
+      "cwd": "benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2",
+      "expected_tests": 9,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/test_sequence_prior.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-013.command-02"
+    },
+    {
+      "task_id": "NEURAL-032",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-032/implementations/hierarchy-sidecar-v1/test_hierarchy.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-b",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-032/implementations/hierarchy-sidecar-v1/test_hierarchy.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-032.command-02"
+    },
+    {
+      "task_id": "NEURAL-046",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-046/implementations/joined-scoring-v1/test_grade_artifacts.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-b",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-046/implementations/joined-scoring-v1/test_grade_artifacts.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-046.command-02"
+    },
+    {
+      "task_id": "NEURAL-067",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "test_row_journal.py"
+      ],
+      "cwd": "benchmarks/neural/NEURAL-067/implementations/causal-row-journal-v1",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-067/implementations/causal-row-journal-v1/test_row_journal.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-067.command-02"
+    },
+    {
+      "task_id": "PAPER-CANDIDATE-20261114-CONSENSUS",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-CONSENSUS/implementations/native-trial-indices/test_native_indices.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-CONSENSUS/implementations/native-trial-indices/test_native_indices.py"
+      ],
+      "fixtures": [],
+      "id": "PAPER-CANDIDATE-20261114-CONSENSUS.command-02"
+    },
+    {
+      "task_id": "NEURAL-SCOPE-20261114-AASD-REPORT",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/current-case-broker-v1/tests/test_aasd_broker.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-SCOPE-20261114-AASD-REPORT/implementations/current-case-broker-v1/tests/test_aasd_broker.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-SCOPE-20261114-AASD-REPORT.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-signal-add-019",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-paper-signal-add-019/implementations/author-law-production-v1/tests",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-signal-add-019/implementations/author-law-production-v1/tests/test_producer.py"
+      ],
+      "fixtures": [],
+      "id": "PAPER-paper-signal-add-019.command-02"
+    },
+    {
+      "task_id": "NEURAL-002",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "benchmarks/neural/NEURAL-002/implementations/typed-viewer-v1/test_viewer.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-002/implementations/typed-viewer-v1/test_viewer.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-002.command-02"
+    },
+    {
+      "task_id": "NEURAL-035",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "benchmarks/neural/NEURAL-035/implementations/typed-viewer-v1/test_viewer.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-035/implementations/typed-viewer-v1/test_viewer.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-035.command-02"
+    },
+    {
+      "task_id": "NEURAL-059",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-059/implementations/direct-probability-v1/test_delivery.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-059/implementations/direct-probability-v1/test_delivery.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-059.command-02"
+    },
+    {
+      "task_id": "NEURAL-074",
+      "argv": [
+        "${PYTHON}",
+        "benchmarks/neural/NEURAL-074/implementations/release-census-v1/test_census.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-074/implementations/release-census-v1/test_census.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-074.command-02"
+    },
+    {
+      "task_id": "NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR/implementations/hybrid-direct-dialogue-v1/test_direct_dialogue.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR/implementations/hybrid-direct-dialogue-v1/test_direct_dialogue.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR.command-02"
+    },
+    {
+      "task_id": "NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY/implementations/fly-group-splits-v1/test_compile_splits.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY/implementations/fly-group-splits-v1/test_compile_splits.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY.command-02"
+    },
+    {
+      "task_id": "PAPER-FIND-NEW-003",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-FIND-NEW-003/implementations/sensory-effector-result-inspection-v1",
+        "-p",
+        "test_inspect_results.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-NEW-003/implementations/sensory-effector-result-inspection-v1/test_inspect_results.py"
+      ],
+      "fixtures": [],
+      "id": "PAPER-FIND-NEW-003.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-030",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-paper-method-030/implementations/ep-affine-calibration-v1/tests",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-030/implementations/ep-affine-calibration-v1/tests/test_calibrate.py"
+      ],
+      "fixtures": [],
+      "id": "PAPER-paper-method-030.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-signal-add-001",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_curve_audit.py"
+      ],
+      "cwd": "benchmarks/paper/PAPER-paper-signal-add-001/implementations/empirical-curve-audit-v1",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-signal-add-001/implementations/empirical-curve-audit-v1/test_curve_audit.py"
+      ],
+      "fixtures": [],
+      "id": "PAPER-paper-signal-add-001.command-02"
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/neural/NEURAL-006/implementations/static-direct-response-v1",
+        "-p",
+        "test_static_direct_response.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_skips": 0,
+      "expected_tests": 15,
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "NEURAL-006.command-02",
+      "runner": "unittest",
+      "task_id": "NEURAL-006",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-006/implementations/static-direct-response-v1/test_static_direct_response.py"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_baseline"
+      ],
+      "cwd": "benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/implementations/dunl-smoothed-raster-v1",
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "id": "PAPER-CANDIDATE-20261114-DUNL.command-02",
+      "task_id": "PAPER-CANDIDATE-20261114-DUNL",
+      "group": "stdlib-b",
+      "test_paths": [
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/implementations/dunl-smoothed-raster-v1/test_baseline.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-FIND-REP-015/implementations/helper-metric-semantics-v1/test_diagnose.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 7,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "id": "PAPER-FIND-REP-015.command-02",
+      "task_id": "PAPER-FIND-REP-015",
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-REP-015/implementations/helper-metric-semantics-v1/test_diagnose.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "task_id": "NEURAL-021",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-021/implementations/raster-participant-v1/test_raster.py",
+        "RasterTests"
+      ],
+      "cwd": ".",
+      "expected_tests": 14,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 90,
+      "group": "scientific",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-021/implementations/raster-participant-v1/test_raster.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-021.command-05"
+    },
+    {
+      "task_id": "NEURAL-021",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-021/implementations/raster-participant-v1/test_transport.py",
+        "RasterTransportTests"
+      ],
+      "cwd": ".",
+      "expected_tests": 12,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 90,
+      "group": "scientific",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-021/implementations/raster-participant-v1/test_transport.py"
+      ],
+      "fixtures": [],
+      "id": "NEURAL-021.command-06"
+    },
+    {
+      "task_id": "clinical-ccep-stimulation-attribution",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-coordinate-binding/test_coordinate_gate.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 27,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 60,
+      "group": "stdlib-a",
+      "test_paths": [
+        "benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/clinical-ccep-coordinate-binding/test_coordinate_gate.py"
+      ],
+      "fixtures": [],
+      "id": "clinical-ccep-stimulation-attribution.command-02"
+    },
+    {
+      "task_id": "PAPER-paper-method-029",
+      "argv": [
+        "${PYTHON}",
+        "benchmarks/paper/PAPER-paper-method-029/implementations/reference-key-adapter-v1/test_reference_key_adapter.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 12,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 180,
+      "group": "numpy226",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-029/implementations/reference-key-adapter-v1/test_reference_key_adapter.py"
+      ],
+      "fixtures": [],
+      "id": "PAPER-paper-method-029.command-03"
     }
   ],
   "source_only_assignments": [

@@ -53,6 +53,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prospective BrainHub referring-expression grounding scoring with per-subject All-category accuracy at strict IoU greater than 0.5, secondary salience summaries, paired controls and shared-image uncertainty. Authentic annotation/order membership, model/reference execution, actual exposure and intervention fidelity, rights and protected isolation remain held. Captioning, transfer and subject adaptation are outside this component; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Raw response parser v1](implementations/raw-response-parser-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Endpoint vector v2](implementations/endpoint-vector-v2) — Reviewed source component.
   Scope: UMBRAE original endpoint vector. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

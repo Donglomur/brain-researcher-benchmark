@@ -62,7 +62,7 @@ The candidate produces newline-terminated JSONL, in this exact order:
 
 There are exactly 636 records. No omissions, extra records (including JSON null),
 NaN/Infinity, duplicate JSON keys, reordered identities, substituted groups,
-negative noise variances, constant pupil targets, or zero-energy selected loading
+negative noise variances, constant retained pupil targets, or zero-energy selected loading
 dimensions are silently repaired. All-zero contrasts produce undefined t and p. Constant nonzero contrasts have
 an explicitly labeled limiting p of zero or one and null t; neither is a finite
 t statistic. No unit is dropped to manufacture a p-value.
@@ -114,3 +114,14 @@ or reference outputs are bundled. `SPEC.json` identifies input schemas and limit
 (which includes pupil targets), optional reference and detailed report private to
 the operator. Unlike the separate DFINE API, this evaluator reads trusted support
 before candidate validation. It is not a target-release or isolation service.
+
+### Pupil eligibility ordering
+
+The source variance/IQR rule receives every complete finite session, including
+constant traces. Only retained sessions require a nonconstant target for
+z-scoring. An excluded constant session still requires its complete neural
+model and remains in the42-session covariance assay. All original per-animal
+retained counts and552 pair identities are unchanged. See
+[PUPIL_SELECTION_SOURCE.json](PUPIL_SELECTION_SOURCE.json) for source evidence
+and its authentication limits. This correction does not identify the actual
+excluded source session or establish a reproduction result.

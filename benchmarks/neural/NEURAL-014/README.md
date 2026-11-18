@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Completed collection grading](implementations/completed-collection-grading) — Completed collection grading.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Source count reconciliation](implementations/source-count-reconciliation) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Receipt bound grading](implementations/receipt-bound-grading) — Reviewed source component.
   Scope: Complete collection receipt commitment. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

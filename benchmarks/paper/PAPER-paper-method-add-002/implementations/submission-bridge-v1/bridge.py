@@ -248,16 +248,59 @@ class Packet:
   return real(np.frombuffer(data,dtype=dtype).reshape(shape,order='F' if fortran else 'C'),key,shape)
 
 
+PREPARED_SHAPES = {
+ 'neural.npy': SHAPE, 'movement.npy': (150,511,2),
+ 'target_angle.npy': (511,), 'target_pos.npy': (511,2),
+ 'condition.npy': (511,), 'source_trial_indices.npy': (511,),
+}
+
+
+def _captured_numeric_npy(path,shape,*,expected_bytes=None,expected_sha256=None):
+ """Decode an immutable bounded capture, never reopen a hashed path or mmap.
+
+ The same captured bytes are hashed and interpreted. Returned arrays retain the
+ immutable bytes as their backing store, so later file mutation cannot alter
+ operator targets or masks. This is file-input integrity, not process isolation.
+ """
+ need(isinstance(shape,tuple) and shape and all(type(n) is int and n>0 for n in shape),'positive fixed NPY shape required')
+ count=1
+ for n in shape:count*=n
+ # Preserve numeric primitive precision, including 16-byte floating point.
+ # The original published bank is float32/float64/integer. This maximum is an
+ # allocation bound, not a permission to alter its expected source shape.
+ maximum=count*16+8192
+ need((expected_bytes is None)==(expected_sha256 is None),'NPY extent and hash must be supplied together')
+ if expected_bytes is not None:
+  need(type(expected_bytes) is int and 0<expected_bytes<=maximum and hexhash(expected_sha256),'invalid prepared NPY extent/hash')
+ fd=os.open(path,os.O_RDONLY|os.O_NOFOLLOW|os.O_NONBLOCK)
+ with os.fdopen(fd,'rb') as stream:
+  before=os.fstat(stream.fileno())
+  need(stat.S_ISREG(before.st_mode) and 0<before.st_size<=maximum,'operator NPY file extent/type differs')
+  if expected_bytes is not None:need(before.st_size==expected_bytes,'prepared NPY extent differs')
+  payload=stream.read(before.st_size+1)
+ need(len(payload)==before.st_size,'operator NPY extent changed while capturing')
+ if expected_sha256 is not None:need(hashlib.sha256(payload).hexdigest()==expected_sha256,'prepared NPY identity differs')
+ stream=io.BytesIO(payload);version=np.lib.format.read_magic(stream)
+ need(version in ((1,0),(2,0)),'numeric NPYv1/v2 required')
+ actual_shape,fortran,dtype=(np.lib.format.read_array_header_1_0 if version==(1,0) else np.lib.format.read_array_header_2_0)(stream,max_header_size=4096)
+ need(actual_shape==shape and dtype.kind in 'biuf' and not dtype.hasobject and dtype.fields is None and dtype.subdtype is None and dtype.itemsize in (1,2,4,8,16),'operator NPY shape/primitive dtype differs')
+ offset=stream.tell();need(len(payload)-offset==count*dtype.itemsize,'operator NPY decoded extent differs')
+ value=np.frombuffer(payload,dtype=dtype,count=count,offset=offset).reshape(shape,order='F' if fortran else 'C')
+ need(np.isfinite(value).all(),'operator NPY nonfinite value')
+ need(not value.flags.writeable,'operator NPY capture must be immutable')
+ return value
+
+
 def load_prepared_bank(directory,expected_manifest_sha256):
- root=Path(directory);path=root/'COMPLETE.json'
- manifest=frozen_json(path,expected_manifest_sha256,65536);need(manifest['task_id']==TASK and manifest['producer_sha256']==PRODUCER_SHA and manifest['status']=='complete_original_array_preparation_only','unrecognized prepared bank')
- needed={'neural.npy':SHAPE,'movement.npy':(150,511,2),'target_angle.npy':(511,),'target_pos.npy':(511,2),'condition.npy':(511,),'source_trial_indices.npy':(511,)}
+ root=Path(directory);need(root.is_dir() and not root.is_symlink(),'regular prepared bank directory required')
+ manifest=frozen_json(root/'COMPLETE.json',expected_manifest_sha256,65536)
+ need(manifest['task_id']==TASK and manifest['producer_sha256']==PRODUCER_SHA and manifest['status']=='complete_original_array_preparation_only','unrecognized prepared bank')
  arrays={}
- for name,shape in needed.items():
-  record=manifest['files'][name];file=root/name;st=file.lstat()
-  need(stat.S_ISREG(st.st_mode) and st.st_size==record['bytes'] and p.file_hash(file)==record['sha256'],'prepared array identity differs')
-  values=np.load(file,allow_pickle=False,mmap_mode='r',max_header_size=4096);arrays[name[:-4]]=real(values,name,shape)
- same_indices(arrays['source_trial_indices'],np.arange(511),'prepared source rows')
+ for name,shape in PREPARED_SHAPES.items():
+  record=manifest['files'][name]
+  value=_captured_numeric_npy(root/name,shape,expected_bytes=record['bytes'],expected_sha256=record['sha256'])
+  arrays[name[:-4]]=real(value,name,shape)
+ same_indices(arrays['source_trial_indices'],np.arange(SHAPE[0]),'prepared source rows')
  arrays['manifest_sha256']=expected_manifest_sha256
  return arrays
 
@@ -362,10 +405,9 @@ def load_operator_masks(directory,plan):
  need({x.name for x in root.iterdir()}=={c['id']+'.npy' for c in cells},'operator mask file roster differs')
  result={}
  for cell in cells:
-  path=root/(cell['id']+'.npy');st=path.lstat()
-  need(stat.S_ISREG(st.st_mode) and st.st_size<=int(np.prod(SHAPE))*8+4096,'operator mask file extent differs')
-  value=np.load(path,allow_pickle=False,mmap_mode='r',max_header_size=4096)
-  need(value.shape==SHAPE and mask_digest(value)==cell['training_mask_sha256'],'operator mask content/shape differs')
+  path=root/(cell['id']+'.npy')
+  value=_captured_numeric_npy(path,SHAPE)
+  need(mask_digest(value)==cell['training_mask_sha256'],'operator mask content/shape differs')
   result[cell['id']]=value
  return result
 

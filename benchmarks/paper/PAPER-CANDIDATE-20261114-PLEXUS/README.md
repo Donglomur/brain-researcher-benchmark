@@ -74,6 +74,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prospective complete 52-gene/four-line held-plate prediction scoring with exact well coverage, AUROC, calibration, blocked inference and paired batch uncertainty. Authentic v2 population and v1 equivalence, archived-code parity, train-only native representations, matched model comparisons and protected references remain held. Cross-line transfer and biological effect estimation are unimplemented; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original classifier producer v1](implementations/original-classifier-producer-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Original figure4 v1](implementations/original-figure4-v1) — Reviewed source component.
   Scope: Original Figure 4 folds and AUROC. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

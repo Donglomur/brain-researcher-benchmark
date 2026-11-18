@@ -1,0 +1,9 @@
+# Enforced shared-image identity
+
+The active package now calls the already-reviewed source-identity-v2 validator directly from preparation.extract and views.FeatureIssuer. The exact validator body is vendored into the authenticated runtime closure so these checks cannot be bypassed by using the ordinary entrypoints instead of an optional adapter. The original optional adapter and registered-runtime source remain unchanged.
+
+Preparation checks full source roster and extraction-image identity after the existing authorization and qualification gates but before output creation or a native import. The feature issuer checks full shared image identity and exact visual row order before opening category targets or building any views. The validator retains all108192 source dispositions and88992 experimental rows; it rejects cross-person concept/path swaps, changed shared image sets and duplicate visual rows.
+
+Generated tests exercise the actual authenticated modules and call paths, including failure ordering and a valid join reaching the existing native/target boundary. They deliberately stop there. No authentic data, target labels, native preparation, model, reference fit, grading or Docker execution is performed. This does not authenticate external source correctness, ocular clock alignment, source-release lineage, native isolation or runtime readiness. All scientific endpoints, selected modes, estimands, metrics and29 qualification gates remain unchanged. Historical predecessor packaging counts are historical; RUNTIME_SOURCE_LOCK and SOURCE_MANIFEST describe the current source closure.
+
+The new test entrypoint is `python -I -S -B tests/test_runtime_source_identity.py`. Run through the coordinated metadata test pool during construction. Integration must enroll this command in the current component inventory and refresh its downstream source pins; no central files are changed by this task-private patch.

@@ -31,6 +31,41 @@ Files are consumed one draw at a time, and their exact bytes are hashed while be
 
 ## Scientific limits and validation
 
+### Trusted native prediction export
+
+`export_native_draw(fits, ordered_trial_ids=..., modality=..., pseudo_id=...)`
+converts ten already-loaded native fit dictionaries into one draw accepted by
+this component. This fills the transport gap left by the historical exporter,
+whose fixed fifty-fold Ephys and 200-null assumptions belong to a different
+protocol. The original exporter is unchanged.
+
+The adapter checks actual train/test index arrays: five outer Ephys folds or
+fifty WFI folds, exact complementary training sets, balanced complete test
+coverage, ten distinct run IDs, a fixed draw identity and targets, and reported
+R² against the pooled predictions. An exported `n_folds` scalar cannot override
+those arrays. One scalar prior and prediction per retained trial is required;
+time-binned or multi-target arrays are rejected rather than flattened. Native
+NumPy-like values are accepted through `tolist()`/`item()` only at this trusted
+operator boundary; no files, pickle, models or external services are opened.
+
+The operator must supply original trial IDs in the order of this draw's actual
+retained mask. The adapter cannot establish that this mapping or the fit is
+truthful. The returned draw can be serialized as one JSONL record; the existing
+cell scorer still requires the real draw and all 1,000 null draws, unchanged
+trial identities, source receipts and complete metadata. A successful one-draw
+conversion is not whole-cell, whole-cohort, nested-fitting or paper readiness.
+
+The new focused controls exercise both modality partitions, real/null IDs,
+false fold scalars, leakage, missing/duplicate test coverage, changed targets,
+wrong reported scores, malformed scalar outputs and immutable exported data.
+They use generated dictionaries only; no authentic fits or predictions were
+loaded.
+
+[Export provenance and source-route findings](native-export-provenance.json)
+record the unchanged native field contract and the limits of the source lookup.
+
+### Remaining scientific qualification
+
 The original cohort (414 Ephys sessions / 2,289 region-sessions / 242 regions; 51 WFI sessions / 1,539 region-sessions / 32 regions), immutable input objects and original fold identities remain unrecovered. Counts alone cannot authenticate that cohort. A declared subset stays a declared subset, regardless of numerical outputs. This component validates supplied outer assignments, but cannot establish that fitting respected them or used the published nested inner folds, feature windows, QC and reaction-time selection. It neither fits models nor generates authentic Bayes targets/pseudosessions.
 
 It deliberately does not implement a paper significance claim: the journal's quantile description does not resolve every finite-sample/tie convention, and the pinned generic script uses a distinct protocol. It also does not define paired uncertainty, a minimum improvement, an overall scalar ranking, or a paper-win decision. Movement residual and other companion analyses remain required for complete source comparison. The unchanged source improvement contract remains `source_unresolved`.

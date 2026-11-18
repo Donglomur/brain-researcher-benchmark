@@ -439,6 +439,18 @@ def _current(original, contract, binding, source_id):
                 "launcher": "benchmarks/neural/NEURAL-095/operator.py",
                 "selection": "explicit_opt_in_source_route_only", "execution_authority": False}
             current["next_implementation_action"] = copy.deepcopy(contract["implementation"]["missing"])
+    # Recover the declared complete-condition endpoint without granting runtime
+    # or scientific admission; the exact reviewed source selects this projection.
+    if contract["task_id"] == "NEURAL-037" and any(
+            item.get("id") == "condition-endpoint-recovery"
+            and item.get("kind") == "local_source"
+            and item.get("path") == "benchmarks/neural/NEURAL-037/implementations/condition-endpoint-v1/SOURCE_RECOVERY.json"
+            and item.get("sha256") == "cf69b6c66248647b28dc91e3a9685f876d931cf06984bd287767f2aebedc0a21"
+            for item in contract["evidence"]):
+        for hold in current.get("holds", []):
+            if hold.get("id") == "scorer":
+                hold["requirement"] = "The complete-condition evaluator and generated negative controls exist as source. Qualify authentic complete-support execution, protected target custody and independent reference/scoring before any scientific claim."
+        current["next_implementation_action"] = copy.deepcopy(contract["implementation"]["missing"])
     return current
 
 

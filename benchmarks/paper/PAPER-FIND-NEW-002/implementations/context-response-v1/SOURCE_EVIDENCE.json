@@ -1,0 +1,87 @@
+{
+  "schema": "sequence-context-source-evidence/v1",
+  "task_id": "PAPER-FIND-NEW-002",
+  "archive": {
+    "url": "https://zenodo.org/records/18726362",
+    "version": 18726362,
+    "file": "sequenceFiltering.zip",
+    "declared_bytes": 7365221563,
+    "declared_md5": "35b86a22f10b600dbd98f23db3f9343d",
+    "full_archive_rehashed_here": false
+  },
+  "source_members": [
+    {
+      "member": "sequenceFiltering/code/Figure3_panelGI.ipynb",
+      "bytes": 16898,
+      "sha256": "59a3d642e59ed91f72ef819cd818e8b4ecfd6ff6e461e85330885ef1b8358bec",
+      "locators": {
+        "source_keys_and_selection_counts": "cell2",
+        "distinct_panelG_nonfinite_handling": "cell4",
+        "HI_response_function": "cell8 calc_single_cells_resp",
+        "original_response_window": "cell9",
+        "unimplemented_source_inference": "cell11 mannwhitneyu"
+      }
+    },
+    {
+      "member": "sequenceFiltering/README.md",
+      "bytes": 6461,
+      "sha256": "564c049cab6ce6eb4548e4360916fee7b3e0426f3866c041d572b7554c6c65ff",
+      "locator": "Data File Contents / figure3_data.npz"
+    }
+  ],
+  "required_source_operands": [
+    "panelGI_expt1_visF1",
+    "panelGI_expt1_visF2",
+    "panelGI_expt1_vis1OptoF1",
+    "panelGI_expt1_vis2OptoF1",
+    "panelGI_expt1_optoF1",
+    "panelGI_expt1_stim",
+    "panelGI_expt2_visF1",
+    "panelGI_expt2_visF2",
+    "panelGI_expt2_vis1OptoF1",
+    "panelGI_expt2_vis2OptoF1",
+    "panelGI_expt2_optoF1",
+    "panelGI_expt2_stim",
+    "panelGI_expt3_visF1",
+    "panelGI_expt3_visF2",
+    "panelGI_expt3_vis1OptoF1",
+    "panelGI_expt3_vis2OptoF1",
+    "panelGI_expt3_optoF1",
+    "panelGI_expt3_stim",
+    "panelGI_new_matched",
+    "panelGI_new_unmatched",
+    "panelGI_new_opto"
+  ],
+  "source_operation": {
+    "original_stimulated_counts": [
+      9,
+      13,
+      10
+    ],
+    "revision_rows": 108,
+    "original_frames": [
+      125,
+      128
+    ],
+    "revision_frames": [
+      123,
+      126
+    ],
+    "windows": "zero-based stop-exclusive source indices, not a verified physical clock",
+    "matched": "mean(vis1OptoF1[stim,125:128] - visF1[stim,125:128], axis=1)",
+    "unmatched": "mean(vis2OptoF1[stim,125:128] - visF2[stim,125:128], axis=1)",
+    "opto_only": "mean(optoF1[stim,125:128], axis=1)",
+    "revision": "mean(each already-derived revision matrix[:,123:126], axis=1)",
+    "nonfinite_replacement": "None in source H/I; G uses nan_to_num separately",
+    "pooling": "all140 selected/revision cells, not four equally weighted namespaces"
+  },
+  "qualification": {
+    "retained_local_source_texts_rehashed": true,
+    "source_notebook_executed": false,
+    "authentic_arrays_read": false,
+    "biological_mapping_verified": false,
+    "final_paper_clock_or_figure_mapping_resolved": false,
+    "canonical_task_changed": false,
+    "scientific_improvement_defined": false
+  }
+}

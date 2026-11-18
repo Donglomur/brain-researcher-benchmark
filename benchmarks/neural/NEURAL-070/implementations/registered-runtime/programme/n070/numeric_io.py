@@ -10,7 +10,12 @@ def array(root,descriptor,max_bytes):
     stream=io.BytesIO(body)
     version=np.lib.format.read_magic(stream)
     need(version in ((1,0),(2,0)),"Bounded primitive NPY format")
-    shape,fortran,dtype=np.lib.format._read_array_header(stream,version,max_header_size=4096)
+    # Use the public, version-specific API; NumPy 2.4 no longer exposes the
+    # private _read_array_header name at np.lib.format. Preserve the same header
+    # limit, supported versions and pre-allocation shape/payload checks below.
+    reader = (np.lib.format.read_array_header_1_0 if version == (1, 0)
+              else np.lib.format.read_array_header_2_0)
+    shape,fortran,dtype=reader(stream,max_header_size=4096)
     count=1
     for n in shape:
         need(type(n)is int and n>0,"Positive array dimension");count*=n

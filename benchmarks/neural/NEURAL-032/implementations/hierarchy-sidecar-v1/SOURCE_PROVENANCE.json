@@ -1,0 +1,82 @@
+{
+  "schema": "neural032-hierarchy-sidecar-source/v1",
+  "task_id": "NEURAL-032",
+  "scope": "source-grounded structural projection and identity join; no authentic sidecar execution",
+  "canonical_task": {
+    "name": "task.json",
+    "bytes": 17272,
+    "sha256": "909f74acd9598d06e0d4081182c65ec3e8defdbd2935b8dc6e2688f068e8ddca"
+  },
+  "understanding": {
+    "name": "understanding.v1.json",
+    "bytes": 13109,
+    "sha256": "aaeabf8cc98927287d59190ebbfd7dafddaf8cecd04f0044bba28f14e5fb1e7b"
+  },
+  "existing_scorer": {
+    "name": "../paired-mae-v1/paired_mae.py",
+    "bytes": 13253,
+    "sha256": "fe56882f7a1d99f1a62df83f35646a800df72734ec34a265f3cbe0eb1c11fc96"
+  },
+  "inspected_original_construction_sources": [
+    {
+      "name": "authoring/delivery-20261105/neural032/private/preparation/PLAN.json",
+      "bytes": 35640,
+      "sha256": "c951560601e6f11d34f3f5069b84e98de1a014c6753b00024e5d7c843009a423"
+    },
+    {
+      "name": "authoring/delivery-20261105/neural032/private/preparation/project.py",
+      "bytes": 6042,
+      "sha256": "f28197d6837337133bf64d9eec12dd3cd5e67bae1808cd61e535b67d00ef4e3e"
+    },
+    {
+      "name": "authoring/delivery-20261105/neural032/private/preparation/restricted_data.py",
+      "bytes": 28705,
+      "sha256": "da8c0756b61dd6c0cc5aa1ea06bb6d90dab34c3f7935f9d59451629ef41a6fdb"
+    }
+  ],
+  "source_roster": {
+    "name": "source_roster.json",
+    "bytes": 7241,
+    "sha256": "4b45c9d09e659f8c060807a03a03a7777acdce36e8969029da1031731da3fdb8",
+    "derivation": "Exactly index0/name/mouse_id/FOV/session/compartment from27 pinned PLAN member descriptors; no payload or observation read."
+  },
+  "scientific_source": {
+    "paper": "https://doi.org/10.1126/science.ads4706",
+    "selected_release": "https://doi.org/10.5281/zenodo.15047046",
+    "release_equivalence_to_article_cited14549129": "not_established"
+  },
+  "recovered_seam": [
+    {
+      "source": "restricted_data.py",
+      "lines": [
+        385,
+        487
+      ],
+      "finding": "Auditor validates mouse/FOV/session against filename, aligned dendrite_ids, typed tokens and per-row namespaced_dendrite_id; typed labels explicitly not verified biological dendrites."
+    },
+    {
+      "source": "project.py",
+      "lines": [
+        43,
+        66
+      ],
+      "finding": "project() calls that auditor but copies only flat member/row/mouse/compartment plus numeric features/flags, dropping FOV/session/dendrite identity from historical export."
+    }
+  ],
+  "unchanged_export": {
+    "bytes": 477396,
+    "sha256": "4f095339e7b60f647f0d977d3713e72e373a2e397ce579fa451ba04ed23164a6",
+    "body_read_in_this_work": false,
+    "source_members": 27,
+    "rows": 1143,
+    "mice": 20
+  },
+  "authority_limits": [
+    "All helpers are operator-construction functions, not authenticators or participant interfaces.",
+    "Exact source closure and unchanged observation export must be authenticated before any real call.",
+    "No source dictionary, observation array, label list or private grade was read; no pickle imported/deserialized.",
+    "The helper supports narrow standard scalar spellings; unrecognized source classes/dtypes refuse instead of coercing. Authentic token-type support is not yet measured.",
+    "No primary estimand, matching, multiplicity, chronology, readiness or central authority change.",
+    "No authentic-data/model/scientific run, web request, source download or dependency install. Two bounded generated-software test attempts are recorded separately."
+  ]
+}

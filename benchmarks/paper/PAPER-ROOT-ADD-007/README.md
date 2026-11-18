@@ -53,11 +53,14 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
 - [fig1 position source recovery v1](docs/fig1-position-source-recovery-v1.md)
+- [Replay active-source recovery](docs/replay-active-source-recovery-v1.md)
 
 ## Implementation artifacts
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Declared four-mouse sequence clustering and descriptive counts, prospective matched-phase template recurrence, and separate Poisson trajectory replay primitives. Native safe conversion and cell identities, waveform/rate-map normalization, Skaggs selectivity, full figure replay, authentic references, rights and protected evaluation remain held. Template recurrence does not establish native spatial replay; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Replay source statistics v1](implementations/replay-source-statistics-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Fig1 position scoring v1](implementations/fig1-position-scoring-v1) — Reviewed source component.
   Scope: Recovered Figure 1 position scoring. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

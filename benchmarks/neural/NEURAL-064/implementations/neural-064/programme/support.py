@@ -68,7 +68,14 @@ def support_tables(membership,events,dispositions):
         strata=(row['mouse'],row['session'],row['container'],row['condition'],row['image'],native,lifetime,
                 row['within_session_history'],row['pre_running_bin'],row['pre_pupil_bin'],row['outcome_status'],row['neural_support'])
         joint[strata]+=1;event_counts[row['condition']]+=1;per_experiment[eid]+=1
-        signature=('retained',)+tuple(repr(row.get(k)) for k in ('condition','image','native_image_novel','lifetime_image_count','within_session_history','pre_running_bin','pre_pupil_bin','outcome_flags'))
+        # Every behavioral field used by overlap_profiles must agree across
+        # simultaneous imaging planes. Otherwise first-plane iteration order
+        # silently selects a different matching/support population. Neural
+        # support and container identity remain plane-specific.
+        signature=('retained',)+tuple(repr(row.get(k)) for k in (
+            'condition','image','native_image_novel','lifetime_image_count','lifetime_count_status',
+            'session_order','change','within_session_history','pre_running_bin','pre_pupil_bin',
+            'outcome_status','outcome_flags'))
         if behavior_join(behavior_key,signature):overlap_rows.append(row);unique_condition[row['condition']]+=1
     for row in dispositions:
         eid,behavior_key=event_join(row);reason=_identifier(row['reason'])

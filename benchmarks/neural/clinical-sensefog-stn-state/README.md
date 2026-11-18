@@ -38,6 +38,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
+- [Signal packets v1](implementations/signal-packets-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Recording lag controls](implementations/recording-lag-controls) — Recording lag controls.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Primary scoring v1](implementations/primary-scoring-v1) — Reviewed source component.

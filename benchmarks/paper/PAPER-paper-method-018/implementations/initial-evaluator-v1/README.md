@@ -20,3 +20,5 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 ```
 
 This package does not train a model, load author checkpoints/pickles, download Allen data, or redistribute author code. Native source-interface, split, encoder-layout, figure-reference, rights and population-validation holds remain explicit. Target-conditioned reconstruction is not blind forecasting. All controls are generated engineering data; no authentic reproduction, causal connectivity, scientific qualification or benchmark acceptance is established.
+
+Artifact commitments now bind the exact byte snapshots used by the evaluator. Each manifest is parsed and hashed from one capture; each NPZ is hashed before decoding the same in-memory bytes. Replacing a pathname after capture cannot change the score or its reported manifest commitments. Changed content present at capture still fails the declared digest. This adds temporary memory for the compressed NPZ snapshot during decoding; it does not establish a protected filesystem, a complete deployment resource envelope, or authentic scientific qualification.

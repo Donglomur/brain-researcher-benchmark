@@ -1,7 +1,8 @@
-# Original NoMAD monkey-panel metadata
+# Original NoMAD panel metadata and human publication references
 
-This component prepares the original relative-session calendar and complete
-directed-pair identities from the publisher's source-data workbook. It supplies
+The `panel_metadata.py` extractor prepares the original relative-session
+calendar and complete directed-pair identities from the publisher's source-data
+workbook. It supplies
 previously missing input identities for both paper reproduction and improvement
 on the same task. Those remain separate outcomes; neither is evaluated here.
 
@@ -60,13 +61,15 @@ addresses are retained as formatting metadata. Populated extra columns refuse;
 they are never silently discarded. This distinction was found by authentic
 source execution and is covered by a generated regression.
 
-Column E contains published results. XML package bytes necessarily contain
-those cells, but the program does not decode their values, convert them to
-numbers, retain them in its output or compute scores. There are no neural
-recordings, private targets, published score arrays or author software bundled
-in this component. `parse_workbook` is a structural parser for generated
-controls; only `prepare_source_roster` authenticates the pinned publication
-body. These functions are trusted operator utilities, not a candidate sandbox.
+Column E in the Figure 3/4 monkey sheets contains published results. XML
+package bytes necessarily contain those cells, but `panel_metadata.py` does not
+decode their values, convert them to numbers, retain them in its output or
+compute scores. Its metadata-only output contains no neural recordings, private
+targets, published score arrays or author software. The later human publication
+reference files described below have a separate scope. `parse_workbook` is a
+structural parser for generated controls; only `prepare_source_roster`
+authenticates the pinned publication body. These functions are trusted operator
+utilities, not a candidate sandbox.
 
 ## Evidence and remaining scope
 
@@ -97,6 +100,32 @@ admitted data access and rights; this extractor neither supplies nor clears
 the restricted original software. No reproduction result, improvement, SOTA
 claim or ready benchmark is established.
 
-The independent extractor contains no copied original-software bodies. Raw
-publisher files and extraction outputs stay operator-owned and outside Git;
-their applicable source terms remain separate from repository code licensing.
+The independent extractor contains no copied original-software bodies. The raw
+publisher workbook, neural recordings and runtime preparation inputs and outputs
+(including `panel_metadata.py` outputs) remain operator-owned and outside Git.
+The versioned human publication-reference JSON files below are separate source
+evidence retained in the repository. Applicable source terms remain separate
+from repository code licensing.
+
+## Human Figure 5 source evidence
+
+[HUMAN_PANEL_FINDING.json](HUMAN_PANEL_FINDING.json) records the initial
+metadata-only inspection of the human Figure 5 worksheet. It established the
+published table layout and literal labels. Numeric Timestamp and R² values
+were not extracted or evaluated **in that initial inspection**; its historical
+no-extraction flags do not describe the later reference recovery.
+
+A later, separate publication-reference recovery is retained in
+[HUMAN_REFERENCE_CELLS.json](HUMAN_REFERENCE_CELLS.json): 72 published R² cells
+and 18 Timestamp cells, preserving their XML-character lexical values and
+source addresses. [HUMAN_REFERENCE_BINDING.json](HUMAN_REFERENCE_BINDING.json)
+links the four method columns—Static decoder, RTI, NoMAD and NoMAD + RTI—to the
+original Figure 5 intended-cursor-velocity endpoint. These are publisher-reported
+reference values, not newly computed author outputs or reproduced results.
+
+The published rows do not establish raw recording or block identities, timestamp
+units, calibration roles or first-evaluation assignments. Original chronology,
+movement-window support and both scientific outcomes remain unresolved. The
+human references support an original companion reproduction obligation; they
+do not replace the separate monkey force/reaching comparison or establish
+improvement, SOTA performance or benchmark readiness.

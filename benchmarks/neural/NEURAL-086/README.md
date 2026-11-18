@@ -43,6 +43,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Zuco2 neural085 086 complete v1](../../shared/zuco2/zuco2-neural085-086-complete-v1) — Shared task programme.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Released summary response v1](implementations/released-summary-response-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Paired support v2](implementations/paired-support-v2) — Reviewed source component.
   Scope: Paired word support scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

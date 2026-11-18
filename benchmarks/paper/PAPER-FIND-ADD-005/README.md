@@ -60,6 +60,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prospective within-cell dentate encoding from exported spike/event/eye/history trials through source-informed binning and event kernels, paired ridge Poisson models, nested contiguous trial-block fitting and held-out likelihoods. The implemented contrast is gap-direction encoding conditional on event/eye/history/saccade terms; direct attention and behavioral decoding remain unresolved. Authentic MAT/population reconciliation, native hierarchical MATLAB model parity, figure targets, protected evaluation and scientific qualification remain held. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Decoder score replay v1](implementations/decoder-score-replay-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Source score replay v1](implementations/source-score-replay-v1) — Reviewed source component.
   Scope: Source predictive-likelihood replay. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

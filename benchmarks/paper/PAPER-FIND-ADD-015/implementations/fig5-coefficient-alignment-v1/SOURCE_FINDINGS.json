@@ -1,0 +1,60 @@
+{
+  "schema_version": "opto-fig5-coefficient-source-findings/v1",
+  "task_id": "PAPER-FIND-ADD-015",
+  "scope": "Conditional source semantics and a structural coefficient-join diagnostic; no historical runtime, authentic fit, reproduction or improvement qualification.",
+  "retained_author_sources": [
+    {
+      "deposit": "https://zenodo.org/records/13851356",
+      "member": "IOfunction-PNAS-2024/IO-fig5-variability.ipynb",
+      "retained_transform": "Code+markdown source only with cell labels; outputs omitted; not executed",
+      "transformed_bytes": 15227,
+      "transformed_sha256": "6d237a00b9d2407eebfe393257c6336e69b2e42a12715b7fbbfee1b6415586f8",
+      "cells": [
+        4,
+        7,
+        8,
+        9,
+        12,
+        13,
+        29,
+        30,
+        31
+      ]
+    },
+    {
+      "deposit": "https://zenodo.org/records/13851356",
+      "member": "IOfunction-PNAS-2024/environment/environment.yml",
+      "retained_bytes": 302,
+      "retained_sha256": "f6e29e753df4958c046cd04ab1a4b80230dc79df06fa3012e6c463e6153c346a",
+      "finding": "Python3.9 is specified; pymer4, lme4/lmerTest, NumPy, pandas and SciPy versions are not frozen."
+    }
+  ],
+  "official_api_observations": [
+    {
+      "url": "https://github.com/ejolly/pymer4/blob/v0.8.2/pymer4/models/Lmer.py",
+      "observed_version_label": "v0.8.2",
+      "locator": "Lmer.fit cluster-level coefficient extraction and separate random-deviation extraction",
+      "finding": "fixef is constructed from R coef(model); ranef is separately constructed from R ranef(model). The inspected fit signature defaults REML=True.",
+      "evidence_type": "Hosted primary source inspected through browser tool; raw body/commit not independently authenticated; not a claim this version generated the paper."
+    },
+    {
+      "url": "https://lme4.github.io/lme4/reference/merMod-class.html",
+      "observed_version_label": "1.1-37.9000",
+      "locator": "S3 methods: coef",
+      "finding": "coef combines population and group-deviation coefficients.",
+      "evidence_type": "Current official reference semantics, not the historical paper runtime."
+    }
+  ],
+  "new_source_resolution": {
+    "intercept_branches": "If the inspected API semantics apply, notebook cell9 adds the population intercept to a conditional intercept that already includes it. Preserve literal notebook algebra and conditional-model algebra as separate declared branches; do not silently repair either.",
+    "variance_limit": "A common population-intercept offset does not alter within-group intercept differences or variance in exact arithmetic. This source observation alone does not refute the biological variability claim.",
+    "identity_join": "pd.unique(df.basef) de-duplicates numeric values and does not join coefficients by cell identity. Shared values across distinct cells and differing source row orders must be retained and checked explicitly.",
+    "support_axis": "Cell4 concatenates paired and spontaneous preceding-activity arrays on the default first axis. If their axes are cell-by-trial, subsequent indexing by original cell selects the paired block. This conditional source inference is not an authenticated statement of the unreopened array shapes."
+  },
+  "component_boundaries": [
+    "Exports, cell coordinates, conditional/random fit provenance and full original cohort remain operator prerequisites.",
+    "The diagnostic validates exact typed-cell joins relative only to a supplied roster and reports both algebraic branches plus residuals without an acceptance tolerance.",
+    "No R/pymer4/NumPy import, fitting, authentic array/pickle loading, candidate evaluation, scientific score, primary contract mutation or readiness promotion.",
+    "Figure5 source selection, baseline and fit semantics, animal/experiment joins, FigureS13 randomization/refit protocol and same-result superiority criterion remain unresolved."
+  ]
+}

@@ -5,6 +5,7 @@ No author-cleaned epoch, response-locked data, resampling or query fit is suppor
 """
 from dataclasses import dataclass
 import math
+import operator
 
 HZ = 1024
 CHANNEL_COUNT = 32
@@ -17,6 +18,7 @@ CHUNK = HZ
 
 @dataclass(frozen=True)
 class Schedule:
+    # Absolute acquisition sample numbers, not Raw.get_data array offsets.
     session_start: int
     onset: int
     start: int
@@ -36,6 +38,8 @@ def schedule(session_start, onset):
 def response_at_or_before_deadline(first_response_sample, plan):
     if type(plan) is not Schedule or type(first_response_sample) is not int:
         raise ValueError("verified original response sample required")
+    if plan != schedule(plan.session_start, plan.onset):
+        raise ValueError("exact fixed schedule")
     if first_response_sample < plan.onset:
         raise ValueError("response pairing precedes its stimulus")
     return 10 * first_response_sample <= plan.deadline_numerator
@@ -53,11 +57,44 @@ def advance(state, row):
     return tuple((1.0 - ALPHA) * old + ALPHA * (value - common)
                  for old, value in zip(state, row))
 
+def _sample_integer(value, name):
+    """Accept index integers (including reader integer scalars), never booleans."""
+    if isinstance(value, bool):
+        raise ValueError(name + " must be an integer sample coordinate")
+    try:
+        return operator.index(value)
+    except TypeError:
+        raise ValueError(name + " must be an integer sample coordinate") from None
+
+
+def _raw_grid(raw, plan):
+    """Bind an admitted whole-acquisition reader to the absolute sample schedule.
+
+    MNE get_data start/stop are zero-based offsets into available data; event
+    sample numbers may include first_samp. Requiring the separately supplied
+    acquisition start prevents silently treating a later crop as filter history.
+    This consistency check cannot authenticate a caller's claimed acquisition.
+    """
+    try:
+        first = _sample_integer(raw.first_samp, "raw.first_samp")
+        count = _sample_integer(raw.n_times, "raw.n_times")
+    except AttributeError:
+        raise ValueError("reader must expose first_samp and n_times") from None
+    if first != plan.session_start:
+        raise ValueError("reader start differs from original acquisition start")
+    if count <= 0 or plan.stop > first + count:
+        raise ValueError("reader lacks complete acquisition-start through deadline support")
+    return first
+
+
 def produce_prefix(raw, eeg_indices, plan, max_native_samples):
     """Consume a future admitted MNE Raw object via its real get_data interface.
 
     raw must already be the unfiltered original acquisition with independently
-    validated channel/time identity. This is a downstream component, not that
+    validated channel/time identity. Schedule fields are absolute acquisition
+    sample numbers; the reader must start at the independently declared original
+    session_start. MNE get_data uses offsets relative to raw.first_samp.
+    This is a downstream component, not that
     missing admission/decoder/event producer. A native reader may read physical
     blocks beyond logical slices; physical I/O and timing remain qualification.
     """
@@ -74,6 +111,7 @@ def produce_prefix(raw, eeg_indices, plan, max_native_samples):
         raise ValueError("verified ordered EEG-only channel indices required")
     if float(raw.info["sfreq"]) != HZ:
         raise ValueError("native1024 only; neither saved512 nor suggested100")
+    first_samp = _raw_grid(raw, plan)
     state = (0.0,) * CHANNEL_COUNT
     captured = []
     attempted = 0
@@ -82,7 +120,8 @@ def produce_prefix(raw, eeg_indices, plan, max_native_samples):
         attempted += (end - begin) * CHANNEL_COUNT
         # Charge before the call; preserve the actual first native exception.
         try:
-            block = raw.get_data(picks=list(eeg_indices), start=begin, stop=end)
+            block = raw.get_data(picks=list(eeg_indices),
+                                 start=begin - first_samp, stop=end - first_samp)
         except BaseException as error:
             try:
                 error.add_note("N003 attempted logical scalar reads=" + str(attempted)

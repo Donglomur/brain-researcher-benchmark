@@ -39,7 +39,7 @@ Complete source-produced files are checked for exact closure, hashes, strict JSO
 
 On timeout, process failure or invalid output, private partial artifacts are retained within the declared native-payload retention limit, with full source lengths/hashes and explicit prefix truncation where necessary. Already copied native files are counted without duplicate retention. Streams retain at most 1 MiB each with hashes and extent metadata. Provenance/manifest overhead is separate from the native-payload limit. Limits govern acceptance/retention, not hard disk/RAM/CPU confinement while the native process runs; the owner must supply its separate execution controls. Failed runs have no successful completion manifest and are never retried automatically.
 
-The 18 generated Python tests passed. They exercise artifact closure, source and predecessor identity, strict JSON/PNG, ordered source lineage, limits, and mocked process/publication failure paths. They use invented fixtures, including placeholder native-RDS bytes, and never invoke R. The separate R suite uses generated model objects and asymmetric matrices to check native field extraction, RDS/CSV/JSON preservation, nonfinite states, names/dimensions, sample-size distinctions and no-overwrite behavior; it calls no estimator and loads no scientific package. R tests and parse checks remain **unexecuted** because no Rscript was found on PATH or the three previously checked standard paths. No runtime was installed or container started.
+The original 18 generated Python tests passed before this revision. This revision adds seven methods (25 total). The first local run passed six new methods plus two affected bundle/pipeline controls. Independent review then identified an integer-storage edge case; after its correction, a second run passed the new integer-domain method and two affected semantic methods. Nine distinct methods passed across the two revisions, with three targeted methods run on the final integer correction. The other 16 historical methods were not rerun locally and remain required by CI. They exercise artifact closure, source and predecessor identity, strict JSON/PNG, ordered source lineage, limits, and mocked process/publication failure paths. They use invented fixtures, including placeholder native-RDS bytes, and never invoke R. The separate R suite uses generated model objects and asymmetric matrices to check native field extraction, RDS/CSV/JSON preservation, nonfinite states, names/dimensions, sample-size distinctions and no-overwrite behavior; it calls no estimator and loads no scientific package. R tests and parse checks remain **unexecuted** because no Rscript was found on PATH or the three previously checked standard paths. No runtime was installed or container started.
 
 ```sh
 python3 -I -B tests/generated_controls.py
@@ -49,3 +49,34 @@ Rscript --vanilla tests/artifact_controls.R /absolute/path/to/nider-primary-comp
 Run construction controls through the shared test pool. Actual native runtime compatibility, original computation, figure/result comparison and scientific admission remain later work, separately reported.
 
 The official source is [NIDER_project at the original commit](https://github.com/MaurizioSicorello/NIDER_project/tree/90e8f324f78701bc3b1a8af3b79685ca91084d05), accompanying [the original article](https://www.nature.com/articles/s41586-026-11203-1). MaurizioSicorello's 2025 MIT notice is retained in the immutable predecessor's `UPSTREAM_LICENSE`; no general source-data redistribution license is inferred. Numerical export keys are independently bound to versioned [meta 7.0-0](https://raw.githubusercontent.com/cran/meta/7.0-0/R/metagen.R), [its original forest renderer](https://raw.githubusercontent.com/cran/meta/7.0-0/R/forest.R), [metaBMA 0.6.9](https://raw.githubusercontent.com/cran/metaBMA/0.6.9/R/meta_bma.R), and [its inclusion calculation](https://raw.githubusercontent.com/cran/metaBMA/0.6.9/R/inclusion.R). Source review does not establish installed package-byte identity.
+
+## Typed companion export validation
+
+The Python completion boundary now checks the numerical export structure declared by
+`native_artifacts.R`, in addition to matching the original source/model identities.
+Every forest vector must retain the complete membership extent, native storage
+type, optional native names, explicit numeric-state tags and declared scale. Raw
+weights cannot be relabeled as percentages, and correlation-scale labels cannot
+replace Fisher-z labels. Altered values with unchanged labels still require an
+independent numerical reference comparison.
+
+The Bayesian export must retain all four positional models, the two original
+effect-inclusion positions, separate scalar inclusion BF10 and 4×4 pairwise BF
+matrix, all native vector dimensions and optional axis names/labels. Missing
+native names, repeated names, NA/NaN and signed infinities remain explicit; the
+checker does not impute, reorder, clip or repair values. Integer storage permits
+explicit NA or finite integral values from −2147483647 through2147483647;
+NaN and signed infinities remain valid only for double storage. This follows the
+R integer representation described in the official
+[integer documentation](https://stat.ethz.ch/R-manual/R-devel/library/base/html/integer.html)
+and [machine characteristics](https://stat.ethz.ch/R-manual/R-devel/library/base/html/zMachine.html).
+Those browser-viewed pages describe the current documentation; installed R4.3.2
+behavior was not executed or independently verified here. The generated controls
+include asymmetric matrix sentinels and malformed/truncated export mutations.
+
+These are typed export checks, not an independent calculation of the Bayesian
+results or agreement with native RDS objects. A valid numerical shape does not
+establish a valid prior, fitted result, cohort independence, scientific
+reproduction or improvement. No native R process or authentic study data is
+required by these generated Python controls. The historical meta-analysis null
+finding and the separately retained Figure5b assessment remain distinct.

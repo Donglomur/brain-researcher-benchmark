@@ -202,5 +202,124 @@ class CompleteImport(unittest.TestCase):
             with self.assertRaises(ValueError): s.read_pinned(roster, "0"*64)
 
 
+class IndexedExport(unittest.TestCase):
+    """New complete-family export controls; no original data or model fits."""
+    @classmethod
+    def setUpClass(cls):
+        cls.roster, cls.bundle = fixture()
+        cls.report = s.evaluate(cls.roster, cls.bundle, include_indexed=True)
+        cls.collections = cls.report["indexed_collections"]["collections"]
+
+    def test_legacy_report_is_unchanged(self):
+        legacy = s.evaluate(self.roster, self.bundle)
+        self.assertEqual({k: v for k, v in self.report.items() if k != "indexed_collections"}, legacy)
+        self.assertNotIn("indexed_collections", legacy)
+        with self.assertRaises(ValueError):
+            s.evaluate(self.roster, self.bundle, include_indexed=1)
+
+    def test_complete_source_keyed_families_and_counts(self):
+        self.assertEqual(len(self.collections), 70)
+        for endpoint, (runs, nulls) in s.ENDPOINTS.items():
+            for member, count in (("observed_run_score", 2*runs), ("null_run_score", 2*nulls*runs),
+                                  ("null_pseudo_run_mean", 2*nulls), ("observed_session_mean", 2),
+                                  ("source_figure_effect", 1)):
+                c = self.collections[endpoint + "." + member]
+                self.assertEqual(len(c["records"]), count)
+                keys = [tuple(row[k] for k in c["record_key_fields"]) for row in c["records"]]
+                self.assertEqual(len(keys), len(set(keys)))
+            self.assertTrue(all(row["pseudo_id"] > 0 for row in self.collections[endpoint+".null_run_score"]["records"]))
+            self.assertEqual({row["run_id"] for row in self.collections[endpoint+".observed_run_score"]["records"]},
+                             set(range(1, runs+1)))
+
+    def test_input_order_does_not_change_indexed_support_or_values(self):
+        roster = dict(self.roster, cells=list(reversed(self.roster["cells"])))
+        bundle = dict(self.bundle, roster_digest=s.digest(roster), records=list(reversed(self.bundle["records"])))
+        self.assertEqual(s.evaluate(roster, bundle, include_indexed=True)["indexed_collections"],
+                         self.report["indexed_collections"])
+
+    def test_endpoint_specific_regions_are_not_rectangularized(self):
+        roster, bundle = fixture()
+        for cell in roster["cells"]:
+            if cell["endpoint"] == "wheel_speed":
+                cell["region"] = "wheel-only-region"
+                cell["unit_ids"] = [u + "-wheel" for u in cell["unit_ids"]]
+        for row in bundle["records"]:
+            if row["endpoint"] == "wheel_speed":
+                row["region"] = "wheel-only-region"
+                if row["pseudo_id"] == -1:
+                    row["unit_ids"] = [u + "-wheel" for u in row["unit_ids"]]
+        bundle["roster_digest"] = s.digest(roster)
+        cols = s.evaluate(roster, bundle, include_indexed=True)["indexed_collections"]["collections"]
+        for endpoint in s.ENDPOINTS:
+            expected = {"wheel-only-region" if endpoint == "wheel_speed" else "generated-region"}
+            self.assertEqual({r["region"] for r in cols[endpoint+".null_run_score"]["records"]}, expected)
+
+    def test_pseudo_run_means_keep_id_and_negative_r2(self):
+        roster, bundle = fixture()
+        for row in bundle["records"]:
+            if row["endpoint"] == "wheel_speed" and row["eid"] == "generated-eid-0" and row["pseudo_id"] == 1:
+                row["score"] = -3.0 if row["run_id"] == 1 else 1.0
+        cols = s.evaluate(roster, bundle, include_indexed=True)["indexed_collections"]["collections"]
+        records = cols["wheel_speed.null_pseudo_run_mean"]["records"]
+        selected = [r for r in records if r["eid"] == "generated-eid-0" and r["pseudo_id"] == 1]
+        self.assertEqual(len(selected), 1)
+        self.assertEqual(selected[0]["value"], -1.0)
+        untouched = [r for r in records if r["eid"] == "generated-eid-1" and r["pseudo_id"] == 1]
+        self.assertEqual(untouched[0]["value"], 0.0)
+
+    def test_recorded_observed_value_is_not_silently_replaced(self):
+        roster, bundle = fixture()
+        bundle["records"][0]["score"] = 1.0 - 1e-11
+        cols = s.evaluate(roster, bundle, include_indexed=True)["indexed_collections"]["collections"]
+        row = cols["stimulus_side.observed_run_score"]["records"][0]
+        self.assertEqual(row["value"], 1.0 - 1e-11)
+        self.assertEqual(row["recomputed_value"], 1.0)
+        self.assertEqual(cols["stimulus_side.observed_session_mean"]["records"][0]["value"], 1.0)
+
+    def test_summary_fields_keep_existing_values_and_boolean_type(self):
+        for old in self.report["sessions"]:
+            for member, field in (("observed_session_mean", "real_score"),
+                                  ("source_median_including_observed", "source_median_including_observed"),
+                                  ("paper_null_only_median", "paper_null_only_median"),
+                                  ("paper_corrected_score", "paper_corrected_score"),
+                                  ("source_session_p", "source_session_p")):
+                rows = self.collections[old["endpoint"]+"."+member]["records"]
+                row = next(r for r in rows if (r["eid"], r["region"]) == (old["eid"], old["region"]))
+                self.assertEqual(row["value"], old[field])
+        for old in self.report["regions"]:
+            for member in ("source_figure_effect", "paper_text_effect", "source_fisher_p", "source_bh_q",
+                           "source_fraction_significant_sessions", "source_significant"):
+                row = next(r for r in self.collections[old["endpoint"]+"."+member]["records"]
+                           if r["region"] == old["region"])
+                self.assertEqual(row["value"], old[member])
+                if member == "source_significant":
+                    self.assertIs(type(row["value"]), bool)
+
+    def test_indexed_mode_cannot_bypass_original_validation(self):
+        for records in (self.bundle["records"][:-1], self.bundle["records"] + [self.bundle["records"][-1]]):
+            with self.assertRaises(ValueError):
+                s.evaluate(self.roster, dict(self.bundle, records=records), include_indexed=True)
+        bundle = dict(self.bundle, roster_digest="0"*64)
+        with self.assertRaises(ValueError):
+            s.evaluate(self.roster, bundle, include_indexed=True)
+
+    def test_units_match_declared_reproduction_members(self):
+        declaration = json.loads((MODULE.parents[2] / "reproduction.v2.json").read_text())
+        declared = {member["manifest_key"]: member["units"]
+                    for family in declaration["findings"]
+                    for member in family.get("representation", {}).get("members", [])}
+        self.assertEqual(set(self.collections), set(declared))
+        self.assertEqual({key: value["units"] for key, value in self.collections.items()}, declared)
+
+    def test_no_mutation_or_authentication_claim(self):
+        before = s.digest({"roster": self.roster, "bundle": self.bundle})
+        report = s.evaluate(self.roster, self.bundle, include_indexed=True)
+        self.assertEqual(before, s.digest({"roster": self.roster, "bundle": self.bundle}))
+        self.assertFalse(report["indexed_collections"]["full_contract_complete"])
+        self.assertEqual(report["indexed_collections"]["scientific_qualification"], "unknown")
+        self.assertIn("not rescored or authenticated", report["indexed_collections"]["null_score_verification"])
+        self.assertEqual(self.collections["choice.null_run_score"]["value_role"], "recorded_source_scalar_not_rescored")
+
+
 if __name__ == "__main__":
     unittest.main()

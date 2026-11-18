@@ -299,7 +299,6 @@ def manifest(raw, roster):
             require(len(r["channels"][h]) <= 512, "engineering channel ceiling; never subsample")
         ids(r["trial_ids"], 2)
         y = vector(r["fast_pupil"], len(r["trial_ids"]))
-        require(variance(y) > 0, "constant full-session fast pupil")
         support[r["id"]] = r
         pupil[r["id"]] = y
     included, diagnostics = [], {}
@@ -319,6 +318,10 @@ def manifest(raw, roster):
     normalized = {}
     for s in included:
         y, m, sd = pupil[s], mean(pupil[s]), math.sqrt(variance(pupil[s]))
+        # The original driver applies its complete-cohort variance fence first.
+        # An excluded constant session still belongs to the42 neural models,
+        # but never needs a pupil z-score. Retained constants remain invalid.
+        require(sd > 0, "constant retained pupil target: no invented z-score")
         normalized[s] = [(v - m) / sd for v in y]
     return support, included, normalized, diagnostics
 

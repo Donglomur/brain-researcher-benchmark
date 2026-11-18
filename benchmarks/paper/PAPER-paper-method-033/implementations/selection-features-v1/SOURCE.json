@@ -1,0 +1,72 @@
+{
+  "schema": "mindbridge-selection-features-source/v1",
+  "task_id": "PAPER-paper-method-033",
+  "scope": "Offline operator selection-token producer only; all original48finding cells unchanged",
+  "files": {
+    "selection_features.py": {
+      "bytes": 7629,
+      "sha256": "749b32e97cdb346ab00717be0b6faf7ab6806bdc430198ac8087219fa71207f6"
+    },
+    "README.md": {
+      "bytes": 3591,
+      "sha256": "570c01ffc329283f9f0838c20b469ac8886a9b6399e0964c6b7f786a32dd2429"
+    },
+    "tests/test_selection_features.py": {
+      "bytes": 13480,
+      "sha256": "badf0b354e6920e4da2f58f48ec32b0040dcb42ff5803138d0bc1fd3883d50a5"
+    }
+  },
+  "source_evidence": [
+    {
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/models.py",
+      "locators": "Clipper, lines29-107",
+      "finding": "hidden-state preprocessing, post-layernorm/projection and common CLS-norm scaling",
+      "retrieval": "official web text observed; no new raw-byte identity claimed"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/recon.py",
+      "locators": "prepare_CLIP, lines83-90",
+      "finding": "ViT-L/14 with hidden_state=True,norm_embs=True",
+      "retrieval": "official web text observed"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/utils.py",
+      "locators": "reconstruction, lines227-243",
+      "finding": "candidate pixels castfloat32 before selection extraction; target features separate; chosen common image",
+      "retrieval": "official web text observed"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/pytorch/vision/v0.15.2/torchvision/transforms/transforms.py",
+      "locators": "Resize, lines261-332",
+      "finding": "integer shorter edge; antialiasNone isFalse for tensor inputs",
+      "retrieval": "official web text observed"
+    }
+  ],
+  "existing_component_bindings": [
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-033/implementations/source-protocol-v2/source_protocol.py",
+      "bytes": 7260,
+      "sha256": "9a84d3938071bf57b9e0f6f7675fac023f343f5218a5d051aeabcf38cb2f9d2b"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-033/implementations/original-panel-v1/SOURCE.json",
+      "bytes": 1396,
+      "sha256": "87e936a70518907c81ae48df91148507c15b318d0ff1b11f70d80779c04cf364"
+    }
+  ],
+  "author_runtime": {
+    "torch": "2.0.1",
+    "torchvision": "0.15.2",
+    "transformers": "unresolved; explicit installedversion required, not historicalclaim"
+  },
+  "operator_admission_required": [
+    "Originalcompleteweights/configuration/sourceversion",
+    "All candidate images fixed before targetfeature access",
+    "Full original gallery/calibration identities",
+    "Separate source-runtime/device numerical qualification"
+  ],
+  "test_scope": "14 generated NumPy-backed doubles, no actualTorch/modeltransform/nativefeatures",
+  "authentic_data_execution": false,
+  "native_model_execution": false,
+  "scientific_qualification": false
+}

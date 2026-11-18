@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Decoded calcium frames to fixed trial/position packets, a prospective animal-disjoint train-only neural decoder and matched movement/position comparator, mouse-macro phase log loss/balanced accuracy, and paired mouse uncertainty. Original-NPY intake/export equality, complete source population and alignment, position units, anatomical pooling validity, rights and protected scientific qualification remain held. Shared source family with PAPER-FIND-REP-007 is not an independent cohort.
+- [Exposure matched reference v1](implementations/exposure-matched-reference-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Direct packets v1](implementations/direct-packets-v1) — Reviewed source component.
   Scope: NEURAL-027 direct numeric packets. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

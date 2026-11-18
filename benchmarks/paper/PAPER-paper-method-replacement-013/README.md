@@ -101,6 +101,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Scientific contract](implementations/scientific-contract) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Paired generation admission v1](implementations/paired-generation-admission-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Native behavior truth v1](implementations/native-behavior-truth-v1) — Reviewed source component.
   Scope: Native behavior truth issuance. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

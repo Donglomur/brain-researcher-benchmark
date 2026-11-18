@@ -53,6 +53,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Audits the complete CSI1 BOLD5000-QA inventory and image/person aliases, projects separate neural/zero/shuffled inference packets, and scores every declared structured QA answer. Native NPY conversion, actual stimulus identity, question-text leakage, genuine model provenance, protected runtime, source test-informed selection differences, broader person/stimulus independence, independently trained text-only baseline and scientific qualification remain open. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Six cell suite v1](implementations/six-cell-suite-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Source scoring v2](implementations/source-scoring-v2) — Reviewed source component.
   Scope: NEURONA source scoring paths. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -203,7 +203,90 @@ def summarize_regions(sessions):
     return output
 
 
-def evaluate(roster, bundle):
+def indexed_collections(cells, indexed, real_by_cell, sessions, regions):
+    """Expose all14 declared scalar families without changing legacy reductions.
+
+    The source-recorded observed score remains the primary leaf value; its
+    independently recomputed value is retained beside it because acceptance uses
+    a floating-point tolerance. Null leaves are source-recorded scalars only.
+    These keys describe the supplied roster, not authenticated paper membership.
+    """
+    session_members = {
+        "observed_session_mean": "real_score",
+        "source_median_including_observed": "source_median_including_observed",
+        "paper_null_only_median": "paper_null_only_median",
+        "paper_corrected_score": "paper_corrected_score",
+        "source_session_p": "source_session_p",
+    }
+    region_members = (
+        "source_figure_effect", "paper_text_effect", "source_fisher_p",
+        "source_bh_q", "source_fraction_significant_sessions", "source_significant",
+    )
+    collections = {}
+    for endpoint in ENDPOINTS:
+        score_unit = "balanced accuracy fraction" if ENDPOINTS[endpoint][0] == 10 else "R-squared"
+        shapes = {
+            "observed_run_score": (["eid", "region", "run_id"], "recorded_source_score_with_prediction_recheck"),
+            "null_run_score": (["eid", "region", "pseudo_id", "run_id"], "recorded_source_scalar_not_rescored"),
+            "null_pseudo_run_mean": (["eid", "region", "pseudo_id"], "derived_from_recorded_null_scores"),
+        }
+        shapes.update({name: (["eid", "region"], "derived_session_summary") for name in session_members})
+        shapes.update({name: (["region"], "derived_regional_summary") for name in region_members})
+        for name, (keys, role) in shapes.items():
+            units = ("boolean" if name == "source_significant" else
+                     "probability" if name in ("source_session_p", "source_fisher_p", "source_bh_q") else
+                     "fraction" if name == "source_fraction_significant_sessions" else score_unit)
+            collections[endpoint + "." + name] = {
+                "record_key_fields": keys, "units": units, "value_role": role, "records": []}
+
+    def append(endpoint, name, row, value, **extra):
+        collection = collections[endpoint + "." + name]
+        collection["records"].append({**{key: row[key] for key in collection["record_key_fields"]},
+                                      "value": value, **extra})
+
+    for key, cell in sorted(cells.items()):
+        endpoint, eid, region = key
+        runs, n_null = ENDPOINTS[endpoint]
+        identity = {"eid": eid, "region": region}
+        source_records = indexed[key]
+        for run in range(1, runs + 1):
+            append(endpoint, "observed_run_score", dict(identity, run_id=run),
+                   number(source_records[-1, run]["score"]),
+                   recomputed_value=real_by_cell[key][run - 1])
+        for pseudo in range(1, n_null + 1):
+            values = []
+            for run in range(1, runs + 1):
+                value = number(source_records[pseudo, run]["score"])
+                values.append(value)
+                append(endpoint, "null_run_score", dict(identity, pseudo_id=pseudo, run_id=run), value)
+            append(endpoint, "null_pseudo_run_mean", dict(identity, pseudo_id=pseudo),
+                   math.fsum(values) / runs)
+    for row in sessions:
+        for name, field in session_members.items():
+            append(row["endpoint"], name, row, row[field])
+    for row in regions:
+        for name in region_members:
+            append(row["endpoint"], name, row, row[name])
+    for collection in collections.values():
+        fields = collection["record_key_fields"]
+        collection["records"].sort(key=lambda row: tuple(row[field] for field in fields))
+        keys = [[row[field] for field in fields] for row in collection["records"]]
+        require(len(keys) == len({tuple(key) for key in keys}), "duplicate indexed output identity")
+        collection["support_digest"] = digest({"record_key_fields": fields, "keys": keys})
+    return {
+        "schema": "brainwide-decoder-indexed-collections/v1",
+        "collections": collections,
+        "coverage_basis": "complete supplied validated roster; original cohort authentication unresolved",
+        "observed_score_recheck": {"relative_tolerance": 1e-9, "absolute_tolerance": 1e-10,
+                                  "stored_value_preserved": True},
+        "null_score_verification": "recorded source scalar only; not rescored or authenticated",
+        "scientific_qualification": "unknown",
+        "full_contract_complete": False,
+    }
+
+
+def evaluate(roster, bundle, *, include_indexed=False):
+    require(type(include_indexed) is bool, "include_indexed must be boolean")
     cells = validate_roster(roster)
     require(bundle["schema"] == "brainwide-decoder-formatted-export/v1", "bundle schema mismatch")
     require(bundle["roster_digest"] == digest(roster), "bundle bound to different frozen roster")
@@ -219,7 +302,7 @@ def evaluate(roster, bundle):
         value = number(row["score"])
         require(value <= 1 and (runs != 10 or value >= 0), "score outside metric range")
         indexed[key][pseudo, run] = row
-    sessions = []
+    sessions, real_by_cell = [], {}
     for key, cell in sorted(cells.items()):
         runs, nulls = ENDPOINTS[key[0]]
         records = indexed[key]
@@ -230,18 +313,24 @@ def evaluate(roster, bundle):
             real.append(value)
             target_hashes.add(target_hash)
         require(len(target_hashes) == 1, "real targets changed across CV repetitions")
+        if include_indexed:
+            real_by_cell[key] = real
         null = [[number(records[pseudo, run]["score"]) for run in range(1, runs+1)]
                 for pseudo in range(1, nulls+1)]
         sessions.append({"endpoint": key[0], "eid": key[1], "region": key[2],
                          "subject": cell["subject"], "n_units": len(cell["unit_ids"]),
                          "n_trials": len(cell["trial_ids"]), **summarize_session(real, null)})
-    return {"schema": "brainwide-decoder-score-report/v1", "task_id": "PAPER-FIND-005",
+    report = {"schema": "brainwide-decoder-score-report/v1", "task_id": "PAPER-FIND-005",
             "roster_digest": digest(roster), "bundle_digest": digest(bundle),
             "evidence_kind": roster["evidence_kind"], "sessions": sessions,
             "regions": summarize_regions(sessions), "scored_real_runs": sum(ENDPOINTS[k[0]][0] for k in cells),
             "null_score_verification": "recorded source scalar only; author settings do not save null predictions",
             "qualification": "software_component_only; no source-cohort authentication or paper improvement",
             "profile_adjudication": "unresolved; retain both source_figure_effect and paper_text_effect"}
+    if include_indexed:
+        report["indexed_collections"] = indexed_collections(cells, indexed, real_by_cell,
+                                                            sessions, report["regions"])
+    return report
 
 
 def read_pinned(path, expected):
@@ -257,8 +346,11 @@ def main():
     parser.add_argument("--bundle", type=Path, required=True)
     parser.add_argument("--bundle-sha256", required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--include-indexed", action="store_true",
+                        help="also emit every declared source-keyed scalar quantity family")
     args = parser.parse_args()
-    result = evaluate(read_pinned(args.roster, args.roster_sha256), read_pinned(args.bundle, args.bundle_sha256))
+    result = evaluate(read_pinned(args.roster, args.roster_sha256),
+                      read_pinned(args.bundle, args.bundle_sha256), include_indexed=args.include_indexed)
     with args.output.open("x") as handle:
         json.dump(result, handle, indent=2, allow_nan=False)
         handle.write("\n")

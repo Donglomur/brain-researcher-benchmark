@@ -1,5 +1,7 @@
 # NEURAL-080: complete prospective person/family generalization source
 
+The TRAIN-scale integration repair applies the existing stable population-sigma algorithm to both reference fitting and protected scorer reconstruction. All 19,050 target coordinates and biological weights remain. Earlier reference/scale captures require reconstruction under the new source identity; no authentic execution or qualification is implied. See `../../stable-target-scale-v1/README.md`.
+
 V2 repairs independent finding N080-W02: the actual campaign now requires the supplied FULL decoder and generic candidate to share memory, per-file, scratch, descriptor, process and thread capacities, plus seed and monitoring/cleanup policy, before any reference launch. The complete seven-arm reference keeps its separate explicit additive and capture allowances. All scientific scope and empirical gates remain unchanged. This public snapshot preserves the accepted source repair; scientific, authentic-input and native qualification remain open. See PUBLICATION_SCOPE.md for release boundaries.
 
 This package implements the selected full EEG video-dynamics investigation. It is an inactive source checkpoint, not an empirical result, qualified reference, newly registered task, fresh evaluation, or authorization to acquire study assets or run native scientific work. The source phase acquired ordinary primary literature and official API source only. No authentic recording, recording header, stimulus, model weight, fitted model, candidate or numerical benchmark was executed or acquired.

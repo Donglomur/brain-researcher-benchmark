@@ -6,6 +6,7 @@ import sys
 import shutil
 from .common import need, load, read, pin, put, relative, digest
 from .spec import PEOPLE, DIMS, DOMAIN
+from .source_identity import validate_roster
 
 
 def extract(admission, source_root, image_root, output, execution_selection):
@@ -15,7 +16,13 @@ def extract(admission, source_root, image_root, output, execution_selection):
     need(len(admission['derivatives']) == 64 and sum(x['kind'] == 'FIF' for x in admission['derivatives']) == 16 and
          sum(x['kind'] == 'EYE_CSV' for x in admission['derivatives']) == 48, 'All original 16+48 derivative objects')
     need(len(admission['images']) == 22248, 'All original authentic images')
-    root = Path(source_root); images = Path(image_root); out = Path(output); out.mkdir(exist_ok=False)
+    root = Path(source_root); images = Path(image_root); out = Path(output)
+    relative(admission['roster']['path'])
+    rows = load(root / admission['roster']['path'], 64 << 20,
+                {k: admission['roster'][k] for k in ('bytes', 'sha256')})
+    # Enforce the reviewed shared-image join before native imports or output creation.
+    validate_roster(rows, images=admission['images'])
+    out.mkdir(exist_ok=False)
     for record in admission['derivatives']:
         relative(record['path'])
     # Native imports occur only beyond separately selected authentic admission.
@@ -25,7 +32,6 @@ def extract(admission, source_root, image_root, output, execution_selection):
     import extract as inherited
     import delivery_io as legacy_io
     import array_io
-    rows = load(root / admission['roster']['path'], 64 << 20, {k: admission['roster'][k] for k in ('bytes', 'sha256')})
     need(len(rows) == 108192, 'Complete original source trial dispositions')
     experimental = [r for r in rows if r['trial_type'] == 'exp']
     experimental.sort(key=lambda r: (PEOPLE.index(r['person']), r['epoch_index']))

@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Stable deviance integration v1](implementations/stable-deviance-integration-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Stable deviance v1](implementations/stable-deviance-v1) — Reviewed source component.
   Scope: Stable Poisson deviance component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

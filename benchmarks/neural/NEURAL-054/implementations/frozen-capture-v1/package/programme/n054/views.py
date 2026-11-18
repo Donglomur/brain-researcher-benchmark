@@ -6,6 +6,7 @@ from collections import Counter
 import hmac
 from pathlib import Path
 from .common import need, digest, load, read, pin, probabilities, number, verify
+from .source_identity import validate_roster
 from .spec import PEOPLE, LABELS, WINDOWS, FAMILIES, DIMS, DOMAIN, INERT, cases, slots, concept_group, bucket
 
 
@@ -45,8 +46,13 @@ class FeatureIssuer:
         need(admission['release_bridge']['status'] == 'QUALIFIED' and
              admission['clock_geometry']['status'] == 'QUALIFIED' and
              admission['preprocessing']['status'] == 'QUALIFIED', 'Unclosed source/clock/native gates')
+        image_order = admission.get('image_order')
+        need(type(image_order) is list and len(image_order) == 22248,
+             'Complete shared visual row order required before target access')
         self.rows = load(self.root / admission['roster']['path'], 64 << 20,
                          {k: admission['roster'][k] for k in ('bytes', 'sha256')})
+        # Shared identity and visual row order must be valid before target access.
+        self.source_identity = validate_roster(self.rows, image_order=image_order)
         self.annotations = load(self.root / admission['labels']['path'], 4 << 20,
                                 {k: admission['labels'][k] for k in ('bytes', 'sha256')})
         need(self.annotations['names'] == list(LABELS), 'Original 27 categories')
