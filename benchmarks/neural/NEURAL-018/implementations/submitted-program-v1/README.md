@@ -74,7 +74,14 @@ cleanup. Source/input/archive reads reserve 512 MiB plus 1 MiB for independent
 receipt observation; transport host writes reserve 48 MiB. Those are transport
 counters, not complete kernel/daemon/producer I/O. The outer source and grader
 reads are separate and must be included in a future actual resource receipt.
-Capture is not copied again merely to grade it.
+Capture is not copied again merely to grade it. Before grader dispatch, the
+runner streams the committed prediction through SHA-256 on its owned, ordinary,
+single-link descriptor, verifies the unchanged identity, and finalizes only that
+file to 0444. This permits the separate UID 65534 grader to read its individual
+file mount. Quarantine parents stay 0700, private receipts stay private, and the
+generic archive receiver retains its 0600 defaults. Permission finalization
+precedes the prediction commitment and grader; post-grade identity is rechecked.
+This repairs a source-level access mismatch, not an observed native run.
 
 The trusted `grade.py` adapts the original launcher only for operator path/source
 binding and individual file mounts. The original numerical `worker.py`,
@@ -169,4 +176,11 @@ is intercepted; these controls do not launch or qualify a container. Historical
 results above remain historical. Two further controls use the actual program
 commit and transport publishers under umask 077, check complete bytes before
 permission finalization, and verify public 0444, private defaults, parent 0700,
-and unchanged umask. The default suite now contains 25 test methods.
+and unchanged umask. Those historical repairs brought the suite to 25 test methods. Four additional
+controls exercise captured-prediction finalization with real generated file
+modes, digest mismatch, symlink/hardlink/FIFO refusal, and actual completion
+ordering before a scripted grader. The output-mutation control explicitly
+restores owner write permission before its adversarial mutation. The default
+suite now contains 29 methods; this change selects these four new controls and
+the changed output-mutation control, without replaying unrelated controls.
+Generated-file checks do not establish a UID-separated native bind mount.

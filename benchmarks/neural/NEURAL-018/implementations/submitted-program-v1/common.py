@@ -66,6 +66,42 @@ def capture(path, cap, expected=None):
         os.close(fd)
 
 
+def prepare_grader_prediction(path, expected):
+    """Authenticate the stopped capture and make only it readable to UID 65534."""
+    path = ordinary(path)
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    try:
+        before = os.fstat(fd)
+        need(stat.S_ISREG(before.st_mode) and before.st_nlink == 1
+             and before.st_uid == os.geteuid() and 0 < before.st_size <= MAX_OUTPUT,
+             'Owned bounded single-link prediction')
+        digest = hashlib.sha256()
+        count = 0
+        while count <= before.st_size:
+            block = os.read(fd, min(1024**2, before.st_size + 1 - count))
+            if not block:
+                break
+            digest.update(block)
+            count += len(block)
+        identity = {'bytes': count, 'sha256': digest.hexdigest()}
+        need(count == before.st_size and identity == expected,
+             'Frozen prediction identity differs before grader access')
+        need(fingerprint(before) == fingerprint(os.fstat(fd))
+             == fingerprint(os.stat(path, follow_symlinks=False)),
+             'Prediction changed before permission finalization')
+        os.fchmod(fd, 0o444)
+        os.fsync(fd)
+        after = os.fstat(fd)
+        need(fingerprint(before)[:4] == fingerprint(after)[:4]
+             and stat.S_ISREG(after.st_mode) and after.st_nlink == 1
+             and after.st_uid == os.geteuid() and stat.S_IMODE(after.st_mode) == 0o444
+             and fingerprint(after) == fingerprint(os.stat(path, follow_symlinks=False)),
+             'Exact prediction descriptor and public mode after finalization')
+        return identity
+    finally:
+        os.close(fd)
+
+
 def publish(path, body, mode=0o400):
     path = ordinary(path)
     fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, mode)

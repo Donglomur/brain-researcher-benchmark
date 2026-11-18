@@ -311,6 +311,7 @@ class Controls(unittest.TestCase):
             calls.append(action)
             test.assertTrue((output/'PREDICTION_COMMIT.json').exists())
             if mutation == 'capture_after':
+                predicted.chmod(0o600)
                 save(predicted,b'changed')
             if mutation == 'invalid':
                 return {'status':'rejected_no_score','target_loader_invocations':0}
@@ -329,6 +330,88 @@ class Controls(unittest.TestCase):
             self.assertFalse((output/'COMPLETE.json').exists())
             if mutation in ('programme','live','time'):
                 self.assertEqual(calls, [])
+
+    def test_captured_prediction_finalization_preserves_private_boundary(self):
+        parent = self.root / 'capture'
+        parent.mkdir(mode=0o700)
+        previous = os.umask(0o077)
+        try:
+            prediction = parent / 'predictions.npz'
+            expected = save(prediction, b'generated complete opaque prediction')
+            private = parent / 'PRIVATE.json'
+            save(private, b'private generated record')
+            self.assertEqual(stat.S_IMODE(prediction.stat().st_mode), 0o600)
+            before = prediction.stat()
+            self.assertEqual(common.prepare_grader_prediction(prediction, expected), expected)
+            self.assertEqual(common.pin(prediction.read_bytes()), expected)
+            self.assertEqual(stat.S_IMODE(prediction.stat().st_mode), 0o444)
+            self.assertEqual((before.st_ino, before.st_size, before.st_mtime_ns),
+                             (prediction.stat().st_ino, prediction.stat().st_size, prediction.stat().st_mtime_ns))
+            self.assertEqual(stat.S_IMODE(parent.stat().st_mode), 0o700)
+            self.assertEqual(stat.S_IMODE(private.stat().st_mode), 0o600)
+            self.assertEqual(os.umask(0o077), 0o077)
+        finally:
+            os.umask(previous)
+
+    def test_captured_prediction_wrong_identity_stays_private(self):
+        prediction = self.root / 'predictions.npz'
+        save(prediction, b'generated owned capture')
+        prediction.chmod(0o600)
+        with self.assertRaisesRegex(ValueError, 'Frozen prediction identity'):
+            common.prepare_grader_prediction(prediction, common.pin(b'different'))
+        self.assertEqual(stat.S_IMODE(prediction.stat().st_mode), 0o600)
+
+    def test_captured_prediction_rejects_aliases_before_public_mode(self):
+        prediction = self.root / 'predictions.npz'
+        expected = save(prediction, b'generated owned capture')
+        prediction.chmod(0o600)
+        symbolic = self.root / 'symbolic.npz'
+        symbolic.symlink_to(prediction)
+        with self.assertRaises(ValueError):
+            common.prepare_grader_prediction(symbolic, expected)
+        linked = self.root / 'hard.npz'
+        os.link(prediction, linked)
+        with self.assertRaises(ValueError):
+            common.prepare_grader_prediction(prediction, expected)
+        fifo = self.root / 'pipe.npz'
+        os.mkfifo(fifo, 0o600)
+        with self.assertRaises(ValueError):
+            common.prepare_grader_prediction(fifo, expected)
+        self.assertEqual(stat.S_IMODE(prediction.stat().st_mode), 0o600)
+        self.assertEqual(stat.S_IMODE(linked.stat().st_mode), 0o600)
+
+    def test_complete_exposes_only_committed_prediction_before_grader(self):
+        output = self.root / 'attempt'
+        identity = run.commit(self.generated_program(), output, self.source, {})
+        capture_root = self.root / 'captured'
+        capture_root.mkdir(mode=0o700)
+        predicted = capture_root / 'predictions.npz'
+        prediction_pin = save(predicted, b'generated opaque invalid archive')
+        predicted.chmod(0o600)
+        private = capture_root / 'PRIVATE.json'
+        save(private, b'private generated receipt')
+        private.chmod(0o600)
+        tester, calls = self, []
+        class GeneratedBackend:
+            def produce(self, programme):
+                tester.assertEqual(stat.S_IMODE(predicted.stat().st_mode), 0o600)
+                return predicted, {'source':tester.source,'program':programme,
+                    'submission':prediction_pin,'producer_removed_before_capture':True,
+                    'all_native_resources_closed':True}
+        def grader(action, path, destination, config, deadline, source):
+            calls.append(action)
+            tester.assertEqual(path, predicted)
+            tester.assertTrue((output/'PREDICTION_COMMIT.json').exists())
+            tester.assertEqual(common.pin(path.read_bytes()), prediction_pin)
+            tester.assertEqual(stat.S_IMODE(path.stat().st_mode), 0o444)
+            tester.assertEqual(stat.S_IMODE(capture_root.stat().st_mode), 0o700)
+            tester.assertEqual(stat.S_IMODE(private.stat().st_mode), 0o600)
+            return {'status':'rejected_no_score','target_loader_invocations':0}
+        result = run.complete({}, output, self.source, identity, GeneratedBackend(), grader,
+                              time.monotonic()+140)
+        self.assertEqual(calls, ['score'])
+        self.assertEqual(result['status'], 'rejected_no_score')
+        self.assertTrue((output/'COMPLETE.json').exists())
 
     def test_success_and_invalid_public_output(self):
         self.completion('good')

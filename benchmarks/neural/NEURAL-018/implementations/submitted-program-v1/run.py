@@ -12,7 +12,7 @@ sys.dont_write_bytecode = True
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from common import (MAX_OUTPUT, PUBLIC, assets, authenticate, capture, decode,
-                    encoded, file_mount, need, ordinary, pin, publish)
+                    encoded, file_mount, need, ordinary, pin, prepare_grader_prediction, publish)
 from transport.provider import Provider
 from transport.bounds import mount_identity
 import grade
@@ -136,7 +136,7 @@ def complete(config, output, source_pin, program_pin, backend, grader, deadline)
          'Stopped same-program candidate required before private grader')
     authenticate(source_pin)
     capture(output / 'program.py', 200000, program_pin)
-    capture(submission, MAX_OUTPUT, evidence['submission'])
+    prepare_grader_prediction(submission, evidence['submission'])
     publish(output / 'PREDICTION_COMMIT.json', encoded(evidence))
     need(time.monotonic() + 60 <= deadline, 'Entire original grader allowance remains')
     result = grader('score', submission, output / 'SCORE.json', config, deadline, source_pin)
