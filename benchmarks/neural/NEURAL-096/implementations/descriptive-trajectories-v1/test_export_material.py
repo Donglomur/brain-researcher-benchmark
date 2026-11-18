@@ -8,6 +8,10 @@ before writing, with a512KiB cumulative cap. No authentic data are used.
 """
 from contextlib import contextmanager
 from pathlib import Path
+from types import ModuleType
+import builtins
+import importlib
+from importlib.util import resolve_name
 import os
 import struct
 import sys
@@ -16,8 +20,60 @@ import unittest
 from unittest.mock import patch
 
 import attempt
-import export_material as exporter
 import test_attempt as fixtures
+
+
+FORBIDDEN_IMPORT_ROOTS = frozenset(("numpy", "PIL", "prepare", "attempt_grade"))
+
+
+@contextmanager
+def reject_scientific_imports():
+    """Audit normal import routes, including cached roots and submodules.
+
+    Existing modules are left untouched. This is import-causality measurement,
+    not isolation from direct sys.modules access, captured aliases or custom
+    loaders. Deliberate negative probes use their own separate record.
+    """
+    rejected = []
+    original_import = builtins.__import__
+    original_dynamic = importlib.import_module
+
+    def check(name):
+        if name.split(".", 1)[0] in FORBIDDEN_IMPORT_ROOTS:
+            rejected.append(name)
+            raise AssertionError("forbidden scientific import: " + name)
+
+    def guarded_import(name, globals=None, locals=None, fromlist=(), level=0):
+        resolved = name
+        if level and globals and globals.get("__package__"):
+            resolved = resolve_name("." * level + name, globals["__package__"])
+        check(resolved)
+        return original_import(name, globals, locals, fromlist, level)
+
+    def guarded_dynamic(name, package=None):
+        resolved = resolve_name(name, package) if name.startswith(".") else name
+        check(resolved)
+        return original_dynamic(name, package)
+
+    with patch.object(builtins, "__import__", guarded_import), patch.object(
+            importlib, "import_module", guarded_dynamic):
+        yield rejected
+
+
+def load_exporter_under_guard():
+    # Compile the sibling source into a fresh namespace, even if discovery
+    # already cached export_material. This also measures module initialization.
+    path = Path(__file__).with_name("export_material.py")
+    module = ModuleType("neural096_export_material_under_test")
+    module.__file__ = str(path)
+    with reject_scientific_imports() as rejected:
+        exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
+    if rejected:
+        raise AssertionError("exporter initialization attempted scientific imports")
+    return module, rejected
+
+
+exporter, EXPORT_INITIALIZATION_REJECTIONS = load_exporter_under_guard()
 
 
 # Integrated CI uses the sibling implementation. The isolated source-pool
@@ -67,6 +123,20 @@ class ExportAssemblyControls(unittest.TestCase):
         cls.captured = {}
         cls.verified_captures = []
         cls.native_copy_calls = 0
+        cls.export_import_rejections = []
+        cls.guard_probe_rejections = 0
+        original_run = exporter.run_export
+        def guarded_run(*args, **kwargs):
+            with reject_scientific_imports() as rejected:
+                try:
+                    return original_run(*args, **kwargs)
+                finally:
+                    cls.export_import_rejections.extend(rejected)
+                    if rejected:
+                        raise AssertionError("export attempted scientific imports")
+        handle = patch.object(exporter, "run_export", guarded_run)
+        handle.start()
+        cls.addClassCleanup(handle.stop)
 
         _, _, index, observations, unused_binding = fixtures.generated_inputs()
         cls.index_bytes, cls.observation_bytes = index, observations
@@ -243,7 +313,45 @@ class ExportAssemblyControls(unittest.TestCase):
         self.assertEqual(cls.successful_exports, 1)
         return cls.success_result
 
+    def assert_import_guard_with_preloaded_modules(self):
+        original_import, original_dynamic = builtins.__import__, importlib.import_module
+        preexisting = {name: sys.modules[name] for name in FORBIDDEN_IMPORT_ROOTS if name in sys.modules}
+        added = {name: ModuleType(name) for name in FORBIDDEN_IMPORT_ROOTS if name not in sys.modules}
+        sys.modules.update(added)
+        try:
+            for name in sorted(FORBIDDEN_IMPORT_ROOTS):
+                probes = (
+                    lambda name=name: builtins.__import__(name),
+                    lambda name=name: builtins.__import__(name + ".__guard_probe__"),
+                    lambda name=name: importlib.import_module(name),
+                    lambda name=name: importlib.import_module(".__guard_probe__", name),
+                    lambda name=name: builtins.__import__("__guard_probe__", {"__package__": name}, None, (), 1),
+                )
+                for probe in probes:
+                    with self.assertRaisesRegex(AssertionError, "forbidden scientific import"):
+                        with reject_scientific_imports() as rejected:
+                            probe()
+                    self.assertEqual(len(rejected), 1)
+                    type(self).guard_probe_rejections += 1
+                    self.assertIs(builtins.__import__, original_import)
+                    self.assertIs(importlib.import_module, original_dynamic)
+            with reject_scientific_imports() as rejected:
+                self.assertIs(builtins.__import__("math"), sys.modules["math"])
+            self.assertEqual(rejected, [])
+            self.assertIs(builtins.__import__, original_import)
+            self.assertIs(importlib.import_module, original_dynamic)
+            for name, module in {**preexisting, **added}.items():
+                self.assertIs(sys.modules[name], module)
+        finally:
+            for name, module in added.items():
+                if sys.modules.get(name) is module:
+                    del sys.modules[name]
+        for name, module in preexisting.items():
+            self.assertIs(sys.modules[name], module)
+        self.assertEqual(type(self).guard_probe_rejections, 20)
+
     def test_complete_117_files_full_traversal_and_shared_bindings(self):
+        self.assert_import_guard_with_preloaded_modules()
         result = self.success()
         self.assertEqual(result["status"], "exported_engineering_only")
         self.assertEqual(result["files"], 117)
@@ -279,7 +387,8 @@ class ExportAssemblyControls(unittest.TestCase):
         self.assertTrue(all(value is False for value in receipt["qualification"].values()))
         self.assertFalse(receipt["qualification"]["engineering_answer_graded"])
         self.assertLessEqual(self.written_bytes, self.WRITE_CEILING)
-        self.assertFalse(any(name in sys.modules for name in ("numpy", "PIL", "prepare", "attempt_grade")))
+        self.assertEqual(EXPORT_INITIALIZATION_REJECTIONS, [])
+        self.assertEqual(self.export_import_rejections, [])
 
     def test_input_pin_and_source_preimage_failures_precede_any_copy(self):
         before = self.native_copy_calls
