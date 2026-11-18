@@ -47,6 +47,26 @@ def number(value):
     return float(value)
 
 
+def frame_number_match(value, source_value, jsonlite_version):
+    """Exact numeric identity or the pinned exporter's exact decimal encoding.
+
+    jsonlite1.8.4 src/num_to_char.c uses snprintf("%.15g") for digits=NA.
+    This is a deterministic serialization rule, not a distance tolerance. It
+    cannot establish finer identity inside a15-significant-digit encoding bin.
+    Unknown runtime versions retain the predecessor's exact-only behavior.
+    """
+    actual = number(value)
+    require(type(source_value) is not bool, "Expected a non-Boolean source number")
+    expected = number(float(source_value))
+    if actual == expected:
+        return "exact"
+    if jsonlite_version == "1.8.4":
+        encoded = float(format(expected, ".15g"))
+        if math.isfinite(encoded) and actual == encoded:
+            return "jsonlite_1.8.4_15g"
+    return None
+
+
 def strict_json(data):
     def pairs(items):
         result = {}
@@ -149,14 +169,18 @@ def validate_export(export, prepared, contract):
         fields = [OUTCOMES[name]] + spec["terms"][1:] + ["sub"]
         frame = model["frame"]
         require(set(frame) == set(fields), f"Model-frame columns differ: {name}")
+        checked_numeric_values = serialization_equivalent_values = 0
         for field in fields:
             values = frame[field]
             require(type(values) is list and len(values) == len(rows), f"Model-frame support differs: {name}/{field}")
             if field == "sub":
                 require(values == groups, f"Participant order differs: {name}")
             else:
-                require([number(value) for value in values] == [number(float(row[field])) for row in rows],
-                        f"Fitted-frame value/order differs: {name}/{field}")
+                matches = [frame_number_match(value, row[field], runtime["packages"].get("jsonlite"))
+                           for value, row in zip(values, rows)]
+                require(all(matches), f"Fitted-frame value/order differs: {name}/{field}")
+                checked_numeric_values += len(matches)
+                serialization_equivalent_values += matches.count("jsonlite_1.8.4_15g")
         native_names = model["native_frame_row_names"]
         require(type(native_names) is list and len(native_names) == len(rows) and
                 all(type(x) is str and x for x in native_names) and len(set(native_names)) == len(rows),
@@ -176,12 +200,20 @@ def validate_export(export, prepared, contract):
             "ordered_identity_sha256": digest(canonical([[int(r["source_row"]), r["sub"], r["trialGlobal"]] for r in rows])),
             "native_frame_row_names_sha256": digest(canonical(native_names)),
             "native_diagnostics": model["diagnostics"],
+            "numeric_frame_binding": {
+                "checked_values": checked_numeric_values,
+                "exact_numeric_values": checked_numeric_values - serialization_equivalent_values,
+                "jsonlite_1_8_4_15g_values": serialization_equivalent_values,
+                "rule": "Exact numeric equality, or exact15-significant-digit source encoding only for declared jsonlite1.8.4",
+                "within_encoding_bin_identity_established": False,
+            },
         }
     warnings = {name: {field: model["diagnostics"][field] for field in warning_fields}
                 for name, model in export["models"].items()}
     method = ("Already-fitted original conditional Gaussian REML models; native exporter checked fixed/random design and unweighted/no-offset structure. "
               "Export runtime (not original fit-time provenance): " + canonical(runtime).decode() +
-              "; native optimizer/convergence diagnostics: " + canonical(warnings).decode())
+              "; native optimizer/convergence diagnostics: " + canonical(warnings).decode() +
+              "; numeric frame binding accepts exact equality, or the exact15-significant-digit source encoding for declared jsonlite1.8.4; finer within-bin identity is not established")
     require(len(method.encode()) <= 16384, "Method text exceeds public ABI")
     summary = {"schema_version": 1, "candidate_id": TASK, "input_manifest_sha256": INPUT_SHA,
                "analysis_family": "specified_conditional_REML_v1", "method": method,
@@ -237,6 +269,7 @@ def finalize(export_path, prepared_dir, contract_path, output_dir):
             "Explicit operator binding plus ordered frame equality does not authenticate an original fit, its chronology, or independent ERP/behavior correspondence.",
             "Prepared-table source pins rely on the existing preparer's receipt; this bridge does not reread or reconstruct the eight original tables.",
             "Export-runtime versions do not establish original author or fit-time versions.",
+            "jsonlite1.8.4 digits=NA emits15 significant digits. Version-guarded exact encoding equivalence cannot establish finer within-bin numeric identity; no distance tolerance is used.",
             "No companion/choice-model export, whole-paper reproduction, improvement eligibility, or native R parity is established.",
         ],
     }

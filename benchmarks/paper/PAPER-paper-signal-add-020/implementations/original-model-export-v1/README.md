@@ -31,8 +31,19 @@ Provenance remains a separate file; keep the original native export as well.
 First prepare the eight exact public inputs using the existing
 `processed-inputs-v1/prepare.py`. Keep its three CSVs and `receipt.json` together.
 An operator must explicitly bind each existing fit's ordered observations to
-those original source rows. Equality of ordered fitted-frame values is checked;
+those original source rows. Ordered fitted-frame values are checked as described below;
 it is not evidence of when a model was fitted or independent ERP/trial linkage.
+
+Finite numeric frame values accept exact numeric equality for every declared
+exporter version. For declared `jsonlite` version `1.8.4`, they also accept
+equality to the source value encoded with the documented 15-significant-digit
+rule (`float(format(source_value, ".15g"))`). This is a deterministic encoding
+comparison, with no absolute, relative, or ULP tolerance. It cannot establish
+finer numeric identity within a 15-significant-digit encoding bin. A version
+declaration alone does not authenticate the exporter runtime: original source
+and runtime custody remain separate requirements. Row order, identities,
+participant support, finite/non-Boolean values, coefficients, covariance, and
+contrast checks remain unchanged.
 
 In the trusted R session containing the author's conditional objects:
 
