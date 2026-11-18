@@ -1,0 +1,259 @@
+{
+  "schema": "neural096-descriptive-public-validation/v1",
+  "task_id": "NEURAL-096",
+  "method": "neural096-split-stratified-quarter-rate-contrasts/v1",
+  "as_of_utc_date": "2026-11-17",
+  "recorded_stage": "authentic_preparation_and_independent_arithmetic",
+  "status": "finite_preparation_integrity_and_independent_arithmetic_accepted",
+  "endpoint": {
+    "scope": "Deterministic descriptive analysis of response-conditioned Set-Go observations.",
+    "prior_contrast": "long minus short",
+    "prior_label_binding": {
+      "long": "is_short = false",
+      "short": "is_short = true"
+    },
+    "trial_rates": "count divided by that trial and phase bin actual exposure in seconds",
+    "prior_means": "equal-trial mean of individual trial rates; not pooled count divided by pooled exposure",
+    "basis": "fixed identity basis over all 54 source units; no learned projection",
+    "phase_bins": 20,
+    "quarter_bin_slices_zero_based_half_open": [
+      [
+        0,
+        5
+      ],
+      [
+        5,
+        10
+      ],
+      [
+        10,
+        15
+      ],
+      [
+        15,
+        20
+      ]
+    ],
+    "per_supported_cell_summary": "four signed quarter means and four quarter RMS differences, each over 54 units by five phase bins",
+    "units": "spikes/s/source unit (Hz)",
+    "unsupported_comparisons": "retain cell and counts; null numerical differences and summaries; retain any available prior-specific mean",
+    "required_effect_sign": null,
+    "original_paper_metric_reproduction": false
+  },
+  "coverage": {
+    "selected_trials": 204,
+    "original_split_counts": {
+      "train": 150,
+      "val": 54
+    },
+    "source_units": 54,
+    "recording_segments": 6,
+    "comparison_cells": 48,
+    "cell_axes": [
+      "original split",
+      "recording segment",
+      "response effector",
+      "direction"
+    ],
+    "supported_cells_with_both_priors": 27,
+    "unsupported_cells": 21,
+    "combined_empty_prior_groups": 3,
+    "population_scope": "one exposed animal/session"
+  },
+  "completed_verification": {
+    "authentic_descriptive_preparation_runs": 1,
+    "preparation_integrity_review": "accepted",
+    "independent_arithmetic_runs": 1,
+    "independent_arithmetic_result_review": "accepted",
+    "automatic_retries": 0,
+    "full_structure_comparisons": [
+      "all available prior-specific 54 by 20 mean-rate arrays",
+      "supported full signed difference arrays",
+      "eight fixed phase summaries per supported cell",
+      "exact metadata, support and missingness",
+      "global common display maximum",
+      "matched observations, manifest and expected-answer structures"
+    ],
+    "independent_implementation": "Python standard-library NPY header/struct decoding; equal-trial math.fsum means and signed quarter means; math.hypot RMS. No production arithmetic or NumPy imports.",
+    "numeric_scalar_comparisons": 182954,
+    "exact_metadata_leaves": 1302,
+    "comparison_count_interpretation": "Counts traverse reference, observation and answer structures, including repeated representations. They are not independent trials, replications, model attempts or benchmark tasks.",
+    "maximum_absolute_disagreement_hz": 2.842170943040401e-14,
+    "finite_scalar_agreement_predicate": "abs(a-b) <= max(1e-12 Hz, 1e-12 * max(abs(a), abs(b)))",
+    "metadata_nulls_support": "exact type-sensitive equality",
+    "tolerance_widened": false,
+    "tolerance_scope": "Engineering comparison of two arithmetic implementations only; no participant scoring tolerance or scientific significance threshold is introduced.",
+    "independent_audit_generated_controls": {
+      "passed": 10,
+      "skipped": 0
+    },
+    "prepared_delivery_files": 6,
+    "prepared_delivery_bytes": 2030349
+  },
+  "matched_access_contract": {
+    "underlying_information": "Both conditions receive the same prior-specific aggregate 54 by 20 trajectories and support.",
+    "viewer_representation": "Typed SVG view with 256 colour intensities and a common global scale.",
+    "programme_representation": "Numeric prior-specific means and the same support metadata.",
+    "withheld_from_participant_delivery": [
+      "computed difference arrays",
+      "reference summaries",
+      "expected numerical answers",
+      "individual-trial data"
+    ],
+    "precision": "SVG colour quantization and finite viewing resolution differ from numerical precision; no wider viewer scoring tolerance is specified.",
+    "interpretation": "A viewer/programme performance gap would include representation precision and access to computation; it would not isolate a pure tool-use effect."
+  },
+  "pending_verification_at_this_record": {
+    "authentic_svg_rendering_all_48_cells": true,
+    "typed_viewer_delivery_packaging": true,
+    "authentic_grader_controls": true,
+    "raster_or_model_provider_transport": true,
+    "participant_execution_and_isolation": true
+  },
+  "scientific_limits": {
+    "learned_neural_understanding_established": false,
+    "reason": "Successful programmed arithmetic establishes this deterministic calculation path, not learned or native neural understanding.",
+    "inferential_uncertainty": "not_qualified",
+    "uncertainty_reason_codes": [
+      "single_exposed_animal_session",
+      "assignment_and_dependence_unverified",
+      "recording_segments_not_randomized_blocks"
+    ],
+    "response_conditioned": true,
+    "population_or_causal_inference": false,
+    "prospective_interval_prediction": false,
+    "full_unit_trajectory_geometry_identified_by_eight_summaries": false,
+    "rms_note": "RMS is descriptive and can be positive under noise; it is not a significance test.",
+    "source_scope": "Independent audit decoded six arithmetic operand arrays and checked all eight member headers. Raw spike-time and offset values were not decoded, and original-NWB equivalence, a fresh spike recount and separate recovery of the fourteen extra unit identities were not established."
+  },
+  "model_evaluation": {
+    "model_trials": 0,
+    "fits": 0,
+    "participant_exposures": 0,
+    "authentic_svg_renders": 0,
+    "ai_performance_result": false
+  },
+  "readiness": {
+    "new_benchmark_ids": 0,
+    "full_task_completed": false,
+    "scientific_inference_qualified": false,
+    "submission_readiness_promoted": false,
+    "sota_claim": false
+  },
+  "lineage": {
+    "original_nwb_source": {
+      "sha256": "6212aaee2c978d1cd53fbfb433d11f418ed27cd83017b8b2befa4a1d7add5198",
+      "verification": "Identity inherited from the earlier source-preparation receipt; this verification did not independently reopen the original NWB."
+    },
+    "saved_input_packet": {
+      "receipt": {
+        "bytes": 3688,
+        "sha256": "3011373f5286ee20e3b308644f22c27203cfcd69b971d2f1ff039584734982ac"
+      },
+      "metadata": {
+        "bytes": 313926,
+        "sha256": "7c2cd8e613824d79cb6910fa5f661b82bca4756370cebc16ad80fa110a2631d6"
+      },
+      "numeric_npz": {
+        "bytes": 322403,
+        "sha256": "e299061f98a8e51a3c958fe264a737e533de20ab612be4ceeefe0921f8f7290c"
+      },
+      "total_bytes": 640017
+    },
+    "descriptive_producer_files": {
+      "CONTRACT.json": {
+        "bytes": 5439,
+        "sha256": "5f0375f8bb3cced2b33017f296302587f0c91f8486faf8394a5581a0b4e10e99"
+      },
+      "ROOT_SELECTION.json": {
+        "bytes": 3131,
+        "sha256": "82c7a0e5acace4537423ca4f2403320b64d1e2621f2aef7d2760af86a91e25c0"
+      },
+      "packet.py": {
+        "bytes": 7883,
+        "sha256": "21c2d5385360c53a544ac1612f24f4cabb6349329bbb328b182cbe24201dc9c8"
+      },
+      "prepare.py": {
+        "bytes": 10471,
+        "sha256": "2aea67c3b17c0d9a26786bce2302fddf7a572c679a335cd5f7e3e1a29aadd64e"
+      },
+      "score.py": {
+        "bytes": 8310,
+        "sha256": "97f58ae80c10c65602abd6fc64cbf33e5d4e1d4e155480a8935c27ef29caf95b"
+      },
+      "support.py": {
+        "bytes": 12856,
+        "sha256": "e2a5e2c2f6a3dcfcbb88d3bf02cbc73caabb98bde7c8f9b8983b30117f86c610"
+      },
+      "trajectory.py": {
+        "bytes": 8295,
+        "sha256": "708c4da7a9c87d4e35328fb59816f51ce75fd989e0aa15af798212da91b584a8"
+      },
+      "view.py": {
+        "bytes": 10185,
+        "sha256": "091e1c406968e3d47e782f6551d2d87715f998fde43689157e684009c8dfcab6"
+      }
+    },
+    "authentic_preparation_protocol": {
+      "bytes": 14258,
+      "sha256": "ce6f488ea870a9b7d3445ebf4011dfa8262257761b78b441fe33362af3b2bc65"
+    },
+    "operator_completion": {
+      "bytes": 180,
+      "sha256": "6ec9ddb3f338b6d7224dd95c45ca09c2a4be6d6dab85f1b4341f2f906c8175ad"
+    },
+    "operator_preparation_receipt": {
+      "bytes": 2486,
+      "sha256": "f479fc8678c9ec9b74cddee21f9f0b0eb075b51674b3600088e944e78bf0539f"
+    },
+    "matched_observations": {
+      "bytes": 813516,
+      "sha256": "76e7324b3832721f80539c4e0e48a33ce550e06deb29d639154a1674f4d00f43"
+    },
+    "participant_manifest": {
+      "bytes": 408,
+      "sha256": "ad2112afdf83179bd10c253f007176ceb9246ce00ecf401f52da3cfa4f3c0a35"
+    },
+    "operator_reference": {
+      "bytes": 1202212,
+      "sha256": "bbe85f9223797ce7e90375f8e5afd259a2c7f7e2f778c605a4321904b1594e95"
+    },
+    "operator_expected_answer": {
+      "bytes": 11547,
+      "sha256": "8fc05a87ccabc6a0b7494048ecc9f00ef949f03818f10b912d85c44f1a6b1a31"
+    },
+    "preparation_integrity_report": {
+      "bytes": 1565,
+      "sha256": "4806d97cbe47f97f3aea2d04cbb3d7944bec38a55ff571b89b99eab3d618d3bd"
+    },
+    "preparation_integrity_review": {
+      "bytes": 7778,
+      "sha256": "df7ffb5af89a49b4c49f5d15aa64080077081d86a2e8a2b78a523f4da7b23a81"
+    },
+    "independent_audit_source": {
+      "bytes": 24021,
+      "sha256": "b2b5d2d1f63e6a2f1ac3edffe219b1bd6005c9bc39519c1829d5f28468998bd0"
+    },
+    "independent_audit_protocol": {
+      "bytes": 9781,
+      "sha256": "0e473bfeb62f4fb081134f9123b13714be935707505fafc2ef58e15d5f88506a"
+    },
+    "independent_audit_source_review": {
+      "bytes": 8553,
+      "sha256": "1d64a87c138edd04ee7b8eb7aeb75188184409bc2b47754f1bf76f4d72ebbadb"
+    },
+    "independent_audit_result": {
+      "bytes": 1215,
+      "sha256": "4961e546fd987112983aabe123c5bb6e273baf7cb29f7d33c739fd9d7841aa43"
+    },
+    "independent_audit_result_review": {
+      "bytes": 9350,
+      "sha256": "c586fd7034ebe031d07cfa3db05b66bc688de3485bb662a803f2dffece2440ff"
+    },
+    "accepted_final_handoff": {
+      "bytes": 7202,
+      "sha256": "37c84f05a341570a810820940324116395b124625f7ff747a51cda2f4261c562"
+    }
+  },
+  "evidence_access": "SHA256 commitments identify retained operator evidence; they do not distribute or independently prove its contents. No private numerical vectors or answers are included in this record."
+}

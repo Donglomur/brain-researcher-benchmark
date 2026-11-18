@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "id": "NEURAL-010",
+  "track": "neural",
+  "title": "Seizure false alarms and montage confounding",
+  "status": "specification_only",
+  "source_identity": {
+    "ids": [
+      "D-H024"
+    ],
+    "titles": [
+      "CHB-MIT Scalp EEG"
+    ],
+    "overlap_groups": [
+      "chbmit"
+    ],
+    "task_family": "seizure_detection"
+  },
+  "scientific_question": "Does a frozen EEG detector improve complete held-person seizure detection over a matched no-EEG method, and does the paired improvement survive montage-stratified analysis?",
+  "task_type": "investigation",
+  "neural_role": "input",
+  "primary_outputs": [
+    "Held-person differences in event F1, sensitivity and false alarms per observed day for frozen EEG, matched no-EEG, montage-only and fixed signal-reference streams; null or inconclusive contrasts are valid answers."
+  ],
+  "input_assets": {
+    "routes": [
+      "https://physionet.org/content/chbmit/1.0.0/",
+      "https://github.com/esl-epfl/epilepsy2bids",
+      "https://physionet.org/files/chbmit/1.0.0/RECORDS",
+      "https://physionet.org/files/chbmit/1.0.0/SHA256SUMS.txt",
+      "https://physionet.org/files/chbmit/1.0.0/chb01/chb01_03.edf",
+      "https://physionet.org/files/chbmit/1.0.0/chb01/chb01-summary.txt",
+      "https://physionet.org/files/chbmit/1.0.0/SUBJECT-INFO",
+      "https://raw.githubusercontent.com/esl-epfl/epilepsy2bids/d3fb17526b8a483e292ae9ba2e51b02d5f9128ff/src/epilepsy2bids/bids/chbmit/convert2bids.py",
+      "https://raw.githubusercontent.com/esl-epfl/epilepsy2bids/d3fb17526b8a483e292ae9ba2e51b02d5f9128ff/src/epilepsy2bids/load_annotations/chbmit.py",
+      "https://raw.githubusercontent.com/esl-epfl/timescoring/426f8d2b77974641dc9db71884e0812b249ba93b/src/timescoring/scoring.py",
+      "https://raw.githubusercontent.com/esl-epfl/sz-validation-framework/aba5accc45598156cb178cf48a3203639bc23ff8/3-runSzDetection/docker-szDetection/algo/src/algo/sz_detection.py"
+    ],
+    "readiness_records": [
+      {
+        "source_id": "D-H024",
+        "ledger": "readiness/signals_extension_a.json",
+        "record_sha256": "c0c3d821f1471cd7b084a376bd4f9ab05f27c0e5d4f89ee4a2ff37e7feae09c7",
+        "data_manifest": {
+          "url": "https://physionet.org/files/chbmit/1.0.0/RECORDS",
+          "version": "1.0.0",
+          "sha256": "72b640d6a3fef4b40de255933d1403823d1655c56f93d69761105a653798fc08",
+          "recording_files": 686,
+          "publisher_hashes": "https://physionet.org/files/chbmit/1.0.0/SHA256SUMS.txt",
+          "case_folders": 24,
+          "biological_people": 23,
+          "count_caveat": "Live RECORDS contains 686 EDF paths, while publisher descriptive prose still says 664. Use the pinned actual manifest; chb24 was added later.",
+          "example_input": {
+            "url": "https://physionet.org/files/chbmit/1.0.0/chb01/chb01_03.edf",
+            "bytes": 42399744,
+            "publisher_sha256": "4c4a95a9b4331aeaadadd538763eb2e735950d9aa615b85ee6246c784be8ae90"
+          },
+          "example_labels": {
+            "url": "https://physionet.org/files/chbmit/1.0.0/chb01/chb01-summary.txt",
+            "event_onset_seconds": 2996,
+            "event_offset_seconds": 3036
+          },
+          "biological_identity_url": "https://physionet.org/files/chbmit/1.0.0/SUBJECT-INFO"
+        },
+        "recording_contract": {
+          "neural": "Actual representative EDF header has 23 bipolar EEG channels at 256 Hz, microvolt units, and 3,600 one-second records. Montage and duplicate labels vary across files; never infer all channels are distinct electrodes.",
+          "labels": "Per-case summary files give seizure starts/ends in recording-relative seconds; companion .edf.seizures files also exist. Actual chb01_03 event is 2996–3036 s.",
+          "time_alignment": "Summary onset/offset is relative to the EDF recording. Gaps between files must not be treated as observed background. Pinned parser matches the exact EDF filename and reads its event interval.",
+          "biological_ids": "chb01 and chb21 are the same biological person approximately 1.5 years apart; official converter maps chb21 to subject01/session02. Split 23 people, not 24 folder names. chb24 age/sex missing in SUBJECT-INFO.",
+          "evidence": "686-path manifest, SUBJECT-INFO, actual summary, 6,144-byte EDF header, source alias mapping and label parser inspected; no signal samples downloaded."
+        },
+        "status": "artifact_ready"
+      }
+    ],
+    "exact_asset_records": [],
+    "missing_or_unverified": [
+      "No exact input asset record was extracted from the linked readiness manifest; inspect the pinned source audit before acquisition.",
+      "This specification does not establish a local public/private packet, payload equality or an executed task adapter."
+    ]
+  },
+  "allowed_inputs": {
+    "inputs": [
+      "For actual target inference, held-person EEG and admissible montage information plus frozen training-only fit state.",
+      "For scoped analysis calibration only, released annotation/prediction tables and complete observed-duration metadata; these inputs disclose event truth."
+    ],
+    "forbidden_inputs": [
+      "Held-person seizure annotations in a detector input",
+      "Final held-person outcomes used for detector or threshold selection",
+      "Treating current report reconstruction inputs as an unseen neural decoding query"
+    ],
+    "case_identity": "Source schedule requires 686 unique recording IDs and 23 person IDs; analyst contexts cross frozen-program/case-adaptive mode, three repetitions and two views. These are conditions, not independent tasks or people.",
+    "split": "Source detector schedule uses nested biological-person selection: outer held person never supplies fitting labels; stronger arms search nine settings on inner held-person folds. Current analyst reconstruction occurs after prediction freeze and is a distinct task.",
+    "coverage": "Full source programme schedules 92 final fold streams and all 686 recordings; recorded plan contains 9,706 fits, not executed fit evidence. Actual authentic complete corpus and programme execution remain unqualified."
+  },
+  "biological_unit": "23 biological people, with chb01/chb21 merged; montage strata can have only one person.",
+  "case_definition": "A complete 686-record CHB-MIT comparison panel, with localized false alarms nested in records and people.",
+  "split": {
+    "policy": "Source detector schedule uses nested biological-person selection: outer held person never supplies fitting labels; stronger arms search nine settings on inner held-person folds. Current analyst reconstruction occurs after prediction freeze and is a distinct task.",
+    "coverage": "Full source programme schedules 92 final fold streams and all 686 recordings; recorded plan contains 9,706 fits, not executed fit evidence. Actual authentic complete corpus and programme execution remain unqualified."
+  },
+  "reference": {
+    "source_code_url": "https://github.com/esl-epfl/epilepsy2bids",
+    "commit_or_archive_version": "d3fb17526b8a483e292ae9ba2e51b02d5f9128ff",
+    "entrypoints": [
+      "src/epilepsy2bids/bids/chbmit/convert2bids.py",
+      "src/epilepsy2bids/load_annotations/chbmit.py"
+    ],
+    "role": "recording_conversion_and_label_parser; separate_event_scorer; no_verified_positive_neural_detector",
+    "reference_executed_for_this_contract": false,
+    "source_paper": null,
+    "data_url": "https://physionet.org/content/chbmit/1.0.0/"
+  },
+  "controls": [
+    "Keep identical recording hours and event processing across arms.",
+    "Group biological identity aliases and freeze training-only selection.",
+    "Do not label false alarms as movement/electrode artifacts without independent annotations.",
+    "Inspect single-person montage strata; montage differences do not identify a montage effect independently of patient.",
+    "The independent operator owns fixed no-EEG predictions and their fit/selection lineage; candidate-authored nuisance predictions do not establish incremental neural value."
+  ],
+  "access_conditions": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "A no-tools analyst may interpret an operator-produced numerical evidence display, but current complete table copying does not test a withheld scientific answer.",
+      "boundary": "Only the declared observation/demonstration context, no external tools or evaluator feedback; a new direct condition needs an independently frozen view and complete output identity.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "typed_viewer": {
+      "status": "not_delivered",
+      "representation": "Viewing EEG false-alarm windows could support localization review, but an image cannot by itself establish a whole-cohort matched contrast; no typed transport is delivered.",
+      "boundary": "Only typed render/navigation actions with audited limits; no raw arrays, labels, filenames or external source retrieval returned to the participant.",
+      "evidence_ids": [],
+      "missing": [
+        "No delivered participant condition establishes this mode for the same scientific target."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Source analyst phases permit case-adaptive numerical reconstruction over released tables; this is source availability for calibration, with target-withholding investigation absent.",
+      "boundary": "Same permitted observations, frozen checkpoint tools and accounted compute as the compared arm; case state and feedback policy must be fixed before query.",
+      "evidence_ids": [],
+      "missing": [
+        "The inspected source supports reconstruction or fixed-reference computation; a participant condition for the revised withheld scientific target is not delivered."
+      ]
+    },
+    "frozen_program": {
+      "status": "not_delivered",
+      "representation": "Source precommits analyst code and detector-generation graph; currently scored analyst output is reconstruction, not a qualified frozen EEG detector outcome.",
+      "boundary": "Freeze code and fitting/adaptation recipe before queries; admit only explicitly allowed labels/calibration, retain all failed/incomplete cases.",
+      "evidence_ids": [],
+      "missing": [
+        "The inspected source supports reconstruction or fixed-reference computation; a participant condition for the revised withheld scientific target is not delivered."
+      ]
+    }
+  },
+  "evaluation": {
+    "primary": {
+      "name": "EEG_minus_matched_no_EEG_patient_macro_event_F1",
+      "direction": "two_sided",
+      "aggregation": "Compute paired person F1 differences on all 23 people, then equal-person mean; preserve missing/undefined support.",
+      "rationale": "This signed scientific contrast can be positive, zero or negative; larger apparent neural contribution is not greater correctness of understanding. Any detector ranking uses absolute held-target event quality against an independently selected, frozen and operator-owned competent comparator, with false-alarm burden and all absolute arms retained. Candidate-controlled degradation of a nuisance arm cannot earn improvement. Submitted numerical-claim accuracy is error against the independently computed signed contrast, not reward for its sign. Historical report reconstruction remains numerical calibration."
+    },
+    "secondary": [
+      "Mandatory absolute event F1, sensitivity and false alarms per24 observed hours for candidate, fixed no-EEG, montage-only and signal-reference arms, with full person support; a delta alone is insufficient.",
+      "Paired event-sensitivity and false-alarms-per-24-observed-hours changes",
+      "Montage-stratified paired contrasts with person support, including single-person flags",
+      "Exact false-alarm locations and durations; reconstruction tolerance as a separate software-calibration outcome",
+      "Absolute held-person event F1, sensitivity and false-alarm burden for every detector arm; any programme ranking is separate from signed neural-contribution reporting."
+    ],
+    "comparators": [
+      {
+        "name": "Matched no-EEG method",
+        "inputs": "Same allowed nonsignal metadata and training labels; EEG removed",
+        "procedure": "Operator selects and freezes the matched learner family, nine-setting search and inner-person selection before candidate evaluation. references/learners.py fixes joint/noEEG family and feature exclusion; the candidate cannot supply or weaken the comparator stream. Actual independent fitting and stream ownership must be authenticated."
+      },
+      {
+        "name": "Montage-only method",
+        "inputs": "Admissible montage, no waveform",
+        "procedure": "Source fixed comparison arm; support and person confounding reported."
+      },
+      {
+        "name": "Fixed signal reference",
+        "inputs": "Median channel line-length-related features from EEG",
+        "procedure": "Source reference arm; empirical competence is not established by its presence."
+      }
+    ],
+    "nuisance_controls": [
+      "Keep identical recording hours and event processing across arms.",
+      "Group biological identity aliases and freeze training-only selection.",
+      "Do not label false alarms as movement/electrode artifacts without independent annotations.",
+      "Inspect single-person montage strata; montage differences do not identify a montage effect independently of patient.",
+      "The independent operator owns fixed no-EEG predictions and their fit/selection lineage; candidate-authored nuisance predictions do not establish incremental neural value."
+    ],
+    "uncertainty": "Source reports paired person means and standard errors descriptively; repetition of analyst prompts does not increase biological n. An inferential superiority claim additionally needs a predeclared paired procedure accounting for nested training dependence.",
+    "failure_policy": "Require all 686 recordings, all expected analyst contexts and exact report support; reject malformed report scalars/IDs. A scientifically missing detector stream must remain a failed condition, never become a perfect reconstructed table.",
+    "neural_understanding": {
+      "schema_version": "neural-understanding/v1",
+      "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+      "contract_path": "understanding.v1.json",
+      "contract_sha256": "ae0fa3c908fe623435f081d8a49374c3dbc621fd1b3191019d04975595f4a012",
+      "original_definition_path": "historical/task.pre-understanding.v1.json",
+      "original_definition_sha256": "408ea0b41c55ec7f2b04f088c3c35507e59d5f655945786a044f7908073f4260"
+    }
+  },
+  "resources": {
+    "class": "CPU_workstation_bounded",
+    "basis": "Planning estimate only; reuse author processed inputs first. Training/runtime/storage not measured for this task.",
+    "source_storage_evidence": {
+      "publisher_total_uncompressed": "42.6 GB",
+      "example_record_bytes": 42399744,
+      "bounded_intake_plan": "One seizure-bearing and one background record per selected person for schema/positive-control setup, then complete monitoring periods for an honest false-alarm assessment.",
+      "compute_estimate": "CPU feature-baseline scope is plausible; throughput and RAM unmeasured. Full monitoring is much larger than a balanced epoch demonstration."
+    }
+  },
+  "holds": [
+    {
+      "id": "task_specific",
+      "requirement": "Independent artifact annotation is needed for artifact-class scoring; otherwise grade numeric localization only."
+    },
+    {
+      "id": "source_1",
+      "requirement": "Public input and label/evaluator source are verified; a meaningful signal-derived reference predictor has not been selected or run."
+    },
+    {
+      "id": "source_2",
+      "requirement": "No packet, scorer, baseline or investigation grading has been executed. Source-supported status does not imply predictive support."
+    },
+    {
+      "id": "source_3",
+      "requirement": "Clinical cohort composition, medication changes, hardware, montage and monitoring context can confound transfer; a failed transfer is not proof of absent neural understanding."
+    },
+    {
+      "id": "packet",
+      "requirement": "Validate full selected payloads, biological IDs, alignment, target privacy, finite values and exact public/private packet hashes."
+    },
+    {
+      "id": "protocol",
+      "requirement": "Freeze source versions, selection/exclusion, fitting and case-adaptive access, resource budget, split and primary estimator before outcomes."
+    },
+    {
+      "id": "reference",
+      "requirement": "Execute a signal-derived reference and independently checked comparator under this exact contract; record resources and matched controls."
+    },
+    {
+      "id": "scorer",
+      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+    },
+    {
+      "id": "replication",
+      "requirement": "Independently reproduce scoring and reference; determine scientific admission criteria before agent outcomes. Public data remain development."
+    }
+  ],
+  "next_implementation_action": [
+    "Independent artifact annotation is needed for artifact-class scoring; otherwise grade numeric localization only."
+  ],
+  "construction_review": null,
+  "source_audit_overlays": [],
+  "provenance": {
+    "canonical_record_sha256": "6042b0c3739812dafc9b1df1f2ec4503ffe9ba8b852a2342d09a4441ec62ddb4",
+    "source_files": [
+      {
+        "path": "docs/neuroscience-benchmarks/build/neural_100.json",
+        "bytes": 799654,
+        "sha256": "a4dbc73d5a86187eac325ed5e11ef37f17e2c1a9d712ce2fc35e891c8909d18f"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/build/construction_audit_index.json",
+        "bytes": 48504,
+        "sha256": "480320535bad610b370cbd4a1b93247f42c748aca29ca18919bae55c98bcbd4a"
+      },
+      {
+        "path": "docs/neuroscience-benchmarks/readiness/signals_extension_a.json",
+        "bytes": 75510,
+        "sha256": "c8483ac7303756678974cca75dfb64a16064f68cec4a0ae407ae84d7976f41d6"
+      }
+    ],
+    "builder": {
+      "path": "tools/build_neural_delivery_manifests.py",
+      "bytes": 8015,
+      "sha256": "83b664a2bf5f771725ae8b5798f5aae210f1b5303c96b6735d9f36049f8ce7f0"
+    },
+    "new_payload_reads": 0,
+    "scientific_execution": false
+  },
+  "admission": {
+    "runnable": false,
+    "research_qualified": false,
+    "submission_ready": false,
+    "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."
+  },
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations"
+}

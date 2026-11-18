@@ -60,6 +60,10 @@ Package-local task IDs do not override this registered definition; ownership lin
 
 ## Public source citations
 
+- [Code](https://github.com/engellab/latentcircuit)
+- [Code](https://www.uzh.ch/dam/jcr:e530b74d-8a46-430a-9a8d-38dd3b957f8e/tdr.zip)
+- [Data](https://www.ini.uzh.ch/en/research/groups/mante/data.html)
+- [Data](https://www.uzh.ch/dam/jcr:ca4213cf-1692-4c3d-8aeb-d4c5081d2fd1/PFC%20data.zip)
 - [Paper](https://www.nature.com/articles/s41593-025-01869-7)
 
 Citations come from the specification; their availability was not rechecked when generating this page.

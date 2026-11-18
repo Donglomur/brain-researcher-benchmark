@@ -81,6 +81,10 @@ Package-local task IDs do not override this registered definition; ownership lin
 
 ## Public source citations
 
-No public HTTP(S) citation was extracted for this catalog entry. Consult the authoritative specification and its provenance.
+- [Code](https://github.com/pgrosjean/plexus)
+- [Data](https://zenodo.org/records/15809433)
+- [Paper](https://www.nature.com/articles/s42256-025-01156-x)
+
+Citations come from the specification; their availability was not rechecked when generating this page.
 
 Generated from the public catalog; edit the authoritative definition and regenerate instead of editing this page.

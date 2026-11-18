@@ -1,0 +1,134 @@
+{
+  "actual_target_exposure": [
+    {
+      "access_task": "NEURAL-023",
+      "affected_task": "NEURAL-024",
+      "evidence": [
+        "NEURAL-023 TASK:13",
+        "NEURAL-024 TASK:11"
+      ],
+      "forbid_concurrent_inputs": true,
+      "limit": "Directional: no converse velocity-target exposure asserted.",
+      "relation": "public_input_equals_private_future_target"
+    }
+  ],
+  "prohibited_inferences": [
+    "Shared paper/stimulus/family or exact locator alone does not verify biological overlap.",
+    "No edge does not establish independence or target freshness.",
+    "No transitive closure or connected components are used.",
+    "Operator-declared access histories are inputs, not verified records of actual human/model/checkpoint exposure."
+  ],
+  "schema": "campaign_exposure_declarations_v1",
+  "scope": "Four exact selected task declarations plus a pinned non-exhaustive typed metadata graph; unknown is never independent.",
+  "shared_biology": [
+    {
+      "evidence": [
+        "selected descriptors /scope/biological_source_shared_with and /scope/selected_day_pair",
+        "NEURAL-023 TASK:3,13",
+        "NEURAL-024 TASK:3,15"
+      ],
+      "shared_animal": true,
+      "shared_session": true,
+      "tasks": [
+        "NEURAL-023",
+        "NEURAL-024"
+      ]
+    },
+    {
+      "evidence": [
+        "NEURAL-095 selected descriptor /limitations/0: exposed Haydn20161211 session shared with the NEURAL-096 selected subset",
+        "NEURAL-095 TASK:5",
+        "NEURAL-096 TASK:7,11,13"
+      ],
+      "limit": "Shared recording and neural observations; no direct produced-interval target leak asserted.",
+      "shared_animal": true,
+      "shared_session": true,
+      "tasks": [
+        "NEURAL-095",
+        "NEURAL-096"
+      ]
+    }
+  ],
+  "tasks": {
+    "NEURAL-023": {
+      "declaration": {
+        "bytes": 4394,
+        "path": "authoring/delivery-20261105/neural023/public/TASK.md",
+        "sha256": "87dbea378b22663e0296fbf35ea665faebab74470fe90d021e74eac349cb4352"
+      },
+      "evidence_lines": [
+        3,
+        7,
+        13
+      ],
+      "exposed_development": true,
+      "scope": "One exposed Indy 2016-10-05/06 day pair; trailing-velocity endpoint.",
+      "selected_source": {
+        "bytes": 12072,
+        "path": "authoring/delivery-20261105/neural023/delivery_manifest.json",
+        "sha256": "5cd4aab32a9a9a6513acd8ecf52b36eeb0766751a697c913f5a25f42a00f045d"
+      }
+    },
+    "NEURAL-024": {
+      "declaration": {
+        "bytes": 4090,
+        "path": "authoring/delivery-20261105/rtt-forecast/public/TASK.md",
+        "sha256": "567ef08695a032a0972057f87bfaa4e8d0d90d23495a825110038fbdc9ea4eb8"
+      },
+      "evidence_lines": [
+        3,
+        5,
+        7,
+        11,
+        15
+      ],
+      "exposed_development": true,
+      "scope": "Same Indy day pair; causal next-count task. NEURAL-023 public assessment counts are NEURAL-024 private future observations.",
+      "selected_source": {
+        "bytes": 13240,
+        "path": "authoring/delivery-20261105/rtt-forecast/delivery_manifest.json",
+        "sha256": "a3aed33412b4ecaecf691f2daf896b2a5661230ac4cf46d6d1d47fd029fcb017"
+      }
+    },
+    "NEURAL-095": {
+      "declaration": {
+        "bytes": 2559,
+        "path": "authoring/delivery-20261105/dmfc/NEURAL-095/public/TASK.md",
+        "sha256": "fcb48f9b1bf748b66a883b9a459b031ed1e00536145dbf42598a99008e7f54bd"
+      },
+      "evidence_lines": [
+        3,
+        5,
+        9
+      ],
+      "exposed_development": true,
+      "scope": "Released behavioral tp prediction on the historical Haydn20161211 split; not cross-animal generalization.",
+      "selected_source": {
+        "bytes": 11090,
+        "path": "authoring/delivery-20261105/dmfc/NEURAL-095/delivery_manifest.json",
+        "sha256": "92333fc46bf0e23671c154f89b7a8a64dc3c2c82b03ebb2d48a3289173713ec6"
+      }
+    },
+    "NEURAL-096": {
+      "declaration": {
+        "bytes": 6234,
+        "path": "artifacts-build/dmfc096-scoring-materialize-002/packet/TASK.md",
+        "sha256": "f6b34caab8222d682afe7168c41ee3180d0374d06f6637d48c17f1738481e54a"
+      },
+      "evidence_lines": [
+        5,
+        7,
+        11,
+        13,
+        42
+      ],
+      "exposed_development": true,
+      "scope": "177-trial, 40-unit, 15-bin fixed reconstruction in the same exposed recording. Produced intervals and Go times are not public.",
+      "selected_source": {
+        "bytes": 12649,
+        "path": "authoring/delivery-20261105/dmfc/NEURAL-096/delivery_manifest.json",
+        "sha256": "aaeaa0b88b1ac9c1b332c1420bf54f66e13efa1955ea1956ae3127ecc594cf09"
+      }
+    }
+  }
+}

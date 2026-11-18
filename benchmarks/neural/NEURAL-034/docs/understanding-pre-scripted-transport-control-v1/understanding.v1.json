@@ -1,0 +1,272 @@
+{
+  "schema_version": "neural-understanding/v1",
+  "task_id": "NEURAL-034",
+  "title": "Held-mouse recall-context decoding from processed astrocytic calcium",
+  "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
+  "disposition": "delivered_named_scope",
+  "disposition_reason": "A portable programme path, exact140-probability scorer and restricted active-fold image transport source exist for the complete selected seven-mouse subset. Scientific interpretation remains limited by processed-ROI selection, behavior polarity, context/day-order confounding, historical exposure and unqualified authentic/provider execution; combined calcium/behavior accuracy alone cannot establish neural contribution.",
+  "scientific_target": {
+    "question": "Can a frozen predictor classify recall context for held mice from the selected astrocytic calcium windows, and how does its performance compare with behavior-only, amplitude and time-scrambled controls?",
+    "target_kind": "observation_decoding",
+    "known_answer": "Observed context A=0 or B=1 for each fixed30-second window. This is an experimental context label, not a ground-truth memory strength or causal astrocyte mechanism.",
+    "answer_origin": "Seven paired mice from the author-processed Zenodo21780255 calcium collection; protected grader joins exact context labels by fold/query ID. The selected source subset and release are historically public.",
+    "case_unit": "One30-second query window of300 samples×12 selected accepted cells;20 windows per held-mouse fold.",
+    "independent_unit": "Seven mice; windows and the two contexts are repeated observations within mouse.",
+    "inference_scope": "Retrospective held-mouse classification on this selected processed subset. Context and day/order, ROI normalization and released behavior-state proxy can explain apparent accuracy; a behavior-enabled programme must not be described as native neural understanding.",
+    "exclusions": [
+      "No raw-imaging understanding or prospective online analysis.",
+      "No unseen-population or globally unexposed-data claim.",
+      "No causal memory mechanism or human performance estimate."
+    ]
+  },
+  "observation_contract": {
+    "inputs": [
+      "Programme condition receives one active-fold NPZ: train_windows(120,300,12), train_behavior(120,300), train_labels(120), query_windows(20,300,12), query_behavior(20,300), query_ids(20). Typed-viewer condition receives only images from these same active-fold windows through restricted actions, with permitted training labels and no raw arrays.",
+      "Windows are30 seconds at10Hz from12 selected accepted astrocytes; fluorescence has author-processed rather than physical spike-rate units. Behavior is a released binary-state proxy.",
+      "The typed viewer retains original300samples/12traces and behavior at0.05..29.95s, with shared display gain and no added preprocessing. Every fold has all120training windows available and requires all20query probabilities; all seven folds close before collection."
+    ],
+    "forbidden_inputs": [
+      "Held-fold context labels, mouse/context-coded filenames, saved answers and private comparator results.",
+      "All other fold NPZs: another fold’s training labels can reveal this fold’s targets.",
+      "Persistent candidate state or source revisions between folds; no private feedback until all outputs close."
+    ],
+    "case_identity": "Exactly140 public pairs (fold integer0..6, opaque24-character query_id) listed in registered-runtime/public/cases.json;20 queries per fold. Per-fold programme outputs omit fold, and trusted assembly adds it for the scorer.",
+    "split": "Seven leave-one-mouse-out folds: six mice supply120 training windows and one mouse supplies20 queries (10 A,10 B). A fresh programme process/state for each fold is source-enforced; the same source is frozen before any fold. The typed-viewer local process and empty read-only working directory are separately reset for every fold; remote provider conversation/cache reset remains an external requirement.",
+    "coverage": "Complete selected seven paired mice and140 windows; not the11-mouse panel named in the original Figure3 source audit and not the entire author archive. Each access condition retains the same roster rather than creating new tasks."
+  },
+  "evaluation": {
+    "primary": {
+      "name": "equal_mouse_balanced_accuracy and equal_mouse_log_loss",
+      "direction": "two_sided",
+      "aggregation": "Compute each metric within all20 windows of a held mouse, then average the seven mice equally; retain both directions separately (accuracy higher, log loss lower).",
+      "rationale": "Preserve both co-primary endpoints and all comparator differences. Choosing only favorable accuracy would hide calibration degradation; no combined scalar or parity threshold is justified."
+    },
+    "secondary": [
+      "All seven mouse-level balanced accuracies/log losses and signed candidate-minus-reference differences for every fixed comparator.",
+      "Report neural-only versus behavior-only and combined arms under matched access; a combined success cannot identify a neural contribution.",
+      "Source scorer predicts B at p≥0.5 and clips only the log calculation at1e-15; calibration/extreme-probability failures remain visible."
+    ],
+    "comparators": [
+      {
+        "name": "Constant",
+        "inputs": "No observations beyond declared class prior.",
+        "procedure": "Existing fixed constant comparator accompanies private grading; retains both co-primary values."
+      },
+      {
+        "name": "Amplitude and glial",
+        "inputs": "Amplitude-only summary or source-defined glial information from the same active-fold windows.",
+        "procedure": "Existing fixed amplitude and glial comparator outputs are protected and authenticated; do not retune them on query labels."
+      },
+      {
+        "name": "Behavior and combined",
+        "inputs": "Released behavior proxy alone, or behavior plus glial inputs.",
+        "procedure": "Existing behavior/combined comparators expose shortcut contribution; proxy polarity and causal meaning remain unresolved."
+      },
+      {
+        "name": "Time scrambled",
+        "inputs": "Source-defined disrupted temporal ordering of glial windows.",
+        "procedure": "Existing fixed time_scrambled comparator; interpretation is constrained to its actual source transform and does not remove all state/selection confounding."
+      }
+    ],
+    "nuisance_controls": [
+      "Equal10/10 context support per mouse; every mouse weighted equally.",
+      "Prevent cross-fold target leakage by exposing only the active fold and destroying writable state between folds.",
+      "Retain behavior/amplitude/time-scrambled controls and inspect context/day-order and session normalization confounding.",
+      "Fit learned transforms only on active training data; accepted-ROI and whole-session preprocessing remain inherited limitations."
+    ],
+    "uncertainty": "Seven mouse-level paired results are the independent support; report their full distribution and a prespecified mouse-level interval if computed. No140-window population interval or new-animal generalization claim beyond the selected mice.",
+    "failure_policy": "Require all140 unique exact fold/query IDs and finite nonboolean probabilities in[0,1] before private-target access. Reject duplicate fields/IDs, missing/extra rows and invalid values; failed or incomplete programmes receive no partial scientific score. Keep both metrics even if one worsens."
+  },
+  "implementation": {
+    "reviewed_paths": [
+      "benchmarks/neural/NEURAL-034/historical/task.pre-understanding.v1.json",
+      "benchmarks/neural/NEURAL-034/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-034/implementations/registered-runtime/grader.py",
+      "benchmarks/neural/NEURAL-034/implementations/registered-runtime/public/cases.json",
+      "benchmarks/neural/NEURAL-034/implementations/neural034-portable/authoring/glial-context-v1/ordinary-completion-v1/TASK.md",
+      "benchmarks/neural/NEURAL-034/implementations/neural034-portable/README.md",
+      "benchmarks/neural/NEURAL-034/implementations/neural034-portable/HISTORICAL_EVIDENCE.json",
+      "benchmarks/neural/NEURAL-034/implementations/fold-viewer-v1/viewer.py",
+      "benchmarks/neural/NEURAL-034/implementations/fold-viewer-v1/render.py",
+      "benchmarks/neural/NEURAL-034/implementations/viewer-transport-v1/transport.py",
+      "benchmarks/neural/NEURAL-034/implementations/viewer-transport-v1/README.md"
+    ],
+    "scorer_target": "Actual grader.py validates the exact140 public identities before labels, computes seven-mouse balanced accuracy/log loss and all six fixed-reference differences. It grades context-label prediction, not a reconstructed paper statistic; static scoring alone does not attest fold isolation.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Existing portable programme/provisioning/scorer source remains unchanged. An additive typed-image transport now confines a fresh local macOS participant process to one fold, denies filesystem writes/raw and cross-fold inputs, replays immutable histories and collects all140original predictions. The original Docker programme and the framework-Python viewer are distinct execution conditions.",
+    "missing": [
+      "Authentic complete fold/label/reference provisioning and programme runtime qualification remain separate; the new authentic viewer transport protocol is proposed but not executed by this source revision.",
+      "Fresh external provider context, actual provider image delivery and prohibited-tool enforcement are unqualified; direct/no-tools and numerical investigator transports are not supplied by the typed viewer.",
+      "Raw-event/behavior polarity and context/day-order audit, matched behavior-only candidate condition and competent scientific comparisons remain necessary for stronger neural interpretation."
+    ],
+    "execution_evidence": "Retained manifest documents six historical scorer controls and programme-runner controls; portable README records a historical completed reference-derived programme and worse log-loss comparator context. Relocated source checks are engineering only, not an authentic new run or LLM trial. New generated controls verify actual macOS confinement over seven complete folds plus a separately scoped portable protocol suite; no authentic signals, scientific raster run, model/API attempt or private grading was performed."
+  },
+  "access_modes": {
+    "direct_observation": {
+      "status": "not_delivered",
+      "representation": "Proposed no-tools numeric or visual presentation of the active held-mouse30-second calcium window. No such participant transport is present.",
+      "boundary": "Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance."
+      ]
+    },
+    "typed_viewer": {
+      "status": "source_available",
+      "representation": "Existing complete calcium-plus-behavior PNG viewer with restricted local typed training/query/inspect/gain/respond/finish transport; all120training windows and20queries in each of seven held-mouse folds.",
+      "boundary": "Participant sees image bytes and allowed labels only. Fresh process and empty read-only state per fold, no raw packets/other folds/private targets, immutable first responses and complete seven-fold restricted collection. Protocol-only diagnostics cannot collect as restricted transport.",
+      "evidence_ids": [
+        "active_fold_viewer",
+        "active_fold_renderer",
+        "restricted_viewer_transport",
+        "restricted_viewer_documentation"
+      ],
+      "missing": [
+        "Complete authentic scripted transport validation under separately admitted resources; no inference result follows from that future software control.",
+        "Fresh external provider conversation/cache, genuine image content delivery, declared model/tool budget and scientific evaluation remain unqualified."
+      ]
+    },
+    "tool_assisted": {
+      "status": "not_delivered",
+      "representation": "Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget.",
+      "boundary": "Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback.",
+      "evidence_ids": [
+        "source_audit"
+      ],
+      "missing": [
+        "No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode."
+      ]
+    },
+    "frozen_program": {
+      "status": "source_available",
+      "representation": "One frozen Python programme over seven fresh held-mouse folds, fitting only each active training set.",
+      "boundary": "Commit source and allowed fitting recipe before query access; no target feedback or source updates; require complete case coverage before protected grading.",
+      "evidence_ids": [
+        "participant_contract",
+        "grader",
+        "portable_route"
+      ],
+      "missing": [
+        "Authentic external inputs and current runtime qualification remain required.",
+        "Other folds’ training targets must never enter the active candidate workspace."
+      ]
+    }
+  },
+  "evidence": [
+    {
+      "id": "source_audit",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-034/historical/task.pre-understanding.v1.json",
+      "sha256": "7bdc7239b804ff669547b7fa3818e7cc11ef2a2d5461a126aeec0bba116ba2aa",
+      "supports": "Preserved original source audit: source measurements, provenance, units, biological identities, caveats and reference entrypoints. Reused as verified source evidence; not proof of current execution."
+    },
+    {
+      "id": "declaration",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-034/implementations/registered-runtime/manifest.json",
+      "sha256": "1ae845a1df2fc9b0f356abf3bbbac2d9ce460dd15e7a76abc604af4463c04fc5",
+      "supports": "Historical declared scope, score/run status and actual external-source prerequisites; current tree inspection confirms which executable paths are absent."
+    },
+    {
+      "id": "grader",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-034/implementations/registered-runtime/grader.py",
+      "sha256": "e48954a3b0e6ab44fbe4ad393b2716a31151bd8c2362e472bc0fef99bee2b5e6",
+      "supports": "Exact140-ID validation, co-primary score arithmetic and private-label boundary."
+    },
+    {
+      "id": "case_roster",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-034/implementations/registered-runtime/public/cases.json",
+      "sha256": "0434344482bf833d27cd1c385daea0449032e6c62920557ffa2b7c665294e0c2",
+      "supports": "Complete public140-query identity roster."
+    },
+    {
+      "id": "participant_contract",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-034/implementations/neural034-portable/authoring/glial-context-v1/ordinary-completion-v1/TASK.md",
+      "sha256": "142fe5b8be1463c0709ea119f8e3289f8686d70603c13ede3dba54f8270b48ca",
+      "supports": "Seven-fold participant geometry, public observations and prohibited cross-fold access."
+    },
+    {
+      "id": "portable_route",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-034/implementations/neural034-portable/README.md",
+      "sha256": "8d3b2a999a579dc0da72f5e9db7ed641e3a4612f8a83dd45c649192f0e78ba27",
+      "supports": "Portable source path, external prerequisites and historical/reference execution limits."
+    },
+    {
+      "id": "history",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-034/implementations/neural034-portable/HISTORICAL_EVIDENCE.json",
+      "sha256": "f3f1108c834db0ec023ea8bfe9798467a601ac78c49530ffc3a8b76e8bcc1d2d",
+      "supports": "Historical result/image pointers; no qualification of relocated source."
+    },
+    {
+      "id": "source_paper",
+      "kind": "primary_source",
+      "url": "https://doi.org/10.1038/s41593-026-02448-0",
+      "locator": "Source paper and original task’s retained source audit",
+      "supports": "Scientific measurement and paradigm provenance. The source paper is not treated as a correctness answer or proof of task execution."
+    },
+    {
+      "id": "source_data",
+      "kind": "primary_source",
+      "url": "https://zenodo.org/records/21780255",
+      "locator": "Versioned author archive metadata; record checked2026-11-16 without fetching biological payloads",
+      "supports": "Current primary author-data record and immutable archive identity; code/data content claims use preserved original audits and inspected local implementation."
+    },
+    {
+      "id": "active_fold_viewer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-034/implementations/fold-viewer-v1/viewer.py",
+      "sha256": "ffe54d25be0287d6ff1936330cc975b4d8b015f80522912c12cf9f00d294c37a",
+      "supports": "Existing exact active-fold observations and immutable response state, original complete replay and140-ID output format."
+    },
+    {
+      "id": "active_fold_renderer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-034/implementations/fold-viewer-v1/render.py",
+      "sha256": "fe5290719e448a2acd9971ecbc47a4014ebc5fceb87d0277d42c4b8607a2dd65",
+      "supports": "Existing fixed raster of all300samples/12calcium traces and aligned binary behavior; no numerical preprocessing added."
+    },
+    {
+      "id": "restricted_viewer_transport",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-034/implementations/viewer-transport-v1/transport.py",
+      "sha256": "acebb5238d5df0ae2599750b6fd47acb7596e9847899d9ff20e118e79d901ff2",
+      "supports": "Fresh local restricted process and empty read-only workspace per fold, source-pinned image/action boundary, complete seven-fold collection; remote provider context remains unqualified."
+    },
+    {
+      "id": "restricted_viewer_documentation",
+      "kind": "local_review",
+      "path": "benchmarks/neural/NEURAL-034/implementations/viewer-transport-v1/README.md",
+      "sha256": "71bbc65fa992252154b28979c7a7d0e1b9c1b8a600cbdb81ded489f0d66e877a",
+      "supports": "Exact restricted/local versus provider boundary, same scientific support, mandatory host controls and separately scoped portable diagnostics."
+    }
+  ],
+  "empirical_claims": {
+    "new_model_trials": 0,
+    "new_human_results": 0,
+    "scientific_qualification": "not_established_by_this_revision",
+    "historical_evidence": "Retained manifest documents six historical scorer controls and programme-runner controls; portable README records a historical completed reference-derived programme and worse log-loss comparator context. Relocated source checks are engineering only, not an authentic new run or LLM trial.",
+    "excluded_claims": [
+      "No raw-imaging understanding or prospective online analysis.",
+      "No unseen-population or globally unexposed-data claim.",
+      "No causal memory mechanism or human performance estimate.",
+      "Programme performance is not evidence of direct-observation or typed-viewer understanding."
+    ]
+  },
+  "revision": {
+    "date": "2026-11-17",
+    "summary": [
+      "Replace stale not_implemented language with the exact delivered140-case, seven-fold source route and its external prerequisites.",
+      "Preserve two co-primary metrics and all six fixed comparators instead of collapsing success to accuracy.",
+      "Document cross-fold target leakage, proxy behavior and context/day-order limitations.",
+      "Bind the additive complete restricted active-fold viewer source and explicit local reset boundary; retain all seven mice/140queries, scientific caveats, original scorer and no new empirical model claims."
+    ],
+    "source_review": "Original scientific sources/scorer remain pinned. New source review covers unchanged viewer integration, actual generated macOS process boundaries and portable protocol refusal controls; authentic neural packets and private targets were not opened. Current canonical adoption remains owned by the shared integrator."
+  }
+}

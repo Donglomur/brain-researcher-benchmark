@@ -11,7 +11,7 @@ These families retain scientific source used by, related to, or not yet assigned
 
 Scientific and submission readiness remain **unknown**. Stable artifact IDs and original paths remain in [catalog metadata](../catalog/catalog.json).
 
-## Family folders (23)
+## Family folders (24)
 
 These links group current physical locations for browsing; folder names do not assign scientific ownership.
 
@@ -35,6 +35,7 @@ These links group current physical locations for browsing; folder names do not a
 - [Sleep](sleep)
 - [Sleep EOG](sleep-eog)
 - [Study exposure](study-exposure)
+- [Suns2](suns2)
 - [TMS](tms)
 - [ZAPBench](zapbench)
 - [ZuCo2](zuco2)
@@ -57,7 +58,7 @@ These links group current physical locations for browsing; folder names do not a
 | --- | --- | --- | --- |
 | [Background classification runner](abr/background-classification-runner) | None assigned | [NEURAL-SCOPE-20261114-ABR-TRANSFER](../neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/README.md) | Alternative released background classification diagnostic: 104-animal background classification is not the registered primary cross-laboratory threshold-transfer endpoint; shared cohort establishes relatedness only. |
 
-## Unbound scientific families (20 artifacts)
+## Unbound scientific families (21 artifacts)
 
 | Scientific source | Explicit task owners | Related tasks | Role and scientific scope |
 | --- | --- | --- | --- |
@@ -81,6 +82,7 @@ These links group current physical locations for browsing; folder names do not a
 | [Finite forecast](zapbench/finite-forecast) | None assigned | None assigned | Finite forecast: No registered owner is established in the234-ID inventory by the reviewed documentation; preserve a clearly labeled source-family holding without adding a task ID. |
 | [Complete nlb panel v1](langevinflow/complete-nlb-panel-v1) | None assigned | None assigned | Bounded structural guard source: Unregistered shared structural-guard source, with no task owner or related task IDs. Freeze validates structure and bytes, not prediction values or complete authentic ordered trial/unit/mask coverage. The accepted README clarification preserves the NaN limitation and unmet DMFC-speed qualification. This source family is not eight task IDs. |
 | [Author reference v1](megnist/author-reference-v1) | None assigned | None assigned | Reviewed shared author reference source: Standalone shared MegNIST author-reference construction, with no task owner or related task IDs. Original full70 route and validation selection are retained; test-informed representative seed remains posthoc and the optional71st refit is excluded. Original trainer/MIT notice and the separate CC BY-NC4.0 dataset terms are distinct. Generated controls do not establish authentic execution, historical environment equivalence, scientific agreement, Linux qualification or process/provider isolation. |
+| [Original nine video v1](suns2/original-nine-video-v1) | None assigned | None assigned | Shared execution or family source: Original nine-video SUNS2 shared source. This ownerless component is retained source, not a task, candidate or scientific/runtime qualification. The scoped literal\_assignment.py license exception preserves exact Alex Melin attribution and upstream GPLv2 text; no MIT, or-later, relicensing or compatibility claim is made. |
 
 ## Unresolved ownership (5 artifacts)
 

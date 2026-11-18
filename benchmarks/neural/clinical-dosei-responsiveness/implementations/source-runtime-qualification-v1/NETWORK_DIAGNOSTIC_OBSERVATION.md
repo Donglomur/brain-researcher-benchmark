@@ -1,0 +1,21 @@
+# Fixed network diagnostic: observed state and limits
+
+The single fixed diagnostic completed in 4.041 seconds and its saved custody check passed. All eight original command chains, one owned container lifecycle, six complete Netlink dumps and cleanup records reconcile. This does not change the historical runtime qualification result: **zero of six controls qualified**. The three failed qualification attempts remain failed.
+
+`NETWORK_DIAGNOSTIC_EXECUTION_RECEIPT.json` binds the source, original report, saved proof and independent acceptance. Raw runtime records remain outside Git. The once-only saved pass used fake sockets to reparse the retained frames; it performed no new kernel observation. It checked 1,139,916 explicit input bytes and produced a 108,803-byte proof.
+
+## Measured state
+
+The Linux 6.10.14-linuxkit/aarch64 container returned ten interfaces in both link brackets. One carried the LOOPBACK flag. Each of the nine others had the UP bit clear and operational state DOWN. The identity and selected link fields agreed between brackets. These are flag/state criteria, independent of the interface names. The loopback interface had operational state UNKNOWN, which Linux explicitly does not equate with an unusable interface. [Linux interface definitions](https://raw.githubusercontent.com/torvalds/linux/v6.10/include/uapi/linux/if.h), [operational states](https://docs.kernel.org/networking/operstates.html).
+
+The two address records were loopback IPv4 `127.0.0.1/8` and IPv6 `::1/128`. All four returned routes used output-interface index 1 and local table 255: `127.0.0.0/8`, `127.0.0.1/32`, `127.255.255.255/32` and `::1/128`. The IPv6 route retained its actual scope value 0. The original route descriptors contain only destination, preferred source, output interface, table, priority, cache information and router preference attributes; no gateway, multipath, via, encapsulation or nexthop-ID attribute was present. A proposed future check must refuse unsupported attributes rather than infer their absence from a partial summary. [Linux routing definitions](https://raw.githubusercontent.com/torvalds/linux/v6.10/include/uapi/linux/rtnetlink.h).
+
+The sampled process reported five zero capability masks, NoNewPrivs 1 and Seccomp 2. Seccomp 2 indicates filter mode; the filter contents were not collected. NoNewPrivs constrains gains through exec, not every possible communication or privilege mechanism. [Linux process-status fields](https://man7.org/linux/man-pages/man5/proc_pid_status.5.html), [no-new-privileges documentation](https://docs.kernel.org/userspace-api/no_new_privs.html).
+
+Docker's none-driver documentation describes only loopback and no IPv6 loopback configuration. This actual runtime contained additional down interfaces and IPv6 loopback. That discrepancy is preserved; documentation does not replace the measured state, and the mechanism that created those devices remains unverified. [Docker none network driver](https://docs.docker.com/engine/network/drivers/none/).
+
+## What this establishes
+
+The diagnostic establishes the bounded returned state and complete owned cleanup. Its artifact accounting is 265,012 cumulative bytes: 224,815 evidence, 20,536 deleted staging, 13,879 report and 5,782 capture. Retained bytes alone were 244,476. Deleted files are not refunded. Command prefixes charged 175,269 bytes and explicit worker source reads charged 30,132,626 bytes. Daemon/VM physical I/O and CPU were not measured.
+
+Two matching link brackets do not form an atomic snapshot. Routing policy rules, firewall contents, every network namespace and every communication mechanism were not inspected. The IPv6 route's priority, cache-information and preference payload values were not decoded by the existing probe; their complete attribute descriptors and original frame bindings are preserved. Full original process-status bytes were not retained; only the selected raw lines and values can be checked. No external connection test was part of this diagnostic. A semantic network criterion is a separate proposed source change requiring explicit adoption and a new bounded qualification protocol before any runtime pass claim. No EEG, trained model or provider API was executed here.

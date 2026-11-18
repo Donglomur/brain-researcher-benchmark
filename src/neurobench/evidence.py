@@ -27,12 +27,14 @@ DEEP_PREPARATION = 'docs/status/deepcaimx-source-preparation-20261116.json'
 SMC_HOME = 'benchmarks/paper/PAPER-SMC-RNN-2024/'
 SMC_PREPARATION = SMC_HOME + 'docs/source-preparation-evidence.json'
 SMC_PROBES = SMC_HOME + 'docs/native-cost-characterization.json'
+SMC_CALIBRATION = 'docs/science/smc-author-calibration-20261117.json'
+SMC_MATERIALS = SMC_HOME + 'docs/official-assets-materials-v2-20261117.json'
 NEURAL096_HOME = 'benchmarks/neural/NEURAL-096/implementations/full-set-go-v1/'
 NEURAL096_PREPARATION = NEURAL096_HOME + 'AUTHENTIC_PREPARATION.json'
 SMC_ACTUAL_PANEL = '3b160dfb4aef8c68cbae8d4a02d5933576a77e4bc47a7c3a5b484369caf95be5'
 SMC_PUBLIC_PANEL = '209a15e2189499a9e68264df5c9f81057dd919564d98a46fb64d75b3f39af2f3'
 PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR, REVE_PREPARATION, DEEP_PREPARATION,
-                  SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION)
+                  SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION, SMC_CALIBRATION, SMC_MATERIALS)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -824,7 +826,7 @@ def smc_probe_records(doc, source, preparation):
                      '/arms/' + arm, 'Actual selected author-checkpoint inference on the first train and eval chunks only; no complete predictions, scores or 32-repeat baseline.',
                      arm + ' author model, 192 particles, filtered outputs', [
                          'Two partial author-model probes are not candidate or solver attempts.',
-                         'Full-panel, all-repeat author calibration and printed-score linkage remain unqualified.',
+                         'These historical probes do not establish full-panel, all-repeat author calibration or printed-score linkage.',
                          'Full-run time and memory projections are estimates; generated allocation controls are not model inference.',
                          'Original test targets were publicly exposed, but were not accessed by these probes.'])
         row.update(model_executed=True, author_model_probe_count=1, native_inference_calls=2,
@@ -846,6 +848,159 @@ def smc_probe_records(doc, source, preparation):
                    author_baseline_qualified=False, scientific_result=False, original_records_in_publication=False)
         result.append(row)
     return result
+
+
+def smc_original_panels(phases):
+    phases = obj(phases)
+    require(set(phases) == {'test', 'val'}, 'SMC complete original panel phases required')
+    result = {}
+    for phase, n_train in (('test', 2295), ('val', 1721)):
+        panel = obj(phases[phase])
+        result[phase] = exact_counts(panel, {'bin_ms': 20, 'condition_count': 108,
+            'forward_bins': 10, 'n_bins': 35, 'n_eval': 574, 'n_heldin': 137,
+            'n_heldout': 45, 'n_train': n_train}, 'SMC original panel')
+        require(panel['phase'] == phase and panel['dataset'] == 'mc_maze_20',
+                'SMC original panel identity differs')
+    return result
+
+
+def smc_calibration_records(doc, source):
+    require(doc.get('schema') == 'smc_source_calibration_report_draft_v1'
+            and doc.get('task_id') == 'PAPER-SMC-RNN-2024'
+            and doc.get('status') == 'author_reference_calibration_outputs_accepted_with_recovered_noncausal_aggregate_publication_review_pending'
+            and doc['ready_for_publication'] is False, 'unsupported SMC calibration report')
+    completion = obj(doc['completion'])
+    require(all(completion[key] is True for key in ('all_four_metrics_per_arm_reviewed',
+        'author_reference_calibration_outputs_accepted', 'both_aggregates_authenticated',
+        'both_original_scoring_children_completed', 'both_predictions_frozen'))
+        and all(completion[key] is False for key in ('both_supervised_scoring_stages_passed',
+        'candidate_episode_executed', 'controlled_ai_pass', 'llm_study_executed'))
+        and completion['full_source_qualification'] is None
+        and completion['publication_review_accepted'] is None
+        and doc['execution_counts']['llm_study_executed'] is False,
+        'SMC accepted reference outputs cannot imply full supervision or candidate qualification')
+    exact_counts(doc['execution_counts'], {'candidate_runs': 0, 'completed_full_author_prediction_runs': 2,
+        'original_scoring_children': 2, 'scoring_retries': 0, 'supervised_scoring_failures': 1,
+        'supervised_scoring_stage_attempts': 2}, 'SMC calibration execution scope')
+    disposition = obj(doc['root_disposition'])
+    require(disposition['status'] == 'accepted_existing_recovered_reference_calibration_output_only'
+        and disposition['accepted_existing_noncausal_aggregate'] is True
+        and disposition['failure_receipt_preserved'] is True
+        and disposition['fully_successful_noncausal_supervised_stage_claimed'] is False
+        and disposition['retry_authorized'] is False,
+        'SMC recovered output requires the preserved failed-stage disposition')
+    scoring = obj(doc['scoring'])
+    names = ['co-bps', 'vel R2', 'psth R2', 'fp-bps']
+    require(scoring['required_metrics'] == names and scoring['tolerance_is_success_criterion'] is False
+        and number(scoring['diagnostic_tolerance']) == 0.01
+        and scoring['input_group'] == 'mc_maze_20' and scoring['result_group'] == 'mc_maze_20_split',
+        'SMC diagnostic tolerance is not a reproduction success rule')
+    require(doc['data']['full_panel_only'] is True and doc['data']['data_values_in_report'] is False,
+            'SMC calibration report must retain its complete metadata-only scope')
+    panels = smc_original_panels(doc['data']['phases'])
+    arms = obj(doc['arms'])
+    require(set(arms) == {'causal', 'noncausal'}, 'both SMC calibration arms required')
+    limits = texts(doc['claim_limits'])
+    require(bool(limits), 'SMC calibration interpretation limits required')
+    limits = limits + ['The 108 conditions describe the source cohort, not 108 nonempty scored PSTHs.']
+    rows = []
+    for arm in ('causal', 'noncausal'):
+        values = obj(arms[arm])
+        causal = arm == 'causal'
+        expected_status = ('authenticated_aggregate_supervision_succeeded' if causal
+                           else 'accepted_recovered_reference_calibration_aggregate_supervision_failed')
+        require(values['status'] == expected_status and values['native_prediction_complete'] is True
+                and values['all_four_metrics_finite'] is True and values['source_chain_after_run_verified'] is True
+                and integer(values['particles']) == 192 and integer(values['repeats']) == 32
+                and values['smooth'] is False and values['independent_repeat_uncertainty'] is None,
+                'SMC calibration arm scope differs')
+        execution = obj(values['scoring_execution'])
+        require(integer(execution['scorer_child_exit_code']) == 0
+                and integer(execution['supervisor_exit_code']) == (0 if causal else 1)
+                and execution['supervisor_success'] is causal
+                and execution['native_ledger_status'] == ('succeeded' if causal else 'failed'),
+                'SMC scorer output and supervisor lifecycle must remain distinct')
+        if not causal:
+            require(execution['failure'] == 'ValueError: Scorer identity changed'
+                    and execution['existing_aggregate_root_admitted'] is True,
+                    'SMC noncausal failure and recovered-output acceptance required')
+        else:
+            require(execution['failure'] is None, 'SMC causal successful supervisor has a failure')
+        observed, published, deltas = (obj(values[key]) for key in
+            ('observed_metrics', 'published_metrics', 'signed_delta_observed_minus_published'))
+        require(all(set(group) == set(names) for group in (observed, published, deltas)),
+                'SMC all four original metrics required')
+        metrics = []
+        for name in names:
+            value, reference, delta = number(observed[name]), number(published[name]), number(deltas[name])
+            require(delta == value - reference, 'SMC observed-minus-published delta differs')
+            metrics.append({**metric(name, value, 'higher', {'published_same_method': reference}),
+                            'signed_delta_observed_minus_published': delta})
+        row = record('smc-author-reference-calibration:' + arm, 'PAPER-SMC-RNN-2024',
+            'author_reference_calibration', source, '/arms/' + arm,
+            'Complete selected author predictions and four original aggregate metrics; recovered noncausal output retains its failed supervisor.',
+            arm + ' released author model, 192 particles and 32 averaged repeats', limits)
+        row.update(metrics=metrics, original_panels=panels, scored_phase='test',
+            validation_panel_role='Original input metadata only; no validation scoring is inferred.', status=expected_status,
+            particles=192, repeats=32, scoring_execution={key: execution[key] for key in
+                ('scorer_child_exit_code', 'supervisor_exit_code', 'supervisor_success', 'native_ledger_status', 'failure')},
+            diagnostic_tolerance=0.01, tolerance_is_success_criterion=False,
+            independent_repeat_uncertainty=None, candidate_attempts_recorded=0, solver_attempts_recorded=0,
+            recovered_output_accepted=not causal,
+            original_report_state={'schema': doc['schema'], 'status': text(doc['status']),
+                'ready_for_publication': doc['ready_for_publication'],
+                'publication_review_accepted': completion['publication_review_accepted'],
+                'meaning': 'Preserved report-assembly state, not a new publication or qualification decision.'},
+            retained_evidence={key: digest(values[key]) for key in
+                ('prediction_sha256', 'freeze_receipt_sha256', 'score_report_sha256',
+                 'score_supervisor_receipt_sha256', 'aggregate_authentication_review_sha256')})
+        rows.append(row)
+    return rows
+
+
+def smc_material_records(doc, source):
+    require(doc.get('schema') == 'smc_official_assets_material_validation_receipt_v2'
+        and doc.get('task_id') == 'PAPER-SMC-RNN-2024'
+        and doc.get('status') == 'complete_current_participant_materials_prepared_and_independently_verified'
+        and integer(doc['registered_benchmark_count_delta']) == 0,
+        'unsupported SMC material preparation report')
+    interpretation = obj(doc['interpretation'])
+    require(all(interpretation[key] is False for key in ('AI_execution', 'checkpoint_deserialization',
+        'model_loading_training_inference_or_scoring', 'original_test_target_access'))
+        and interpretation['reproduction_result'] == interpretation['improvement_result'] == 'not_attempted',
+        'SMC material preparation cannot imply participant execution or results')
+    materials = obj(doc['materials'])
+    conditions = ['paper_data', 'paper_data_author_code_and_weights']
+    require(materials['conditions'] == conditions and integer(materials['file_count']) == 71
+        and extent(materials['total_bytes']) == 31393479 and integer(materials['official_asset_count']) == 10
+        and materials['published_payload'] is False
+        and all(materials[key] is True for key in ('all_assets_assisted_only', 'shared_materials_identical',
+            'unknown_files_original_test_targets_and_operator_predictions_absent')),
+        'SMC material inventory or access separation differs')
+    require(set(obj(materials['condition_manifest_sha256'])) == set(conditions), 'SMC material conditions differ')
+    panels = smc_original_panels(materials['original_source_panels'])
+    validation = obj(doc['validation'])
+    exact_counts(validation, {'failed_or_retried_attempts': 0, 'inspect_attempts': 1, 'prepare_attempts': 1},
+                 'SMC material validation attempts')
+    require(set(obj(validation['stages'])) == {'inspect', 'prepare'}
+            and all(integer(obj(stage)['exit_code']) == 0 for stage in validation['stages'].values()),
+            'SMC material stages must preserve successful completion')
+    review_pins = {key: digest(validation[key]) for key in
+                  ('independent_final_review_sha256', 'independent_saved_file_review_sha256')}
+    row = record('smc-official-assets-materials-v2', 'PAPER-SMC-RNN-2024',
+        'participant_material_preparation', source, '/materials',
+        'Complete external 71-file paper/data and author-code/released-model material pair; payloads are not published in this report.',
+        'paper_data versus paper_data_author_code_and_weights; version2 material preparation',
+        [text(interpretation['scientific_limits']), text(interpretation['participant_runtime_enforcement']),
+         'This receipt records its original material pair and resource profiles; later exports remain separate.'])
+    row.update(coverage={'files': 71, 'total_bytes': 31393479, 'official_assets': 10},
+        original_panels=panels, conditions=conditions,
+        condition_manifest_sha256={key: digest(value) for key, value in materials['condition_manifest_sha256'].items()},
+        pair_manifest_sha256=digest(materials['pair_manifest_sha256']), published_payload=False,
+        independent_review_sha256=review_pins,
+        participant_episode_executed=False, model_attempts_recorded=0, solver_attempts_recorded=0,
+        reproduction_result='not_attempted', improvement_result='not_attempted')
+    return [row]
 
 
 def neural096_preparation_records(doc, source):
@@ -915,7 +1070,9 @@ def load(root, task_ids=None):
                               (REVE_PREPARATION, paper_preparation_records), (DEEP_PREPARATION, paper_preparation_records),
                               (SMC_PREPARATION, smc_preparation_records),
                               (SMC_PROBES, lambda doc, source: smc_probe_records(doc, source, captured_reports.get(SMC_PREPARATION))),
-                              (NEURAL096_PREPARATION, neural096_preparation_records)):
+                              (NEURAL096_PREPARATION, neural096_preparation_records),
+                              (SMC_CALIBRATION, smc_calibration_records),
+                              (SMC_MATERIALS, smc_material_records)):
         try:
             captured = read(root, relative)
             if captured is None:
@@ -944,6 +1101,10 @@ def load(root, task_ids=None):
         'paper_source_preparation_reports': categories['paper_source_preparation'],
         'neural_source_preparation_reports': categories['neural_source_preparation'],
         'author_model_inference_probes': categories['author_model_inference_probe'],
+        'author_reference_calibration_arms': categories['author_reference_calibration'],
+        'author_reference_calibration_reports': len({row['source']['path'] for items in records.values() for row in items
+                                                   if row['category'] == 'author_reference_calibration'}),
+        'participant_material_preparation_reports': categories['participant_material_preparation'],
         'author_model_inference_probe_reports': len({row['source']['path'] for items in records.values() for row in items
                                                    if row['category'] == 'author_model_inference_probe'}),
         'paper_source_preparation_tasks': sum(any(row['category'] == 'paper_source_preparation' for row in items)

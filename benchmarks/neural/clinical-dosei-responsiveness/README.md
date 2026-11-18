@@ -44,6 +44,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
+- [Source runtime qualification v1](implementations/source-runtime-qualification-v1) — Metadata only source evidence.
+  Scope: Metadata-only source-runtime diagnostic receipt and observation note. This artifact admits no executable runtime-parent source. Zero of six runtime controls is qualified; three failed attempts remain retained. It changes no EEG, provider/model, scoring, network policy, participant pairing or readiness claim.
 - [Ordinal and paired](implementations/ordinal-and-paired) — Ordinal and paired.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Ordinal metrics v2](implementations/ordinal-metrics-v2) — Task implementation.

@@ -75,6 +75,10 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Calibration only.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Prediction interface v1](implementations/prediction-interface-v1) — Reviewed source component.
+  Scope: Reviewed prediction interface and trusted fixed-control source with its scoped public engineering receipt. A fixed control is not participant/model execution, a new scientific result or runtime qualification; original evaluation and historical limits remain unchanged.
+- [Trusted fixed control v1](implementations/trusted-fixed-control-v1) — Reviewed source component.
+  Scope: Reviewed prediction interface and trusted fixed-control source with its scoped public engineering receipt. A fixed control is not participant/model execution, a new scientific result or runtime qualification; original evaluation and historical limits remain unchanged.
 - [Source cv replay v1](implementations/source-cv-replay-v1) — Reviewed source component.
   Scope: Source condition-CV replay and training packet projection. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 - [Source model producer v1](implementations/source-model-producer-v1) — Reviewed source component.

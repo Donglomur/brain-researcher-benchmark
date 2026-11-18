@@ -1,0 +1,96 @@
+{
+  "author_revision": "9674a6cb0c39926d70746024ce17de35f87df8f9",
+  "functions": [
+    {
+      "derived": "recorded_glm.py",
+      "derived_function": "fit_search_recorded",
+      "intentional_changes": [
+        "Explicit numeric capture-array ceiling before source validation/casts and estimator calls.",
+        "Row-identified ndarray wraps original validated design; numeric values unchanged.",
+        "Additional scoring recorder calls original estimator.score unchanged, then predict for exact alpha/fold/unit raw operands. Extra prediction warnings are retained separately.",
+        "Original search/refit/selected-alpha extra fits and source outputs retained; adds alpha_oof_predictions and capture metadata.",
+        "Require the original estimator float64 prediction dtype; refuse unsupported dtypes instead of silently narrowing their values."
+      ],
+      "source": "../original-grid-producer-v1/glm_search.py",
+      "source_function": "fit_search",
+      "source_function_text_sha256": "bb0ca0ce76a5ab32619da45ce4b68a8e6ef663a027057bcf3d125636b966d671",
+      "source_sha256": "0d0ee0da6ef13e430bc8ce207a38d94d2eebffd82816c333b162e41a02ff1321"
+    },
+    {
+      "derived": "recorded_glm.py",
+      "derived_function": "fit_session_recorded",
+      "intentional_changes": [
+        "Additional explicit capture budget argument/validation.",
+        "Original preprocessing unchanged; dispatch to fit_search_recorded."
+      ],
+      "source": "../original-grid-producer-v1/glm_search.py",
+      "source_function": "fit_session",
+      "source_function_text_sha256": "76356e96da4eff577e29f29fb85f75905ccc22cba0bc5da78badd081cc89e43b",
+      "source_sha256": "0d0ee0da6ef13e430bc8ce207a38d94d2eebffd82816c333b162e41a02ff1321"
+    },
+    {
+      "derived": "recorded_geometry.py",
+      "derived_function": "readout_recorded",
+      "intentional_changes": [
+        "Additional explicit raw-prediction allocation ceiling.",
+        "Retain the already-computed svc_pred values by existing test-row and valid-teacher order.",
+        "Validate numeric capture shape; no added classifier calls or random draws.",
+        "Require the original estimator float64 prediction dtype; refuse unsupported dtypes instead of silently narrowing their values."
+      ],
+      "source": "../original-grid-producer-v1/geometry_results.py",
+      "source_function": "readout",
+      "source_function_text_sha256": "cfb4821de6c7c1b08e12d370415e545eaa012c86b956a7ecb03e10ef67a95116",
+      "source_sha256": "79cc4ec77d1cf32938ff1afac7998951919916c54eb6d871a1b7275e84ee036e"
+    },
+    {
+      "derived": "recorded_geometry.py",
+      "derived_function": "geometry_repetition_recorded",
+      "intentional_changes": [
+        "Additional explicit prediction budget argument/validation.",
+        "Original draw/covariance/geometry unchanged; dispatch to readout_recorded."
+      ],
+      "source": "../original-grid-producer-v1/geometry_results.py",
+      "source_function": "geometry_repetition",
+      "source_function_text_sha256": "632a831cefdccea5a10e2174fb6b3b5295dc4738aa312ecacbe1d32144a26315",
+      "source_sha256": "79cc4ec77d1cf32938ff1afac7998951919916c54eb6d871a1b7275e84ee036e"
+    },
+    {
+      "derived": "raw_producer.py",
+      "derived_function": "run_glm",
+      "intentional_changes": [
+        "New recording execution binding; existing summaries cannot resume without raw operands.",
+        "Explicit per-result/cumulative output and capture ceilings.",
+        "Dispatch to recorded session fitter; retain source job/packet fields and source aggregation.",
+        "Partial chunk and successful output accounting are explicit; external controller owns failed/prior write accounting."
+      ],
+      "source": "../original-grid-producer-v1/producer.py",
+      "source_function": "run_glm",
+      "source_function_text_sha256": "16070797d0ab290329072c3a80bc7d70cf5e9dd31ef7485beb7eb8f6d593d422",
+      "source_sha256": "891cc87cb9ce825d375114dafd78f77e5f11f9ca0187f8108602876b27c54328"
+    },
+    {
+      "derived": "raw_producer.py",
+      "derived_function": "run_geometry",
+      "intentional_changes": [
+        "New recording execution binding; existing summaries cannot resume without raw operands.",
+        "Explicit per-result/cumulative output and raw-prediction ceilings.",
+        "Original RNG stream and resume order retained; dispatch to recorded geometry function.",
+        "Optional stop restricts only a prefix checkpoint, never benchmark support."
+      ],
+      "source": "../original-grid-producer-v1/producer.py",
+      "source_function": "run_geometry",
+      "source_function_text_sha256": "d5e7e26b9198fbe121544948cd558c39428554c1a8c91c34557206e3f797503b",
+      "source_sha256": "891cc87cb9ce825d375114dafd78f77e5f11f9ca0187f8108602876b27c54328"
+    }
+  ],
+  "integration": "staged_delivery.py composes unchanged candidate-grid-submission-v1 collector and raw evaluator schemas; dependency_loader.py authenticates all11 sibling files.",
+  "schema": "population_raw_recording_lineage/v1",
+  "scope_limits": [
+    "This is source derivation and generated control-flow validation, not numerical parity of genuine estimator fitting.",
+    "No original method, original panel, original fitting labels or metric is replaced.",
+    "Participant staging and required per-coordinate isolation are prospective delivery restrictions, not recovered author workflow.",
+    "No authentic arrays, actual trained models, native production run, AI trial, paper reproduction or improvement established."
+  ],
+  "task_id": "PAPER-paper-method-add-006",
+  "unchanged_original_source": true
+}

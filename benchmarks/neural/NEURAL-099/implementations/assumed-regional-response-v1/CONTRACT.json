@@ -1,0 +1,66 @@
+{
+  "schema": "neural099-assumed-regional-response-construction/v1",
+  "task_id": "NEURAL-099",
+  "condition_id": "processed-regional-early-response-assumed-support-v1",
+  "status": "source construction and generated validation; authentic preparation and runtime qualification pending",
+  "authority": {
+    "condition_selection_sha256": "cfa111c88ece1f1254a1d0672a7203ea056ac82318b187cb6ab7a964da940672",
+    "protocol_selection_sha256": "ca39b5c189035ed4fa6d25203a99e9c1c5dd213e96a51d9b313abe03593e7b6d",
+    "sequential_refit_addendum_sha256": "0dec37e443efbf255a966d44afe511f842edf7ebba13c555dfdb0ed820543fee",
+    "state_and_refit": "Persistent permitted past within one animal, resets between animals/folds, and one frozen refit on all four non-query folds after selection are selected. Source-declared 26-MGN-animal grouping is accepted with the unknown-alias limitation."
+  },
+  "scientific_claim": "Predict processed extracellular regional response rates under an explicit prespecified-window observation assumption. This is a new benchmark endpoint, not reproduction of the original paper or proof of verified physiological silence.",
+  "preserved_original_gap": "Verified physiological observation coverage remains unresolved. No recording duration is inferred from spikes, click stops or histology timestamps.",
+  "support": {
+    "source": "DANDI 001421 version 0.250521.2343, full MGN component",
+    "files": 26,
+    "declared_source_subject_ids": 26,
+    "source_trial_rows": 5238,
+    "source_clusters": 2053,
+    "eligible_good_and_mua_named_region_clusters": 1387,
+    "unassigned_clusters_audited": 666,
+    "nonempty_asset_region_cells": 49,
+    "regional_trial_cases_from_headers": 9867,
+    "response_scalars_if_all_windows_are_later_admitted": 986700,
+    "zero_rule": "A missing region or zero cluster denominator is unsupported. A zero deposited-event count in an eligible cell is conditional on assumed support, not independently verified neuronal silence.",
+    "identity": "The paper reports26 MGN mice and the authenticated MGN roster has26 unique source subject identifiers. Their source-declared animal grouping is accepted, with unknown aliases retained as a limitation; no grouping is inferred from dates, prefixes or demographics. Known crossarchive HK210212 overlap is outside MGN-only scope. Any later discovered alias must remain within one fold. Declared identity is not independent biological verification. Multiple sessions would need a qualified chronology schedule before the one-asset cursor can be extended."
+  },
+  "target": {
+    "response_ms": [0, 100],
+    "optional_history_ms": [-100, 0],
+    "bin_width_ms": 1,
+    "intervals": "half-open",
+    "units": "deposited spike events per retained source cluster per nominal second",
+    "primary": "equal animal, then available region, then trial, then bin MSE",
+    "secondary": ["same hierarchy MAE", "same hierarchy MSE after averaging each consecutive five 1-ms rates into 20 five-ms rates"],
+    "reference": "region-specific animal-balanced final-training mean with explicit animal/region-balanced global fallback for unseen regions"
+  },
+  "conditions": {
+    "information_views": ["timing", "timing_history"],
+    "canonical_projection": "condition.project emits identical semantic observations for a future viewer or programme adapter in the same information condition. Raw unit spikes and response gold are evaluator-only.",
+    "viewer_status": "canonical input source seam only; no graphical renderer, viewer/provider runtime or native AI run is qualified",
+    "programme_status": "canonical input and prediction source seam only; no candidate process containment or actual programme run is qualified",
+    "demonstration_budget": "Not yet bound. Full-training programmes and limited-demonstration viewers must have separately labelled information budgets; their difference is not an isolated tool-use effect.",
+    "state": "sequential within-animal prediction using only already permitted observations and prior own predictions; reset between animals and folds; no query response feedback",
+    "folds": "Five outer folds; selected animal-ID hash namespace; next fold for selection validation, other three for initial training; one frozen final refit on all four non-query folds; candidate procedure fixed before all outer folds; no outer scores until every prediction locks"
+  },
+  "implemented": [
+    "strict pinned metadata decoding and full support joins",
+    "explicit selected protocol and declared fold construction",
+    "pure half-open event counting and nominal-denominator preparation",
+    "known-gap and cross-trial history/response overlap rejection",
+    "whitelisted paired observation projection and chronological prediction locking",
+    "complete prediction admission before private gold access",
+    "ragged animal/region scoring and competent mean reference"
+  ],
+  "not_qualified": [
+    "authentic click timestamp membership and onset semantics on the deposited spike clock",
+    "authentic neural-array preparation or any scientific score",
+    "independent observation continuity or biological identity",
+    "process-level fold isolation, state resets, candidate containment and private-gold secrecy",
+    "graphical viewer parity, demonstration-budget parity, native AI performance or SOTA"
+  ],
+  "full_cohort_reference_scorer_cost": "Unmeasured. Exact rational reference arithmetic prioritizes correctness; generated tiny fixtures do not establish production runtime.",
+  "retrospective_limit": "Released sorting and eligibility may use whole-session information; sequential permitted-input delivery is not proof of strictly online preprocessing.",
+  "contamination_limit": "The original study data are public. This source construction does not establish hidden test-data secrecy."
+}

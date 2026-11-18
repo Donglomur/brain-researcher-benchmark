@@ -84,7 +84,8 @@ Package-local task IDs do not override this registered definition; ownership lin
 - [Code](https://github.com/panzerilab/MINT/blob/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/How_to_use_MINT/How_to_compute_non_discrete.m)
 - [Code](https://raw.githubusercontent.com/panzerilab/MINT/f0d43b68a6e8541f56b3ca67d9af5a7a0e76acbb/README.md)
 - [Code](https://zenodo.org/records/13998526)
-- [Source](https://doi.org/10.1371/journal.pcbi.1012934.s002)
+- [Data](https://doi.org/10.1371/journal.pcbi.1012934.s002)
+- [Paper](https://journals.plos.org/ploscompbiol/article%3Fid=10.1371/journal.pcbi.1012934)
 
 Citations come from the specification; their availability was not rechecked when generating this page.
 

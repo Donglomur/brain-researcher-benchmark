@@ -69,7 +69,8 @@ Package-local task IDs do not override this registered definition; ownership lin
 - [Code](https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/run_train.py)
 - [Code](https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/trial_selections/pretrain_split_trials.json)
 - [Code](https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/trial_selections/test_trials.json)
-- [Source](https://braintreebank.dev/)
+- [Data](https://braintreebank.dev/)
+- [Paper](https://openreview.net/forum%3Fid=FVuqJt3c4L)
 - [Source](https://drive.google.com/file/d/14ZBOafR7RJ4A6TsurOXjFVMXiVH6Kd_Q/view)
 - [Source](https://huggingface.co/api/models/PopulationTransformer/popt_brainbert_stft)
 

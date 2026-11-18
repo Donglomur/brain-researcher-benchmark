@@ -113,7 +113,8 @@ Package-local task IDs do not override this registered definition; ownership lin
 - [Code](https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/aggregate_runs.py)
 - [Code](https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/run_finetune_folds.sh)
 - [Code](https://raw.githubusercontent.com/ShanechiLab/BaRISTA/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/utility_scripts/run_finetune_random_splits.sh)
-- [Source](https://braintreebank.dev/)
+- [Data](https://braintreebank.dev/)
+- [Paper](https://openreview.net/forum%3Fid=LDjBDk3Czb)
 - [Source](https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/electrode_selections/clean_laplacian.json)
 
 Citations come from the specification; their availability was not rechecked when generating this page.
