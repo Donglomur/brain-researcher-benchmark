@@ -15,14 +15,14 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | Task | Scientific question / title | Implementation artifacts | Legacy runtime declaration |
 | --- | --- | --- | --- |
 | [NEURAL-001](NEURAL-001/README.md) | Audiobook-calibrated sentence-envelope inference from MEG | 3 | not linked |
-| [NEURAL-002](NEURAL-002/README.md) | Early marker-window stimulus-ID inference from MorseEEG | 3 | [manifest](NEURAL-002/implementations/registered-runtime/manifest.json) |
+| [NEURAL-002](NEURAL-002/README.md) | Early marker-window stimulus-ID inference from MorseEEG | 4 | [manifest](NEURAL-002/implementations/registered-runtime/manifest.json) |
 | [NEURAL-003](NEURAL-003/README.md) | Fixed-deadline reaction-time inference from causal EEG | 2 | not linked |
 | [NEURAL-004](NEURAL-004/README.md) | Conditional contrast inference and HMP evidence investigation | 4 | not linked |
 | [NEURAL-005](NEURAL-005/README.md) | ERP contribution to subsequent social choice | 4 | [manifest](NEURAL-005/implementations/registered-runtime/manifest.json) |
 | [NEURAL-006](NEURAL-006/README.md) | Reward versus emotion prediction-error physiology | 4 | not linked |
 | [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 13 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
 | [NEURAL-008](NEURAL-008/README.md) | EOG information beyond EEG and sleep timing | 5 | [manifest](NEURAL-008/implementations/registered-runtime/manifest.json) |
-| [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 3 | not linked |
+| [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 5 | not linked |
 | [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 7 | not linked |
 | [NEURAL-011](NEURAL-011/README.md) | Adult clinical seizure-event detection | 2 | not linked |
 | [NEURAL-012](NEURAL-012/README.md) | Cross-cohort seizure robustness | 3 | [manifest](NEURAL-012/implementations/registered-runtime/manifest.json) |
@@ -37,10 +37,10 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-021](NEURAL-021/README.md) | Somatosensory hand-velocity decoding | 7 | [manifest](NEURAL-021/implementations/registered-runtime/manifest.json) |
 | [NEURAL-022](NEURAL-022/README.md) | Active-versus-passive sensory coding | 5 | not linked |
 | [NEURAL-023](NEURAL-023/README.md) | Continuous reaching across recording days | 4 | [manifest](NEURAL-023/implementations/registered-runtime/manifest.json) |
-| [NEURAL-024](NEURAL-024/README.md) | Stable population dynamics across days | 4 | [manifest](NEURAL-024/implementations/registered-runtime/manifest.json) |
+| [NEURAL-024](NEURAL-024/README.md) | Stable population dynamics across days | 5 | [manifest](NEURAL-024/implementations/registered-runtime/manifest.json) |
 | [NEURAL-025](NEURAL-025/README.md) | Fine reach-kinematics decoding from calcium | 6 | not linked |
 | [NEURAL-026](NEURAL-026/README.md) | Fine-joint information beyond reach phase | 5 | not linked |
-| [NEURAL-027](NEURAL-027/README.md) | Visual stimulus decoding across learning phases | 3 | not linked |
+| [NEURAL-027](NEURAL-027/README.md) | Visual stimulus decoding across learning phases | 4 | not linked |
 | [NEURAL-028](NEURAL-028/README.md) | Reward-free versus rewarded cortical learning | 3 | not linked |
 | [NEURAL-029](NEURAL-029/README.md) | Registered granule-cell reward-delay trajectory transfer | 3 | [manifest](NEURAL-029/implementations/registered-runtime/manifest.json) |
 | [NEURAL-030](NEURAL-030/README.md) | Cerebellar decoding of planned-delay lick-contact counts | 5 | [manifest](NEURAL-030/implementations/registered-runtime/manifest.json) |
@@ -52,7 +52,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-036](NEURAL-036/README.md) | Retrospective prediction of released glial-behavior state proxy | 3 | [manifest](NEURAL-036/implementations/registered-runtime/manifest.json) |
 | [NEURAL-037](NEURAL-037/README.md) | Acquisition-local held-condition calcium response prediction | 3 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
 | [NEURAL-038](NEURAL-038/README.md) | Sensory-context modulation of optogenetic calcium response investigation | 4 | [manifest](NEURAL-038/implementations/registered-runtime/manifest.json) |
-| [NEURAL-039](NEURAL-039/README.md) | Natural-movie parcel-response encoding | 3 | [manifest](NEURAL-039/implementations/registered-runtime/manifest.json) |
+| [NEURAL-039](NEURAL-039/README.md) | Natural-movie parcel-response encoding | 4 | [manifest](NEURAL-039/implementations/registered-runtime/manifest.json) |
 | [NEURAL-040](NEURAL-040/README.md) | Audio, visual and language contributions to fMRI | 2 | not linked |
 | [NEURAL-041](NEURAL-041/README.md) | Working-memory load decoding | 2 | [manifest](NEURAL-041/implementations/registered-runtime/manifest.json) |
 | [NEURAL-042](NEURAL-042/README.md) | Load-dependent theta-gamma coupling | 5 | [manifest](NEURAL-042/implementations/registered-runtime/manifest.json) |
@@ -86,7 +86,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-070](NEURAL-070/README.md) | Action dynamics beyond static appearance | 2 | [manifest](NEURAL-070/implementations/registered-runtime/manifest.json) |
 | [NEURAL-071](NEURAL-071/README.md) | Story-to-brain language encoding | 2 | not linked |
 | [NEURAL-072](NEURAL-072/README.md) | Contextual linguistic information beyond acoustics | 2 | not linked |
-| [NEURAL-073](NEURAL-073/README.md) | Cognitive task identification from fMRI maps | 2 | [manifest](NEURAL-073/implementations/registered-runtime/manifest.json) |
+| [NEURAL-073](NEURAL-073/README.md) | Cognitive task identification from fMRI maps | 4 | [manifest](NEURAL-073/implementations/registered-runtime/manifest.json) |
 | [NEURAL-074](NEURAL-074/README.md) | Shared cognitive components across tasks | 3 | not linked |
 | [NEURAL-075](NEURAL-075/README.md) | Perception-to-imagery object decoding | 3 | [manifest](NEURAL-075/implementations/registered-runtime/manifest.json) |
 | [NEURAL-076](NEURAL-076/README.md) | Visual-feature hierarchy in mental imagery | 3 | [manifest](NEURAL-076/implementations/registered-runtime/manifest.json) |
@@ -97,7 +97,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-081](NEURAL-081/README.md) | Imagined melody identification | 3 | not linked |
 | [NEURAL-082](NEURAL-082/README.md) | Rhythm versus melody information in music imagery | 2 | [manifest](NEURAL-082/implementations/registered-runtime/manifest.json) |
 | [NEURAL-083](NEURAL-083/README.md) | Motor-imagery protocol classification with fixed calibration | 5 | not linked |
-| [NEURAL-084](NEURAL-084/README.md) | Overt-gaze steady-state visual target decoding | 3 | not linked |
+| [NEURAL-084](NEURAL-084/README.md) | Overt-gaze steady-state visual target decoding | 6 | not linked |
 | [NEURAL-085](NEURAL-085/README.md) | Natural versus task-directed reading from EEG | 4 | [manifest](NEURAL-085/implementations/registered-runtime/manifest.json) |
 | [NEURAL-086](NEURAL-086/README.md) | EEG reading effects beyond fixation and words | 4 | [manifest](NEURAL-086/implementations/registered-runtime/manifest.json) |
 | [NEURAL-087](NEURAL-087/README.md) | Connectivity prediction from functional tuning | 2 | [manifest](NEURAL-087/implementations/registered-runtime/manifest.json) |

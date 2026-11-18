@@ -26,7 +26,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 
 | Task | Scientific question / title | Reproduction eligibility | Improvement disposition | Implementation artifacts | Legacy runtime declaration |
 | --- | --- | --- | --- | --- | --- |
-| [PAPER-FIND-003](PAPER-FIND-003/README.md) | Human hippocampal ripples align new experiences with a grid-like schema | unavailable | unavailable | 2 | [manifest](PAPER-FIND-003/implementations/registered-runtime/manifest.json) |
+| [PAPER-FIND-003](PAPER-FIND-003/README.md) | Human hippocampal ripples align new experiences with a grid-like schema | unavailable | unavailable | 3 | [manifest](PAPER-FIND-003/implementations/registered-runtime/manifest.json) |
 | [PAPER-FIND-004](PAPER-FIND-004/README.md) | Brain-wide representations of prior information in mouse decision-making | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-FIND-005](PAPER-FIND-005/README.md) | A brain-wide map of neural activity during complex behaviour | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-FIND-013](PAPER-FIND-013/README.md) | Synaptic plasticity rules driving representational shifting in the hippocampus | unavailable | unavailable | 4 | [manifest](PAPER-FIND-013/implementations/registered-runtime/manifest.json) |
@@ -92,7 +92,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-method-030](PAPER-paper-method-030/README.md) | Robust self-supervised denoising of voltage imaging data using CellMincer | source_unresolved | source_unresolved | 4 | not linked |
 | [PAPER-paper-method-031](PAPER-paper-method-031/README.md) | Real-time self-supervised denoising for high-speed fluorescence neural imaging | source_unresolved | source_unresolved | 3 | not linked |
 | [PAPER-paper-method-032](PAPER-paper-method-032/README.md) | MindEye2: Shared-Subject Models Enable fMRI-To-Image With 1 Hour of Data | source_unresolved | design_ready | 2 | not linked |
-| [PAPER-paper-method-033](PAPER-paper-method-033/README.md) | MindBridge: A Cross-Subject Brain Decoding Framework | design_ready | design_ready | 4 | not linked |
+| [PAPER-paper-method-033](PAPER-paper-method-033/README.md) | MindBridge: A Cross-Subject Brain Decoding Framework | design_ready | design_ready | 6 | not linked |
 | [PAPER-paper-method-034](PAPER-paper-method-034/README.md) | MARBLE: interpretable representations of neural population dynamics using geometric deep learning | source_unresolved | source_unresolved | 5 | [manifest](PAPER-paper-method-034/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-042](PAPER-paper-method-042/README.md) | UMBRAE: Unified Multimodal Brain Decoding | source_unresolved | design_ready | 3 | not linked |
 | [PAPER-paper-method-043](PAPER-paper-method-043/README.md) | NeuroPictor: Refining fMRI-to-Image Reconstruction via Multi-individual Pretraining and Multi-level Modulation | source_unresolved | source_unresolved | 3 | not linked |
@@ -123,8 +123,8 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-signal-add-012](PAPER-paper-signal-add-012/README.md) | Measuring the dynamic balance of integration and segregation underlying consciousness, anesthesia, and sleep in humans | source_unresolved | design_ready | 2 | not linked |
 | [PAPER-paper-signal-add-013](PAPER-paper-signal-add-013/README.md) | BOLD signal changes can oppose oxygen metabolism across the human cortex | source_unresolved | source_unresolved | 3 | not linked |
 | [PAPER-paper-signal-add-017](PAPER-paper-signal-add-017/README.md) | EEG-based brain-computer interface enables real-time robotic hand control at individual finger level | source_unresolved | source_unresolved | 3 | not linked |
-| [PAPER-paper-signal-add-019](PAPER-paper-signal-add-019/README.md) | Decision-making components and times revealed by the single-trial electroencephalogram | source_unresolved | source_unresolved | 4 | not linked |
-| [PAPER-paper-signal-add-020](PAPER-paper-signal-add-020/README.md) | Separable neural signals for reward and emotion prediction errors | source_unresolved | ineligible | 3 | [manifest](PAPER-paper-signal-add-020/implementations/registered-runtime/manifest.json) |
+| [PAPER-paper-signal-add-019](PAPER-paper-signal-add-019/README.md) | Decision-making components and times revealed by the single-trial electroencephalogram | source_unresolved | source_unresolved | 5 | not linked |
+| [PAPER-paper-signal-add-020](PAPER-paper-signal-add-020/README.md) | Separable neural signals for reward and emotion prediction errors | source_unresolved | ineligible | 4 | [manifest](PAPER-paper-signal-add-020/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-signal-add-021](PAPER-paper-signal-add-021/README.md) | Perturbing human V1 degrades the fidelity of visual working memory | source_unresolved | ineligible | 6 | [manifest](PAPER-paper-signal-add-021/implementations/registered-runtime/manifest.json) |
 ## Expansion drafts (17)
 
@@ -140,8 +140,8 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-CANDIDATE-20261114-POYO](PAPER-CANDIDATE-20261114-POYO/README.md) | Cross-session transfer of a unified neural population decoder | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-CANDIDATE-20261114-SBIND](PAPER-CANDIDATE-20261114-SBIND/README.md) | Joint behavioral decoding and neural prediction from full spatial imaging fields | source_unresolved | design_ready | 5 | not linked |
 | [PAPER-EXP-20261113-002](PAPER-EXP-20261113-002/README.md) | Flexible neural population dynamics govern the speed and stability of sensory encoding in mouse visual cortex | source_unresolved | source_unresolved | 3 | not linked |
-| [PAPER-EXP-20261113-003](PAPER-EXP-20261113-003/README.md) | Emotion regulation capacity lacks a shared neural signature | unavailable | unavailable | 6 | not linked |
-| [PAPER-EXP-20261113-004](PAPER-EXP-20261113-004/README.md) | A flexible hippocampal population code for experience relative to reward | source_unresolved | source_unresolved | 3 | not linked |
+| [PAPER-EXP-20261113-003](PAPER-EXP-20261113-003/README.md) | Emotion regulation capacity lacks a shared neural signature | unavailable | unavailable | 7 | not linked |
+| [PAPER-EXP-20261113-004](PAPER-EXP-20261113-004/README.md) | A flexible hippocampal population code for experience relative to reward | source_unresolved | source_unresolved | 4 | not linked |
 | [PAPER-EXP-20261113-005](PAPER-EXP-20261113-005/README.md) | A prefrontal cortex map based on single-neuron activity | unavailable | unavailable | 7 | not linked |
 | [PAPER-SCOPE-20261114-LATENTCIRCUIT](PAPER-SCOPE-20261114-LATENTCIRCUIT/README.md) | Latent circuit inference from heterogeneous neural responses during cognitive tasks | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-SCOPE-20261114-REM-DYNAMICS](PAPER-SCOPE-20261114-REM-DYNAMICS/README.md) | Low-dimensional population dynamics in the brainstem gate REM sleep | source_unresolved | source_unresolved | 2 | not linked |

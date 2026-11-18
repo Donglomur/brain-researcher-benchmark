@@ -59,6 +59,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Trusted owner](implementations/trusted-owner) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Nider original input custody v1](implementations/nider-original-input-custody-v1) — Reviewed source component.
+  Scope: Exact original-input custody and command binding, preserving new57-expression production versus existing26/17 qualification. No original R execution, native verification, fit causality or same-task superiority is established.
 - [Nider primary companions v1](implementations/nider-primary-companions-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Nider primary producer v2](implementations/nider-primary-producer-v2) — Reviewed task source component.

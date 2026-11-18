@@ -53,6 +53,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. This retained scoring facade requires 2 source or input dependencies absent from the public baseline. Correcting its repository locator does not make it runnable from this checkout alone. This limit does not apply automatically to sibling implementations of the task. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Companion designs v1](implementations/companion-designs-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
+- [Original model export v1](implementations/original-model-export-v1) — Reviewed source component.
+  Scope: Conditional source-only original-model-frame exporter. Historical per-call source hashes and overwritten metadata bodies are unavailable; fresh final-source validation and native R/model-object qualification remain required.
 - [Processed inputs v1](implementations/processed-inputs-v1) — Reviewed source component.
   Scope: Processed ERP input preparation. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
