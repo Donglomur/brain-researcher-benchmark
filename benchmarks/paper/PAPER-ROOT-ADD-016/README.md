@@ -69,6 +69,7 @@ This preserved declaration is lineage, not current execution qualification. Its 
 ## Task documentation
 
 - [Complete cohort and saved-draw reference preparation](docs/full-cohort-admission-v1.md)
+- [Public source availability and missing original-cohort evidence (2026-11-18)](docs/source-availability-2026-11-18.md)
 
 ## Implementation artifacts
 

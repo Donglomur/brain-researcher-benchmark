@@ -453,6 +453,68 @@ def _current(original, contract, binding, source_id):
             if hold.get("id") == "scorer":
                 hold["requirement"] = "The complete-condition evaluator and generated negative controls exist as source. Qualify authentic complete-support execution, protected target custody and independent reference/scoring before any scientific claim."
         current["next_implementation_action"] = copy.deepcopy(contract["implementation"]["missing"])
+    # These exact source recoveries update inherited construction actions only.
+    # Full-task admission, original history and scientific/runtime holds stay intact.
+    scope_refresh = {'NEURAL-018': ('submitted-program-source', 'benchmarks/neural/NEURAL-018/implementations/submitted-program-v1/run.py', '914c77f95749aed1565025a85aefd7173d368e69590d142fb874eabd52b2965f'), 'NEURAL-022': ('typed-count-viewer-source', 'benchmarks/neural/NEURAL-022/implementations/typed-count-viewer-v1/viewer.py', '691a5c261fb70003f834d75e4b4fd1c3180954b498ed47cc8f0234569c3aee22'), 'NEURAL-031': ('paired-executor-source', 'benchmarks/neural/NEURAL-031/implementations/paired-executor-v1/executor.py', '56b437d590136c089810e09dc6688ba4fd30c7f552f9d73216eece996fc6f5b2')}
+    selected_refresh = scope_refresh.get(contract["task_id"])
+    if selected_refresh is not None and any(
+            (item.get("id"), item.get("path"), item.get("sha256")) == selected_refresh
+            and item.get("kind") == "local_source" for item in contract["evidence"]):
+        for hold in current.get("holds", []):
+            if hold.get("id") == "scorer":
+                hold["requirement"] = "The existing complete evaluator and generated source controls are delivered. Independently qualify complete authentic-input scoring, protected targets, failure handling and matched reference execution before scientific admission."
+        current["next_implementation_action"] = copy.deepcopy(contract["implementation"]["missing"])
+    # Reviewed publisher locators change source metadata only. Exact report
+    # bindings preserve the unresolved release, cohort and runtime conditions.
+    if contract["task_id"] == 'NEURAL-075' and any(
+            item.get("id") == 'god-source-locator-20261118-v1'
+            and item.get("kind") == "local_review"
+            and item.get("path") == 'docs/provenance/neural-source-locators/god-20261118-v1.json'
+            and item.get("sha256") == '027c2c51473ecfb5c9a2917f5c006cdb66e782f61279c5db845d09e1218c9917'
+            for item in contract["evidence"]):
+        current['reference']['data_url'] = 'https://figshare.com/articles/dataset/Generic_Object_Decoding/7387130'
+        current['input_assets']['routes'] = ['https://github.com/KamitaniLab/GenericObjectDecoding', 'https://www.nature.com/articles/ncomms15037', 'https://figshare.com/articles/dataset/Generic_Object_Decoding/7387130', 'https://openneuro.org/datasets/ds001246']
+        current['holds'][1]['requirement'] = 'Author-deposited data are identified as Figshare 7387130 (preprocessed fMRI and image features) and OpenNeuro ds001246 (raw fMRI). Figshare version 8 is the publisher release observed during this locator audit, not a newly selected benchmark release. Preserve the processing-branch and exact-byte qualification gates; independently bind the benchmark assets to a frozen publisher manifest before acquisition or use. Stimulus images require request; code MIT does not cover images.'
+    if contract["task_id"] == 'NEURAL-076' and any(
+            item.get("id") == 'god-source-locator-20261118-v1'
+            and item.get("kind") == "local_review"
+            and item.get("path") == 'docs/provenance/neural-source-locators/god-20261118-v1.json'
+            and item.get("sha256") == '027c2c51473ecfb5c9a2917f5c006cdb66e782f61279c5db845d09e1218c9917'
+            for item in contract["evidence"]):
+        current['reference']['data_url'] = 'https://figshare.com/articles/dataset/Generic_Object_Decoding/7387130'
+        current['input_assets']['routes'] = ['https://github.com/KamitaniLab/GenericObjectDecoding', 'https://www.nature.com/articles/ncomms15037', 'https://figshare.com/articles/dataset/Generic_Object_Decoding/7387130', 'https://openneuro.org/datasets/ds001246']
+        current['holds'][1]['requirement'] = 'Author-deposited data are identified as Figshare 7387130 (preprocessed fMRI and image features) and OpenNeuro ds001246 (raw fMRI). Figshare version 8 is the publisher release observed during this locator audit, not a newly selected benchmark release. Preserve the processing-branch and exact-byte qualification gates; independently bind the benchmark assets to a frozen publisher manifest before acquisition or use. Stimulus images require request; code MIT does not cover images.'
+    if contract["task_id"] == 'NEURAL-089' and any(
+            item.get("id") == 'libribrain-source-locator-20261118-v1'
+            and item.get("kind") == "local_review"
+            and item.get("path") == 'docs/provenance/neural-source-locators/libribrain-20261118-v1.json'
+            and item.get("sha256") == '6cf510e585e7a7096753878b6060a11b1d285cf0ed366843484a1a37753cfb41'
+            for item in contract["evidence"]):
+        current['reference']['source_paper'] = 'https://arxiv.org/abs/2506.02098'
+        current['reference']['data_url'] = 'https://huggingface.co/datasets/pnpl/LibriBrain/tree/5a7c332b34fc7be329c4df3e527a41f67bfd878f'
+        current['source_identity']['titles'] = ['LibriBrain 2025 original participant (frozen 90-run selection)']
+    if contract["task_id"] == 'NEURAL-090' and any(
+            item.get("id") == 'libribrain-source-locator-20261118-v1'
+            and item.get("kind") == "local_review"
+            and item.get("path") == 'docs/provenance/neural-source-locators/libribrain-20261118-v1.json'
+            and item.get("sha256") == '6cf510e585e7a7096753878b6060a11b1d285cf0ed366843484a1a37753cfb41'
+            for item in contract["evidence"]):
+        current['reference']['data_url'] = 'https://huggingface.co/datasets/pnpl/LibriBrain2/tree/78443d024480c66bf340073c69bef50af8d1d335/Sherlock1'
+        current['source_identity']['titles'] = ['LibriBrain100 Broad (subjects 1–32; two Sherlock chapters)']
+    if contract["task_id"] == 'NEURAL-099' and any(
+            item.get("id") == 'garcia-source-locator-20261118-v1'
+            and item.get("kind") == "local_review"
+            and item.get("path") == 'docs/provenance/neural-source-locators/garcia-20261118-v1.json'
+            and item.get("sha256") == '13a8c7e945182679c950d642af73b944c841a8c6f489014297c9b41dc6285368'
+            for item in contract["evidence"]):
+        current['reference']['data_url'] = 'https://doi.org/10.48324/dandi.001421/0.250521.2343'
+    if contract["task_id"] == 'NEURAL-100' and any(
+            item.get("id") == 'garcia-source-locator-20261118-v1'
+            and item.get("kind") == "local_review"
+            and item.get("path") == 'docs/provenance/neural-source-locators/garcia-20261118-v1.json'
+            and item.get("sha256") == '13a8c7e945182679c950d642af73b944c841a8c6f489014297c9b41dc6285368'
+            for item in contract["evidence"]):
+        current['reference']['data_url'] = 'https://doi.org/10.48324/dandi.001419/0.250521.2343'
     return current
 
 

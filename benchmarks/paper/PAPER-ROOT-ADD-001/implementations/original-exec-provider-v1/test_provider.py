@@ -1,5 +1,6 @@
-"""Generated format/custody/mocked lifecycle controls; no native child launch."""
+"""Generated format/custody/lifecycle and real stdout-pipe transport controls."""
 from contextlib import ExitStack
+import ast
 import hashlib
 import importlib.util
 import io
@@ -7,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import struct
+import subprocess
 import sys
 import tempfile
 import time
@@ -296,6 +298,111 @@ class MockNativeLifecycle(unittest.TestCase):
     def test_nonzero_candidate_never_returns_raw_transport(self):
         result,events=self.scenario(True)
         self.assertIsNone(result);self.assertIn(('close',90),events)
+
+
+# Only filesystem locations are adapted: main(), decoding, candidate import/call,
+# np.save, PipeWriter and the child's real stdout pipe remain production code.
+PIPE_CHILD = r'''
+import importlib.util
+import os
+from pathlib import Path
+import stat
+import sys
+entry, root, byte_limit, work_limit = sys.argv[1:]
+assert stat.S_ISFIFO(os.fstat(1).st_mode), 'stdout must be an actual pipe'
+real_spec = importlib.util.spec_from_file_location
+spec = real_spec('generated_pipe_participant', entry)
+module = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+real_bounded = module.bounded
+paths = {name: Path(root)/Path(name).name for name in
+         ('/input/request.json', '/input/features.npy', '/input/responses.bin')}
+def relocated_bounded(path, cap):
+    return real_bounded(paths[path], cap)
+def relocated_candidate(name, path):
+    assert path == '/candidate/candidate.py'
+    return real_spec(name, Path(root)/'candidate.py')
+module.bounded = relocated_bounded
+module.importlib.util.spec_from_file_location = relocated_candidate
+sys.argv = [entry, byte_limit, work_limit]
+module.main()
+'''
+
+
+class PublicMainPipeControls(unittest.TestCase):
+    """Generated real-process transport checks; no native sandbox qualification."""
+    def child(self, candidate, *, broken_pipe=False):
+        _, _, bundle, feature, descriptor = inputs()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for name, raw in (('request.json', descriptor.public_json),
+                              ('features.npy', feature), ('responses.bin', bundle)):
+                (root/name).write_bytes(raw)
+            (root/'candidate.py').write_text(candidate, encoding='utf-8')
+            command = [sys.executable, '-I', '-B', '-c', PIPE_CHILD,
+                       str(HERE/'participant_entry.py'), str(root), str(BYTE), str(WORK)]
+            if broken_pipe:
+                read_fd, write_fd = os.pipe()
+                os.close(read_fd)
+                try:
+                    return subprocess.run(command, stdin=subprocess.DEVNULL, stdout=write_fd,
+                                          stderr=subprocess.PIPE, cwd=root, timeout=10, check=False)
+                finally:
+                    os.close(write_fd)
+            return subprocess.run(command, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                                  stderr=subprocess.PIPE, cwd=root, timeout=10, check=False)
+
+    def test_real_main_pipe_preserves_npy_dtype_order_and_payload(self):
+        for dtype, order in (('<f4', 'C'), ('<f8', 'F'), ('>f4', 'C'), ('>f8', 'F')):
+            with self.subTest(dtype=dtype, order=order):
+                child = self.child(
+                    "import numpy as np\nprint('candidate-import')\n"
+                    "def predict(tx, ty, qx, context):\n"
+                    "    print('candidate-call')\n"
+                    "    assert (tx.shape, ty.shape, qx.shape) == ((4,30),(4,2),(2,30))\n"
+                    f"    return np.array([[0., -0.], [1.25, -2.5]], dtype={dtype!r}, order={order!r})\n")
+                self.assertEqual(child.returncode, 0, child.stderr.decode(errors='replace'))
+                self.assertEqual(child.stderr, b'candidate-import\ncandidate-call\n')
+                # Independent NPY reader: no participant decoder or NumPy load/save.
+                raw = child.stdout
+                self.assertLessEqual(len(raw), 2048)
+                self.assertEqual(raw[:6], b'\x93NUMPY')
+                self.assertIn(raw[6:8], (b'\x01\x00', b'\x02\x00'))
+                prefix = 10 if raw[6] == 1 else 12
+                size = int.from_bytes(raw[8:prefix], 'little')
+                self.assertTrue(0 < size <= 1024)
+                header = ast.literal_eval(raw[prefix:prefix+size].decode('latin1'))
+                self.assertEqual(set(header), {'descr', 'shape', 'fortran_order'})
+                self.assertEqual(header['descr'], dtype)
+                self.assertEqual(header['shape'], (2, 2))
+                self.assertIs(header['fortran_order'], order == 'F')
+                values = (0., -0., 1.25, -2.5) if order == 'C' else (0., 1.25, -0., -2.5)
+                expected = struct.pack(dtype[0] + ('4f' if dtype[-1] == '4' else '4d'), *values)
+                # Exact payload equality also rejects truncation, extra bytes, and lost -0 bits.
+                self.assertEqual(raw[prefix+size:], expected)
+
+    def test_real_main_invalid_prediction_and_candidate_error_emit_no_npy(self):
+        for expression in ('[[0., 0.], [0., 0.]]', 'np.zeros((2,2), dtype=np.int64)',
+                           'np.zeros((1,2))', 'np.full((2,2), np.nan)'):
+            with self.subTest(expression=expression):
+                child = self.child('import numpy as np\ndef predict(*args):\n    return ' + expression + '\n')
+                self.assertNotEqual(child.returncode, 0)
+                self.assertEqual(child.stdout, b'')
+                self.assertIn(b'Finite exact raw prediction geometry', child.stderr)
+        for candidate in ("raise RuntimeError('generated-import-failure')\n",
+                          "def predict(*args):\n    raise RuntimeError('generated-predict-failure')\n"):
+            with self.subTest(candidate=candidate):
+                child = self.child(candidate)
+                self.assertNotEqual(child.returncode, 0)
+                self.assertEqual(child.stdout, b'')
+                self.assertIn(b'RuntimeError: generated-', child.stderr)
+
+    def test_real_main_broken_stdout_pipe_fails(self):
+        child = self.child('import numpy as np\ndef predict(tx,ty,qx,context):\n'
+                           '    return np.zeros((len(qx),ty.shape[1]), dtype=np.float64)\n',
+                           broken_pipe=True)
+        self.assertNotEqual(child.returncode, 0)
+        self.assertIn(b'BrokenPipeError', child.stderr)
 
 
 if __name__=='__main__':unittest.main()

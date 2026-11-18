@@ -1,0 +1,147 @@
+{
+  "schema": "neural-source-locator-review/v1",
+  "review_id": "libribrain-source-locator-20261118-v1",
+  "checked_on": "2026-11-18",
+  "scope": "Reviewed primary-source cohort identity and publisher file-inventory metadata only. No recording bodies, executable qualification, model evaluation or readiness promotion.",
+  "primary_sources": [
+    {
+      "id": "original-paper",
+      "url": "https://arxiv.org/html/2506.02098v1",
+      "locations": [
+        "Section 3.3, lines 154–169 in the inspected HTML",
+        "Table 2, lines 147–153"
+      ],
+      "finding": "The original single-participant LibriBrain paper links the author data repository pnpl/LibriBrain. Table 2 reports 93 sessions: 91 training, one validation and one test."
+    },
+    {
+      "id": "broad-paper",
+      "url": "https://arxiv.org/html/2608.25204v1",
+      "locations": [
+        "Table 1, lines 108–119",
+        "Section 3.2, lines 122–131",
+        "Section 3.3, lines 177–181"
+      ],
+      "finding": "LibriBrain100 is the union of LibriBrain and LibriBrain2. Its Broad component adds subjects 1–32 with two Sherlock chapter blocks each, distinct from the original subject-0 cohort. LibriBrain100 is not a third independent collection."
+    },
+    {
+      "id": "original-publisher-inventory",
+      "url": "https://huggingface.co/api/datasets/pnpl/LibriBrain/revision/5a7c332b34fc7be329c4df3e527a41f67bfd878f",
+      "response_bytes": 99075,
+      "response_sha256": "8c51d444497ae94a6d9c03c32e7d057cf00fed611288c38d6dba2a70156d7cd6",
+      "json_fields": [
+        "id",
+        "sha",
+        "siblings[].rfilename",
+        "cardData.license"
+      ],
+      "repository": "pnpl/LibriBrain",
+      "revision": "5a7c332b34fc7be329c4df3e527a41f67bfd878f"
+    },
+    {
+      "id": "broad-publisher-inventory",
+      "url": "https://huggingface.co/api/datasets/pnpl/LibriBrain2",
+      "response_bytes": 121904,
+      "response_sha256": "835d2ba921d1fc1c5a9258c0e7e6b5786f2d1c9ca3961308a2b70fe80852797d",
+      "json_fields": [
+        "id",
+        "sha",
+        "siblings[].rfilename",
+        "description",
+        "cardData.license"
+      ],
+      "repository": "pnpl/LibriBrain2",
+      "observed_revision": "78443d024480c66bf340073c69bef50af8d1d335",
+      "current_endpoint_caveat": "The API endpoint is mutable; these findings concern the pinned response and its reported revision only."
+    }
+  ],
+  "task_sources": {
+    "NEURAL-089": {
+      "cohort": "Original LibriBrain subject 0; frozen 2025-phoneme 90-run selection",
+      "repository": "pnpl/LibriBrain",
+      "dataset_revision": "5a7c332b34fc7be329c4df3e527a41f67bfd878f",
+      "data_locator": "https://huggingface.co/datasets/pnpl/LibriBrain/tree/5a7c332b34fc7be329c4df3e527a41f67bfd878f",
+      "selected_manifest": {
+        "path": "benchmarks/neural/NEURAL-089/implementations/phoneme-programme/source_identity/ORIGINAL_ASSETS.json",
+        "bytes": 91873,
+        "sha256": "23489ecda2cfb13fcb425593fa9370f64e4188c8aca7f5c9d79bb4343e0ddcba"
+      },
+      "selection": {
+        "people": 1,
+        "runs": 90,
+        "train": 88,
+        "validation": 1,
+        "query": 1,
+        "recording_paths": 90,
+        "event_paths": 90,
+        "publisher_inventory_paths_matched": 180
+      },
+      "paper_panel_difference": {
+        "published_sessions": 93,
+        "selected_runs": 90,
+        "equivalence_established": false,
+        "meaning": "The task-selected panel is not established as the entire published paper panel. No run is added or removed by this locator correction."
+      },
+      "validation_scope": "Publisher path identities match the already-maintained selected manifest. No payload checksum, content, channel order, numerical preparation or runtime execution was newly verified."
+    },
+    "NEURAL-090": {
+      "cohort": "LibriBrain100 Broad, subjects 1–32, Sherlock chapters 11 and 12",
+      "repository": "pnpl/LibriBrain2",
+      "metadata_observed_revision": "78443d024480c66bf340073c69bef50af8d1d335",
+      "data_locator": "https://huggingface.co/datasets/pnpl/LibriBrain2/tree/78443d024480c66bf340073c69bef50af8d1d335/Sherlock1",
+      "run_key_rule": {
+        "subjects": {
+          "first": 1,
+          "last": 32
+        },
+        "sessions": [
+          "11",
+          "12"
+        ],
+        "task": "Sherlock1",
+        "run": "1"
+      },
+      "publisher_inventory": {
+        "people": 32,
+        "chapter_blocks": 64,
+        "event_paths": 64,
+        "recording_paths": 64,
+        "full_named_serialised_paths": 24,
+        "first_half_competition_paths": 20,
+        "first_quarter_competition_paths": 20,
+        "Sherlock1_FIF_paths": 0
+      },
+      "source_patterns": {
+        "event": "Sherlock1/derivatives/events/sub-{subject}_ses-{session}_task-Sherlock1_run-1_events.tsv",
+        "full_named": "Sherlock1/derivatives/serialised/sub-{subject}_ses-{session}_task-Sherlock1_run-1_proc-bads+headpos+sss+notch+bp+ds_meg.h5",
+        "first_half": "Sherlock1/derivatives/serialised_competition/sub-{subject}_ses-{session}_task-Sherlock1_run-1_proc-bads+headpos+sss+notch+bp+ds_desc-firsthalf_meg.h5",
+        "first_quarter": "Sherlock1/derivatives/serialised_competition/sub-{subject}_ses-{session}_task-Sherlock1_run-1_proc-bads+headpos+sss+notch+bp+ds_desc-firstquarter_meg.h5"
+      },
+      "complete_full_original_collection_qualified": false,
+      "runtime_replacement_revision_selected": false,
+      "remaining_boundary": "The 64 published serialized paths cover the prescribed run keys, but 40 are reduced competition derivatives. The observed inventory has no Sherlock1 FIF paths. Complete original durations, payload pins, source clocks, channel identity, event equivalence and protected runtime catalogue remain unqualified."
+    }
+  },
+  "desired_task_field_values": {
+    "NEURAL-089": {
+      "/reference/source_paper": "https://arxiv.org/abs/2506.02098",
+      "/reference/data_url": "https://huggingface.co/datasets/pnpl/LibriBrain/tree/5a7c332b34fc7be329c4df3e527a41f67bfd878f",
+      "/source_identity/titles": [
+        "LibriBrain 2025 original participant (frozen 90-run selection)"
+      ]
+    },
+    "NEURAL-090": {
+      "/reference/data_url": "https://huggingface.co/datasets/pnpl/LibriBrain2/tree/78443d024480c66bf340073c69bef50af8d1d335/Sherlock1",
+      "/source_identity/titles": [
+        "LibriBrain100 Broad (subjects 1–32; two Sherlock chapters)"
+      ]
+    }
+  },
+  "counting": "Two cohort units, sharing a LibriBrain family identity. The union, chapter blocks, files and reduced derivatives are not additional independent cohorts.",
+  "preserved_boundaries": [
+    "No target, metric, split, access mode, disposition, admission flag or existing evidence is changed by this metadata report.",
+    "The observed Broad revision is a locator/inventory observation, not a replacement selected for numerical execution.",
+    "The 2026 paper benchmarks word classification; NEURAL-090 retains its existing phoneme adaptation and does not become a published word-result reproduction.",
+    "Publisher metadata declares CC-BY-NC-4.0; this report does not establish redistribution permissions or complete a rights audit.",
+    "All original source, numerical, runtime, provider and scientific qualification holds remain in force."
+  ]
+}

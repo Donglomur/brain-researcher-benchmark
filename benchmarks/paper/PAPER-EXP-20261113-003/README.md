@@ -51,6 +51,12 @@ Within the existing improvement contract, historical graders and pilot scores re
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Primary endpoint source audit](docs/provenance/primary-endpoint-source-audit.v1.json)
+- [Archived primary endpoint reproduction contract](docs/provenance/primary-endpoint-audit-20261118-v1/reproduction.v2.json)
+- [Archived primary endpoint outcomes](docs/provenance/primary-endpoint-audit-20261118-v1/outcomes.v1.json)
+
 ## Implementation artifacts
 
 - [Nider arm64 owner setup v1](implementations/nider-arm64-owner-setup-v1) — Calibration only.

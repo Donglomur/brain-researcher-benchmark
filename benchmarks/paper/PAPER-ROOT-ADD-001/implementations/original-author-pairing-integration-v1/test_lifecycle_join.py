@@ -54,7 +54,7 @@ class LifecycleJoinControl(unittest.TestCase):
         for relative, expected in PINS.items():
             self.assertEqual(pin(TASK/'implementations'/relative)['sha256'], expected)
         r = load('_lifecycle_control_reference', PAIR/'executed_reference.py',
-                 '2805dcef579b0412da577ca1c5fa433d0a0dffe255540deab4ce22c25b530949')
+                 'b6d9db1eb1a22f3186f72c88c6003a389061e82615789dfc604e822a3369b0c9')
         pairing = load('_lifecycle_control_pairing', PAIR/'paired.py',
                        'c5da4304846f65c89a01fc3b5d22d0a4adf07fce32729db1f0e0e92dab1e4380')
         assay = load('_lifecycle_existing_assay',

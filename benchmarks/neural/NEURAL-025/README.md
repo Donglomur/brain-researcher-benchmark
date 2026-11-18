@@ -40,6 +40,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Prospective calcium/kinematics decoder and controls](docs/train-only-decoding-v1.md)
 - [Before processed-input source-condition adoption: task.json](docs/understanding-pre-source-condition-v2/task.json)
 - [Before processed-input source-condition adoption: understanding.v1.json](docs/understanding-pre-source-condition-v2/understanding.v1.json)
+- [Source-declared joint geometry and unresolved native lineage](docs/source-declared-joint-geometry.md)
 
 ## Implementation artifacts
 

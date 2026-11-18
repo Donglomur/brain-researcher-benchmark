@@ -20,7 +20,7 @@
   "task_type": "prediction",
   "neural_role": "input",
   "primary_outputs": [
-    "An eligible spine’s longitudinal structural change derived from baseline spine_volumes and followup_volumes, with the author eligibility/volume transform frozen. The historical declaration names next-day spine size; its missing scorer prevents verifying whether that endpoint exactly matches the original volume-change target."
+    "Observed follow-up spine volume divided by baseline volume for eligible requested rows, dimensionless, with no change equal to 1. Observed zero is valid; unavailable follow-up is not zero. This is the existing finite prediction protocol's recovered ratio endpoint, not a newly substituted normalized difference or raw next-day size."
   ],
   "input_assets": {
     "routes": [
@@ -77,22 +77,22 @@
   },
   "allowed_inputs": {
     "inputs": [
-      "Baseline spine volume, pre-followup movement/nonmovement activity and local/coincident coactivity; compartment and source-declared quality covariates.",
-      "Same permitted training examples for baseline and neural views, with transformations learned inside each training fold."
+      "Common baseline predictors: baseline volume, basal-compartment indicator, and both local/coincident neural-measurement missingness indicators. The neural view adds local normalized coactivity and normalized dendrite coincidence from the completed Early recording.",
+      "The same other nineteen whole mice, ordered training rows and observed ratio labels in both conditions; all transforms, fitting and selection remain training-only under the frozen matched method."
     ],
     "forbidden_inputs": [
       "Followup volume, followup activity, neighboring followup outcomes and labels derived from structural change.",
       "Source filenames or IDs encoding held-mouse answer values; other folds whose training outcomes reveal this fold."
     ],
-    "case_identity": "Historical manifest declares40 contexts (20 mice × baseline/neural),774 query requests and731 scored rows from1143 original rows. Exact public query IDs and row eligibility roster are not distributed here; request count is not the scored-row count.",
-    "split": "Proposed and historically declared held-mouse comparison groups every compartment of a mouse; full40 successor is marked not_run. Exact fold roster and the43 declared requested-but-unscored rows require recovery before scoring.",
-    "coverage": "20-mouse,731-scored-row declaration is a selected finite task, not all archived spine observations. Actual local source coverage is one runtime manifest only."
+    "case_identity": "The fixed support is 27 original members, 20 mice, 1,143 rows, 774 baseline-defined requests and 731 observed ratios; all 774 requests require predictions in each view, including 43 unavailable targets. Exact source identities are pinned by paired-delivery-v1 and target descriptors; biological payloads and private storage locations are not bundled.",
+    "split": "Complete 40 contexts: each of 20 mice held out in both baseline/neural views with every compartment together and the other nineteen mice as training. Fresh participant realms are required because another fold's training labels reveal this fold's targets. The accepted target/input bridge does not qualify candidate execution or matched-method compliance.",
+    "coverage": "The 20-mouse, 774-request/731-observed finite task is not all archived spine observations. Executable endpoint, complete paired delivery, private-target conversion and candidate executor source are present; retained accepted interoperability evidence covers all 40 existing contexts without a new participant/model/scientific run."
   },
   "biological_unit": "Mouse; repeated compartments, FOVs, dendrites and spines remain clustered within mouse.",
   "case_definition": "An eligible longitudinal spine pair within mouse/FOV/dendrite; query records are nested within one held-mouse fold.",
   "split": {
-    "policy": "Proposed and historically declared held-mouse comparison groups every compartment of a mouse; full40 successor is marked not_run. Exact fold roster and the43 declared requested-but-unscored rows require recovery before scoring.",
-    "coverage": "20-mouse,731-scored-row declaration is a selected finite task, not all archived spine observations. Actual local source coverage is one runtime manifest only."
+    "policy": "Complete 40 contexts: each of 20 mice held out in both baseline/neural views with every compartment together and the other nineteen mice as training. Fresh participant realms are required because another fold's training labels reveal this fold's targets. The accepted target/input bridge does not qualify candidate execution or matched-method compliance.",
+    "coverage": "The 20-mouse, 774-request/731-observed finite task is not all archived spine observations. Executable endpoint, complete paired delivery, private-target conversion and candidate executor source are present; retained accepted interoperability evidence covers all 40 existing contexts without a new participant/model/scientific run."
   },
   "reference": {
     "source_code_url": "https://zenodo.org/api/records/15047046/files/Repo_data_code.zip/content",
@@ -149,14 +149,21 @@
       ]
     },
     "frozen_program": {
-      "status": "not_delivered",
-      "representation": "A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout.",
-      "boundary": "Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode.",
+      "status": "source_available",
+      "representation": "One frozen submitted programme and declared matched method across all 40 original mouse/view contexts, joined to recovered complete paired delivery and the unchanged equal-mouse ratio scorer.",
+      "boundary": "Only one held-mouse view, its other-nineteen-mouse training labels and frozen source enter each fresh participant realm. Baseline shares neural missingness but no neural values. All contexts and producer closure must complete before protected target scoring; a method declaration is not independent evidence of matched fitting.",
       "evidence_ids": [
-        "declaration"
+        "ratio-endpoint-source",
+        "paired-delivery-source",
+        "paired-delivery-scope",
+        "paired-executor-source",
+        "paired-target-source",
+        "paired-executor-scope",
+        "target-input-interoperability"
       ],
       "missing": [
-        "Recover the named source/dependency closure and exact public input contract before executing or scoring."
+        "Exact native image/source/process containment, current resource admission and actual complete candidate execution.",
+        "Independent matched-method/scientific review and preserved original acquisition/correspondence limitations; programme source or target interoperability does not establish native neural understanding."
       ]
     }
   },
@@ -165,7 +172,7 @@
       "name": "equal_mouse_baseline_minus_neural_mae",
       "direction": "higher",
       "aggregation": "MAE across eligible spines within each held mouse; average20 mouse differences equally.",
-      "rationale": "Compare measured-target prediction under matched baseline and neural information. Historical manifest names this metric, but units/target transform remain unresolved."
+      "rationale": "Compare the existing dimensionless follow-up/baseline ratio under matched baseline and neural information; maintain equal-mouse baseline MAE minus neural MAE and complete support. This is not the paper's pooled correlation estimator."
     },
     "secondary": [
       "Report equal_mouse_baseline_mae and equal_mouse_neural_mae separately, plus every mouse and compartment result.",
@@ -174,8 +181,8 @@
     "comparators": [
       {
         "name": "Initial morphology and compartment",
-        "inputs": "Baseline volume and compartment only.",
-        "procedure": "Freeze a training-fold-only regularized regression and tuning rule; historical baseline-view structure exists but executable method is absent."
+        "inputs": "Baseline volume, compartment and the two neural-measurement missingness indicators shared with the neural view; no activity values.",
+        "procedure": "Freeze the same training-fold-only learner, tuning rule and budget across both original views. Source delivery and same-program checks exist; independent method review and competent candidate/reference execution remain required."
       },
       {
         "name": "Activity/coactivity added",
@@ -194,12 +201,12 @@
       "Restrict all spatial neighbor features to baseline observations; use mouse clustering for dendrite dependence."
     ],
     "uncertainty": "Report20 paired mouse differences and a mouse-cluster interval if the recovered roster confirms20 distinct animals. Measurement error and within-mouse dependence prohibit treating731 spines as731 replicates.",
-    "failure_policy": "Require complete public query identity before private grading; keep invalid/failed attempts. Recover the explicit eligibility map for774 requests versus731 scored rows and never treat omitted predictions as exclusion decisions.",
+    "failure_policy": "Require all 40 public contexts and all 774 requested row predictions in each view before private grading; retain failures and reject missing predictions, including predictions for requested rows with unavailable targets. Only the 731 observed ratios enter the original equal-mouse score; missing targets are never zeros or participant-selected exclusions.",
     "neural_understanding": {
       "schema_version": "neural-understanding/v1",
       "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
       "contract_path": "understanding.v1.json",
-      "contract_sha256": "8d332387bca3cb2017ed2d1e6480dea04703401c79c9607611b50afe8eb22420",
+      "contract_sha256": "ab08692709501821b16dd83fb1165758c4aac00499652851f16f4de70ab49a20",
       "original_definition_path": "historical/task.pre-understanding.v1.json",
       "original_definition_sha256": "5abc62e1fe2aa7a292d58df998176341067af9e46b4da141f4990651e06c1af6"
     }
@@ -247,7 +254,7 @@
     },
     {
       "id": "scorer",
-      "requirement": "Implement evaluator and negative tests for IDs, malformed/constant outputs, leakage, missingness and relevant null controls."
+      "requirement": "The existing complete evaluator and generated source controls are delivered. Independently qualify complete authentic-input scoring, protected targets, failure handling and matched reference execution before scientific admission."
     },
     {
       "id": "replication",
@@ -255,7 +262,10 @@
     }
   ],
   "next_implementation_action": [
-    "Audit feature timestamps and longitudinal spine correspondence; safe dictionary ingestion required."
+    "Preserve and authenticate the exact selected original packet/projection/target receipts when deploying; the accepted 40-context bridge does not qualify fresh raw-volume reconstruction, elapsed visit time or image-level longitudinal correspondence.",
+    "Qualify the isolated 40-context executor, exact image/source boundary, process/resource closure and same precommitted programme under the original complete 480-second batch allowance.",
+    "Independently review matched baseline/neural learning, training-only transforms and shared missingness, then execute complete candidate and comparator predictions before protected scoring.",
+    "Retain informative missingness, differing paper/prediction cohorts and overlapping training sets; stronger biological or population inference needs separately justified evidence. Direct, viewer and interactive investigator transports remain absent."
   ],
   "construction_review": null,
   "source_audit_overlays": [],

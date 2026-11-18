@@ -93,6 +93,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Conditional nested connectivity evaluation](docs/nested-connectivity-v1.md)
 - [Pre-scope reproduction source role](docs/provenance/reproduction.pre-scope.role.json)
 - [Preserved pre-scope reproduction declaration](docs/provenance/reproduction.pre-scope.v1.json)
+- [MEG generation provenance, observed discrepancies and remaining evidence](docs/generation-provenance-20261118/generation-provenance.v2.md)
+- [MEG primary source and derived-evidence identities](docs/generation-provenance-20261118/source-map.v2.json)
 
 ## Implementation artifacts
 
