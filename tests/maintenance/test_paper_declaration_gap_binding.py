@@ -324,13 +324,13 @@ class DeclarationGapBindingTests(DeclarationGapFixture):
         calls = 0
         observed = None
 
-        def changed_build(root):
+        def changed_build(root, **kwargs):
             nonlocal calls, observed
             calls += 1
             if calls == 2:
                 self.put(gaps.PATH, (self.root / gaps.PATH).read_bytes() + b" ")
                 observed = self.snapshot()
-            return original_build(root)
+            return original_build(root, **kwargs)
 
         with mock.patch.object(binder, "build_outputs", side_effect=changed_build):
             with self.assertRaises(ValueError):
