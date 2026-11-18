@@ -95,6 +95,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Preserved pre-scope reproduction declaration](docs/provenance/reproduction.pre-scope.v1.json)
 - [MEG generation provenance, observed discrepancies and remaining evidence](docs/generation-provenance-20261118/generation-provenance.v2.md)
 - [MEG primary source and derived-evidence identities](docs/generation-provenance-20261118/source-map.v2.json)
+- [Historical initial-classifier source linkage and unresolved full-bank qualification](docs/historical-classifier-source-binding.v1.md)
+- [Historical classifier source identities and public provenance](docs/historical-classifier-sources.v1.json)
 
 ## Implementation artifacts
 

@@ -69,6 +69,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+- [Historical release/archive source join; numerical reference unresolved](docs/historical-release-join-v1.json)
 
 ## Implementation artifacts
 

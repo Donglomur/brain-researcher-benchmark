@@ -21,7 +21,7 @@ R&K technician hypnogram labels mapped to W,N1,N2,N3,R with source stages3/4 mer
 
 | Condition | Source availability | Representation and boundary | Missing |
 | --- | --- | --- | --- |
-| Direct observation | not\_delivered | Potential direct sleep interpretation from prespecified scaled waveforms/numeric samples with fixed surrounding epochs. No tools or decoder caches; same authenticated target epochs and fixed context for all participants. | No complete direct sleep transport, response collector or model trial is delivered. |
+| Direct observation | not\_delivered | Potential direct sleep interpretation from prespecified scaled waveforms/numeric samples with fixed surrounding epochs. No tools or decoder caches; same authenticated target epochs and fixed context for all participants. | No complete direct sleep transport or response collector is delivered. |
 | Typed viewer | not\_delivered | Potential typed channel/time/scale waveform viewer for EEG/EOG, retaining calibrated time/amplitude axes and epoch context. Rendered views only; no raw-array export, masks, labels or cached stage predictions. | No typed sleep viewer or restrictive participant transport currently linked. |
 | Tool assisted | source\_available | Whole-night programme source supports case-adaptive numerical investigation and separately declared reference/tool conditions. Matched allowed views/tool opportunities, finite cumulative cost and fresh person state; supplied model outputs are explicit model assistance. | Qualified authentic complete-cohort execution; fresh external investigator model context not proven by file exchange. |
 | Frozen program | source\_available | Finite precommitted program with separate person processes and complete5,450-epoch output; full153 programme is separately scoped. Commit complete source/configuration before development dispatch; no cross-person mutable state or private labels. Shared-host audit is not hostile-code isolation. | Authentic hard-memory path requires qualified Linux runtime and exact dependency closure; old trials remain historical. |
@@ -42,7 +42,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18480 bytes; SHA-256 `d76d2a7d33930d791d101c6fa5636b32004e84b8678cf040d98b52949e2381a7`.
+- Specification identity: 18467 bytes; SHA-256 `2169ce3efef713414ded0519e4693b6f10db3ddbbdca28e14d1db94d771949c4`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -62,6 +62,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Separately named epoch-isolated raw-viewer and programme conditions for all 5450 targets across two already-exposed people. Each target exposes one original 3x3000 epoch and three same-target clocks, with full overview on each viewer request, optional same-target detail, fresh target context and first-answer custody. Historical whole-person conditions remain separate. Real provider, programme image/container/assets, complete target runtime, matched-agent provenance and raster/numeric information equivalence remain unqualified; no population, scientific-improvement or readiness claim.
 - [Viewer provider integration v1](implementations/viewer-provider-integration-v1) — Reviewed source component.
   Scope: Reviewed whole-person viewer sender and provenance source with fresh-viewer admission support. Five public generated controls are separate from retained private admission evidence. The whole-person 1500-image capacity hold, genuine provider/frame/token behavior, participant provenance and authentic runtime/scientific qualification remain unresolved. No whole-history scientific result or readiness is established.
+- [Epoch projection preflight v1](implementations/epoch-projection-preflight-v1) — Reviewed source component.
+  Scope: Portable source for the epoch-isolated projection preflight, reusing the maintained projection/viewer chain. Saved local generated controls cover the canonical roster using repeated synthetic fixtures and two first-epoch request constructions. Original operation remains disabled; original-data projection, saved-frame parity, hosted runtime, programme exposure, provider/model behavior and whole-task scientific qualification remain unestablished. The README retains its historical private-preparation wording; this registration contextualizes source ownership only and does not activate original operation.
 - [Finite attempt audit](implementations/finite-attempt-audit) — Independent programme lifecycle audit.
   Scope: Wraps the existing frozen lifecycle with externally retained commitment/completion witnesses and exact per-person stage, source, input, process, output and complete 5450-epoch joins. No fresh authentic candidate execution, private grading, authoring-history proof, hostile-host isolation, direct neural understanding or scientific qualification is established. The audit stops before grading.
 - [Finite workflow v1](implementations/finite-workflow-v1) — Reviewed source component.

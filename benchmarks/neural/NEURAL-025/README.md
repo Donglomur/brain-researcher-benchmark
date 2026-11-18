@@ -41,6 +41,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Before processed-input source-condition adoption: task.json](docs/understanding-pre-source-condition-v2/task.json)
 - [Before processed-input source-condition adoption: understanding.v1.json](docs/understanding-pre-source-condition-v2/understanding.v1.json)
 - [Source-declared joint geometry and unresolved native lineage](docs/source-declared-joint-geometry.md)
+- [Paper-cited figure-code revision and narrow source comparison; producer/calibration unresolved](docs/provenance/paper-figure-code-revision-20261118-v1.json)
 
 ## Implementation artifacts
 

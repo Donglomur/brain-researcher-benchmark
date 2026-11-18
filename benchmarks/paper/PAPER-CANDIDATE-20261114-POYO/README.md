@@ -50,6 +50,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Published transfer panel provenance](docs/provenance/published-transfer-panel.v1.json)
 - [Published transfer panel scope](docs/provenance/published-transfer-panel.v1.md)
+- [Contemporary code/import lineage; original2023 result linkage unresolved (identity map)](docs/provenance/code-import-lineage.v1.json)
+- [Contemporary code/import lineage; original2023 result linkage unresolved](docs/provenance/code-import-lineage.v1.md)
 
 ## Implementation artifacts
 

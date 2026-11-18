@@ -66,6 +66,10 @@ Within the existing improvement contract, historical graders and pilot scores re
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Original source scope; empirical pipeline unresolved](docs/provenance/npvc-original-source-scope.v1.md)
+
 ## Implementation artifacts
 
 - [Signed motifs](implementations/signed-motifs) — Calibration only.

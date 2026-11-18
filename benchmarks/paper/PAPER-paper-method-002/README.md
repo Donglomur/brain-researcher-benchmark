@@ -72,6 +72,7 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Pre-scope reproduction source role](docs/provenance/reproduction.pre-scope.role.json)
 - [Preserved pre-scope reproduction declaration](docs/provenance/reproduction.pre-scope.v1.json)
+- [Current reference qualification and historical replay scope](docs/reference-qualification-scope.v1.md)
 
 ## Implementation artifacts
 
