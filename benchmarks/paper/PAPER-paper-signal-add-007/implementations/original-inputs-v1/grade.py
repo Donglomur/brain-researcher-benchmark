@@ -14,7 +14,7 @@ from source import (ANIMALS, SOUNDS, TIME_BINS, UNITS, SOURCE_FILES, InputError,
                     read_json_with_pin, require, sha256_file, validate_policy, write_json)
 from predictions import MAX_BLOCK_BINS, inside, load_array, validate_public
 
-SCORER_SHA256 = "ee2f1d5e3d927c142ab3ec70aec212dfa7d70a8a7253905dd10016b85d6eea5e"
+SCORER_SHA256 = "6059486fcf3cf1c07c53fb1c214e5f5f76ded53995757c329d6ada557b812bae"
 
 
 def _canonical_hash(value):

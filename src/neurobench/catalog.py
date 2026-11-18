@@ -679,6 +679,15 @@ def discover(root=ROOT):
                                             'Initial source-paper task with no predecessor benchmark; source preparation and author calibration do not establish candidate superiority.')
         if bound_outcomes is not None:
             task['paper_outcomes'] = outcome_binding.public_summary(row, bound_outcomes)
+            if (bound_outcomes.get('reve_reporting_selected')
+                    or bound_outcomes.get('nuclr_reporting_selected')):
+                # Retained policy and history were checked above. Display the
+                # separately authenticated current reporting contract.
+                task['paper_improvement'] = {
+                    **improvement_module().summary(bound_outcomes['improvement_contract']),
+                    'contract': bound_outcomes['improvement_contract_pin'],
+                    'historical_specification': task['paper_improvement']['historical_specification'],
+                }
             if bound_outcomes.get('primary_policy_revision') is not None:
                 task['paper_improvement']['role'] = RETAINED_POLICY_ROLE
                 task['runtime_lineage_note'] = (
@@ -899,6 +908,8 @@ def validate(catalog, root=ROOT, *, _reader=None):
                       if original.get('track') == 'paper' and identifier in fixed_successors}
                      if authenticated_previous_rows is not None else set())
     successor_ids |= endpoint_ids
+    successor_ids |= {identifier for identifier, registered in source_by_id.items()
+                      if module.has_root004_scope(registered)}
     need(successor_ids <= {row['id'] for row in tasks}, 'Adopted primary successor tasks cannot be omitted')
     for registered in source_by_id.values():
         declaration = registered.get('paper_outcomes')
@@ -1602,6 +1613,15 @@ def render_tracks(catalog):
                                  '- ' + markdown_link('Selected current improvement contract', outcomes['improvement_contract']['path'], task) + '\n'
                                  '- ' + markdown_link('Authenticated endpoint selection', outcomes['primary_policy_revision']['path'], task) + '\n'
                                  '- ' + markdown_link('Reviewed endpoint selection authority', provenance['endpoint_selection_authority']['path'], task) + '\n\n'
+                                 '**Remaining reproduction/source limits:**\n\n'
+                                 + ''.join('- ' + markdown_text(limit) + '\n' for limit in outcomes['reproduction_blocking_issues'])
+                                 + '\n')
+                    elif row['id'] == 'PAPER-ROOT-ADD-004':
+                        text += ('The manuscript-scope correction requires participant temporal-generalization category-AUC surfaces for Figure 3a. '
+                                 'Figure 3b phase/memory and Figure 3c electrode/time coupling remain separate. '
+                                 'Original source inputs, numerical references, native execution and improvement inference remain unqualified.\n\n'
+                                 '- ' + markdown_link('Selected current improvement contract', outcomes['improvement_contract']['path'], task) + '\n'
+                                 '- ' + markdown_link('Authenticated manuscript-scope correction', outcomes['primary_policy_revision']['path'], task) + '\n\n'
                                  '**Remaining reproduction/source limits:**\n\n'
                                  + ''.join('- ' + markdown_text(limit) + '\n' for limit in outcomes['reproduction_blocking_issues'])
                                  + '\n')

@@ -10,7 +10,9 @@ animal/sound cases within one paper task, not 28 animals or new benchmarks.
 The original four sounds are evaluation material. The two response trials are
 not a train/test split. Neither response array is supplied to the predictor.
 Original development inputs, paper-era mask/crop correspondence, competent author
-and LNP replay, and the paper's scalar reduction remain separate requirements.
+and LNP replay remain separate requirements. The source-defined Fig. 4b/4d
+endpoint vectors do not require a universal scalar; historical textual-summary
+reconciliation is a separate reporting question.
 This component does not establish a reproduced finding, an improvement, or SOTA.
 
 ## What was recovered
@@ -164,7 +166,8 @@ Only after a complete prediction manifest exists does the separate grading stage
 read private response files. It requires the exact same public-panel hash,
 complete 28-case/two-trial identities, original columns, source mask, times and
 array pins. It creates a private manifest in memory and calls the byte-pinned,
-unchanged `source-equations-v1/scorer.py`; no large array copies are needed.
+`source-equations-v1/scorer.py` with unchanged Eq. 3–5 numerical kernels and an
+updated source endpoint binding; no large array copies are needed.
 
 ```sh
 python grade.py --public-manifest /operator/workspace/prepared/public/panel.json \
@@ -198,4 +201,18 @@ the large fixture was not repeated. The full-size test requires an explicit
 Two focused controls subsequently verify explicit nonidentity time-column mapping
 and refuse missing, duplicate or foreign sound identities.
 See `SOURCE.json` and `TESTING.json` for exact source dependencies and observed
-test evidence. Historical contracts and the earlier scorer remain unchanged.
+test evidence. Historical contracts and earlier test evidence remain unchanged. The current
+scorer reporting and its live dependency pins are updated; Eq. 3–5 numerical
+kernels remain unchanged.
+
+## Distinct LNP rate route
+
+This categorical transport retains its five count classes and original dtype
+contract. It must not be relabelled as the paper's Poisson LNP. The separate
+`source-equations-v1/lnp_comparison.py` accepts external LNP rates, samples
+unbounded int64 Poisson counts under explicit prospective seeds, and compares
+the same per-MUA Eq. 3–5 vectors while retaining flattened companions. It does
+not fit or authenticate LNP rates, recover historical sampling, or qualify a
+source baseline. The same prepared observations, unit mask, original columns
+and temporal support remain required. ICNet-minus-LNP results describe the
+original comparator contrast; candidate improvement over ICNet is separate.

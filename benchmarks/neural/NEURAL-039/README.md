@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Acquisition](acquisition) — Reviewed source component.
+  Scope: StageA logical metadata route and generated controls only; no HTTP execution, physical payload availability or outer-runtime admission.
 - [Movie10 evaluator v1](implementations/movie10-evaluator-v1) — Reviewed source component.
   Scope: Movie10 whole-film development evaluator. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Hmp original source](implementations/hmp-original-source) — Task implementation.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Protected grading identity v1](implementations/protected-grading-identity-v1) — Reviewed source component.
+  Scope: Protected grading identity source controls for the existing task; no metric, transport, target, workload or admission change and no runtime or scientific qualification.
 - [Paired contrasts v1](implementations/paired-contrasts-v1) — Reviewed source component.
   Scope: Paired prediction contrasts. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

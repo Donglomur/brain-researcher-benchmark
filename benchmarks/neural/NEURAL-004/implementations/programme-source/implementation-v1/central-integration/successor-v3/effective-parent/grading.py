@@ -1,15 +1,20 @@
 """Independent protected scoring; reconstruction, prediction and reasoning stay distinct."""
 import math
-from .common import (PEOPLE,PREDICTION_POLICIES,fields,need,probability,finite,
+from types import MappingProxyType
+from .common import (PEOPLE,MODES,VIEWS,PREDICTION_POLICIES,fields,need,probability,finite,
     integer,same_roster,pin,check_pin)
 from .investigator import forecast_rows
 
 class ReleaseBarrier:
     """Operator-side complete roster, never an actor-provided ready Boolean."""
     def __init__(self,contexts,reference_contexts,authorities,ledger):
-        need(len(contexts)==208 and len(reference_contexts)==52,'full208 actors plus52 reference slots')
-        need(len(set(contexts))==208 and len(set(reference_contexts))==52 and not(set(contexts)&set(reference_contexts)),'unique actor/reference contexts')
-        self.expected=set(contexts)|set(reference_contexts);self.closed={};self.authorities=authorities;self.ledger=ledger;self.release=None
+        need(type(contexts) is dict and set(contexts)=={(m,v,p) for m in MODES for v in VIEWS for p in PEOPLE},'source-owned complete208 actor slot map')
+        need(type(reference_contexts) is dict and set(reference_contexts)=={(f,p) for f in ('B','N') for p in PEOPLE},'source-owned complete52 reference slot map')
+        actor_values=list(contexts.values());reference_values=list(reference_contexts.values())
+        need(all(type(c) is str and c for c in actor_values+reference_values),'source-owned context names')
+        need(len(set(actor_values))==208 and len(set(reference_values))==52 and not(set(actor_values)&set(reference_values)),'unique actor/reference contexts')
+        self._actor_slots=MappingProxyType(dict(contexts));self._reference_slots=MappingProxyType(dict(reference_contexts))
+        self.expected=frozenset(actor_values+reference_values);self.closed={};self.authorities=authorities;self.ledger=ledger;self.release=None
         self.registered={}
     def register(self,context,disposition,limits,operation_qualifications):
         need(context in self.expected and context not in self.registered,'one source-owned expected context')
@@ -67,13 +72,16 @@ def person_loss(forecasts,answers):
 def grade_prediction_panels(barrier,actor_panels,reference_panels,target_bundle):
     need(type(barrier) is ReleaseBarrier and barrier.release is not None,'independently opened protected target barrier')
     need(pin(target_bundle,32*1048576)==barrier.target_bundle_pin,'exact independently released answers and private identity maps')
+    need(set(barrier.closed)==barrier.expected,'complete closed context roster')
     answers=target_bundle['answers'];maps=target_bundle['context_answer_maps']
     fields(actor_panels,PREDICTION_POLICIES);fields(reference_panels,('B','N'));fields(answers,PEOPLE)
-    results={};references={}
-    def one_panel(panel):
+    results={};references={};used_contexts=set()
+    def one_panel(panel,slot_contexts):
         fields(panel,PEOPLE);rows=[];failures=[]
         for person in PEOPLE:
             record=panel[person];fields(record,('context','status','forecasts','seal','answer_map'))
+            need(record['context']==slot_contexts[person],'exact source-owned role/person context')
+            need(record['context'] not in used_contexts,'each closed context used once');used_contexts.add(record['context'])
             need(record['context'] in barrier.closed,'context physically closed')
             disposition=barrier.closed[record['context']]['disposition'];need(record['status']==disposition['status'],'same closed context status')
             if record['status']!='sealed':failures.append({'person':person,'status':record['status']});continue
@@ -92,14 +100,16 @@ def grade_prediction_panels(barrier,actor_panels,reference_panels,target_bundle)
         leave=[math.fsum(r['mse'] for r in rows if r['person']!=p)/25 for p in PEOPLE]
         return {'status':'complete','person_results':rows,'failures':[],'macro_mse':loss,'display_percentage_point_rmse':100*math.sqrt(loss),
             'descriptive_delete_one_person_macro':leave,'population_confidence_interval':None,'unit':'fractional contrast squared'}
-    for family,panel in reference_panels.items():references[family]=one_panel(panel)
+    for family,panel in reference_panels.items():references[family]=one_panel(panel,{p:barrier._reference_slots[(family,p)] for p in PEOPLE})
     for policy,panel in actor_panels.items():
-        result=one_panel(panel);result['versus_behavior_reference']=None
+        mode,view=policy.split('/')
+        result=one_panel(panel,{p:barrier._actor_slots[(mode,view,p)] for p in PEOPLE});result['versus_behavior_reference']=None
         if result['status']==references['B']['status']=='complete':
             diff=[{'person':p,'behavior_minus_actor_mse':b['mse']-a['mse']} for p,b,a in zip(PEOPLE,references['B']['person_results'],result['person_results'])]
             result['versus_behavior_reference']={'people':diff,'person_macro_difference':math.fsum(x['behavior_minus_actor_mse'] for x in diff)/26,
                 'positive_neural_gain_required':False,'mutual_information':False}
         results[policy]=result
+    need(used_contexts==barrier.expected,'all260 original context slots used exactly once')
     return {'schema':'neural004_prediction_grade_v1','release_pin':barrier.release['envelope_pin'],'actors':results,'references':references,
         'whole_prediction_complete':all(r['status']=='complete' for r in list(results.values())+list(references.values())),
         'whole_study_qualified':False,'reference_empirical_competence':'requires independent full reference diagnostics review'}

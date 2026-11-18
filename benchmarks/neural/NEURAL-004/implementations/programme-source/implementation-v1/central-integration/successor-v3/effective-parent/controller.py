@@ -56,7 +56,7 @@ class Programme:
         self.global_bodies={};self.data=None;self.hmp=None;self.hmp_module=None;self.references=None;self.actors={};self.reconstruction={};self.explanations={}
         self.contexts={(m,v,p):opaque(seed,'context','prediction',[m,v,p]) for m in MODES for v in VIEWS for p in PEOPLE}
         self.reference_contexts={(f,p):opaque(seed,'context','reference',[f,p]) for f in ('B','N') for p in PEOPLE}
-        self.barrier=ReleaseBarrier(list(self.contexts.values()),list(self.reference_contexts.values()),authorities,ledger)
+        self.barrier=ReleaseBarrier(self.contexts,self.reference_contexts,authorities,ledger)
         self.private_maps={};self.closed_dispositions={};self.runtime=None;self.prediction_grade=None;self.reconstruction_grade={};self.spatial_records=None
     def admit_runtime(self,envelope):
         need(self.runtime is None,'single complete deployment profile')

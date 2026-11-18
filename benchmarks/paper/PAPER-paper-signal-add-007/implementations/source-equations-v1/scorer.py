@@ -1,8 +1,9 @@
 """ICNet Fig. 4b,d equations (3)--(5), not a qualified paper-win evaluator.
 
 Inputs are already aligned, time x unit count arrays. Authentic preparation,
-source mask recovery, source variance convention and baseline replay remain
-external prerequisites. No response-based unit selection or sound pooling.
+source mask recovery and baseline replay remain external prerequisites.
+Variance divisor is an explicit convention, not a recovered historical default.
+No response-based unit selection or sound pooling.
 """
 from __future__ import annotations
 
@@ -249,7 +250,8 @@ def score_panel(manifest, input_root):
         "variance_ddof": ddof,
         "n_animals": 7, "n_sounds": 4, "eligible_units": 3476,
         "cases": results,
-        "published_text_aggregation": "unresolved_no_scalar_reduction",
+        "published_text_aggregation": "textual_summaries_separate_from_defined_vectors",
+        "endpoint_binding": {'definition_status': 'source_defined_fig4b_and_fig4d_vectors', 'primary_comparison': {'panel': 'Fig4d', 'observation': 'MUA channel within animal', 'reduction': 'time_only_per_unit', 'metrics': ['correlation_explained_percent', 'variance_explained_percent'], 'direction': 'higher_for_both', 'reference': 'source_single_layer_Poisson_LNP_for_same_units', 'biological_replication': 'animal; units and trials are nested'}, 'companion': {'panel': 'Fig4b', 'reduction': 'flatten_time_and_eligible_units_within_each_animal', 'metrics': ['correlation_explained_percent', 'variance_explained_percent']}, 'prediction_objects': {'equation_3': 'sampled_counts_from_each_trial_distribution', 'equations_4_5': 'expected_counts_from_each_trial_distribution'}, 'universal_scalar_required': False, 'textual_summary_reconciliation': 'separate_from_defined_vectors; not performed', 'distinct_overall_metrics': 'Figs1-3 early/late trial-average sampled-count RMSE and observed-count probability likelihood are not Fig4 metrics', 'source_uncertainty': '1000 unit bootstrap samples within each animal; no new inferential procedure implemented', 'prospective_conventions': {'variance_divisor': 'explicit variance_ddof input, common across compared models', 'undefined_metrics': 'null and diagnostics; retain units; no silent omission or clipping'}, 'accepted_definition_sha256': 'e7ec5c040d629dff023ced7d42edb1679b3c4d41636431fc441a684cbb712dd0'},
         "reproduction_evaluated": False,
         "improvement_evaluated": False,
         "native_author_baseline_reproduced": False,

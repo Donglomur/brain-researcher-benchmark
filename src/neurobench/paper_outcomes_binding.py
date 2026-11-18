@@ -313,6 +313,87 @@ def _authenticate_isttc_qc_resolution(entry, read_pin):
     return record_pin["path"]
 
 
+# Exact REVE reporting revision. This changes reporting, never scientific policy.
+_REVE_HOME = "benchmarks/paper/PAPER-paper-method-003"
+_REVE_OLD_IMPROVEMENT = {"path": _REVE_HOME + "/improvement.v1.json", "bytes": 16334, "sha256": "3b7d04a02c39793f20f907dd1b6e64ce090067decd7effb9ceeea8a2fbcb7408"}
+_REVE_IMPROVEMENT = {"path": _REVE_HOME + "/improvement.v1.json", "bytes": 16434, "sha256": "39731c74f06523f789326bf86ed9822543f72b2ff2f8ac85563359fe5fd537c7"}
+_REVE_TASK = {"path": _REVE_HOME + "/task.json", "bytes": 18826, "sha256": "5efe0f0b62682a35184be87a91a64ac7c8d9ec78f9076297e80dc78483923423"}
+_REVE_OLD_TASK = {"path": _REVE_HOME + "/task.json", "bytes": 18776, "sha256": "b80a91b5b4b4977a9690de2724b52a210987289e5df7e9dba9d0f7ec815613b3"}
+_REVE_OUTCOMES = {"path": _REVE_HOME + "/outcomes.v1.json", "bytes": 1458, "sha256": "8068d87ea97656589802b027e11431c33884490b37217528cb3d19cdf37e8685"}
+_REVE_RETAINED_IMPROVEMENT = {**_REVE_OLD_IMPROVEMENT, "path": _REVE_HOME + "/historical/improvement.pre-readiness-reporting.v1.json"}
+_REVE_RETAINED_OUTCOMES = {"path": _REVE_HOME + "/historical/outcomes.pre-readiness-reporting.v1.json", "bytes": 1333, "sha256": "9e7fe21d4a6b2c9bb01e4228de67e62cd8add6d3b9c196175ce719fdfdf30408"}
+_REVE_PENDING = "Candidate outcome pending: no candidate comparison has run; absence of that attempt is not a benchmark-construction blocker."
+
+
+def has_reve_reporting(row):
+    return (row.get("id") == "PAPER-paper-method-003"
+            and row.get("specification") == _REVE_TASK)
+
+
+def _reve_contract_pin(document):
+    # This already-reviewed contract uses the retained ASCII JSON serialization.
+    body = (json.dumps(document, indent=2, ensure_ascii=True, allow_nan=False) + "\n").encode()
+    return pin(_REVE_IMPROVEMENT["path"], body)
+
+
+def _reve_corrected_improvement(retained):
+    need(_reve_contract_pin(retained) == _REVE_OLD_IMPROVEMENT,
+         "REVE retained improvement differs from its exact original bytes")
+    result = copy.deepcopy(retained)
+    before = "No authentic author-model reproduction or candidate comparison has run."
+    after = "No authentic author-model calibration has run."
+    need(result["blocking_issues"][2].startswith(before), "REVE original reporting sentence changed")
+    result["blocking_issues"][2] = after + result["blocking_issues"][2][len(before):]
+    result["disposition_reason"] += " " + _REVE_PENDING
+    need(_reve_contract_pin(result) == _REVE_IMPROVEMENT, "REVE selected reporting contract changed")
+    return result
+
+
+def reve_reporting_bundle(read_pin):
+    """Authenticate current and retained files separately; never fake an old pin."""
+    task = read_pin(_REVE_TASK, "Selected REVE reporting task")
+    current = read_pin(_REVE_IMPROVEMENT, "Selected REVE reporting contract")
+    outcomes = read_pin(_REVE_OUTCOMES, "Selected REVE reporting outcomes")
+    retained = read_pin(_REVE_RETAINED_IMPROVEMENT, "Retained REVE improvement archive")
+    old_outcomes = read_pin(_REVE_RETAINED_OUTCOMES, "Retained REVE outcome archive")
+    need(pin(_REVE_TASK["path"], encode(task)) == _REVE_TASK,
+         "Selected REVE task serialization changed")
+    need(current == _reve_corrected_improvement(retained), "REVE reporting revision changed scientific fields")
+    expected = copy.deepcopy(old_outcomes)
+    expected["original_task_sha256"] = _REVE_TASK["sha256"]
+    expected["contracts"]["improvement"] = hashlib.sha256(
+        json.dumps(current, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode()).hexdigest()
+    expected["pairing"]["improvement"]["rationale"] += " " + _REVE_PENDING
+    need(outcomes == expected, "REVE outcome revision changed beyond reporting identities and rationale")
+    return {"current": current, "retained": retained}
+
+
+def reve_retained_improvement(requested, read_pin):
+    """One exact old logical descriptor resolves to its explicit retained archive."""
+    if requested != _REVE_OLD_IMPROVEMENT:
+        return None
+    # The caller already observed a mismatch at the physical current path.
+    # Authenticate the complete selected correction before admitting the archive.
+    return reve_reporting_bundle(read_pin)["retained"]
+
+
+def _project_reve_reporting(result, improvement):
+    observed = _reve_contract_pin(improvement)
+    need(observed in (_REVE_OLD_IMPROVEMENT, _REVE_IMPROVEMENT),
+         "Unselected REVE improvement revision")
+    if observed == _REVE_OLD_IMPROVEMENT:
+        return result
+    need(pin(_REVE_OLD_TASK["path"], encode(result)) == _REVE_OLD_TASK,
+         "REVE reporting revision changed retained task lineage")
+    result["blocking_issues"]["improvement"] = copy.deepcopy(improvement["blocking_issues"])
+    result["holds"]["preserved_limits"]["task_specific"] = copy.deepcopy(improvement["blocking_issues"])
+    result["next_implementation_action"]["improvement"]["action"] = (
+        improvement["disposition_reason"] + " " + " ".join(improvement["blocking_issues"]))
+    need(pin(_REVE_TASK["path"], encode(result)) == _REVE_TASK,
+         "REVE reporting projection differs from the selected postimage")
+    return result
+
+
 def project_task(previous, row, improvement, scope_entry=None, *, reproduction_version="paper-reproduction/v1",
                  primary_correction=None):
     """Return the reviewed dual-outcome wording, preserving scientific inputs.
@@ -450,6 +531,41 @@ def project_task(previous, row, improvement, scope_entry=None, *, reproduction_v
                                "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
                                "primary_source_limits": copy.deepcopy(scope_entry["remaining_source_limits"])}
         _project_isttc_qc_resolution(result, scope_entry)
+    if identifier == "PAPER-ROOT-ADD-018":
+        # Fixed Figure4 reporting correction; no scientific contract is replaced.
+        # Authenticate the original unavailable-scope projection before changing
+        # only the seven reviewed reporting fields. Current/history readers still
+        # enforce their independent raw-byte identities in context().
+        root018_home = "benchmarks/paper/PAPER-ROOT-ADD-018"
+        need(scope_entry is not None and primary_correction is None
+             and reproduction_version == "paper-reproduction/v2",
+             "ROOT018 reporting requires its retained unavailable-scope route")
+        need(pin(root018_home + "/historical/task.pre-outcomes.v1.json", encode(previous)) == {
+            "path": root018_home + "/historical/task.pre-outcomes.v1.json", "bytes": 18547,
+            "sha256": "17ba1586e6e164350bb6d9a6c9346cec4aec9e1dcfe0b312945e6ef65ececf12"},
+            "ROOT018 reporting changed its historical task")
+        need(pin(root018_home + "/improvement.v1.json", encode(improvement)) == {
+            "path": root018_home + "/improvement.v1.json", "bytes": 11757,
+            "sha256": "25db16fa1f6872298d80034d01419bc0922878ce6e6d6eefb04fe84081efc193"},
+            "ROOT018 reporting changed its retained improvement")
+        root018_scope = encode(scope_entry)
+        need(len(root018_scope) == 6233 and hashlib.sha256(root018_scope).hexdigest() ==
+             "ac542fdc331f83ba3165f29abf65e4efa75202278bb9141c230a0e765371ea71",
+             "ROOT018 reporting changed its retained scope entry")
+        need(pin(root018_home + "/task.json", encode(result)) == {
+            "path": root018_home + "/task.json", "bytes": 24481,
+            "sha256": "211be4de10677214ca5dd22345ac454f5ee17db6159afe90af82f358e23e15ba"},
+            "ROOT018 reporting changed its original task projection")
+        root018_limits = ['Figure 4 is not eligible for the current same-task performance-improvement track from the accepted manuscript and pinned author sources: it reports descriptive expert-OFC cluster/event state-inference findings, not a source-defined performance score or improvement comparison. Smaller p-values, more significant bins and lower training reconstruction error do not establish improvement. This Figure 4 decision does not declare the whole paper ineligible or replace its retained hLDS branch.', 'Figure 4 reproduction remains separately unresolved: the original expert-OFC cluster/event finding is identifiable, but original figure-input production, neuron selection and identity joins, permutation semantics and numerical reference closure are unqualified. The accepted manuscript is not authenticated publisher-version/supplement equivalence; no execution or scientific readiness is established.']
+        for root018_field in ("episode", "blocking_issues", "holds"):
+            result[root018_field]["primary_source_limits"].extend(root018_limits)
+        result["next_implementation_action"]["primary"] = 'Resolve the corrected primary source limits and establish a source-grounded reproduction interface; separately justify any primary improvement comparison. For Figure 4, resolve the original incongruentResponses.mat and info_8comp.mat production/analysis closure for reproduction; preserve its current performance-improvement ineligibility without substituting a metric, split or secondary task.'
+        need(pin(root018_home + "/task.json", encode(result)) == {
+            "path": root018_home + "/task.json", "bytes": 27454,
+            "sha256": "e1fd8bf5ea3970defca67bc992e879d660957f7362fd6476474b6d132b70e5e2"},
+            "ROOT018 reporting differs from the reviewed task postimage")
+    if identifier == "PAPER-paper-method-003":
+        result = _project_reve_reporting(result, improvement)
     return result
 
 
@@ -674,6 +790,130 @@ def validate_unavailable(outcomes, reproduction, improvement, row, previous_rows
     return unavailable_summary(identifier)
 
 
+# Fixed manuscript-scope correction for ROOT004, composed after ROOT018/REVE.
+# These reviewed identities cannot be supplied or broadened by a registry row.
+_ROOT004_PINS = {'reproduction': {'path': 'benchmarks/paper/PAPER-ROOT-ADD-004/reproduction.v1.json', 'bytes': 20870, 'sha256': '39bedb14b8ca60bcc9fa6deaffaac8bcb0b8242281eea2f86c07e6f541df505f'}, 'improvement': {'path': 'benchmarks/paper/PAPER-ROOT-ADD-004/improvement.manuscript-scope.v1.json', 'bytes': 12059, 'sha256': '07822aa62a166e0a98f1ca405ec16a5dfbcfe9cf30f9144a2186067220ef68b0'}, 'task': {'path': 'benchmarks/paper/PAPER-ROOT-ADD-004/task.json', 'bytes': 20580, 'sha256': '2b9ac9dc16648c5944f091d9de27db7f1ddc90a76f859d96dc5e3ec25b38c6e7'}, 'outcomes': {'path': 'benchmarks/paper/PAPER-ROOT-ADD-004/outcomes.v1.json', 'bytes': 1479, 'sha256': '2c89671f94151ac0adbcdfc3a9d3cef553f8d3e2d82fb591fe72968eecac09ff'}, 'retained_reproduction': {'path': 'benchmarks/paper/PAPER-ROOT-ADD-004/historical/pre-manuscript-scope-v1/reproduction.v1.json', 'bytes': 19274, 'sha256': 'f23d1b1da99a1a9b9c0a2e32246c304d992806ba9146b6e1683e527d3ebc8798'}, 'retained_task': {'path': 'benchmarks/paper/PAPER-ROOT-ADD-004/historical/pre-manuscript-scope-v1/task.json', 'bytes': 19564, 'sha256': 'be95dae6675a2f636e748add4d35490962b6d6304edc84adda4cc9f842bde1d1'}, 'retained_outcomes': {'path': 'benchmarks/paper/PAPER-ROOT-ADD-004/historical/pre-manuscript-scope-v1/outcomes.v1.json', 'bytes': 1356, 'sha256': 'f63061cf1c6ea8c018478c02eb3e2b745f5f892e095ccdba4da2a5be03ac5434'}, 'retained_improvement': {'path': 'benchmarks/paper/PAPER-ROOT-ADD-004/improvement.v1.json', 'bytes': 10441, 'sha256': '1722d35399d677f5b5fd666c082f2ace39a9422ce0da09df1746fcccf8e80cd8'}, 'pre_outcomes': {'path': 'benchmarks/paper/PAPER-ROOT-ADD-004/historical/task.pre-outcomes.v1.json', 'bytes': 19162, 'sha256': 'a163da4d208b7d4edd3d0d35fa741d951c8319789a620daedeac44e817f0240f'}, 'descriptor': {'path': 'benchmarks/paper/PAPER-ROOT-ADD-004/docs/figure3-manuscript-scope.v1.json', 'bytes': 25376, 'sha256': 'ae144988650ffdf3418797eefecf389b9cf092a0149e94a4cf9d969fffc99fa3'}}
+_ROOT004_CANONICAL = {'reproduction': 'c1627e0b5e664eaa34dad98854812df055fc8ff3682e98d1f04c9ddd46b34798', 'improvement': 'ad6c9bcad98b5c902b94881de374001760156152aa7daaba7b529eb88125caae', 'task': 'eded18bfe3b29c3f2c763ada0a7c61eaeec00df4d60fe9121a68a326592baae1', 'outcomes': '17352794a351f996334470dd3287f1917acd5fb81a20c7fb9d5d37282183f36d', 'retained_reproduction': '596fbbc331d354a2d63b1b5accf8ed95837f9702b9e07e0a8441c42be74724c9', 'retained_task': '132a3b83f81c1f4319c3b2947acbc5c4fdaa2469007025e73f6775ab487650cd', 'retained_outcomes': 'c608a97ad2eb6d2f8169e676add1a30e66f342eb958310d2286881780056fd04', 'retained_improvement': '18ee71bd9dc3e311b9902f6eee7418db0b545b26e84b8314b762dc69e707c975', 'pre_outcomes': '7bb39bb595837d73c774bbeb2dcee6968beb724417bc4492ad872334466fe27c', 'descriptor': '2383eacc48e5cd083669a4faeb2b07e4c94884260dadd1dad43e1bdfbd844c94'}
+
+
+def has_root004_scope(row):
+    return (row.get("id") == "PAPER-ROOT-ADD-004"
+            and row.get("specification") == _ROOT004_PINS["task"])
+
+
+def _root004_digest(value):
+    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"),
+                                    ensure_ascii=False, allow_nan=False).encode()).hexdigest()
+
+
+def _root004_replace(previous, replacements):
+    result = copy.deepcopy(previous)
+    for replacement in replacements:
+        parts = replacement["pointer"].split("/")[1:]
+        parent = result
+        for part in parts[:-1]:
+            parent = parent[int(part)] if type(parent) is list else parent[part]
+        key = int(parts[-1]) if type(parent) is list else parts[-1]
+        need(_root004_digest(parent[key]) == replacement["before_sha256"],
+             "ROOT004 field predecessor differs: " + replacement["pointer"])
+        parent[key] = copy.deepcopy(replacement["after"])
+    return result
+
+
+def root004_scope_bundle(read_pin):
+    """Authenticate only the fixed scope correction, retaining every prior file."""
+    documents = {}
+    for name, identity in _ROOT004_PINS.items():
+        value = read_pin(copy.deepcopy(identity), "ROOT004 manuscript scope " + name)
+        need(_root004_digest(value) == _ROOT004_CANONICAL[name],
+             "ROOT004 parsed document identity differs: " + name)
+        documents[name] = value
+    descriptor = documents["descriptor"]
+    need(descriptor["schema_version"] == "root004-manuscript-scope/v1"
+         and descriptor["task_id"] == "PAPER-ROOT-ADD-004",
+         "ROOT004 source scope identity differs")
+    for current, retained in (("reproduction", "retained_reproduction"),
+                              ("improvement", "retained_improvement"),
+                              ("task", "retained_task"), ("outcomes", "retained_outcomes")):
+        need(_root004_replace(documents[retained], descriptor["replacements"][current]) == documents[current],
+             "ROOT004 correction exceeds its reviewed field guards: " + current)
+    need(documents["reproduction"]["eligibility"] == "source_unresolved"
+         and documents["improvement"]["disposition"] == "source_unresolved"
+         and documents["improvement"]["comparison"]["direction"] == "higher"
+         and "admission_policy" not in documents["reproduction"],
+         "ROOT004 source correction cannot promote qualification")
+    return documents
+
+
+def _project_root004_scope(projected, documents):
+    need(projected == documents["retained_task"]
+         and pin(_ROOT004_PINS["retained_task"]["path"], encode(projected)) == _ROOT004_PINS["retained_task"],
+         "ROOT004 source correction changed the retained deterministic projection")
+    result = _root004_replace(projected, documents["descriptor"]["replacements"]["task"])
+    need(result == documents["task"] and pin(_ROOT004_PINS["task"]["path"], encode(result)) == _ROOT004_PINS["task"],
+         "ROOT004 source correction changed its selected task projection")
+    return result
+
+
+# Exact NuCLR uncertainty-reporting correction; scientific policy is unchanged.
+_NUCLR_HOME = "benchmarks/paper/PAPER-paper-method-replacement-012"
+_NUCLR_OLD_IMPROVEMENT = {"path": _NUCLR_HOME + "/improvement.v1.json", "bytes": 14982, "sha256": "f2d4275a29ff41e6a37fd674e3f2f50b2a34a0e7bdf7a8b992bfcc209e2f8f22"}
+_NUCLR_IMPROVEMENT = {"path": _NUCLR_HOME + "/improvement.v1.json", "bytes": 15175, "sha256": "0312ae81862130d11a96eb6b59d974cecd96935cdba29461daf7cf4b96e52e2e"}
+_NUCLR_TASK = {"path": _NUCLR_HOME + "/task.json", "bytes": 31596, "sha256": "cde7612e71a6133fc3d660b2800d9e4c71ede1a687eec81c611918d323ae8ab8"}
+_NUCLR_OUTCOMES = {"path": _NUCLR_HOME + "/outcomes.v1.json", "bytes": 1999, "sha256": "bb76d5fe9ed4946cb8831bc8fce4a937f5136793fcdf7b0562e4772adbd0eabb"}
+_NUCLR_RETAINED_IMPROVEMENT = {**_NUCLR_OLD_IMPROVEMENT, "path": _NUCLR_HOME + "/historical/improvement.pre-uncertainty-reporting.v1.json"}
+_NUCLR_RETAINED_OUTCOMES = {"path": _NUCLR_HOME + "/historical/outcomes.pre-uncertainty-reporting.v1.json", "bytes": 1999, "sha256": "5f6fd64159dcc2527bd5645c81fe610f52434e2b6a2eff4be151179283e1a6da"}
+
+
+def has_nuclr_reporting(row):
+    declared = row.get("paper_outcomes")
+    return (row.get("id") == "PAPER-paper-method-replacement-012"
+            and row.get("specification") == _NUCLR_TASK
+            and type(declared) is dict and declared.get("outcomes") == _NUCLR_OUTCOMES)
+
+
+def _nuclr_corrected_improvement(retained):
+    need(pin(_NUCLR_OLD_IMPROVEMENT["path"], encode(retained)) == _NUCLR_OLD_IMPROVEMENT,
+         "NuCLR retained improvement differs from its exact original bytes")
+    result = copy.deepcopy(retained)
+    before = "Nine Bugeon macro-F1 panel results, reported as five-training-seed means and standard deviations; EI inductive LOLCAT exceeds NuCLR."
+    after = "Nine Bugeon macro-F1 panel results averaged across five training seeds; Table 1 and Table 8 captions identify the accompanying bars as SD, while the paper checklist calls them SEM. Bar type and normalization therefore remain unresolved. The macro-F1 means and panel identities remain valid; EI inductive LOLCAT exceeds NuCLR."
+    need(result["task_id"] == "PAPER-paper-method-replacement-012"
+         and result["evidence"][0]["id"] == "conference_scores"
+         and result["evidence"][0]["supports"] == before,
+         "NuCLR uncertainty reporting predecessor changed")
+    result["evidence"][0]["supports"] = after
+    need(pin(_NUCLR_IMPROVEMENT["path"], encode(result)) == _NUCLR_IMPROVEMENT,
+         "NuCLR selected reporting contract changed")
+    return result
+
+
+def nuclr_reporting_bundle(read_pin):
+    """Authenticate this exact one-field correction and both retained archives."""
+    task = read_pin(copy.deepcopy(_NUCLR_TASK), "Selected NuCLR reporting task")
+    current = read_pin(copy.deepcopy(_NUCLR_IMPROVEMENT), "Selected NuCLR reporting contract")
+    outcomes = read_pin(copy.deepcopy(_NUCLR_OUTCOMES), "Selected NuCLR reporting outcomes")
+    retained = read_pin(copy.deepcopy(_NUCLR_RETAINED_IMPROVEMENT), "Retained NuCLR improvement archive")
+    old_outcomes = read_pin(copy.deepcopy(_NUCLR_RETAINED_OUTCOMES), "Retained NuCLR outcome archive")
+    need(pin(_NUCLR_TASK["path"], encode(task)) == _NUCLR_TASK,
+         "NuCLR reporting changed the original task bytes")
+    need(current == _nuclr_corrected_improvement(retained),
+         "NuCLR reporting revision changed scientific fields")
+    expected = copy.deepcopy(old_outcomes)
+    expected["contracts"]["improvement"] = hashlib.sha256(
+        json.dumps(current, sort_keys=True, separators=(",", ":"), ensure_ascii=False, allow_nan=False).encode()).hexdigest()
+    need(outcomes == expected and outcomes["original_task_sha256"] == _NUCLR_TASK["sha256"],
+         "NuCLR outcome revision changed beyond the canonical improvement commitment")
+    return {"current": current, "retained": retained}
+
+
+def nuclr_retained_improvement(requested, read_pin):
+    """Resolve only the exact old NuCLR pin after authenticating its full bundle."""
+    if requested != _NUCLR_OLD_IMPROVEMENT:
+        return None
+    return nuclr_reporting_bundle(read_pin)["retained"]
+
+
 def context(row, document, previous_rows, read_pin, *, improvement_contract=None):
     """Validate current bytes and return prior lineage plus separate outcomes.
 
@@ -721,13 +961,54 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     previous_document = read_pin(previous_pin, "Pre-outcomes definition")
     improvement_pin = row["specification_revision"]["improvement_contract"]
     require_pin(improvement_pin, home + "/improvement.v1.json", "improvement contract")
-    improvement = improvement_contract if improvement_contract is not None else read_pin(improvement_pin, "Improvement contract")
-    retained_improvement, retained_improvement_pin = improvement, improvement_pin
+    reve_reporting = has_reve_reporting(row)
+    nuclr_reporting = has_nuclr_reporting(row)
+    root004_scope = has_root004_scope(row)
+    root004_documents = None
+    if root004_scope:
+        need(improvement_pin == _ROOT004_PINS["retained_improvement"]
+             and binding.get("outcomes") == _ROOT004_PINS["outcomes"]
+             and binding.get("reproduction_contract") == _ROOT004_PINS["reproduction"]
+             and previous_pin == _ROOT004_PINS["pre_outcomes"]
+             and not successor_selected and not continuous_selected,
+             "ROOT004 source scope changed its exact retained/current bindings")
+        root004_documents = root004_scope_bundle(read_pin)
+        need(improvement_contract is None or improvement_contract == root004_documents["retained_improvement"],
+             "ROOT004 caller changed the retained improvement")
+        retained_improvement, retained_improvement_pin = root004_documents["retained_improvement"], improvement_pin
+        improvement, improvement_pin = root004_documents["improvement"], _ROOT004_PINS["improvement"]
+    elif nuclr_reporting:
+        need(improvement_pin == _NUCLR_OLD_IMPROVEMENT
+             and not successor_selected and not continuous_selected,
+             "NuCLR reporting changed its retained bindings")
+        reporting = nuclr_reporting_bundle(read_pin)
+        need(improvement_contract is None or improvement_contract == reporting["retained"],
+             "NuCLR caller changed the retained improvement evidence")
+        retained_improvement, retained_improvement_pin = reporting["retained"], improvement_pin
+        improvement, improvement_pin = reporting["current"], _NUCLR_IMPROVEMENT
+    elif reve_reporting:
+        need(improvement_pin == _REVE_OLD_IMPROVEMENT
+             and binding["outcomes"] == _REVE_OUTCOMES, "REVE reporting selection changed its retained or current bindings")
+        reporting = reve_reporting_bundle(read_pin)
+        need(improvement_contract is None or improvement_contract == reporting["retained"],
+             "REVE caller changed the retained improvement evidence")
+        retained_improvement, retained_improvement_pin = reporting["retained"], improvement_pin
+        improvement, improvement_pin = reporting["current"], _REVE_IMPROVEMENT
+    else:
+        improvement = improvement_contract if improvement_contract is not None else read_pin(improvement_pin, "Improvement contract")
+        retained_improvement, retained_improvement_pin = improvement, improvement_pin
     scope = getattr(previous_rows, "scope_decisions", None)
     scope_entry = scope["entries"].get(identifier) if scope else None
     source_policy_member = _authenticate_isttc_qc_resolution(scope_entry, read_pin)
     primary_correction = scope.get("same_primary_corrections", {}).get(identifier) if scope else None
     reproduction = read_reproduction(binding["reproduction_contract"], home, read_pin) if "reproduction_contract" in binding else None
+    if nuclr_reporting:
+        need(scope_entry is None and primary_correction is None,
+             "NuCLR reporting cannot combine another source correction")
+    if root004_scope:
+        need(scope_entry is None and primary_correction is None
+             and reproduction == root004_documents["reproduction"],
+             "ROOT004 manuscript scope cannot combine another correction")
     successor = None
     if successor_selected:
         successor_module = primary_successor_module(identifier)
@@ -765,6 +1046,8 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
         projected = successor_module.project(projected, successor)
         if not continuous_selected:
             need(row.get("title") == projected["title"], "Primary successor current title differs from the reviewed successor projection")
+    if root004_scope:
+        projected = _project_root004_scope(projected, root004_documents)
     retained_current = pin(home + "/task.json", encode(projected))
     continuous = None
     continuous_selection = None
@@ -779,10 +1062,27 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     expected_current = pin(home + "/task.json", encode(projected))
     need(document == projected and row.get("specification") == expected_current,
          "Current paper definition differs from the deterministic dual-outcome projection")
+    if identifier == "PAPER-ROOT-ADD-018":
+        need(binding["outcomes"] == {
+            "path": "benchmarks/paper/PAPER-ROOT-ADD-018/outcomes.v1.json", "bytes": 4745,
+            "sha256": "8bd7bc3479aa808556ae84858b06e3f990744d52d71f1f99778c658feeb89ab8"},
+            "ROOT018 reporting changed its selected outcomes")
     require_pin(binding["outcomes"], home + "/" + OUTCOMES, "paper outcomes")
     outcomes = read_pin(binding["outcomes"], "Paper outcomes")
     need(type(outcomes) is dict, "Paper outcomes must be an object")
     members = {previous_pin["path"], binding["outcomes"]["path"]}
+    if reve_reporting:
+        members.update((_REVE_RETAINED_IMPROVEMENT["path"], _REVE_RETAINED_OUTCOMES["path"]))
+    if nuclr_reporting:
+        members.update((_NUCLR_RETAINED_IMPROVEMENT["path"], _NUCLR_RETAINED_OUTCOMES["path"]))
+    if root004_scope:
+        # The retained improvement remains authenticated by the full scope
+        # bundle and owned by the task revision route, not by outcomes twice.
+        for root004_name in ("descriptor", "improvement",
+                             "retained_task", "retained_reproduction", "retained_outcomes"):
+            root004_path = _ROOT004_PINS[root004_name]["path"]
+            need(root004_path not in members, "Duplicate ROOT004 source scope member")
+            members.add(root004_path)
     if source_policy_member is not None:
         members.add(source_policy_member)
     if "reproduction_contract" in binding:
@@ -843,12 +1143,14 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
                             for condition in continuous_selection["conditions"]],
                   "paired_metadata_admitted": {"reproduction": False, "improvement": False},
                   "assurance": "Authenticated continuous measurement policy and source routes; no instantiated episode, submitted result, binary pass or scientific qualification."}
-    return {"previous_row": prior, "previous_document": previous_document, "previous_pin": previous_pin,
+    return {"reve_reporting_selected": reve_reporting, "nuclr_reporting_selected": nuclr_reporting,
+            "previous_row": prior, "previous_document": previous_document, "previous_pin": previous_pin,
             "improvement_contract": improvement, "improvement_contract_pin": improvement_pin,
             "retained_improvement_contract": retained_improvement,
             "retained_improvement_contract_pin": retained_improvement_pin,
-            "primary_policy_revision": continuous_selection["revision"] if continuous else successor.descriptor_pin if successor else None,
-            "primary_policy_provenance": current_continuous["provenance"] if continuous else successor_provenance,
+            "primary_policy_revision": copy.deepcopy(_ROOT004_PINS["descriptor"]) if root004_scope else continuous_selection["revision"] if continuous else successor.descriptor_pin if successor else None,
+            "primary_policy_provenance": {name: copy.deepcopy(_ROOT004_PINS[name]) for name in
+                                          ("descriptor", "retained_improvement", "retained_reproduction", "retained_task", "retained_outcomes")} if root004_scope else current_continuous["provenance"] if continuous else successor_provenance,
             "candidate_interface": continuous_selection["candidate_interface"] if continuous else successor.candidate_interface if successor else None,
             "author_reproduction_routes": continuous_selection["author_reproduction_routes"] if continuous else successor.author_reproduction_routes if successor else None,
             "continuous_outcomes_v1": continuous_selection if current_continuous and current_continuous["version"] == 1 else None,

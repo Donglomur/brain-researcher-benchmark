@@ -1,0 +1,22 @@
+"""Root-selected scientific constants, distinct from recovered historical method."""
+AREAS=('VISp','VISl','VISal','VISrl','VISam','VISpm')
+RUN=('REST','RUN','TRANSITION','MISSING')
+PUPIL=('LOW','MID','HIGH','MISSING')
+PHASES=('FIT','VALIDATION','QUERY')
+BLOCKS={'FIT':2,'VALIDATION':5,'QUERY':7}
+MODELS=('state_only','stimulus_only','stimulus_plus_state','stimulus_plus_running','stimulus_plus_pupil')
+LAMBDAS=(.0001,.001,.01,.1,1.,10.,100.,1000.,10000.)
+EXPOSURE=1.9
+MAX_UPDATES=200
+LINE_ATTEMPTS=31
+ARMIJO=1e-4
+GRADIENT_TOL=1e-8
+FIELDS=('orientation','spatial_frequency','temporal_frequency','contrast','phase','size','x_position','y_position','color','opacity','mask','units')
+MATCH_BINS={'FITbaseline':(1.,2.,4.,8.,16.,32.,64.),'presence_ratio':(.97,.99),'isi_violations':(.1,.3),'amplitude_cutoff':(.05,)}
+CONTRASTS={
+ 'stimulus_beyond_state':('state_only','stimulus_plus_state'),
+ 'state_beyond_stimulus':('stimulus_only','stimulus_plus_state'),
+ 'running_conditional_sensitivity':('stimulus_plus_pupil','stimulus_plus_state'),
+ 'pupil_conditional_sensitivity':('stimulus_plus_running','stimulus_plus_state'),
+ 'candidate_improvement':('stimulus_plus_state','candidate'),
+ 'candidate_beyond_state':('state_only','candidate')}
