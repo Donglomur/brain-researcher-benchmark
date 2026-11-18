@@ -56,6 +56,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Calibration only.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. This retained scoring facade requires 2 source or input dependencies absent from the public baseline. Correcting its repository locator does not make it runnable from this checkout alone. This limit does not apply automatically to sibling implementations of the task. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Source behavior input v1](implementations/source-behavior-input-v1) — Reviewed source component.
+  Scope: Offline original behavioral-input connector preserves complete joined row/column order, subject GroupCount, NaN/Inf and round-trippable binary64 values, and describes the original six robustbase model order without running fits. Native MATLAB/R parsing/defaults, source working-directory lineage, authentic inputs, original comparator/tolerances and same-task improvement remain unqualified; smaller p-values are not an improvement criterion.
 - [Source learnr v1](implementations/source-learnr-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Source subject export v1](implementations/source-subject-export-v1) — Reviewed source component.
