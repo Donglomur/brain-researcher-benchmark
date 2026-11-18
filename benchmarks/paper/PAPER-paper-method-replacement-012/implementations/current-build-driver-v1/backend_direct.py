@@ -37,6 +37,10 @@ MAX_RECEIPT = 256 * 1024
 class Refusal(ValueError):
     pass
 
+class OwnedCancellation(RuntimeError):
+    """Cancellation must escape selectors' handling of InterruptedError."""
+    pass
+
 def require(value, message):
     if not value:
         raise Refusal(message)
@@ -286,7 +290,7 @@ def run_owned(argv, cwd, env, log_path, seconds, limit):
     started = time.monotonic()
     handlers = {}
     def interrupted(signum, frame):
-        raise InterruptedError("Owned backend observer received signal " + str(signum))
+        raise OwnedCancellation("Owned backend observer received signal " + str(signum))
     for sig in (signal.SIGTERM, signal.SIGINT, signal.SIGHUP):
         handlers[sig] = signal.signal(sig, interrupted)
     try:

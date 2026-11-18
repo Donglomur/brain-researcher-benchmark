@@ -290,22 +290,44 @@ class BackendControls(unittest.TestCase):
     def test_owned_parent_term_cancels_and_reaps_only_owned_child(self):
         # Parent handlers are installed before Popen; the owned child cannot
         # signal this test outside run_owned's guarded cancellation window.
-        result, text = self.run_child(
+        child_signal = (
             "import os,signal,time; print(os.getpid(), flush=True); "
             "print('signal-target', os.getppid(), flush=True); "
             "os.kill(os.getppid(), signal.SIGTERM); "
-            "print('signal-returned', flush=True); time.sleep(10)",
-            allow_empty_log=True,
+            "print('signal-returned', flush=True); time.sleep(10)"
         )
-        try:
-            self.assertIn("signal", result["error"])
-            self.assertNotEqual(result["exit_code"], 0)
-        except (AssertionError, TypeError):
-            # The fixed result and <=1025-byte owned log fit a 64 KiB diagnostic.
-            print("OWNED_CANCELLATION_DIAGNOSTIC=" + json.dumps(
-                {"observer_pid": os.getpid(), "owned_result": result, "owned_child_log": text},
-                sort_keys=True), flush=True)
-            raise
+        def selector_with_signal():
+            # Deliver one real signal from inside SelectSelector's wait call.
+            # Its real except InterruptedError clause swallowed the old handler
+            # exception; this fixes the regression without relying on timing.
+            selector = driver.selectors.SelectSelector()
+            wait = selector._select
+            sent = False
+            def signal_once(*args):
+                nonlocal sent
+                if not sent:
+                    sent = True
+                    signal.raise_signal(signal.SIGTERM)
+                return wait(*args)
+            selector._select = signal_once
+            return selector
+        for source in ("child", "selector-wait"):
+            with self.subTest(signal_source=source):
+                code = child_signal if source == "child" else "import os,time; print(os.getpid(), flush=True); time.sleep(10)"
+                selector_factory = driver.selectors.DefaultSelector if source == "child" else selector_with_signal
+                with mock.patch.object(driver.selectors, "DefaultSelector", selector_factory):
+                    result, text = self.run_child(code, allow_empty_log=True)
+                try:
+                    self.assertIn("signal", result["error"])
+                    self.assertTrue(result["error"].startswith("OwnedCancellation:"), result)
+                    self.assertNotEqual(result["exit_code"], 0)
+                except (AssertionError, TypeError):
+                    # The fixed result and <=1025-byte owned log fit a 64 KiB diagnostic.
+                    print("OWNED_CANCELLATION_DIAGNOSTIC=" + json.dumps(
+                        {"observer_pid": os.getpid(), "signal_source": source,
+                         "owned_result": result, "owned_child_log": text},
+                        sort_keys=True), flush=True)
+                    raise
 
     def test_final_group_signal_precedes_first_reap(self):
         events = []
