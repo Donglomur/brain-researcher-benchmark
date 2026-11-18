@@ -1166,7 +1166,7 @@ def paper_count_text(catalog):
                               'the selected contract defines the candidate interface.')
             if reference_successor_count:
                 dual_text += ('The LANGUAGE reference successor records author-provided-array/current-runtime reference recovery; '
-                              'its current improvement policy and remaining source limits are explicit, with no AI outcome or qualification. ')
+                              'its selected policy identifies either that reference stage or the separately authenticated original Figure3b continuous improvement scope, with full reproduction retained and no AI outcome or qualification. ')
             if deeprecon_reference_count:
                 dual_text += ('The Deeprecon reference successor records recovered publisher pair means; '
                               'native replay, matched candidate comparison and scientific qualification remain unresolved. ')
@@ -1567,6 +1567,11 @@ def render_tracks(catalog):
                         text += '\n'
                     elif row['id'] == 'PAPER-ROOT-ADD-001':
                         provenance = outcomes['primary_policy_provenance']
+                        if 'figure3b_scope_decision' in provenance:
+                            text += ('**Selected original Figure3b improvement:** continuous paired candidate-minus-author Pearson delta at layer 5/lags 17–19 over all 14 sessions/eight people. '
+                                     'Full 224-array reproduction remains separate. Selected input preparation and the fixed time-only engineering traversal are not AI outcomes or baseline reproduction. '
+                                     'All four cells remain unknown; no binary win, population inference or current SOTA is admitted.\n\n'
+                                     '- ' + markdown_link('Authenticated Figure3b scope decision', provenance['figure3b_scope_decision']['path'], task) + '\n\n')
                         text += ('The reference successor records author-provided-array/current-runtime measurements. '
                                  'It does not establish AI reproduction, fresh author training, paired improvement or scientific qualification. '
                                  'The retained scope decision above keeps its historical limits; the selected current contracts record reference recovery and remaining obligations.\n\n'

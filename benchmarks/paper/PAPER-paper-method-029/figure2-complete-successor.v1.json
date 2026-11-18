@@ -1,0 +1,336 @@
+{
+  "schema_version": "deeprecon-figure2-complete-successor/v1",
+  "task_id": "PAPER-paper-method-029",
+  "construction_authority": "Root-selected complete original Figure2 binding; private construction is subject to independent review and explicit integration adoption.",
+  "source_commit": "c33a113448fc7fed33977caa9299f345f48c2dc7",
+  "previous_authenticator": {
+    "path": "src/neurobench/paper_deeprecon_reference.py",
+    "bytes": 12899,
+    "sha256": "98256a1ca02da2a4bad11ab6735d966a36011d638e9e7ecf35e0195a102daea5"
+  },
+  "previous_reference_revision": {
+    "path": "benchmarks/paper/PAPER-paper-method-029/reference-recovery-successor.v1.json",
+    "bytes": 20682,
+    "sha256": "2e7b690aec9d923929edd4ad60097d5b270b3d03b4c1dbb30b17cd49a00f38cb"
+  },
+  "previous_improvement": {
+    "path": "benchmarks/paper/PAPER-paper-method-029/improvement.reference-recovery.v1.json",
+    "bytes": 16145,
+    "sha256": "87181df3a225144d4b39820b3873fb55061bdd566fed57a240b282c0f3b650cd"
+  },
+  "unchanged_reproduction": {
+    "path": "benchmarks/paper/PAPER-paper-method-029/reproduction.v1.json",
+    "bytes": 1251690,
+    "sha256": "d9432f48416392bad798461dfabc5d49f60e44b6ce658a9e2127c4c0aca7a602"
+  },
+  "archived_previous_task": {
+    "path": "benchmarks/paper/PAPER-paper-method-029/docs/provenance/pre-figure2-complete-20261117/task.json",
+    "bytes": 29884,
+    "sha256": "bf0a50c891e2654e310ede3e5e322283db064e990d925f54559b58bcc1ca1eeb"
+  },
+  "archived_previous_outcomes": {
+    "path": "benchmarks/paper/PAPER-paper-method-029/docs/provenance/pre-figure2-complete-20261117/outcomes.v1.json",
+    "bytes": 1559,
+    "sha256": "4ecaa3fe84077ff455079bb817edf5e7defb7a6e529f8bfd8eed6660f5364ecf"
+  },
+  "panel_binding": {
+    "selection": "complete_original_figure2_overlapping_training_condition",
+    "subjects": [
+      "sub01",
+      "sub02",
+      "sub03",
+      "sub04",
+      "sub05"
+    ],
+    "directed_pairs": [
+      [
+        "sub01",
+        "sub02"
+      ],
+      [
+        "sub01",
+        "sub03"
+      ],
+      [
+        "sub01",
+        "sub04"
+      ],
+      [
+        "sub01",
+        "sub05"
+      ],
+      [
+        "sub02",
+        "sub01"
+      ],
+      [
+        "sub02",
+        "sub03"
+      ],
+      [
+        "sub02",
+        "sub04"
+      ],
+      [
+        "sub02",
+        "sub05"
+      ],
+      [
+        "sub03",
+        "sub01"
+      ],
+      [
+        "sub03",
+        "sub02"
+      ],
+      [
+        "sub03",
+        "sub04"
+      ],
+      [
+        "sub03",
+        "sub05"
+      ],
+      [
+        "sub04",
+        "sub01"
+      ],
+      [
+        "sub04",
+        "sub02"
+      ],
+      [
+        "sub04",
+        "sub03"
+      ],
+      [
+        "sub04",
+        "sub05"
+      ],
+      [
+        "sub05",
+        "sub01"
+      ],
+      [
+        "sub05",
+        "sub02"
+      ],
+      [
+        "sub05",
+        "sub03"
+      ],
+      [
+        "sub05",
+        "sub04"
+      ]
+    ],
+    "rois": [
+      "VC",
+      "V1",
+      "V2",
+      "V3",
+      "V4",
+      "HVC"
+    ],
+    "axes": [
+      "pattern",
+      "profile"
+    ],
+    "source_methods": [
+      "brain_loss",
+      "content_loss"
+    ],
+    "images": 50,
+    "repeats": 24,
+    "training_samples": 6000,
+    "metric": "noise_ceiling_normalized_Pearson_correlation",
+    "direction": "higher",
+    "pattern": "Average all 24-by-24 measured/predicted repeat correlations per image in target-normalized voxel space; normalize and mask/clip eligible per-image values before within-pair averaging.",
+    "profile": "Restore target training-derived scaling; correlate across the 50-image axis for each voxel and every repeat combination; normalize and mask/clip eligible voxel values before within-pair averaging.",
+    "mask_clip": "Use fixed source noise-ceiling/random-pair-threshold artifacts and exact author eligible-feature rule; divide by ceiling, clip each eligible feature to [-1,1], then average. Do not estimate or alter masks from candidate/test results.",
+    "source_support_holds": [
+      "Native source and target ordered voxel/trial identities and training-derived scales remain unqualified.",
+      "Original noise-ceiling/threshold/mask arrays are not authenticated by this binding.",
+      "Existing refusal of undefined eligible replay values remains; source nan_to_num parity is an unresolved native verification issue."
+    ],
+    "published_source": {
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs43588-025-00826-5/MediaObjects/43588_2025_826_MOESM4_ESM.csv",
+      "bytes": 15637,
+      "sha256": "f6beffbcad700f3e24208016daabe18d802805404f32a0585e2f9333fd4968fb",
+      "row_keys": [
+        "Source",
+        "Target",
+        "ROI",
+        "Method"
+      ],
+      "axis_columns": {
+        "pattern": "pattern_mean",
+        "profile": "profile_mean"
+      },
+      "rows": 240,
+      "pair_axis_values": 480,
+      "role": "exposed_published_pair_means_not_computation_proof"
+    },
+    "primary_comparator": {
+      "method_key": "content_loss",
+      "pair_axis_values": 240,
+      "support": "Every directed pair x ROI x axis in the explicit roster; exact keyed lookup in the pinned publisher CSV.",
+      "role": "matching_main_original_paper_method_reference"
+    },
+    "required_control": {
+      "method_key": "brain_loss",
+      "pair_axis_values": 240,
+      "support": "The identical complete directed pair x ROI x axis roster.",
+      "role": "source_control_under_its_own_access_condition_not_main_comparator_substitution"
+    },
+    "continuous_reporting": {
+      "implementation": {
+        "path": "benchmarks/paper/PAPER-paper-method-029/implementations/published-reference-continuous-v1/continuous.py",
+        "bytes": 6044,
+        "sha256": "199803a571931e4665fe8ae34e272716c21bcc4b86f87a0ab926f59f2110591b"
+      },
+      "predecessor_reader": {
+        "path": "benchmarks/paper/PAPER-paper-method-029/implementations/published-reference-v1/published_reference.py",
+        "bytes": 12446,
+        "sha256": "3e4d5d23fbd740999f60b8deaaa9689db72bc3821f07259639716b70d60263f8"
+      },
+      "api": "compare_continuous(reference, replay)",
+      "result_schema": "deeprecon_published_pair_discrepancies/v1",
+      "pair_rows": 480,
+      "roi_method_axis_groups": 24,
+      "summary_role": "observed_equal_pair_mean_not_figure_bootstrap_mean",
+      "decision": "not_made",
+      "candidate_or_native_authentication": "not_provided_by_reporter",
+      "scientific_improvement": "not_evaluated"
+    },
+    "bootstrap_companions": {
+      "count": 72,
+      "finding_ids": [
+        "fig2-pattern-vc-brain_loss-bootstrap_mean",
+        "fig2-pattern-vc-brain_loss-percentile_2_5",
+        "fig2-pattern-vc-brain_loss-percentile_97_5",
+        "fig2-pattern-vc-content_loss-bootstrap_mean",
+        "fig2-pattern-vc-content_loss-percentile_2_5",
+        "fig2-pattern-vc-content_loss-percentile_97_5",
+        "fig2-pattern-v1-brain_loss-bootstrap_mean",
+        "fig2-pattern-v1-brain_loss-percentile_2_5",
+        "fig2-pattern-v1-brain_loss-percentile_97_5",
+        "fig2-pattern-v1-content_loss-bootstrap_mean",
+        "fig2-pattern-v1-content_loss-percentile_2_5",
+        "fig2-pattern-v1-content_loss-percentile_97_5",
+        "fig2-pattern-v2-brain_loss-bootstrap_mean",
+        "fig2-pattern-v2-brain_loss-percentile_2_5",
+        "fig2-pattern-v2-brain_loss-percentile_97_5",
+        "fig2-pattern-v2-content_loss-bootstrap_mean",
+        "fig2-pattern-v2-content_loss-percentile_2_5",
+        "fig2-pattern-v2-content_loss-percentile_97_5",
+        "fig2-pattern-v3-brain_loss-bootstrap_mean",
+        "fig2-pattern-v3-brain_loss-percentile_2_5",
+        "fig2-pattern-v3-brain_loss-percentile_97_5",
+        "fig2-pattern-v3-content_loss-bootstrap_mean",
+        "fig2-pattern-v3-content_loss-percentile_2_5",
+        "fig2-pattern-v3-content_loss-percentile_97_5",
+        "fig2-pattern-v4-brain_loss-bootstrap_mean",
+        "fig2-pattern-v4-brain_loss-percentile_2_5",
+        "fig2-pattern-v4-brain_loss-percentile_97_5",
+        "fig2-pattern-v4-content_loss-bootstrap_mean",
+        "fig2-pattern-v4-content_loss-percentile_2_5",
+        "fig2-pattern-v4-content_loss-percentile_97_5",
+        "fig2-pattern-hvc-brain_loss-bootstrap_mean",
+        "fig2-pattern-hvc-brain_loss-percentile_2_5",
+        "fig2-pattern-hvc-brain_loss-percentile_97_5",
+        "fig2-pattern-hvc-content_loss-bootstrap_mean",
+        "fig2-pattern-hvc-content_loss-percentile_2_5",
+        "fig2-pattern-hvc-content_loss-percentile_97_5",
+        "fig2-profile-vc-brain_loss-bootstrap_mean",
+        "fig2-profile-vc-brain_loss-percentile_2_5",
+        "fig2-profile-vc-brain_loss-percentile_97_5",
+        "fig2-profile-vc-content_loss-bootstrap_mean",
+        "fig2-profile-vc-content_loss-percentile_2_5",
+        "fig2-profile-vc-content_loss-percentile_97_5",
+        "fig2-profile-v1-brain_loss-bootstrap_mean",
+        "fig2-profile-v1-brain_loss-percentile_2_5",
+        "fig2-profile-v1-brain_loss-percentile_97_5",
+        "fig2-profile-v1-content_loss-bootstrap_mean",
+        "fig2-profile-v1-content_loss-percentile_2_5",
+        "fig2-profile-v1-content_loss-percentile_97_5",
+        "fig2-profile-v2-brain_loss-bootstrap_mean",
+        "fig2-profile-v2-brain_loss-percentile_2_5",
+        "fig2-profile-v2-brain_loss-percentile_97_5",
+        "fig2-profile-v2-content_loss-bootstrap_mean",
+        "fig2-profile-v2-content_loss-percentile_2_5",
+        "fig2-profile-v2-content_loss-percentile_97_5",
+        "fig2-profile-v3-brain_loss-bootstrap_mean",
+        "fig2-profile-v3-brain_loss-percentile_2_5",
+        "fig2-profile-v3-brain_loss-percentile_97_5",
+        "fig2-profile-v3-content_loss-bootstrap_mean",
+        "fig2-profile-v3-content_loss-percentile_2_5",
+        "fig2-profile-v3-content_loss-percentile_97_5",
+        "fig2-profile-v4-brain_loss-bootstrap_mean",
+        "fig2-profile-v4-brain_loss-percentile_2_5",
+        "fig2-profile-v4-brain_loss-percentile_97_5",
+        "fig2-profile-v4-content_loss-bootstrap_mean",
+        "fig2-profile-v4-content_loss-percentile_2_5",
+        "fig2-profile-v4-content_loss-percentile_97_5",
+        "fig2-profile-hvc-brain_loss-bootstrap_mean",
+        "fig2-profile-hvc-brain_loss-percentile_2_5",
+        "fig2-profile-hvc-brain_loss-percentile_97_5",
+        "fig2-profile-hvc-content_loss-bootstrap_mean",
+        "fig2-profile-hvc-content_loss-percentile_2_5",
+        "fig2-profile-hvc-content_loss-percentile_97_5"
+      ],
+      "values_status": "unresolved",
+      "source_statistic": "Author plot_figure.py: seed42 reset per ROI/method group; 1000 replicates of20 accepted nonself source-target draws; replicate mean and2.5/97.5 percentiles, preserving exact subject order and random generator.",
+      "role": "required_source_outputs_not_independent_subject_uncertainty"
+    },
+    "decision_policy": {
+      "combined_scalar": null,
+      "binary_threshold": null,
+      "partial_panel_win": false,
+      "inferential_rule": null,
+      "scientific_outcomes": "unknown"
+    }
+  },
+  "improvement_changed_pointers": [
+    "/blocking_issues/0",
+    "/blocking_issues/3",
+    "/comparison/paper_win_requires/0",
+    "/comparison/paper_win_requires/2",
+    "/comparison/paper_win_requires/4",
+    "/comparison/primary_metric",
+    "/comparison/published_baseline/description",
+    "/comparison/published_baseline/evidence_ids",
+    "/disposition_reason",
+    "/episode/candidate_freeze",
+    "/episode/final_evaluation",
+    "/episode/improvement_loop",
+    "/evidence"
+  ],
+  "task_changed_pointers": [
+    "/blocking_issues/improvement/0",
+    "/blocking_issues/improvement/3",
+    "/episode/improvement/candidate_freeze",
+    "/episode/improvement/final_evaluation",
+    "/episode/improvement/improvement_loop",
+    "/evaluation/contracts/improvement",
+    "/holds/interpretation",
+    "/holds/preserved_limits/task_specific/0",
+    "/holds/preserved_limits/task_specific/3",
+    "/next_implementation_action/improvement/action",
+    "/primary_outputs/1",
+    "/success_criteria/0"
+  ],
+  "outcomes_changed_pointers": [
+    "/contracts/improvement",
+    "/original_task_sha256",
+    "/pairing/improvement/rationale"
+  ],
+  "preserved_invariants": [
+    "Original improvement.v1 and current reference-recovery policy/descriptor remain byte-identical.",
+    "All eight same-task anchors and reproduction.v1, including480 pair means and72 unresolved bootstrap companions, remain byte-identical.",
+    "Published pair references are bound by method/axis/pair/ROI keys; no combined scalar is selected.",
+    "Both source_unresolved dispositions, null budgets/protocols and all four unknown scientific cells remain.",
+    "No threshold, tolerance, source-bootstrap value, independent-subject uncertainty, model lineage or qualified candidate result is supplied.",
+    "Generic endpoint selection batch remains unchanged and excludes029; existing continuous reporter and all native components remain unchanged."
+  ]
+}

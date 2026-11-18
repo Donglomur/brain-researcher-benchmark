@@ -29,10 +29,12 @@ class LanguageReferenceTests(unittest.TestCase):
         cls.original_row = next(row for row in cls.registry['tasks'] if row['id'] == successor.TASK)
         cls.reader = binder.checker.Reader(ROOT)
         cls.previous = binding.coverage(cls.registry, cls.read_pin)
-        cls.current = json.loads((ROOT / successor.HOME / 'task.json').read_bytes())
+        cls.current = cls.read_pin(successor.figure3b_pin('previous_task'), 'Archived LANGUAGE reference task')
 
     @classmethod
     def read_pin(cls, pin, label):
+        if pin == successor.approved_pin('outcomes'):
+            pin = successor.figure3b_pin('previous_outcomes')
         return binder.read_pinned(cls.reader, pin, label)
 
     def setUp(self):

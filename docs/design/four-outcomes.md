@@ -73,6 +73,19 @@ superiority or qualified improvement decision. A published number, a measured
 source-method result, a candidate result and verified current SOTA are different
 claims. Surpassing the source paper does not by itself establish SOTA.
 
+Paper-method replication on new assignments is a controlled reanalysis of the
+original observations. It may provide a qualified comparator for improvement on
+the same scientific task without verifying the historical result. Report
+historical-result reproduction and improvement against that rerun separately.
+The source-defined splitting protocol, complete endpoint and controls remain
+fixed; candidate and comparator must use identical protected cases under a
+prospectively frozen policy. Original observations are not independent biological
+replication, and new random seeds do not erase public-data exposure. Paired
+uncertainty must respect biological dependence while preserving the original
+endpoint weighting and aggregation. This scoped claim does not establish a
+historical paper win or current SOTA, create another task, or change existing
+task dispositions.
+
 Before that decision, a fixed complete panel may report direction-aware numerical
 candidate gains against its authenticated matching comparator, in the original
 units and with all required companion results, access/exposure and execution

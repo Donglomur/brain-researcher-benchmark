@@ -1,0 +1,19 @@
+{
+  "schema": "dosei_paired_terminal_mapping_policy_v1",
+  "condition": "native_marker_relative_30s_v1",
+  "states": ["awaiting_delivery", "active", "terminal", "invalid"],
+  "host_attaches_case_and_observation_identity": true,
+  "model_response_fields": ["status", "probabilities"],
+  "response_byte_limit": 65536,
+  "audit_event_limit": 1024,
+  "participant_abstention_reasons": ["voluntary_abstention", "invalid_model_response", "participant_wall_budget", "participant_token_budget", "participant_tool_cpu_budget", "participant_tool_memory_budget", "participant_tool_call_budget"],
+  "invalidating_reasons": ["authentication_failure", "provider_quota", "provider_outage", "transport_timeout", "transport_failure", "uncertain_delivery", "source_failure", "observation_hash_failure", "runtime_failure", "isolation_failure", "unavailable_interface", "unclassified_failure"],
+  "participant_tool_errors": "Recoverable only while the same declared participant budget remains; preserve trusted error evidence",
+  "delivery_gate": "Host must establish exact observation delivery, available permitted interface, fresh isolated case context and valid source custody before any participant failure can become abstention",
+  "attribution": "Only trusted host/provider evidence, never a model-declared reason; ambiguous failures invalidate the paired run",
+  "raw_evidence": "Host retains complete original response/error artifacts; this pure mapper checks supplied content bindings but performs no storage or custody authentication",
+  "budget": "One caller-authenticated immutable prospective budget hash per case; host enforces exact limits and attributes exhaustion",
+  "retry": "No reset, terminal replacement, label-informed retry or case reselection; permitted within-case analysis stays inside the original budget",
+  "complete_run": "Any invalid case prevents a scored paired run; trusted complete prediction records still undergo the unchanged strict transport and scorer validation",
+  "source_and_model_execution": false
+}

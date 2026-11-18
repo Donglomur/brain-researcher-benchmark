@@ -598,3 +598,455 @@ def compare(contract, result):
 
 
 admit_comparison = compare
+
+
+# Explicit successor branch. The v1 schemas, defaults and comparison remain
+# unchanged. No registry selector or outcome bundle adopts this branch implicitly.
+from copy import deepcopy as _deepcopy
+
+RERUN_VERSION = "paper-improvement/v2"
+RERUN_RESULT_VERSION = "paper-improvement-result/v2"
+RERUN_CLAIM = "same_task_author_method_improvement"
+_IDENTITIES = ("cohort", "split", "panel", "observations", "metric", "aggregation")
+_IDENTITY = _obj({key: SHA for key in _IDENTITIES})
+_CONTROL_BOUND = _obj({"minimum": NULL_NUMBER, "maximum": NULL_NUMBER, "evidence_ids": POS_REFS})
+_OUTPUT = _obj({"id": TEXT, "kind": _enum("observation_level", "source_grounded_derived", "companion_control"),
+                "identity_sha256": SHA, "control_rule": {"anyOf": [_CONTROL_BOUND, {"type": "null"}]}, "evidence_ids": POS_REFS})
+_EXECUTION = _obj({"execution_id": TEXT, "executor_role": {"const": "independent_operator"},
+    "candidate_sha256": SHA, "analysis_interface_sha256": SHA, "authentic_data_manifest_sha256": SHA,
+    "runtime_manifest_sha256": SHA, "invocation_sha256": SHA, "evaluation_identity": _IDENTITY,
+    "started_at": STAMP, "finished_at": STAMP, "output_manifest_sha256": SHA, "evidence_ids": POS_REFS})
+_VERIFICATION = _obj({"verifier_role": {"const": "independent_operator"},
+    "verification_program_sha256": SHA, "execution_id": TEXT, "output_manifest_sha256": SHA,
+    "measurement_digest": SHA, "started_at": STAMP, "finished_at": STAMP, "evidence_ids": POS_REFS,
+    "outputs": _array(_obj({"id": TEXT, "identity_sha256": SHA, "status": {"const": "verified"}, "value": NULL_NUMBER}), minimum=1)})
+
+RERUN_CONTRACT_SCHEMA = _deepcopy(CONTRACT_SCHEMA)
+RERUN_CONTRACT_SCHEMA.update({"$id": "https://neurobench.org/schemas/paper-improvement/v2",
+    "title": "Same-task qualified author-method rerun comparison v2",
+    "description": "Explicit scoped successor; metadata consistency is not independent scientific authentication."})
+_rp = RERUN_CONTRACT_SCHEMA["properties"]
+_rp["schema_version"] = {"const": RERUN_VERSION}
+_rp["objective"] = {"const": "improve_qualified_author_method_same_task"}
+_rp["disposition"] = _enum("metadata_ready", "design_ready", "source_unresolved", "ineligible")
+_rp["source_contract_digest"] = SHA
+RERUN_CONTRACT_SCHEMA["required"].extend(("source_contract_digest", "admission_policy"))
+_rc = _rp["comparison"]["properties"]
+_rc["improvement_requires"] = _rc.pop("paper_win_requires")
+_rp["comparison"]["required"].remove("paper_win_requires")
+_rp["comparison"]["required"].append("improvement_requires")
+_rc["current_sota"]["properties"]["status"] = {"const": "not_claimed"}
+_policy = _rp["admission_policy"]["properties"]
+_policy["comparator"] = {"const": "qualified_author_rerun_on_identical_cases"}
+_policy["author_baseline"] = _obj({"route": {"const": "qualified_source_method"}, "description": TEXT,
+    "implementation_origin": _enum("author_released_code", "independent_paper_method"),
+    "method_sha256": SHA, "source_version": TEXT, "qualification_sha256": SHA,
+    "corrections": ANCHOR_SCHEMA, "tolerance": {"type": "number", "minimum": 0}, "evidence_ids": POS_REFS})
+_policy["uncertainty_rule"]["properties"]["comparison_target"] = {"const": "paired_qualified_author_rerun"}
+_policy["requirement_checks"]["items"]["properties"]["checks"]["items"] = _enum(
+    "same_task", "reproduced_author_effect", "uncertainty", "candidate_freeze", "final_evaluation", "budgets", "provenance")
+_policy["evaluation_protocol"] = _obj({
+    "assignment_origin": {"const": "preregistered_regeneration"},
+    "historical_assignment_status": _enum("unavailable", "unresolved"),
+    "historical_assignment_sha256": {"type": "null"},
+    "source_split_protocol": ANCHOR_SCHEMA, "generation_record_sha256": SHA, "frozen_at": STAMP,
+    "evaluation_identity": _IDENTITY,
+    "exposure_policy_sha256": SHA, "prior_public_test_exposure": TEXT,
+    "analysis_interface_sha256": SHA, "authentic_data_manifest_sha256": SHA,
+    "verification_program_sha256": SHA, "required_outputs": _array(_OUTPUT, minimum=1),
+    "independent_units": _obj({"unit": TEXT, "count": {"type": "integer", "minimum": 1},
+        "manifest_sha256": SHA, "aggregation_sha256": SHA,
+        "preserves_source_estimand": {"type": "boolean", "const": True}, "dependence_method": TEXT, "evidence_ids": POS_REFS}),
+    "evidence_ids": POS_REFS})
+_rp["admission_policy"]["required"].append("evaluation_protocol")
+_policy["source_blocker_dispositions"] = _array(_obj({"blocker": TEXT,
+    "resolution": _enum("historical_assignment_unavailable", "contextual_published_reference_unavailable", "resolved_for_rerun"),
+    "evidence_ids": POS_REFS}))
+_rp["admission_policy"]["required"].append("source_blocker_dispositions")
+
+RERUN_RESULT_SCHEMA = _deepcopy(RESULT_SCHEMA)
+_rr = RERUN_RESULT_SCHEMA["properties"]
+_rr["schema_version"] = {"const": RERUN_RESULT_VERSION}
+_rr["claim"] = {"const": RERUN_CLAIM}
+_rr["measurement"]["properties"]["comparator_kind"] = {"const": "qualified_author_rerun"}
+_rr["measurement"]["properties"]["published_value"] = NULL_NUMBER
+_rr["evaluation"]["properties"].update({"finished_at": STAMP, "evaluation_identity": _IDENTITY})
+_rr["evaluation"]["required"].extend(("finished_at", "evaluation_identity"))
+_rr["selection_started_at"] = STAMP
+_rr["freeze"]["properties"]["selection_started_at"] = STAMP
+_rr["freeze"]["required"].append("selection_started_at")
+_rr["exposure"] = _obj({"exposure_policy_sha256": SHA, "exposure_manifest_sha256": SHA,
+    "prior_public_test_exposure": TEXT, "protected_labels_accessed_before_freeze": {"type": "boolean", "const": False},
+    "contract_digest": SHA, "candidate_sha256": SHA, "baseline_method_sha256": SHA,
+    "candidate_execution_id": TEXT, "baseline_execution_id": TEXT,
+    "selection_started_at": STAMP, "candidate_frozen_at": STAMP, "evaluation_started_at": STAMP, "evaluation_finished_at": STAMP,
+    "evidence_ids": POS_REFS})
+_rr["analysis_execution"] = _EXECUTION
+_rr["output_verification"] = _VERIFICATION
+RERUN_RESULT_SCHEMA["required"].extend(("selection_started_at", "exposure", "analysis_execution", "output_verification"))
+_baseline = _rr["reproduced_author_baseline"]
+_baseline["properties"].update({"method_sha256": SHA, "qualification_sha256": SHA, "freeze": _deepcopy(RESULT_SCHEMA["properties"]["freeze"]),
+    "analysis_execution": _EXECUTION, "output_verification": _VERIFICATION,
+    "budget_usage": _deepcopy(RESULT_SCHEMA["properties"]["budget_usage"])})
+_baseline["required"].extend(("method_sha256", "qualification_sha256", "freeze", "analysis_execution", "output_verification", "budget_usage"))
+for _usage_schema in (_rr["budget_usage"], _baseline["properties"]["budget_usage"]):
+    for _arm in ("access", "resource"):
+        # deepcopy preserves aliases: the legacy arms intentionally share _USAGE.
+        # Detach each arm before extending its required-field array.
+        _usage_schema["properties"][_arm] = _deepcopy(_usage_schema["properties"][_arm])
+        _usage_schema["properties"][_arm]["properties"].update({"contract_digest": SHA, "candidate_sha256": SHA, "execution_id": TEXT})
+        _usage_schema["properties"][_arm]["required"].extend(("contract_digest", "candidate_sha256", "execution_id"))
+_ru = _rr["uncertainty"]["properties"]
+_ru["comparison_target"] = {"const": "paired_qualified_author_rerun"}
+_ru["published_value"] = NULL_NUMBER
+_ru.update({"evaluation_identity": _IDENTITY, "candidate_output_manifest_sha256": SHA,
+    "baseline_output_manifest_sha256": SHA, "independent_units_manifest_sha256": SHA})
+_rr["uncertainty"]["required"].extend(("evaluation_identity", "candidate_output_manifest_sha256",
+    "baseline_output_manifest_sha256", "independent_units_manifest_sha256"))
+_rr["evidence"]["items"]["properties"]["kind"] = _enum("candidate", "freeze", "evaluation",
+    "reproduced_baseline", "budget", "exposure", "analysis_execution", "output_verification")
+RERUN_CONTRACT_SCHEMA["$defs"] = {"admission_result": RERUN_RESULT_SCHEMA}
+
+_v1_contract_validate, _v1_compare, _v1_summary = contract_validate, compare, summary
+
+
+def _rerun_contract_errors(document, task_id, source_contract):
+    errors = _json_errors(document)
+    if not errors:
+        errors = _schema_errors(document, RERUN_CONTRACT_SCHEMA)
+    if errors:
+        return errors
+    if source_contract is None or type(source_contract) is not dict or source_contract.get("schema_version") != "paper-improvement/v1":
+        return ["v2 requires the explicit frozen original v1 source contract; no implicit migration"]
+    errors.extend(_v1_contract_validate(source_contract, document["task_id"]))
+    if errors:
+        return errors
+    if source_contract["disposition"] == "ineligible":
+        errors.append("an ineligible source endpoint requires an independently reviewed source revision, not a rerun bypass")
+    if task_id is not None and document["task_id"] != task_id:
+        errors.append("task_id differs from expected task")
+    if document["source_contract_digest"] != contract_digest(source_contract):
+        errors.append("source_contract_digest does not bind the supplied original contract")
+    if document["same_task"] != source_contract["same_task"] or document["source_paper"] != source_contract["source_paper"]:
+        errors.append("original source identity and all anchors, including historical split unknowns, must be preserved")
+    comparison, policy = document["comparison"], document["admission_policy"]
+    if comparison["published_baseline"] != source_contract["comparison"]["published_baseline"]:
+        errors.append("contextual published reference must preserve the original source record")
+    for key in ("primary_metric", "direction"):
+        if comparison[key] != source_contract["comparison"][key]:
+            errors.append("original comparison " + key + " must be preserved")
+    # Reuse v1's source, domain, meaningful-effect, rule and budget semantics on
+    # a nonready projection. Historical replay requirements are never asserted.
+    projected = _deepcopy(document)
+    projected.pop("source_contract_digest")
+    projected.update(schema_version="paper-improvement/v1", objective="surpass_source_paper_same_task", disposition="design_ready")
+    projected["comparison"]["paper_win_requires"] = projected["comparison"].pop("improvement_requires")
+    pp = projected["admission_policy"]
+    protocol = pp.pop("evaluation_protocol")
+    pp.pop("source_blocker_dispositions")
+    pp["author_baseline"] = {key: policy["author_baseline"][key] for key in ("description", "tolerance", "evidence_ids")}
+    pp["author_baseline"]["route"] = "reproduced_author"
+    pp["comparator"] = "both_published_and_reproduced_author"
+    pp["uncertainty_rule"]["comparison_target"] = "stronger_of_published_and_reproduced_author"
+    errors.extend(_v1_contract_validate(projected, task_id))
+    sources = _evidence_map(document["evidence"], errors)
+    for row in source_contract["evidence"]:
+        if row["id"] in sources and sources[row["id"]] != row:
+            errors.append("inherited source evidence id cannot be redefined: " + row["id"])
+    for path, refs in _refs_in(document):
+        if any(ref not in sources for ref in refs):
+            errors.append(path + ": unknown source or registration evidence")
+    baseline_refs = policy["author_baseline"]["evidence_ids"]
+    required_kind = "author_code" if policy["author_baseline"]["implementation_origin"] == "author_released_code" else "paper"
+    if not any(sources.get(ref, {}).get("kind") == required_kind for ref in baseline_refs):
+        errors.append("qualified source-method implementation lacks the required primary method evidence")
+    if not any(sources.get(ref, {}).get("kind") == "registration" for ref in baseline_refs):
+        errors.append("qualified source method requires independent qualification/review evidence")
+    if not any(sources.get(ref, {}).get("kind") == "registration" for ref in protocol["evidence_ids"]):
+        errors.append("regenerated assignments require explicit preregistration evidence")
+    def primary(record, label):
+        if not any(sources.get(ref, {}).get("kind") in ("paper", "author_code", "author_data") for ref in record["evidence_ids"]):
+            errors.append(label + ": primary source evidence required")
+    split_protocol = protocol["source_split_protocol"]
+    primary(split_protocol, "source split protocol")
+    if split_protocol["status"] != "verified":
+        errors.append("source split unit and evaluation recipe must be verified separately from missing historical assignments")
+    corrections = policy["author_baseline"]["corrections"]
+    if corrections["status"] == "unresolved":
+        errors.append("source-method corrections must be explicitly adjudicated")
+    if corrections["status"] == "verified" and not any(sources.get(ref, {}).get("kind") == "registration" for ref in corrections["evidence_ids"]):
+        errors.append("source-method corrections require explicit adjudication evidence")
+    dispositions = policy["source_blocker_dispositions"]
+    if len(dispositions) != len(source_contract["blocking_issues"]) or {row["blocker"] for row in dispositions} != set(source_contract["blocking_issues"]):
+        errors.append("every original source blocker needs one explicit rerun disposition")
+    for row in dispositions:
+        if not any(sources.get(ref, {}).get("kind") == "registration" for ref in row["evidence_ids"]):
+            errors.append("source-blocker adjudication requires review/registration evidence")
+        if row["resolution"] == "resolved_for_rerun":
+            primary(row, "resolved source blocker")
+    if policy["author_baseline"]["qualification_sha256"] != rerun_qualification_digest(document):
+        errors.append("source-method qualification must bind the complete source, endpoint/output map and evaluation protocol")
+    for key in ("published_baseline", "reproduced_author_baseline"):
+        if comparison[key]["status"] == "verified" and comparison[key]["value"] is None:
+            errors.append("verified " + key + " requires a value; unavailable references must remain unresolved/null")
+    units, rule = protocol["independent_units"], policy["uncertainty_rule"]
+    if units["unit"] != rule["independent_unit"] or units["count"] < rule["minimum_independent_units"]:
+        errors.append("frozen biological unit roster does not match the inference rule")
+    if units["aggregation_sha256"] != protocol["evaluation_identity"]["aggregation"]:
+        errors.append("biological uncertainty must preserve the source endpoint aggregation")
+    outputs = protocol["required_outputs"]
+    if len({row["id"] for row in outputs}) != len(outputs):
+        errors.append("required output ids must be unique")
+    if not any(row["kind"] != "companion_control" for row in outputs):
+        errors.append("source-native observation or derived outputs are required")
+    for row in outputs:
+        primary(row, "required output " + row["id"])
+        bound = row["control_rule"]
+        if row["kind"] == "companion_control":
+            if bound is None or (bound["minimum"] is None and bound["maximum"] is None):
+                errors.append("every companion control requires a frozen pass constraint")
+            elif bound["minimum"] is not None and bound["maximum"] is not None and bound["minimum"] > bound["maximum"]:
+                errors.append("companion control bounds are reversed")
+            if bound is not None:
+                primary(bound, "companion control bound")
+        elif bound is not None:
+            errors.append("only companion-control outputs may carry control bounds")
+    if document["disposition"] == "metadata_ready":
+        if document["blocking_issues"]:
+            errors.append("metadata_ready cannot retain branch-specific scientific blockers")
+        for key, row in document["same_task"].items():
+            if key != "split" and row["status"] not in ("verified", "not_applicable"):
+                errors.append("unresolved original same-task anchor: " + key)
+        if comparison["direction"] == "unresolved":
+            errors.append("metric direction unresolved")
+        effect = comparison["minimum_effect"]
+        if effect["status"] != "justified" or effect["value"] is None or effect["value"] <= 0:
+            errors.append("positive justified meaningful effect required")
+        if comparison["uncertainty"]["status"] != "specified":
+            errors.append("paired uncertainty must be specified")
+        if any(document["episode"][key] is None for key in ("access_budget", "resource_budget")):
+            errors.append("explicit cumulative access and resource budgets required")
+    return errors
+
+
+def rerun_measurement_digest(result):
+    """Bind checked outputs to measurements, without circular receipt hashes."""
+    return contract_digest({"measurement": result["measurement"], "uncertainty": result["uncertainty"],
+        "reproduced_value": result["reproduced_author_baseline"]["value"]})
+
+
+def rerun_qualification_digest(contract):
+    """Commit the exact method, source recipe, complete output map and review."""
+    policy = contract["admission_policy"]
+    return contract_digest({"source_contract_digest": contract["source_contract_digest"],
+        "same_task": contract["same_task"], "evaluation_protocol": policy["evaluation_protocol"],
+        "source_blocker_dispositions": policy["source_blocker_dispositions"],
+        "author_baseline": {key: value for key, value in policy["author_baseline"].items() if key != "qualification_sha256"}})
+
+
+def rerun_record_digest(record):
+    """Canonical receipt payload commitment, excluding its evidence references."""
+    return contract_digest({key: value for key, value in record.items() if key != "evidence_ids"})
+
+
+def _compare_rerun(contract, result, source_contract):
+    errors = _rerun_contract_errors(contract, None, source_contract)
+    out = {"claim": RERUN_CLAIM, "status": "rejected", "comparison_admitted": False,
+        "criterion_satisfied": None, "required_controls_pass": None, "reproduced_improvement": None,
+        "paper_win": None, "paper_win_verification": "unverified", "scientific_outcome": "unknown",
+        "current_sota": "not_assessed", "assurance": ASSURANCE, "errors": errors}
+    if errors:
+        return out
+    errors.extend(_json_errors(result))
+    if not errors:
+        errors.extend(_schema_errors(result, RERUN_RESULT_SCHEMA))
+    if errors:
+        return out
+    if contract["disposition"] != "metadata_ready":
+        errors.append("v2 comparison requires a separately reviewed metadata_ready policy")
+    digest = contract_digest(contract)
+    policy, comparison = contract["admission_policy"], contract["comparison"]
+    protocol, baseline = policy["evaluation_protocol"], result["reproduced_author_baseline"]
+    identity = protocol["evaluation_identity"]
+    if result["task_id"] != contract["task_id"] or result["phase"] != "final":
+        errors.append("same task and final evaluation required")
+    for label, record in (("result", result), ("freeze", result["freeze"]), ("evaluation", result["evaluation"]), ("uncertainty", result["uncertainty"])):
+        if record["contract_digest"] != digest or record["candidate_sha256"] != result["candidate_sha256"]:
+            errors.append(label + ": frozen contract/candidate identity mismatch")
+    for record in (result, baseline):
+        if record["same_task"] != contract["same_task"]:
+            errors.append("original scientific anchors changed")
+    for key in ("id", "sha256"):
+        if result["evaluation"]["evaluator_" + key] != policy["evaluator"][key]:
+            errors.append("frozen evaluator identity mismatch")
+    if result["evaluation"]["evaluation_identity"] != identity:
+        errors.append("final protected evaluation manifest mismatch")
+    if not (_timestamp(protocol["frozen_at"]) < _timestamp(result["selection_started_at"]) <=
+            _timestamp(result["freeze"]["frozen_at"]) < _timestamp(result["evaluation"]["started_at"]) <
+            _timestamp(result["evaluation"]["finished_at"])):
+        errors.append("protocol must freeze before selection; candidate must freeze before final evaluation")
+    if result["freeze"]["selection_started_at"] != result["selection_started_at"]:
+        errors.append("candidate selection start must bind its freeze receipt")
+    if (baseline["freeze"]["contract_digest"] != digest or baseline["freeze"]["candidate_sha256"] != baseline["method_sha256"]):
+        errors.append("baseline freeze receipt must bind this contract and source method")
+    if not (_timestamp(protocol["frozen_at"]) <= _timestamp(baseline["freeze"]["frozen_at"]) < _timestamp(result["selection_started_at"])):
+        errors.append("qualified baseline must freeze before candidate selection")
+    for key in ("method_sha256", "qualification_sha256"):
+        if baseline[key] != policy["author_baseline"][key]:
+            errors.append("baseline is not the frozen qualified source-method implementation")
+    evidence = _evidence_map(result["evidence"], errors)
+    def refs(record, kind, label, sha=None):
+        for ref in record["evidence_ids"]:
+            item = evidence.get(ref, {})
+            if item.get("kind") != kind or (sha is not None and item.get("sha256") != sha):
+                errors.append(label + ": missing or inconsistent " + kind + " evidence")
+    source_ids = {ref for _, ids in _refs_in(contract) for ref in ids}
+    if not source_ids.issubset(set(result["source_evidence_ids"])) or not set(result["source_evidence_ids"]).issubset({row["id"] for row in contract["evidence"]}):
+        errors.append("complete declared source/registration provenance required")
+    candidates = [row for row in result["evidence"] if row["kind"] == "candidate"]
+    if not candidates or any(row["sha256"] != result["candidate_sha256"] for row in candidates):
+        errors.append("candidate evidence must bind the frozen artifact")
+    refs(result["freeze"], "freeze", "freeze", rerun_record_digest(result["freeze"]))
+    refs(baseline["freeze"], "freeze", "baseline freeze", rerun_record_digest(baseline["freeze"]))
+    refs(result["evaluation"], "evaluation", "evaluation", rerun_record_digest(result["evaluation"]))
+    refs(baseline, "reproduced_baseline", "baseline", baseline["qualification_sha256"])
+    exposure = result["exposure"]
+    for key in ("exposure_policy_sha256", "prior_public_test_exposure"):
+        if exposure[key] != protocol[key]:
+            errors.append("exposure disclosure/policy differs from the frozen protocol")
+    for key, expected in (("contract_digest", digest), ("candidate_sha256", result["candidate_sha256"]),
+            ("baseline_method_sha256", baseline["method_sha256"]),
+            ("candidate_execution_id", result["analysis_execution"]["execution_id"]),
+            ("baseline_execution_id", baseline["analysis_execution"]["execution_id"]),
+            ("selection_started_at", result["selection_started_at"]), ("candidate_frozen_at", result["freeze"]["frozen_at"]),
+            ("evaluation_started_at", result["evaluation"]["started_at"]), ("evaluation_finished_at", result["evaluation"]["finished_at"])):
+        if exposure[key] != expected:
+            errors.append("exposure attestation does not bind this candidate/comparator episode: " + key)
+    refs(exposure, "exposure", "exposure", rerun_record_digest(exposure))
+    expected_outputs = {row["id"]: row["identity_sha256"] for row in protocol["required_outputs"]}
+    measurement_digest = rerun_measurement_digest(result)
+    execution_ids = []
+    controls_pass = True
+    output_rules = {row["id"]: row for row in protocol["required_outputs"]}
+    for label, holder, method in (("candidate", result, result["candidate_sha256"]), ("baseline", baseline, baseline["method_sha256"])):
+        execution, verification = holder["analysis_execution"], holder["output_verification"]
+        execution_ids.append(execution["execution_id"])
+        refs(execution, "analysis_execution", label + " execution", rerun_record_digest(execution))
+        refs(verification, "output_verification", label + " verification", rerun_record_digest(verification))
+        if execution["candidate_sha256"] != method or execution["evaluation_identity"] != identity:
+            errors.append(label + ": method or identical protected case manifest mismatch")
+        for key in ("analysis_interface_sha256", "authentic_data_manifest_sha256"):
+            if execution[key] != protocol[key]:
+                errors.append(label + ": authentic analysis input/interface mismatch")
+        if (verification["verification_program_sha256"] != protocol["verification_program_sha256"] or
+                verification["execution_id"] != execution["execution_id"] or
+                verification["output_manifest_sha256"] != execution["output_manifest_sha256"] or
+                verification["measurement_digest"] != measurement_digest):
+            errors.append(label + ": independent output verification does not bind this execution and result")
+        outputs = verification["outputs"]
+        if len(outputs) != len(expected_outputs) or {row["id"]: row["identity_sha256"] for row in outputs} != expected_outputs:
+            errors.append(label + ": required complete granular output/control coverage mismatch")
+        for row in outputs:
+            target = output_rules.get(row["id"])
+            if target is None:
+                continue
+            if target["kind"] == "companion_control":
+                if row["value"] is None:
+                    errors.append(label + ": companion control measurement missing")
+                elif not _in_domain(row["value"], target["control_rule"]):
+                    controls_pass = False
+            elif row["value"] is not None:
+                errors.append(label + ": granular output must not be replaced by an aggregate value")
+        if not (_timestamp(result["evaluation"]["started_at"]) <= _timestamp(execution["started_at"]) <
+                _timestamp(execution["finished_at"]) <= _timestamp(verification["started_at"]) <
+                _timestamp(verification["finished_at"]) <= _timestamp(result["evaluation"]["finished_at"])):
+            errors.append(label + ": execution and independent verification must occur within final evaluation")
+    if len(set(execution_ids)) != 2:
+        errors.append("candidate and comparator require distinct independently recorded executions")
+    candidate_execution, baseline_execution = result["analysis_execution"], baseline["analysis_execution"]
+    measurement, uncertainty, rule = result["measurement"], result["uncertainty"], policy["uncertainty_rule"]
+    for key in ("primary_metric", "direction"):
+        if measurement[key] != comparison[key]:
+            errors.append("original metric/direction mismatch")
+    published = comparison["published_baseline"]["value"]
+    if measurement["published_value"] != published or uncertainty["published_value"] != published:
+        errors.append("contextual published value differs from its original bound reference")
+    for value in (measurement["candidate_value"], baseline["value"]):
+        if not _in_domain(value, policy["metric_domain"]):
+            errors.append("score outside declared metric domain")
+    pinned = comparison["reproduced_author_baseline"]["value"]
+    if pinned is not None and _difference(baseline["value"], pinned).copy_abs() > Decimal(str(policy["author_baseline"]["tolerance"])):
+        errors.append("measured rerun differs from its frozen baseline reference")
+    for key in ("statistic", "method", "independent_unit", "confidence_level", "null_effect", "alternative", "comparison_target"):
+        if uncertainty[key] != rule[key]:
+            errors.append("uncertainty." + key + " differs from frozen paired rule")
+    for key, expected in (("evaluation_identity", identity), ("reproduced_value", baseline["value"]),
+            ("comparator_value", baseline["value"]), ("candidate_output_manifest_sha256", candidate_execution["output_manifest_sha256"]),
+            ("baseline_output_manifest_sha256", baseline_execution["output_manifest_sha256"]),
+            ("independent_units_manifest_sha256", protocol["independent_units"]["manifest_sha256"]),
+            ("n_independent_units", protocol["independent_units"]["count"])):
+        if uncertainty[key] != expected:
+            errors.append("uncertainty." + key + " does not bind the paired biological comparison")
+    effect = _difference(measurement["candidate_value"], baseline["value"])
+    if comparison["direction"] == "lower":
+        effect = effect.copy_negate()
+    if not _finite_number(effect):
+        errors.append("computed paired effect must be finite")
+    if rule["statistic"] == "effect_lower_bound":
+        interval = uncertainty["interval"]
+        if interval is None or not (Decimal(str(interval[0])) <= effect <= Decimal(str(interval[1]))) or uncertainty["value"] != interval[0]:
+            errors.append("paired interval must contain the effect and declare its lower bound")
+    elif uncertainty["interval"] is not None or not 0 <= uncertainty["value"] <= 1:
+        errors.append("probability uncertainty requires [0,1] and no interval")
+    refs(uncertainty, "evaluation", "uncertainty")
+    if not set(uncertainty["evidence_ids"]).issubset(result["evaluation"]["evidence_ids"]):
+        errors.append("paired uncertainty must belong to the final evaluation")
+    for holder in (result, baseline):
+        for key, budget in policy["budgets"].items():
+            usage = holder["budget_usage"][key]
+            refs(usage, "budget", "budget", rerun_record_digest(usage))
+            if (usage["contract_digest"] != digest or usage["candidate_sha256"] != holder["analysis_execution"]["candidate_sha256"] or
+                    usage["execution_id"] != holder["analysis_execution"]["execution_id"]):
+                errors.append("cumulative budget evidence must bind this method and execution episode")
+            if usage["unit"] != budget["unit"] or usage["scope"] != budget["scope"] or usage["used"] > budget["limit"]:
+                errors.append("cumulative " + key + " budget mismatch or exceeded")
+    if not errors:
+        out.update(comparison_admitted=True, status="admitted_on_declared_evidence",
+            reproduced_improvement=float(effect), required_controls_pass=controls_pass, criterion_satisfied=(controls_pass and
+                _passes(effect, policy["effect_operator"], comparison["minimum_effect"]["value"]) and
+                _passes(uncertainty["value"], rule["operator"], rule["threshold"])))
+    return out
+
+
+def contract_validate(document, task_id=None, *, source_contract=None):
+    """Validate explicit v2 with its frozen source; otherwise retain v1 semantics."""
+    if type(document) is dict and document.get("schema_version") == RERUN_VERSION:
+        return _rerun_contract_errors(document, task_id, source_contract)
+    return _v1_contract_validate(document, task_id)
+
+
+def compare(contract, result, *, source_contract=None):
+    """Dispatch an explicitly selected comparison; never migrate an old task."""
+    if type(contract) is dict and contract.get("schema_version") == RERUN_VERSION:
+        return _compare_rerun(contract, result, source_contract)
+    return _v1_compare(contract, result)
+
+
+def validate_contract(document, task_id=None, *, expected_task_id=None, source_contract=None):
+    if task_id is not None and expected_task_id is not None and task_id != expected_task_id:
+        return ["task_id and expected_task_id disagree"]
+    return contract_validate(document, task_id if task_id is not None else expected_task_id, source_contract=source_contract)
+
+
+def summary(document, *, source_contract=None):
+    if type(document) is not dict or document.get("schema_version") != RERUN_VERSION:
+        return _v1_summary(document)
+    errors = contract_validate(document, source_contract=source_contract)
+    return {"task_id": document.get("task_id"), "claim": RERUN_CLAIM, "valid": not errors,
+        "branch_metadata_ready": not errors and document.get("disposition") == "metadata_ready",
+        "improvement_ready": False, "paper_win": None, "scientific_outcome": "unknown",
+        "current_sota": "not_assessed", "errors": errors, "assurance": ASSURANCE}
+
+
+contract_summary = summary
+admit_comparison = compare

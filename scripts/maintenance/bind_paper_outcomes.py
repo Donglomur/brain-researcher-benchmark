@@ -145,7 +145,7 @@ def validate_existing(root=ROOT):
             "scientific_qualification": False, "bytes_read": reader.bytes_read}
 
 
-def build_outputs(root=ROOT):
+def build_outputs(root=ROOT, *, adopt_language_figure3b=False):
     """Validate every supplied contract before returning deterministic outputs."""
     root = root_path(root)
     reader = checker.Reader(root)
@@ -155,6 +155,7 @@ def build_outputs(root=ROOT):
     read_pin = lambda pin, label: read_pinned(reader, pin, label)
     previous = binding.coverage(registry, read_pin)
     already_bound = previous is not None
+    binding.need(not adopt_language_figure3b or already_bound, "LANGUAGE Figure3b adoption requires the existing reviewed reference binding")
     if already_bound:
         snapshot_pin = registry["paper_outcomes"]["pre_outcomes_registry"]
         snapshot_raw, observed = raw(reader, binding.SNAPSHOT)
@@ -192,6 +193,28 @@ def build_outputs(root=ROOT):
             current = read_pin(row["specification"], "Current paper definition")
             context = binding.context(row, current, previous, read_pin, improvement_contract=improvement)
             contexts[identifier] = context
+            if adopt_language_figure3b and identifier == "PAPER-ROOT-ADD-001":
+                language = binding.primary_successor_module(identifier)
+                if not language.is_figure3b_selected(row):
+                    selected_row, selected_task, selected_outcomes = language.adoption(row, read_pin)
+                    proposed = {
+                        selected_row["specification"]["path"]: (selected_row["specification"], selected_task),
+                        selected_row["paper_outcomes"]["outcomes"]["path"]:
+                            (selected_row["paper_outcomes"]["outcomes"], selected_outcomes),
+                    }
+                    def selected_read(member_pin, label):
+                        # Exactly two sealed, root-reviewed successor outputs;
+                        # no general virtual reader and no arbitrary pin fallback.
+                        if member_pin["path"] in proposed:
+                            expected, value = proposed[member_pin["path"]]
+                            binding.need(member_pin == expected, "LANGUAGE proposed output pin mismatch")
+                            return copy.deepcopy(value)
+                        return read_pin(member_pin, label)
+                    binding.context(selected_row, selected_task, previous, selected_read, improvement_contract=improvement)
+                    updated_rows[identifier].update(selected_row)
+                    for path, (_, value) in proposed.items():
+                        outputs[path] = binding.encode(value)
+                    continue
             archived_raw, archive_pin = raw(reader, home + "/" + binding.HISTORY)
             previous_document = context["previous_document"]
             if binding.has_endpoint_selection(row):
@@ -313,7 +336,8 @@ def build_outputs(root=ROOT):
             binding.need(binding.engine().contract_digest(improvement) == binding.engine().contract_digest(successor.retained_improvement),
                          "Retained improvement differs from authenticated successor lineage")
             selected_improvement = successor.primary_improvement
-        projected = binding.project_task(previous_document, prior, selected_improvement,
+        projection_policy = module.projection_improvement(successor) if identifier == 'PAPER-ROOT-ADD-001' and successor is not None else selected_improvement
+        projected = binding.project_task(previous_document, prior, projection_policy,
                                          scopes["entries"].get(identifier) if scopes else None,
                                          reproduction_version=reproduction["schema_version"] if reproduction is not None else "paper-reproduction/v1",
                                          primary_correction=scopes.get("same_primary_corrections", {}).get(identifier) if scopes else None)
@@ -365,10 +389,10 @@ def build_outputs(root=ROOT):
                      "input_registry": registry_pin}
 
 
-def write_or_check(root=ROOT, *, write=False, check=False):
+def write_or_check(root=ROOT, *, write=False, check=False, adopt_language_figure3b=False):
     binding.need(not (write and check), "Choose either write or check")
     root = root_path(root)
-    outputs, report = build_outputs(root)
+    outputs, report = build_outputs(root, adopt_language_figure3b=adopt_language_figure3b)
     destination_reader = checker.Reader(root)
     before = {}
     for relative in outputs:
@@ -378,7 +402,7 @@ def write_or_check(root=ROOT, *, write=False, check=False):
     if check:
         binding.need(not stale, "Paper outcome bindings are stale or missing: " + ", ".join(stale))
     if write:
-        repeated, repeated_report = build_outputs(root)
+        repeated, repeated_report = build_outputs(root, adopt_language_figure3b=adopt_language_figure3b)
         report["repeat_preflight_bytes_read"] = repeated_report["bytes_read"]
         binding.need(outputs == repeated, "Outcome binding inputs changed during preflight")
         for relative in outputs:
@@ -411,9 +435,10 @@ def main(argv=None):
     mode.add_argument("--write", action="store_true", help="Apply the fully validated deterministic metadata plan")
     mode.add_argument("--check", action="store_true", help="Require existing bytes to match the validated plan")
     parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--adopt-language-figure3b", action="store_true", help="Select only the fixed reviewed LANGUAGE Figure3b successor")
     args = parser.parse_args(argv)
     try:
-        print(json.dumps(write_or_check(args.root, write=args.write, check=args.check), indent=2))
+        print(json.dumps(write_or_check(args.root, write=args.write, check=args.check, adopt_language_figure3b=args.adopt_language_figure3b), indent=2))
         return 0
     except (ValueError, KeyError, TypeError, OSError, ImportError) as error:
         print("paper outcome binding refused: " + str(error), file=sys.stderr)

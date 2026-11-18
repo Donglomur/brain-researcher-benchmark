@@ -176,9 +176,16 @@ The pinned native fitter retains its potentially expensive fit budget; an
 external execution owner must qualify resources and lifecycle handling.
 
 Outstanding requirements include original object/cohort/covariate identities,
-the paper QC amplitude cutoff 0.01 versus retained loader default 0.1, historic
-window/table provenance, independently competent references, native numerical
-agreement and protected candidate evaluation. Source Figure 7D/F fitted model
+historic window/table provenance, independently competent references, native
+numerical agreement and protected candidate evaluation. Pinned author source
+shows initial amplitude cutoff0.1 followed by an eight-area filter using
+amplitude_cutoff <0.01, isi_violations <0.5 and presence_ratio >0.9. Paper inclusive
+versus source strict boundaries, saved presence minimum0.95, historical AllenSDK
+filtering and actual cohort/panel identities remain unresolved. The
+[QC source clarification](../../docs/provenance/empirical-qc-source-resolution.v1.json) supersedes the unexplained amplitude contrast in
+the frozen `POLICY.json /unimplemented_or_unqualified/1` for current interpretation.
+The policy bytes and execution bindings stay unchanged. This is a hosted source
+observation; the admitted local notebook capture failed. Source Figure 7D/F fitted model
 curves, pooled-area Figure 7B fits with 50 repetitions, area contrasts and the
 whole paper are not implemented by these per-unit summaries. A future constrained
 improvement benchmark must independently freeze support and withhold full-recording
