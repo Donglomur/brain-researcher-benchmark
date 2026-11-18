@@ -31,7 +31,7 @@ Source availability does not establish a qualified runtime. A programme score ca
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 17286 bytes; SHA-256 `99aefc548cc26715a3acefa5097e6f3d752851ccde90a4c9358a279d4a07584b`.
+- Specification identity: 17775 bytes; SHA-256 `76de8b6b17e4919dd13fea9feb2033e2868228cfd25505c1587d9592c3431eb6`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -50,7 +50,9 @@ Package-local task IDs do not override this registered definition; ownership lin
 
 ## Public source citations
 
+- [Source](https://figshare.com/articles/dataset/Generic_Object_Decoding/7387130)
 - [Source](https://github.com/KamitaniLab/GenericObjectDecoding)
+- [Source](https://openneuro.org/datasets/ds001246)
 - [Source](https://www.nature.com/articles/ncomms15037)
 
 Citations come from the specification; their availability was not rechecked when generating this page.
