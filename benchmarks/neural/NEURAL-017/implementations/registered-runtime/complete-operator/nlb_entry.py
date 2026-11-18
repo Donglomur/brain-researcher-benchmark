@@ -1,7 +1,7 @@
 """NEURAL-017 standalone source bootstrap; no scientific authority is granted.
 
 Required: python -I -B -X pycache_prefix=ABSOLUTE_FRESH_OWNED_PATH
-          nlb_entry.py prepare|campaign ORIGINAL_ARGUMENTS...
+          nlb_entry.py prepare|campaign|opaque-s03-prepare|opaque-s03-original ORIGINAL_ARGUMENTS...
 The selected trusted entry is outside its acyclic payload manifest. Capture and
 compile that fixed payload before any local import. Native children have their
 separate unchanged deployment/source admission, not this host bootstrap.
@@ -9,8 +9,8 @@ separate unchanged deployment/source admission, not this host bootstrap.
 import sys
 import os
 
-MANIFEST_BYTES = 12019
-MANIFEST_SHA256 = "082738cc4454754de31c5518de82285921ccb2c948b532c8774b1f9b3532e643"
+MANIFEST_BYTES = 12317
+MANIFEST_SHA256 = "400c8599c2ee2b8b329f3f2f7b40d0cd4ab87ffdc08aeea082f082999e1ea6c9"
 
 
 def require_startup():
@@ -92,7 +92,7 @@ def capture_source(root):
 
     raw = read(os.path.join(root, "SOURCE_MANIFEST.json"), MANIFEST_BYTES, MANIFEST_SHA256)
     manifest = json.loads(raw, object_pairs_hook=pairs)
-    if manifest["schema"] != "NLB017_complete_operator_source_v1" or len(manifest["files"]) != 73:
+    if manifest["schema"] != "NLB017_complete_operator_source_v1" or len(manifest["files"]) != 74:
         raise ValueError("exact complete operator payload")
     captured = {}; seen = set(); aggregate = len(raw)
     for row in manifest["files"]:
@@ -170,11 +170,15 @@ def main():
                             "entry": entry, "manifest_sha256": MANIFEST_SHA256,
                             "cache_prefix": prefix, "cache_identity": identity,
                             "captured_source_bytes": source_bytes}
-    if len(sys.argv) < 2 or sys.argv[1] not in ("prepare", "campaign"):
-        raise ValueError("select prepare or campaign with original arguments")
+    if len(sys.argv) < 2 or sys.argv[1] not in ("prepare", "campaign", "opaque-s03-prepare", "opaque-s03-original"):
+        raise ValueError("select prepare, campaign, opaque-s03-prepare, or opaque-s03-original with selected arguments")
     route = sys.argv[1]; args = sys.argv[2:]
     if route == "prepare":
         from nlb.operator_driver import main as selected_main
+    elif route == "opaque-s03-prepare":
+        from nlb.opaque_s03 import main as selected_main
+    elif route == "opaque-s03-original":
+        from nlb.opaque_s03 import original_main as selected_main
     else:
         from nlb.cli import main as selected_main
     # The entry dispatches the unchanged actual lifecycle; it does not create

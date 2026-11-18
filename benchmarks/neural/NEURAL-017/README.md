@@ -45,6 +45,10 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Opaque file delivery v1](implementations/opaque-file-delivery-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Opaque s03 handoff v1](implementations/opaque-s03-handoff-v1) — Reviewed source component.
+  Scope: Original full-panel opaque S03 handoff preserves 1721 training/574 query trials, 140 five-ms bins, 137 observed/45 withheld units and the fixed 1381/340 split. It transports the same protected-seed donor relation; this source enrollment does not qualify a complete campaign, participant model, direct understanding or scientific result.
+- [Opaque s03 worker v1](implementations/opaque-s03-worker-v1) — Reviewed source component.
+  Scope: Original S03 worker prepares all five conditions through the existing project\_views implementation and authenticates the unchanged full trial/bin/unit support. Comparison-only integer/float64 canonical-grid binding preserves original bytes, support hashes and donor commitments. Source enrollment does not import private execution receipts, authorize native execution or qualify the complete campaign.
 - [Opaque delivery v1](implementations/opaque-delivery-v1) — Reviewed source component.
   Scope: Opaque full-panel delivery for NEURAL-017. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -1,0 +1,68 @@
+{
+  "schema": "neural067-original-target-callback-source/v1",
+  "task_id": "NEURAL-067",
+  "readiness_promoted": false,
+  "proposed_public_directory": "benchmarks/neural/NEURAL-067/implementations/original-target-callback-v1",
+  "files": [
+    {
+      "path": "target_callback.py",
+      "bytes": 16547,
+      "sha256": "b1b5bbc6cc4c5b614048fb9533a8ae36255f1901f03061adc86be4d74e51329a",
+      "public_path": "benchmarks/neural/NEURAL-067/implementations/original-target-callback-v1/target_callback.py",
+      "preimage_sha256": null
+    },
+    {
+      "path": "guarded_npz.py",
+      "bytes": 3576,
+      "sha256": "e72688ecd53c9dfd891b105b1e49b3d22871cc8b3ecb17339bd8a7f88672b890",
+      "public_path": "benchmarks/neural/NEURAL-067/implementations/original-target-callback-v1/guarded_npz.py",
+      "preimage_sha256": null
+    },
+    {
+      "path": "test_target_callback.py",
+      "bytes": 16321,
+      "sha256": "7382f42d653a9b167a731e1b8fbe2f9a744597dd6096301bcb7089f3468966da",
+      "public_path": "benchmarks/neural/NEURAL-067/implementations/original-target-callback-v1/test_target_callback.py",
+      "preimage_sha256": null
+    },
+    {
+      "path": "README.md",
+      "bytes": 3949,
+      "sha256": "7abda3c5388a059cfb11c6452b3483bf3b2e659b703043a15c240c5e7e0d314a",
+      "public_path": "benchmarks/neural/NEURAL-067/implementations/original-target-callback-v1/README.md",
+      "preimage_sha256": null
+    }
+  ],
+  "dependencies": [
+    {
+      "role": "unchanged current scorer",
+      "path": "benchmarks/neural/NEURAL-067/implementations/session-evaluator-v1/scorer.py",
+      "bytes": 11283,
+      "sha256": "91dbec46a088e807ebdbf243c478ea6f9e8a3ea0cb5f7747837673d499279b51"
+    },
+    {
+      "role": "unchanged reviewed prediction bridge, separate future source integration",
+      "path": "benchmarks/neural/NEURAL-067/implementations/journal-session-bridge-v1/bridge.py",
+      "bytes": 6579,
+      "sha256": "f46895d79cf3646313749e7226a334d4a468dc67a8a60d62a02562da7dd09e33"
+    }
+  ],
+  "reuse": [
+    {
+      "role": "task-local guarded capture/NPZ reader",
+      "source": "neural067/public/array_io.py",
+      "bytes": 3514,
+      "sha256": "16f6f3096000ad1347bf4956b2165e8b923639da4ddcbd7416c097288580fa46",
+      "delta": "Replace common.need import with equivalent local guard only; capture function body also reused unchanged under capture_source name in adapter."
+    },
+    {
+      "role": "existing authenticated target-loader seam, metric not copied",
+      "source": "neural067/constant-target-fix-v1/scorer.py",
+      "bytes": 4881,
+      "sha256": "55ca97179227c2cdaaec04289b02f744e0cf9438bae00af14dd1a68bc484e937",
+      "locator": "main.target: capture\u2192identity check\u2192arrays(velocity,eval_mask). Adapter binds same capture but returns revised scorer object and strict original dtypes."
+    }
+  ],
+  "scientific_contract": "Full14queryruns/7sessions/7outputs/4arms and original40/27source support. Fixed original units, immutable metadata provenance, no label/source/split/metric change.",
+  "ci": "Generated test requires NumPy and explicit owned --workdir; use shared two-slotpool. No source promotion, current B17 insertion, CI/API/Git changes or actual target qualification."
+}

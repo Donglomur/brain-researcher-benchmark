@@ -1,0 +1,426 @@
+{
+  "aggregate": {
+    "all11archive_decoded_array_bytes": 370707000,
+    "all11archive_default_deflate_upper_bytes": 370837017,
+    "all12product_upper_bytes": 370974431,
+    "general_guard_sum_bytes": 5905580032,
+    "general_guard_sum_is_not_selected_data_requirement": true,
+    "input_decoded_array_bytes": 113740492,
+    "largest_archive_upper_bytes": 88039837,
+    "support_JSON_derived_exact_bytes": 137414
+  },
+  "field_metadata": {
+    "bin_left_edges_ms": {
+      "decoded_bytes": 1120,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<f8",
+      "itemsize": 8,
+      "shape": [
+        140
+      ]
+    },
+    "donor_index": {
+      "decoded_bytes": 4592,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<i8",
+      "itemsize": 8,
+      "shape": [
+        574
+      ]
+    },
+    "eval_condition_ids": {
+      "decoded_bytes": 13776,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<U6",
+      "itemsize": 24,
+      "shape": [
+        574
+      ]
+    },
+    "eval_counts_heldin": {
+      "decoded_bytes": 22018640,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<u2",
+      "itemsize": 2,
+      "shape": [
+        574,
+        140,
+        137
+      ]
+    },
+    "eval_trial_ids": {
+      "decoded_bytes": 80360,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<U35",
+      "itemsize": 140,
+      "shape": [
+        574
+      ]
+    },
+    "eval_valid_mask": {
+      "decoded_bytes": 3616200,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "|b1",
+      "itemsize": 1,
+      "shape": [
+        574,
+        140,
+        45
+      ]
+    },
+    "heldin_unit_ids": {
+      "decoded_bytes": 19180,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<U35",
+      "itemsize": 140,
+      "shape": [
+        137
+      ]
+    },
+    "heldout_unit_ids": {
+      "decoded_bytes": 6300,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<U35",
+      "itemsize": 140,
+      "shape": [
+        45
+      ]
+    },
+    "panel_fingerprint": {
+      "decoded_bytes": 256,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<U64",
+      "itemsize": 256,
+      "shape": []
+    },
+    "source_manifest_sha256": {
+      "decoded_bytes": 256,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<U64",
+      "itemsize": 256,
+      "shape": []
+    },
+    "train_bin_opportunities": {
+      "decoded_bytes": 8,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<i8",
+      "itemsize": 8,
+      "shape": []
+    },
+    "train_condition_ids": {
+      "decoded_bytes": 41304,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<U6",
+      "itemsize": 24,
+      "shape": [
+        1721
+      ]
+    },
+    "train_count_totals": {
+      "decoded_bytes": 360,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<f8",
+      "itemsize": 8,
+      "shape": [
+        45
+      ]
+    },
+    "train_counts_heldin": {
+      "decoded_bytes": 66017560,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<u2",
+      "itemsize": 2,
+      "shape": [
+        1721,
+        140,
+        137
+      ]
+    },
+    "train_counts_heldout": {
+      "decoded_bytes": 21684600,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<u2",
+      "itemsize": 2,
+      "shape": [
+        1721,
+        140,
+        45
+      ]
+    },
+    "train_trial_ids": {
+      "decoded_bytes": 240940,
+      "derived_NPY_header_bytes": 128,
+      "dtype": "<U35",
+      "itemsize": 140,
+      "shape": [
+        1721
+      ]
+    }
+  },
+  "format_derivation": {
+    "DEFLATE": "For each NPY extent n, conservatively use n+(n>>12)+(n>>14)+(n>>25)+13. This is the documented/default zlib bound; keeping its zlib-wrapper allowance also covers ZIP raw deflate. No empirical compression ratio is assumed.",
+    "NPY": "Primitive output arrays are copied in C order or scalar/1D. NumPy2.2.6 sorted header repr,21-digit growth allowance and64-byte alignment give128bytes including prefix/header for every listed field. No structured/object dtype or huge shape header.",
+    "ZIP": "Each member uses ASCII fieldname+.npy, local header30+filename+20 forced-ZIP64 extra, central header46+filename, and one22-byte end record per archive. BytesIO is seekable: no data descriptor. Every selected archive is below2GiB and below65535members, so no central/end ZIP64 expansion.",
+    "runtime_qualification_limit": "The bound follows the cited exact NumPy/CPython source and standard default-zlib behavior. This review has not observed the container zlib binary/runtime version and does not claim hermetic binary qualification; actual source/runtime admission remains required."
+  },
+  "lineage": [
+    {
+      "bytes": 18847,
+      "finding": "Explicit uint16 allocation, original packet constructor reuse and on-disk public uint16 roundtrip requirement.",
+      "path": "/Users/nicholas/Documents/Codex/neuroscience-benchmark-planning/authoring/nlb-cosmoothing/full-panel-v1/full_converter.py",
+      "sha256": "05002ae4833fff46192f6cf98a85b954e8993a0ea6c700dd8dc7fa06c3594184"
+    },
+    {
+      "bytes": 18857,
+      "finding": "make_packets preserves counts, uses float64 grid, bool mask and minimal-width compact Unicode labels.",
+      "path": "/Users/nicholas/Documents/Codex/neuroscience-benchmark-planning/authoring/nlb-cosmoothing/real-data-v1/convert.py",
+      "sha256": "50b0d3bd206f9236e8f14c274aef41c6a9d62c00fcaaf8f85d020d4d10e1361f"
+    },
+    {
+      "bytes": 3611,
+      "finding": "Successful full-panel metadata explicitly records uint16 and exact113599728B/6c4ae66 physical packet and ba1b5019 fingerprint.",
+      "path": "/Users/nicholas/Documents/Codex/neuroscience-benchmark-planning/artifacts-build/nlb-cosmoothing-full-001/operator/conversion_result.json",
+      "sha256": "25661cb296ff763f97dafae8bdbcafc76c2f02e7e4e31e6d8b7f5c504d743f01"
+    },
+    {
+      "bytes": 137327,
+      "finding": "All opaque trial/unit aliases35characters; both condition maxima6characters; fixed1721/574/137/45/140 support.",
+      "path": "/Users/nicholas/Documents/Codex/benchmark-engineering-evidence/comprehensive-revision-20261116-v2/completion21-v1/neural017-opaque-metadata-preparation-v1/native/output/prepared/opaque/support.json",
+      "sha256": "36f14142de2422fe2928b037d70033b5c7675f5f1b1eb07dcf1a731026c76597"
+    }
+  ],
+  "live_buffer_derivation": {
+    "A_largest_compressed_archive_upper": 88039837,
+    "B_largest_training_query_pair": 113766580,
+    "E_query_count_bytes": 22018640,
+    "P_public": 113740492,
+    "additional_reserve_basis": "Add explicit NumPy serialization16MiB chunk, read buffers, small metadata/read-owner state, compression state, Python/NumPy runtime and allocator retention. Public pre-admission decode returns no arrays; previous postvalidation archive is explicitly deleted before next. The expressions are live-buffer models, not measured peakRSS.",
+    "one_archive_validation_three_archive_buffers_plus_decoded_bytes": 352130515,
+    "production_pair_overlap_plus_shuffle_extra_bytes": 385310932,
+    "rate_float64_cast_bytes": 86738400,
+    "root_selection_suggestion": "2GiB hard container is a defensible first full-panel qualification envelope with substantial margin over the listed sub0.5GB major-buffer peaks; root selects actual memory/time.4GiB remains conservative but is not required by the general512MiB archive guards alone.",
+    "serialization_public_pair_two_buffers_partial_write_bytes": 491626583
+  },
+  "no_new_array_reads_or_seed_draw_in_derivation": true,
+  "primary_sources": [
+    {
+      "support": "Header alignment/growth rules and bounded NPY read/write buffers.",
+      "url": "https://raw.githubusercontent.com/numpy/numpy/v2.2.6/numpy/lib/format.py"
+    },
+    {
+      "support": "savez_compressed uses DEFLATED members and force_zip64=True.",
+      "url": "https://raw.githubusercontent.com/numpy/numpy/v2.2.6/numpy/lib/_npyio_impl.py"
+    },
+    {
+      "support": "Default raw-deflate settings, seekable writer behavior and ZIP structures.",
+      "url": "https://raw.githubusercontent.com/python/cpython/v3.12.8/Lib/zipfile/__init__.py"
+    },
+    {
+      "support": "Default compressBound expression; no runtime binary version inferred.",
+      "url": "https://raw.githubusercontent.com/madler/zlib/v1.2.13/compress.c"
+    }
+  ],
+  "products": [
+    {
+      "NPY_header_bytes": 896,
+      "ZIP_framing_bytes": 992,
+      "decoded_array_bytes": 88011004,
+      "default_deflate_archive_upper_bytes": 88039837,
+      "fields": [
+        "train_counts_heldin",
+        "train_counts_heldout",
+        "train_trial_ids",
+        "heldin_unit_ids",
+        "heldout_unit_ids",
+        "train_condition_ids",
+        "bin_left_edges_ms"
+      ],
+      "product": "intact_training"
+    },
+    {
+      "NPY_header_bytes": 896,
+      "ZIP_framing_bytes": 976,
+      "decoded_array_bytes": 25755576,
+      "default_deflate_archive_upper_bytes": 25765391,
+      "fields": [
+        "eval_counts_heldin",
+        "eval_trial_ids",
+        "heldin_unit_ids",
+        "heldout_unit_ids",
+        "eval_condition_ids",
+        "bin_left_edges_ms",
+        "eval_valid_mask"
+      ],
+      "product": "intact_query"
+    },
+    {
+      "NPY_header_bytes": 896,
+      "ZIP_framing_bytes": 992,
+      "decoded_array_bytes": 88011004,
+      "default_deflate_archive_upper_bytes": 88039837,
+      "fields": [
+        "train_counts_heldin",
+        "train_counts_heldout",
+        "train_trial_ids",
+        "heldin_unit_ids",
+        "heldout_unit_ids",
+        "train_condition_ids",
+        "bin_left_edges_ms"
+      ],
+      "product": "within_condition_shuffle_training"
+    },
+    {
+      "NPY_header_bytes": 896,
+      "ZIP_framing_bytes": 976,
+      "decoded_array_bytes": 25755576,
+      "default_deflate_archive_upper_bytes": 25765391,
+      "fields": [
+        "eval_counts_heldin",
+        "eval_trial_ids",
+        "heldin_unit_ids",
+        "heldout_unit_ids",
+        "eval_condition_ids",
+        "bin_left_edges_ms",
+        "eval_valid_mask"
+      ],
+      "product": "within_condition_shuffle_query"
+    },
+    {
+      "NPY_header_bytes": 640,
+      "ZIP_framing_bytes": 716,
+      "decoded_array_bytes": 21974264,
+      "default_deflate_archive_upper_bytes": 21982387,
+      "fields": [
+        "train_counts_heldout",
+        "train_trial_ids",
+        "heldout_unit_ids",
+        "train_condition_ids",
+        "bin_left_edges_ms"
+      ],
+      "product": "context_only_training"
+    },
+    {
+      "NPY_header_bytes": 640,
+      "ZIP_framing_bytes": 702,
+      "decoded_array_bytes": 3717756,
+      "default_deflate_archive_upper_bytes": 3720292,
+      "fields": [
+        "eval_trial_ids",
+        "heldout_unit_ids",
+        "eval_condition_ids",
+        "bin_left_edges_ms",
+        "eval_valid_mask"
+      ],
+      "product": "context_only_query"
+    },
+    {
+      "NPY_header_bytes": 384,
+      "ZIP_framing_bytes": 448,
+      "decoded_array_bytes": 6668,
+      "default_deflate_archive_upper_bytes": 7540,
+      "fields": [
+        "train_count_totals",
+        "train_bin_opportunities",
+        "heldout_unit_ids"
+      ],
+      "product": "training_rate_only_training"
+    },
+    {
+      "NPY_header_bytes": 512,
+      "ZIP_framing_bytes": 562,
+      "decoded_array_bytes": 3703980,
+      "default_deflate_archive_upper_bytes": 3706232,
+      "fields": [
+        "eval_trial_ids",
+        "heldout_unit_ids",
+        "bin_left_edges_ms",
+        "eval_valid_mask"
+      ],
+      "product": "training_rate_only_query"
+    },
+    {
+      "NPY_header_bytes": 896,
+      "ZIP_framing_bytes": 992,
+      "decoded_array_bytes": 88011004,
+      "default_deflate_archive_upper_bytes": 88039837,
+      "fields": [
+        "train_counts_heldin",
+        "train_counts_heldout",
+        "train_trial_ids",
+        "heldin_unit_ids",
+        "heldout_unit_ids",
+        "train_condition_ids",
+        "bin_left_edges_ms"
+      ],
+      "product": "metadata_neutral_training"
+    },
+    {
+      "NPY_header_bytes": 896,
+      "ZIP_framing_bytes": 976,
+      "decoded_array_bytes": 25755576,
+      "default_deflate_archive_upper_bytes": 25765391,
+      "fields": [
+        "eval_counts_heldin",
+        "eval_trial_ids",
+        "heldin_unit_ids",
+        "heldout_unit_ids",
+        "eval_condition_ids",
+        "bin_left_edges_ms",
+        "eval_valid_mask"
+      ],
+      "product": "metadata_neutral_query"
+    },
+    {
+      "NPY_header_bytes": 128,
+      "ZIP_framing_bytes": 148,
+      "decoded_array_bytes": 4592,
+      "default_deflate_archive_upper_bytes": 4882,
+      "fields": [
+        "donor_index"
+      ],
+      "product": "protected_map"
+    }
+  ],
+  "read_accounting": {
+    "host_product_authentication_upper": 370974431,
+    "public_archive_admission_and_original_worker": 4376242,
+    "receipt_and_root_postflight_reserve": 33554432,
+    "scope": "Explicit selected source/input/output captures, not OS-wide image/import/page-fault IO. source_budget_used counts only original Store IO; core.snapshot and direct receipt IO are separate.",
+    "source_metadata_controller_capture_multiplicity_reserve": 33554432,
+    "sum_upper": 813433968,
+    "worker_postvalidation_allproducts_upper": 370974431
+  },
+  "schema": "NLB017_selected_S03_resource_envelope_v1",
+  "selected_proposal": {
+    "actual_native_release_required": true,
+    "container_hard_memory_bytes": 2147483648,
+    "enumerated_read_envelope_bytes": 2147483648,
+    "failure_inclusive_write_envelope_bytes": 536870912,
+    "host_cooperative_allowance_bytes": 3221225472,
+    "participant_or_model_runs": 0,
+    "threads": 1,
+    "time_is_first_qualification_ceiling_not_completion_guarantee": true,
+    "whole_operation_seconds": 180,
+    "worker_seconds": 140
+  },
+  "status": "prospective_exact_panel_not_actual_measurement",
+  "unchanged_generic_guards": {
+    "archive_cap": 536870912,
+    "generic_guard_sum_not_data_requirement": 5905580032,
+    "original_Store_read_cap": 8589934592,
+    "original_Store_write_cap": 6442450944,
+    "public_decoded_cap": 268435456
+  },
+  "write_accounting": {
+    "all12products_upper": 370974431,
+    "external_root_postflight_reserve": 8388608,
+    "process_ownership_atomic_write_attempts_upper": 262144,
+    "root_child_commitment_intent_result_release_metadata_upper": 262144,
+    "scope": "Logical retained/attempted file bytes including partial products, exclusive one-attempt writes and failure cleanup; not physical filesystem block accounting or quota. No output copies/retries.",
+    "selected_envelope_remainder": 152658209,
+    "sum_fixed_allowances_and_products": 384212703,
+    "tmpfs_and_shm_allowance": 131072,
+    "two_docker_journals_including_partial_records_upper": 2097152,
+    "worker_receipt_upper": 2097152
+  }
+}

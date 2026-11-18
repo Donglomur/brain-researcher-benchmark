@@ -13,6 +13,8 @@ python -B /absolute/package/test_metric_core.py -v
 
 The inspector uses only the Python standard library; numerical controls require NumPy. These routes do not prepare data, choose a model, read credentials, contact a service, fit scientific models or grant execution authority. The unchanged historical `nlb_entry.py` deliberately refuses the repaired payloads, including its help routes. Native startup needs a separately admitted successor closure; the numerical descriptor does not supply one. Normal Git source-file permissions are supported; native worker input/mount/image permissions retain their separate requirements.
 
+The public source composition adds the opaque S03 helper and its accepted compiler/worker changes to the historical inventory, while the numerical overlay retains current original-dtype admission. The exact inventory is 74 historical payload rows plus the separately bound numerical test. The standalone entry remains held: its historical README/inspector/numerical row pins deliberately differ from the current overlay. The narrow `../../opaque-s03-worker-v1/` loader has a separately pinned seven-file dependency closure and does not load the scoring or inspection modules. Prior private metadata/S03 receipts remain tied to their original source closures; this public composition establishes source consistency only and does not inherit their runtime qualification.
+
 This is an inactive source component. The full original release, protected inputs, exact external libraries, licensed participant contexts, qualified host/model deployment and independent evidence must be supplied separately. No scientific/model/native campaign, empirical performance, resource adequacy or benchmark qualification is claimed. Private histories, controls, acquired primary bodies, arrays, targets and model states are excluded.
 
 ## Source provenance
@@ -23,7 +25,7 @@ Scientific source identities are the [Neural Latents Benchmark](https://arxiv.or
 
 ### Included source
 
-`SOURCE_MANIFEST.json` preserves the historical inventory, including all 53 local `nlb` modules. The current numerical descriptor records the exact changed and added files while preserving all other payload identities. It fixes original-dtype target admission in both the independent metric and complete scoring entry: counts above `2**53` cannot round down into the permitted domain. The included generated controls retain the exact allowed boundary, observed-mask semantics and co-smoothing equation. The separately pinned historical `nlb_entry.py` remains held as described above. Source hashes authenticate bytes; they do not confer scientific authority or prove a complete native deployment.
+`SOURCE_MANIFEST.json` preserves the historical inventory, including all 54 local `nlb` modules. The current numerical descriptor records the exact changed and added files while preserving all other payload identities. It fixes original-dtype target admission in both the independent metric and complete scoring entry: counts above `2**53` cannot round down into the permitted domain. The included generated controls retain the exact allowed boundary, observed-mask semantics and co-smoothing equation. The separately pinned historical `nlb_entry.py` remains held as described above. Source hashes authenticate bytes; they do not confer scientific authority or prove a complete native deployment.
 
 | Role | Included implementation |
 | --- | --- |

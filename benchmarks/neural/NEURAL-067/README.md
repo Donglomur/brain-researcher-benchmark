@@ -43,6 +43,10 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Causal row journal v1](implementations/causal-row-journal-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
+- [Journal session bridge v1](implementations/journal-session-bridge-v1) — Reviewed source component.
+  Scope: Accepted prerequisite translating all 56 admitted prediction journals into the unchanged current session scorer interface. Prediction and arm/group identities are preserved; it does not enforce participant runtime custody or timing, replace undefined/negative scoring semantics, transfer historic qualification, or establish native understanding or scientific performance.
+- [Original target callback v1](implementations/original-target-callback-v1) — Reviewed source component.
+  Scope: Grader-only callback authenticates fixed original FALCON H1 prepared targets after admission of all 56 prediction blocks, preserving 14 query runs, all rows, seven channels, original masks/units and current negative/undefined scoring semantics. No private targets, operator metadata, participant execution, score or readiness promotion is included.
 - [Session evaluator v1](implementations/session-evaluator-v1) — Reviewed source component.
   Scope: Complete held-out trajectory evaluation. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

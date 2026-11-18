@@ -30,7 +30,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-014](NEURAL-014/README.md) | Speech decoder neural dependence under drift | 5 | not linked |
 | [NEURAL-015](NEURAL-015/README.md) | Word-boundary localization from intracranial activity | 3 | not linked |
 | [NEURAL-016](NEURAL-016/README.md) | Linguistic effects beyond natural-movie covariates | 3 | not linked |
-| [NEURAL-017](NEURAL-017/README.md) | Motor population co-smoothing | 4 | [manifest](NEURAL-017/implementations/registered-runtime/manifest.json) |
+| [NEURAL-017](NEURAL-017/README.md) | Motor population co-smoothing | 6 | [manifest](NEURAL-017/implementations/registered-runtime/manifest.json) |
 | [NEURAL-018](NEURAL-018/README.md) | Causal motor-population forecasting | 3 | [manifest](NEURAL-018/implementations/registered-runtime/manifest.json) |
 | [NEURAL-019](NEURAL-019/README.md) | Movement information in neural latent representations | 5 | [manifest](NEURAL-019/implementations/registered-runtime/manifest.json) |
 | [NEURAL-020](NEURAL-020/README.md) | Somatosensory population co-smoothing | 2 | not linked |
@@ -80,7 +80,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-064](NEURAL-064/README.md) | Predictive novelty contrasts with pre-state matching and explicit support limits | 2 | not linked |
 | [NEURAL-065](NEURAL-065/README.md) | Neural typing character reconstruction | 2 | not linked |
 | [NEURAL-066](NEURAL-066/README.md) | Typing information versus language and motor shortcuts | 2 | not linked |
-| [NEURAL-067](NEURAL-067/README.md) | Seven-dimensional attempted reach/grasp decoding | 3 | [manifest](NEURAL-067/implementations/registered-runtime/manifest.json) |
+| [NEURAL-067](NEURAL-067/README.md) | Seven-dimensional attempted reach/grasp decoding | 5 | [manifest](NEURAL-067/implementations/registered-runtime/manifest.json) |
 | [NEURAL-068](NEURAL-068/README.md) | Recalibration benefit under intracortical drift | 2 | [manifest](NEURAL-068/implementations/registered-runtime/manifest.json) |
 | [NEURAL-069](NEURAL-069/README.md) | Dynamic-video fMRI encoding | 4 | [manifest](NEURAL-069/implementations/registered-runtime/manifest.json) |
 | [NEURAL-070](NEURAL-070/README.md) | Action dynamics beyond static appearance | 2 | [manifest](NEURAL-070/implementations/registered-runtime/manifest.json) |

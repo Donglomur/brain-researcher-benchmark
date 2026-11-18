@@ -13010,6 +13010,111 @@
         "benchmarks/neural/NEURAL-027/implementations/source-record-binding-v1/test_source_record_binding.py"
       ],
       "fixtures": []
+    },
+    {
+      "id": "NEURAL-017.command-03",
+      "task_id": "NEURAL-017",
+      "group": "numpy",
+      "cwd": "benchmarks/neural/NEURAL-017/implementations/opaque-s03-handoff-v1",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "test_handoff.py",
+        "-v"
+      ],
+      "runner": "unittest",
+      "expected_tests": 15,
+      "expected_skips": 0,
+      "timeout_seconds": 150,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-017/implementations/opaque-s03-handoff-v1/test_handoff.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "NEURAL-017.command-04",
+      "task_id": "NEURAL-017",
+      "group": "numpy",
+      "cwd": "benchmarks/neural/NEURAL-017/implementations/opaque-s03-worker-v1",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "test_worker.py",
+        "-v"
+      ],
+      "runner": "unittest",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "timeout_seconds": 150,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-017/implementations/opaque-s03-worker-v1/test_worker.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "NEURAL-017.command-05",
+      "task_id": "NEURAL-017",
+      "group": "numpy",
+      "cwd": "benchmarks/neural/NEURAL-017/implementations/opaque-s03-worker-v1",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "test_support_binding.py",
+        "-v"
+      ],
+      "runner": "unittest",
+      "expected_tests": 6,
+      "expected_skips": 0,
+      "timeout_seconds": 150,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-017/implementations/opaque-s03-worker-v1/test_support_binding.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "NEURAL-067.command-03",
+      "task_id": "NEURAL-067",
+      "group": "numpy",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-c",
+        "import pathlib,runpy,sys\nbase=pathlib.Path('benchmarks/neural/NEURAL-067/implementations').resolve()\nwork=pathlib.Path(sys.argv[1]); work.mkdir()\nsys.argv=[str(base/'original-target-callback-v1/test_target_callback.py'),'--workdir',str(work.resolve()),'--scorer-path',str(base/'session-evaluator-v1/scorer.py')]\nrunpy.run_path(sys.argv[0],run_name='__main__')",
+        "${ARTIFACT_DIR}"
+      ],
+      "runner": "unittest",
+      "expected_tests": 9,
+      "expected_skips": 0,
+      "timeout_seconds": 150,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-067/implementations/original-target-callback-v1/test_target_callback.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "NEURAL-067.command-04",
+      "task_id": "NEURAL-067",
+      "group": "stdlib-a",
+      "cwd": "benchmarks/neural/NEURAL-067/implementations/journal-session-bridge-v1",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "test_bridge.py",
+        "--scorer-path",
+        "../session-evaluator-v1/scorer.py"
+      ],
+      "runner": "unittest",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-067/implementations/journal-session-bridge-v1/test_bridge.py"
+      ],
+      "fixtures": []
     }
   ],
   "source_only_assignments": [
