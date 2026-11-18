@@ -11,9 +11,11 @@ import types
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import contract as C
+import matched_access as M
 
 RUNTIME_FILES = {"contract.py", "epoch_programme.py", "epoch_producer.py",
-                 "epoch_admission.py", "epoch_visual.py", "epoch_provider.py", "SOURCE_BINDINGS.json"}
+                 "epoch_admission.py", "epoch_visual.py", "epoch_provider.py", "SOURCE_BINDINGS.json",
+                  "matched_access.py"}
 COMMAND = ["/usr/local/bin/python", "-I", "-B", "/trusted/epoch_producer.py"]
 INPUT_TARGETS = {"/input/case.json", "/input/signals.npy", "/program/program.py",
                  "/trusted/PROGRAMME.json", "/trusted/epoch_producer.py", "/trusted/contract.py"}
@@ -45,8 +47,13 @@ def _module(name, path, expected):
     return module
 
 
-def load_runtime(implementations_root, finite_bindings_root=None):
-    """Read only pinned existing source; never opens original signal or target files."""
+def load_runtime(implementations_root, finite_bindings_root=None, *, matched_access_audit=None,
+                 claim_matched_information=False):
+    """Load pinned sources; semantic audit is required only for an explicit matching claim."""
+    selection = {"claim_matched_information": claim_matched_information,
+                 "matched_access_audit": matched_access_audit}
+    M.selected(selection)
+    selected = selection.get("_matched_access")
     root = C.ordinary_path(implementations_root)
     bindings = C.decode((HERE / "SOURCE_BINDINGS.json").read_bytes())
     C.need(bindings["schema"] == "sleep007_epoch_dependencies_v1", "Exact epoch dependency map")
@@ -71,7 +78,9 @@ def load_runtime(implementations_root, finite_bindings_root=None):
     for name, expected in bindings["viewer_dependencies"].items():
         C.read_exact(root / "whole-night-viewer-v1" / name, expected)
     return {"implementations_root": root, "common": common, "grading": grading,
-            "viewer": viewer, "provider": None, "bindings": bindings}
+            "viewer": viewer, "provider": None, "bindings": bindings,
+            "matched_access_audit": matched_access_audit, "_matched_access": selected,
+            "claim_matched_information": claim_matched_information}
 
 
 def source_freeze(value):
@@ -84,8 +93,12 @@ def source_freeze(value):
     return frozen
 
 
-def prepare_programme(programme_path, knowledge, source, root, *, image, generation_provenance=None):
+def prepare_programme(programme_path, knowledge, source, root, *, image, generation_provenance=None,
+                      matched_access_audit=None, claim_matched_information=False):
     """Freeze before any target projection is opened; external provenance never self-qualifies."""
+    selected = {"matched_access_audit": matched_access_audit,
+                "claim_matched_information": claim_matched_information}
+    scope = M.comparison_scope(selected)
     frozen = source_freeze(source)
     knowledge_value = C.checked_knowledge(C.decode(descriptor(knowledge, 8192)))
     C.need(C.encode(knowledge_value) == descriptor(knowledge, 8192), "Canonical shared knowledge declaration")
@@ -95,27 +108,36 @@ def prepare_programme(programme_path, knowledge, source, root, *, image, generat
            and all(c in "0123456789abcdef" for c in image[7:]), "Immutable externally reviewed image")
     if generation_provenance is not None:
         descriptor(generation_provenance, 2**20)
-    root = C.ordinary_path(root)
-    root.mkdir(mode=0o700)
-    programme = C.write_new(root / "program.py", raw)
+    programme = {"path": str(C.ordinary_path(programme_path)), **C.pin(raw)}
     definition_value = {"schema": "sleep007_epoch_programme_definition_v1",
                         "condition": C.PROGRAMME_CONDITION, "information_contract": C.PAIR_CONDITION,
                         "programme": plain(programme), "knowledge": plain(knowledge), "image": image,
                         "source": plain(source), "generation_provenance": None if generation_provenance is None else plain(generation_provenance),
+                         "matched_access_audit": None if matched_access_audit is None else plain(matched_access_audit),
+                         "comparison_scope": scope,
                         "additional_training_or_reference_assets": [],
                         "hidden_pretraining_verified": False, "matched_agent_provenance_qualified": False}
+    M.bind_prepared(selected, {"programme": programme, "source": source, "knowledge": knowledge,
+                             "generation_provenance": generation_provenance,
+                             "matched_access_audit": matched_access_audit, "comparison_scope": scope}, definition_value, knowledge_value)
+    root = C.ordinary_path(root)
+    root.mkdir(mode=0o700)
+    programme = C.write_new(root / "program.py", raw)
     definition = C.write_new(root / "PROGRAMME.json", C.encode(definition_value))
     return C.write_new(root / "PREPARED.json", C.encode({
         "schema": "sleep007_epoch_prepared_v1", "programme": programme, "definition": definition,
         "knowledge": knowledge, "source": source, "generation_provenance": generation_provenance,
+        "matched_access_audit": matched_access_audit, "comparison_scope": scope,
         "scientific_input_reads": 0}))
 
 
-def checked_prepared(prepared):
+def checked_prepared(prepared, *, runtime=None):
+    runtime = {} if runtime is None else runtime
     value = C.decode(descriptor(prepared, 32768))
     C.need(type(value) is dict and set(value) == {"schema", "programme", "definition", "knowledge", "source",
-           "generation_provenance", "scientific_input_reads"} and value["schema"] == "sleep007_epoch_prepared_v1"
+           "generation_provenance", "matched_access_audit", "comparison_scope", "scientific_input_reads"} and value["schema"] == "sleep007_epoch_prepared_v1"
            and value["scientific_input_reads"] == 0, "Pre-input immutable programme freeze")
+    M.check_claim(value["comparison_scope"], runtime)
     frozen = source_freeze(value["source"])
     descriptor(value["programme"], 200000).decode("utf-8", errors="strict")
     knowledge_raw = descriptor(value["knowledge"], 8192)
@@ -129,11 +151,14 @@ def checked_prepared(prepared):
                 "programme": plain(value["programme"]), "knowledge": plain(value["knowledge"]),
                 "image": definition.get("image"), "source": plain(value["source"]),
                 "generation_provenance": None if value["generation_provenance"] is None else plain(value["generation_provenance"]),
+                 "matched_access_audit": None if value["matched_access_audit"] is None else plain(value["matched_access_audit"]),
+                "comparison_scope": value["comparison_scope"],
                 "additional_training_or_reference_assets": [],
                 "hidden_pretraining_verified": False, "matched_agent_provenance_qualified": False}
     C.need(definition == expected and type(definition["image"]) is str
            and len(definition["image"]) == 71 and definition["image"].startswith("sha256:")
            and all(c in "0123456789abcdef" for c in definition["image"][7:]), "Exact frozen programme definition")
+    M.bind_prepared(runtime, value, definition, knowledge)
     return value, frozen, definition, knowledge
 
 
@@ -203,6 +228,7 @@ def validate_request(runtime, request, mounts, deadline):
 
 
 def validate_exposure(runtime, request, mounts, exposure, boundary_audit):
+    M.selected(runtime)
     module = _provider_module(runtime)
     contract = sys.modules[module.__package__ + ".contract"]
     value = C.decode(descriptor(exposure, 2**20))
@@ -210,10 +236,12 @@ def validate_exposure(runtime, request, mounts, exposure, boundary_audit):
     contract.validate_exposure(value, request, mounts)
     C.need(plain(boundary_audit) == value["boundary_audit"], "Bound external image/source boundary audit")
     descriptor(boundary_audit, 2**20)
+    M.bind_exposure(runtime, request, value, boundary_audit)
     return value
 
 
 def open_provider(runtime, control_root, quarantine_root, provider_config, exposures, read_limit, write_limit):
+    selected = M.selected(runtime)
     C.need(type(provider_config) is dict and set(provider_config) == {"docker_binary", "docker_socket"},
            "External admitted Docker interface only")
     C.need(type(exposures) is dict and set(exposures) == set(C.required_targets()), "External exposure approval for every target")
@@ -225,6 +253,7 @@ def open_provider(runtime, control_root, quarantine_root, provider_config, expos
         value = C.decode(descriptor(item, 2**20))
         C.need(plain(approval["boundary_audit"]) == value["boundary_audit"], "Bound external boundary audit")
         descriptor(approval["boundary_audit"], 2**20)
+        M.bind_exposure(runtime, {"image": value["image"]}, value, approval["boundary_audit"])
         registry[item["sha256"]] = item["path"]
     module = _provider_module(runtime)
     return module.Provider(control_root, quarantine_root, provider_config["docker_binary"],
@@ -235,7 +264,7 @@ def open_provider(runtime, control_root, quarantine_root, provider_config, expos
 def execute_phase(runtime, provider, prepared, projection, exposure, resources, origin, phase_deadline, deadline, journal,
                   *, boundary_audit):
     """One fresh container/volume/scratch. Closure is checked before its answer is accepted."""
-    value, source, definition, knowledge = checked_prepared(prepared)
+    value, source, definition, knowledge = checked_prepared(prepared, runtime=runtime)
     mounts, packet = make_mounts(value, source["files"], projection)
     descriptor(exposure, 2**20)  # The canonical Provider validates externally approved exact image/mounts.
     request = phase_request(packet.epoch_id, definition, plain(value["definition"]), plain(exposure),
@@ -252,7 +281,8 @@ def execute_phase(runtime, provider, prepared, projection, exposure, resources, 
     receipt = observed["receipt"]
     request_path = C.ordinary_path(provider.control_root) / request["phase_id"] / "REQUEST.json"
     output = C.ordinary_path(receipt["quarantine_root"])
-    record = {"epoch_id": packet.epoch_id, "projection": projection, "prepared": prepared,
+    record = {"epoch_id": packet.epoch_id, "comparison_scope": M.comparison_scope(runtime),
+              "projection": projection, "prepared": prepared,
               "exposure": exposure, "boundary_audit": boundary_audit,
               "request": {"path": str(request_path), **C.pin(_provider_module(runtime).encoded(request))},
               "receipt": {"path": result["receipt_path"], **result["receipt_pin"]},
@@ -264,13 +294,15 @@ def execute_phase(runtime, provider, prepared, projection, exposure, resources, 
 
 def admit_phase(runtime, record, packet, expected_knowledge):
     """Read-only exact closure/input/output check; participant self-reports never suffice."""
-    C.need(type(record) is dict and set(record) == {"epoch_id", "projection", "prepared", "exposure", "boundary_audit", "request", "receipt",
+    C.need(type(record) is dict and set(record) == {"epoch_id", "comparison_scope", "projection", "prepared", "exposure", "boundary_audit", "request", "receipt",
            "observer_value", "prediction", "result"} and record["epoch_id"] == packet.epoch_id,
            "Exact target phase record")
+    M.check_claim(record["comparison_scope"], runtime)
+    prepared, source, definition, knowledge = checked_prepared(record["prepared"], runtime=runtime)
+    C.need(record["comparison_scope"] == prepared["comparison_scope"], "Frozen execution comparison scope")
     projected = C.read_projection(record["projection"])
     C.need(projected.metadata() == packet.metadata() and projected.signals_npy == packet.signals_npy,
            "Only the authenticated original target signal and metadata")
-    prepared, source, definition, knowledge = checked_prepared(record["prepared"])
     C.need(knowledge == C.checked_knowledge(expected_knowledge), "Same pinned shared prior declaration")
     request = C.decode(descriptor(record["request"], 32768))
     receipt = C.decode(descriptor(record["receipt"], 2**20))
@@ -332,4 +364,59 @@ def admit_phase(runtime, record, packet, expected_knowledge):
     return {"epoch_id": packet.epoch_id, "probabilities": values, "knowledge": C.pin(C.encode(knowledge)),
             "resources": retired, "timing": timing, "definition": plain(prepared["definition"]),
             "hidden_pretraining_verified": False, "matched_agent_provenance_qualified": False,
-            "runtime_qualification": False, "scientific_qualification": False}
+            "comparison_scope": M.comparison_scope(runtime),
+             "matched_access_audit": M.comparison_scope(runtime)["matched_access_audit"],
+             "generation_origin": M.selected(runtime)["generation_origin"] if M.claim(runtime) else None,
+             "runtime_qualification": False, "scientific_qualification": False}
+
+
+
+def stage_projection(anchor, root, *, source):
+    """Copy only pinned epoch members into the unchanged exact-two-file contract."""
+    source_freeze(source)
+    C.need(type(anchor) is dict and set(anchor) == {"root", "case", "signals"}, "Exact selected anchor pins")
+    C.need(type(anchor["root"]) is str and Path(anchor["root"]).is_absolute()
+           and type(root) is str and Path(root).is_absolute(), "Explicit absolute relocated paths")
+    original, root = C.ordinary_path(anchor["root"]), C.ordinary_path(root)
+    C.need(not root.exists() and root.parent.is_dir()
+           and original != root and original not in root.parents and root not in original.parents,
+           "Fresh disjoint staging directory")
+    names = {p.name for p in original.iterdir()}
+    C.need(names in ({"case.json", "signals.npy"}, {"case.json", "signals.npy", "request.json"}),
+           "Only the two pinned epoch files and optional unexposed request are allowed")
+    raw = C.read_exact(original / "case.json", anchor["case"], 4096)
+    signals = C.read_exact(original / "signals.npy", anchor["signals"], 76106)
+    packet = C.EpochPacket(C.decode(raw), signals)
+    C.need(raw == C.encode(packet.metadata()), "Exact canonical source metadata")
+    result = C.write_projection(packet, root)
+    C.need(result["case"] == anchor["case"] and result["signals"] == anchor["signals"], "Unchanged staged epoch bytes")
+    checked = C.read_projection(result)
+    C.need(checked.metadata() == packet.metadata() and checked.signals_npy == packet.signals_npy,
+           "Maintained strict two-file projection admission")
+    return result
+
+
+def main(argv=None):
+    """Source-bound staging only; this CLI never opens a Provider or private truth."""
+    try:
+        argv = sys.argv[1:] if argv is None else argv
+        C.need(len(argv) == 6 and set(argv[::2]) == {"--stage-request", "--bytes", "--sha256"},
+               "Exact staging arguments")
+        flags = dict(zip(argv[::2], argv[1::2]))
+        request = C.decode(descriptor({"path": flags["--stage-request"], "bytes": int(flags["--bytes"]),
+                                       "sha256": flags["--sha256"]}, 32768))
+        C.need(type(request) is dict and set(request) == {"schema", "source", "anchor", "output_root"}
+               and request["schema"] == "sleep007_epoch_projection_staging_v1", "Exact staging request")
+        projection = stage_projection(request["anchor"], request["output_root"], source=request["source"])
+        print(C.encode({"status": "staged_unqualified", "projection": projection,
+                        "authentic_origin_qualified": False, "native_execution_qualified": False,
+                        "matched_agent_provenance_qualified": False, "scientific_qualification": False}).decode(), end="")
+        return 0
+    except Exception as exc:
+        print(C.encode({"status": "failed", "stage": "projection_staging", "error": type(exc).__name__,
+                        "message": str(exc)[:240]}).decode(), end="")
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

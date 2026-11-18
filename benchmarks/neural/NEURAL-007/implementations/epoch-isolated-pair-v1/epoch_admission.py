@@ -15,12 +15,18 @@ sys.path.insert(0, str(HERE))
 import contract as C
 import epoch_programme as P
 
+DECLARED_SCOPE = {"claim_matched_information": False, "matched_access_audit": None}
+
 
 def _collection(descriptor, condition):
     value = C.decode(P.descriptor(descriptor, 8 * 2**20))
-    C.need(type(value) is dict and set(value) == {"schema", "condition", "knowledge", "source", "rows", "submission"}
+    keys = {"schema", "condition", "knowledge", "source", "rows", "submission"}
+    C.need(type(value) is dict and set(value) in (keys, keys | {"comparison_scope"})
            and value["schema"] == "sleep007_epoch_arm_collection_v1"
            and value["condition"] == condition, "Explicit new condition; no whole-history pooling")
+    value = dict(value, comparison_scope=value.get("comparison_scope", dict(DECLARED_SCOPE)))
+    scope = value["comparison_scope"]
+    P.M.check_claim(scope, {"claim_matched_information": scope.get("claim_matched_information")})
     P.source_freeze(value["source"])
     knowledge_raw = P.descriptor(value["knowledge"], 8192)
     knowledge = C.checked_knowledge(C.decode(knowledge_raw))
@@ -30,10 +36,13 @@ def _collection(descriptor, condition):
     return value, knowledge
 
 
-def _visual_record(record, packet, runtime, knowledge):
+def _visual_record(record, packet, runtime, knowledge, comparison_scope=None):
     import epoch_provider as V
-    C.need(type(record) is dict and set(record) == {"epoch_id", "projection", "session_root", "end"}
+    scope = dict(DECLARED_SCOPE) if comparison_scope is None else comparison_scope
+    keys = {"epoch_id", "projection", "session_root", "end"}
+    C.need(type(record) is dict and set(record) in (keys, keys | {"comparison_scope"})
            and record["epoch_id"] == packet.epoch_id, "Exact visual target record")
+    C.need(record.get("comparison_scope", DECLARED_SCOPE) == scope, "Immutable visual record comparison scope")
     projection = C.read_projection(record["projection"])
     C.need(projection.metadata() == packet.metadata() and projection.signals_npy == packet.signals_npy,
            "Exact original target available to visual and programme arms")
@@ -43,7 +52,7 @@ def _visual_record(record, packet, runtime, knowledge):
     return V.audit_session(record["session_root"], packet, runtime, knowledge)
 
 
-def _new_collection(condition, knowledge_descriptor, source, rows, answers, root):
+def _new_collection(condition, knowledge_descriptor, source, rows, answers, root, comparison_scope=None):
     C.need(condition in (C.VISUAL_CONDITION, C.PROGRAMME_CONDITION), "New epoch condition only")
     C.checked_complete_rows(rows)
     complete = answers.complete()
@@ -52,11 +61,19 @@ def _new_collection(condition, knowledge_descriptor, source, rows, answers, root
     submission = C.write_new(root / "predictions.npz", C.submission_bytes(complete))
     return C.write_new(root / "COLLECTION.json", C.encode({
         "schema": "sleep007_epoch_arm_collection_v1", "condition": condition,
-        "knowledge": knowledge_descriptor, "source": source, "rows": rows, "submission": submission}))
+        "knowledge": knowledge_descriptor, "source": source, "rows": rows, "submission": submission,
+        "comparison_scope": dict(DECLARED_SCOPE) if comparison_scope is None else comparison_scope}))
 
 
-def collect_visual(records, knowledge_descriptor, source, runtime, output_root):
+def collect_visual(records, knowledge_descriptor, source, runtime, output_root, *,
+                   claim_matched_information=False, matched_access_audit=None):
     """All5450 terminal sessions, one immutable first answer per target; no raw truth."""
+    selection = {"claim_matched_information": claim_matched_information, "matched_access_audit": matched_access_audit}
+    scope = P.M.comparison_scope(selection)
+    if claim_matched_information:
+        audit = P.M.selected(selection)
+        C.need(audit["knowledge"] == P.plain(knowledge_descriptor) and audit["source"] == P.plain(source),
+               "Visual collection shares the selected source and declared knowledge review")
     P.source_freeze(source)
     knowledge = C.checked_knowledge(C.decode(P.descriptor(knowledge_descriptor, 8192)))
     C.checked_complete_rows(records)
@@ -67,17 +84,18 @@ def collect_visual(records, knowledge_descriptor, source, runtime, output_root):
         record = C.decode(raw)
         packet = C.read_projection(record["projection"])
         C.need(packet.epoch_id == row["epoch_id"], "Exact target row")
-        result = _visual_record(record, packet, runtime, knowledge)
+        result = _visual_record(record, packet, runtime, knowledge, scope)
         C.need(result["session_id"] not in sessions, "Fresh independent context for every target")
         sessions.add(result["session_id"])
         C.need(not response_ids.intersection(result["response_ids"]), "No provider response reused across targets")
         response_ids.update(result["response_ids"])
         answers.accept(row["epoch_id"], result["probabilities"], C.pin(raw))
-    return _new_collection(C.VISUAL_CONDITION, knowledge_descriptor, source, records, answers, output_root)
+    return _new_collection(C.VISUAL_CONDITION, knowledge_descriptor, source, records, answers, output_root, scope)
 
 
 def collect_programme(records, knowledge_descriptor, source, runtime, output_root):
     """All5450 closed independent producers; never accepts a partial or revised panel."""
+    P.M.selected(runtime)
     P.source_freeze(source)
     knowledge = C.checked_knowledge(C.decode(P.descriptor(knowledge_descriptor, 8192)))
     C.checked_complete_rows(records)
@@ -95,14 +113,14 @@ def collect_programme(records, knowledge_descriptor, source, runtime, output_roo
         if definition is None: definition = result["definition"]
         C.need(result["definition"] == definition, "One pre-input programme and declared prior across all targets")
         answers.accept(row["epoch_id"], result["probabilities"], C.pin(raw))
-    return _new_collection(C.PROGRAMME_CONDITION, knowledge_descriptor, source, records, answers, output_root)
+    return _new_collection(C.PROGRAMME_CONDITION, knowledge_descriptor, source, records, answers, output_root, P.M.comparison_scope(runtime))
 
 
 def execute_programme_collection(runtime, prepared, projections, exposures, provider_config, resources,
                                  root, *, origin, deadline, provider_read_limit, provider_write_limit,
                                  journal_bytes_limit, journal_records_limit):
     """Finite all-target operator loop; external native admission is required before calling."""
-    value, source, definition, knowledge = P.checked_prepared(prepared)
+    value, source, definition, knowledge = P.checked_prepared(prepared, runtime=runtime)
     targets = C.required_targets()
     C.need(type(projections) is dict and set(projections) == set(targets)
            and type(exposures) is dict and set(exposures) == set(targets), "No subset execution contract")
@@ -160,8 +178,12 @@ class AdmittedPair:
 
 def admit_pair(viewer_collection, programme_collection, packet_roots, references, runtime, visual_runtime):
     """Both complete source/byte/first-answer chains pass before any private target operand is read."""
+    matched_access = P.M.selected(runtime)
     visual, visual_knowledge = _collection(viewer_collection, C.VISUAL_CONDITION)
     programme, programme_knowledge = _collection(programme_collection, C.PROGRAMME_CONDITION)
+    scope = P.M.comparison_scope(runtime)
+    C.need(visual["comparison_scope"] == programme["comparison_scope"] == scope,
+           "Both immutable arm scopes must match the selected comparison claim")
     C.need(visual_knowledge == programme_knowledge
            and P.plain(visual["knowledge"]) == P.plain(programme["knowledge"]), "Identical immutable shared prior declaration")
     C.need(P.plain(visual["source"]) == P.plain(programme["source"]), "Same frozen condition implementation")
@@ -189,7 +211,7 @@ def admit_pair(viewer_collection, programme_collection, packet_roots, references
                 C.need(visual_row["epoch_id"] == programme_row["epoch_id"] == packet.epoch_id, "Matched exact target order")
                 vr = C.decode(P.descriptor(visual_row["record"], 2**20))
                 pr = C.decode(P.descriptor(programme_row["record"], 2**20))
-                v = _visual_record(vr, packet, visual_runtime, visual_knowledge)
+                v = _visual_record(vr, packet, visual_runtime, visual_knowledge, scope)
                 p = P.admit_phase(runtime, pr, packet, programme_knowledge)
                 expected_knowledge = P.plain(visual["knowledge"])
                 C.need(v["knowledge"] == p["knowledge"] == expected_knowledge, "Same declared agent/prior provenance binding")
@@ -212,7 +234,10 @@ def admit_pair(viewer_collection, programme_collection, packet_roots, references
     C.need(ordinal == C.TOTAL and len(sessions) == C.TOTAL, "All5450 targets; two exposed people")
     return AdmittedPair(specification, view, prog, refs, adapter, assets, helper, visual_knowledge,
                         {"viewer": viewer_collection, "programme": programme_collection,
-                         "knowledge": P.plain(visual["knowledge"]), "source": P.plain(visual["source"])})
+                         "knowledge": P.plain(visual["knowledge"]), "source": P.plain(visual["source"]),
+                          "comparison_scope": scope,
+                          "matched_access_audit": scope["matched_access_audit"],
+                          "programme_generation_origin": matched_access["generation_origin"] if matched_access is not None else None})
 
 
 def score_admitted(admitted, target_loader):
@@ -239,6 +264,7 @@ def score_admitted(admitted, target_loader):
             "reference_access": "Original richer-information YASA/RF references; not matched same-epoch conditions.",
             "temporal_context_removed": True, "whole_history_pooling_allowed": False,
             "contrast": "same_epoch_signal_access_pairing_under_declared_shared_prior_policy",
+             "comparison_scope": admitted.evidence["comparison_scope"],
             "rendered_and_numerical_information_equivalence_proven": False,
             "hidden_pretraining_verified": False, "matched_agent_provenance_qualified": False,
             "population_inference": False, "confidence_interval": None, "p_value": None,
@@ -249,10 +275,15 @@ def score_admitted(admitted, target_loader):
 
 
 def _checked_config(value):
-    C.need(type(value) is dict and set(value) == {"schema", "source", "viewer_collection", "programme_collection",
-           "packet_roots", "references", "private_locations", "implementations_root",
-           "finite_bindings_root", "visual_runtime"}
+    required = {"schema", "source", "viewer_collection", "programme_collection", "packet_roots", "references",
+                "private_locations", "implementations_root", "finite_bindings_root", "visual_runtime"}
+    C.need(type(value) is dict and required <= set(value)
+           and set(value) <= required | {"matched_access_audit", "claim_matched_information"}
            and value["schema"] == "sleep007_epoch_pair_request_v1", "Exact separately selected epoch pair request")
+    value = dict(value)
+    value.setdefault("matched_access_audit", None)
+    value.setdefault("claim_matched_information", False)
+    P.M.claim(value)
     P.source_freeze(value["source"])
     C.need(type(value["visual_runtime"]) is dict and set(value["visual_runtime"]) == {
         "root", "whole_history_integration_root", "whole_history_admission_root"}, "Exact trusted visual source roots")
@@ -262,7 +293,12 @@ def _checked_config(value):
 def _public(value):
     import epoch_visual as V
     value = _checked_config(value)
-    runtime = P.load_runtime(value["implementations_root"], value["finite_bindings_root"])
+    if value["claim_matched_information"]:
+        C.need(value["matched_access_audit"] is not None, "Externally selected matched-access audit required")
+    runtime = P.load_runtime(value["implementations_root"], value["finite_bindings_root"],
+                             matched_access_audit=value["matched_access_audit"],
+                             claim_matched_information=value["claim_matched_information"])
+    P.M.selected(runtime)
     visual_runtime = V.load_runtime(**value["visual_runtime"])
     admitted = admit_pair(value["viewer_collection"], value["programme_collection"], value["packet_roots"],
                           value["references"], runtime, visual_runtime)

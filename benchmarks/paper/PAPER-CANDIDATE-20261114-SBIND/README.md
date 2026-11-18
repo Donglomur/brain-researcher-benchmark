@@ -46,6 +46,11 @@ Within the existing improvement contract, historical graders and pilot scores re
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Historical code-tree identity; original paper execution unresolved (identity map)](docs/source-notes/historical-code-tree-identity.v1.json)
+- [Historical code-tree identity; original paper execution unresolved](docs/source-notes/historical-code-tree-identity.md)
+
 ## Implementation artifacts
 
 - [Continuous normalization](implementations/continuous-normalization) — Calibration only.

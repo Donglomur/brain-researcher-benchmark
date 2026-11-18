@@ -13530,6 +13530,7 @@
       ],
       "test_paths": [
         "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/PROGRAMME_PAIR.md",
+        "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/README.md",
         "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/SOURCE_BINDINGS.json",
         "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/VISUAL_PROVIDER.md",
         "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/contract.py",
@@ -13538,6 +13539,7 @@
         "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/epoch_programme.py",
         "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/epoch_provider.py",
         "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/epoch_visual.py",
+        "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/matched_access.py",
         "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/tests/test_epoch_condition.py",
         "benchmarks/neural/NEURAL-007/implementations/finite-attempt-audit/vendor/candidate_adapter.py",
         "benchmarks/neural/NEURAL-007/implementations/finite-workflow-v1/SOURCE_BINDINGS.json",
@@ -13613,6 +13615,29 @@
         "benchmarks/paper/PAPER-paper-method-003/implementations/release-restoration-v1/tests/test_binding.py"
       ],
       "fixtures": []
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-c",
+        "import os, pathlib, runpy, sys\nroot = pathlib.Path.cwd().resolve(strict=True)\nscratch = pathlib.Path(sys.argv[1])\nassert scratch.is_absolute() and not scratch.exists() and not scratch.is_symlink()\nassert scratch.parent.is_dir() and not any(p.is_symlink() for p in (scratch, *scratch.parents))\nassert scratch != root and not scratch.is_relative_to(root) and not root.is_relative_to(scratch)\nscratch.mkdir(mode=0o700)\nos.environ[\"N007_PREFLIGHT_CONTROL_ROOT\"] = str(scratch)\nos.environ[\"N007_DEPENDENCY_ROOT\"] = str(root)\nentry = root / \"benchmarks/neural/NEURAL-007/implementations/epoch-projection-preflight-v1/test_preflight.py\"\nsys.argv = [str(entry)]\nrunpy.run_path(str(entry), run_name=\"__main__\")",
+        "${ARTIFACT_DIR}"
+      ],
+      "cwd": ".",
+      "environment": {},
+      "expected_skips": 0,
+      "expected_tests": 10,
+      "fixtures": [],
+      "group": "numpy",
+      "id": "NEURAL-007.command-13",
+      "runner": "unittest",
+      "task_id": "NEURAL-007",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-007/implementations/epoch-projection-preflight-v1/test_preflight.py"
+      ],
+      "timeout_seconds": 180
     }
   ],
   "source_only_assignments": [

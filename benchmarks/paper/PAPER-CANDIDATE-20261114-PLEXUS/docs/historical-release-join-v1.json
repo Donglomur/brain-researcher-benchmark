@@ -1,0 +1,217 @@
+{
+  "schema": "plexus-historical-publication-join/v1",
+  "task_id": "PAPER-CANDIDATE-20261114-PLEXUS",
+  "disposition": "publication_release_and_repository_source_join_resolved_at_metadata_level; numerical_reference_unresolved",
+  "publication": {
+    "doi": "10.1038/s42256-025-01156-x",
+    "title": "Network-aware self-supervised learning enables high-content phenotypic screening for genetic modifiers of neuronal activity dynamics",
+    "venue": "Nature Machine Intelligence",
+    "published_online": "2025-12-17",
+    "source": "06-publisher-deposit.json#/message",
+    "publisher_reference_43": {
+      "doi": "10.5281/zenodo.15809433",
+      "label": "data v2",
+      "locator": "/message/reference[key=1156_CR43]"
+    },
+    "publisher_reference_44": {
+      "doi": "10.5281/zenodo.15811302",
+      "label": "Plexus version 1.0.0",
+      "locator": "/message/reference[key=1156_CR44]"
+    },
+    "limit": "Publisher-deposited bibliography identifies the intended releases. It does not establish which exact members and numerical outputs were consumed by the final figure."
+  },
+  "software_join": {
+    "release": "v1.0.0",
+    "release_commit": "63089567fd5fa9d6e75032a7e36009e843e5595b",
+    "release_tree": "ebc6ed72c2159ea48b5c7b4ab7d3376c21198b94",
+    "benchmark_commit": "69ccecbcc00f8462c8ce2a9d699be09f4c53ed66",
+    "benchmark_tree": "d31b9a1a5afd4573d53a0e7be07be56736b7ecce",
+    "comparison": "Benchmark commit is two commits ahead, zero behind; provider net diff lists only README.md. Figure 4 source has the same Git blob and SHA256 as the retained benchmark source.",
+    "archive_record": 15811302,
+    "archive_metadata_revision": 4,
+    "archive_bytes": 1204854,
+    "archive_provider_md5": "50ce53270049c7b0550a6bcb7d00c463",
+    "archive_swh_directory": "1acb201a8a8ae768f6592b5aebf46f20402b2046",
+    "archive_inner_path": "pgrosjean-plexus-6308956",
+    "archive_inner_tree": "ebc6ed72c2159ea48b5c7b4ab7d3376c21198b94",
+    "evidence": [
+      "01-software-record.json#/swh",
+      "04-release.json",
+      "05-code-comparison.json",
+      "07-release-tree.json",
+      "08-release-figure4.json",
+      "10-software-archive-directory.json"
+    ],
+    "strength": "Independent provider metadata joins the archived inner directory to the release Git tree. Static Figure 4 content identity is authenticated against its provider blob and retained source SHA256.",
+    "limits": [
+      "No ZIP body was acquired or independently checksummed locally.",
+      "GitHub returns immutable=false for the release object; retain the exact resolved commit and tree pins rather than relying on the mutable tag.",
+      "No historical environment or final-paper execution equivalence is inferred from equal source."
+    ]
+  },
+  "data_join": {
+    "concept_doi": "10.5281/zenodo.14714573",
+    "selected_publisher_reference": {
+      "record": 15809433,
+      "metadata_revision": 4,
+      "version_index": 1,
+      "publisher_label": "v2",
+      "bytes": 38590002068,
+      "provider_md5": "f1e91844c059276529bf241b1c554523",
+      "license": "CC-BY-4.0",
+      "access": "open"
+    },
+    "predecessor": {
+      "record": 14714574,
+      "metadata_revision": 3,
+      "version_index": 0,
+      "bytes": 31989485708,
+      "provider_md5": "2a5cd6e29190d26e43c8d58abe258877",
+      "license": "CC-BY-4.0",
+      "access": "open"
+    },
+    "author_readme_change": "The net README patch replaces the predecessor DOI/download link with record15809433; head commit message says V2 Zenodo updates for revisions.",
+    "interpretation": "The final-paper bibliography and later README explicitly select v2. This resolves the intended release pointer; it does not make the two archives or their Figure 4 members identical.",
+    "remaining_conflict": "Prior retained publisher availability text cited v1; that exact wording was not re-fetched because the prior publisher routes failed. Preserve the historical caveat while distinguishing bibliography-supported v2 selection from missing member/output parity.",
+    "limits": [
+      "API metadata.version is absent for both data records; v2 comes from publisher reference43 and version index1, not an invented API field.",
+      "No dataset body, archive directory listing or native H5AD/array was read.",
+      "No original observation count, ordered support or authenticated member hash is established by top-level ZIP metadata."
+    ]
+  },
+  "original_analysis": {
+    "source_path": "figure_scripts/Figure4/figure_4.py",
+    "source_commit": "63089567fd5fa9d6e75032a7e36009e843e5595b",
+    "bytes": 18428,
+    "sha256": "2c685db69e2604f1214e02eb2dec19c161e5732acd34aa51c32ec30039601af7",
+    "git_blob_sha1": "9a36b69cebb23efda2e076a601f91d1383f29902",
+    "comparator": "Plexus embeddings and manually engineered features, each separately evaluated for WT WTC11 and WT Patient Line.",
+    "metric": "Two reciprocal fold AUROC values per eligible guide, computed from guide-positive probabilities via sklearn roc_curve then auc. No source-defined whole-panel scalar baseline is recovered.",
+    "producer_locators": {
+      "split_and_classifier": "compute_auroc_for_guides lines13-217; seed0 line46; pre-split scaling lines52-53; elastic-net logistic estimators lines159-172; AUROC lines184-189; two-fold dataframe lines213-216",
+      "inputs_and_preprocessing": "main lines231-253; four panel calls lines255-288",
+      "outputs": "Four PDF plots at lines328,344,360,376; correlation diagnostic at387. No numeric panel serializer is present in this Figure4 script."
+    },
+    "source_named_input_members": [
+      "plexus_embeddings/crispri_screen/tvn_corrected_embeddings/single_cell_tvn_corrected_embeddings_WT_WTC11_CRISPRi.h5ad",
+      "plexus_embeddings/crispri_screen/tvn_corrected_embeddings/single_cell_tvn_corrected_embeddings_WT_Patient_Line_CRISPRi.h5ad",
+      "plexus_embeddings/crispri_screen/crispri_screen_manual_features.h5ad"
+    ],
+    "coverage": "The nontruncated 76-entry release tree contains only figure_4.py under Figure4; no saved AUROC table or plotted PDF is present in that directory. This is a scoped inventory finding, not proof no result artifact exists elsewhere.",
+    "numerical_comparator_values": null,
+    "display_lines_not_baselines": [
+      0.8,
+      0.5
+    ],
+    "source_fidelity_holds": [
+      "Retain full-panel preprocessing and unequal reciprocal balancing; no whole-plate or train-only-normalizer substitution.",
+      "Retain every donor, representation, guide, eligible/skip state and original ordered fold support.",
+      "Do not treat library defaults or equal estimator settings as historical runtime identity.",
+      "Figure4's donor-correlation diagnostic is not an improvement objective."
+    ]
+  },
+  "portable_update": {
+    "kind": "additive source provenance note only",
+    "suggested_repository_path": "benchmarks/paper/PAPER-CANDIDATE-20261114-PLEXUS/docs/historical-release-join-v1.json",
+    "mutation_performed": false,
+    "replace_blanket_claim_with": "The final-paper bibliography identifies data v2 and Plexus software v1.0.0; provider metadata joins that archive's inner Git tree to the release, and Figure4 source is identical to the benchmark-pinned revision. Dataset-member/final-result correspondence, historical runtime and complete numerical baseline remain unresolved.",
+    "unchanged": [
+      "selected endpoint",
+      "scientific contracts",
+      "data exposure and assistance policy",
+      "full-support obligations",
+      "readiness and outcome fields",
+      "registration counts"
+    ],
+    "scope_guard": "Do not replace source_unresolved with runnable or research_qualified; do not erase final numerical/data-member parity holds."
+  },
+  "precise_remaining_witness": {
+    "needed": "An authenticated complete Figure4 source-result panel (donor, representation, original guide identity, fold identity, AUROC, eligibility/skip states), tied to the selected v2 input members and original producer/runtime; or a separately admitted source-equivalent reference reconstruction with explicit paper-level numerical calibration.",
+    "smallest_next_step": "Inspect publisher source-data/supplement inventory for Figure4 under the known article, or obtain author-confirmed machine-readable Figure4 reference and input member/version mapping. No standalone result URL is authenticated by this inquiry.",
+    "known_parent_url": "https://www.nature.com/articles/s42256-025-01156-x",
+    "alternative_preparation": "A versioned v2 archive member inventory/header inquiry could first authenticate the three named H5AD inputs and their extents without fitting; no archive access or such next operation is selected here.",
+    "not_a_gate_by_itself": "Absence of a saved author RNG ledger is not alone proof that reproduction is impossible; a justified source-equivalent rerun may be viable after source/input/runtime and numerical calibration are admitted."
+  },
+  "limits": {
+    "primary_requests": 10,
+    "new_scientific_runs": 0,
+    "new_raw_dataset_bytes": 0,
+    "archive_body_bytes": 0,
+    "paper_pdf_bytes": 0,
+    "W_Git_mutations": 0,
+    "readiness_promotion": false
+  },
+  "primary_sources": [
+    {
+      "id": "01-software-record.json",
+      "url": "https://zenodo.org/api/records/15811302",
+      "retrieved_date": "2026-11-18",
+      "response_bytes": 4309,
+      "response_sha256": "5d5fbe37d50114dd3163b0247c65aae56dbd41addcb0bdf8fd4a75d3e5c4d022"
+    },
+    {
+      "id": "02-data-v2-record.json",
+      "url": "https://zenodo.org/api/records/15809433",
+      "retrieved_date": "2026-11-18",
+      "response_bytes": 6541,
+      "response_sha256": "bfcb806ee37f30d602d385c3bb513b9798f5e2c338b8d41d01592e4df51c981a"
+    },
+    {
+      "id": "03-data-v1-record.json",
+      "url": "https://zenodo.org/api/records/14714574",
+      "retrieved_date": "2026-11-18",
+      "response_bytes": 6523,
+      "response_sha256": "4c4e902f0725c82a417b5a1ff8e76fe375519afc72f0d99233158035de79bd53"
+    },
+    {
+      "id": "04-release.json",
+      "url": "https://api.github.com/repos/pgrosjean/plexus/releases/tags/v1.0.0",
+      "retrieved_date": "2026-11-18",
+      "response_bytes": 2279,
+      "response_sha256": "412f65f9c2ad9aef5eb8e8d1c73cfdb2bc4ed6a9ac0b38f84c607b03919be119"
+    },
+    {
+      "id": "05-code-comparison.json",
+      "url": "https://api.github.com/repos/pgrosjean/plexus/compare/v1.0.0...69ccecbcc00f8462c8ce2a9d699be09f4c53ed66",
+      "retrieved_date": "2026-11-18",
+      "response_bytes": 23601,
+      "response_sha256": "e05e8f2031a579ee047c851f358a3bfa8053aafd570707ea950a6d4f76861939"
+    },
+    {
+      "id": "06-publisher-deposit.json",
+      "url": "https://api.crossref.org/works/10.1038/s42256-025-01156-x",
+      "retrieved_date": "2026-11-18",
+      "response_bytes": 21611,
+      "response_sha256": "7f49e7a057395ae10f97f3759050c7bf5b7d732f25d50893d2837d4f4b35e324"
+    },
+    {
+      "id": "07-release-tree.json",
+      "url": "https://api.github.com/repos/pgrosjean/plexus/git/trees/ebc6ed72c2159ea48b5c7b4ab7d3376c21198b94?recursive=1",
+      "retrieved_date": "2026-11-18",
+      "response_bytes": 22862,
+      "response_sha256": "db3b3c1bc4165b242c3c1763aa3e7a52c222788fe7c867136b72ef9a61f56ad6"
+    },
+    {
+      "id": "08-release-figure4.json",
+      "url": "https://api.github.com/repos/pgrosjean/plexus/contents/figure_scripts/Figure4/figure_4.py?ref=63089567fd5fa9d6e75032a7e36009e843e5595b",
+      "retrieved_date": "2026-11-18",
+      "response_bytes": 26550,
+      "response_sha256": "3cc24fc0ae03148cfc6b5d8df3778116577284b790025df76d74df4e65c04d03"
+    },
+    {
+      "id": "09-open-article-metadata.json",
+      "url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=DOI%3A10.1038%2Fs42256-025-01156-x&format=json",
+      "retrieved_date": "2026-11-18",
+      "response_bytes": 193,
+      "response_sha256": "66b3dea7f9dd021962218489977683acb998aa8ce333335320f129a55828955c"
+    },
+    {
+      "id": "10-software-archive-directory.json",
+      "url": "https://archive.softwareheritage.org/api/1/directory/1acb201a8a8ae768f6592b5aebf46f20402b2046/",
+      "retrieved_date": "2026-11-18",
+      "response_bytes": 292,
+      "response_sha256": "ef076690e98e6211540808121c544d47c2c4af10f32319e15e9ba7fd11fce256"
+    }
+  ],
+  "primary_source_handling": "Evidence IDs name retained private response receipts; public URLs and response pins are supplied here for provenance. The raw receipts are not required runtime inputs and are not claimed to be shipped with this note."
+}

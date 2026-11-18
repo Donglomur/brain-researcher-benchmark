@@ -51,6 +51,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Publication correction scope](docs/correction-status.md)
 - [inference source evidence](docs/inference-source-evidence.json)
 - [inference source reconciliation](docs/inference-source-reconciliation.md)
+- [Publication-release tutorial scope; empirical-result linkage unresolved](docs/publication-tutorial-scope-2026-11-18.md)
 
 ## Implementation artifacts
 

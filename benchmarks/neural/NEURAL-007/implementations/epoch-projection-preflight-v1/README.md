@@ -1,0 +1,27 @@
+# N007 host preflight driver
+
+This private preparation source wraps the maintained epoch projection, renderer and request builder. It is not a participant operator, provider qualification or OS sandbox.
+
+The suggested later portable destination is `benchmarks/neural/NEURAL-007/implementations/epoch-projection-preflight-v1/`. No publication or original operation is selected. `ORIGINAL_OPERATION_ENABLED=False` refuses original mode even if a protocol changes `selected`; future activation requires a separately reviewed source change and new source pin.
+
+Run the actual entry only under a separately selected operation:
+
+```text
+python -I -B preflight.py --protocol ABSOLUTE_JSON --bytes N --sha256 SHA256
+```
+
+Protocol schema is `n007_epoch_host_preflight_v1` with exactly: schema, mode, selected, repository_root, output_root, limits, knowledge, budget, source, fixtures, materials. Limits have read_bytes (up to 2 GiB), write_bytes (up to 32 MiB), wall_seconds (up to 1800). Output must not exist and must be disjoint from repository root. The maintained epoch_visual.py descriptor is fixed by byte count/SHA in source. Existing runtime loading preserves its transitive source authentication. Existing knowledge and Budget schemas are unchanged; max_images=2 and image_detail=original.
+
+Generated mode requires selected=true, materials=null and exactly two fixture rows in canonical person order. Each row is {case_id, signals:{path,bytes,sha256}}. Signals are bounded ordinary single-link NPY-v1 little-endian f64(3,3000), produced from generated values using maintained contract.signal_bytes. The driver loads each once, repeats its complete epoch lazily and supplies deterministic generated clock rows. The SAME maintained contract.project_epoch loop executes all 5,450 projections; only the first epoch per person calls actual Session.initial and request_bytes. No core functions or renderers are replaced. Generated success always says original_body_access=false and full_original_projection_qualified=false.
+
+Output is CONFIG.json, roster.jsonl, two anchors/{case}/{case.json,signals.npy,request.json}, PROPOSED_EXPOSURES.json, REPORT.json, CLOSURE.json and GUARD_DENIALS.jsonl. Roster rows contain epoch_id, metadata pin, signal pin and previous_sha256. REPORT distinguishes projection_count=5450 and request_count=2, retained request bytes and transient NPY construction. REPORT is provisional: success requires a passed CLOSURE and an empty denial journal. Denials during terminal writes are recorded immediately in that create-only journal and invalidate success even if caught. CLOSURE reports final cumulative writes on the successful path. The two proposals remain approved=false and role_boundary_verified=false; programme/image bindings are deliberately absent.
+
+The scoped sticky audit guard permits repository/runtime source reads, exact fixture/input descriptors and output paths; it refuses writes outside the fresh output, undeclared reads, links/renames, process and socket audit events. A caught denial still prevents success. This is CPython-event coverage, not native-syscall, inherited-descriptor or hostile-code containment. Explicit driver/maintained writes are charged before emission, with 64 KiB reserved for terminal reporting. Open-event extents conservatively account source/runtime reads; mapped original sample accounting is explicit in the disabled branch. Physical IO and RAM are not measured by these counters.
+
+The original branch opens each person Packet once and projects all epochs; it is unreachable in this release. It authenticates metadata/runtime/proof pins before authorizing the six original body paths. Its original read basis is 785,152,888 bytes plus bounded overhead. The anchor comparison authenticates the accepted COMPLETE receipt, the full pinned journal chain and the exact first-view wire range, then compares original PNG bytes; it does not rehash a whole wire. An original activation review must independently qualify this disabled branch and the exact runtime/source binding before running originals. No external token estimator is supplied and no original claim follows from generated controls.
+
+The source-identity report describes the executed visual/contract/renderer closure. The maintained loader also records an epoch_provider.py local hash without executing it; that recorded identity is not a full seven-file package authentication or provider qualification. Always use a fresh process; no preexisting shared contract module may stand in for authenticated source.
+
+Qualification flags for API capacity/tokens, remote context, full paired campaign, shared model prior, hostile-programme containment, population generalization and scientific readiness always remain false. No provider, response, answer, private grading or Docker API is called. Accepted authentic 5,450-view/21,800-render evidence is retained separately; this generated campaign does not replay it.
+
+The mutable denial journal is deliberately excluded from the immutable artifact inventory; its independent empty-on-success rule remains authoritative through closure. original_packet_open_attempted records entry to the disabled original Packet constructor. original_body_access is false before that attempt, null if construction was attempted but did not complete, and true only after successful construction. A failed original constructor never supports a zero-read claim.
