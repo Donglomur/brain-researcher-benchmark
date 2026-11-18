@@ -71,6 +71,10 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Complete original 654-record, 109-person map/export/restore source with shared opaque test-epoch shuffling in both paper conditions and unchanged private source-order scoring support. Authentic export, protected candidate delivery, pretrained-access provisioning and qualified historical reference remain separate requirements; generated metric controls are not model results.
 - [Opaque submission v1](implementations/opaque-submission-v1) — Reviewed source component.
   Scope: Opaque submission adapter source preserves original participant, collection and scoring boundaries. Generated adapter controls are separate from protected runtime/image execution, authentic candidate execution and scientific reproduction or improvement. Existing runtime gates and canonical selectors remain unchanged.
+- [Phase materialization v1](implementations/phase-materialization-v1) — Reviewed source component.
+  Scope: Reviewed source for development and opaque-test phase materialization on the declared full panel. Generated software controls do not establish authentic material delivery, model execution, paper reproduction or improvement, scientific access qualification, or Table 12 parity.
+- [Release restoration v1](implementations/release-restoration-v1) — Reviewed source component.
+  Scope: Reviewed source binding release, arm, profile, roster, material and prediction identities through the existing inverse restoration and native-score interface. Generated software controls do not establish deployment, authentic candidate execution, paper reproduction or improvement, or scientific readiness.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
