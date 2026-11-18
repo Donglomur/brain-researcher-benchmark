@@ -1,0 +1,181 @@
+{
+  "schema": "meg-generic-classification-mode/v1",
+  "task_id": "PAPER-paper-method-add-010",
+  "mode_id": "generic_feature_classification_v1",
+  "role": "separately_named_scoped_execution_mode",
+  "authority": "This descriptor defines only the fixed-Generic-feature classification mode. It does not replace the retained raw-window interface or the broader task/reproduction/improvement contracts.",
+  "scientific_question": "Classify face versus object from the selected released Generic CS-PFC maximum-squared-DTW-barycenter scalar, and compare a frozen candidate to the accepted author-method classifier on identical participant cases, folds and primary metric.",
+  "input": {
+    "selected_rows": 188,
+    "participants": 94,
+    "rows_per_participant": {
+      "face": 1,
+      "object": 1
+    },
+    "feature": "bary-sq_dtw_max",
+    "orientation": [
+      "Category_Selective",
+      "Prefrontal_Cortex"
+    ],
+    "source_labels": {
+      "relevance": "Irrelevant",
+      "stimulus_presentation": "on",
+      "duration_ms": 1000
+    },
+    "physical_raw_window_timing_reconstructed": false,
+    "dtype": "little-endian float64",
+    "shape": [
+      188
+    ],
+    "construction": "Released condition-averaged Generic features after author full-category QC and before candidate classification. The curator supplied category-homogeneous averages; this oracle exposure remains explicit.",
+    "other_category_scalar_values_public": false,
+    "full_category_qc_provenance": "Retained privately; it is not discarded when only the 188 selected scalars are delivered.",
+    "raw_to_generic_feature_equivalence_established": false,
+    "source_inventory_identity": {
+      "bytes": 3182215,
+      "sha256": "80b16614e7654a4b0efaafced5abb251ab17e625f264c66c87c0c8658737fa2d"
+    }
+  },
+  "information_conditions": {
+    "A": "paper_data",
+    "B": "paper_data_author_code",
+    "matched": [
+      "selected scalar bytes and opaque row order",
+      "94 participant group identities and ten frozen folds",
+      "per-fold training labels and held query support",
+      "paper",
+      "primary metric and probability orientation",
+      "declared access and cumulative resources"
+    ],
+    "only_intended_difference": "B also receives the pinned official code/config capsule. Authorship exposure history requires separate documentation; runtime mounts do not recover it.",
+    "trained_models": "Permitted as declared frozen programme components within the selected information and resource conditions.",
+    "pretraining": "Unknown historical pretraining equality is not claimed or required."
+  },
+  "execution": {
+    "preparation": "generic_prepare.py",
+    "runner": "run.py",
+    "runtime_schema": "meg-runtime-campaign/v2",
+    "candidate_instructions": "GENERIC_PARTICIPANT.md",
+    "control_example": "generic_fixed_control.py",
+    "control_example_role": "constant 0.5 engineering programme; not an AI attempt or competent scientific comparator",
+    "freeze": "Both complete programmes freeze before any outer-fold labeled view; twenty fresh executions prevent cross-fold writable state or feedback.",
+    "privacy": "Held labels and reference probabilities remain private. The evaluator reads the reference for scoring after all twenty validated responses and transport closure.",
+    "identity": "Join by canonical Generic case identity and exact row_key/participant/category/fold mapping; never zip serialized prediction order."
+  },
+  "reference": {
+    "schema": "meg-fresh-reference-result-v1",
+    "selector": {
+      "arm": "author-batch-range-logistic-reference-v1",
+      "orientation": [
+        "Category_Selective",
+        "Prefrontal_Cortex"
+      ]
+    },
+    "result_identity": {
+      "bytes": 441245,
+      "sha256": "cdb07c21ba429cd0f44852e62842b95d939632a18cd9575492a7d391e1faf1ba"
+    },
+    "fold_identity": {
+      "bytes": 292670,
+      "sha256": "a650b9c73f756feee54ce49f4c8d903336335ce6b971affc5a3c9aaa78a05b79"
+    },
+    "mean_fold_accuracy_exact": {
+      "numerator": 1157,
+      "denominator": 1800
+    },
+    "population_fold_variance_exact": {
+      "numerator": 28501,
+      "denominator": 3240000
+    },
+    "mean_accuracy_percent": 64.27777777777777,
+    "population_fold_sd_percentage_points": 9.379021771097241,
+    "paper_reported": {
+      "mean_accuracy_percent": 64.3,
+      "population_fold_sd_percentage_points": 9.4
+    },
+    "role": "Accepted author-method reference calibration for this selected classification endpoint; not an AI result or exact historical replay.",
+    "preprocessing": "Author batch-range arm: training location/scale with unlabeled transform-batch extrema. The separate training-range comparator is not silently substituted.",
+    "source_search_exposure": "The published winner and broader measure/condition search were exposed. This is not untouched external validation or a rerun of the 246-measure discovery family."
+  },
+  "scoring": {
+    "implementation": "classification_grading.py",
+    "probability": "P(object); exactly 0.5 predicts face",
+    "primary_metric": "Unweighted arithmetic mean of ten held-participant fold accuracies",
+    "dispersion": "Population fold SD (ddof 0), descriptive rather than an inferential uncertainty interval",
+    "arithmetic": "Integer per-fold correct/count values determine exact Fraction mean and population variance; no submitted aggregate metrics are read.",
+    "machine_outcomes": {
+      "valid_same_case_evaluation": "Strict complete 188-case/94-person/10-fold support and identity joins pass.",
+      "published_precision_numerical_reproduction": {
+        "meaning": "Classifier-summary compatibility with the paper precision; individual predictions need not be identical.",
+        "mean_interval": {
+          "lower": {
+            "numerator": 257,
+            "denominator": 400
+          },
+          "upper": {
+            "numerator": 1287,
+            "denominator": 2000
+          },
+          "lower_inclusive": true,
+          "upper_inclusive": false
+        },
+        "variance_interval": {
+          "lower_squared_sd": {
+            "numerator": 187,
+            "denominator": 2000
+          },
+          "upper_squared_sd": {
+            "numerator": 189,
+            "denominator": 2000
+          },
+          "lower_inclusive": true,
+          "upper_inclusive": false
+        },
+        "convention": "Explicit benchmark half-open precision convention, not recovered historical rounding."
+      },
+      "reference_score_exceeded": "Strictly positive exact rational candidate-minus-reference mean-fold accuracy on identical support. This is an observed point-score increase.",
+      "scientific_superiority_established": null
+    },
+    "retained_diagnostics": [
+      "exact mean/variance and paper differences",
+      "per-fold counts/correct/accuracy differences",
+      "participant-paired correct/accuracy effects",
+      "probability discrepancies and hard prediction disagreements",
+      "B-minus-A assistance contrast"
+    ],
+    "not_populated": [
+      "raw_feature_reproduction",
+      "distributional_equivalence",
+      "auc_qualification",
+      "whole_paper_reproduction"
+    ],
+    "current_sota_claimed": false
+  },
+  "delivery_and_qualification": {
+    "source_implementation": "accepted separately scoped source cut",
+    "prior_generated_control_methods": 25,
+    "portable_control_entry": "tests_generic_classification/run_controls.py",
+    "exact_method_roster": {
+      "path": "tests_generic_classification/CONTROL_METHODS.json",
+      "bytes": 3196,
+      "sha256": "243e91320bd2b9ca4646f0b1a74ada46e8fade5d3c0e5c4ac21f322128eae568"
+    },
+    "prior_control_scope": "Generated source checks with explicitly simulated source acquisition/transport; no native isolation or authentic candidate fit.",
+    "authentic_generic_preparation_completed": false,
+    "native_candidate_runtime_qualified": false,
+    "paired_ai_outcomes_established": false,
+    "broader_task_admission_changed": false,
+    "benchmark_count_increment": 0,
+    "remaining": "The retained JATS paper body resolves the paper-representation binding. Authentic preparation with frozen engineering programmes and reviewed resource/runtime bindings remains unexecuted. Preparation and candidate execution require separate selected operations.",
+    "retained_paper_representation": {
+      "format": "application/xml; complete JATS article body",
+      "bytes": 197340,
+      "sha256": "f2ce9154b3ea7b0b91097b7a806e07ec27a5f671760846d39458373e45457b46",
+      "doi": "10.1093/nc/niag029",
+      "pmcid": "PMC13338905",
+      "pmid": "42415873",
+      "figure_scope": "Captions and links are retained; figure image bodies are not included. This representation is not a PDF.",
+      "correction": "The separate October 15 correction (PMC13669618; 10.1093/nc/niag071) must remain documented in preparation provenance."
+    }
+  }
+}

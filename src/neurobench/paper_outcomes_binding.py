@@ -33,6 +33,30 @@ SCOPE_POLICY_SUCCESSOR_TASKS = frozenset((
 ))
 REFERENCE_SUCCESSOR_TASKS = frozenset(("PAPER-ROOT-ADD-001", "PAPER-paper-method-029"))
 PRIMARY_SUCCESSOR_FIELDS = frozenset(("primary_policy_revision", "primary_improvement_contract"))
+MEG_GENERIC_TASK = "PAPER-paper-method-add-010"
+MEG_GENERIC_FIELD = "generic_classification_mode"
+MEG_GENERIC_MODE_PIN = {
+    "path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/GENERIC_CLASSIFICATION_MODE.json",
+    "bytes": 8877,
+    "sha256": "245ed9305cea36d2b1a37268f2bea393c75617dfa2115b2abac2f6ef12634b9f"
+}
+MEG_GENERIC_BASE_TASK = {
+    "path": "benchmarks/paper/PAPER-paper-method-add-010/task.json",
+    "bytes": 92570,
+    "sha256": "fe1f8de046c5a2ca6aa496ffe665959cba32282a39c349d4f0d20702ad4b953a"
+}
+MEG_GENERIC_BASE_OUTCOMES = {
+    "path": "benchmarks/paper/PAPER-paper-method-add-010/outcomes.v1.json",
+    "bytes": 4824,
+    "sha256": "67558ec8f67e2269068d703d1b61abd8805f3566675918693b621c0bdf00bb3e"
+}
+MEG_GENERIC_PUBLIC_TEXT = {
+    "description": "An explicitly separate fixed-Generic-feature classification mode uses 188 selected released post-QC scalars from 94 participants and the accepted author-method reference on identical frozen participant folds. It assesses classifier-summary published-precision numerical reproduction and strict exact same-case reference-score exceedance. These scoped outcomes do not populate raw-feature, paired-distribution, AUC, whole-paper or scientific-superiority claims.",
+    "pairing_description": "The generic_feature_classification_v1 descriptor defines a narrower executable classifier mode shared by paper+data and paper+data+official-code conditions. Their scientific inputs, frozen cases/folds, primary metric and budgets are matched; only the declared code access differs. Both programmes freeze before fold labels are exposed, and no writable state or feedback crosses the twenty executions. Its published-precision and positive-score flags remain distinct from the broader contracts and from established statistical superiority.",
+    "reproduction_description": "The accepted author-method calibration reproduces 64.3% mean accuracy and 9.4pp population fold SD at the paper precision. Candidate published-precision compatibility is computed from exact fold counts and the explicit half-open criterion, with granular discrepancies retained; it is not full-feature or distribution reproduction.",
+    "improvement_description": "reference_score_exceeded means a strictly positive exact rational mean-fold accuracy difference from the frozen reference on identical selected cases. Scientific superiority remains unevaluated without a separately selected inferential study; no arbitrary new effect margin or significance threshold is introduced.",
+    "catalog_scope_note": "Explicit 188-scalar fixed-Generic classification mode with accepted author-method calibration, exact numerical reproduction/score-exceedance outcomes, and portable 25-method controls. Existing raw-window mode and full-feature/distribution/AUC/whole-paper limitations remain. No AI result, native qualification, SOTA or benchmark-count increase."
+}
 SOURCE_DECLARATION_GAP_IDS = frozenset(("PAPER-paper-method-011", "PAPER-paper-method-replacement-009"))
 SOURCE_DECLARATION_GAP_PATH = "docs/provenance/paper-outcome-source-declaration-gaps.v1.json"
 # Initial adoption trusts this independently reviewed record, never a self-pin
@@ -722,6 +746,7 @@ def coverage(registry, read_pin):
              "Original source declaration gap task cannot omit its adopted route")
         successor_selected = has_primary_successor(row)
         has_continuous_outcomes(row)
+        has_meg_generic_classification(row)
         for field in PRESERVED_ROW_FIELDS:
             if field == "title" and row["id"] in selected_endpoint_ids:
                 # The sealed authority already authenticated the selected task
@@ -914,6 +939,115 @@ def nuclr_retained_improvement(requested, read_pin):
     return nuclr_reporting_bundle(read_pin)["retained"]
 
 
+def has_meg_generic_classification(row):
+    binding = row.get("paper_outcomes")
+    if type(binding) is not dict or MEG_GENERIC_FIELD not in binding:
+        return False
+    need(row.get("id") == MEG_GENERIC_TASK and row.get("track") == "paper"
+         and binding[MEG_GENERIC_FIELD] == MEG_GENERIC_MODE_PIN,
+         "Generic classification requires the exact selected MEG descriptor")
+    return True
+
+
+def meg_generic_classification_descriptor(read_pin):
+    descriptor = read_pin(MEG_GENERIC_MODE_PIN, "MEG Generic classification mode")
+    # The published descriptor has the maintained canonical encoding. This
+    # second commitment also rejects altered objects supplied by a callback.
+    need(type(descriptor) is dict
+         and pin(MEG_GENERIC_MODE_PIN["path"], encode(descriptor)) == MEG_GENERIC_MODE_PIN,
+         "MEG Generic descriptor differs from its complete selected identity")
+    need(descriptor.get("schema") == "meg-generic-classification-mode/v1"
+         and descriptor.get("task_id") == MEG_GENERIC_TASK
+         and descriptor.get("mode_id") == "generic_feature_classification_v1"
+         and descriptor.get("role") == "separately_named_scoped_execution_mode",
+         "Invalid MEG Generic classification identity")
+    delivery, inputs, scoring = (descriptor["delivery_and_qualification"],
+                                 descriptor["input"], descriptor["scoring"])
+    need(inputs["selected_rows"] == 188 and inputs["participants"] == 94
+         and inputs["raw_to_generic_feature_equivalence_established"] is False
+         and inputs["physical_raw_window_timing_reconstructed"] is False
+         and scoring["machine_outcomes"]["scientific_superiority_established"] is None
+         and scoring["current_sota_claimed"] is False
+         and delivery["benchmark_count_increment"] == 0
+         and all(delivery[field] is False for field in (
+             "authentic_generic_preparation_completed", "native_candidate_runtime_qualified",
+             "paired_ai_outcomes_established", "broader_task_admission_changed")),
+         "MEG Generic scope cannot grant broader admission or scientific qualification")
+    return descriptor
+
+
+def meg_generic_classification_summary(descriptor):
+    result = copy.deepcopy(MEG_GENERIC_PUBLIC_TEXT)
+    result.update({
+        "mode_id": descriptor["mode_id"], "role": descriptor["role"],
+        "descriptor": copy.deepcopy(MEG_GENERIC_MODE_PIN),
+        "scientific_question": descriptor["scientific_question"],
+        "selected_rows": descriptor["input"]["selected_rows"],
+        "participants": descriptor["input"]["participants"],
+        "source_labels": copy.deepcopy(descriptor["input"]["source_labels"]),
+        "raw_feature_equivalence_established": False,
+        "declared_classification_criteria": copy.deepcopy(descriptor["scoring"]["machine_outcomes"]),
+        "unpopulated_broader_claims": copy.deepcopy(descriptor["scoring"]["not_populated"]),
+        "broader_task_admission_changed": False, "scientific_superiority_established": None,
+        "paired_ai_outcomes_established": False, "native_candidate_runtime_qualified": False,
+        "benchmark_count_increment": 0, "assurance": descriptor["authority"],
+    })
+    return result
+
+
+def project_meg_generic_classification(projected, descriptor):
+    need(pin(MEG_GENERIC_BASE_TASK["path"], encode(projected)) == MEG_GENERIC_BASE_TASK,
+         "MEG Generic projection requires the exact retained full-primary task")
+    result = copy.deepcopy(projected)
+    need(type(result.get("evaluation")) is dict
+         and "scoped_execution_modes" not in result["evaluation"],
+         "MEG Generic projection cannot replace an existing execution mode")
+    result["evaluation"]["scoped_execution_modes"] = [meg_generic_classification_summary(descriptor)]
+    return result
+
+
+def validate_meg_generic_outcomes(outcomes):
+    retained = copy.deepcopy(outcomes)
+    need(type(retained) is dict and "original_task_sha256" in retained,
+         "MEG Generic outcomes require the retained task-identity leaf")
+    retained["original_task_sha256"] = MEG_GENERIC_BASE_TASK["sha256"]
+    need(pin(MEG_GENERIC_BASE_OUTCOMES["path"], encode(retained)) == MEG_GENERIC_BASE_OUTCOMES,
+         "MEG Generic outcomes changed beyond the raw task identity")
+
+
+def meg_generic_classification_adoption(row, document, outcomes, read_pin):
+    need(row.get("id") == MEG_GENERIC_TASK and row.get("track") == "paper",
+         "MEG Generic adoption cannot select another task")
+    descriptor = meg_generic_classification_descriptor(read_pin)
+    retained_task = copy.deepcopy(document)
+    selected = has_meg_generic_classification(row)
+    if selected:
+        need(retained_task.get("evaluation", {}).get("scoped_execution_modes")
+             == [meg_generic_classification_summary(descriptor)],
+             "MEG Generic task changed its selected mode")
+        del retained_task["evaluation"]["scoped_execution_modes"]
+        validate_meg_generic_outcomes(outcomes)
+        need(row.get("specification") == pin(MEG_GENERIC_BASE_TASK["path"], encode(document))
+             and row["paper_outcomes"]["outcomes"] == pin(MEG_GENERIC_BASE_OUTCOMES["path"], encode(outcomes))
+             and outcomes["original_task_sha256"] == row["specification"]["sha256"],
+             "MEG Generic selected current identities differ")
+    else:
+        need(row.get("specification") == MEG_GENERIC_BASE_TASK
+             and row.get("paper_outcomes", {}).get("outcomes") == MEG_GENERIC_BASE_OUTCOMES
+             and pin(MEG_GENERIC_BASE_OUTCOMES["path"], encode(outcomes)) == MEG_GENERIC_BASE_OUTCOMES,
+             "MEG Generic adoption requires its exact current predecessor")
+    projected = project_meg_generic_classification(retained_task, descriptor)
+    proposed_outcomes = copy.deepcopy(outcomes)
+    proposed_task_pin = pin(MEG_GENERIC_BASE_TASK["path"], encode(projected))
+    proposed_outcomes["original_task_sha256"] = proposed_task_pin["sha256"]
+    validate_meg_generic_outcomes(proposed_outcomes)
+    proposed_row = copy.deepcopy(row)
+    proposed_row["specification"] = proposed_task_pin
+    proposed_row["paper_outcomes"]["outcomes"] = pin(MEG_GENERIC_BASE_OUTCOMES["path"], encode(proposed_outcomes))
+    proposed_row["paper_outcomes"][MEG_GENERIC_FIELD] = copy.deepcopy(MEG_GENERIC_MODE_PIN)
+    return proposed_row, projected, proposed_outcomes
+
+
 def context(row, document, previous_rows, read_pin, *, improvement_contract=None):
     """Validate current bytes and return prior lineage plus separate outcomes.
 
@@ -931,6 +1065,7 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     identifier, home = row["id"], row["task_directory"]
     need(home == "benchmarks/paper/" + identifier, "Paper outcome task home mismatch")
     binding = row.get("paper_outcomes")
+    meg_generic_selected = has_meg_generic_classification(row)
     selected_endpoint_ids = endpoint_selection_ids(previous_rows)
     endpoint_selected = has_endpoint_selection(row)
     need(endpoint_selected == (identifier in selected_endpoint_ids),
@@ -951,6 +1086,9 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
                     if successor_selected else (base_keys, base_keys | {"reproduction_contract"}))
     if continuous_selected:
         allowed_keys = tuple(keys | {"continuous_policy_revision"} for keys in allowed_keys)
+    if meg_generic_selected:
+        need(successor_selected and not continuous_selected, "MEG Generic mode requires its retained primary successor")
+        allowed_keys = tuple(keys | {MEG_GENERIC_FIELD} for keys in allowed_keys)
     need(type(binding) is dict and set(binding) in allowed_keys
          and binding["schema_version"] == VERSION, "Invalid paper outcome task binding")
     prior = previous_rows[identifier]
@@ -1048,6 +1186,10 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
             need(row.get("title") == projected["title"], "Primary successor current title differs from the reviewed successor projection")
     if root004_scope:
         projected = _project_root004_scope(projected, root004_documents)
+    meg_generic_descriptor = None
+    if meg_generic_selected:
+        meg_generic_descriptor = meg_generic_classification_descriptor(read_pin)
+        projected = project_meg_generic_classification(projected, meg_generic_descriptor)
     retained_current = pin(home + "/task.json", encode(projected))
     continuous = None
     continuous_selection = None
@@ -1070,6 +1212,10 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     require_pin(binding["outcomes"], home + "/" + OUTCOMES, "paper outcomes")
     outcomes = read_pin(binding["outcomes"], "Paper outcomes")
     need(type(outcomes) is dict, "Paper outcomes must be an object")
+    if meg_generic_selected:
+        validate_meg_generic_outcomes(outcomes)
+    # The descriptor is authenticated above and owned by its existing implementation
+    # artifact; adding it to outcome members would duplicate that ownership route.
     members = {previous_pin["path"], binding["outcomes"]["path"]}
     if reve_reporting:
         members.update((_REVE_RETAINED_IMPROVEMENT["path"], _REVE_RETAINED_OUTCOMES["path"]))
@@ -1143,7 +1289,8 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
                             for condition in continuous_selection["conditions"]],
                   "paired_metadata_admitted": {"reproduction": False, "improvement": False},
                   "assurance": "Authenticated continuous measurement policy and source routes; no instantiated episode, submitted result, binary pass or scientific qualification."}
-    return {"reve_reporting_selected": reve_reporting, "nuclr_reporting_selected": nuclr_reporting,
+    return {"scoped_execution_modes": [meg_generic_classification_summary(meg_generic_descriptor)] if meg_generic_selected else None,
+            "reve_reporting_selected": reve_reporting, "nuclr_reporting_selected": nuclr_reporting,
             "previous_row": prior, "previous_document": previous_document, "previous_pin": previous_pin,
             "improvement_contract": improvement, "improvement_contract_pin": improvement_pin,
             "retained_improvement_contract": retained_improvement,
@@ -1277,6 +1424,8 @@ def public_summary(row, bound):
             "candidate_interface": copy.deepcopy(bound["candidate_interface"]),
             "author_reproduction_routes": copy.deepcopy(bound["author_reproduction_routes"]),
         })
+    if bound.get("scoped_execution_modes") is not None:
+        result["scoped_execution_modes"] = copy.deepcopy(bound["scoped_execution_modes"])
     if bound["availability"] == "unavailable":
         for field in ("reason_code", "reason", "primary_scope", "retained_secondary_improvement", "root_scope_decision"):
             result[field] = copy.deepcopy(bound["outcomes"][field])

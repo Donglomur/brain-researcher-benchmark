@@ -1,5 +1,39 @@
 # Paired frozen programmes for the selected MEG paper endpoint
 
+## Explicit fixed-Generic classification mode
+
+[GENERIC_CLASSIFICATION_MODE.json](GENERIC_CLASSIFICATION_MODE.json) defines the
+separate `generic_feature_classification_v1` route. It supplies 188 selected
+post-QC Generic scalars from 94 participants and reuses the existing twenty fresh
+fold/assistance executions. The accepted author-method reference reproduces the
+paper's 64.3% mean accuracy and 9.4 percentage-point fold SD at published precision.
+The grader separately reports valid same-case evaluation, published-precision
+classifier-summary compatibility, and strict reference-score exceedance. A
+positive score difference does not establish statistical superiority or SOTA.
+
+Use [GENERIC_PARTICIPANT.md](GENERIC_PARTICIPANT.md) for the probability-only
+submission interface and `generic_prepare.py` for trusted preparation. The source
+labels identify task irrelevance, stimulus ON and duration 1000 ms; they do not
+reconstruct the physical raw-signal window. Raw feature extraction, paired-feature
+distributions, AUC companions, whole-paper qualification and paired AI outcomes
+remain separate. An authenticated JATS paper body is retained with captions and links, without
+figure image bodies. Actual preparation and native execution remain uncompleted;
+generated controls do not establish them.
+
+The maintained portable control entry below defaults to all 25 frozen methods,
+rejects missing/extra/duplicate/skipped methods, and writes its bounded transcript
+and result outside the source tree. `--select` is only for a named changed-path
+check and does not claim another full 25-method run.
+
+```sh
+python3 -I -S -B tests_generic_classification/run_controls.py \
+  --output /absolute/fresh/external/meg-generic-controls
+```
+
+The following retained sections describe the raw-window route. Its
+`prepare.py`/`WINDOWS.npy` inputs and feature-claim obligations are unchanged.
+
+
 This source connects the accepted full-cohort window preparation to two isolated
 programme conditions and the original fold scorer. It has generated control
 evidence, **no authentic execution through this route and no qualified paper

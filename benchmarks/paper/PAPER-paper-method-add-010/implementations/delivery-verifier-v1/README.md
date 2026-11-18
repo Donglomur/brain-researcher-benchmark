@@ -1,5 +1,13 @@
 # Independent protected-delivery audit
 
+The same mandatory audit also supports the explicit fixed-Generic classification
+mode described in [GENERIC_CLASSIFICATION_MODE.json](../paired-program-v1/GENERIC_CLASSIFICATION_MODE.json).
+It authenticates 188 scalar rows and mode-specific contexts/mounts while retaining
+reference bodies for the post-closure scoring read. The retained raw-window
+geometry and source checks remain distinct. These source checks establish neither
+native isolation nor completed authentic preparation.
+
+
 This source checks the entire prepared MEG delivery before an operator hands it
 to the paired frozen-programme runner. It preserves all **94 participants,
 376 original category windows, 188 face/object predictions and ten grouped
