@@ -1,6 +1,6 @@
 # Original Figure 3b improvement endpoint
 
-This selector implements the explicit task-specific scope decision recorded in `proposals/figure3b-improvement-scope-v1/ROOT_SELECTION.json`. Improvement uses the original contextual population-predictivity comparison: zero-based layer 5 and lag indices 17, 18 and 19, across all 14 sessions and eight participants. The 42 job correlations require 5,685 original held-sentence software callbacks. Those counts do not prescribe native process or AI API calls.
+This selector implements the explicit task-specific scope decision recorded in `docs/proposals/figure3b-improvement-scope-v1/ROOT_SELECTION.json`. Improvement uses the original contextual population-predictivity comparison: zero-based layer 5 and lag indices 17, 18 and 19, across all 14 sessions and eight participants. The 42 job correlations require 5,685 original held-sentence software callbacks. Those counts do not prescribe native process or AI API calls.
 
 The author notebook's cell 5 fixes this selection. It was recovered before new benchmark candidate evaluation; author preregistration is not established. Full 224-array reproduction, individual-neuron and temporal/layer maps, context-length results and author controls remain a separate outcome. An improvement here does not establish improvement of all paper findings.
 
