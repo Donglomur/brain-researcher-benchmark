@@ -21,7 +21,7 @@ import common as u
 import campaign as c
 import provider
 
-PREDECESSOR=Path(os.environ['NEURAL010_COMPATIBILITY_ROOT'])
+PREDECESSOR=Path(os.environ.get('NEURAL010_COMPATIBILITY_ROOT',str(HERE.parent/'preparation-compatibility-v1')))
 sys.path.insert(0,str(PREDECESSOR))
 import test_bridge as predecessor
 
