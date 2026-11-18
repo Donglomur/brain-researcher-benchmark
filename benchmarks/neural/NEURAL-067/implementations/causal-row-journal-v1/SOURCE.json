@@ -1,0 +1,50 @@
+{
+  "schema": "neural067-causal-row-source/v1",
+  "task_id": "NEURAL-067",
+  "origin": {
+    "source_manifest_bytes": 9344,
+    "source_manifest_sha256": "acbd50067f165296e04ef3c59a59052dc45f306ec351e27b8cddaf4f07bd70bf",
+    "registered_source_locator": "implementations/registered-runtime/manifest.json#/lifecycle_successor"
+  },
+  "derived_members": [
+    {
+      "name": "causal_io.py",
+      "bytes": 5500,
+      "sha256": "6e266e035774775e0ce9b5eb36fad24bc81498ecc9a11b01de841bfb9f27eb0d",
+      "selected": "ARMS/ROW/ACTION/HEADER/RECORD and Rows/Journal only; retirement functions excluded"
+    },
+    {
+      "name": "runtime_io.py",
+      "bytes": 4786,
+      "sha256": "58d0ddd8ab332fed2411bea789be26f1c9881f221e2125dd0849840d600916de",
+      "selected": "need/identity/parse/encoded/ordinary/stamp/capture/sync only; execution budgets/module execution/tree allocation excluded"
+    }
+  ],
+  "changes": [
+    "Dependency import made local to io_utils.py.",
+    "After append write/fsync/deadline failure, close the journal permanently; preserve failed file and original exception.",
+    "After a failure during complete sealing, permanently close the journal logically and attempt descriptor closure; retain unknown OS descriptor state on close failure and issue no successful seal.",
+    "Initial append deadline failure now invokes the same permanent logical closure.",
+    "Logical closure is recorded before attempting os.close; close_error records unknown OS descriptor state if cleanup fails.",
+    "Constructor/append/seal preserve the original exception as primary while chaining a cleanup exception."
+  ],
+  "unchanged": [
+    "176-count little-endian prepared cache geometry",
+    "seven source-native action coordinates",
+    "four information arms",
+    "20ms source timing must be authenticated by preparation, not inferred here",
+    "4096-byte header and160-byte hash-chain action records",
+    "complete task remains27runs/13training/14query/7held-out sessions/34490queryrows perarm/56arm-run blocks"
+  ],
+  "not_included": [
+    "Private input/target arrays or their source-specific digest/identifier tables",
+    "LOCK.json, worker/BINDING.json and executable selection",
+    "Candidate process/container transport or reference fitting",
+    "Actual source calibration/packet preparation",
+    "Official hidden test score or readiness promotion"
+  ],
+  "source_availability_only": true,
+  "runtime_qualified": false,
+  "authentic_data_read": false,
+  "review_successor_of": "initial causal-row-journal-v1 private proposal; original files and10-test success preserved"
+}

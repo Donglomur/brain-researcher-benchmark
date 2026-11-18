@@ -1,0 +1,84 @@
+{
+  "schema": "dentate-decoder-replay-source/v1",
+  "task_id": "PAPER-FIND-ADD-005",
+  "source_revision": "130f5e64f86bd63980f70bb839c02cd264782aef",
+  "source_decoder_record": {
+    "path": "decodeTrialOutcome.m",
+    "bytes": 15974,
+    "sha256": "c1b9008ecdd5d2c6bbd5c10b93e0285e4f7baf4fe1fff0ba77b1c4e6428e3179",
+    "git_blob_sha": "2478005a70d30bf865928275806d0d22aaab5191",
+    "identity_basis": "Existing published source-provenance record; this wave browsed the pinned official HTML but did not reacquire or independently hash a raw decoder body."
+  },
+  "existing_source_provenance": {
+    "public_path": "benchmarks/paper/PAPER-FIND-ADD-005/implementations/initial-evaluator-v1/source-provenance.json",
+    "bytes": 10582,
+    "sha256": "5dbaab5c3f5ea71bad17873deec2f16d2a0c0f08f64ce4fc808dafaffb522038"
+  },
+  "primary_pages": [
+    {
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/blob/130f5e64f86bd63980f70bb839c02cd264782aef/decodeTrialOutcome.m",
+      "status": "browser_observed",
+      "locators": [
+        "cfg.nCVFolds/cfg.nShuffles/cfg.fitFcn/cfg.behavCategories",
+        "trialWeight normalization",
+        "model.accuracy and deletion of model.prediction(:,:,2:end)"
+      ],
+      "supports": "Trial-weighted first-column score replay and explicit lack of retained permutation predictions."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11737872/",
+      "status": "browser_observed",
+      "locators": [
+        "Figure4 caption",
+        "Decoding trial variables",
+        "Decoding model"
+      ],
+      "supports": "Logistic/current-past endpoint discrepancies stay unresolved."
+    },
+    {
+      "url": "https://github.com/sakoay/ErasmusAttn_2020/tree/130f5e64f86bd63980f70bb839c02cd264782aef",
+      "status": "browser_fetch_restricted",
+      "supports": null
+    }
+  ],
+  "interpretation": {
+    "first_experiment_accuracy": "sum_i normalized_source_weight_i * equality(retained_prediction_i,target_i)",
+    "first_experiment_unshuffled_identity": "not_verified_without_permutation_helper_binding",
+    "retained_null_accuracy": "Source values retained in export; not independently replayed because corresponding predictions are deleted. No p-values or significant-cell fractions generated.",
+    "requested_shuffle_count_vs_actual_columns": "Recorded separately; no assumed +1 convention.",
+    "selected_prefiltered_indices": "Index into the source current/past-condition-filtered trial list, not the original archive; original source trial_nr retained separately.",
+    "paper_mapping": "not_qualified; exact source variant and paper Figure4 not declared equivalent"
+  },
+  "implementation_members": [
+    {
+      "path": "README.md",
+      "bytes": 4195,
+      "sha256": "253203b91b5edb8516ea8a1004f2cb39317447400d9178239767c0147c73f7d5"
+    },
+    {
+      "path": "decode_replay.py",
+      "bytes": 15351,
+      "sha256": "c5f18be3404b367665a94e217ba9c6c9ee4808012d9e2dc8adc624a096499b65"
+    },
+    {
+      "path": "export_decoder_scores.m",
+      "bytes": 6588,
+      "sha256": "49f6cbebb7352ef43c930aff010ee60105776cb139621ea7d8edfdaa6cb0062d"
+    },
+    {
+      "path": "tests/test_decode_replay.py",
+      "bytes": 8349,
+      "sha256": "8865a5bd273a4d20540fd59c4cfaa3cdd595daa8b8d5a1e72aa6fdd302e202ba"
+    }
+  ],
+  "qualification": {
+    "authentic_data_read": false,
+    "source_fits_loaded": false,
+    "native_matlab_executed": false,
+    "new_fits_or_model_runs": 0,
+    "reproduction_established": false,
+    "improvement_established": false,
+    "independent_review": "pending"
+  },
+  "attribution": "Source semantics attributed to ErasmusAttn_2020 authors, CC BY4.0 as recorded in existing provenance; new Python/MATLAB bridge implementation, no author source or neural data bundled."
+}

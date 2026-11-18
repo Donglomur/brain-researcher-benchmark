@@ -85,6 +85,18 @@ class ProcessControls(unittest.TestCase):
 
 
 class ManifestControls(unittest.TestCase):
+    def test_command_capacity_536_accepts_and_537_refuses(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);_,_,document=self.fixture(root)
+            template=document['commands'][0]
+            document['commands']=[{**template,'id':'control%d'%index} for index in range(536)]
+            _,selected=launcher.validate_document(document,'stdlib')
+            self.assertEqual(selected,document['commands'])
+            self.assertEqual(len(selected),536)
+            document['commands'].append({**template,'id':'control536','group':'other'})
+            with self.assertRaisesRegex(ValueError,'bounded command list required'):
+                launcher.validate_document(document,'stdlib')
+
     def test_exact_fixture_directory_membership(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);directory=root/'author';directory.mkdir()
@@ -304,6 +316,23 @@ class Opener:
 
 
 class FixtureControls(unittest.TestCase):
+    def test_command_capacity_536_without_fixtures_and_537_refuses(self):
+        self.document={'fixtures':{},'commands':[{'group':'stdlib','fixtures':[]} for _ in range(536)]}
+        result,opener,_=self.run_fetch([])
+        self.assertEqual(result['status'],'succeeded')
+        self.assertEqual(result['response_bytes_read'],0)
+        self.assertEqual(result['files'],[])
+        self.assertEqual(opener.requests,[])
+        self.assertEqual(self.receipt(),result)
+        self.assertEqual(signal.getitimer(signal.ITIMER_REAL),(0.0,0.0))
+        self.dest=self.base/'excess'
+        self.document['commands'].append({'group':'other','fixtures':[]})
+        with patch.object(launcher.urllib.request,'build_opener') as builder:
+            with self.assertRaisesRegex(ValueError,'bounded fixture commands required'):
+                launcher.prepare_fixtures(self.root,self.document,'stdlib',self.dest)
+        builder.assert_not_called()
+        self.assertFalse(self.dest.exists())
+
     def test_exact_physionet_object_address_only(self):
         address='https://physionet-open.s3.amazonaws.com/chbmit/1.0.0/RECORDS'
         self.document['fixtures']['source']['url']=address

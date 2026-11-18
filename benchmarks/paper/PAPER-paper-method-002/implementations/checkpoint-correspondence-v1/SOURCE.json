@@ -1,0 +1,87 @@
+{
+  "schema": "jaxley-retinal-checkpoint-correspondence-source/v1",
+  "task_id": "PAPER-paper-method-002",
+  "component": "complete declared validation-history and saved-checkpoint correspondence audit",
+  "source_revision": "5e7a86282adb9d4603b5546ac5d8dad59aec7cc0",
+  "source_observation_date_utc": "2026-11-18",
+  "primary_sources": [
+    {
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/train.py",
+      "observation": "Browser-rendered pinned author code; raw file not acquired/authenticated locally.",
+      "locator": "run(): full-field cache branch; periodic and epoch-end evaluation; best_validation_rho update; parameter checkpoint writes",
+      "finding": "The full15-field branch reads a pre-existing averaged-recording cache. Validation uses strict improvements from minus one. Best-test scalars track that selection, whereas parameter snapshots are written at epoch boundaries. Periodic evaluation can create an intervening winner when enabled by the actual schedule. A scalar alone does not identify a saved parameter snapshot."
+    },
+    {
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/config/train.yaml",
+      "observation": "Browser-rendered pinned author configuration; not a recovered historical run configuration.",
+      "finding": "Defaults request1000iterations,256batchsize,15fields,1024rows/field,20percentvalidation,128testrows and an evaluation interval of100batches. Default values cannot prove published-run identity."
+    },
+    {
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/utils/dataloader.py",
+      "observation": "Browser-rendered pinned author code; raw file not acquired/authenticated locally.",
+      "finding": "The splitter uses a permutation, reserves test first, then train and validation; it saves allthree index vectors. Evaluation iteration order is validation,test,train. It resets the TensorFlow loader seed to1."
+    },
+    {
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695658/",
+      "observation": "CAPTCHA; scientific body not inspected."
+    },
+    {
+      "url": "https://www.nature.com/articles/s41592-025-02895-w",
+      "observation": "Initial metadata/abstract available; targeted body requests were redirected to inaccessible authorization endpoint. No control-membership conclusion drawn."
+    },
+    {
+      "url": "https://www.nature.com/articles/s41592-025-02895-w.pdf",
+      "observation": "Observed publisher PDF link inaccessible through authorization redirect; no PDF acquired."
+    },
+    {
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/01_setup.ipynb",
+      "observation": "Metadata page available; notebook content not rendered. No notebook-body provenance claimed."
+    }
+  ],
+  "local_source_pins": [
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-002/task.json",
+      "bytes": 35436,
+      "sha256": "0ca58963c4c07298bc258e3abb6a4a0dea1a2415204c681a78182dbad7978644"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-002/improvement.v1.json",
+      "bytes": 13085,
+      "sha256": "b7c83b20cca52ce0c282953357ea1a3f43592d33791fde4f23f9e8eaaa90e569"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-002/implementations/retinal-heldout/score.py",
+      "bytes": 10745,
+      "sha256": "b2ac5156fe01d600d32b35e0bbf716bd6dea69f59b6bd3a062a6a6c2b0bb126c"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-002/implementations/retinal-heldout/SOURCE.json",
+      "bytes": 2303,
+      "sha256": "9c75184b05d559fa7caf6b261ed367ace634dcc526978c5ccbd22f5679c04429"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/programme/scientific/retina.py",
+      "bytes": 18937,
+      "sha256": "eccf8e3bb4c5ccbe0fa7fba5e82070f83bfb46e3ae49a553195134ab9b90a438"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/programme/scientific/retina_model.py",
+      "bytes": 13596,
+      "sha256": "102830b9474dff42c9dcb938d1fd463bb26934e0b22bc70f42f9febccac0993f"
+    }
+  ],
+  "scientific_scope": "Operator metadata consistency only; existing retinal prediction metric and registered tasks unchanged.",
+  "new_inference": "A source-recorded validation-selected scalar cannot authenticate a chosen epoch checkpoint. The current derived runtime explicitly selects a produced epoch and disclaims historical params_16 equivalence.",
+  "conditional_default_example": "If the actual row count is15360, the observed default splitter yields12185train,3047validation and128testrows,48batches/epoch and21completeepochs for1000requestediterations. With evaluation interval100, that default example has epoch-end evaluations only. This arithmetic does not identify the published run.",
+  "open_questions": [
+    "Historical cache and raw-ROI/site mapping",
+    "Published split/configuration/checkpoint identity and matching evaluated state",
+    "Original fixed/untrained or constrained-parameter control membership",
+    "Independent complete predictions and protected candidate comparison",
+    "Effect and dependence-aware uncertainty"
+  ],
+  "historical_source_authenticated": false,
+  "authentic_data_read": false,
+  "model_fit_or_inference": false,
+  "scientific_readiness_promoted": false
+}

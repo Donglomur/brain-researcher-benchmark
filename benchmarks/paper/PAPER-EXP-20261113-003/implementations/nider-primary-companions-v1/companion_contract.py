@@ -1,5 +1,6 @@
 """Exact owner-side artifact closure; not a participant submission/scoring schema."""
 import hashlib
+from decimal import Decimal
 import importlib.util
 import json
 from pathlib import Path
@@ -148,6 +149,123 @@ def png_dimensions(raw):
     return [width,height]
 
 
+# The existing R exporter declares this typed representation. These checks retain
+# source-native states and names; they do not prove numerical or paper agreement.
+FOREST_SCALES = {
+    'cor': 'native_input_Pearson_r', 'n': 'source_sample_size',
+    'TE': 'Fisher_z', 'seTE': 'Fisher_z', 'lower': 'Fisher_z', 'upper': 'Fisher_z',
+    'w.common': 'raw_native_weight_not_percent', 'w.random': 'raw_native_weight_not_percent',
+}
+
+
+def exact_keys(value, keys, label):
+    need(isinstance(value, dict) and set(value) == set(keys), label + '_keys')
+
+
+def native_cell(value, label):
+    need(isinstance(value, dict), label + '_tagged_cell')
+    state = value.get('state')
+    if state == 'finite':
+        exact_keys(value, ('state', 'value'), label)
+        number = value['value']
+        need(isinstance(number, Decimal) and number.is_finite(), label + '_finite_JSON_number')
+        need(len(number.as_tuple().digits) <= 400 and -400 <= number.as_tuple().exponent <= 400,
+             label + '_numeric_extent')
+        return number
+    need(isinstance(state, str) and state in ('NA', 'NaN', '+Inf', '-Inf'), label + '_native_state')
+    exact_keys(value, ('state',), label)
+    return None
+
+
+def native_labels(value, extent, label):
+    # Native absent names and NA character labels are preserved, not fabricated.
+    need(value is None or (isinstance(value, list) and len(value) == extent and
+         all(item is None or isinstance(item, str) for item in value)), label + '_label_extent')
+
+
+def native_storage_cell(cell, storage_type, label):
+    number = native_cell(cell, label)
+    if storage_type == 'integer':
+        # R's 32-bit integer minimum bit pattern represents NA, not a number.
+        need(cell['state'] in ('finite', 'NA'), label + '_integer_native_state')
+        if number is not None:
+            need(number == number.to_integral_value() and -2147483647 <= number <= 2147483647,
+                 label + '_integer_storage')
+
+
+def native_vector(value, extent, label):
+    exact_keys(value, ('length', 'storage_type', 'names', 'values'), label)
+    need(isinstance(value['length'], Decimal) and value['length'] == extent, label + '_declared_extent')
+    need(value['storage_type'] in ('integer', 'double'), label + '_storage_type')
+    native_labels(value['names'], extent, label)
+    need(isinstance(value['values'], list) and len(value['values']) == extent, label + '_value_extent')
+    for cell in value['values']:
+        native_storage_cell(cell, value['storage_type'], label)
+
+
+def check_forest_export(forest, reference, model):
+    exact_keys(forest, ('schema', 'contrast', 'native_model', 'source_order', 'membership',
+                       'studlab', 'scales', 'vectors', 'transformation_performed'), 'native_forest')
+    need(forest['schema'] == 'nider_original_forest_native_vectors_v1' and
+         forest['contrast'] == reference['contrast'] and forest['native_model'] == model and
+         forest['membership'] == reference['membership'] and
+         forest['studlab'] == [unit['author_label'] for unit in reference['membership']],
+         'native_forest_export_source_alignment')
+    need(forest['source_order'] == 'unchanged_native_and_full120_membership_order' and
+         forest['transformation_performed'] is False, 'native_forest_preservation')
+    need(forest['scales'] == FOREST_SCALES, 'native_forest_source_scales')
+    exact_keys(forest['vectors'], FOREST_SCALES, 'native_forest_vectors')
+    for key in FOREST_SCALES:
+        native_vector(forest['vectors'][key], len(reference['membership']), 'native_forest_' + key)
+
+
+def check_bayes_export(bayes, contrast, model):
+    exact_keys(bayes, ('schema', 'contrast', 'native_model', 'documented_positional_model_order',
+                      'inclusion_BF_role', 'inclusion', 'model_vectors', 'pairwise_BF',
+                      'native_names_or_absence_preserved', 'numerical_repair_performed'), 'native_Bayesian')
+    need(bayes['schema'] == 'nider_original_bma_native_values_v1' and
+         bayes['contrast'] == contrast and bayes['native_model'] == 'B' + model,
+         'native_Bayesian_export_source_alignment')
+    need(bayes['documented_positional_model_order'] == ['fixed_H0', 'fixed_H1', 'random_H0', 'random_H1'],
+         'native_Bayesian_positional_order')
+    need(bayes['inclusion_BF_role'] == 'incl.BF_is_model_averaged_effect_inclusion_BF10_not_pairwise_BF',
+         'native_Bayesian_inclusion_role')
+    need(bayes['native_names_or_absence_preserved'] is True and bayes['numerical_repair_performed'] is False,
+         'native_Bayesian_preservation')
+    inclusion = bayes['inclusion']
+    exact_keys(inclusion, ('incl.BF', 'incl.prior', 'incl.posterior', 'include', 'prior', 'posterior'),
+               'native_Bayesian_inclusion')
+    for key in ('incl.BF', 'incl.prior', 'incl.posterior'):
+        native_cell(inclusion[key], 'native_Bayesian_' + key)
+    native_vector(inclusion['include'], 2, 'native_Bayesian_include')
+    need([native_cell(cell, 'native_Bayesian_include') for cell in inclusion['include']['values']] == [2, 4],
+         'native_Bayesian_effect_inclusion_positions')
+    for key in ('prior', 'posterior'):
+        native_vector(inclusion[key], 4, 'native_Bayesian_inclusion_' + key)
+    exact_keys(bayes['model_vectors'], ('prior_models', 'posterior_models', 'logml'), 'native_Bayesian_model_vectors')
+    for key, vector in bayes['model_vectors'].items():
+        native_vector(vector, 4, 'native_Bayesian_' + key)
+    matrix = bayes['pairwise_BF']
+    exact_keys(matrix, ('dimensions', 'storage_type', 'dimension_axis_names', 'dimension_labels',
+                        'values_by_row'), 'native_Bayesian_pairwise_BF')
+    need(isinstance(matrix['dimensions'], list) and len(matrix['dimensions']) == 2 and
+         all(isinstance(item, Decimal) and item == 4 for item in matrix['dimensions']),
+         'native_Bayesian_pairwise_BF_dimensions')
+    need(matrix['storage_type'] in ('integer', 'double'), 'native_Bayesian_pairwise_BF_storage')
+    native_labels(matrix['dimension_axis_names'], 2, 'native_Bayesian_matrix_axis_names')
+    labels = matrix['dimension_labels']
+    need(labels is None or (isinstance(labels, list) and len(labels) == 2), 'native_Bayesian_matrix_labels')
+    if labels is not None:
+        for axis in labels:
+            native_labels(axis, 4, 'native_Bayesian_matrix_labels')
+    values = matrix['values_by_row']
+    need(isinstance(values, list) and len(values) == 4 and
+         all(isinstance(row, list) and len(row) == 4 for row in values), 'native_Bayesian_pairwise_BF_rows')
+    for row in values:
+        for cell in row:
+            native_storage_cell(cell, matrix['storage_type'], 'native_Bayesian_pairwise_BF')
+
+
 def check_bundle(root, arm, byte_limit, base):
     files = {str(path.relative_to(root)) for path in root.rglob('*') if path.is_file() or path.is_symlink()}
     need(files == set(REQUIRED_ARTIFACTS), 'exact_original_artifact_closure')
@@ -172,13 +290,9 @@ def check_bundle(root, arm, byte_limit, base):
              all(unit['n_column']==n_column for unit in reference['membership']), 'row_ledger_source_n_choices')
         contrast = reference['contrast']
         forest = json_documents['dl/'+contrast+'.json']
-        need(forest['schema']=='nider_original_forest_native_vectors_v1' and forest['contrast']==contrast and
-             forest['native_model']==model and forest['membership']==reference['membership'] and
-             forest['studlab']==[unit['author_label'] for unit in reference['membership']],
-             'native_forest_export_source_alignment')
+        check_forest_export(forest, reference, model)
         bayes = json_documents['bayes/'+contrast+'.json']
-        need(bayes['schema']=='nider_original_bma_native_values_v1' and bayes['contrast']==contrast and
-             bayes['native_model']=='B'+model, 'native_Bayesian_export_source_alignment')
+        check_bayes_export(bayes, contrast, model)
     for name in FIGURES.values():
         raw = (root/name).read_bytes()
         inventory[name]['png_dimensions'] = png_dimensions(raw)

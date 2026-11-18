@@ -61,3 +61,30 @@ The evaluator performs no fitting and executes no candidate code. Captured predi
 Expected numerical dependencies are the existing `numpy==2.2.6` and `h5py==3.13.0` environment; no dependency installation is included. The implementation retains all prediction arrays in memory and hashes four source HDF5 files. Authentic full-panel resource use has not been measured. A source preparation/qualification protocol and lease are required before native runs; the generated controls do not authorize one.
 
 No nuisance/time reference, transcript reference, encoder trial, full audiovisual comparison, real data preparation, source qualification, direct observer delivery or viewer delivery is claimed. Integrating this component requires a separately reviewed registry/contract update; this task-local package does not change current registration status.
+
+## Original Movie10 source inventory preparation
+
+`prepare_panel.py` supplies an offline producer for the operator `panel.json` consumed above. The four exact Movie10 pointers at the pinned organizer commit declare **368,950,005 bytes** in total. Browser-visible pointer text was reconstructed and its Git blob SHA1 matched the existing task inventory for every participant; this verifies the recovered pointer identity, not acquisition or HDF5 contents. The tool performs no download.
+
+| Person | Original HDF5 bytes | Annex MD5 |
+| --- | ---: | --- |
+| sub-01 | 92,248,907 | `679e60674df5d669e09467c3a84fbba1` |
+| sub-02 | 92,262,363 | `5fc31c031b40e5c032c145816dedeb3d` |
+| sub-03 | 92,197,356 | `3748698c8261e92bf3be29944829543b` |
+| sub-05 | 92,241,379 | `1b16eaea10be5a58052b891806cf10e6` |
+
+The exact source URLs and recovered pointer provenance are in `source-provenance.json`. `sources` exports these fixed expectations without opening payloads or importing numerical dependencies:
+
+```sh
+python prepare_panel.py --output /operator/movie10-source-expectations.json sources
+```
+
+After a separate approved acquisition/preparation step, stage the four originals as ordinary singly linked files named `sub-01_movie10.h5`, `sub-02_movie10.h5`, `sub-03_movie10.h5`, and `sub-05_movie10.h5` in one source directory. No other files may be in that directory. Under an admitted operator runtime with h5py installed:
+
+```sh
+python prepare_panel.py --output /operator/panel.json prepare --source-root /operator/responses
+```
+
+Preparation streams all four files to verify their exact annex extents and MD5s before parsing any HDF5 container, observes SHA256s for the emitted panel, and keeps the same descriptors open until metadata checks finish. It inspects local dataset keys, shapes, float32 dtype and storage metadata; it rejects soft and external links, virtual/external storage, missing repeat viewings and the existing evaluator's other panel violations. It never indexes response datasets, casts values, drops parcels, normalizes responses or substitutes a different participant. The output retains the current `neural039_movie10_panel_v1` schema and must be frozen by hash before candidate generation. Existing-file outputs are refused.
+
+`test_prepare_panel.py` tests generated HDF5 metadata, exact pointer reconstruction, all-four identity checks before parsing, schema/repeat rejection and mutation detection. No authentic source HDF5, neural array, model or candidate was used to construct or test it. The numerical source dtype, complete source key inventory, finite responses, sample counts and anonymous payload retrieval therefore remain unverified in practice. A successful future metadata preparation would still not prove train-only fitting, temporal-context isolation, authentic numerical performance, full audiovisual delivery or native understanding.

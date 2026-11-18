@@ -12,12 +12,19 @@ def require(value, message):
         raise ValueError(message)
 
 
-def _identity(core, expected, terminals):
+def _identity(core, registry, system, expected, terminals):
     """Bind one opaque case to each person before reporting matched effects."""
     people = tuple(core.PEOPLE)
     require(len(people) == len(set(people)) == 10, "exact ten-person roster")
     require(len({core.token(c) for c in expected}) == len(expected),
             "duplicate expected cells cannot become replicates")
+    require(len(expected) == 960, "retain the full 960-cell expected denominator")
+    require(tuple(registry.PEOPLE) == people, "same authenticated registry people")
+    require({core.token(c) for c in expected} ==
+            {core.token(c) for c in registry.campaign(system)},
+            "expected cells must equal the exact canonical campaign")
+    require(set(terminals) == {core.token(c) for c in expected},
+            "terminal roster must match the exact expected cells")
     cases = {}
     replicates = {}
     for cell in expected:
@@ -40,6 +47,37 @@ def _identity(core, expected, terminals):
     return people, cases, replicates
 
 
+def _raw_support(core, expected, terminals, outcomes):
+    """Reject malformed rows before averaging can discard extra observations.
+
+    A missing outcome remains unavailable under the original report policy.
+    A failed cell's diagnostic outcome is not used for a complete condition.
+    """
+    require(set(outcomes).issubset({core.token(c) for c in expected}),
+            "outcomes belong only to expected cells")
+    for cell in expected:
+        ident = core.token(cell)
+        if terminals[ident]['status'] not in core.VALID or ident not in outcomes:
+            continue
+        row = outcomes[ident]
+        require(type(row) is dict, "raw outcome must be a mapping")
+        queries = row.get('query_ids')
+        require(type(queries) is list and len(queries) == 200 and
+                all(type(q) is str and bool(q) for q in queries) and
+                len(set(queries)) == 200,
+                "raw outcome requires exactly 200 unique query IDs")
+        metrics = row.get('metrics')
+        require(type(metrics) is dict and set(metrics) == set(core.METRICS),
+                "raw outcome retains exactly the original endpoint metrics")
+        for metric, values in metrics.items():
+            require(type(values) is list and len(values) == 200,
+                    "raw endpoint requires exactly 200 query values")
+            require(all(type(v) in (int, float) and not math.isnan(v) and
+                        (math.isfinite(v) or metric == 'NLL' and v == math.inf)
+                        for v in values),
+                    "raw endpoints must be finite or positive infinite NLL")
+
+
 def _person_points(core, metrics):
     require(set(metrics) == set(core.METRICS), "all original endpoint metrics")
     result = {}
@@ -56,13 +94,14 @@ def _person_points(core, metrics):
 
 
 def participant_endpoints(core, system, expected, terminals, outcomes, pairing,
-                          contrast_registry):
+                          contrast_registry, *, registry):
     """Use the original replicate averaging and image join, then retain people.
 
     A single unavailable required cell excludes its entire condition, exactly
     as in the original report. There is no observed-subset primary estimate.
     """
-    people, cases, replicates = _identity(core, expected, terminals)
+    people, cases, replicates = _identity(core, registry, system, expected, terminals)
+    _raw_support(core, expected, terminals, outcomes)
     values, missing = core.complete_conditions(expected, terminals, outcomes, pairing)
     rows = contrast_registry['contrasts']
     require(contrast_registry['count'] == 32 and
@@ -118,15 +157,15 @@ def participant_endpoints(core, system, expected, terminals, outcomes, pairing,
 
 
 def paired_report(core, system, expected, terminals, outcomes, pairing, schedule,
-                  contrast_registry, interpretation_records, guard):
+                  contrast_registry, interpretation_records, guard, *, registry):
     """Explicit successor API; preserve every original numerical report field.
 
-    A qualified operator supplies its authenticated original reporting module.
+    A qualified operator supplies authenticated original reporting and registry modules.
     This does not select, modify or bypass the protected target-last route.
     """
     guard('before participant endpoint identity and support checks')
     extension = participant_endpoints(core, system, expected, terminals, outcomes,
-                                     pairing, contrast_registry)
+                                     pairing, contrast_registry, registry=registry)
     original = core.paired_report(system, expected, terminals, outcomes, pairing,
                                  schedule, contrast_registry, interpretation_records, guard)
     require(original['schema'] == 'neural055-complete-paired-report-v1',

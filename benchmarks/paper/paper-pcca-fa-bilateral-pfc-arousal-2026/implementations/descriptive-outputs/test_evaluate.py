@@ -8,6 +8,7 @@ import os
 from pathlib import Path
 import tempfile
 import unittest
+from unittest.mock import patch
 
 HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location("pcca_eval", HERE / "evaluate.py")
@@ -153,6 +154,93 @@ class Controls(unittest.TestCase):
             with self.assertRaises(e.Invalid): list(e.records(fifo))
             with self.assertRaises(e.Invalid): e.read_regular(fifo, 10)
         with self.assertRaises(e.Invalid): self.score(reference=self.rows[:-1])
+
+
+class PupilSelection(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        raw, cls.rows = fixture()
+        cls.support = json.loads(raw)
+        cls.roster = [s["id"] for s in cls.support["sessions"]]
+        cls.excluded = next(s for s in cls.roster if s.startswith("Wa"))
+
+    def support_with_constant_outlier(self):
+        support = copy.deepcopy(self.support)
+        for session in support["sessions"]:
+            if session["id"] == self.excluded:
+                session["fast_pupil"] = [7.0] * len(session["trial_ids"])
+        return support
+
+    def parse(self, support):
+        return e.manifest(json.dumps(support).encode(), self.roster)
+
+    def test_constant_outlier_is_selected_out_before_zscoring(self):
+        support, included, targets, diagnostics = self.parse(
+            self.support_with_constant_outlier())
+        self.assertEqual(len(support), 42)
+        self.assertEqual(len(included), 41)
+        self.assertEqual(diagnostics["Wa"]["variance_by_session"][self.excluded], 0)
+        self.assertEqual(diagnostics["Wa"]["excluded"], [self.excluded])
+        self.assertNotIn(self.excluded, targets)
+        self.assertEqual([len(diagnostics[a]["included"]) for a in e.ANIMALS],
+                         [16, 9, 16])
+
+    def test_constant_retained_session_is_still_refused(self):
+        support = self.support_with_constant_outlier()
+        # Equal zero variances all survive Pe's zero-width IQR fence.
+        for session in support["sessions"]:
+            if session["id"].startswith("Pe"):
+                session["fast_pupil"] = [4.0] * len(session["trial_ids"])
+        with self.assertRaisesRegex(e.Invalid, "constant retained pupil"):
+            self.parse(support)
+
+    def test_zero_variance_does_not_force_a_desired_exclusion(self):
+        support = self.support_with_constant_outlier()
+        for session in support["sessions"]:
+            if session["id"].startswith("Wa"):
+                session["fast_pupil"] = [0.0] * len(session["trial_ids"])
+        with self.assertRaisesRegex(e.Invalid, "historical pupil support mismatch"):
+            self.parse(support)
+
+    def test_wrong_animal_loss_does_not_satisfy_total_count(self):
+        support = copy.deepcopy(self.support)
+        # Put Wa back inside its fence and exclude one Pe instead: still41,
+        # but15/10/16 is not the source16/9/16 support.
+        for session in support["sessions"]:
+            if session["id"] == self.excluded:
+                session["fast_pupil"] = [v / 10 for v in session["fast_pupil"]]
+        support["sessions"][0]["fast_pupil"] = [0.0] * len(
+            support["sessions"][0]["trial_ids"])
+        with self.assertRaisesRegex(e.Invalid, "historical pupil support mismatch"):
+            self.parse(support)
+
+    def test_excluded_observations_still_require_finite_complete_support(self):
+        for mutation in ("nonfinite", "truncated", "duplicate_identity"):
+            support = self.support_with_constant_outlier()
+            row = next(s for s in support["sessions"] if s["id"] == self.excluded)
+            if mutation == "nonfinite":
+                row["fast_pupil"][0] = float("nan")
+            elif mutation == "truncated":
+                row["fast_pupil"].pop()
+            else:
+                row["trial_ids"][1] = row["trial_ids"][0]
+            with self.subTest(mutation=mutation), self.assertRaises(e.Invalid):
+                self.parse(support)
+
+    def test_complete_real_evaluator_route_keeps42_models_and552_pairs(self):
+        raw = json.dumps(self.support_with_constant_outlier()).encode()
+        rows = copy.deepcopy(self.rows)
+        rows[0]["support_sha256"] = hashlib.sha256(raw).hexdigest()
+        # Only the file transport is replaced. All636 generated records go
+        # through production model/prediction admission and metric arithmetic.
+        with patch.object(e, "records", lambda _: (row for row in rows)):
+            report = e.evaluate(raw, "generated-in-memory-candidate")
+        self.assertEqual((len(report["models"]), len(report["pupil_r2"]),
+                          len(report["pairs"])), (42, 41, 552))
+        self.assertIn(self.excluded, report["models"])
+        self.assertNotIn(self.excluded, report["pupil_r2"])
+        self.assertFalse(report["reference_present"])
+        self.assertIsNone(report["numerical_pass"])
 
 
 if __name__ == "__main__":

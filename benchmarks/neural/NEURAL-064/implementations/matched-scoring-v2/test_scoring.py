@@ -231,5 +231,88 @@ class PolicyTests(unittest.TestCase):
             evidence.evaluate()
 
 
+class BehaviorPlaneIdentityTests(unittest.TestCase):
+    """Generated metadata only: two imaging planes are one behavioral event."""
+
+    @staticmethod
+    def support_module():
+        path = HERE.parent / "neural-064" / "programme"
+        name = "neural064_support_identity"
+        spec = importlib.util.spec_from_file_location(
+            name, path / "__init__.py", submodule_search_locations=[str(path)])
+        package = importlib.util.module_from_spec(spec)
+        sys.modules[name] = package
+        spec.loader.exec_module(package)
+        return importlib.import_module(name + ".support")
+
+    @staticmethod
+    def plane_fixture():
+        records, events = [], []
+        for plane in range(2):
+            experiment, container = "plane" + str(plane), "container" + str(plane)
+            common = {"experiment": experiment, "mouse": "generated-mouse",
+                      "session": "generated-session", "container": container,
+                      "condition": "Novel 1"}
+            records.append({**common, "status": "complete",
+                            "source_event_observations": 1,
+                            "retained_event_observations": 1,
+                            "excluded_event_observations": 0})
+            events.append({**common, "event": experiment + ":event",
+                           "behavior_event": "generated-session:event",
+                           "image": "generated-image", "native_image_novel": True,
+                           "lifetime_count_status": "known", "lifetime_image_count": 0,
+                           "session_order": 1, "change": 0, "within_session_history": 0,
+                           "pre_running_bin": 0, "pre_pupil_bin": 0,
+                           "outcome_status": "known", "outcome_flags": [0] * 8,
+                           "neural_support": "supported"})
+        return ({"population": "catalogue", "membership_status": "admitted",
+                 "source_membership_binding": "generated-binding-not-admission",
+                 "experiments": records}, events)
+
+    def test_matching_planes_keep_two_observations_and_one_behavior_event(self):
+        membership, events = self.plane_fixture()
+        table = self.support_module().support_tables(membership, events, [])
+        self.assertEqual(table["unique_behavior_events"], 1)
+        self.assertEqual(table["event_denominator_summary"]["source_event_observations"], 2)
+        self.assertTrue(table["complete_quantitative_support"])
+
+    def test_change_disagreement_rejected_in_either_plane_order(self):
+        membership, events = self.plane_fixture()
+        events[1]["change"] = 1
+        for ordered in (events, list(reversed(events))):
+            with self.assertRaisesRegex(ValueError, "session-plane"):
+                self.support_module().support_tables(membership, ordered, [])
+
+    def test_session_order_disagreement_rejected(self):
+        membership, events = self.plane_fixture()
+        events[1]["session_order"] = 2
+        with self.assertRaisesRegex(ValueError, "session-plane"):
+            self.support_module().support_tables(membership, events, [])
+
+    def test_outcome_availability_disagreement_rejected(self):
+        membership, events = self.plane_fixture()
+        events[1]["outcome_status"] = "unavailable"
+        with self.assertRaisesRegex(ValueError, "session-plane"):
+            self.support_module().support_tables(membership, events, [])
+
+    def test_missing_session_order_stays_unknown(self):
+        membership, events = self.plane_fixture()
+        for event in events:
+            event["session_order"] = None
+        table = self.support_module().support_tables(membership, events, [])
+        row = next(r for r in table["overlap"]
+                   if r["contrast"] == "Familiar_vs_Novel1"
+                   and r["constraints"] == "image_animal_session_order")
+        self.assertEqual(row["status"], "unavailable_required_fields")
+        self.assertEqual(row["unavailable_by_field"], {"session_order": 1})
+
+    def test_plane_specific_neural_support_may_differ(self):
+        membership, events = self.plane_fixture()
+        events[1]["neural_support"] = "unavailable_clock_or_registered_cells"
+        table = self.support_module().support_tables(membership, events, [])
+        self.assertEqual(table["unique_behavior_events"], 1)
+        self.assertEqual(len(table["joint_support"]), 2)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -120,3 +120,43 @@ production-width numerical/resource parity, author reproduction, reconstruction
 companions, participant-aware uncertainty and a predeclared improvement decision
 remain unqualified. Paired paper+data versus paper+data+author-code delivery is
 outside this numerical component and remains required by the broader task.
+
+## Complete retrieval query evidence
+
+Pass `--include-decisions` to include protected operator evidence for every query
+in both physical retrieval directions. The source-matched admitted geometry
+remains 1,000 shared images and 30 frozen pools of 300 candidates: 9,000 queries
+per direction and 18,000 decisions per subject. Each draw records its ordered
+candidate identities; each direction records the ordered query identity,
+predicted paired identity and correctness. The evidence includes the original
+population order, pool commitment, explicit direction semantics and a canonical
+JSON digest. It is generated from the same cosine matrix and shared winner
+routine as the aggregate scores, without a second feature traversal. Default
+calls retain the previous metric-only output shape.
+
+`score_aligned_features(..., include_decisions=True)` returns `metrics`,
+`decision_evidence` and `decision_evidence_digest`; its default remains the
+metric dictionary. `evaluate(..., include_decisions=True)` and the CLI add the
+latter two fields to the existing identity-bound result. Complete records add
+memory and serialized-output cost; the prior array allocation estimates do not
+bound those Python objects or output bytes. A plain three-identity numerical
+control may use `retrieval_decisions_from_cosines`, but native `evaluate` still
+requires all 1,000 rows and 425,984 coordinates.
+
+These records are **protected scoring evidence** and include reference answer
+identities. They must not be exposed to candidate agents as query observations.
+The digest detects changes only relative to an independently retained trusted
+commitment; it does not attest truthful model execution, native feature parity,
+source identity, or training exposure. The records close one output-representation
+gap for the feature scorer. They neither supply the complete reconstruction panel
+or Figure5 transfer contrast nor justify reproduction, improvement, uncertainty,
+readiness or a current-SOTA claim. Native ties remain rejected. All four subjects
+and all remaining original-task source and execution requirements still apply.
+
+Nine additional generated controls check complete 18,000-decision coverage,
+identity joins after candidate storage permutation, independent dense-oracle
+agreement, both physical directions, tie/nonfinite failure, detached identity
+snapshots, strict option typing, unchanged native-width/reference gates and admitted-result
+routing. The last routing control mocks the feature geometry/numerical result; it
+is not a native-width execution.
+These controls use reduced feature width and no authentic arrays or model runs.

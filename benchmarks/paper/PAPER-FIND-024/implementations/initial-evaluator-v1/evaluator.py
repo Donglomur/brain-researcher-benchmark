@@ -9,6 +9,7 @@ import argparse
 from collections import defaultdict
 from itertools import combinations, product
 import hashlib
+import io
 import json
 from pathlib import Path
 
@@ -286,9 +287,14 @@ def summarize(rows):
     return results
 
 
-def load_input(path):
+def _load_captured_input(path, manifest_payload):
+    """Load arrays from the exact bytes whose identities are reported.
+
+    The pathname supplies relative-path context only. Neither the manifest nor
+    an NPZ is reopened after its byte snapshot is captured.
+    """
     path = Path(path)
-    manifest = json.loads(path.read_text())
+    manifest = json.loads(manifest_payload)
     _validate_manifest(manifest)
     arrays = {}
     receipts = []
@@ -298,13 +304,20 @@ def load_input(path):
         filename = _name(source.get("npz_path"), "npz_path")
         _require(Path(filename).name not in {"cross_context_correlation.mat", "model_fits.mat"}, "derived results are forbidden empirical input")
         local = Path(filename) if Path(filename).is_absolute() else path.parent / filename
-        digest = hashlib.sha256(local.read_bytes()).hexdigest()
+        payload = local.read_bytes()
+        digest = hashlib.sha256(payload).hexdigest()
         _require(source.get("sha256") == digest, "timecourse file SHA256 mismatch")
-        with np.load(local, allow_pickle=False) as packed:
+        with np.load(io.BytesIO(payload), allow_pickle=False) as packed:
             _require(set(packed.files) == {"D", "t"}, "NPZ must contain exactly D and t")
             arrays[p["participant_id"]] = {"D": packed["D"], "t": packed["t"]}
-        receipts.append({"participant_id": p["participant_id"], "sha256": digest, "bytes": local.stat().st_size})
+        receipts.append({"participant_id": p["participant_id"], "sha256": digest, "bytes": len(payload)})
     return manifest, arrays, receipts
+
+
+def load_input(path):
+    """Preserve the public three-item API while binding each captured input."""
+    path = Path(path)
+    return _load_captured_input(path, path.read_bytes())
 
 
 def main():
@@ -312,10 +325,11 @@ def main():
     parser.add_argument("manifest", type=Path)
     parser.add_argument("output", type=Path)
     args = parser.parse_args()
-    manifest, arrays, receipts = load_input(args.manifest)
+    manifest_payload = args.manifest.read_bytes()
+    manifest, arrays, receipts = _load_captured_input(args.manifest, manifest_payload)
     result = evaluate(manifest, arrays)
     result["input_receipts"] = receipts
-    result["manifest_sha256"] = hashlib.sha256(args.manifest.read_bytes()).hexdigest()
+    result["manifest_sha256"] = hashlib.sha256(manifest_payload).hexdigest()
     args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
 
 

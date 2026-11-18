@@ -11,7 +11,7 @@ python3 benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/eva
 PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/tests -v
 ```
 
-The offline CLI consumes SHA-256-pinned NPZ files containing real `D[time, stimulus, electrode, repetition]` arrays and timestamp vector `t`, plus a prospectively frozen JSON cohort/segment map. It rejects incomplete matched designs, aliased physical contexts, complex/nonfinite active data, and segments outside actual sound intervals. Undefined or overflowing normalized correlations remain null with explicit status. Raw negative correlations and valid corrected values above one are retained.
+The offline CLI consumes SHA-256-pinned NPZ files containing real `D[time, stimulus, electrode, repetition]` arrays and timestamp vector `t`, plus a prospectively frozen JSON cohort/segment map. Each NPZ is captured once: its SHA-256, byte count and loaded arrays refer to that same byte snapshot. The CLI likewise reports the captured manifest it actually evaluated, even if input pathnames change during the run. These byte identities do not establish source authenticity or native scientific parity. It rejects incomplete matched designs, aliased physical contexts, complex/nonfinite active data, and segments outside actual sound intervals. Undefined or overflowing normalized correlations remain null with explicit status. Raw negative correlations and valid corrected values above one are retained.
 
 ## Scope
 

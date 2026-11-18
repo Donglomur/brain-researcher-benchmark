@@ -56,6 +56,48 @@ def generated_ledger(doc):
             'membership':copy.deepcopy(row['membership'])} for row in doc['contrasts']]}
 
 
+def native_cell(value):
+    return {'state':'finite','value':value}
+
+
+def native_vector(values, names=None, storage='double'):
+    return {'length':len(values),'storage_type':storage,'names':names,
+            'values':[native_cell(value) for value in values]}
+
+
+def generated_forest(row):
+    extent=len(row['membership'])
+    fields=('cor','n','TE','seTE','lower','upper','w.common','w.random')
+    return {'schema':'nider_original_forest_native_vectors_v1','contrast':row['contrast'],
+        'native_model':row['native_model'],
+        'source_order':'unchanged_native_and_full120_membership_order',
+        'membership':copy.deepcopy(row['membership']),
+        'studlab':[unit['author_label'] for unit in row['membership']],
+        'scales':{'cor':'native_input_Pearson_r','n':'source_sample_size','TE':'Fisher_z',
+                  'seTE':'Fisher_z','lower':'Fisher_z','upper':'Fisher_z',
+                  'w.common':'raw_native_weight_not_percent','w.random':'raw_native_weight_not_percent'},
+        'vectors':{key:native_vector([i/100.0 for i in range(extent)]) for key in fields},
+        'transformation_performed':False}
+
+
+def generated_bayes(row):
+    # Deliberately asymmetric sentinels preserve row/column identity; not fitted values.
+    return {'schema':'nider_original_bma_native_values_v1','contrast':row['contrast'],
+        'native_model':'B'+row['native_model'],
+        'documented_positional_model_order':['fixed_H0','fixed_H1','random_H0','random_H1'],
+        'inclusion_BF_role':'incl.BF_is_model_averaged_effect_inclusion_BF10_not_pairwise_BF',
+        'inclusion':{'incl.BF':native_cell(2.25),'incl.prior':native_cell(.5),
+                     'incl.posterior':native_cell(.75),'include':native_vector([2,4],storage='integer'),
+                     'prior':native_vector([.25]*4),'posterior':native_vector([.1,.2,.3,.4])},
+        'model_vectors':{'prior_models':native_vector([.25]*4),
+                         'posterior_models':native_vector([.1,.2,.3,.4]),
+                         'logml':native_vector([-5.0,-4.0,-3.0,-2.0])},
+        'pairwise_BF':{'dimensions':[4,4],'storage_type':'double','dimension_axis_names':None,
+                       'dimension_labels':[['a','b','c','d'],['a','b','c','d']],
+                       'values_by_row':[[native_cell(i*4+j+.125) for j in range(4)] for i in range(4)]},
+        'native_names_or_absence_preserved':True,'numerical_repair_performed':False}
+
+
 def generated_bundle(root):
     """RDS bytes are opaque invented fixtures; tests make no native-serialization claim."""
     doc = prior_fixtures.generated_document()
@@ -74,16 +116,10 @@ def generated_bundle(root):
         elif name.endswith('.png'):
             raw = generated_png()
         elif name.endswith('.json'):
-            # Only JSON transport is tested here. R controls cover mapped native structures.
+            # Generated mapped exports exercise the Python semantic boundary too.
             contrast=Path(name).stem
             row=next(row for row in ledger['contrasts'] if row['contrast']==contrast)
-            export={'schema':'nider_original_forest_native_vectors_v1' if name.startswith('dl/')
-                    else 'nider_original_bma_native_values_v1', 'contrast':contrast,
-                    'native_model':row['native_model'] if name.startswith('dl/') else 'B'+row['native_model'],
-                    'generated_only':True, 'distinct_sentinel':i+0.125}
-            if name.startswith('dl/'):
-                export.update(membership=copy.deepcopy(row['membership']),
-                              studlab=[unit['author_label'] for unit in row['membership']])
+            export=generated_forest(row) if name.startswith('dl/') else generated_bayes(row)
             raw=base.json_bytes(export)
         else:
             raw = ('GENERATED ONLY '+name+'\n').encode()
@@ -356,6 +392,125 @@ class GeneratedCompanionControls(unittest.TestCase):
                 launch.assert_not_called()
             self.assertEqual((output/'sentinel').read_bytes(),b'previous evidence')
 
+
+
+class NativeExportSemanticsControls(unittest.TestCase):
+    def setUp(self):
+        self.reference=prior_fixtures.generated_document()['contrasts'][0]
+        self.row=generated_ledger({'task':'PAPER-EXP-20261113-003','workbook_sha256':'generated',
+                                  'contrasts':[self.reference]})['contrasts'][0]
+        self.decoder,_=base.load_validator(public)
+
+    def decoded(self, value):
+        return self.decoder.decode_numeric_json(base.json_bytes(value))
+
+    def forest(self, value):
+        contract.check_forest_export(self.decoded(value), self.decoded(self.reference), self.row['native_model'])
+
+    def bayes(self, value):
+        contract.check_bayes_export(self.decoded(value), self.row['contrast'], self.row['native_model'])
+
+    def test_every_forest_vector_is_complete_and_source_scaled(self):
+        initial=generated_forest(self.row);self.forest(initial)
+        for key in ('cor','n','TE','seTE','lower','upper','w.common','w.random'):
+            for mutation in ('missing','short','declared','wrong_scale','names'):
+                value=copy.deepcopy(initial)
+                if mutation=='missing':del value['vectors'][key]
+                if mutation=='short':value['vectors'][key]['values'].pop()
+                if mutation=='declared':value['vectors'][key]['length']-=1
+                if mutation=='wrong_scale':value['scales'][key]='percent'
+                if mutation=='names':value['vectors'][key]['names']=['incomplete']
+                with self.subTest(key=key,mutation=mutation),self.assertRaises(ValueError):self.forest(value)
+        for key,value in [('transformation_performed',True),('source_order','sorted_alphabetically')]:
+            changed=copy.deepcopy(initial);changed[key]=value
+            with self.subTest(key=key),self.assertRaises(ValueError):self.forest(changed)
+
+    def test_explicit_native_states_preserved_without_repair(self):
+        for state in ('NA','NaN','+Inf','-Inf'):
+            value=generated_forest(self.row);value['vectors']['TE']['values'][0]={'state':state}
+            before=copy.deepcopy(value);self.forest(value);self.assertEqual(value,before)
+        invalid=[None,True,0.25,{'state':'finite','value':True},
+                 {'state':'finite','value':'0.25'},{'state':'missing'},
+                 {'state':'NA','value':0},{'state':'finite','value':0,'extra':1}]
+        for cell in invalid:
+            value=generated_forest(self.row);value['vectors']['TE']['values'][0]=cell
+            with self.subTest(cell=cell),self.assertRaises(ValueError):self.forest(value)
+        value=generated_forest(self.row);value['vectors']['TE']['storage_type']='integer'
+        value['vectors']['TE']['values'][0]=native_cell(.5)
+        with self.assertRaisesRegex(ValueError,'integer_storage'):self.forest(value)
+
+    def test_integer_storage_matches_native_R_domain(self):
+        for kind in ('forest', 'pairwise_BF'):
+            def value_with(cell):
+                if kind == 'forest':
+                    value=generated_forest(self.row)
+                    value['vectors']['TE']=native_vector([0]*len(self.row['membership']),storage='integer')
+                    value['vectors']['TE']['values'][0]=cell
+                    return value,self.forest
+                value=generated_bayes(self.row)
+                matrix=value['pairwise_BF'];matrix['storage_type']='integer'
+                matrix['values_by_row']=[[native_cell(i*4+j) for j in range(4)] for i in range(4)]
+                matrix['values_by_row'][0][0]=cell
+                return value,self.bayes
+            for cell in ({'state':'NA'},native_cell(-2147483647),native_cell(0),native_cell(2147483647)):
+                value,check=value_with(cell)
+                with self.subTest(kind=kind,valid=cell):check(value)
+            invalid=[{'state':state} for state in ('NaN','+Inf','-Inf')]
+            invalid.extend(native_cell(number) for number in (-2147483648,2147483648,.5))
+            for cell in invalid:
+                value,check=value_with(cell)
+                with self.subTest(kind=kind,invalid=cell),self.assertRaises(ValueError):check(value)
+
+    def test_native_names_and_missing_labels_remain_optional(self):
+        value=generated_forest(self.row);n=len(self.row['membership'])
+        value['vectors']['TE']['names']=[None]+['same']*(n-1)
+        self.forest(value)
+        value=generated_bayes(self.row);value['pairwise_BF']['dimension_labels']=[None,['same',None,'same','']]
+        value['pairwise_BF']['dimension_axis_names']=['',None]
+        before=copy.deepcopy(value);self.bayes(value);self.assertEqual(value,before)
+        for bad in ([],['one'],[[1,2,3,4],None]):
+            value=generated_bayes(self.row);value['pairwise_BF']['dimension_labels']=bad
+            with self.subTest(labels=bad),self.assertRaises(ValueError):self.bayes(value)
+
+    def test_inclusion_BF_cannot_be_replaced_by_pairwise_matrix(self):
+        initial=generated_bayes(self.row);self.bayes(initial)
+        for mutation in ('matrix_as_scalar','positions','role','order','repair','names_flag'):
+            value=copy.deepcopy(initial)
+            if mutation=='matrix_as_scalar':value['inclusion']['incl.BF']=value['pairwise_BF']
+            if mutation=='positions':value['inclusion']['include']['values']=[native_cell(1),native_cell(3)]
+            if mutation=='role':value['inclusion_BF_role']='pairwise_BF'
+            if mutation=='order':value['documented_positional_model_order'].reverse()
+            if mutation=='repair':value['numerical_repair_performed']=True
+            if mutation=='names_flag':value['native_names_or_absence_preserved']=1
+            with self.subTest(mutation=mutation),self.assertRaises(ValueError):self.bayes(value)
+
+    def test_bayesian_vector_and_matrix_extents_are_independently_checked(self):
+        initial=generated_bayes(self.row)
+        for key in ('prior_models','posterior_models','logml'):
+            value=copy.deepcopy(initial);value['model_vectors'][key]['values'].pop()
+            with self.subTest(vector=key),self.assertRaises(ValueError):self.bayes(value)
+        for mutation in ('dimensions','rows','columns','axis_names','integer_cell','cell'):
+            value=copy.deepcopy(initial);matrix=value['pairwise_BF']
+            if mutation=='dimensions':matrix['dimensions']=[4,3]
+            if mutation=='rows':matrix['values_by_row'].pop()
+            if mutation=='columns':matrix['values_by_row'][0].pop()
+            if mutation=='axis_names':matrix['dimension_axis_names']=['single']
+            if mutation=='integer_cell':matrix['storage_type']='integer'
+            if mutation=='cell':matrix['values_by_row'][0][1]={'state':'finite','value':False}
+            with self.subTest(mutation=mutation),self.assertRaises(ValueError):self.bayes(value)
+        before=copy.deepcopy(initial);self.bayes(initial);self.assertEqual(before,initial)
+        self.assertNotEqual(initial['pairwise_BF']['values_by_row'][0][1],initial['pairwise_BF']['values_by_row'][1][0])
+
+    def test_bundle_rejects_previously_accepted_identity_only_stubs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);generated_bundle(root)
+            for kind in ('dl','bayes'):
+                path=root/kind/'quest_self.json';original=path.read_bytes();value=json.loads(original)
+                keys={'schema','contrast','native_model','membership','studlab'}
+                path.write_bytes(base.json_bytes({k:v for k,v in value.items() if k in keys}))
+                with self.subTest(kind=kind),self.assertRaises(ValueError):
+                    contract.check_bundle(root,'A',1_000_000,base)
+                path.write_bytes(original)
 
 if __name__=='__main__':
     unittest.main(verbosity=2)

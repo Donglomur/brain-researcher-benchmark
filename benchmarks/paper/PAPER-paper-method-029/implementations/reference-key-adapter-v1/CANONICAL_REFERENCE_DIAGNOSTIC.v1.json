@@ -1,0 +1,109 @@
+{
+  "schema": "deeprecon-canonical-reference-qualification/v1",
+  "task_id": "PAPER-paper-method-029",
+  "qualification": "reference_table_canonical_keys_only",
+  "result": "single_admitted_diagnostic_reported_complete_one_to_one_matches",
+  "run_id": "deeprecon-canonical-reference-v1-20261118",
+  "runtime": {
+    "python": "3.11.6",
+    "pandas": "3.0.3",
+    "numpy": "2.4.6"
+  },
+  "publication_source": {
+    "repository": "KamitaniLab/InterSiteNeuralCodeConversion",
+    "commit": "edbff02edd6a08d3c6c829af45a957fd14bdc460",
+    "consumer_path": "evaluation/conversion_accuracy/plot_figure.py",
+    "consumer_git_blob_sha1": "27f1255c19db57380877250badddc38f64148578"
+  },
+  "reference_roles": [
+    {
+      "axis": "pattern",
+      "role": "ceiling",
+      "source_path": "evaluation/conversion_accuracy/results/pattern_noise_ceiling_single_trial.csv",
+      "input_bytes": 53222,
+      "input_sha256": "53ba7688f94691f2a5838912136e48069497524f01c64b4cf09fe940b6dc934e",
+      "input_git_blob_sha1": "e3fea730f0ae77372ee877bd1737b8e5e146c547",
+      "rows": 1500,
+      "matched_keys": 1500,
+      "unmatched_keys": 0,
+      "canonical_key_set_sha256": "262484bf92e0504d7fe6f17d5050e0ae13cb3935c5a3f6fb9b853b355ad8ca45",
+      "row_order_key_sha256": "f1a699eeeae3e83fc477b6a2b012258bf078cae28ca22fdaabd9f5c27ca41ddf"
+    },
+    {
+      "axis": "pattern",
+      "role": "threshold",
+      "source_path": "evaluation/conversion_accuracy/results/pattern_nc_threshold_single_trial.csv",
+      "input_bytes": 82978,
+      "input_sha256": "2e5e97d82a5f7dcf46f02c87e3f5f8bc0eaf5a00e0725da9314b405d1e384938",
+      "input_git_blob_sha1": "825b7098fa6245364961cd0165809e64ae544dc8",
+      "rows": 1500,
+      "matched_keys": 1500,
+      "unmatched_keys": 0,
+      "canonical_key_set_sha256": "262484bf92e0504d7fe6f17d5050e0ae13cb3935c5a3f6fb9b853b355ad8ca45",
+      "row_order_key_sha256": "f1a699eeeae3e83fc477b6a2b012258bf078cae28ca22fdaabd9f5c27ca41ddf"
+    },
+    {
+      "axis": "profile",
+      "role": "ceiling",
+      "source_path": "evaluation/conversion_accuracy/results/profile_noise_ceiling_single_trial.csv",
+      "input_bytes": 4706814,
+      "input_sha256": "e8a12de6fb115fc0833d4d31bdb22cdf4992d93a9879588e693277f22d907571",
+      "input_git_blob_sha1": "8da3a933e0d118ec4b6d082a622e66bc00ed6f73",
+      "rows": 151790,
+      "matched_keys": 151790,
+      "unmatched_keys": 0,
+      "canonical_key_set_sha256": "f9967137d3620e14ac749adf8209b15bdb6fd8145943c98d89a0fdf84f3adcd5",
+      "row_order_key_sha256": "60dae76b3198d077fe3b02fa0a662c00faef3f1d135533d717d188504b8efc17"
+    },
+    {
+      "axis": "profile",
+      "role": "threshold",
+      "source_path": "evaluation/conversion_accuracy/results/profile_nc_threshold_single_trial.csv",
+      "input_bytes": 8407374,
+      "input_sha256": "8e4e93092fc45873c8a533b5aaa7392c5e0ad6a7ae21e1c641d040a7501aa4f6",
+      "input_git_blob_sha1": "96c5e934b6b810c8af0c780bcbeac792af818c2b",
+      "rows": 151790,
+      "matched_keys": 151790,
+      "unmatched_keys": 0,
+      "canonical_key_set_sha256": "f9967137d3620e14ac749adf8209b15bdb6fd8145943c98d89a0fdf84f3adcd5",
+      "row_order_key_sha256": "60dae76b3198d077fe3b02fa0a662c00faef3f1d135533d717d188504b8efc17"
+    }
+  ],
+  "key_rules": {
+    "pattern_ceiling": "Remove Subject hyphens; cast Image index to int, then string.",
+    "pattern_threshold": "Do not change Subject; cast Image index to int, then string.",
+    "profile_both_roles": "Do not change Subject; stringify inferred Vox_idx dtype without integer cast.",
+    "identifier": "Subject + ROI + index text, with no separator.",
+    "admission": "Accepted adapter refuses missing/extra/duplicate/colliding canonical keys and nonfinite required values; no repair."
+  },
+  "carrier": {
+    "author": "pd.read_csv(local .csv pathname), default arguments",
+    "diagnostic": "pd.read_csv(fresh BytesIO over authenticated bytes), same parser defaults",
+    "scope": "Selected uncompressed .csv inputs under recorded current versions; no claim of original author runtime or arbitrary carrier equivalence."
+  },
+  "hash_basis": "Accepted component-equal adapter pairs. Ceiling order follows source rows; threshold order reconstructs those pairs by original threshold position. Set hash sorts (identifier, subject, roi, index_text), in that order. Each UTF8 field has an8-byte big-endian length prefix; final8-byte key count; domain deeprecon-reference-key-order-v1 plus NUL.",
+  "evidence_pins": {
+    "accepted_key_adapter_sha256": "b8fbc6d4922a3467fc5ff649a33dd8ebff128f401c77f49eef36729ed7919613",
+    "diagnostic_worker_sha256": "e08e6ff32179130d385dc860257ca96015cb6323d7d3dc5fa76eb05d555e7ebd",
+    "protocol_sha256": "55d8b001a82c2e26c6ae671e986b2e73fbbcdfde6bea920c5fb7f4ae02cfdf10",
+    "saved_summary_sha256": "46ba85756639cd919273a7c476f29b415370400f8eb96b20379f69c6e30fc148",
+    "saved_receipt_sha256": "c7a9ff8eea08fdef129b8becc123d8db676136050ab1d8455dcb79e01c5cfdd9",
+    "closure_sha256": "e512cd548f9423f74b04e44ed074f99fa72f1cca2959b239becedfd32e9d4dae",
+    "construction_review_sha256": "37adc96242da0e34762533f8273c8526d45c4a7daefab8677d1dec848c0085bb",
+    "prior_independent_input_inventory_review_sha256": "2988785344439c41a0766f0ed55c5520eca6d1ab4e7b5a9c4f8b74fba673753e"
+  },
+  "review_policy": {
+    "actual_followup": "Saved metadata, receipt and code consistency only; associated independent review is carried by the intake map.",
+    "independent_authentic_canonical_recomputation": false
+  },
+  "scope_limits": {
+    "raw_rows_exported": false,
+    "scoring_or_normalization": false,
+    "prediction_or_model_execution": false,
+    "historical_runtime_parity": false,
+    "prediction_reference_trial_voxel_alignment_established": false,
+    "benchmark_readiness_promotion": false,
+    "profile_keys_are_not_unique_voxel_count": true
+  },
+  "excluded_private_infrastructure": "The one-use outer dispatcher is private lineage only. It is excluded from reusable/public/runtime-qualified components;125s described monitoring, not every filesystem operation."
+}

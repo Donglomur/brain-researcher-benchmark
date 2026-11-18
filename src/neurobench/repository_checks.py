@@ -36,6 +36,14 @@ MAX_DEPTH = 32
 SOURCE_SUFFIXES = {"", ".py", ".json", ".md", ".txt", ".m", ".r", ".yaml", ".yml",
                    ".sh", ".lock", ".toml", ".in", ".author", ".list", ".template",
                    ".rst", ".c", ".dockerignore", ".patch"}
+# Explicit reviewed resource identity; this does not admit a general font suffix.
+PINNED_SOURCE_RESOURCES = {
+    "benchmarks/neural/NEURAL-021/implementations/raster-participant-v1/assets/DejaVuSansMono.ttf": {
+        "mode": "100644",
+        "bytes": 340240,
+        "sha256": "602ec86b8948cfcd956482fe64f94c36c867770149ef2f791d4613f443bcecb3",
+    },
+}
 RETIRED_ROOTS = ("authoring", "components", "artifacts-build", "verification", "results", "tools",
                  "benchmarks/neuroscience", "benchmarks/manifests",
                  "benchmarks/scientific_components", "benchmarks/scientific_contracts")
@@ -514,7 +522,7 @@ def check_namespace(root, prefix, boundaries, allowed_files):
                     need(child in allowed_files, "Orphan source file: " + child)
 
 
-def artifact_members(root, artifacts, *, binding_metadata_only=False):
+def artifact_members(root, artifacts, *, binding_metadata_only=False, reader=None):
     members = {}
     folded = {}
     visited = 0
@@ -540,7 +548,14 @@ def artifact_members(root, artifacts, *, binding_metadata_only=False):
                         if binding_metadata_only:
                             need(Path(child).suffix == ".json" or Path(child).name == "README.md",
                                  "Unexpected current-binding member: " + child)
-                        need(Path(child).suffix.lower() in SOURCE_SUFFIXES, "Non-source member type: " + child)
+                        if Path(child).suffix.lower() not in SOURCE_SUFFIXES:
+                            expected = PINNED_SOURCE_RESOURCES.get(child)
+                            need(expected is not None, "Non-source member type: " + child)
+                            need(reader is not None and reader.root == root,
+                                 "Pinned source resource requires shared reader: " + child)
+                            actual, _ = reader.file(child)
+                            need(all(actual[key] == expected[key] for key in ("mode", "bytes", "sha256")),
+                                 "Pinned source resource mismatch: " + child)
                         need(child not in members, "Overlapping source ownership: " + child)
                         members[child] = "artifact:" + artifact["id"]
                         need(len(members) <= MAX_FILES, "Source file count limit exceeded")
@@ -769,7 +784,7 @@ def prepare(reader):
                 need(endpoint_path not in members, "Duplicate paper endpoint-selection provenance")
                 members[endpoint_path] = "registration-provenance"
                 expected_pins[endpoint_path] = endpoint_pin
-    artifact_files = artifact_members(root, artifacts)
+    artifact_files = artifact_members(root, artifacts, reader=reader)
     need(not set(members) & set(artifact_files), "Artifact overlaps task or provenance metadata")
     members.update(artifact_files)
     # These are live source-binding descriptors, not additional benchmark artifacts.
@@ -779,7 +794,8 @@ def prepare(reader):
                     {CURRENT_BINDINGS, INVENTORY, PARALLEL_CONTROL_MANIFEST,
                      EXP003_CONTROL_MANIFEST})
     checked_path(root, CURRENT_BINDINGS)
-    binding_files = artifact_members(root, [{"path": CURRENT_CLOSURES, "id": "current-bindings"}], binding_metadata_only=True)
+    binding_files = artifact_members(root, [{"path": CURRENT_CLOSURES, "id": "current-bindings"}],
+                                     binding_metadata_only=True, reader=reader)
     binding_files[CURRENT_BINDINGS] = "current-binding-metadata"
     binding_files = dict.fromkeys(binding_files, "current-binding-metadata")
     need(not set(members) & set(binding_files), "Current binding metadata overlaps artifact source")

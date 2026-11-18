@@ -22,7 +22,7 @@ import urllib.request
 
 MAX_MANIFEST_BYTES = 2 * 1024 * 1024
 MAX_LOG_BYTES = 4 * 1024 * 1024
-MAX_COMMANDS = 512
+MAX_COMMANDS = 536
 MAX_SECONDS = 180
 THREAD_ENV = ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS',
               'VECLIB_MAXIMUM_THREADS', 'NUMEXPR_NUM_THREADS', 'BLIS_NUM_THREADS',
@@ -404,7 +404,7 @@ def prepare_fixtures(root, document, group, destination):
     specs = document.get('fixtures', {})
     _require(len(specs) <= MAX_FIXTURE_FILES, 'fixture file limit')
     commands = document.get('commands')
-    _require(type(commands) is list and len(commands) <= 512, 'bounded fixture commands required')
+    _require(type(commands) is list and len(commands) <= MAX_COMMANDS, 'bounded fixture commands required')
     selected = [row for row in commands if type(row) is dict and row.get('group') == group]
     _require(bool(selected), 'unknown fixture group')
     required = set()

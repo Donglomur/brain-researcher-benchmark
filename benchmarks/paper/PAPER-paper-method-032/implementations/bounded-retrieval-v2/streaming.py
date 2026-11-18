@@ -111,8 +111,8 @@ def cosine_matrix(brain, images, brain_order, *, block_rows=8, feature_block=102
     return result
 
 
-def retrieval_from_cosines(similarities):
-    """Corrected author directions; preserve predecessor's strict tie rejection."""
+def _retrieval_winners(similarities):
+    """One winner definition shared by aggregate and granular evidence paths."""
     sim = np.asarray(similarities)
     if sim.ndim != 2 or sim.shape[0] != sim.shape[1] or len(sim) < 2 or not np.isfinite(sim).all():
         raise ValueError("finite square similarity matrix required")
@@ -121,12 +121,48 @@ def retrieval_from_cosines(similarities):
         maximum = matrix.max(axis=1, keepdims=True)
         if np.any(np.sum(matrix == maximum, axis=1) != 1):
             raise ValueError(f"{name}: tied maximum; native tie parity is unresolved")
-        result[name] = float(np.mean(matrix.argmax(axis=1) == np.arange(len(matrix))))
+        result[name] = matrix.argmax(axis=1)
     return result
 
 
-def score_aligned_features(ids, pools, brain, images, *, brain_order=None, block_rows=8, feature_block=1024):
-    """Low-dimensional generated controls use this same numerical engine."""
+def retrieval_from_cosines(similarities):
+    """Corrected author directions; preserve predecessor's strict tie rejection."""
+    winners = _retrieval_winners(similarities)
+    return {name: float(np.mean(indices == np.arange(len(indices))))
+            for name, indices in winners.items()}
+
+
+def retrieval_decisions_from_cosines(similarities, image_ids):
+    """Operator-only identity-indexed query outcomes, with unchanged tie policy.
+
+    An identity labels the paired image and brain row. For image_retrieval a
+    brain query chooses an image; for brain_retrieval an image chooses a brain.
+    These records are protected scoring evidence, not participant observations.
+    """
+    ids = legacy._ids(image_ids, "pool image_ids", 2)
+    winners = _retrieval_winners(similarities)
+    if any(len(indices) != len(ids) for indices in winners.values()):
+        raise ValueError("pool identities must cover the complete similarity matrix")
+    return {name: [{"query_id": key, "predicted_id": ids[int(indices[index])],
+                    "correct": bool(indices[index] == index)}
+                   for index, key in enumerate(ids)]
+            for name, indices in winners.items()}
+
+
+def _decision_flag(value):
+    if type(value) is not bool:
+        raise ValueError("include_decisions must be a boolean")
+    return value
+
+
+def score_aligned_features(ids, pools, brain, images, *, brain_order=None, block_rows=8, feature_block=1024,
+                           include_decisions=False):
+    """Low-dimensional generated controls use this same numerical engine.
+
+    Default return remains the metric dictionary. include_decisions=True returns
+    metrics and protected decision_evidence from the same single cosine pass.
+    """
+    _decision_flag(include_decisions)
     ids = legacy._ids(ids, "image_ids", 300)
     legacy.validate_pools(ids, pools)
     if _shape(brain, "brain")[0] != len(ids) or _shape(images, "images")[0] != len(ids):
@@ -135,12 +171,31 @@ def score_aligned_features(ids, pools, brain, images, *, brain_order=None, block
     similarities = cosine_matrix(brain, images, order, block_rows=block_rows, feature_block=feature_block)
     locations = {name: position for position, name in enumerate(ids)}
     values = {"image_retrieval": [], "brain_retrieval": []}
-    for pool in pools:
+    draws = [] if include_decisions else None
+    for draw_index, pool in enumerate(pools):
         selected = [locations[name] for name in pool]
-        draw = retrieval_from_cosines(similarities[np.ix_(selected, selected)])
+        matrix = similarities[np.ix_(selected, selected)]
+        if include_decisions:
+            decisions = retrieval_decisions_from_cosines(matrix, pool)
+            draw = {name: sum(row["correct"] for row in rows) / len(rows)
+                    for name, rows in decisions.items()}
+            draws.append({"draw_index_zero_based": draw_index,
+                          "candidate_ids": list(pool), "directions": decisions})
+        else:
+            draw = retrieval_from_cosines(matrix)
         for name, score in draw.items():
             values[name].append(score)
-    return {name: legacy._summary(scores) for name, scores in values.items()}
+    metrics = {name: legacy._summary(scores) for name, scores in values.items()}
+    if not include_decisions:
+        return metrics
+    evidence = {"schema": "mindeye2-retrieval-query-evidence/v1",
+                "image_ids": list(ids), "pool_digest": legacy.digest(pools),
+                "draws": draws, "tie_policy": "reject_maximal_ties",
+                "direction_semantics": {"image_retrieval": "brain_query_to_image_candidates",
+                                        "brain_retrieval": "image_query_to_brain_candidates"},
+                "scope": "protected_operator_feature_decisions_not_native_execution_attestation"}
+    return {"metrics": metrics, "decision_evidence": evidence,
+            "decision_evidence_digest": legacy.digest(evidence)}
 
 
 def validate_reference(reference):
@@ -161,7 +216,9 @@ def validate_reference(reference):
     return ids
 
 
-def evaluate(reference, candidate, images, brain, *, block_rows=8, feature_block=1024):
+def evaluate(reference, candidate, images, brain, *, block_rows=8, feature_block=1024,
+             include_decisions=False):
+    _decision_flag(include_decisions)
     ids = validate_reference(reference)
     if candidate.get("reference_manifest_digest") != legacy.digest(reference):
         raise ValueError("candidate reference commitment differs")
@@ -175,10 +232,12 @@ def evaluate(reference, candidate, images, brain, *, block_rows=8, feature_block
     if _shape(brain, "brain") != (1000, FEATURE_WIDTH) or _shape(images, "images") != (1000, FEATURE_WIDTH):
         raise ValueError("native retrieval requires exactly 1000 rows and 256*1664 coordinates")
     locations = {name: position for position, name in enumerate(candidate_ids)}
-    metrics = score_aligned_features(ids, reference["retrieval_pools"], brain, images,
-                                    brain_order=np.array([locations[name] for name in ids]),
-                                    block_rows=block_rows, feature_block=feature_block)
-    return {"task_id": legacy.TASK, "scope": "bounded_original_population_feature_retrieval",
+    scored = score_aligned_features(ids, reference["retrieval_pools"], brain, images,
+                                   brain_order=np.array([locations[name] for name in ids]),
+                                   block_rows=block_rows, feature_block=feature_block,
+                                   include_decisions=include_decisions)
+    metrics = scored["metrics"] if include_decisions else scored
+    result = {"task_id": legacy.TASK, "scope": "bounded_original_population_feature_retrieval",
             "reference_manifest_digest": legacy.digest(reference), "candidate_manifest_digest": legacy.digest(candidate),
             "population_manifest_sha256": reference["population_manifest_sha256"],
             "subject": reference["subject"], "n_images": 1000,
@@ -195,6 +254,10 @@ def evaluate(reference, candidate, images, brain, *, block_rows=8, feature_block
                        "Full reconstruction companion panel and native author baseline remain required.",
                        "Float64 blocked arithmetic is not qualified against native GPU/TF32/float16 arithmetic.",
                        "Pool intervals describe Monte Carlo variation, not independent participants."]}
+    if include_decisions:
+        result.update(decision_evidence=scored["decision_evidence"],
+                      decision_evidence_digest=scored["decision_evidence_digest"])
+    return result
 
 
 def _hash_stream(stream):
@@ -252,6 +315,8 @@ def main(argv=None):
         parser.add_argument("--" + name, required=True)
     parser.add_argument("--block-rows", type=int, default=8)
     parser.add_argument("--feature-block", type=int, default=1024)
+    parser.add_argument("--include-decisions", action="store_true",
+                        help="include protected complete per-query evidence; operator output only")
     args = parser.parse_args(argv)
     _block_rows(args.block_rows)
     raw = Path(args.reference).read_bytes()
@@ -263,7 +328,8 @@ def main(argv=None):
     with mapped_npy(args.image_features, reference["image_features_sha256"]) as images:
         with mapped_npy(args.brain_features, candidate["brain_features_sha256"]) as brain:
             result = evaluate(reference, candidate, images, brain, block_rows=args.block_rows,
-                              feature_block=args.feature_block)
+                              feature_block=args.feature_block,
+                              include_decisions=args.include_decisions)
     print(json.dumps(result, sort_keys=True, allow_nan=False))
 
 

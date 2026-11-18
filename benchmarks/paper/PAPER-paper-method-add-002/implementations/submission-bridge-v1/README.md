@@ -64,3 +64,34 @@ The adapter verifies native component algebra (peaks, source condition ordering/
 The producer currently does not retain decoder coefficients/fit receipts, predicted displacement traces or neural condition means. Position-level metric completeness therefore remains distinct from full computation verification. The original LFADS outputs, historical fits/seeds/gauges, original reconstruction masks/rank roster, qualified reference and complete protected paired execution remain separate missing requirements. Current code supplies an executable comparison mechanism once authentic outputs are separately available; it does not claim those outputs exist.
 
 All source files and authentic preparation receipts from the accepted producer remain unchanged. Ordinary validation is generated-only and requires NumPy and SciPy through the pinned producer; it does not load the original dataset or an LLM.
+
+## Immutable operator-input capture
+
+The prepared-bank and reconstruction-mask loaders now interpret bounded, captured
+NPY bytes. The prepared file hash is checked on those same bytes before its NPY
+header is parsed. Masks are checked against the frozen semantic mask digest after
+parsing. Both paths return arrays backed by immutable bytes, so later path
+replacement or in-place file modification cannot change accepted operator
+targets or masks. These changes are used by the existing API and CLI; there is no
+parallel replacement task or metric. The original six-bank-file support, exact
+source-row order, reconstruction mask polarity and source metrics are retained.
+
+The reader supports primitive numeric NPY v1/v2, checks declared shape and exact
+decoded extent, rejects nonfinite values and symlink files, and never uses
+`np.load`, pickle or a file-backed mmap. Capturing the complete bank uses more RAM
+than the prior mmap reader. Authentic full-panel resource qualification remains
+separate; the new controls use a deliberately reduced generated bank. This is
+operator-file integrity, not process isolation, trusted fitting, a new historical
+source mapping, or scientific admission.
+
+Run the focused generated controls with:
+
+```sh
+python3 -I -B tests/test_operator_input_snapshot.py
+```
+
+[Operator-input validation](VALIDATION.operator-input-snapshot.v1.json) records
+the 13 distinct new controls across two bounded runs. Earlier validation files retain their original source hashes
+and scope; the entire prior numerical suite was not replayed for this change.
+The decoder-audit dependency pin is updated to the repaired bridge. Global CI
+enrollment and public source-binding regeneration are integration responsibilities.

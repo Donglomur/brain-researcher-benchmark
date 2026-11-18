@@ -134,6 +134,95 @@ def score_draw(draw, expected_trials, modality):
     }
 
 
+def export_native_draw(fits, *, ordered_trial_ids, modality, pseudo_id):
+    """Convert ten trusted, already-loaded native fits into one journal draw.
+
+    No file is opened and no pickle or model is loaded. The operator must map
+    this draw's retained native indices to original trial identities using its
+    actual mask. The native ``n_folds`` scalar is deliberately not authority:
+    actual train/test indices must satisfy the modality's journal partition.
+    This checks transport and arithmetic, not feature construction, inner CV,
+    authentic execution, publication provenance or complete-panel coverage.
+    """
+    ids = list(trial_ids(ordered_trial_ids))
+    require(isinstance(modality, str) and modality in OUTER_FOLDS, "unsupported modality")
+    require(type(pseudo_id) is int and pseudo_id in DRAW_IDS,
+            "expected real -1 or pseudo ID 1..1000 required")
+    require(isinstance(fits, (list, tuple)) and len(fits) == 10,
+            "exactly ten trusted native fits required")
+
+    def plain(value):
+        return value.tolist() if hasattr(value, "tolist") else value
+
+    def integer(value, name):
+        value = value.item() if hasattr(value, "item") else value
+        require(type(value) is int, f"native {name} must be an integer")
+        return value
+
+    def number(value, name):
+        value = value.item() if hasattr(value, "item") else value
+        require(type(value) in (int, float) and math.isfinite(value),
+                f"native {name} must be a finite number")
+        return value
+
+    def scalars(value, name):
+        rows = plain(value)
+        require(isinstance(rows, (list, tuple)) and len(rows) == len(ids),
+                f"native {name} must match original trial identities")
+        result = []
+        for row in rows:
+            row = plain(row)
+            require(isinstance(row, (list, tuple)) and len(row) == 1,
+                    f"native {name} requires exactly one scalar per trial")
+            result.append(number(row[0], name))
+        return result
+
+    def indices(value):
+        row = plain(value)
+        require(isinstance(row, (list, tuple)), "native fold indices must be a sequence")
+        result = [integer(x, "index") for x in row]
+        require(len(set(result)) == len(result), "duplicate native fold indices")
+        return result
+
+    targets, runs = None, []
+    universe = set(range(len(ids)))
+    fields = ("target", "predictions_test", "scores_test_full", "idxes_train",
+              "idxes_test", "pseudo_id", "run_id")
+    for fit in fits:
+        require(isinstance(fit, dict) and all(k in fit for k in fields),
+                "complete trusted native fit dictionary required")
+        require(integer(fit["pseudo_id"], "pseudo_id") == pseudo_id,
+                "native pseudo identity differs from expected draw")
+        target = scalars(fit["target"], "target")
+        require(all(0 <= x <= 1 for x in target), "prior targets must lie in [0,1]")
+        require(targets is None or target == targets, "target changes across native repeats")
+        targets = target
+        prediction = scalars(fit["predictions_test"], "prediction")
+        reported = number(fit["scores_test_full"], "reported score")
+        require(math.isclose(pooled_r2(target, prediction), reported,
+                             rel_tol=1e-10, abs_tol=1e-12),
+                "native reported score disagrees with pooled prediction score")
+        train_rows, test_rows = plain(fit["idxes_train"]), plain(fit["idxes_test"])
+        require(isinstance(train_rows, (list, tuple)) and
+                isinstance(test_rows, (list, tuple)) and
+                len(train_rows) == len(test_rows) == OUTER_FOLDS[modality],
+                "wrong actual native outer fold count for modality")
+        assignment = [-1] * len(ids)
+        for fold_id, (train_row, test_row) in enumerate(zip(train_rows, test_rows)):
+            train, test = indices(train_row), indices(test_row)
+            require(set(test) <= universe and set(train) == universe - set(test),
+                    "native training indices must be the held-out test complement")
+            for trial in test:
+                require(assignment[trial] == -1, "native trial appears in multiple test folds")
+                assignment[trial] = fold_id
+        check_folds(assignment, len(ids), modality)
+        runs.append({"run_id": integer(fit["run_id"], "run_id"),
+                     "prediction": prediction, "test_fold": assignment})
+    draw = {"pseudo_id": pseudo_id, "trial_ids": ids, "target": targets, "runs": runs}
+    score_draw(draw, ids, modality)
+    return draw
+
+
 def score_cell(metadata, draws):
     """Consume a single cell's draw iterator with O(trials * repeats) storage.
 

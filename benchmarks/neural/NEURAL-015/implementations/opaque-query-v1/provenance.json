@@ -1,0 +1,72 @@
+{
+  "task_id": "NEURAL-015",
+  "component": "opaque-query-v1",
+  "role": "additive_operator_identity_codec",
+  "source_code_reused": "Imports unchanged benchmark evaluator after pin checks; original alias layer, no author code copied.",
+  "sources": [
+    {
+      "path": "benchmarks/neural/NEURAL-015/task.json",
+      "bytes": 32214,
+      "sha256": "c95fe101fd898a4ed44740627c073934f310ac0548b2fcbb0642a92c344e2ecb"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-015/understanding.v1.json",
+      "bytes": 13532,
+      "sha256": "59c3c83abcfdb1d99e7c5f6ca3338fd3eba221c7bc1db6fb67bc07401be1dcdb"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/evaluator.py",
+      "bytes": 21047,
+      "sha256": "366dff43d2624a1cbdf7651a7f0ef00f0dad6cae01480e75d600a7c969096f2a"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/catalog.json",
+      "bytes": 3150,
+      "sha256": "31aab0168d2f6dcf2c230a6649320d03f53f415b726991eb8f12c02d3a800942"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/tests/test_evaluator.py",
+      "bytes": 11956,
+      "sha256": "eb7b6cc594c9890b20311da576dfd7299ce1fe86775677a873024555f2ccd169"
+    },
+    {
+      "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/provenance.json",
+      "bytes": 9676,
+      "sha256": "6e25589feaccf3c8cd39080ef188390cffde4d6ad52f427210a7991337987943"
+    }
+  ],
+  "scientific_basis": "The current task documents recording IDs permitting external label lookup. This component removes those explicit identifiers before collection and restores them privately for the same scorer. It does not resolve other identification channels or access enforcement.",
+  "source_body_downloads": 0,
+  "authentic_data_reads": 0,
+  "model_runs": 0,
+  "changes_to_task_target_or_primary_estimator": false,
+  "scientific_qualification": "unknown",
+  "native_or_viewer_condition_delivered": false,
+  "validation": {
+    "kind": "generated_fixture_controls",
+    "methods": 15,
+    "attempts": 2,
+    "result": "second_affected_run_passed",
+    "same_complete_26_recording_predictions_score_identically": true,
+    "review_corrections": [
+      "Bind complete canonical train/test/unused fold membership, not only public test assignments.",
+      "Use26distinct generated vectors and assert uniqueness."
+    ],
+    "wall_seconds": 0.184691,
+    "peak_child_rss_bytes": 24887296
+  },
+  "source_identity_limit": "The context binds declared neural_sha256 values but does not open or authenticate source observations.",
+  "security_limits": [
+    "Operator must protect fresh32-byte secret and private reference. Key length does not prove entropy.",
+    "Durations, fold grouping and signal content can remain identifying.",
+    "No filesystem, network, process, size-limit or model-provider enforcement.",
+    "Restored submission and evaluator score contain original source IDs and are operator-only."
+  ],
+  "unchanged_holds": [
+    "Authentic HDF5 sampling/electrodes and complete observations",
+    "Trigger/pause/replay alignment and transcript preparation",
+    "Protected evaluation and target-independent acoustic/visual reference",
+    "Runner access enforcement and independently qualified native execution"
+  ],
+  "source_revision_of_unpublished_component": 2
+}

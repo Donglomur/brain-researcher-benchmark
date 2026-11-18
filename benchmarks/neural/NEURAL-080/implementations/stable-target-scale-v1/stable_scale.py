@@ -1,9 +1,9 @@
 """Stable complete-basis weighted TRAIN moments for the NEURAL-080 readout.
 
-An additive numerical repair candidate. The preserved generalization operator
-still uses its pinned predecessor; selecting this kernel requires selecting it
-for BOTH reference construction and scorer scale reconstruction. No study input
-is opened at import. Generated controls do not qualify authentic EEG or fits.
+Standalone equivalent helper for the inactive integrated generalization kernel.
+Reference construction and scorer reconstruction now share the stable algorithm
+in models.fit_target_scale. No study input is opened at import. Generated
+controls do not qualify authentic EEG, fits, source provenance or native runtime.
 """
 from dataclasses import dataclass
 

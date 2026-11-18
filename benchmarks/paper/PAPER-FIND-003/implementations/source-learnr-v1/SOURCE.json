@@ -1,0 +1,71 @@
+{
+  "schema": "ripple-channel-learnr-source/v1",
+  "task_id": "PAPER-FIND-003",
+  "source_revision": "f143b0b7dca77bf9b09d5c7f39352fc5332c83c0",
+  "source_observation_scope": "Browser-visible pinned official code and current MathWorks documentation; raw source bodies not locally acquired or hashed. Documentation is R2026b, not evidence of the authors original MATLAB version.",
+  "observed_sources": [
+    {
+      "url": "https://raw.githubusercontent.com/liulab-repository/ripple-representation-learning/f143b0b7dca77bf9b09d5c7f39352fc5332c83c0/ripple/computeLearnR.m",
+      "locator": "function eligibility, Spearman call and Fisher transform",
+      "supports": "At least10 observations and positive-rate fraction>=0.1; rank-based Learn-R, not a slope.",
+      "local_raw_sha256": null
+    },
+    {
+      "url": "https://raw.githubusercontent.com/liulab-repository/ripple-representation-learning/f143b0b7dca77bf9b09d5c7f39352fc5332c83c0/ripple/Ripple_offline_learning.m",
+      "locator": "phase preprocessing lines10\u201318; correct-trial channel/phase Learn-R lines63\u201369; downstream outliers and subject/behavior operations lines71\u201399",
+      "supports": "Phase filter precedes correct-trial selection. Component stops before all downstream operations.",
+      "local_raw_sha256": null
+    },
+    {
+      "url": "https://www.mathworks.com/help/stats/corr.html",
+      "locator": "missing-value example and Rows default",
+      "supports": "Default corr retains missing rows and produces undefined correlation, unlike complete/pairwise deletion.",
+      "local_raw_sha256": null
+    },
+    {
+      "url": "https://www.mathworks.com/help/matlab/ref/rmoutliers.html",
+      "locator": "mean method and default median method distinction",
+      "supports": "Unimplemented downstream author mean-based removal must not be replaced by the default median rule.",
+      "local_raw_sha256": null
+    }
+  ],
+  "local_prerequisites": [
+    {
+      "path": "benchmarks/paper/PAPER-FIND-003/task.json",
+      "bytes": 21029,
+      "sha256": "647fde2a4313a1c630873e67844588cc000a553ec8ba8a99da82e35a802079cd"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-003/reproduction.v1.json",
+      "bytes": 21261,
+      "sha256": "21c9fccec015e9f3e3041d78cdafd19edef2414dfc46204ec2c424a8f77848fe"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-003/improvement.v1.json",
+      "bytes": 12945,
+      "sha256": "35cb0e5869f9f1d496eb63cb2a18d22ac44817ca69d07cc4833ec2b1f3b19353"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-FIND-003/implementations/registered-runtime/program-v1/portable/task/DATA_AND_OUTPUT_CONTRACT.md",
+      "bytes": 7466,
+      "sha256": "391a0aebf7f5b887c548fe1615b7d6bf60275d4b656d818cde0ae508949299c1"
+    }
+  ],
+  "adoption": {
+    "task_changed": false,
+    "outcomes_changed": false,
+    "improvement_status_changed": false,
+    "scientific_qualification": false,
+    "authentic_input_run": false,
+    "matlab_parity_run": false
+  },
+  "remaining": [
+    "source input/cohort/first-session identities",
+    "channel-outlier parity",
+    "source channel-to-subject mapping and aggregation",
+    "behavioral joins and robust-regression inference",
+    "trial-count controls and complete Figure2C\u2013E crosswalk",
+    "reference values and justified reproduction criteria",
+    "source-grounded original computational improvement endpoint"
+  ]
+}

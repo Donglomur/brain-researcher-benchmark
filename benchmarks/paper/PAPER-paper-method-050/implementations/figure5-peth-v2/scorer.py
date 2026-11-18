@@ -161,7 +161,8 @@ def _population(packet):
         peak = max(vector)
         require(mean >= 0, "firing-rate metadata cannot be negative")
         item = {"key": key, "session": session, "day": day, "shank": shank,
-                "peth": vector, "eligible": mean >= 1 and peak >= 5}
+                "peth": vector, "mean_rate_hz": mean, "peak_rate_hz": peak,
+                "eligible": mean >= 1 and peak >= 5}
         lookup[key] = item
         datasets[dataset].append(item)
     for dataset in datasets:
@@ -171,7 +172,7 @@ def _population(packet):
     return lookup, datasets
 
 
-def _method(method, population, datasets):
+def _method(method, population, datasets, audit=None):
     # An assertion is needed to avoid an accidental circular analysis; it is
     # not executable proof that PETH was excluded during external matching.
     require(method.get("peth_excluded_from_matching_and_selection") is True,
@@ -180,6 +181,7 @@ def _method(method, population, datasets):
     assignments = method.get("assignments")
     require(isinstance(assignments, list), "complete track assignments required")
     seen, tracks = set(), defaultdict(list)
+    unmatched = [] if audit is not None else None
     for row in assignments:
         key = (identifier(row.get("dataset"), "assignment dataset"), integer(row.get("unit_id"), "assignment unit_id"))
         require(key in population and key not in seen, "unknown or duplicate assignment unit")
@@ -188,12 +190,17 @@ def _method(method, population, datasets):
         require(type(track) is int and (track == -1 or track > 0), "track_id must be -1 or positive integer")
         if track > 0:
             tracks[(key[0], track)].append(population[key])
+        elif unmatched is not None:
+            unmatched.append({"dataset": key[0], "unit_id": key[1]})
     require(seen == set(population), "assignments must cover the same complete unit population")
     reports = {dataset: {"all_track_pairs": 0, "not_consecutive_day_pairs": 0,
                          "rate_ineligible_pairs": 0, "constant_peth_pairs": 0,
                          "valid_pairs": 0, "median_fisher_z": None} for dataset in datasets}
     scores = defaultdict(list)
-    for (dataset, _), members in tracks.items():
+    if audit is not None:
+        audit.update(unmatched_units=sorted(unmatched, key=lambda row: (row["dataset"], row["unit_id"])),
+                     tracks=[], consecutive_day_pairs=[])
+    for (dataset, track_id), members in tracks.items():
         require(len({u["session"] for u in members}) == len(members), "track contains two units from one session")
         require(len({u["shank"] for u in members}) == 1, "track crosses shanks")
         # Inspect only adjacent calendar days. Count every other unordered
@@ -202,28 +209,71 @@ def _method(method, population, datasets):
         for unit in members:
             by_day[unit["day"].toordinal()].append(unit)
         total = len(members) * (len(members) - 1) // 2
+        track_record = None
+        if audit is not None:
+            track_record = {"dataset": dataset, "track_id": track_id,
+                            "unit_ids": sorted(unit["key"][1] for unit in members),
+                            "all_track_pairs": total}
+            audit["tracks"].append(track_record)
         consecutive = 0
         for day, first in by_day.items():
             for left in first:
                 for right in by_day.get(day + 1, []):
                     consecutive += 1
+                    pair_record = None
+                    if audit is not None:
+                        pair_record = {"dataset": dataset, "track_id": track_id,
+                                       "earlier_unit_id": left["key"][1],
+                                       "later_unit_id": right["key"][1],
+                                       "outcome": None, "fisher_z": None}
+                        audit["consecutive_day_pairs"].append(pair_record)
                     if not (left["eligible"] and right["eligible"]):
                         reports[dataset]["rate_ineligible_pairs"] += 1
+                        if pair_record is not None:
+                            pair_record["outcome"] = "rate_ineligible"
                         continue
                     z = fisher_z(left["peth"], right["peth"])
                     if z is None:
                         reports[dataset]["constant_peth_pairs"] += 1
+                        if pair_record is not None:
+                            pair_record["outcome"] = "constant_peth"
                     else:
                         scores[dataset].append(z)
+                        if pair_record is not None:
+                            pair_record.update(outcome="valid", fisher_z=encoded(z))
+        if track_record is not None:
+            track_record["not_consecutive_day_pairs"] = total - consecutive
         reports[dataset]["all_track_pairs"] += total
         reports[dataset]["not_consecutive_day_pairs"] += total - consecutive
     for dataset, report in reports.items():
         report["valid_pairs"] = len(scores[dataset])
         report["median_fisher_z"] = median(scores[dataset])
+    if audit is not None:
+        audit["tracks"].sort(key=lambda row: (row["dataset"], row["track_id"]))
+        audit["consecutive_day_pairs"].sort(key=lambda row: (
+            row["dataset"], row["track_id"], row["earlier_unit_id"], row["later_unit_id"]))
     return reports
 
 
-def score(packet):
+def _population_audit(population):
+    """Bind normalized validated operands without retaining a second PETH bank."""
+    rows = []
+    for key, unit in sorted(population.items()):
+        # This is a semantic hash of validated float values, not raw source-file
+        # authentication. CLI input_sha256 separately binds the submitted bytes.
+        digest = hashlib.sha256()
+        digest.update(b"figure5-peth/validated-float-json/v1\n")
+        for chunk in json.JSONEncoder(allow_nan=False, separators=(",", ":")).iterencode(unit["peth"]):
+            digest.update(chunk.encode("utf-8"))
+        rows.append({"dataset": key[0], "unit_id": key[1], "session_id": unit["session"],
+                     "shank": unit["shank"], "recording_date": unit["day"].isoformat(),
+                     "mean_rate_hz": unit["mean_rate_hz"], "peak_rate_hz": unit["peak_rate_hz"],
+                     "rate_eligible": unit["eligible"], "peth_sha256": digest.hexdigest()})
+    return rows
+
+
+def score(packet, *, include_pair_audit=False):
+    require(type(include_pair_audit) is bool, "include_pair_audit must be boolean")
     require(packet.get("schema_version") == "figure5-peth/v2", "unsupported packet schema")
     require(packet.get("source_kind") in ("generated_engineering_control", "operator_prepared_source"),
             "explicit source kind required")
@@ -231,7 +281,10 @@ def score(packet):
     methods = packet.get("methods")
     require(isinstance(methods, dict) and set(methods) in (set(BASELINES), set(BASELINES) | {"candidate"}),
             "DANT, UnitMatch and EMD are mandatory; only an optional candidate may be added")
-    reports = {name: _method(method, population, datasets) for name, method in methods.items()}
+    audits = {name: {} for name in methods} if include_pair_audit else None
+    reports = {name: _method(method, population, datasets,
+                             None if audits is None else audits[name])
+               for name, method in methods.items()}
     retained, excluded = [], {}
     for dataset in sorted(datasets):
         failing = [name for name in BASELINES if reports[name][dataset]["valid_pairs"] < MIN_PAIRS]
@@ -261,6 +314,15 @@ def score(packet):
                       "meets_100_pair_support": reports["candidate"][dataset]["valid_pairs"] >= MIN_PAIRS,
                       "median_fisher_z": reports["candidate"][dataset]["median_fisher_z"]}
             for dataset in retained}
+    if audits is not None:
+        result["pair_audit"] = {
+            "schema_version": "figure5-peth-pair-audit/v1",
+            "scope": "complete_positive_tracks_and_every_consecutive_calendar_day_pair",
+            "population": _population_audit(population),
+            "methods": audits,
+            "coverage": "Each nonconsecutive pair is recoverable from complete track membership and population dates; it is counted algebraically, not materialized.",
+            "peth_hash_recipe": "sha256(domain ASCII figure5-peth/validated-float-json/v1 plus LF, then compact UTF8 JSON of the validated float vector)",
+            "provenance_limit": "Bindings show which supplied operands were scored; they do not authenticate the source cohort, preprocessing, unseen data, matching execution or PETH exclusion."}
     return result
 
 
@@ -268,9 +330,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("packet", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--pair-audit", action="store_true",
+                        help="Include complete track membership and consecutive-day pair verification records")
     args = parser.parse_args()
     raw = args.packet.read_bytes()
-    result = score(json.loads(raw))
+    result = score(json.loads(raw), include_pair_audit=args.pair_audit)
     result["input_sha256"] = hashlib.sha256(raw).hexdigest()
     with args.output.open("x") as stream:
         json.dump(result, stream, indent=2, allow_nan=False)

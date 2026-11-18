@@ -148,6 +148,16 @@ probabilities when it samples; its returned sample alone cannot satisfy this
 interface. A qualified author bridge must expose the pre-sampling distributions,
 preserve the two measurement times, and establish original context alignment.
 
+## Expose the author model probability output
+
+The [explicit-context author bridge](AUTHOR_BRIDGE.md) supplies a source-documented
+connection from an operator-supplied model to this probability-stream interface.
+It preserves original decoder columns, both measurement times and the complete
+output support. It requires explicit preceding waveform context and external
+alignment evidence; no demo padding policy is selected automatically. Its
+generated controls do not qualify the checkpoint, TensorFlow execution, context
+policy or an original-author numerical replay.
+
 ## Join and score privately
 
 Only after a complete prediction manifest exists does the separate grading stage

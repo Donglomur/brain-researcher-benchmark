@@ -15,7 +15,7 @@ The prospective source uses a forward-only fixed smoother at native 1024 Hz and 
 - `neural003/scoring.py`: target-last scoring arithmetic; the protected target producer is still missing.
 - `neural003/__init__.py`: package marker; no runtime entrypoint.
 
-Five scientific modules and both included contracts retain their previous source bytes. The scoring module now preserves finite participant means when an intermediate sum overflows, while retaining the original successful arithmetic, equal-person weighting and target-last barrier. This README is only a scope summary; it does not replace or amend either contract. No recordings, participant identifiers, targets, predictions, primary-paper copies, execution records, source locks, or private build history are included.
+The partition, reference, prediction schema and both included contracts retain their previous source bytes. The scoring module preserves finite participant means when an intermediate sum overflows, while retaining the original successful arithmetic, equal-person weighting and target-last barrier. The window reader now binds absolute acquisition sample numbers to the reader’s first_samp and translates them into zero-based get_data indices; its complete acquisition-start history and deadline support are checked before the first signal read. This README is only a scope summary; it does not replace or amend either contract. No recordings, participant identifiers, targets, predictions, primary-paper copies, execution records, source locks, or private build history are included.
 
 ## Prerequisites still open
 
@@ -27,4 +27,34 @@ The code uses Python standard-library `dataclasses` and `math`. Python 3.11 or l
 
 ## Generated scoring regression checks
 
-Run `python3 -I -S -B components/neural003-causal-rt/test_scoring.py` from the repository root. The seven tests use the actual public prediction schema and scorer with invented complete26-person/52-product inputs. `fixtures/scoring_before_overflow.py` is the ordinary predecessor regression fixture (2,737 bytes; SHA-256 `11299c87f9b0a4affa50bdaff57cad8923a2b1599effb90e767f82cad6761d45`), not an alternative runtime. No authentic targets or private history are included. The existing scientific-contracts CI job runs the same checks. The new internal mean materializes a tuple; its authentic aggregate memory/CPU cost remains unqualified.
+Run `python3 -I -S -B benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/test_scoring.py` from the repository root. The 12 tests use the actual public prediction schema and scorer with invented complete26-person/52-product inputs. `fixtures/scoring_before_overflow.py` is the ordinary predecessor regression fixture (2,737 bytes; SHA-256 `11299c87f9b0a4affa50bdaff57cad8923a2b1599effb90e767f82cad6761d45`), not an alternative runtime. No authentic targets or private history are included. The existing scientific-contracts CI job runs the same checks. The new internal mean materializes a tuple; its authentic aggregate memory/CPU cost remains unqualified.
+
+## Acquisition sample coordinates
+
+`Schedule` fields and response sample numbers use the original acquisition's
+absolute integer sample numbering. `raw.first_samp` must equal the independently
+supplied `session_start`; `raw.n_times` must cover the entire required prefix.
+Only the arguments sent to `raw.get_data` are translated to zero-based reader
+offsets. A later crop cannot supply the omitted filter history by changing the
+reader start alone. Authentication of the original acquisition and its onset
+join remains the caller's unresolved prerequisite.
+
+The previous code passed absolute coordinates directly as reader offsets. For a
+reader starting at sample2000, a schedule beginning at2000 requested data starting
+at offset2000 (absolute sample4000). Expected array shape did not detect that
+shift. This was a downstream coordinate hazard; no authentic recording or past
+scientific outcome has been shown affected.
+
+The [official MNE Raw documentation](https://mne.tools/stable/generated/mne.io.Raw.html#mne.io.Raw.get_data)
+describes zero-based start/stop indexing and the separate first-sample timeline;
+its crop documentation explains preservation of nonzero `first_samp`. This was
+reviewed as hosted documentation, not used to qualify an installed MNE runtime.
+
+`test_window_grid.py` uses a generated MNE-interface-shaped reader, not MNE or
+neural data. It verifies nonzero-origin translation, zero-origin equivalence to
+the retained predecessor fixture, future-only perturbation invariance, complete
+history, and refusal of absent/mismatched/short sample grids before reading.
+It also verifies that a forged `Schedule` cannot alter early-response eligibility.
+Run from this implementation directory with `python3 -I -S -B test_window_grid.py`
+through the shared construction test pool. These controls do not establish
+hardware timing, acquisition authentication, physical I/O causality or task readiness.

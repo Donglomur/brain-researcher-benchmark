@@ -1,0 +1,61 @@
+{
+  "schema": "treebank-observation-verifier-source/v1",
+  "task_id": "PAPER-paper-method-replacement-011",
+  "role": "owner-only independent observed score arithmetic; no scientific or runtime admission",
+  "author_revision": "c54ba38eab7814538bc03b1b6d29a3f50f034e12",
+  "paper_url": "https://proceedings.nips.cc/paper_files/paper/2024/file/aefa2385b3f33abf1526ae4e2c208cd9-Paper-Datasets_and_Benchmarks_Track.pdf",
+  "selected_scope": "Complete original Figure4a-c sentence-onset/no-speech; not reduced by this component",
+  "existing_producer_dependencies": [
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/treebank-figure4-producer-v2/observation.py",
+      "bytes": 21344,
+      "sha256": "1255b571d7a03efc248ec91d22199df5140abf084da6e903f892b497f8811cac"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/treebank-figure4-producer-v2/support_checks.py",
+      "bytes": 9025,
+      "sha256": "0474032cb591162a64012bc7565c4ac5d2b2267032632362ec2bf59d9d13e1f9"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/treebank-figure4-producer-v2/replay.py",
+      "bytes": 18675,
+      "sha256": "f5a7d2cd6fd82d64c26846ac48c5cf4fe3820c05ccf63f1e1ebf9ac6aa8f9c4c"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/treebank-figure4-producer-v2/SOURCE_BINDINGS.json",
+      "bytes": 5316,
+      "sha256": "31f160bf6b44aa76e59e677afcb2613bc93c12d3f22d12b98aebff357c47f027"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/treebank-figure4-producer-v2/tests/test_observation.py",
+      "bytes": 18508,
+      "sha256": "5f5b9d50d5f31b9d9773d330b5e694594283ae89f2f56abd77c21b1f0fd815be"
+    }
+  ],
+  "author_source": [
+    {
+      "url": "https://github.com/czlwang/brain_treebank_code_release/blob/c54ba38eab7814538bc03b1b6d29a3f50f034e12/regression_runner.py",
+      "locator": "RegressionRunnerTestSet.split_and_train_and_test",
+      "retained_text_bytes": 5694,
+      "retained_text_sha256": "8bfe5a7ccce6c4a6c164295e13768140c732828ee0bf2d3bfa91639ee23ea919",
+      "semantics": "training StandardScaler/logistic regression; five fold AUC mean; final roc_auc_score(y_test,predict_proba(X_test)[:,1])",
+      "qualification": "Local retained author text inspected; this component does not authenticate the original Git tree or runtime."
+    },
+    {
+      "url": "https://github.com/czlwang/brain_treebank_code_release/blob/c54ba38eab7814538bc03b1b6d29a3f50f034e12/tasks/utils.py",
+      "locator": "split_dataset lines80-92",
+      "retained_html_sha256": "887ab72d1e040a520bcef8d2092ad22336703e157329ce73843fd8e6c96eb1bd",
+      "rawLines_derivative_sha256": "b5de8048da1ab55e071c08ec1a657592e75a72af4152b49ef861e581ad2b573e",
+      "semantics": "split indices and raw encoded labels determine exact original test row order",
+      "qualification": "Inspected retained GitHub HTML rawLines, not raw Git-blob authentication."
+    }
+  ],
+  "implementation": "Independently written standard-library rank/pair-count AUC and source observation join; no author source vendored",
+  "limits": [
+    "Declared manifest support is not authenticated original support.",
+    "No CV out-of-fold predictions are observed; fold AUCs are not independently recomputed.",
+    "Source-support disagreements remain separate and do not establish shared-case admission.",
+    "Successful score arithmetic does not establish source checkout, data, runtime, training provenance or producer completion.",
+    "Paper reproduction, improvement, benchmark readiness and AI outcomes remain unqualified."
+  ]
+}

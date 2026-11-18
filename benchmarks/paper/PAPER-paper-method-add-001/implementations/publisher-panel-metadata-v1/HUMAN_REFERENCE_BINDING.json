@@ -1,0 +1,107 @@
+{
+  "schema": "nomad-published-reference-binding/v1",
+  "task_id": "PAPER-paper-method-add-001",
+  "reference_artifact": {
+    "file": "HUMAN_REFERENCE_CELLS.json",
+    "bytes": 39481,
+    "sha256": "06ca1466155f96a159c2ea7db197f3fd9558bb0589621e50643b206178b0cbd5",
+    "role": "publisher-reported reference cells; not reproduced or improved results"
+  },
+  "publisher_workbook": {
+    "url": "https://pmc-oa-opendata.s3.amazonaws.com/PMC12089531.1/41467_2025_59652_MOESM4_ESM.xlsx?md5=93d1ffcae2bf540a9bbe474f502a72a4",
+    "bytes": 3077326,
+    "sha256": "58c45c042767ffeda0c03e34446656dc3ddb7994a52c157436d0c8a6adfd7ab4"
+  },
+  "paper": {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12089531/",
+    "doi": "10.1038/s41467-025-59652-y",
+    "title": "Stabilizing brain-computer interfaces through alignment of latent dynamics",
+    "access": "Official PMC page rendered through web tool; one distinct page, no authenticated raw body acquired or claimed.",
+    "primary_locators": [
+      "Results: NoMAD is complementary to retrospective decoder recalibration approaches",
+      "Figure 5 caption, panels b and c",
+      "Methods: Retrospective target inference (RTI)",
+      "Methods: Neural decoding / Wiener filter",
+      "Methods: Evaluation of decoding performance, Equation 4"
+    ]
+  },
+  "common_endpoint": "Predicted versus estimated intended cursor-velocity R2 in two T11 sessions; optimal linear estimator, one history bin; variance-weighted multidimensional R2.",
+  "columns": [
+    {
+      "worksheet_column": "B",
+      "literal_header": "Static decoder R2",
+      "paper_method": "Static decoder",
+      "representation": "Smoothed spikes",
+      "update": "Fixed decoder",
+      "primary_locators": [
+        "Figure 5 caption",
+        "Results paragraphs after Figure 5"
+      ]
+    },
+    {
+      "worksheet_column": "C",
+      "literal_header": "RTI R2",
+      "paper_method": "RTI",
+      "representation": "Smoothed spikes",
+      "update": "Decoder refitted using previous blocks",
+      "primary_locators": [
+        "Figure 5 caption",
+        "Results paragraphs after Figure 5",
+        "Methods: Retrospective target inference (RTI)"
+      ]
+    },
+    {
+      "worksheet_column": "D",
+      "literal_header": "NoMAD R2",
+      "paper_method": "NoMAD",
+      "representation": "LFADS Generator states",
+      "update": "Unsupervised alignment; fixed decoder",
+      "primary_locators": [
+        "Figure 5 caption",
+        "Results paragraphs before and after Figure 5"
+      ]
+    },
+    {
+      "worksheet_column": "E",
+      "literal_header": "NoMAD + RTI R2",
+      "paper_method": "NoMAD + RTI",
+      "representation": "LFADS Generator states",
+      "update": "Alignment plus previous-block decoder refitting",
+      "primary_locators": [
+        "Figure 5 caption",
+        "Results paragraphs before and after Figure 5",
+        "Methods: Retrospective target inference (RTI)"
+      ]
+    }
+  ],
+  "support_notes": [
+    "The caption distinguishes calibration, first evaluation without updates, and later updated evaluations using plot markers.",
+    "Intended movements use a 500 ms trajectory; eligible movement windows extend to 600 ms or target acquisition. Exact tail handling remains unresolved."
+  ],
+  "unresolved": [
+    "The prior saved worksheet labels match the four paper methods; this is a semantic column binding, not a reproduction result.",
+    "Paper marker roles are not an authenticated mapping from worksheet row numbers to original recording blocks.",
+    "Timestamp units, source clock origin, date-system application and the relation of cell display formats to experimental time must remain explicit; formatting alone does not authenticate recording identities.",
+    "Retain all 18 source row slots and all 72 published result slots, including missing, nonfinite and formula/cached distinctions. Do not choose a subset or substitute a new endpoint.",
+    "Published references may inform later comparisons only after raw support, author replay, recipe, evaluation metric and original chronology are independently qualified.",
+    "An extraction report must label the values as publisher-reported reference data; neither retrieval nor parsing is reproduction, improvement or a new benchmark."
+  ],
+  "observation": {
+    "published_panel_b_row_slots": 8,
+    "published_panel_c_row_slots": 10,
+    "timestamp_cells": 18,
+    "published_r2_cells": 72,
+    "all_selected_numeric_lexical_values_finite": true,
+    "selected_formula_cells": 0,
+    "selected_missing_cells_or_values": 0,
+    "date_system_style_limit": "Timestamp cells have general number format ID0; both workbook date flags absent; no timestamp-unit or original recording identity established."
+  },
+  "scientific_status": {
+    "source_reference_extracted": true,
+    "original_row_support_qualified": false,
+    "author_replay_established": false,
+    "reproduction_established": false,
+    "improvement_established": false,
+    "readiness_promoted": false
+  }
+}

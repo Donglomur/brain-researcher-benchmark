@@ -29,7 +29,11 @@ The two newly authenticated figure notebooks have no cached outputs.
 * P03: `compute_pupil_pred.py`, lines 32–45, derives population-variance outliers
   separately within animal, using linear-interpolated 25th/75th percentiles and
   strict outside `Q1 - 2*IQR` / `Q3 + 2*IQR` boundaries. The operator's complete
-  pre-z-score target supports this selection. Historical denominators must be
+  pre-z-score target supports this selection. Constant traces enter this full variance calculation; only retained sessions
+  must have nonzero variance for subsequent z-scoring. An excluded constant
+  session remains part of the42-session neural assay. See
+  `PUPIL_SELECTION_SOURCE.json` for the exact-release browser observation and
+  authentication limit. Historical denominators must be
   Pe16/Wa9/Sa16; a mismatch is a diagnostic refusal, never permission to force a
   particular exclusion. Lines 67–88 z-score each entire retained session and fit
   OLS with `CROSSVAL=False`. Report R² = 1 − SSE/SST from every prediction.

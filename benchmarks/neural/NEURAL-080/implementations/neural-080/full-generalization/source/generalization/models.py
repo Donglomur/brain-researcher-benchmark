@@ -356,22 +356,77 @@ class TargetScale:
 
 
 def fit_target_scale(raw_targets, weights, owner):
+    """Return mean, population sigma, and same-basis standardized TRAIN values.
+
+    Each coordinate is anchored at an observed TRAIN value, then divided by its
+    maximum TRAIN deviation before evaluating weighted moments. This avoids
+    squaring dimensional tiny/large deviations and computing variance around a
+    rounded large-offset mean. All 19,050 coordinates must remain nonconstant.
+
+    The stored mean is necessarily one representable float64 value. As in the
+    predecessor's interface, standardized values use that stored mean; their
+    weighted mean can be nonzero at machine precision. prepare_ridge's explicit
+    target intercept handles it. Do not silently assume a zero intercept.
+    """
     import numpy as np
-    need(raw_targets.ndim == 2 and raw_targets.shape[1] == 127 * 150 and
-         raw_targets.shape[0] == len(weights), "Complete target fit basis")
-    reserve_array(owner, tuple(map(int, raw_targets.shape)), copies=3)
-    reserve_array(owner, (127 * 150,), copies=3)
-    mean = weights @ raw_targets
-    centered = raw_targets - mean
-    sigma = np.sqrt(weights @ (centered ** 2))
-    constant = np.all(raw_targets == raw_targets[0], axis=0)
-    need(not constant.any() and np.isfinite(mean).all() and np.isfinite(sigma).all() and
-         np.all(sigma > 0), "Undefined or constant target coordinate makes full case unavailable")
+
+    need(type(raw_targets) is np.ndarray and raw_targets.ndim == 2 and
+          raw_targets.shape[1] == (127 * 150) and raw_targets.shape[0] >= 2 and
+          raw_targets.dtype == np.dtype('float64'),
+          'Complete float64 TRAIN matrix with 127 channels by 150 bins required')
+    need(type(weights) is np.ndarray and weights.shape == (raw_targets.shape[0],) and
+          weights.dtype == np.dtype('float64'), 'Aligned float64 TRAIN weights required')
+    # The source Owner counts cumulative logical payload allocation, not peak
+    # resident memory. Charge conservative temporaries before their allocation.
+    owner.reserve('retained_bytes', raw_targets.nbytes * 6 + (127 * 150) * 8 * 9 +
+                  weights.nbytes * 3 + raw_targets.size + weights.size)
+    need(np.isfinite(raw_targets).all() and np.isfinite(weights).all() and
+          np.all(weights > 0), 'Finite complete TRAIN values and positive weights required')
+    total = weights.sum()
+    need(np.isfinite(total) and abs(float(total) - 1.0) <= 32 * np.finfo(np.float64).eps,
+          'Source family/person weights must already be normalized')
+    # Remove accumulated roundoff in the sum; do not accept arbitrary weights.
+    normalized_weights = weights / total
+    anchor = raw_targets[0]
+    with np.errstate(over='ignore', invalid='ignore', under='ignore', divide='ignore'):
+        shifted = raw_targets - anchor
+        need(np.isfinite(shifted).all(), 'TRAIN deviations are not representable')
+        spread = np.max(np.abs(shifted), axis=0)
+        need(np.all(spread > 0), 'Constant target coordinate makes the complete case unavailable')
+        shifted /= spread
+        centered_mean = normalized_weights @ shifted
+        centered = shifted - centered_mean
+        variance = normalized_weights @ (centered * centered)
+        sigma = spread * np.sqrt(variance)
+        mean = anchor + spread * centered_mean
+        need(np.isfinite(mean).all() and np.isfinite(sigma).all() and np.all(sigma > 0),
+              'Every TRAIN target mean and positive sigma must be representable')
+        standardized = (raw_targets - mean) / sigma
+    need(np.isfinite(standardized).all(), 'Finite full standardized target matrix required')
     mean.setflags(write=False)
     sigma.setflags(write=False)
-    standardized = centered / sigma
-    need(np.isfinite(standardized).all(), "Finite full standardized target matrix")
     return TargetScale(mean, sigma), standardized
+
+
+def verify_captured_target_scale(raw_targets, weights, captured_mean, captured_sigma, owner):
+    """Reconstruct TRAIN scale and reject numerically mismatching captures.
+
+    Both reference fitting and this scorer boundary use fit_target_scale. The
+    supplied captures remain original-unit full 127-by-150 arrays. Equal values
+    do not prove source provenance: source-tree binding and rebuild stay external.
+    """
+    import numpy as np
+    for value in (captured_mean, captured_sigma):
+        need(type(value) is np.ndarray and value.shape == TARGET_SHAPE and
+             value.dtype == np.dtype("float64"),
+             "Captured TRAIN scale must retain the complete float64 target basis")
+    exact, standardized = fit_target_scale(raw_targets, weights, owner)
+    need(np.array_equal(exact.mean.reshape(TARGET_SHAPE), captured_mean) and
+         np.array_equal(exact.sigma.reshape(TARGET_SHAPE), captured_sigma),
+         "Captured mean/sigma must equal the exact selected outer TRAIN-only transform")
+    # Do not return standardized training values to a participant or scorer caller.
+    del standardized
+
 
 
 @dataclass(frozen=True)

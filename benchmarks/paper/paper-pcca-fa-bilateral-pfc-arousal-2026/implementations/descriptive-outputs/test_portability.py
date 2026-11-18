@@ -21,6 +21,15 @@ def module(path):
 
 
 class PortableSource(unittest.TestCase):
+    def test_source_ordered_pupil_selection_controls(self):
+        fixture_module = module(ROOT / "test_evaluate.py")
+        suite = unittest.defaultTestLoader.loadTestsFromTestCase(
+            fixture_module.PupilSelection)
+        result = unittest.TestResult()
+        suite.run(result)
+        self.assertTrue(result.wasSuccessful(), result.errors + result.failures)
+        self.assertFalse(result.skipped)
+
     def test_complete_inventory_and_claims(self):
         inventory = json.loads((ROOT / "SOURCE_MANIFEST.json").read_bytes())
         expected = {r["path"] for r in inventory["files"]} | {"SOURCE_MANIFEST.json"}

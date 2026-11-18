@@ -14,6 +14,15 @@ REGRESSIONS = ROOT / "benchmarks/neural/NEURAL-003/implementations/causal-reacti
 
 
 class NumericNeural003(unittest.TestCase):
+    def test_generated_causal_sample_grid_regressions(self):
+        grid_tests = REGRESSIONS.with_name("test_window_grid.py")
+        result = subprocess.run(
+            [sys.executable, "-I", "-S", "-B", str(grid_tests)],
+            cwd=ROOT, capture_output=True, text=True, timeout=10,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("Ran 9 tests", result.stderr)
+
     def test_invented_full_roster_regressions(self):
         result = subprocess.run(
             [sys.executable, "-I", "-S", "-B", str(REGRESSIONS)],

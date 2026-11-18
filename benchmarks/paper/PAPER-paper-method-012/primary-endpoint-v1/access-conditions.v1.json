@@ -3,7 +3,7 @@
   "task_id": "PAPER-paper-method-012",
   "status": "unresolved",
   "selection": "selection.v1.json",
-  "source_defined_input_scope": "Source S1 Data (10.1371/journal.pcbi.1012934.s002) Position and R_neuron_binned. Neural responses are decoder inputs, spatial labels are training targets and protected held-out answers. Preserve the original discretization and observation order, cap of four response labels and original conditional shuffles.",
+  "source_defined_input_scope": "Authenticated S1 Data (10.1371/journal.pcbi.1012934.s002) contains CA1_data/CA1_data.mat (168241 bytes; SHA256 68819d601f9a019d1ca447424e6bc9366f43f89ba09ccb836ebc190842f8eaa0): neuro_struct has 11 recorded structs with Positions (1 x T), Binary (N x T) and ROI (N x 1). The driver instead expects Hippocampus_data with Position and R_neuron_binned; these are candidate structural aliases, not established semantic equivalents. Neural responses are decoder inputs; spatial labels are training targets and protected held-out answers. Preserve record, neuron and observation identity/order and original conditional-shuffle semantics. Population decoding receives uncapped R; cap 4 applies only to local pair-analysis copies. No automatic alias, cast, rebinning, cap, transpose, filtering or replacement split is authorized.",
   "original_split": "Resolve reported five trial folds versus pinned twofold population-SVM options, separately from optimization folds; recover exact original partitions and nested tuning. No new animal holdout or favorable fold selection.",
   "common_artifacts": "Authenticated original CA1 observations and approved exact stimulus/response representation only; disclose any common prepared arrays and correction implementation. No fitted decoders, answer-bearing fold outputs or algorithm-bearing author solution in paper_data.",
   "common_input_manifest_sha256": null,
@@ -12,7 +12,7 @@
     "paper_data": {
       "available": [
         "Original paper and selected-task contract",
-        "Source S1 Data (10.1371/journal.pcbi.1012934.s002) Position and R_neuron_binned. Neural responses are decoder inputs, spatial labels are training targets and protected held-out answers. Preserve the original discretization and observation order, cap of four response labels and original conditional shuffles.",
+        "Authenticated S1 Data (10.1371/journal.pcbi.1012934.s002) contains CA1_data/CA1_data.mat (168241 bytes; SHA256 68819d601f9a019d1ca447424e6bc9366f43f89ba09ccb836ebc190842f8eaa0): neuro_struct has 11 recorded structs with Positions (1 x T), Binary (N x T) and ROI (N x 1). The driver instead expects Hippocampus_data with Position and R_neuron_binned; these are candidate structural aliases, not established semantic equivalents. Neural responses are decoder inputs; spatial labels are training targets and protected held-out answers. Preserve record, neuron and observation identity/order and original conditional-shuffle semantics. Population decoding receives uncapped R; cap 4 applies only to local pair-analysis copies. No automatic alias, cast, rebinning, cap, transpose, filtering or replacement split is authorized.",
         "Authenticated original CA1 observations and approved exact stimulus/response representation only; disclose any common prepared arrays and correction implementation. No fitted decoders, answer-bearing fold outputs or algorithm-bearing author solution in paper_data."
       ],
       "excluded": [
@@ -42,7 +42,7 @@
     "resource": null
   },
   "blocking_issues": [
-    "Authenticate S1 payload and original animal/session/response/stimulus membership and spatial-bin conventions.",
+    "S1 object identity and all 11 direct schemas are authenticated. Resolve their semantic binding to the author driver, original animal/session/observation membership and spatial-bin conventions; shape and pair-count agreement alone do not resolve these.",
     "Resolve fivefold paper versus twofold source and exact nested optimization/outer trial partitions.",
     "Resolve swapped shuffled-linear/RBF assignments and caption stimulus-column inconsistency; direct-MI commented call must not silently supply decoder outputs.",
     "Recover native confusion counts, all session/fold outputs and exact original aggregate/reference vectors.",

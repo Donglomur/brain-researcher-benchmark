@@ -50,7 +50,8 @@ class ParticipantEndpointTests(unittest.TestCase):
 
     def summarize(self):
         return endpoint.participant_endpoints(reporting, 'GENERATED', self.expected,
-                                             self.terminals, self.outcomes, self.pairing, CONTRASTS)
+                                             self.terminals, self.outcomes, self.pairing, CONTRASTS,
+                                             registry=registry)
 
     def test_ten_person_effects_and_seed_average_have_hand_computed_values(self):
         result = self.summarize()
@@ -103,6 +104,77 @@ class ParticipantEndpointTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'exact cell'):
             self.summarize()
 
+    def test_removing_one_seed_for_all_people_cannot_shrink_denominator(self):
+        removed = [cell for cell in self.expected
+                   if cell['evaluated_system'] == 'GENERATED' and cell['mode'] == 'F'
+                   and cell['tool_setting'] == 'T0' and cell['arm'] == 'FULL'
+                   and cell['seed'] == registry.SEEDS[-1]]
+        self.assertEqual(len(removed), 10)
+        for cell in removed:
+            self.expected.remove(cell)
+            self.terminals.pop(registry.token(cell))
+            self.outcomes.pop(registry.token(cell))
+        with self.assertRaisesRegex(ValueError, 'full 960-cell expected denominator'):
+            self.summarize()
+
+    def test_unexpected_terminal_is_not_silently_discarded(self):
+        self.terminals['foreign-cell'] = copy.deepcopy(next(iter(self.terminals.values())))
+        with self.assertRaisesRegex(ValueError, 'terminal roster'):
+            self.summarize()
+
+    def test_same_count_seed_substitution_cannot_hide_missing_required_cells(self):
+        removed = [cell for cell in self.expected
+                   if cell['evaluated_system'] == 'GENERATED' and cell['mode'] == 'F'
+                   and cell['tool_setting'] == 'T0' and cell['arm'] == 'FULL'
+                   and cell['seed'] == registry.SEEDS[-1]]
+        for cell in removed:
+            original_token = registry.token(cell)
+            replacement = dict(cell, arm='IMAGE_ONLY', seed=123456789)
+            replacement_token = registry.token(replacement)
+            self.expected[self.expected.index(cell)] = replacement
+            terminal = self.terminals.pop(original_token)
+            terminal['cell_key'] = replacement
+            self.terminals[replacement_token] = terminal
+            self.outcomes[replacement_token] = self.outcomes.pop(original_token)
+        self.assertEqual(len(self.expected), 960)
+        self.assertEqual(len({registry.token(cell) for cell in self.expected}), 960)
+        with self.assertRaisesRegex(ValueError, 'exact canonical campaign'):
+            self.summarize()
+
+    def test_duplicated_overlong_query_row_is_rejected_before_averaging(self):
+        row = self.outcomes[registry.token(self.expected[0])]
+        row['query_ids'].append(row['query_ids'][0])
+        for values in row['metrics'].values():
+            values.append(values[0])
+        with self.assertRaisesRegex(ValueError, 'exactly 200 unique query IDs'):
+            self.summarize()
+
+    def test_extra_raw_metric_is_not_silently_dropped(self):
+        row = self.outcomes[registry.token(self.expected[0])]
+        row['metrics']['unregistered_metric'] = [0.0] * 200
+        with self.assertRaisesRegex(ValueError, 'exactly the original endpoint metrics'):
+            self.summarize()
+
+    def test_short_raw_metric_is_rejected_before_indexing(self):
+        self.outcomes[registry.token(self.expected[0])]['metrics']['Brier'].pop()
+        with self.assertRaisesRegex(ValueError, 'exactly 200 query values'):
+            self.summarize()
+
+    def test_missing_valid_cell_outcome_remains_unavailable(self):
+        self.outcomes.pop(registry.token(self.expected[0]))
+        result = self.summarize()
+        self.assertEqual(result['paired_person_effects'][0]['status'], 'unavailable')
+        self.assertEqual(result['unavailable_conditions'][0]['required_cells'], 30)
+        self.assertEqual(len(result['unavailable_conditions'][0]['missing']), 1)
+
+    def test_joint_query_and_metric_permutation_keeps_original_identity_join(self):
+        before = self.summarize()
+        row = self.outcomes[registry.token(self.expected[0])]
+        row['query_ids'].reverse()
+        for values in row['metrics'].values():
+            values.reverse()
+        self.assertEqual(self.summarize(), before)
+
     def test_infinite_nll_is_retained_and_difference_is_undefined(self):
         for cell in self.expected:
             if cell['outer_person'] == 'sub-01':
@@ -137,7 +209,8 @@ class ParticipantEndpointTests(unittest.TestCase):
             return original
         facade.paired_report = retained
         result = endpoint.paired_report(facade, 'GENERATED', self.expected, self.terminals,
-                                       self.outcomes, self.pairing, {}, CONTRASTS, {}, lambda stage: None)
+                                       self.outcomes, self.pairing, {}, CONTRASTS, {}, lambda stage: None,
+                                       registry=registry)
         self.assertEqual(len(calls), 1)
         self.assertEqual(original, saved)
         result.pop('participant_endpoints')

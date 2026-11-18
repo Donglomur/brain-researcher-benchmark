@@ -1,0 +1,78 @@
+{
+  "schema": "opm-spatial-source-kernel-source/v1",
+  "task_id": "PAPER-paper-signal-add-005",
+  "source_revision": "0eb3a56af3d0e3a44b0f65c364e999f69cd4563f",
+  "scope": "supplied-operand spatial source map arithmetic; neither full primary reconstruction nor improvement",
+  "source_observations": [
+    {
+      "url": "https://raw.githubusercontent.com/LukasRier/RierRhodes_2024_Neurodevelopmental_OPMMEG/0eb3a56af3d0e3a44b0f65c364e999f69cd4563f/index_pinky_Tstat_func.m",
+      "browser_zero_based_lines": [
+        "367-383",
+        "424-469",
+        "499-525",
+        "622-664"
+      ],
+      "observed": "Two tangential fields; separate finger covariance; 5% maximal-singular loading; minimum inverse-power singular orientation; normalized active-rest power difference; first minimum voxel; noise-normalized virtual electrode.",
+      "raw_file_sha256": null,
+      "verification": "browser text only, fixed revision URL; raw bytes not acquired"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/LukasRier/RierRhodes_2024_Neurodevelopmental_OPMMEG/0eb3a56af3d0e3a44b0f65c364e999f69cd4563f/index_pinky_peak_TFS_func.m",
+      "browser_zero_based_lines": [
+        "365-381",
+        "425-471",
+        "506-522",
+        "525-549"
+      ],
+      "observed": "Broadband own/opposite finger virtual-electrode branches use each trial condition covariance. Spectrum helper differs from beta normalization.",
+      "raw_file_sha256": null,
+      "verification": "browser text only, fixed revision URL; raw bytes not acquired"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/LukasRier/RierRhodes_2024_Neurodevelopmental_OPMMEG/0eb3a56af3d0e3a44b0f65c364e999f69cd4563f/RESULTS_Plots_Beta_modulation_diff.m",
+      "browser_zero_based_lines": [
+        "23-48",
+        "119-136",
+        "635-662"
+      ],
+      "observed": "Fixed adult inclusion and spectral helper inspected for context only; no new cohort or spectral reconstruction implemented.",
+      "raw_file_sha256": null,
+      "verification": "browser text only, fixed revision URL; raw bytes not acquired"
+    },
+    {
+      "url": "https://elifesciences.org/articles/94561",
+      "status": "publisher_client_challenge",
+      "observation": "No fresh article content obtained; no source claim derived from challenge page."
+    }
+  ],
+  "existing_component_pins": [
+    {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-005/task.json",
+      "bytes": 32305,
+      "sha256": "26a9b1f964aab274e51ae079d5866ce05f97d4d0377b07e783f76bfbec03d5bf"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-005/outcomes.v1.json",
+      "bytes": 3890,
+      "sha256": "2777aff2374cceb427b1bec4301af32d2e41b7acc06c6f6383410907f420482c"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/beta_evaluator.py",
+      "bytes": 21579,
+      "sha256": "7baf4c56b895b75927dc59d0f7a0f0f2d91425617c5b3e7e64b918a159db3955"
+    },
+    {
+      "path": "benchmarks/paper/PAPER-paper-signal-add-005/implementations/geometry-reproduction-v1/geometry.py",
+      "bytes": 10979,
+      "sha256": "9c95e19d854f8d6bb8952159d3f3a0745b3cf5069dac7c60acbf0b448e8d13d7"
+    }
+  ],
+  "implementation_policies": [
+    "Use linear solves rather than explicit inversion; no native numerical parity asserted.",
+    "Require finite real matching operands; reject singular or numerically degenerate orientation and abort complete map instead of dropping voxel.",
+    "Source and mesh coordinates supplied in common metre frame; no authentication inferred from dimensions or prose.",
+    "Do not infer biological cohort, filter provenance, calibration, source result or improvement criterion."
+  ],
+  "scientific_outcome": "unknown",
+  "readiness_promoted": false
+}
