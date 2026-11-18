@@ -271,8 +271,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-diagnostics/COVARIATE_MAPPING.json",
-                  "bytes": 1482,
-                  "sha256": "8812662ddd5403f138e024cfb8df48e84d7706430df7d0a96483685e4480c5a4"
+                  "bytes": 1827,
+                  "sha256": "3dd3555a4f9edec9497b22bb3004fc0057e97e4dd9e0f1a797c5cda815366244"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-diagnostics/cohort.schema.json",
@@ -316,8 +316,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/README.md",
-                  "bytes": 10824,
-                  "sha256": "92ef1484e947211991463b6b873c876428eae9d4b71d32e515fb0ab9af11f463"
+                  "bytes": 11440,
+                  "sha256": "ba249155e1a21ac2dbea8ac9084beb3d319cfa1b7a23f2b439144d0527721f4a"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1/SOURCE_BINDING.json",
@@ -378,7 +378,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-add-004/implementations/sensitivity-glm-v1"
           ]
           assert len(rows) == 64 > 0
-          assert sum(row['bytes'] for row in rows) == 871599 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 872560 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -421,7 +421,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 871599,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 872560,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

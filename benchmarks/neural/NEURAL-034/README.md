@@ -55,6 +55,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Fold viewer v1](implementations/fold-viewer-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Viewer grading v1](implementations/viewer-grading-v1) — Reviewed source component.
+  Scope: Reviewed viewer-grading source and generated controls for the existing NEURAL-034 task. Current task definitions and authentic runtime qualification remain separately governed.
 - [Authentic programme receipt v1](implementations/authentic-programme-receipt-v1) — Metadata only source evidence.
   Scope: Metadata receipt component only; it contributes no executable source selection. Reviewed authentic programme or runtime-prerequisite source and its scoped engineering receipts. A scripted transport control does not establish typed-viewer use, general participant execution, model/provider success, protected runtime or scientific qualification; retained failed attempts and receipt limits remain applicable.
 - [Authentic programme v1](implementations/authentic-programme-v1) — Reviewed source component.

@@ -26,7 +26,6 @@ This version selects an exact author-reported computational result as the primar
 
 **Remaining reproduction/source limits:**
 
-- Confirm author-final Figure3 r0.43(all1500) and r0.30(baseline1000) against final publication; rounded values are not exact acceptance thresholds.
 - Authenticate complete original training responses/feature rows, response normalization, official model-selection and strongest relevant author predictor/reference on this exact panel; saved author predictions are not an independent refit.
 - Bind authentic candidate prediction/output manifests, original item/condition rows, runtime and a source-matched author fit/apply execution; no qualifying execution is supplied here.
 - Finalize common source inputs and code-only assistance manifests, paired budgets, candidate freeze and evaluator-owned target isolation. Original public responses/predictions are historically exposed.
@@ -59,7 +58,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 26139 bytes; SHA-256 `fd4c7a210a744db46fec141dab981ad4aa41f244a5d50e962bc5d41a020ff3a6`.
+- Specification identity: 25856 bytes; SHA-256 `d3df839acac4c161e05ff203a9db262259216bbc4d59f5995f9d2678532ddda0`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -71,6 +70,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. This retained scoring facade requires 3 source or input dependencies absent from the public baseline. Correcting its repository locator does not make it runnable from this checkout alone. This limit does not apply automatically to sibling implementations of the task. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Claim evidence](implementations/claim-evidence) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Author final reference 20261117 v1](contracts/author-final-reference-20261117-v1) — Metadata only source evidence.
+  Scope: Five retained predecessor reference documents under a dedicated artifact owner. Their byte identities and historical endpoint registry row remain unchanged; this source layout creates no scientific qualification.
 - [Original fig3 v1](implementations/original-fig3-v1) — Reviewed source component.
   Scope: Original Fig. 3 source-row endpoint. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

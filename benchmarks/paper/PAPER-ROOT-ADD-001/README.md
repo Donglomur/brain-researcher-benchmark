@@ -47,10 +47,14 @@ The current definition supports two independent outcomes: recreate the original 
 
 **Disposition:** design\_ready.
 
+**Selected original Figure3b improvement:** continuous paired candidate-minus-author Pearson delta at layer 5/lags 17–19 over all 14 sessions/eight people. Full 224-array reproduction remains separate. Selected input preparation and the fixed time-only engineering traversal are not AI outcomes or baseline reproduction. All four cells remain unknown; no binary win, population inference or current SOTA is admitted.
+
+- [Authenticated Figure3b scope decision](docs/proposals/figure3b-improvement-scope-v1/ROOT_SELECTION.json)
+
 The reference successor records author-provided-array/current-runtime measurements. It does not establish AI reproduction, fresh author training, paired improvement or scientific qualification. The retained scope decision above keeps its historical limits; the selected current contracts record reference recovery and remaining obligations.
 
-- [Selected current improvement contract](improvement.reference.v1.json)
-- [Authenticated reference successor](reference-successor.v1.json)
+- [Selected current improvement contract](improvement.figure3b.v1.json)
+- [Authenticated reference successor](figure3b-successor.v1.json)
 - [Provided-author reference report](docs/provenance/original-reference-20261117/REFERENCE.json)
 - [Reference recovery receipt](docs/provenance/original-reference-20261117/RECEIPT.json)
 
@@ -92,7 +96,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 31718 bytes; SHA-256 `5c4e1af6794f068015c5750e2d99e1560b35f04cb472c56446f01c884a237029`.
+- Specification identity: 28518 bytes; SHA-256 `7cc30f5590ebbeb0a8c7114e2df70e1fe2f1d34821684bea4d1998dce2442098`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -122,6 +126,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Archived Figure3b proposal: predecessor.improvement.reference.v1.json (not current definition)](docs/proposals/figure3b-improvement-scope-v1/predecessor.improvement.reference.v1.json)
 - [Archived Figure3b proposal: predecessor.task.json (not current definition)](docs/proposals/figure3b-improvement-scope-v1/predecessor.task.json)
 - [Archived Figure3b proposal: task.proposed.json (not current definition)](docs/proposals/figure3b-improvement-scope-v1/task.proposed.json)
+- [Immediate predecessor before Figure 3b definition adoption — provenance/current-definition-pre-figure3b-20261117/task.json](docs/provenance/current-definition-pre-figure3b-20261117/task.json)
+- [Immediate predecessor before Figure 3b definition adoption — provenance/current-definition-pre-figure3b-20261117/outcomes.v1.json](docs/provenance/current-definition-pre-figure3b-20261117/outcomes.v1.json)
 
 ## Implementation artifacts
 
@@ -135,6 +141,10 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Original 196-member, 14-session input and 224-result prediction construction retains the source Figure 3 reducer and original population distinctions. Authentic source preparation, historical numerical reference parity, unit joins and protected same-task candidate custody remain separate; generated callbacks are not model results.
 - [Original prediction submission v1](implementations/original-prediction-submission-v1) — Reviewed source component.
   Scope: Frozen raw-prediction submission transport covers the original 14-session, eight-person, 58,926-job source panel, private operator-held target recomputation and all 224 result files. Generated controls do not establish protected per-fold execution, historical preprocessing parity, independent-person uncertainty, candidate authorship or authentic candidate scoring. Continuous reference differences remain separate from binary success or superiority.
+- [Original author pairing integration v1](implementations/original-author-pairing-integration-v1) — Reviewed source component.
+  Scope: Reviewed lifecycle integration for the original-author pairing source. Canonical task and outcome selection is maintained separately by the current-definition binder.
+- [Original author pairing v1](implementations/original-author-pairing-v1) — Reviewed source component.
+  Scope: Reviewed original-author pairing source and generated controls. Current task and outcome selection remains separately governed; source enrollment does not extend retained execution evidence.
 - [Original compact bundles v1](implementations/original-compact-bundles-v1) — Reviewed source component.
   Scope: Reviewed finite original-task source. Fixed time-only controls and preparation receipts are scoped engineering observations; general participant execution, assisted-arm results, AI reproduction/improvement, SOTA and protected-runtime qualification are not established. Namespace reset, hidden-label boundaries, author parity, unit/PCA exposure and clustered uncertainty remain separately scoped. The Figure3b proposal remains archived documentation, not current definition adoption.
 - [Original compact scoring join v1](implementations/original-compact-scoring-join-v1) — Reviewed source component.

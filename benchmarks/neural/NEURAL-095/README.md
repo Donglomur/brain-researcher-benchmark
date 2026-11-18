@@ -61,6 +61,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Count viewer v1](implementations/count-viewer-v1) — Reviewed task source component.
   Scope: Count-viewer observation and response-collection source for the existing NEURAL-095 task. Complete query order and original metrics remain; this viewer pair explicitly selects the reviewed paired-arithmetic-v2 source. Registration does not activate the canonical protected runtime or qualify authentic delivery, participant isolation, neural-information use or model performance.
+- [Cross access pairing v1](implementations/cross-access-pairing-v1) — Reviewed source component.
+  Scope: Reviewed cross-access pairing source and its separately declared stdlib and NumPy generated controls. Authentic execution and scientific qualification retain their original scope.
 - [Adaptive owner v2](implementations/adaptive-owner-v2) — Reviewed source component.
   Scope: Versioned configuration/admission source selects the original stateful investigator through the retained controller, ActorBackend and process-owner route. Generated fixtures exercise adaptive requests and exact paired arithmetic while preserving the original actor, five references and all four complete 258-case producers. Native container/runtime/image qualification and adaptive AI outcomes remain unestablished; protected-owner capacity and recovery gates remain mandatory.
 - [Participant transport v1](implementations/participant-transport-v1) — Reviewed source component.

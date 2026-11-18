@@ -82,7 +82,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 67527 bytes; SHA-256 `462ae59c8692847714ff4b54cc8eec73fc39715f9d00fbc2cebc88190140158e`.
+- Specification identity: 67527 bytes; SHA-256 `4699faf71479d7df4662a5ead4cc85219ea4d9b0a32b35b9818a64da86e13c9d`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

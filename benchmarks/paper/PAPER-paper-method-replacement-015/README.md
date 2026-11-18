@@ -70,6 +70,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Calibration only.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Current condition completion v1](implementations/current-condition-completion-v1) — Reviewed source component.
+  Scope: Reviewed current-condition completion source for the existing spinal task, including retained reference gaps and generated controls. No additional task or scientific readiness claim is created.
 - [Original endpoint metrics v1](implementations/original-endpoint-metrics-v1) — Reviewed source component.
   Scope: Original spinal-calcium endpoint metrics. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 - [Current condition delivery v1](implementations/current-condition-delivery-v1) — Reviewed source component.
