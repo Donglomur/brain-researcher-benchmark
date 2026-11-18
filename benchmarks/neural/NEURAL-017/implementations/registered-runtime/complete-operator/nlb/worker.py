@@ -2,6 +2,25 @@
 import sys,time,os,runpy
 from .contracts import need,closed,parse,canonical,digest,Budget,Custody,Store,Authority
 
+def _prepared_public_comparison(public,planned):
+ """Bind only the fixed float64 grid to original JSON-integer comparison types.
+
+ Original public arrays and committed support remain unchanged for projection,
+ hashing and donor construction; no rounding or arbitrary coercion is admitted.
+ """
+ import numpy as np
+ grid=public['bin_left_edges_ms'];declared=planned['bin_left_edges_ms']
+ expected=list(range(-250,450,5))
+ need(type(declared)is list and len(declared)==140 and all(type(v)is int for v in declared)
+      and declared==expected,'original exact integer grid commitment')
+ need(type(grid)is np.ndarray and grid.dtype==np.dtype('<f8')and grid.shape==(140,)
+      and np.array_equal(grid,np.asarray(expected,dtype=np.float64))
+      and canonical(grid.tolist())==canonical([float(v)for v in expected]),
+      'selected exact float64 public grid, no coercion or changed values')
+ comparison=dict(public);comparison['bin_left_edges_ms']=np.asarray(declared,dtype=np.int64)
+ return comparison
+
+
 def execute(request,inputs,outputs,trace):
  role=request['role'];b=request['body'];products={}
  from .arrays import load_arrays,dump_arrays,state_encode,state_decode
@@ -20,8 +39,12 @@ def execute(request,inputs,outputs,trace):
   from .programme import CONDITIONS,planned_support
   import numpy as np
   public=arrays(b['public']);public['panel_fingerprint']=str(public['panel_fingerprint'].item());planned=planned_support(inputs.json(b['planned_support']));commitment=inputs.json(b['shuffle_commitment']);seed=inputs.read(b['protected_shuffle_seed'],32)
-  for k in('train_trial_ids','eval_trial_ids','heldin_unit_ids','heldout_unit_ids','train_condition_ids','eval_condition_ids','bin_left_edges_ms'):need(np.array_equal(public[k],planned[k])and canonical(public[k].tolist())==canonical(planned[k]),'exact canonical prepared support must match pre-activity commitment')
-  mapping=shuffle_map(seed,planned,commitment)
+  comparison=_prepared_public_comparison(public,planned)if 'opaque_handoff'in b else public
+  for k in('train_trial_ids','eval_trial_ids','heldin_unit_ids','heldout_unit_ids','train_condition_ids','eval_condition_ids','bin_left_edges_ms'):need(np.array_equal(comparison[k],planned[k])and canonical(comparison[k].tolist())==canonical(planned[k]),'exact canonical prepared support must match pre-activity commitment')
+  if 'opaque_handoff'in b:
+   from .opaque_s03 import mapping_for_s03
+   mapping=mapping_for_s03(b,inputs,public,planned,seed,commitment)
+  else:mapping=shuffle_map(seed,planned,commitment)
   for condition in CONDITIONS:
    training,query,refs=project(public,condition,shuffle=mapping);products[condition+'_training']=write(condition+'_training.npz',dump_arrays(training));products[condition+'_query']=write(condition+'_query.npz',dump_arrays(query))
   support={**planned,'panel_fingerprint':public['panel_fingerprint']};products['support']=write('support.json',canonical(support));products['protected_map']=write('protected_map.npz',dump_arrays({'donor_index':mapping}));trace({'event':'all_five_physical_information_views','planned_support_sha256':digest(canonical(planned)),'same_fixed_map_for_all_arms':True})

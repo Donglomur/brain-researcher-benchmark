@@ -85,8 +85,8 @@ def inspect_source(root):
     if len(manifest_raw) != constants["MANIFEST_BYTES"] or hashlib.sha256(manifest_raw).hexdigest() != constants["MANIFEST_SHA256"]:
         raise ValueError("entry and manifest identity mismatch")
     manifest = decode(manifest_raw)
-    if manifest["schema"] != "NLB017_complete_operator_source_v1" or len(manifest["files"]) != 73:
-        raise ValueError("complete current 73-payload manifest required")
+    if manifest["schema"] != "NLB017_complete_operator_source_v1" or len(manifest["files"]) != 74:
+        raise ValueError("complete current 74-payload manifest required")
     if (manifest["group_count"], manifest["query_cases"], manifest["scientific_role_count"]) != (100, 574, 28844):
         raise ValueError("complete original scope required")
     if manifest["source_only"] is not True or manifest["native_qualified"] is not False or manifest["scientific_qualified"] is not False:

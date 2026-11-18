@@ -106,7 +106,7 @@ def run_checks(task_root, work_parent=None):
     binding_raw = read(root.parents[4] / binding_name, 65536)
     binding = json.loads(binding_raw)
     capture_extent = len(manifest_raw) + sum(binding['members'].get(row['path'], row)["bytes"] for row in manifest["files"])
-    check(capture_extent < 2**20 and len(manifest["files"]) == 73, "complete_bounded_payload")
+    check(capture_extent < 2**20 and len(manifest["files"]) == 74, "complete_bounded_payload")
     sidecar = json.loads(read(root / "SOURCE_COMPONENTS.json", 65536))
     check(set(sidecar) == {"schema_version", "task_id", "components"} and sidecar["schema_version"] == 1 and sidecar["task_id"] == "NEURAL-017", "existing_discovery_schema")
     declaration = sidecar["components"][0]
@@ -115,7 +115,7 @@ def run_checks(task_root, work_parent=None):
     check(declaration["source_manifest"] == {"path": "complete-operator/SOURCE_MANIFEST.json", "bytes": len(manifest_raw), "sha256": hashlib.sha256(manifest_raw).hexdigest()}, "sidecar_actual_manifest_pin")
     inspector = child([sys.executable, "-I", "-S", "-B", str(component / "source_inspection.py"), "--inspect"], True, capture_extent + len(entry_raw) + len(binding_raw) + binding['members']['test_metric_core.py']['bytes'] + 65536)
     observed = json.loads(inspector["stdout"])
-    check(observed["source_bodies"] == 76 and observed["python_bodies"] == 56 and observed["groups"] == 100 and observed["query_cases"] == 574 and observed["scientific_roles"] == 28844, "actual_complete_current_source_inspector_scope")
+    check(observed["source_bodies"] == 77 and observed["python_bodies"] == 57 and observed["groups"] == 100 and observed["query_cases"] == 574 and observed["scientific_roles"] == 28844, "actual_complete_current_source_inspector_scope")
     check(observed['current_binding'] == {'path': binding_name, 'bytes': len(binding_raw), 'sha256': hashlib.sha256(binding_raw).hexdigest()}, 'exact_current_overlay_inspected')
     check(observed["local_module_execution"] is False and observed["self_authentication_claim"] is False and observed["scientific_qualified"] is False and observed['native_qualified'] is False and observed['historical_native_entry_held'] is True, "inspection_is_not_execution_or_authority")
     for route in ("prepare", "campaign"):
@@ -153,7 +153,7 @@ def run_checks(task_root, work_parent=None):
         parts = name[:-3].split('/')
         package = parts[-1] == '__init__'
         captured['.'.join(parts[:-1] if package else parts)] = (raw, str(component / name), package)
-    check(len(captured) == 53, 'complete_current_captured_nlb_source')
+    check(len(captured) == 54, 'complete_current_captured_nlb_source')
 
     class NoScientificImports(importlib.abc.MetaPathFinder):
         def find_spec(self, fullname, path=None, target=None):

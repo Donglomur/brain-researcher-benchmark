@@ -345,3 +345,42 @@ def attach_reviews(compiled, preconditions, checkpoint_reviews):
     campaign = {**compiled['campaign'], 'preconditions': preconditions, 'checkpoint_reviews': checkpoint_reviews}
     need(execution_plan_identity(campaign) == compiled['programme']['execution_plan_sha256'], 'review attachment preserves frozen plan')
     return {'programme': compiled['programme'], 'campaign': campaign}
+
+
+def compile_opaque_s03(selected, produced):
+    """Closed operator preparation entry for one genuine, full-support S03 job.
+
+    This does not call or admit Campaign, bypass S04, synthesize E-products,
+    create reference states, or claim downstream opaque-target compatibility.
+    The default full compiler and its physical S02 path are unchanged.
+    """
+    from .opaque_s03 import selection
+    selection(selected); closed(produced, {'support', 'split', 'shuffle', 'handoff'})
+    for pin in produced.values(): descriptor(pin)
+    paths = [p['path'] for p in selected['inputs'].values()] + [p['path'] for p in produced.values()]
+    need(len(set(paths)) == len(paths), 'Exclusive original and produced input roles')
+    names = {'public': 'input/opaque_public', 'planned_support': 'opaque/support',
+             'shuffle_commitment': 'opaque/shuffle', 'protected_shuffle_seed': 'input/protected_shuffle_seed',
+             'opaque_handoff': 'opaque/handoff'}
+    output_roles = {c + '_' + kind: ('prepared/' + c + '/' + kind, 'public_' + kind)
+                    for c in CONDITIONS for kind in ('training', 'query')}
+    output_roles.update(support=('prepared/support', 'metadata'),
+                        protected_map=('prepared/private_map', 'protected_seed'))
+    stage, action = _action('prepare/views', 'S03', 'project_views',
+        {key: ref(name) for key, name in names.items()}, output_roles)
+    initial = [dict(name='input/' + name, pin=pin,
+                    role=('public_training' if name == 'opaque_public' else
+                          'protected_shuffle_seed' if name == 'protected_shuffle_seed' else 'operator_private_metadata'))
+               for name, pin in sorted(selected['inputs'].items())]
+    initial += [dict(name='opaque/' + name, pin=pin, role='operator_private_metadata')
+                for name, pin in sorted(produced.items())]
+    table = {row['name']: row['pin'] for row in initial}
+    request = {'role': 'project_views', 'body': {key: table[name] for key, name in names.items()}}
+    return {'schema': 'NLB017_opaque_S03_compilation_v1', 'source_manifest': selected['source_manifest'],
+        'stage': stage, 'action': action, 'request': request, 'initial_artifacts': initial,
+        'conditions': list(CONDITIONS), 'complete_training_trials': 1721, 'complete_query_trials': 574,
+        'outputs': action['outputs'], 'opaque_split': produced['split'],
+        'scope': 'one original S03 view-preparation role; all five conditions and all support',
+        'full_campaign_compiled': False, 'E_products_issued': False,
+        'native_or_scientific_qualified': False, 'requires_independent_authority_and_runtime': True,
+        'downstream_physical_target_scoring_adopted': False}
