@@ -1,9 +1,12 @@
-"""Four generated HDF5/loopback controls; never original-data qualification.
+"""Four generated HDF5/loopback and six mocked ownership controls.
+
+Neither is original-data qualification.
 
 Run only in the explicitly selected maintained runtime. The loopback origin
 exception and socket guard exist solely here, never in production code.
 """
 import argparse
+import asyncio
 import faulthandler
 import gc
 from contextlib import contextmanager
@@ -17,7 +20,7 @@ import re
 import socket
 import sys
 import threading
-from types import SimpleNamespace
+from types import ModuleType, SimpleNamespace
 import unittest
 from unittest import mock
 
@@ -127,6 +130,203 @@ class FixtureHandler(BaseHTTPRequestHandler):
             self.close_connection = True
 
 
+class ResponseOwnershipControls(unittest.TestCase):
+    """Exercise the actual checked callback and cleanup order with stdlib doubles.
+
+    These controls do not qualify aiohttp/HDF5 or create a network service.
+    The existing four RuntimeControls retain real-library/loopback coverage.
+    """
+
+    @contextmanager
+    def reader(self, *, enabled=True, rejection=None, close_error=None,
+               fail_at=None):
+        events = []
+        state = {"gc": enabled}
+        cleanup_error = RuntimeError("generated owned cleanup failure")
+        callback = {}
+
+        def event(name):
+            events.append((name, state["gc"]))
+            if name == fail_at:
+                raise cleanup_error
+
+        class Response:
+            status = 206
+            url = "generated://bounded-response"
+            headers = {"generated": "headers"}
+            history = ()
+            closed = False
+
+            def close(self):
+                event("response.close")
+                if close_error is not None:
+                    raise close_error
+                self.closed = True
+
+            def read(self):
+                if self.closed:
+                    raise RuntimeError("generated response is already closed")
+                return b"generated unread body"
+
+        response = Response()
+        limits = SimpleNamespace(block_bytes=4096, cache_blocks=4,
+                                 request_seconds=5, hdf5_cache_bytes=8192)
+        budget = SimpleNamespace(limits=limits, pending=None, failed=False,
+                                 check_time=lambda: None)
+        budget.response = mock.Mock(side_effect=rejection)
+
+        def abort():
+            event("budget.abort")
+            budget.failed = True
+        budget.abort = abort
+        asset = SimpleNamespace(validate=lambda: None, url=response.url,
+                                etag='"generated"', extent_bytes=8193)
+        cache = SimpleNamespace(_fetch_block_cached=SimpleNamespace(
+            cache_clear=lambda: event("cache.clear")))
+        stream = SimpleNamespace(cache=cache,
+                                 close=lambda: event("stream.close"))
+
+        async def session_close():
+            event("session.close.begin")
+            await asyncio.sleep(0)
+            event("session.close.end")
+
+        def filesystem(**kwargs):
+            callback["checked"] = kwargs["client_kwargs"]["raise_for_status"]
+            return SimpleNamespace(loop=object(),
+                _session=SimpleNamespace(close=session_close),
+                open=lambda *args, **kw: stream)
+
+        @contextmanager
+        def hdf5_file(*args, **kwargs):
+            event("hdf5.enter")
+            asyncio.run(callback["checked"](response))
+            try:
+                yield SimpleNamespace(response=response)
+            finally:
+                event("hdf5.close")
+
+        aiohttp = ModuleType("aiohttp")
+        aiohttp.TraceConfig = lambda: SimpleNamespace(on_request_start=[],
+            on_response_chunk_received=[], on_request_exception=[])
+        aiohttp.ClientTimeout = lambda **kwargs: kwargs
+        h5py = ModuleType("h5py")
+        h5py.File = hdf5_file
+        fsspec = ModuleType("fsspec")
+        implementations = ModuleType("fsspec.implementations")
+        http = ModuleType("fsspec.implementations.http")
+        asynchronous = ModuleType("fsspec.asyn")
+        http.HTTPFileSystem = filesystem
+        asynchronous.sync = lambda loop, close: asyncio.run(close())
+        fsspec.implementations = implementations
+        fsspec.asyn = asynchronous
+        implementations.http = http
+        modules = {"aiohttp": aiohttp, "h5py": h5py, "fsspec": fsspec,
+                   "fsspec.implementations": implementations,
+                   "fsspec.implementations.http": http,
+                   "fsspec.asyn": asynchronous}
+
+        def disable():
+            event("gc.disable")
+            state["gc"] = False
+
+        def enable():
+            event("gc.restore")
+            state["gc"] = True
+
+        with mock.patch.dict(sys.modules, modules), \
+             mock.patch("importlib.metadata.version",
+                        side_effect=lambda name: range_io.SUPPORTED_RUNTIME[name]), \
+             mock.patch.object(range_io, "configure_cache", lambda *args: None), \
+             mock.patch.object(range_io.gc, "isenabled", lambda: state["gc"]), \
+             mock.patch.object(range_io.gc, "disable", disable), \
+             mock.patch.object(range_io.gc, "enable", enable):
+            yield SimpleNamespace(response=response, asset=asset, budget=budget,
+                state=state, events=events, cleanup_error=cleanup_error,
+                opened=lambda: range_io.open_versioned(
+                    asset, budget, dict(range_io.SUPPORTED_RUNTIME)))
+
+    def test_rejected_response_closes_and_preserves_exception(self):
+        rejection = range_io.RangeContractError("generated header refusal")
+        with self.reader(rejection=rejection) as case:
+            with self.assertRaises(range_io.RangeContractError) as caught:
+                with case.opened():
+                    self.fail("rejected response became usable")
+            self.assertIs(caught.exception, rejection)
+            self.assertTrue(case.response.closed)
+            case.budget.response.assert_called_once_with(case.asset, 206,
+                case.response.url, case.response.headers, ())
+            names = [name for name, _ in case.events]
+            self.assertLess(names.index("response.close"), names.index("budget.abort"))
+            self.assertEqual(names.count("response.close"), 1)
+
+    def test_accepted_response_remains_usable(self):
+        with self.reader() as case:
+            with case.opened() as file:
+                self.assertIs(file.response, case.response)
+                self.assertFalse(case.response.closed)
+                self.assertEqual(file.response.read(), b"generated unread body")
+            case.budget.response.assert_called_once_with(case.asset, 206,
+                case.response.url, case.response.headers, ())
+            self.assertFalse(case.response.closed)
+            self.assertNotIn("response.close", [name for name, _ in case.events])
+            self.assertFalse(case.budget.failed)
+
+    def test_cancelled_check_closes_and_preserves_cancellation(self):
+        rejection = asyncio.CancelledError("generated callback cancellation")
+        with self.reader(rejection=rejection) as case:
+            with self.assertRaises(asyncio.CancelledError) as caught:
+                with case.opened():
+                    self.fail("cancelled response became usable")
+            self.assertIs(caught.exception, rejection)
+            self.assertTrue(case.response.closed)
+            self.assertTrue(case.budget.failed)
+
+    def test_close_failure_retains_original_rejection_context(self):
+        rejection = range_io.RangeContractError("generated header refusal")
+        close_error = RuntimeError("generated response close failure")
+        with self.reader(rejection=rejection, close_error=close_error) as case:
+            with self.assertRaises(RuntimeError) as caught:
+                with case.opened():
+                    self.fail("response close failure was suppressed")
+            self.assertIs(caught.exception, close_error)
+            self.assertIs(caught.exception.__context__, rejection)
+            self.assertEqual([name for name, _ in case.events].count("response.close"), 1)
+            self.assertTrue(case.budget.failed)
+
+    def test_gc_restoration_follows_all_owned_cleanup(self):
+        for enabled in (True, False):
+            with self.subTest(initial_gc_enabled=enabled), self.reader(enabled=enabled) as case:
+                with case.opened():
+                    self.assertFalse(case.state["gc"])
+                expected = ["hdf5.close", "stream.close", "cache.clear",
+                            "session.close.begin", "session.close.end"]
+                observed = [(name, state) for name, state in case.events if name in expected]
+                self.assertEqual(observed, [(name, False) for name in expected])
+                self.assertEqual(case.state["gc"], enabled)
+                restores = [name for name, _ in case.events if name == "gc.restore"]
+                self.assertEqual(restores, ["gc.restore"] if enabled else [])
+                if enabled:
+                    self.assertEqual(case.events[-1][0], "gc.restore")
+
+    def test_gc_restoration_survives_cleanup_failure(self):
+        for enabled in (True, False):
+            for failing in ("hdf5.close", "stream.close", "cache.clear", "session.close.end"):
+                with self.subTest(initial_gc_enabled=enabled, failing=failing), \
+                     self.reader(enabled=enabled, fail_at=failing) as case:
+                    with self.assertRaises(RuntimeError) as caught:
+                        with case.opened():
+                            pass
+                    self.assertIs(caught.exception, case.cleanup_error)
+                    expected = ["hdf5.close", "stream.close", "cache.clear",
+                                "session.close.begin", "session.close.end"]
+                    observed = [(name, state) for name, state in case.events if name in expected]
+                    self.assertEqual(observed, [(name, False) for name in expected])
+                    self.assertEqual(case.state["gc"], enabled)
+                    if enabled:
+                        self.assertEqual(case.events[-1][0], "gc.restore")
+
+
 class RuntimeControls(unittest.TestCase):
     VERSION = "generated+version/one="
     ETAG = '"generated-fixture-etag"'
@@ -136,6 +336,53 @@ class RuntimeControls(unittest.TestCase):
     body_written = 0
     body_lock = threading.Lock()
     allowed_addresses = set()
+    lifecycle_loop = None
+    lifecycle_diagnostics = []
+    lifecycle_overflow = False
+    lifecycle_lock = threading.Lock()
+
+    @classmethod
+    def observe_lifecycle_loop(cls):
+        loop = asyncio.get_running_loop()
+        if cls.lifecycle_loop is not None:
+            if cls.lifecycle_loop is not loop:
+                raise AssertionError("unexpected second generated service loop")
+            return
+        cls.lifecycle_loop = loop
+        previous = loop.get_exception_handler()
+        def observed(current, context):
+            try:
+                message = str(context.get("message", ""))
+                error = context.get("exception")
+                row = {"message": message[:512], "truncated": len(message) > 512,
+                       "exception_type": type(error).__name__ if error is not None else None,
+                       "has_connection": context.get("client_connection") is not None,
+                       "has_response": context.get("client_response") is not None}
+                with cls.lifecycle_lock:
+                    if len(cls.lifecycle_diagnostics) < 16:
+                        cls.lifecycle_diagnostics.append(row)
+                    else:
+                        cls.lifecycle_overflow = True
+            finally:
+                # Retain the original diagnostic path and full context/logging.
+                if previous is None:
+                    current.default_exception_handler(context)
+                else:
+                    previous(current, context)
+        loop.set_exception_handler(observed)
+
+    @classmethod
+    def drain_lifecycle(cls):
+        if threading.current_thread() is not threading.main_thread():
+            raise AssertionError("generated collection must run on the main thread")
+        if cls.lifecycle_loop is None:
+            return
+        async def barrier():
+            await asyncio.sleep(0)
+            await asyncio.sleep(0)
+        for _ in range(2):
+            gc.collect()
+            cls.asyn.sync(cls.lifecycle_loop, barrier)
 
     @classmethod
     def setUpClass(cls):
@@ -231,17 +478,22 @@ class RuntimeControls(unittest.TestCase):
 
     @classmethod
     def stop_owned_loop(cls):
-        loop, thread = cls.asyn.loop[0], cls.asyn.iothread[0]
-        if loop is not None:
-            if thread is None or thread is cls.initial_thread:
-                raise AssertionError("unidentified generated service loop")
-            loop.call_soon_threadsafe(loop.stop)
-            thread.join(timeout=5)
-            if thread.is_alive():
-                raise AssertionError("owned fsspec service thread did not stop")
-            loop.close()
-            cls.asyn.loop[0] = None
-            cls.asyn.iothread[0] = None
+        try:
+            cls.drain_lifecycle()
+        finally:
+            loop, thread = cls.asyn.loop[0], cls.asyn.iothread[0]
+            if loop is not None:
+                if thread is None or thread is cls.initial_thread:
+                    raise AssertionError("unidentified generated service loop")
+                loop.call_soon_threadsafe(loop.stop)
+                thread.join(timeout=5)
+                if thread.is_alive():
+                    raise AssertionError("owned fsspec service thread did not stop")
+                loop.close()
+                cls.asyn.loop[0] = None
+                cls.asyn.iothread[0] = None
+        if cls.lifecycle_diagnostics or cls.lifecycle_overflow:
+            raise AssertionError("retained loop lifecycle diagnostics during generated controls")
 
     def make_budget(self):
         return range_io.Budget(range_io.Limits(
@@ -266,13 +518,74 @@ class RuntimeControls(unittest.TestCase):
                 raise range_io.RangeContractError("test origin exception is exact-fixture only")
             return value
         sessions, connectors, streams, caches = [], [], [], []
+        responses, cleanup_events = [], []
+        lifecycle = {}
         real_session = self.aiohttp.ClientSession
         real_configure = range_io.configure_cache
+        real_close_runtime = range_io.close_runtime
         def capture_session(*args, **kwargs):
+            cls.observe_lifecycle_loop()
+            checked = kwargs["raise_for_status"]
+            async def observed_check(response):
+                if len(responses) >= 64:
+                    raise AssertionError("generated response population exceeds request cap")
+                record = {"response": response, "read": response.read,
+                          "close": response.close, "close_calls": 0,
+                          "accepted": False, "rejected": False,
+                          "reads": 0, "read_failures": 0}
+                responses.append(record)
+                def observed_close():
+                    record["close_calls"] += 1
+                    return record["close"]()
+                async def observed_read():
+                    try:
+                        body = await record["read"]()
+                    except BaseException:
+                        record["read_failures"] += 1
+                        self.assertTrue(response.closed)
+                        self.assertIsNone(response.connection)
+                        raise
+                    record["reads"] += 1
+                    return body
+                response.close = observed_close
+                response.read = observed_read
+                try:
+                    await checked(response)
+                except BaseException:
+                    record["rejected"] = True
+                    self.assertEqual(record["close_calls"], 1)
+                    self.assertTrue(response.closed)
+                    self.assertIsNone(response.connection)
+                    raise
+                else:
+                    record["accepted"] = True
+                    # EOF may already be buffered; do not require closed=False.
+                    self.assertEqual(record["close_calls"], 0)
+            kwargs["raise_for_status"] = observed_check
             session = real_session(*args, **kwargs)
             sessions.append(session)
             connectors.append(session.connector)
             return session
+
+        def capture_close_runtime(stream, close_session):
+            cleanup_events.append(("runtime.begin", gc.isenabled()))
+            def observed_close_session():
+                cleanup_events.append(("session.begin", gc.isenabled()))
+                try:
+                    return close_session()
+                finally:
+                    cleanup_events.append(("session.end", gc.isenabled()))
+            try:
+                return real_close_runtime(stream, observed_close_session)
+            finally:
+                cleanup_events.append(("runtime.end", gc.isenabled()))
+
+        def release_response_instrumentation():
+            for record in responses:
+                response = record["response"]
+                response.read = record["read"]
+                response.close = record["close"]
+            responses.clear()
         def capture_cache(stream, selected, limits):
             real_configure(stream, selected, limits)
             streams.append(stream)
@@ -280,21 +593,58 @@ class RuntimeControls(unittest.TestCase):
         try:
             with mock.patch.object(range_io.Asset, "validate", fixture_origin), \
                  mock.patch.object(self.aiohttp, "ClientSession", capture_session), \
-                 mock.patch.object(range_io, "configure_cache", capture_cache):
-                yield SimpleNamespace(server=server, asset=asset, sessions=sessions, streams=streams, caches=caches)
+                 mock.patch.object(range_io, "configure_cache", capture_cache), \
+                 mock.patch.object(range_io, "close_runtime", capture_close_runtime):
+                yield SimpleNamespace(server=server, asset=asset, sessions=sessions,
+                                      streams=streams, caches=caches, lifecycle=lifecycle)
         finally:
             server.shutdown()
             server.server_close()
             thread.join(timeout=5)
             cls.allowed_addresses.remove(address)
-            self.assertFalse(thread.is_alive(), "fixture server thread must stop")
-            self.assertTrue(all(session.closed for session in sessions))
-            self.assertTrue(all(connector.closed for connector in connectors))
-            self.assertTrue(all(stream.closed for stream in streams))
-            self.assertTrue(all(cache._fetch_block_cached.cache_info().currsize == 0 for cache in caches))
-            self.assertEqual(server.errors, [])
-            self.assertLessEqual(cls.body_reserved, cls.body_allowance)
-            self.assertTrue(all(r.get("cyclic_gc_enabled") is False for r in server.requests))
+            try:
+                self.assertFalse(thread.is_alive(), "fixture server thread must stop")
+                self.assertTrue(all(session.closed for session in sessions))
+                self.assertTrue(all(connector.closed for connector in connectors))
+                self.assertTrue(all(stream.closed for stream in streams))
+                self.assertTrue(all(cache._fetch_block_cached.cache_info().currsize == 0 for cache in caches))
+                self.assertEqual(server.errors, [])
+                self.assertLessEqual(cls.body_reserved, cls.body_allowance)
+                self.assertTrue(all(r.get("cyclic_gc_enabled") is False for r in server.requests))
+                accepted = sum(record["accepted"] for record in responses)
+                rejected = sum(record["rejected"] for record in responses)
+                reads = sum(record["reads"] for record in responses)
+                read_failures = sum(record["read_failures"] for record in responses)
+                lifecycle.update(mode=mode, responses=len(responses), accepted=accepted,
+                    rejected=rejected, successful_body_reads=reads,
+                    failed_body_reads=read_failures, cleanup_events=cleanup_events,
+                    rejected_closed_and_connection_cleared=all(
+                        record["response"].closed and record["response"].connection is None
+                        for record in responses if record["rejected"]))
+                if mode in ("full_body", "version", "etag"):
+                    self.assertEqual((len(responses), accepted, rejected, reads), (1, 0, 1, 0))
+                elif mode == "ok":
+                    self.assertGreater(accepted, 0)
+                    self.assertEqual(rejected, 0)
+                    self.assertGreater(reads, 0)
+                    self.assertEqual(read_failures, 0)
+                elif mode == "short":
+                    self.assertEqual((len(responses), accepted, rejected, reads, read_failures),
+                                     (1, 1, 0, 0, 1))
+                else:
+                    self.assertEqual(mode, "disconnect")
+                    self.assertEqual(len(responses), 0)
+                self.assertEqual(cleanup_events, [(name, False) for name in
+                    ("runtime.begin", "session.begin", "session.end", "runtime.end")])
+                self.assertLessEqual(len(range_io.canonical(lifecycle)), 4096)
+            finally:
+                # Release instrumented response/method references before main-thread GC.
+                release_response_instrumentation()
+                cls.drain_lifecycle()
+                lifecycle["diagnostic_count"] = len(cls.lifecycle_diagnostics)
+                lifecycle["diagnostic_overflow"] = cls.lifecycle_overflow
+                self.assertEqual(cls.lifecycle_diagnostics, [])
+                self.assertFalse(cls.lifecycle_overflow)
 
     def summarize(self, case, selected, budget, **extra):
         receipt = budget.receipt()
@@ -308,7 +658,8 @@ class RuntimeControls(unittest.TestCase):
             "accepted_ranges": len(receipt["ranges"]), "reader_failed": receipt["failed"],
             "full_object_BLAKE2b_verified": receipt["full_object_BLAKE2b_verified"],
             "all_requests_with_cyclic_gc_disabled": all(r.get("cyclic_gc_enabled") is False for r in selected.server.requests),
-            "sessions_connectors_streams_closed_and_cache_cleared": True, **extra})
+            "sessions_connectors_streams_closed_and_cache_cleared": True,
+            "response_lifecycle": selected.lifecycle, **extra})
 
     def test_full_local_range_projection_and_cleanup(self):
         meter = self.owner_io.ByteMeter(4 * 1024 * 1024, 0)
@@ -477,6 +828,7 @@ def main():
     if not ARGS.evidence_root.is_dir() or ARGS.evidence_root.is_symlink():
         parser.error("ordinary pre-created evidence root required")
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(RuntimeControls)
+    suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(ResponseOwnershipControls))
     with one_shot_trace(ARGS.evidence_root) as trace:
         result = unittest.TextTestRunner(verbosity=2).run(suite)
     value = {"schema": "neural063-generated-real-reader-controls-v1", "generated_only": True,
@@ -490,6 +842,8 @@ def main():
              "cumulative_body_upper": ARGS.prior_body_upper + RuntimeControls.body_reserved,
              "one_shot_trace": trace, "cases": RuntimeControls.evidence,
              "owned_service_loop_closed": getattr(RuntimeControls, "asyn", None) is not None and RuntimeControls.asyn.loop[0] is None,
+             "lifecycle_diagnostics": RuntimeControls.lifecycle_diagnostics,
+             "lifecycle_diagnostic_overflow": RuntimeControls.lifecycle_overflow,
              "scientific_equivalence_of_authentic_cohort": False,
              "original_data_requests": 0, "models_or_scoring": False}
     body = range_io.canonical(value)

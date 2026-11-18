@@ -403,6 +403,7 @@ def _current(original, contract, binding, source_id):
             and item.get("sha256") == "d2c2514d9376948ed44234b59a553fa6ba043facfd534c1e3359c129de487719"
             for item in contract["evidence"]):
         current["participant_inputs"] = " ".join(observations["inputs"] + observations["forbidden_inputs"])
+        current["complete_scope"]["unit"] = "Every documented assessment in every released recording; the main packet is the complete native 30-second EEG interval [marker - 30000 ms, marker). This is retrospective marker-relative estimation of the associated five-level recorded MOAA/S responsiveness category, not a pre-assessment or pre-challenge prediction. Preserve original EVENT/assessment identity, nullable labels, eligibility explanations and authentic biological-person grouping; marker timing alone does not establish assessment onset."
         current["complete_scope"]["input"] = current["participant_inputs"]
         current["complete_scope"]["complete_compact_representation"] = " ".join(observations["inputs"]) + " " + observations["coverage"]
         current["machine_output"]["coverage"] = observations["coverage"]
