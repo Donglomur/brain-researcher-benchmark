@@ -21,7 +21,7 @@ PINS = {
  'original-figure3b-execution-v1/execution.py': '5ee501891b963abbce4f6f4aa5085e60e78544cc65f261e00ec75a0c5852229d',
  'original-figure3b-store-v1/producer.py': '620a265897e0b110ffb25da1816f27938f70df4ae3122f7a5c8a71232e9232e9',
  'original-figure3b-store-v1/reader.py': '84a1f6e94dd855aec991026f3804cfe660914d084dbe14ee8b73ba63db39e6c3',
- 'original-exec-provider-v1/provider.py': '7645b8d2701e477b3c10fca11b89bbafb25ca95a319e3a6556da67fd9f37dc1d',
+ 'original-exec-provider-v1/provider.py': 'c9426ce6c51f2ac830809a9aab6649ab5926e5de7d983d0085b448001afb1b98',
 }
 ROLES = ('executed_author_reference', 'paper_data', 'paper_data_author_code')
 COMMON_KEYS = ('context','coordinates','rows','outputs','target_sha256','support_class_sha256',

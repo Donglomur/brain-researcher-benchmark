@@ -23,7 +23,7 @@ import time
 import types
 import uuid
 
-ENTRY_SHA256 = '530452d9b82b87fd395c9faf2496a7de2411c2ca3eb1b0053b21b8fd233de615'
+ENTRY_SHA256 = 'da65bd364986d33650e0a4cb84efb653ecff9e8f986bcff5ea56f100d8484a68'
 BUNDLE_SHA256 = 'a54bdb02d3d9d0be74bafaab3503175a6eaf867ee5299b97c5983bc2ea30a8a7'
 MODE = 'exec_reset_bwrap_v1'
 HERE = Path(__file__).resolve().parent

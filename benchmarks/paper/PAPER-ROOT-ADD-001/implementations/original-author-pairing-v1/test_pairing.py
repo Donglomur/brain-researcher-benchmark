@@ -29,7 +29,7 @@ r=load('generated_executed_reference',HERE/'executed_reference.py')
 p=load('generated_author_pairing',HERE/'paired.py')
 entry_path=TASK/'implementations/original-exec-provider-v1/participant_entry.py'
 endpoint_path=TASK/'implementations/original-figure3b-improvement-v1/improvement.py'
-assert hashlib.sha256(entry_path.read_bytes()).hexdigest()=='530452d9b82b87fd395c9faf2496a7de2411c2ca3eb1b0053b21b8fd233de615'
+assert hashlib.sha256(entry_path.read_bytes()).hexdigest()=='da65bd364986d33650e0a4cb84efb653ecff9e8f986bcff5ea56f100d8484a68'
 assert hashlib.sha256(endpoint_path.read_bytes()).hexdigest()=='bbf81e3f3f8a82edfbeb8005de6b52d335e21d674e3798238a5f8a14555c3afa'
 entry=load('generated_original_participant_entry',entry_path)
 endpoint=load('generated_original_selected_endpoint',endpoint_path)

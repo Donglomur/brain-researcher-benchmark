@@ -122,6 +122,23 @@ def bounded(path, cap):
     return raw
 
 
+class PipeWriter:
+    """Write-only NPY sink: avoid treating a pipe as a seekable real file."""
+    __slots__ = ("_output",)
+
+    def __init__(self, output):
+        self._output = output
+
+    def write(self, value):
+        written = self._output.write(value)
+        if type(written) is not int or written != len(value):
+            raise OSError("incomplete NPY pipe write")
+        return written
+
+    def flush(self):
+        return self._output.flush()
+
+
 def main():
     need(len(sys.argv) == 3, 'Explicit bundle and logical work limits required')
     byte_limit, working_limit = map(int,sys.argv[1:])
@@ -131,7 +148,7 @@ def main():
     bundle = bounded('/input/responses.bin',byte_limit)
     args = operands(feature_raw,bundle,descriptor,byte_limit=byte_limit,working_limit=working_limit)
     # Candidate import/call starts here; no trusted state can follow another request.
-    output = sys.stdout.buffer
+    output = PipeWriter(sys.stdout.buffer)
     sys.stdout = sys.stderr
     spec = importlib.util.spec_from_file_location('frozen_candidate','/candidate/candidate.py')
     module = importlib.util.module_from_spec(spec)
