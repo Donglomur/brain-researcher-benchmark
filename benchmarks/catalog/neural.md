@@ -16,7 +16,7 @@ Neural understanding revision: **118/118 covered**; 13 delivered named scope, 7 
 | [NEURAL-004](../neural/NEURAL-004/README.md) | [Conditional contrast inference and HMP evidence investigation](../neural/NEURAL-004/task.json) | canonical_source_specification | 4 | not included |
 | [NEURAL-005](../neural/NEURAL-005/README.md) | [ERP contribution to subsequent social choice](../neural/NEURAL-005/task.json) | canonical_source_specification | 4 | [manifest](../neural/NEURAL-005/implementations/registered-runtime/manifest.json) |
 | [NEURAL-006](../neural/NEURAL-006/README.md) | [Reward versus emotion prediction-error physiology](../neural/NEURAL-006/task.json) | canonical_source_specification | 4 | not included |
-| [NEURAL-007](../neural/NEURAL-007/README.md) | [Whole-night five-stage sleep scoring](../neural/NEURAL-007/task.json) | canonical_source_specification | 13 | [manifest](../neural/NEURAL-007/implementations/registered-runtime/manifest.json) |
+| [NEURAL-007](../neural/NEURAL-007/README.md) | [Whole-night five-stage sleep scoring](../neural/NEURAL-007/task.json) | canonical_source_specification | 15 | [manifest](../neural/NEURAL-007/implementations/registered-runtime/manifest.json) |
 | [NEURAL-008](../neural/NEURAL-008/README.md) | [EOG information beyond EEG and sleep timing](../neural/NEURAL-008/task.json) | canonical_source_specification | 5 | [manifest](../neural/NEURAL-008/implementations/registered-runtime/manifest.json) |
 | [NEURAL-009](../neural/NEURAL-009/README.md) | [Pediatric continuous seizure-event detection](../neural/NEURAL-009/task.json) | canonical_source_specification | 5 | not included |
 | [NEURAL-010](../neural/NEURAL-010/README.md) | [Seizure false alarms and montage confounding](../neural/NEURAL-010/task.json) | canonical_source_specification | 7 | not included |
@@ -34,7 +34,7 @@ Neural understanding revision: **118/118 covered**; 13 delivered named scope, 7 
 | [NEURAL-022](../neural/NEURAL-022/README.md) | [Active-versus-passive sensory coding](../neural/NEURAL-022/task.json) | canonical_source_specification | 5 | not included |
 | [NEURAL-023](../neural/NEURAL-023/README.md) | [Continuous reaching across recording days](../neural/NEURAL-023/task.json) | canonical_source_specification | 4 | [manifest](../neural/NEURAL-023/implementations/registered-runtime/manifest.json) |
 | [NEURAL-024](../neural/NEURAL-024/README.md) | [Stable population dynamics across days](../neural/NEURAL-024/task.json) | canonical_source_specification | 5 | [manifest](../neural/NEURAL-024/implementations/registered-runtime/manifest.json) |
-| [NEURAL-025](../neural/NEURAL-025/README.md) | [Fine reach-kinematics decoding from calcium](../neural/NEURAL-025/task.json) | canonical_source_specification | 6 | not included |
+| [NEURAL-025](../neural/NEURAL-025/README.md) | [Fine reach-kinematics decoding from calcium](../neural/NEURAL-025/task.json) | canonical_source_specification | 7 | not included |
 | [NEURAL-026](../neural/NEURAL-026/README.md) | [Fine-joint information beyond reach phase](../neural/NEURAL-026/task.json) | canonical_source_specification | 5 | not included |
 | [NEURAL-027](../neural/NEURAL-027/README.md) | [Visual stimulus decoding across learning phases](../neural/NEURAL-027/task.json) | canonical_source_specification | 4 | not included |
 | [NEURAL-028](../neural/NEURAL-028/README.md) | [Reward-free versus rewarded cortical learning](../neural/NEURAL-028/task.json) | canonical_source_specification | 3 | not included |

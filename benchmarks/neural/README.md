@@ -20,7 +20,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-004](NEURAL-004/README.md) | Conditional contrast inference and HMP evidence investigation | 4 | not linked |
 | [NEURAL-005](NEURAL-005/README.md) | ERP contribution to subsequent social choice | 4 | [manifest](NEURAL-005/implementations/registered-runtime/manifest.json) |
 | [NEURAL-006](NEURAL-006/README.md) | Reward versus emotion prediction-error physiology | 4 | not linked |
-| [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 13 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
+| [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 15 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
 | [NEURAL-008](NEURAL-008/README.md) | EOG information beyond EEG and sleep timing | 5 | [manifest](NEURAL-008/implementations/registered-runtime/manifest.json) |
 | [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 5 | not linked |
 | [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 7 | not linked |
@@ -38,7 +38,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-022](NEURAL-022/README.md) | Active-versus-passive sensory coding | 5 | not linked |
 | [NEURAL-023](NEURAL-023/README.md) | Continuous reaching across recording days | 4 | [manifest](NEURAL-023/implementations/registered-runtime/manifest.json) |
 | [NEURAL-024](NEURAL-024/README.md) | Stable population dynamics across days | 5 | [manifest](NEURAL-024/implementations/registered-runtime/manifest.json) |
-| [NEURAL-025](NEURAL-025/README.md) | Fine reach-kinematics decoding from calcium | 6 | not linked |
+| [NEURAL-025](NEURAL-025/README.md) | Fine reach-kinematics decoding from calcium | 7 | not linked |
 | [NEURAL-026](NEURAL-026/README.md) | Fine-joint information beyond reach phase | 5 | not linked |
 | [NEURAL-027](NEURAL-027/README.md) | Visual stimulus decoding across learning phases | 4 | not linked |
 | [NEURAL-028](NEURAL-028/README.md) | Reward-free versus rewarded cortical learning | 3 | not linked |
