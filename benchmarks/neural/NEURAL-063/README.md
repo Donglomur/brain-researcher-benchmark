@@ -39,6 +39,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Neural 063](implementations/neural-063) — Task source archive.
   Scope: Source archive remains an implementation resource; relocation does not establish configured deployment or scientific qualification.
+- [Contained vlen v1](implementations/contained-vlen-v1) — Reviewed source component.
+  Scope: Contained VLEN reader, fixed export and controller source with configurable validated locators and strict independently selected native authority. It adopts the accepted cleanup reader without modifying it and preserves the original 107 mice, 703 sessions, 1936 planes and 73/15/19 split. Saved generated controls use invented data; original-array acquisition, actual Linux/container lifecycle, real OOM/timeout descendant cleanup, full-cohort scientific completion and benchmark readiness remain unestablished. Inactive templates and source enrollment do not activate a runtime.
 - [Full census v1](implementations/full-census-v1) — Reviewed source component.
   Scope: Separate layouts, metadata/support and all-source-column physical chunk census source for the full original cohort. A missing/failed/unattempted plane holds its session and cohort; first failure stops a stage with explicit tail dispositions. Unknown VLEN/unbounded session representations are refused before decoding. Original scientific modules and endpoints are unchanged; no authentic cohort census, projection/provider operation, model result or benchmark readiness is established.
 - [Original qualifier v1](implementations/original-qualifier-v1) — Reviewed source component.
