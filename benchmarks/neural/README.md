@@ -76,11 +76,11 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-060](NEURAL-060/README.md) | Retrospective wheel-speed decoding beyond context and neural alignment controls | 3 | not linked |
 | [NEURAL-061](NEURAL-061/README.md) | Matched regional replacement effects in held-animal wheel decoding | 3 | not linked |
 | [NEURAL-062](NEURAL-062/README.md) | Known-image identity from calcium population summaries in held-out mice | 2 | [manifest](NEURAL-062/implementations/registered-runtime/manifest.json) |
-| [NEURAL-063](NEURAL-063/README.md) | Omission-conditional calcium population trajectory prediction | 2 | not linked |
+| [NEURAL-063](NEURAL-063/README.md) | Omission-conditional calcium population trajectory prediction | 3 | not linked |
 | [NEURAL-064](NEURAL-064/README.md) | Predictive novelty contrasts with pre-state matching and explicit support limits | 2 | not linked |
 | [NEURAL-065](NEURAL-065/README.md) | Neural typing character reconstruction | 2 | not linked |
 | [NEURAL-066](NEURAL-066/README.md) | Typing information versus language and motor shortcuts | 2 | not linked |
-| [NEURAL-067](NEURAL-067/README.md) | Seven-dimensional attempted reach/grasp decoding | 5 | [manifest](NEURAL-067/implementations/registered-runtime/manifest.json) |
+| [NEURAL-067](NEURAL-067/README.md) | Seven-dimensional attempted reach/grasp decoding | 6 | [manifest](NEURAL-067/implementations/registered-runtime/manifest.json) |
 | [NEURAL-068](NEURAL-068/README.md) | Recalibration benefit under intracortical drift | 2 | [manifest](NEURAL-068/implementations/registered-runtime/manifest.json) |
 | [NEURAL-069](NEURAL-069/README.md) | Dynamic-video fMRI encoding | 4 | [manifest](NEURAL-069/implementations/registered-runtime/manifest.json) |
 | [NEURAL-070](NEURAL-070/README.md) | Action dynamics beyond static appearance | 2 | [manifest](NEURAL-070/implementations/registered-runtime/manifest.json) |

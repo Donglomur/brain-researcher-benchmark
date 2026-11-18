@@ -39,6 +39,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Neural 063](implementations/neural-063) — Task source archive.
   Scope: Source archive remains an implementation resource; relocation does not establish configured deployment or scientific qualification.
+- [Versioned range v1](implementations/versioned-range-v1) — Reviewed source component.
+  Scope: Alternative operator preparation reads the same fixed-version NWB objects with explicit range identity and custody. It preserves all107mice/703sessions/1936planes, native ROI/clock and15-bin endpoint support, while explicitly leaving whole-object BLAKE2b verification false. All-cohort native layout/support, authentic comparison, canonical participant adoption and scientific qualification remain unestablished.
 - [Direct numeric v1](implementations/direct-numeric-v1) — Reviewed source component.
   Scope: Direct numeric paired delivery. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

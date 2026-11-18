@@ -141,6 +141,25 @@
         "threadpoolctl": "3.6.0"
       },
       "scope": "Generated software compatibility only; historical source environment evidence remains distinct."
+    },
+    "neural063-range": {
+      "python": "3.11.18",
+      "packages": {
+        "aiohappyeyeballs": "2.6.1",
+        "aiohttp": "3.14.3",
+        "aiosignal": "1.4.0",
+        "attrs": "25.4.0",
+        "frozenlist": "1.8.0",
+        "fsspec": "2026.6.0",
+        "h5py": "3.16.0",
+        "idna": "3.11",
+        "multidict": "6.7.0",
+        "numpy": "2.4.6",
+        "propcache": "0.4.1",
+        "typing-extensions": "4.15.0",
+        "yarl": "1.22.0"
+      },
+      "scope": "Generated source/runtime controls only. Prospective hosted environment; no equivalence to historical ARM interpreter or authentic cohort qualification."
     }
   },
   "fixtures": {
@@ -227,6 +246,12 @@
       "filename": "neural010/RECORDS",
       "bytes": 13056,
       "sha256": "72b640d6a3fef4b40de255933d1403823d1655c56f93d69761105a653798fc08"
+    },
+    "mindbridge-invocation-adapt-bridge": {
+      "filename": "mindbridge-invocation/scripts/adapt_bridge.sh",
+      "url": "https://raw.githubusercontent.com/littlepure2333/MindBridge/2a3943ff5b619db6f85f16a5e7ff1331d25def55/scripts/adapt_bridge.sh",
+      "bytes": 831,
+      "sha256": "5219d2306d780bbad48ff3ce351fee50d732077d653141f076d5da073aea9293"
     }
   },
   "fixture_directories": {
@@ -13115,6 +13140,122 @@
         "benchmarks/neural/NEURAL-067/implementations/journal-session-bridge-v1/test_bridge.py"
       ],
       "fixtures": []
+    },
+    {
+      "id": "NEURAL-063.command-02",
+      "task_id": "NEURAL-063",
+      "group": "stdlib-a",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-063/implementations/versioned-range-v1/tests/test_range_source.py",
+        "-v"
+      ],
+      "runner": "unittest",
+      "expected_tests": 16,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-063/implementations/versioned-range-v1/tests/test_range_source.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "NEURAL-063.command-03",
+      "task_id": "NEURAL-063",
+      "group": "neural063-range",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-c",
+        "import pathlib,runpy,sys\nwork=pathlib.Path(sys.argv[1]); work.mkdir()\npath='benchmarks/neural/NEURAL-063/implementations/versioned-range-v1/tests/test_runtime.py'\nsys.argv=[path,'--original-root','benchmarks/neural/NEURAL-063/implementations/neural-063/complete-omission-v1','--evidence-root',str(work.resolve())]\nrunpy.run_path(path,run_name='__main__')",
+        "${ARTIFACT_DIR}"
+      ],
+      "runner": "unittest",
+      "expected_tests": 4,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-063/implementations/versioned-range-v1/tests/test_runtime.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "NEURAL-067.command-05",
+      "task_id": "NEURAL-067",
+      "group": "stdlib-a",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-067/implementations/trusted-grading-wiring-v1/test_trusted_grading.py"
+      ],
+      "runner": "unittest",
+      "expected_tests": 7,
+      "expected_skips": 0,
+      "timeout_seconds": 150,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-067/implementations/trusted-grading-wiring-v1/test_trusted_grading.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "PAPER-FIND-003.command-03",
+      "task_id": "PAPER-FIND-003",
+      "group": "stdlib-a",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/paper/PAPER-FIND-003/implementations/source-behavior-input-v1/tests",
+        "-p",
+        "test_behavior_input.py"
+      ],
+      "runner": "unittest",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "timeout_seconds": 150,
+      "test_paths": [
+        "benchmarks/paper/PAPER-FIND-003/implementations/source-behavior-input-v1/tests/test_behavior_input.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "PAPER-paper-method-033.command-06",
+      "task_id": "PAPER-paper-method-033",
+      "group": "stdlib-a",
+      "cwd": "benchmarks/paper/PAPER-paper-method-033/implementations/original-method-invocation-v1",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-c",
+        "import os,pathlib,runpy,sys\nfixture=pathlib.Path(sys.argv[1])\nos.environ['MINDBRIDGE_AUTHOR_SOURCE']=str(fixture.parent.parent)\nsys.argv=['test_invocation_manifest.py']\nrunpy.run_path(sys.argv[0],run_name='__main__')",
+        "${FIXTURE:mindbridge-invocation-adapt-bridge}"
+      ],
+      "runner": "unittest",
+      "expected_tests": 13,
+      "expected_skips": 0,
+      "timeout_seconds": 150,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-033/implementations/original-method-invocation-v1/test_invocation_manifest.py"
+      ],
+      "fixtures": [
+        "mindbridge-invocation-adapt-bridge"
+      ]
     }
   ],
   "source_only_assignments": [
