@@ -10,6 +10,9 @@ VIEWER_SUBMISSION = {"bytes": 677264, "sha256": "1efcb3620776d4042d1050e456e8679
 
 
 def admit_viewer(proof, submission):
+    if type(proof) is dict and set(proof) == {"fresh_provider"}:
+        verifier = C._module("sleep007_fresh_viewer_admission", *C.original("fresh_viewer"))
+        return verifier.admit(proof, submission)
     C.need(type(proof) is dict and set(proof) == {"complete", "review"}, "accepted old viewer proof")
     C.need(C.plain(proof["complete"]) == VIEWER_COMPLETE and C.plain(proof["review"]) == VIEWER_REVIEW,
            "exact accepted complete proof and independent review")
