@@ -598,13 +598,42 @@ class ReducedTimeAllCasesRuntimeControls(unittest.TestCase):
         self.assertEqual(assembled["preparation"]["source_authentication"], "generated_test_descriptors")
         result = grade.grade(assembled, self.root)
         self.assertEqual((result["n_animals"], result["n_sounds"], result["eligible_units"]), (7, 4, 3476))
-        self.assertEqual(result["published_text_aggregation"], "unresolved_no_scalar_reduction")
+        self.assertEqual(result["published_text_aggregation"], "textual_summaries_separate_from_defined_vectors")
+        binding = result["endpoint_binding"]
+        metrics = ["correlation_explained_percent", "variance_explained_percent"]
+        self.assertEqual(binding["accepted_definition_sha256"],
+                         "e7ec5c040d629dff023ced7d42edb1679b3c4d41636431fc441a684cbb712dd0")
+        self.assertEqual(binding["primary_comparison"], {
+            "panel": "Fig4d", "observation": "MUA channel within animal",
+            "reduction": "time_only_per_unit", "metrics": metrics, "direction": "higher_for_both",
+            "reference": "source_single_layer_Poisson_LNP_for_same_units",
+            "biological_replication": "animal; units and trials are nested"})
+        self.assertEqual(binding["companion"], {
+            "panel": "Fig4b", "reduction": "flatten_time_and_eligible_units_within_each_animal",
+            "metrics": metrics})
+        self.assertEqual(binding["prediction_objects"], {
+            "equation_3": "sampled_counts_from_each_trial_distribution",
+            "equations_4_5": "expected_counts_from_each_trial_distribution"})
+        self.assertIs(binding["universal_scalar_required"], False)
+        self.assertEqual(binding["textual_summary_reconciliation"],
+                         "separate_from_defined_vectors; not performed")
+        self.assertEqual(result["qualification"], "source_equation_component_only")
+        self.assertIs(result["native_author_baseline_reproduced"], False)
+        self.assertIs(result["paper_win_evaluated"], False)
         self.assertFalse(result["reproduction_evaluated"])
         self.assertFalse(result["improvement_evaluated"])
         for row in result["cases"]:
             self.assertAlmostEqual(row["flattened"]["correlation_explained_percent"], 100.0, places=10)
             self.assertAlmostEqual(row["flattened"]["variance_explained_percent"], 100.0, places=10)
             self.assertEqual(row["time_bins"], 8)
+            animal = assembled["animals"][str(row["animal"])]
+            expected_units = [(column, unit_id) for column, unit_id in enumerate(animal["unit_ids"])
+                              if animal["eligible_mask"][column]]
+            self.assertEqual([(unit["column_zero_based"], unit["unit_id"]) for unit in row["by_unit"]],
+                             expected_units)
+            for unit in row["by_unit"]:
+                for metric in metrics:
+                    self.assertAlmostEqual(unit[metric], 100.0, places=10)
         self.assertEqual(sum(len(row["by_unit"]) for row in result["cases"]), 3476 * 4)
 
     def test_unpatched_production_rejects_reduced_time_artifact(self):
