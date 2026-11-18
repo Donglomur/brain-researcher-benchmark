@@ -76,7 +76,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-060](NEURAL-060/README.md) | Retrospective wheel-speed decoding beyond context and neural alignment controls | 3 | not linked |
 | [NEURAL-061](NEURAL-061/README.md) | Matched regional replacement effects in held-animal wheel decoding | 3 | not linked |
 | [NEURAL-062](NEURAL-062/README.md) | Known-image identity from calcium population summaries in held-out mice | 2 | [manifest](NEURAL-062/implementations/registered-runtime/manifest.json) |
-| [NEURAL-063](NEURAL-063/README.md) | Omission-conditional calcium population trajectory prediction | 4 | not linked |
+| [NEURAL-063](NEURAL-063/README.md) | Omission-conditional calcium population trajectory prediction | 5 | not linked |
 | [NEURAL-064](NEURAL-064/README.md) | Predictive novelty contrasts with pre-state matching and explicit support limits | 2 | not linked |
 | [NEURAL-065](NEURAL-065/README.md) | Neural typing character reconstruction | 2 | not linked |
 | [NEURAL-066](NEURAL-066/README.md) | Typing information versus language and motor shortcuts | 2 | not linked |

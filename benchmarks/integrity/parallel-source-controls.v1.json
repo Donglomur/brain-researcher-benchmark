@@ -13354,6 +13354,53 @@
         "benchmarks/neural/NEURAL-063/implementations/original-qualifier-v1/tests/test_qualifier_runtime.py"
       ],
       "fixtures": []
+    },
+    {
+      "id": "PAPER-paper-signal-add-020.command-04",
+      "task_id": "PAPER-paper-signal-add-020",
+      "group": "stdlib-b",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-paper-signal-add-020/implementations/original-model-export-v1/test_decimal_interchange.py",
+        "-v"
+      ],
+      "runner": "unittest",
+      "expected_tests": 7,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-signal-add-020/implementations/original-model-export-v1/test_decimal_interchange.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "NEURAL-063.command-05",
+      "task_id": "NEURAL-063",
+      "group": "neural063-range",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-c",
+        "import hashlib,pathlib,runpy,sys\ncomponent=pathlib.Path(sys.argv[1]).resolve(strict=True)\nrange_root=pathlib.Path(sys.argv[2]).resolve(strict=True)\noriginal=pathlib.Path(sys.argv[3]).resolve(strict=True)\nwork=pathlib.Path(sys.argv[4]); work.mkdir(mode=0o700)\nwork=work.resolve(strict=True)\nplan=work/'PLAN.json'; evidence=work/'generated'\nhelper=component/'tests/make_generated_plan.py'\nrunpy.run_path(str(helper))['main'](['--component-root',str(component),'--range-source-root',str(range_root),'--original-root',str(original),'--evidence-root',str(evidence),'--output',str(plan)])\nwith plan.open('rb') as stream:\n    body=stream.read(65537)\nif len(body)>65536:\n    raise ValueError('generated plan exceeds admitted extent')\nworker=component/'tests/test_census_generated.py'\nsys.argv=[str(worker),'--plan',str(plan),'--plan-sha256',hashlib.sha256(body).hexdigest()]\ntry:\n    runpy.run_path(str(worker),run_name='__main__')\nfinally:\n    with (evidence/'controls.log').open('rb') as stream:\n        transcript=stream.read(32769)\n    if len(transcript)>32768:\n        raise ValueError('generated control transcript exceeds admitted extent')\n    sys.stdout.buffer.write(transcript)\n    sys.stdout.buffer.flush()\n",
+        "benchmarks/neural/NEURAL-063/implementations/full-census-v1",
+        "benchmarks/neural/NEURAL-063/implementations/versioned-range-v1",
+        "benchmarks/neural/NEURAL-063/implementations/neural-063/complete-omission-v1",
+        "${ARTIFACT_DIR}"
+      ],
+      "runner": "unittest",
+      "expected_tests": 6,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-063/implementations/full-census-v1/tests/test_census_generated.py"
+      ],
+      "fixtures": []
     }
   ],
   "source_only_assignments": [

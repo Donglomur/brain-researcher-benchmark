@@ -39,6 +39,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Neural 063](implementations/neural-063) — Task source archive.
   Scope: Source archive remains an implementation resource; relocation does not establish configured deployment or scientific qualification.
+- [Full census v1](implementations/full-census-v1) — Reviewed source component.
+  Scope: Separate layouts, metadata/support and all-source-column physical chunk census source for the full original cohort. A missing/failed/unattempted plane holds its session and cohort; first failure stops a stage with explicit tail dispositions. Unknown VLEN/unbounded session representations are refused before decoding. Original scientific modules and endpoints are unchanged; no authentic cohort census, projection/provider operation, model result or benchmark readiness is established.
 - [Original qualifier v1](implementations/original-qualifier-v1) — Reviewed source component.
   Scope: One-original acquisition and local-versus-range array/transport comparison source with an explicitly synthetic25721-byte fixture. It preserves original runtime/scoring and the B19 range-source dependency. Authentic CLI/supervisor admission and actual acquisition are separate; no all-plane/full-cohort, native understanding or benchmark completion claim.
 - [Versioned range v1](implementations/versioned-range-v1) — Reviewed source component.

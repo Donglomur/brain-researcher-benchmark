@@ -72,7 +72,7 @@ Neural understanding revision: **118/118 covered**; 13 delivered named scope, 7 
 | [NEURAL-060](../neural/NEURAL-060/README.md) | [Retrospective wheel-speed decoding beyond context and neural alignment controls](../neural/NEURAL-060/task.json) | canonical_source_specification | 3 | not included |
 | [NEURAL-061](../neural/NEURAL-061/README.md) | [Matched regional replacement effects in held-animal wheel decoding](../neural/NEURAL-061/task.json) | canonical_source_specification | 3 | not included |
 | [NEURAL-062](../neural/NEURAL-062/README.md) | [Known-image identity from calcium population summaries in held-out mice](../neural/NEURAL-062/task.json) | canonical_source_specification | 2 | [manifest](../neural/NEURAL-062/implementations/registered-runtime/manifest.json) |
-| [NEURAL-063](../neural/NEURAL-063/README.md) | [Omission-conditional calcium population trajectory prediction](../neural/NEURAL-063/task.json) | canonical_source_specification | 4 | not included |
+| [NEURAL-063](../neural/NEURAL-063/README.md) | [Omission-conditional calcium population trajectory prediction](../neural/NEURAL-063/task.json) | canonical_source_specification | 5 | not included |
 | [NEURAL-064](../neural/NEURAL-064/README.md) | [Predictive novelty contrasts with pre-state matching and explicit support limits](../neural/NEURAL-064/task.json) | canonical_source_specification | 2 | not included |
 | [NEURAL-065](../neural/NEURAL-065/README.md) | [Neural typing character reconstruction](../neural/NEURAL-065/task.json) | canonical_source_specification | 2 | not included |
 | [NEURAL-066](../neural/NEURAL-066/README.md) | [Typing information versus language and motor shortcuts](../neural/NEURAL-066/task.json) | canonical_source_specification | 2 | not included |
