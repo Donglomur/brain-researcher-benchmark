@@ -76,7 +76,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-060](NEURAL-060/README.md) | Retrospective wheel-speed decoding beyond context and neural alignment controls | 3 | not linked |
 | [NEURAL-061](NEURAL-061/README.md) | Matched regional replacement effects in held-animal wheel decoding | 3 | not linked |
 | [NEURAL-062](NEURAL-062/README.md) | Known-image identity from calcium population summaries in held-out mice | 2 | [manifest](NEURAL-062/implementations/registered-runtime/manifest.json) |
-| [NEURAL-063](NEURAL-063/README.md) | Omission-conditional calcium population trajectory prediction | 3 | not linked |
+| [NEURAL-063](NEURAL-063/README.md) | Omission-conditional calcium population trajectory prediction | 5 | not linked |
 | [NEURAL-064](NEURAL-064/README.md) | Predictive novelty contrasts with pre-state matching and explicit support limits | 2 | not linked |
 | [NEURAL-065](NEURAL-065/README.md) | Neural typing character reconstruction | 2 | not linked |
 | [NEURAL-066](NEURAL-066/README.md) | Typing information versus language and motor shortcuts | 2 | not linked |
@@ -90,7 +90,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-074](NEURAL-074/README.md) | Shared cognitive components across tasks | 3 | not linked |
 | [NEURAL-075](NEURAL-075/README.md) | Perception-to-imagery object decoding | 3 | [manifest](NEURAL-075/implementations/registered-runtime/manifest.json) |
 | [NEURAL-076](NEURAL-076/README.md) | Visual-feature hierarchy in mental imagery | 3 | [manifest](NEURAL-076/implementations/registered-runtime/manifest.json) |
-| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 14 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
+| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 15 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
 | [NEURAL-078](NEURAL-078/README.md) | Error-related negativity beyond response timing | 5 | [manifest](NEURAL-078/implementations/registered-runtime/manifest.json) |
 | [NEURAL-079](NEURAL-079/README.md) | Natural-video EEG response encoding | 1 | not linked |
 | [NEURAL-080](NEURAL-080/README.md) | Video dynamics versus eye movements in EEG | 2 | not linked |
