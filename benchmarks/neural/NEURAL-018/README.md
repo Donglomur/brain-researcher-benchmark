@@ -14,7 +14,7 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Observed integer spike counts for all 182 units in 40 future 5 ms bins, relative edges 450…645 ms.
 
-**Source delivery:** partial\_delivery. The current scorer supports genuine future-count predictions on a complete 574-trial panel; legacy programme qualification is recorded but its runner is not delivered in this task folder. Known condition labels and retrospective movement alignment limit a causal-neural interpretation.
+**Source delivery:** partial\_delivery. The complete 574-query future-count scorer and submitted-programme lifecycle are now present as source. The programme freezes candidate code, exposes only the original public operands, and closes candidate resources before the separate unchanged grader. Authentic input, temporal-preprocessing and native runtime qualification remain separate; condition labels and retrospective movement alignment still limit causal interpretation.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
@@ -23,15 +23,15 @@ Observed integer spike counts for all 182 units in 40 future 5 ms bins, relative
 | --- | --- | --- | --- |
 | Direct observation | not\_delivered | Proposed per-trial numerical counts or fixed raster with all 40×182 positive future expected counts; no no-tools participant transport is supplied. Any future direct arm must receive exactly the selected permitted observation and calibrated units, with no decoder, Python, source lookup, target or score access. | Freeze a feasible complete per-case observation and response representation without silently changing the target.; Deliver and qualify a no-tools transport and complete answer collector before a direct-understanding claim. |
 | Typed viewer | not\_delivered | Proposed typed raster/time-window inspection of the same selected neural observations; no viewer is delivered for this registration. Only admitted rendered views; raw numerical/model operations would belong to the tool-assisted condition. Query targets and source identities remain inaccessible. | Implement task-specific renderer, restricted actions and complete responses.; Verify rendered observations preserve required time/unit information and run a separately identified viewer evaluation. |
-| Tool assisted | not\_delivered | Only an external numerical investigation could currently produce the submission; the artifact scorer does not supply a case-adaptive participant loop. Match observations, calibration, decoder access and cumulative compute against the fixed programme; freeze shared preparation, reset case state and prevent target/score feedback. | Deliver a bounded per-case participant loop with authenticated observation and answer lineage. |
-| Frozen program | not\_delivered | The current package accepts prediction artifacts or provides reference routines; it does not deliver the candidate programme lifecycle. Freeze source, fitting, selection and permitted query adaptation before assessment access; authentic target custody and runtime qualification remain external. | Recover or implement the candidate producer and fit/freeze/predict/close lifecycle before calling the artifact score a programme evaluation. |
+| Tool assisted | not\_delivered | The restored submitted-programme and operator utilities can produce complete submissions, but no case-adaptive participant investigation loop is supplied for this condition. Match observations, calibration, decoder access and cumulative compute against the fixed programme; freeze shared preparation, reset case state and prevent target/score feedback. | Deliver a bounded per-case participant loop with authenticated observation and answer lineage. |
+| Frozen program | source\_available | One precommitted Python programme receives the original complete historical training/query packet and returns all 574 x 40 x 182 positive expected counts through submitted-program-v1. Only past.npz, training\_future.npz and public\_manifest.json are public operands. Candidate code is frozen before their release; query targets and scorer/reference files never enter candidate mounts. The same entire query batch and declared training policy apply; output validation cannot certify fitting provenance. | Authenticated operands and independent native image/source/input-boundary admission, platform compatibility and forced-stop recovery.; A prospective complete candidate run and matched-method/scientific review; source controls are not current programme performance. |
 
 Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
 
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 19353 bytes; SHA-256 `0328f6cbfef32141131d80d1e825afb98a9293cb76057ff8e6ae0c23b7a6211f`.
+- Specification identity: 20634 bytes; SHA-256 `41e50168e570b48a060055d33b6b19d4927fbb1fe04279e35b5d952c73cb4f4d`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

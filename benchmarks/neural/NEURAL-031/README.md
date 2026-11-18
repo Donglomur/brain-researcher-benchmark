@@ -12,9 +12,9 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 ## Current neural-understanding objective
 
-An eligible spine’s longitudinal structural change derived from baseline spine\_volumes and followup\_volumes, with the author eligibility/volume transform frozen. The historical declaration names next-day spine size; its missing scorer prevents verifying whether that endpoint exactly matches the original volume-change target.
+Observed follow-up spine volume divided by baseline volume for eligible requested rows, dimensionless, with no change equal to 1. Observed zero is valid; unavailable follow-up is not zero. This is the existing finite prediction protocol's recovered ratio endpoint, not a newly substituted normalized difference or raw next-day size.
 
-**Source delivery:** partial\_delivery. The original source audit supports longitudinal spine measurements and the historical declaration describes a 20-mouse prediction task. This checkout contains the declaration but neither its named scorer nor producer. Recover the exact target transform and executable dependencies before treating the declared finite scope as usable.
+**Source delivery:** partial\_delivery. The existing finite 20-mouse follow-up/baseline ratio endpoint, complete paired delivery, target bridge and 40-context frozen-programme executor are recovered as source. A retained independently accepted receipt establishes exact-source target/input interoperability only. Authentic longitudinal acquisition provenance, matched-method review, native candidate execution and scientific qualification remain separate; this endpoint differs from the paper's pooled stable-spine correlation.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
@@ -24,14 +24,14 @@ An eligible spine’s longitudinal structural change derived from baseline spine
 | Direct observation | not\_delivered | Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present. Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation. | Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance. |
 | Typed viewer | not\_delivered | Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer. Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable. | Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here. |
 | Tool assisted | not\_delivered | Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget. Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback. | No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode. |
-| Frozen program | not\_delivered | A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout. Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode. | Recover the named source/dependency closure and exact public input contract before executing or scoring. |
+| Frozen program | source\_available | One frozen submitted programme and declared matched method across all 40 original mouse/view contexts, joined to recovered complete paired delivery and the unchanged equal-mouse ratio scorer. Only one held-mouse view, its other-nineteen-mouse training labels and frozen source enter each fresh participant realm. Baseline shares neural missingness but no neural values. All contexts and producer closure must complete before protected target scoring; a method declaration is not independent evidence of matched fitting. | Exact native image/source/process containment, current resource admission and actual complete candidate execution.; Independent matched-method/scientific review and preserved original acquisition/correspondence limitations; programme source or target interoperability does not establish native neural understanding. |
 
 Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
 
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 17037 bytes; SHA-256 `e4c4251d9aa4c9c411fcae159e78819274e5d0a9643f60bfcd002df52837855e`.
+- Specification identity: 19871 bytes; SHA-256 `296f733de52ce2f7d21232fa1fa17b13ef34ac6e6480a65c1ac854b2f96b0f84`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
