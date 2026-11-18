@@ -155,6 +155,34 @@ class ManifestControls(unittest.TestCase):
             result=launcher.run(root,manifest,'stdlib',base/'results')
             self.assertEqual((result[0]['tests'],result[0]['skips']),(1,0))
 
+    def test_python_token_binds_nested_argument_and_environment(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp);root=base/'repo';root.mkdir()
+            source,manifest,document=self.fixture(root)
+            source.write_text('import argparse, os, sys, unittest\nfrom pathlib import Path\n'
+                'parser=argparse.ArgumentParser()\nparser.add_argument("--python",required=True)\n'
+                'args=parser.parse_args()\nclass Checks(unittest.TestCase):\n'
+                ' def test_selected_interpreter(self):\n'
+                '  selected=Path(args.python).resolve(strict=True)\n'
+                '  self.assertEqual(selected,Path(sys.executable).resolve(strict=True))\n'
+                '  self.assertEqual(os.environ["CONTROL_PYTHON"],args.python)\n'
+                'if __name__=="__main__": unittest.main(argv=[sys.argv[0]])\n')
+            raw=source.read_bytes();path=source.relative_to(root).as_posix()
+            (root/'benchmarks/integrity/source-ownership.json').write_text(json.dumps({'files':[
+                {'path':path,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}]}))
+            document['commands'][0]['argv'] += ['--python','${PYTHON}']
+            document['commands'][0]['environment']={'CONTROL_PYTHON':'${PYTHON}'}
+            manifest.write_text(json.dumps(document))
+            result=launcher.run(root,manifest,'stdlib',base/'results')
+            self.assertEqual((result[0]['tests'],result[0]['skips']),(1,0))
+            document['commands'][0]['argv'][-1]='prefix-${PYTHON}'
+            manifest.write_text(json.dumps(document))
+            with patch.object(launcher,'run_command') as execute,self.assertRaisesRegex(
+                    ValueError,'unresolved command placeholder'):
+                launcher.run(root,manifest,'stdlib',base/'refused-results')
+            execute.assert_not_called()
+            self.assertFalse((base/'refused-results').exists())
+
     def test_mixed_stream_mutant_summary_keeps_actual_order_under_isolation(self):
         with tempfile.TemporaryDirectory() as tmp:
             base=Path(tmp);root=base/'repo';root.mkdir()

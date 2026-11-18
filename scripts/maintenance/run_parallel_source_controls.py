@@ -282,6 +282,7 @@ def run(root, manifest, group, output, fixtures=None):
         # -u also applies under -I, unlike PYTHONUNBUFFERED. Keep nested mutant
         # stdout in actual order relative to the outer framework's stderr.
         substitutions = dict(fixture_paths)
+        substitutions['${PYTHON}'] = sys.executable
         artifact = None
         if ARTIFACT_TOKEN in row['argv'] + list(row.get('environment', {}).values()):
             artifact = output / (row['id'] + '.artifacts')
