@@ -3,6 +3,7 @@ import builtins
 from copy import deepcopy
 import importlib.util
 import json
+import math
 import os
 from pathlib import Path
 import sys
@@ -62,7 +63,9 @@ class ProfileAndSource(unittest.TestCase):
 
     def test_stale_future_or_incomplete_remaining_window_refused(self):
         loaded = load()
-        for deadline, now in [(500., 100.), (1901., 100.), (float('inf'), 0.), (0., 1.)]:
+        for deadline, now in [(500., 100.), (1901., 100.),
+                              (math.nextafter(1900., math.inf), 100.),
+                              (float('inf'), 0.), (0., 1.)]:
             with self.subTest(deadline=deadline), self.assertRaises(ValueError):
                 profile.runtime(plan(), loaded.transport, loaded.completion_pin, {}, deadline=deadline, now=now)
 
@@ -150,7 +153,8 @@ class FullScopeAggregateControl(unittest.TestCase):
         try:
             p = plan(case.root)
             p['purpose'] = 'improvement'  # Same declaration as the existing fixture's seal.
-            now = time.monotonic()
+            # Keep the exact-endpoint fixture independent of host clock rounding.
+            now = 100.0
             case.runtime = profile.runtime(p, loaded.transport, loaded.completion_pin, s.pin(s.encoded(p)),
                                            deadline=now+1800, now=now)
             # A stricter generated-fixture cap bounds cumulative writes without
