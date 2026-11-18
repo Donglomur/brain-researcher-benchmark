@@ -152,7 +152,7 @@ class AdapterControls(unittest.TestCase):
 
 if __name__=='__main__':
     with mock.patch.object(socket,'socket',side_effect=no_network),mock.patch.object(socket,'getaddrinfo',side_effect=no_network):
-        result=unittest.TestResult();unittest.defaultTestLoader.loadTestsFromTestCase(AdapterControls).run(result)
+        result=unittest.TextTestRunner(verbosity=2).run(unittest.defaultTestLoader.loadTestsFromTestCase(AdapterControls))
     report={'scope':'generated author-source key parity and strict admission guards only',
         'tests_run':result.testsRun,'failures':len(result.failures),'errors':len(result.errors),
         'numpy_version':np.__version__,'pandas_version':pd.__version__,
