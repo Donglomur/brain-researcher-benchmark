@@ -57,7 +57,7 @@ jobs:
               {
                   "path": "benchmarks/integrity/current-closures/construction-dosei-v2/SOURCE_BINDINGS.json",
                   "bytes": 3651,
-                  "sha256": "e6996a9b8b075fdeab0cace14156c3002b606c0d79b13be1f16c1dfa6feedb69"
+                  "sha256": "5b5066257d77b7fc350b5d2b51ad33245cd1c9e665793d9ca775341671953d7c"
               },
               {
                   "path": "benchmarks/integrity/current-closures/construction-fus-delivery/SOURCE.json",
@@ -1162,3 +1162,228 @@ jobs:
           result = unittest.TextTestRunner(verbosity=2).run(suite)
           assert result.testsRun == 8 and not result.skipped and result.wasSuccessful()
           PY
+
+  calcium-session-portable-controls:
+    needs: construction-source-identities
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    env:
+      CONTROL_DECLARED_MEMORY_BYTES: '268435456'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Generated calcium portability controls (10)
+        timeout-minutes: 2
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import resource
+          import stat
+          import subprocess
+          import sys
+
+          source_root = Path('.').absolute()
+          source_rows = [
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/AUTHENTIC_EVIDENCE.json",
+              "bytes": 9762,
+              "sha256": "e5aa504983f1bc1810da690f29a38e004672a685cff5bdf7883d9d5134207360"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/README.md",
+              "bytes": 5290,
+              "sha256": "6e6f191267b0e5c72a84579268bc30503ea000863ffa0b5e81fae095919b0206"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/RECIPE.json",
+              "bytes": 878,
+              "sha256": "b95423aa5cf515514f0c586a7653c8a9de3fcbac1ecbeae3401bedd43c33f77e"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/SOURCE.json",
+              "bytes": 1684,
+              "sha256": "3bab5a7ad6273cf91f945d8e695e8a6f964db655e26d33cafa0bdc9cdfdf98f2"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/_core/metadata.py",
+              "bytes": 25602,
+              "sha256": "2c9f7f8bf65f754a451326a7ef1c400ce85d812b4adbd4149cf3b904ecd6e5f1"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/_core/pairing.py",
+              "bytes": 7325,
+              "sha256": "0c93a2817521651a94621bfd09b76f3d54c802443b29aac0df0f27f98ee755bb"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/_core/reference_pair.py",
+              "bytes": 12710,
+              "sha256": "7120e948d960938f6d018b9972f2ff772976bbb581ba0a83b261b495e8944793"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/_core/session_collector.py",
+              "bytes": 12976,
+              "sha256": "def3924f709b82c17f90539738df51b0fa65a17435759ef2f9dfaf200cd8ff7f"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/_core/session_export.py",
+              "bytes": 6707,
+              "sha256": "275badb038aa74b34c59d4062f65a2af032b2a0b3401546da62191a5b2917a3d"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/_core/session_projection.py",
+              "bytes": 22327,
+              "sha256": "47b06abbade0101eb33c7cddd4d64b30249c9ec078fa635688e5644e0823806f"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/adapter.py",
+              "bytes": 21939,
+              "sha256": "2ef1bda32e3006c56bb52a0175679ab3612c32bd9d57f4b688df7a8546c6d9ee"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/prepare.py",
+              "bytes": 10651,
+              "sha256": "d459bda966f84ddaa79f88935eeb3b2c65b06b3e2198ef527f5f4773e23e0855"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/session-preparation-v1/test_portable.py",
+              "bytes": 23456,
+              "sha256": "cd9569fbd201a3639784dbf840cf09020281179ce527e3494a521461aad1e65a"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/locked-mat-admission-v2/admission.py",
+              "bytes": 34094,
+              "sha256": "ffe2d7d43386f53f92e9e97b07e422581d8fc05e2fa53471bdb9ba38bbcd7ab6"
+            },
+            {
+              "path": "benchmarks/neural/NEURAL-025/implementations/train-only-decoding-v2/source_condition.py",
+              "bytes": 5966,
+              "sha256": "c7ce9b2e464c262550e6e224d7d81becb1094306ff5aeedf819068eb8d14ce11"
+            }
+          ]
+          for row in source_rows:
+              path = source_root / row['path']
+              if any(parent.is_symlink() for parent in (path, *path.parents)):
+                  raise ValueError('symlink in selected portable source path')
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), 'rb') as stream:
+                  before = os.fstat(stream.fileno())
+                  if not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or before.st_size != row['bytes']:
+                      raise ValueError('selected portable source type or extent differs')
+                  body = stream.read(row['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              fields = ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              if any(getattr(before, field) != getattr(after, field) for field in fields):
+                  raise ValueError('selected portable source changed during read')
+              if len(body) != row['bytes'] or hashlib.sha256(body).hexdigest() != row['sha256']:
+                  raise ValueError('selected portable source identity differs')
+          package = source_root / 'benchmarks/neural/NEURAL-025/implementations/session-preparation-v1'
+          expected_members = {row['path'] for row in source_rows if row['path'].startswith(str(package.relative_to(source_root)) + '/')}
+          members = set()
+          for directory, directories, files in os.walk(package, followlinks=False):
+              for name in directories + files:
+                  path = Path(directory) / name
+                  mode = path.lstat().st_mode
+                  if not (stat.S_ISREG(mode) or stat.S_ISDIR(mode)):
+                      raise ValueError('nonordinary portable package member')
+              members.update(str((Path(directory) / name).relative_to(source_root)) for name in files)
+          if members != expected_members:
+              raise ValueError('portable package namespace differs')
+
+          def validate_result(body):
+              def need(ok, message):
+                  if not ok:
+                      raise ValueError(message)
+              def unique_pairs(pairs):
+                  value = {}
+                  for key, item in pairs:
+                      need(key not in value, 'duplicate JSON key')
+                      value[key] = item
+                  return value
+              need(0 < len(body) <= 1048576, 'complete bounded JSON required')
+              value = json.loads(body, object_pairs_hook=unique_pairs)
+              expected_keys = {'schema', 'status', 'case_count', 'passed', 'failed', 'outcomes',
+                  'mat_open_attempts', 'native_import_attempts', 'original_checkout_fallback_open_attempts',
+                  'fixture_accounting', 'prior_35_and_18_control_suites_repeated',
+                  'successful_original_authentication_fabricated', 'numerical_pipeline_invocations',
+                  'scientific_qualification', 'trust_scope', 'malicious_whole_checkout_replacement_detection_claimed'}
+              need(type(value) is dict and set(value) == expected_keys, 'complete report fields required')
+              need(value['schema'] == 'calcium-session-portable-generated-controls-v1'
+                   and value['status'] == 'passed', 'portable controls did not pass')
+              for key, expected in (('case_count', 10), ('passed', 10), ('failed', 0),
+                                    ('numerical_pipeline_invocations', 0)):
+                  need(type(value[key]) is int and value[key] == expected, 'control census or scope differs')
+              expected_names = ["cold_help_is_stdlib_only_and_does_not_open_mat_or_create_output","relocated_check_from_unrelated_cwd_uses_only_bound_relative_sources","native_spy_sees_exact_bindings_and_failure_cannot_publish_completion","fresh_output_required_existing_files_directories_and_missing_parent_refused","symlink_checkout_and_original_location_aliases_cannot_rebind_outputs","self_consistent_recipe_identity_change_refused_before_output_or_native_boundary","modified_immutable_helper_and_rewritten_descriptor_cannot_replace_core_pin","descriptor_cannot_add_or_replace_closed_relative_dependency_paths","real_adapter_rejects_tiny_or_wrong_filename_original_before_open_or_native_import","exact_existing_v2_condition_loaded_without_cwd_shadow_or_invented_qualification"]
+              need(type(value['outcomes']) is list and len(value['outcomes']) == 10, 'ten outcomes required')
+              for row, name in zip(value['outcomes'], expected_names):
+                  need(type(row) is dict and row == {'name': name, 'status': 'passed'},
+                       'ordered successful outcome differs')
+              for key in ('mat_open_attempts', 'native_import_attempts', 'original_checkout_fallback_open_attempts'):
+                  need(value[key] == [], 'forbidden input or native access recorded')
+              for key in ('prior_35_and_18_control_suites_repeated', 'successful_original_authentication_fabricated',
+                          'scientific_qualification', 'malicious_whole_checkout_replacement_detection_claimed'):
+                  need(value[key] is False, 'qualification or repeated-suite claim refused')
+              need(value['trust_scope'] == 'Trusted checked-out CLI plus its hardcoded immutable pins; descriptor coherence only',
+                   'trust scope differs')
+              accounting = value['fixture_accounting']
+              expected_accounting = {'control_cumulative_write_bytes_including_tamper_restores',
+                  'cli_error_receipt_bytes', 'aggregate_fixture_write_cap_bytes', 'fixture_copy_and_receipt_read_bytes',
+                  'source_verifier_reads_metered_by_this_counter', 'relocated_checkout_count', 'original_array_bytes_read'}
+              need(type(accounting) is dict and set(accounting) == expected_accounting, 'fixture accounting fields differ')
+              for key in expected_accounting - {'source_verifier_reads_metered_by_this_counter'}:
+                  need(type(accounting[key]) is int and accounting[key] >= 0, 'nonnegative integer accounting required')
+              writes = accounting['control_cumulative_write_bytes_including_tamper_restores']
+              errors = accounting['cli_error_receipt_bytes']
+              need(writes <= 491520 and errors <= 32768 and writes + errors <= 524288, 'fixture writes exceed bound')
+              need(accounting['aggregate_fixture_write_cap_bytes'] == 524288
+                   and accounting['fixture_copy_and_receipt_read_bytes'] <= 1048576
+                   and accounting['source_verifier_reads_metered_by_this_counter'] is False
+                   and accounting['relocated_checkout_count'] == 1
+                   and accounting['original_array_bytes_read'] == 0, 'fixture scope differs')
+              return value
+
+          temporary_root = Path(os.environ['RUNNER_TEMP']).resolve(strict=True)
+          if any(path.is_symlink() for path in (temporary_root, *temporary_root.parents)):
+              raise ValueError('noncanonical temporary root')
+          run_id = os.environ['GITHUB_RUN_ID']
+          attempt = os.environ['GITHUB_RUN_ATTEMPT']
+          if not run_id.isdecimal() or not attempt.isdecimal():
+              raise ValueError('numeric run identity required')
+          suffix = run_id + '-' + attempt
+          scratch = temporary_root / ('calcium-portable-scratch-' + suffix)
+          evidence = temporary_root / ('calcium-portable-evidence-' + suffix)
+          scratch.mkdir(mode=0o700, exist_ok=False)
+          evidence.mkdir(mode=0o700, exist_ok=False)
+          log = evidence / 'result.stdout.json'
+          # One bounded regular capture; partial output is retained on timeout or failure.
+          resource.setrlimit(resource.RLIMIT_FSIZE, (1048576, 1048576))
+          environment = dict(os.environ)
+          for name in ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS', 'VECLIB_MAXIMUM_THREADS',
+                       'NUMEXPR_NUM_THREADS', 'BLIS_NUM_THREADS', 'POLARS_MAX_THREADS', 'RAYON_NUM_THREADS'):
+              environment[name] = '1'
+          with log.open('xb') as stream:
+              result = subprocess.run([sys.executable, '-I', '-S', '-B', str(package / 'test_portable.py'),
+                  '--scratch-dir', str(scratch)], cwd=source_root, env=environment,
+                  stdout=stream, stderr=subprocess.STDOUT, timeout=60, check=False)
+          with log.open('rb') as stream:
+              report = stream.read(1048577)
+          if result.returncode != 0:
+              raise ValueError('portable command failed; preserve the complete capture')
+          validate_result(report)
+          print(json.dumps({'status': 'passed', 'custom_cases': 10, 'scientific_qualification': False}))
+          PY
+      - name: Retain calcium control output
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: calcium-session-portable-controls
+          path: ${{ runner.temp }}/calcium-portable-evidence-${{ github.run_id }}-${{ github.run_attempt }}/result.stdout.json
+          if-no-files-found: warn
+          retention-days: 14
