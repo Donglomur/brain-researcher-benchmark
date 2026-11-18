@@ -62,6 +62,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Fig5 coefficient alignment v1](implementations/fig5-coefficient-alignment-v1) — Reviewed source component.
   Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
+- [Fig5 keyed fit export v1](implementations/fig5-keyed-fit-export-v1) — Reviewed source component.
+  Scope: Source-defined keyed fit/SEM exporter preserving both diagnostic branches; no endpoint, definition, runtime or scientific readiness change.
 - [Io model source recovery v1](implementations/io-model-source-recovery-v1) — Source metadata and findings.
   Scope: Original IO-model comparison recovered. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

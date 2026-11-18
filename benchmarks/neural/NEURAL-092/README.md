@@ -41,6 +41,10 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Public ci adapter v1](implementations/public-ci-adapter-v1) — Reviewed source component.
+  Scope: Source-only public CI adapter preserving six genuine public controls from the registered inactive runtime; no runtime selection or scientific qualification.
+- [Registered runtime stable deviance v1](implementations/registered-runtime-stable-deviance-v1) — Reviewed source component.
+  Scope: Complete inactive50-role39-module runtime and six public import/CLI/error controls. No authentic32-session execution, profile/resource qualification, native/scientific readiness or performance claim.
 - [Stable deviance integration v1](implementations/stable-deviance-integration-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Stable deviance v1](implementations/stable-deviance-v1) — Reviewed source component.

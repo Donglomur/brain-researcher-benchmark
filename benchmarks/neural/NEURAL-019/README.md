@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Png transport dejavu v1](implementations/png-transport-dejavu-v1) — Reviewed source component.
+  Scope: Exact DejaVu generated transport/profile component; Linux profile, authentic readability/isolation and scientific modes remain unqualified.
 - [Submitted program v1](implementations/submitted-program-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Typed count viewer v1](implementations/typed-count-viewer-v1) — Reviewed source component.

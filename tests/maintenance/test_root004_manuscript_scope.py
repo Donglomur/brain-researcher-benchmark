@@ -1,5 +1,6 @@
 """Changed ROOT004 metadata behavior only; no neural data or scientific execution."""
 from __future__ import annotations
+import ast
 import copy
 import hashlib
 import json
@@ -70,9 +71,36 @@ class Root004ManuscriptScopeTests(unittest.TestCase):
         self.assertEqual(result["improvement_contract_pin"], self.pins["improvement"])
         self.assertEqual(result["retained_improvement_contract_pin"], self.pins["retained_improvement"])
         self.assertEqual(result["primary_policy_revision"], self.pins["descriptor"])
-        for name in ("descriptor", "improvement", "retained_improvement", "retained_reproduction",
+        for name in ("descriptor", "improvement", "retained_reproduction",
                      "retained_task", "retained_outcomes", "pre_outcomes", "reproduction", "outcomes"):
             self.assertIn(self.pins[name]["path"], result["members"])
+        retained = self.pins["retained_improvement"]["path"]
+        self.assertNotIn(retained, result["members"])
+        # Exercise the maintained ownership merge, not only the context in
+        # isolation. The retained policy is already owned by task revision.
+        checker = ast.parse((ROOT / "src/neurobench/repository_checks.py").read_text())
+        prepare = next(node for node in checker.body
+                       if isinstance(node, ast.FunctionDef) and node.name == "prepare")
+        branches = [node for node in ast.walk(prepare) if isinstance(node, ast.If)
+                    and isinstance(node.test, ast.Name) and node.test.id == "outcome_context"]
+        self.assertEqual(len(branches), 1)
+        merge = compile(ast.fix_missing_locations(ast.Module(
+            body=[copy.deepcopy(branches[0])], type_ignores=[])), "<maintained outcome ownership merge>", "exec")
+        owner = "task:PAPER-ROOT-ADD-004"
+        def environment(members):
+            return dict(outcome_context=result, members=members,
+                        identifier="PAPER-ROOT-ADD-004", track="paper",
+                        allowed_files={"paper": set()}, need=self.binding.need)
+        merged = {retained: owner}
+        exec(merge, environment(merged))
+        self.assertEqual(set(merged), result["members"] | {retained})
+        self.assertEqual(set(merged.values()), {owner})
+        # No general same-owner deduplication or cross-owner collision bypass.
+        collision = min(result["members"])
+        for conflicting_owner in (owner, "task:PAPER-ROOT-ADD-005"):
+            with self.subTest(conflicting_owner=conflicting_owner):
+                with self.assertRaisesRegex(ValueError, "Duplicate paper outcome metadata"):
+                    exec(merge, environment({retained: owner, collision: conflicting_owner}))
         self.assertFalse(any(result["summary"]["paired_metadata_admitted"].values()))
         self.assertTrue(all(cell["scientific_outcome"] == "unknown" for cell in result["summary"]["cells"]))
 

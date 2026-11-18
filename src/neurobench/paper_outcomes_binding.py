@@ -1076,7 +1076,9 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     if nuclr_reporting:
         members.update((_NUCLR_RETAINED_IMPROVEMENT["path"], _NUCLR_RETAINED_OUTCOMES["path"]))
     if root004_scope:
-        for root004_name in ("descriptor", "improvement", "retained_improvement",
+        # The retained improvement remains authenticated by the full scope
+        # bundle and owned by the task revision route, not by outcomes twice.
+        for root004_name in ("descriptor", "improvement",
                              "retained_task", "retained_reproduction", "retained_outcomes"):
             root004_path = _ROOT004_PINS[root004_name]["path"]
             need(root004_path not in members, "Duplicate ROOT004 source scope member")

@@ -54,6 +54,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prepares 390 source-context fit units and private expected rows for the full declared 13-session/eight-mouse roster, scores mouse-macro circular error, and separately summarizes complete 13 × 9 source-concordance tables. Authentic behavior/unit/trial support, zero-event trial resolution, paper 1 s/source 0.5 s ambiguity, file-scoped rights, native LDA parity, protected runtime isolation and all nine scientific admission gates remain open. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Native order export v1](implementations/native-order-export-v1) — Reviewed source component.
+  Scope: Metadata export of the actual supplied native training/query index sequence; exact context-dropped training shape and full390-unit membership; source-native order/authentic custody/runtime parity not inferred. No splitter/sorter/neural projection/fit/canonical change.
 - [Original fold bridge v1](implementations/original-fold-bridge-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Original row score v1](implementations/original-row-score-v1) — Reviewed source component.

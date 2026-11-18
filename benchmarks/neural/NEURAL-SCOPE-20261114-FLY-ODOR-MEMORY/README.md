@@ -14,7 +14,7 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Time-weighted mean calc\_speed(t)×cos(heading(t)−goal\_heading) over the five seconds after verified physical odor offset; goal\_heading is the circular mean in the final pre-offset second.
 
-**Source delivery:** partial\_delivery. Complete native inspection and PID command preparation exist, but neither builds the five-second behavioral target or scores neural information. The next concrete step is a verified physical-offset/identity bridge and complete fly-grouped target producer, not treating parser completion as forecast success.
+**Source delivery:** partial\_delivery. Complete native inspection, PID command preparation and an evaluator-only paired fly-macro point scorer exist. The scorer consumes supplied frozen numerical targets; it does not construct the five-second behavioral answer or validate its calibration. A verified physical-offset/identity bridge and complete fly-grouped target producer remain missing; parser or scorer delivery is not forecast success.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
@@ -24,7 +24,7 @@ Time-weighted mean calc\_speed(t)×cos(heading(t)−goal\_heading) over the five
 | Direct observation | not\_delivered | Bounded histories could support direct numerical interpretation after exact episode extraction. No future behavior, derived bump duration or target feedback; finite representation must preserve the registered history. | No authenticated forecast packet or complete no-tools transport. |
 | Typed viewer | not\_delivered | A trace viewer could show aligned permitted neural/behavior histories. No post-offset scroll and no label-bearing derived summaries; current inspector is operator code, not a viewer. | Target-aligned visual representation and typed episode boundary. |
 | Tool assisted | not\_delivered | Per-case signal/behavior analysis with numerical tools over the same history. Matched tools and source-only fitted parameters; operator inspection outputs do not grant candidate access. | No candidate-facing investigation episode or forecast response collector. |
-| Frozen program | not\_delivered | Precommitted model predicts all eligible offset episodes after fly-grouped training. Freeze recipe before query; no held-fly target refresh, whole-test normalization or future-bump selection. | Target producer, scorer, baseline and frozen executor. |
+| Frozen program | not\_delivered | Precommitted model predicts all eligible offset episodes after fly-grouped training. Freeze recipe before query; no held-fly target refresh, whole-test normalization or future-bump selection. | Target producer, competent baselines and frozen executor. |
 
 Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
 
@@ -33,7 +33,7 @@ Source availability does not establish a qualified runtime. A programme score ca
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 27584 bytes; SHA-256 `a998862c3652ccbb71a01f96e66701fc4195b31de56109a99d65b78d6390f94e`.
+- Specification identity: 27771 bytes; SHA-256 `4d0dbb3cb692456670f030a2eb9b69977641e096fbcf4f2ee795afdf43300cfb`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

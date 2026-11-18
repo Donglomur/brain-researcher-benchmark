@@ -17,7 +17,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-001](NEURAL-001/README.md) | Audiobook-calibrated sentence-envelope inference from MEG | 3 | not linked |
 | [NEURAL-002](NEURAL-002/README.md) | Early marker-window stimulus-ID inference from MorseEEG | 3 | [manifest](NEURAL-002/implementations/registered-runtime/manifest.json) |
 | [NEURAL-003](NEURAL-003/README.md) | Fixed-deadline reaction-time inference from causal EEG | 2 | not linked |
-| [NEURAL-004](NEURAL-004/README.md) | Conditional contrast inference and HMP evidence investigation | 3 | not linked |
+| [NEURAL-004](NEURAL-004/README.md) | Conditional contrast inference and HMP evidence investigation | 4 | not linked |
 | [NEURAL-005](NEURAL-005/README.md) | ERP contribution to subsequent social choice | 4 | [manifest](NEURAL-005/implementations/registered-runtime/manifest.json) |
 | [NEURAL-006](NEURAL-006/README.md) | Reward versus emotion prediction-error physiology | 4 | not linked |
 | [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 13 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
@@ -27,12 +27,12 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-011](NEURAL-011/README.md) | Adult clinical seizure-event detection | 2 | not linked |
 | [NEURAL-012](NEURAL-012/README.md) | Cross-cohort seizure robustness | 3 | [manifest](NEURAL-012/implementations/registered-runtime/manifest.json) |
 | [NEURAL-013](NEURAL-013/README.md) | Attempted-speech phoneme-sequence decoding | 2 | [manifest](NEURAL-013/implementations/registered-runtime/manifest.json) |
-| [NEURAL-014](NEURAL-014/README.md) | Speech decoder neural dependence under drift | 4 | not linked |
+| [NEURAL-014](NEURAL-014/README.md) | Speech decoder neural dependence under drift | 5 | not linked |
 | [NEURAL-015](NEURAL-015/README.md) | Word-boundary localization from intracranial activity | 3 | not linked |
 | [NEURAL-016](NEURAL-016/README.md) | Linguistic effects beyond natural-movie covariates | 3 | not linked |
 | [NEURAL-017](NEURAL-017/README.md) | Motor population co-smoothing | 4 | [manifest](NEURAL-017/implementations/registered-runtime/manifest.json) |
 | [NEURAL-018](NEURAL-018/README.md) | Causal motor-population forecasting | 3 | [manifest](NEURAL-018/implementations/registered-runtime/manifest.json) |
-| [NEURAL-019](NEURAL-019/README.md) | Movement information in neural latent representations | 4 | [manifest](NEURAL-019/implementations/registered-runtime/manifest.json) |
+| [NEURAL-019](NEURAL-019/README.md) | Movement information in neural latent representations | 5 | [manifest](NEURAL-019/implementations/registered-runtime/manifest.json) |
 | [NEURAL-020](NEURAL-020/README.md) | Somatosensory population co-smoothing | 2 | not linked |
 | [NEURAL-021](NEURAL-021/README.md) | Somatosensory hand-velocity decoding | 7 | [manifest](NEURAL-021/implementations/registered-runtime/manifest.json) |
 | [NEURAL-022](NEURAL-022/README.md) | Active-versus-passive sensory coding | 5 | not linked |
@@ -52,7 +52,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-036](NEURAL-036/README.md) | Retrospective prediction of released glial-behavior state proxy | 3 | [manifest](NEURAL-036/implementations/registered-runtime/manifest.json) |
 | [NEURAL-037](NEURAL-037/README.md) | Acquisition-local held-condition calcium response prediction | 3 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
 | [NEURAL-038](NEURAL-038/README.md) | Sensory-context modulation of optogenetic calcium response investigation | 4 | [manifest](NEURAL-038/implementations/registered-runtime/manifest.json) |
-| [NEURAL-039](NEURAL-039/README.md) | Natural-movie parcel-response encoding | 2 | [manifest](NEURAL-039/implementations/registered-runtime/manifest.json) |
+| [NEURAL-039](NEURAL-039/README.md) | Natural-movie parcel-response encoding | 3 | [manifest](NEURAL-039/implementations/registered-runtime/manifest.json) |
 | [NEURAL-040](NEURAL-040/README.md) | Audio, visual and language contributions to fMRI | 2 | not linked |
 | [NEURAL-041](NEURAL-041/README.md) | Working-memory load decoding | 2 | [manifest](NEURAL-041/implementations/registered-runtime/manifest.json) |
 | [NEURAL-042](NEURAL-042/README.md) | Load-dependent theta-gamma coupling | 5 | [manifest](NEURAL-042/implementations/registered-runtime/manifest.json) |
@@ -105,7 +105,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-089](NEURAL-089/README.md) | Event-aligned phoneme classification in the original LibriBrain participant | 3 | not linked |
 | [NEURAL-090](NEURAL-090/README.md) | Phoneme information beyond timing and narrative priors in LibriBrain Broad | 1 | not linked |
 | [NEURAL-091](NEURAL-091/README.md) | Stimulus-family response prediction for calibrated Neuropixels units | 2 | not linked |
-| [NEURAL-092](NEURAL-092/README.md) | Within-session count prediction followed by observed state-association investigation | 3 | [manifest](NEURAL-092/implementations/registered-runtime/manifest.json) |
+| [NEURAL-092](NEURAL-092/README.md) | Within-session count prediction followed by observed state-association investigation | 5 | [manifest](NEURAL-092/implementations/registered-runtime/manifest.json) |
 | [NEURAL-093](NEURAL-093/README.md) | Sensory evidence decoding during decisions | 2 | [manifest](NEURAL-093/implementations/registered-runtime/manifest.json) |
 | [NEURAL-094](NEURAL-094/README.md) | Decision correlates beyond movement | 4 | [manifest](NEURAL-094/implementations/registered-runtime/manifest.json) |
 | [NEURAL-095](NEURAL-095/README.md) | Produced-interval prediction from DMFC spikes | 11 | [manifest](NEURAL-095/implementations/registered-runtime/manifest.json) |
@@ -122,7 +122,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-DISC-20261114-VESTIBULAR-VO](NEURAL-DISC-20261114-VESTIBULAR-VO/README.md) | Continuous self-motion reconstruction from simultaneous vestibular spike trains | 3 | not linked |
 | [NEURAL-DISC-20261114-VOLTRON-SPIKES](NEURAL-DISC-20261114-VOLTRON-SPIKES/README.md) | Optical voltage trace to independently recorded spike timing across complete cell recordings | 4 | not linked |
 | [NEURAL-DISC-20261114-WORM-PROPAGATION](NEURAL-DISC-20261114-WORM-PROPAGATION/README.md) | Conditional downstream calcium-response reconstruction after identified-neuron perturbation | 2 | not linked |
-| [NEURAL-EXP-005](NEURAL-EXP-005/README.md) | Neonatal seizure-report probability from complete causal EEG windows | 2 | not linked |
+| [NEURAL-EXP-005](NEURAL-EXP-005/README.md) | Neonatal seizure-report probability from complete causal EEG windows | 6 | not linked |
 | [NEURAL-SCOPE-20261114-AASD-REPORT](NEURAL-SCOPE-20261114-AASD-REPORT/README.md) | Offline reported-attention direction inference with motor and mixture controls | 3 | not linked |
 | [NEURAL-SCOPE-20261114-ABR-TRANSFER](NEURAL-SCOPE-20261114-ABR-TRANSFER/README.md) | Cross-laboratory auditory brainstem threshold inference from complete waveform stacks | 3 | not linked |
 | [NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY](NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY/README.md) | Retrospective held-horizon prediction of goal-aligned movement from odor-memory dynamics | 4 | not linked |

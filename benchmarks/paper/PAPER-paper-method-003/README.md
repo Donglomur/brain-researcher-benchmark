@@ -31,7 +31,7 @@ Author-baseline replay and historical reconstruction attempts retain their origi
 
 **Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
 
-**Disposition:** design\_ready. The complete original PhysioNet-MI panel is authenticated and prepared: 654 imagery EDFs from all 109 participants yield 9,837 epochs on the original split, and the full-test numerical scorer/comparator has passed an authentic-data software control. This establishes source preparation and scoring, not an author baseline. Historical preprocessing, Table 12 classifier/checkpoint parity and seed/run aggregation remain unresolved.
+**Disposition:** design\_ready. The complete original PhysioNet-MI panel is authenticated and prepared: 654 imagery EDFs from all 109 participants yield 9,837 epochs on the original split, and the full-test numerical scorer/comparator has passed an authentic-data software control. This establishes source preparation and scoring, not an author baseline. Historical preprocessing, Table 12 classifier/checkpoint parity and seed/run aggregation remain unresolved. Candidate outcome pending: no candidate comparison has run; absence of that attempt is not a benchmark-construction blocker.
 
 - [Source-grounded improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
@@ -49,7 +49,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18776 bytes; SHA-256 `b80a91b5b4b4977a9690de2724b52a210987289e5df7e9dba9d0f7ec815613b3`.
+- Specification identity: 18826 bytes; SHA-256 `5efe0f0b62682a35184be87a91a64ac7c8d9ec78f9076297e80dc78483923423`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
