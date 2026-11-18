@@ -453,6 +453,17 @@ def _current(original, contract, binding, source_id):
             if hold.get("id") == "scorer":
                 hold["requirement"] = "The complete-condition evaluator and generated negative controls exist as source. Qualify authentic complete-support execution, protected target custody and independent reference/scoring before any scientific claim."
         current["next_implementation_action"] = copy.deepcopy(contract["implementation"]["missing"])
+    # These exact source recoveries update inherited construction actions only.
+    # Full-task admission, original history and scientific/runtime holds stay intact.
+    scope_refresh = {'NEURAL-018': ('submitted-program-source', 'benchmarks/neural/NEURAL-018/implementations/submitted-program-v1/run.py', '5432208ae4408d137e182a1fc5f46e608362b9ae5009781e3c39207cf2a9cc53'), 'NEURAL-022': ('typed-count-viewer-source', 'benchmarks/neural/NEURAL-022/implementations/typed-count-viewer-v1/viewer.py', '691a5c261fb70003f834d75e4b4fd1c3180954b498ed47cc8f0234569c3aee22'), 'NEURAL-031': ('paired-executor-source', 'benchmarks/neural/NEURAL-031/implementations/paired-executor-v1/executor.py', '56b437d590136c089810e09dc6688ba4fd30c7f552f9d73216eece996fc6f5b2')}
+    selected_refresh = scope_refresh.get(contract["task_id"])
+    if selected_refresh is not None and any(
+            (item.get("id"), item.get("path"), item.get("sha256")) == selected_refresh
+            and item.get("kind") == "local_source" for item in contract["evidence"]):
+        for hold in current.get("holds", []):
+            if hold.get("id") == "scorer":
+                hold["requirement"] = "The existing complete evaluator and generated source controls are delivered. Independently qualify complete authentic-input scoring, protected targets, failure handling and matched reference execution before scientific admission."
+        current["next_implementation_action"] = copy.deepcopy(contract["implementation"]["missing"])
     return current
 
 
