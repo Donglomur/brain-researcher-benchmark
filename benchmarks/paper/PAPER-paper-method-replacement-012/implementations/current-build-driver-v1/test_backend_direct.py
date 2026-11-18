@@ -290,12 +290,22 @@ class BackendControls(unittest.TestCase):
     def test_owned_parent_term_cancels_and_reaps_only_owned_child(self):
         # Parent handlers are installed before Popen; the owned child cannot
         # signal this test outside run_owned's guarded cancellation window.
-        result, _ = self.run_child(
-            "import os,signal,time; print(os.getpid(), flush=True); os.kill(os.getppid(), signal.SIGTERM); time.sleep(10)",
+        result, text = self.run_child(
+            "import os,signal,time; print(os.getpid(), flush=True); "
+            "print('signal-target', os.getppid(), flush=True); "
+            "os.kill(os.getppid(), signal.SIGTERM); "
+            "print('signal-returned', flush=True); time.sleep(10)",
             allow_empty_log=True,
         )
-        self.assertIn("signal", result["error"])
-        self.assertNotEqual(result["exit_code"], 0)
+        try:
+            self.assertIn("signal", result["error"])
+            self.assertNotEqual(result["exit_code"], 0)
+        except (AssertionError, TypeError):
+            # The fixed result and <=1025-byte owned log fit a 64 KiB diagnostic.
+            print("OWNED_CANCELLATION_DIAGNOSTIC=" + json.dumps(
+                {"observer_pid": os.getpid(), "owned_result": result, "owned_child_log": text},
+                sort_keys=True), flush=True)
+            raise
 
     def test_final_group_signal_precedes_first_reap(self):
         events = []
