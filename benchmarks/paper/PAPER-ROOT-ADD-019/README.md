@@ -81,6 +81,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. This retained scoring facade requires 1 source or input dependency absent from the public baseline. Correcting its repository locator does not make it runnable from this checkout alone. This limit does not apply automatically to sibling implementations of the task. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Historical timing summary](implementations/historical-timing-summary) — Calibration only.
   Scope: README explicitly identifies historical saved-answer timing endpoint, distinct from the current37-main-figure programme; do not relabel as full current task coverage. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Figure6h source projection v1](implementations/figure6h-source-projection-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Figure6h oof score v1](implementations/figure6h-oof-score-v1) — Reviewed source component.
   Scope: Figure 6h out-of-fold endpoint. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -26,7 +26,7 @@ This version selects an exact author-reported computational result as the primar
 
 **Remaining reproduction/source limits:**
 
-- Authenticate S1 payload and original animal/session/response/stimulus membership and spatial-bin conventions.
+- S1 object identity and all 11 direct schemas are authenticated. Resolve their semantic binding to the author driver, original animal/session/observation membership and spatial-bin conventions; shape and pair-count agreement alone do not resolve these.
 - Resolve fivefold paper versus twofold source and exact nested optimization/outer trial partitions.
 - Resolve swapped shuffled-linear/RBF assignments and caption stimulus-column inconsistency; direct-MI commented call must not silently supply decoder outputs.
 - Recover native confusion counts, all session/fold outputs and exact original aggregate/reference vectors.
@@ -59,7 +59,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 41909 bytes; SHA-256 `b69c8d25ccb63216a00fee480aa4770f5ecc51d376fa43d98ac7725e13af330c`.
+- Specification identity: 42335 bytes; SHA-256 `682403c55c99753e40920e82096120805b17dd451915bca25137ba233151dd4f`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

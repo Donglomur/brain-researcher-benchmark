@@ -49,6 +49,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Paper paper method 023](implementations/paper-paper-method-023) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Physiop300 source lineage v1](implementations/physiop300-source-lineage-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Physiop300 panel v1](implementations/physiop300-panel-v1) — Reviewed source component.
   Scope: PhysioP300 complete-panel metric component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

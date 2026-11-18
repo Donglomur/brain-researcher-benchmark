@@ -46,6 +46,11 @@ Within the existing improvement contract, historical graders and pilot scores re
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Published transfer panel provenance](docs/provenance/published-transfer-panel.v1.json)
+- [Published transfer panel scope](docs/provenance/published-transfer-panel.v1.md)
+
 ## Implementation artifacts
 
 - [Frozen grid evaluator](implementations/frozen-grid-evaluator) — Calibration only.

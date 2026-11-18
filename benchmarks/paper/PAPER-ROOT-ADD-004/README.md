@@ -48,6 +48,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+- [Figure 3a source branch resolution](docs/figure3a-source-branch-resolution-v1.md)
+- [Authenticated Figure 3a source map](docs/provenance/figure3a-authenticated-source-map.v1.json)
 
 ## Implementation artifacts
 

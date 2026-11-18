@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Numerical observation delivery source for the existing NEURAL-022 task, with the explicitly reviewed dependency on repaired producer 34f900. Retrospective binned counts, complete training/query access and original metric scope are preserved. Registration does not qualify provider delivery, model budgets, participant isolation, authentic execution or scientific performance; both predecessor dependency identities and histories are retained.
 - [Submitted program v1](implementations/submitted-program-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Typed count viewer v1](implementations/typed-count-viewer-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Public control v1](implementations/public-control-v1) — Reviewed source component.
   Scope: Public active-only controls. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

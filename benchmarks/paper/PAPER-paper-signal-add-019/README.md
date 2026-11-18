@@ -71,6 +71,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Five-event point-time export metrics, six-stage durations, contrast effects, psychophysical-law parameters, ERP summaries and participant-held-out likelihood export checks. Native HMP compatibility/fitting, authentic EEG/trial inventory, correct-response parity, event selection and cluster/Bayesian analyses, rights and protected references remain held. This does not infer events from EEG or complete the native task; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Author law production v1](implementations/author-law-production-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Contrast panel v2](implementations/contrast-panel-v2) — Reviewed source component.
   Scope: Decision-times complete contrast panel. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -53,6 +53,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prepared paired optical/electrical trace assessment for the saved 22 TIFF/ABF pairs across nine filename-derived cell groups, including prominence-tolerant peak F1, lagged correlation, false-event and residual-spectrum metrics. Native loading, ROI/channel/clock/calibration validation, authentic denoiser execution, historical training/evaluation identity, dataset rights and protected EP admission remain held. Scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Ep affine calibration v1](implementations/ep-affine-calibration-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Native roi v1](implementations/native-roi-v1) — Reviewed source component.
   Scope: CellMincer optical ROI extraction. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

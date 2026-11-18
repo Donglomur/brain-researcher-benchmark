@@ -68,6 +68,10 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Hippocampal programme](implementations/hippocampal-programme) — Calibration only.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original time opaque v1](implementations/original-time-opaque-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
+- [Original time query transport v1](implementations/original-time-query-transport-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Original time v1](implementations/original-time-v1) — Reviewed source component.
   Scope: Original time-decoding endpoint component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

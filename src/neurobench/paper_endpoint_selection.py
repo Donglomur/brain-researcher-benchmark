@@ -23,8 +23,8 @@ SELECTION_KIND = "original_author_reported_computational_endpoint"
 RETAINED_DESIGN_READY = frozenset(("PAPER-paper-method-replacement-005", "PAPER-paper-signal-add-012"))
 # Filled only by the integrator after independent semantic review of the exact
 # complete batch. Never derive these from the file currently occupying the path.
-AUTHORITY_PIN = {'path': 'docs/provenance/paper-primary-endpoint-selections.v2.json', 'bytes': 352958, 'sha256': '1d1ff96985f8399cb944b0333b6fdeb3b52a4a87cb3481fdc65a554ccb459d68'}
-AUTHORITY_CANONICAL = '098ef7af67979009223e4649197fae93631b2d21f925d9a1e5829cc50c45d5f0'
+AUTHORITY_PIN = {'path': 'docs/provenance/paper-primary-endpoint-selections.v2.json', 'bytes': 353386, 'sha256': '00ab617063cd5fd5a4231cb99252cd0304da224b7ef31b4d94715cdd1ace03e5'}
+AUTHORITY_CANONICAL = 'c7401629ae6bf7cedf9fc7417738af9448c129f26bf6dc606e0e18dc0c00e3b0'
 TASKS = frozenset((
     "PAPER-CANDIDATE-20261114-NPVC", "PAPER-CANDIDATE-20261114-PLEXUS",
     "PAPER-EXP-20261113-002", "PAPER-EXP-20261113-004", "PAPER-FIND-036",

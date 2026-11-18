@@ -31,7 +31,7 @@ Source availability does not establish a qualified runtime. A programme score ca
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 19092 bytes; SHA-256 `ef9006a0128bdcb696809136d982d93f7e72af04c94b5ed3d5f818a50316484c`.
+- Specification identity: 19092 bytes; SHA-256 `d8bc2e852c4bb45b8bb78950f42275c2b6b81dccdb157207b50f21c3b9cb2136`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -47,6 +47,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Participant transport v1](implementations/participant-transport-v1) — Reviewed source component.
   Scope: Reviewed participant transport source and generated controls for the existing NEURAL-021 task. Authentic runtime selection and scientific qualification remain separate.
+- [Raster participant v1](implementations/raster-participant-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Publication mode repair v1](implementations/publication-mode-repair-v1) — Reviewed source component.
   Scope: Explicit public directory modes and bounded generated permission controls under restrictive umask; historical source manifests and private defaults remain preserved. Source/control enrollment does not establish Docker behavior, authentic-data correctness, native runtime qualification, model outcomes or scientific qualification.
 - [Paired count delivery v1](implementations/paired-count-delivery-v1) — Reviewed source component.

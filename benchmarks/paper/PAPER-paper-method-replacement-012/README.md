@@ -48,6 +48,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+- [Bugeon conference target provenance](docs/provenance/bugeon-conference-targets.v1.json)
+- [Bugeon conference target scope](docs/provenance/bugeon-conference-targets.v1.md)
 
 ## Implementation artifacts
 

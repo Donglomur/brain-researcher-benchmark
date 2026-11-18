@@ -46,6 +46,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Evaluator-side accounting for all 18 participants and 1260 nominal active/passive trials, report-state duration labels, common valid context, 54 participant/mixture cells, participant-macro scoring and passive motor diagnostics. Native trial/event/channel/stimulus mapping, overlap graph, rights, competent baselines and protected execution remain held. This retains the existing specification alias and adds no task; scientific qualification is unknown.
+- [Current case broker v1](implementations/current-case-broker-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Observation delivery v1](implementations/observation-delivery-v1) — Reviewed source component.
   Scope: AASD normalized observation delivery. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

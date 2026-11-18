@@ -211,13 +211,13 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 2343,
-                  "sha256": "8c7ffa1eb99850cad931a6c38d7439357b880030856559a53e68a67f227606ed"
+                  "bytes": 2651,
+                  "sha256": "9364cecc05f7139909d9644cdba3e425d8fb66fd0603da8142cf3e16a87c50c0"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 18399,
-                  "sha256": "94a7b3d508fe5e4f9398808b36754b9e8b30c608e1e7c2c823468d95d19fd6d5"
+                  "bytes": 18939,
+                  "sha256": "74792fb9a91c729279d483ebaaaeaf83618bf5a4b6420f442bd2a4cbfbc8a105"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/source-provenance.json",
@@ -226,8 +226,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/tests/test_evaluator.py",
-                  "bytes": 13496,
-                  "sha256": "d575424f7935fb07653b25254b476f8d3dd9667b0232adf79f70ce14918bd87a"
+                  "bytes": 17797,
+                  "sha256": "00a3f6072c859fcd1281a9d3fb1cbc20ab47e51fb7436c8d0fee54bc59b479ba"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-024/historical/task.pre-improvement.v1.json",
@@ -301,8 +301,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-007/docs/initial-evaluator-v1.md",
-                  "bytes": 11742,
-                  "sha256": "8f62660e379e8bd4c2af9716e8610cda4a5158eb11754459de1e8895a3c01dc7"
+                  "bytes": 11998,
+                  "sha256": "1fa353be412911c1596d8b855648784cf3393a17e09e279164caf9122d8a9296"
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1/README.md",
@@ -342,7 +342,7 @@ jobs:
               "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1"
           ]
           assert len(rows) == 56 > 0
-          assert sum(row['bytes'] for row in rows) == 724414 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 729819 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -385,7 +385,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 724414,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 729819,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -981,7 +981,7 @@ jobs:
           import json
           import sys
           import unittest
-          expected_ids = ['test_evaluator.CorrelationTests.test_bad_stimulus_exclusion_is_audited', 'test_evaluator.CorrelationTests.test_cached_input_role_fails', 'test_evaluator.CorrelationTests.test_cli_pins_input_and_rejects_tampering', 'test_evaluator.CorrelationTests.test_complex_inputs_are_not_silently_projected_to_real', 'test_evaluator.CorrelationTests.test_duplicate_physical_context_rejected', 'test_evaluator.CorrelationTests.test_extreme_finite_pearson_and_orthogonal_reference', 'test_evaluator.CorrelationTests.test_hand_derived_same_and_opposite_context', 'test_evaluator.CorrelationTests.test_independent_corrected_correlation_above_one_is_not_clipped', 'test_evaluator.CorrelationTests.test_interpolation_exposes_zero_variance_without_dropping', 'test_evaluator.CorrelationTests.test_missing_cell_after_bad_stimulus_exclusion_fails', 'test_evaluator.CorrelationTests.test_missing_participant_fails', 'test_evaluator.CorrelationTests.test_near_equal_rates_are_canonicalized_and_cannot_duplicate_cells', 'test_evaluator.CorrelationTests.test_negative_ceiling_remains_unclipped_and_undefined_ratio', 'test_evaluator.CorrelationTests.test_no_out_of_bounds_or_nonfinite_or_assessment_selection', 'test_evaluator.CorrelationTests.test_no_silent_segment_intersection', 'test_evaluator.CorrelationTests.test_prospective_holdout_preserves_story_rows', 'test_evaluator.CorrelationTests.test_ratio_of_means_is_not_mean_of_ratios', 'test_evaluator.CorrelationTests.test_same_stimulus_cannot_cross_rates', 'test_evaluator.CorrelationTests.test_segment_cannot_be_in_recorded_poststimulus_padding', 'test_evaluator.CorrelationTests.test_story_split_is_global_and_mode_explicit', 'test_evaluator.CorrelationTests.test_subnormal_ceiling_preserves_raw_values_and_nulls_overflow', 'test_evaluator.CorrelationTests.test_summary_balances_participants_not_electrodes', 'test_evaluator.CorrelationTests.test_two_nearly_identical_slow_rates_cannot_replace_fast_rate']
+          expected_ids = ['test_evaluator.CorrelationTests.test_bad_stimulus_exclusion_is_audited', 'test_evaluator.CorrelationTests.test_cached_input_role_fails', 'test_evaluator.CorrelationTests.test_cli_manifest_receipt_binds_evaluated_snapshot', 'test_evaluator.CorrelationTests.test_cli_pins_input_and_rejects_tampering', 'test_evaluator.CorrelationTests.test_complex_inputs_are_not_silently_projected_to_real', 'test_evaluator.CorrelationTests.test_duplicate_physical_context_rejected', 'test_evaluator.CorrelationTests.test_extreme_finite_pearson_and_orthogonal_reference', 'test_evaluator.CorrelationTests.test_hand_derived_same_and_opposite_context', 'test_evaluator.CorrelationTests.test_independent_corrected_correlation_above_one_is_not_clipped', 'test_evaluator.CorrelationTests.test_interpolation_exposes_zero_variance_without_dropping', 'test_evaluator.CorrelationTests.test_loaded_arrays_are_bound_to_captured_npz_after_path_replacement', 'test_evaluator.CorrelationTests.test_loaded_snapshot_survives_path_unlink_after_capture', 'test_evaluator.CorrelationTests.test_missing_cell_after_bad_stimulus_exclusion_fails', 'test_evaluator.CorrelationTests.test_missing_participant_fails', 'test_evaluator.CorrelationTests.test_near_equal_rates_are_canonicalized_and_cannot_duplicate_cells', 'test_evaluator.CorrelationTests.test_negative_ceiling_remains_unclipped_and_undefined_ratio', 'test_evaluator.CorrelationTests.test_no_out_of_bounds_or_nonfinite_or_assessment_selection', 'test_evaluator.CorrelationTests.test_no_silent_segment_intersection', 'test_evaluator.CorrelationTests.test_prospective_holdout_preserves_story_rows', 'test_evaluator.CorrelationTests.test_ratio_of_means_is_not_mean_of_ratios', 'test_evaluator.CorrelationTests.test_same_stimulus_cannot_cross_rates', 'test_evaluator.CorrelationTests.test_segment_cannot_be_in_recorded_poststimulus_padding', 'test_evaluator.CorrelationTests.test_story_split_is_global_and_mode_explicit', 'test_evaluator.CorrelationTests.test_subnormal_ceiling_preserves_raw_values_and_nulls_overflow', 'test_evaluator.CorrelationTests.test_summary_balances_participants_not_electrodes', 'test_evaluator.CorrelationTests.test_two_nearly_identical_slow_rates_cannot_replace_fast_rate']
           suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
           def flatten(suite):
               for item in suite:
@@ -991,9 +991,9 @@ jobs:
                       yield item
           actual_ids = sorted(case.id() for case in flatten(suite))
           assert actual_ids == expected_ids, (actual_ids, expected_ids)
-          assert suite.countTestCases() == 23 > 0
+          assert suite.countTestCases() == 26 > 0
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 23, result.testsRun
+          assert result.testsRun == 26, result.testsRun
           assert not result.skipped, result.skipped
           assert not result.expectedFailures, result.expectedFailures
           assert not result.unexpectedSuccesses, result.unexpectedSuccesses

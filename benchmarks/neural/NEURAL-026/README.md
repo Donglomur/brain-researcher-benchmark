@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Delivery source](implementations/delivery-source) — Task implementation.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Matched input controls v1](implementations/matched-input-controls-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Understanding metrics v1](implementations/understanding-metrics-v1) — Measured target artifact scorer.
   Scope: Measured held-out angle errors on all50cases from5mice against independently fixed nuisance predictions. Arbitrary candidate predictions receive their measured scores; legacy reconstruction remains separate. Generated numerical controls establish implementation behavior, not authentic-data or model performance.
 - [Paired preparation v2](implementations/paired-preparation-v2) — Reviewed source component.

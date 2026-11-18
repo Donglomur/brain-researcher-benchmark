@@ -43,6 +43,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Repository-depth locator corrected after relocation; 1 local scorer dependency is absent from the public source baseline and relocation ledger. Historical dependency names/pins remain unchanged. This bridge has not been made runnable or newly qualified by the reorganization. Other task artifacts are outside this finding.
 - [Comparison contract](../../shared/sleep-eog/comparison-contract) — Comparison contract.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Historical fixed rf v1](implementations/historical-fixed-rf-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Paired program v1](implementations/paired-program-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Finite paired scorer](implementations/finite-paired-scorer) — Reviewed source component.

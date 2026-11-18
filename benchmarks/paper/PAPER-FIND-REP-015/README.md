@@ -54,6 +54,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Full reconstruction](implementations/full-reconstruction) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Helper metric semantics v1](implementations/helper-metric-semantics-v1) — Reviewed source component.
+  Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Source svm v1](implementations/source-svm-v1) — Reviewed source component.
   Scope: Source SVM reward decoding: recovered protocol and paired point metrics. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

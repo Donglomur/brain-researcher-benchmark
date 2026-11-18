@@ -46,6 +46,11 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Complete seven-fold scripted transport control receipt](docs/transport-control-20261117/RECEIPT.json)
 - [Immediate predecessor before scripted transport control v1: task.json](docs/understanding-pre-scripted-transport-control-v1/task.json)
 - [Immediate predecessor before scripted transport control v1: understanding.v1.json](docs/understanding-pre-scripted-transport-control-v1/understanding.v1.json)
+- [Memory512 retained executed README](docs/memory512-control-20261118/EXECUTED_README.md)
+- [Memory512 retained executed source identity](docs/memory512-control-20261118/EXECUTED_SOURCE.json)
+- [Memory512 predecessor source identity](docs/memory512-control-20261118/PREDECESSOR_SOURCE.json)
+- [Memory512 archived control scope](docs/memory512-control-20261118/README.md)
+- [Memory512 scoped control receipt](docs/memory512-control-20261118/RECEIPT.json)
 
 ## Implementation artifacts
 
@@ -55,6 +60,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Fold viewer v1](implementations/fold-viewer-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Viewer grading memory512 v1](implementations/viewer-grading-memory512-v1) — Reviewed source component.
+  Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Viewer grading v1](implementations/viewer-grading-v1) — Reviewed source component.
   Scope: Reviewed viewer-grading source and generated controls for the existing NEURAL-034 task. Current task definitions and authentic runtime qualification remain separately governed.
 - [Authentic programme receipt v1](implementations/authentic-programme-receipt-v1) — Metadata only source evidence.
