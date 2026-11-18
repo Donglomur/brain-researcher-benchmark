@@ -58,6 +58,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. This retained scoring facade requires 2 source or input dependencies absent from the public baseline. Correcting its repository locator does not make it runnable from this checkout alone. This limit does not apply automatically to sibling implementations of the task. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Source learnr v1](implementations/source-learnr-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
+- [Source subject export v1](implementations/source-subject-export-v1) — Reviewed source component.
+  Scope: Original MATLAB subject/behavior export and keyed Python transport source for the existing paper task. No replacement statistical method, authentic MATLAB execution, reproduction or improvement claim.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

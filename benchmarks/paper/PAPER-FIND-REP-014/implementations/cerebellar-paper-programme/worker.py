@@ -746,7 +746,7 @@ def dispatch(request, payload, store):
             result = selection_evaluate(payload, input_store)
     elif action == 'final_evaluate':
         if payload.get('schema') == 'paper_i_worker_native_grade_v1':
-            from native_compare import grade as native_grade
+            from native_compare_v4 import grade as native_grade
             result = native_grade(payload, input_store)
         else:
             result = final_evaluate(payload, input_store)

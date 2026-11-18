@@ -1,0 +1,132 @@
+{
+  "schema": "neural027-source-binding-contract/v1",
+  "task_id": "NEURAL-027",
+  "status": "operator-preparation; original arrays and scientific selection unqualified",
+  "original_code_commit": "ba64ac697f5d9914926baac79399e80707a5f3a6",
+  "primary_sources": [
+    {
+      "id": "notebook",
+      "url": "https://raw.githubusercontent.com/MouseLand/zhong-et-al-2025/ba64ac697f5d9914926baac79399e80707a5f3a6/data_process_script.ipynb",
+      "bytes": 23939,
+      "sha256": "e8ed05d5610ac84e250ea4c43c3c7321df2fbe609fd19af700c29993becc7ef0"
+    },
+    {
+      "id": "utils",
+      "url": "https://raw.githubusercontent.com/MouseLand/zhong-et-al-2025/ba64ac697f5d9914926baac79399e80707a5f3a6/utils.py",
+      "bytes": 46223,
+      "sha256": "3b28bcc4dc5d5ac93105317e7c65711d537796bcf14c0dcd4383fd35d1f79e33"
+    },
+    {
+      "id": "paper",
+      "url": "https://www.nature.com/articles/s41586-025-09180-y",
+      "bytes": 541701,
+      "sha256": "28ca568da33821397d22bb3f784b4373c6f2ec9b3a57615389c1a74d3e4e6653",
+      "capture_note": "Separately retained original HTML capture; not the old N027 implementation metadata HTML hash. No canonical source pin replaced."
+    }
+  ],
+  "bindings": [
+    {
+      "id": "source_address",
+      "source": [
+        "notebook cell9087c6cc",
+        "utils.py load_exp_beh326-328/load_spk338-342/load_retino330-336"
+      ],
+      "rule": "One Beh_<group>.npy container per original experiment group; neural file uses original mname/datexp/blk; transform uses mname/datexp. Neural chunks concatenate along the neuron axis. No author object loader is executed."
+    },
+    {
+      "id": "condition_address",
+      "source": [
+        "notebook cell9087c6cc",
+        "utils.py620-625"
+      ],
+      "rule": "Behavior dictionary key is mname_datexp_blk, with _stimtype appended when the optional field exists. Presence matters; absence is distinct from an empty string. All original typed fields and order are retained. This rule describes the selected notebook route, not every utility."
+    },
+    {
+      "id": "condition_cache_conflict",
+      "source": [
+        "notebook cell9087c6cc",
+        "paper Methods/Visual stimuli"
+      ],
+      "rule": "The interpolation cache uses only physical session identity. The paper describes two swap variants being separate observations within a shared session for unsupervised/naive mice. A cache name cannot certify condition-specific support; no duplicate record is discarded."
+    },
+    {
+      "id": "targets",
+      "source": [
+        "notebook cell005314c3",
+        "utils.py427-440/530-585/624-635"
+      ],
+      "rule": "Canonical targets are obtained from the behavior container: behavior stim_id selects UniqWalls, which maps frame-level ft_WallID. Metadata-row stim_id is retained as a separate descriptor; equality with behavior stim_id is unknown."
+    },
+    {
+      "id": "canonical_stimulus_names",
+      "source": [
+        "notebook cell005314c3"
+      ],
+      "values": {
+        "0": "circle1",
+        "1": "circle2",
+        "2": "leaf1",
+        "3": "leaf2",
+        "4": "leaf3",
+        "5": "leaf1_swap1",
+        "6": "leaf1_swap2"
+      },
+      "qualification": "Source label vocabulary only; not evidence that any record has complete benchmark class support."
+    },
+    {
+      "id": "nonfinite_values",
+      "source": [
+        "notebook cell005314c3"
+      ],
+      "rule": "NaN meaning is field-specific. The notebook documents out-of-behavior trial identity and no-reward timing fields separately. It does not explain metadata stim_id NaNs. Preserve every typed scalar and IEEE bit pattern; no imputation, drop or substitution into the finite-only consumer."
+    },
+    {
+      "id": "frames",
+      "source": [
+        "notebook cell005314c3/cell9087c6cc",
+        "utils.py626-635"
+      ],
+      "rule": "Source routines index behavior vectors by the neural frame prefix and use positive movement plus corridor membership. ft_Pos is within-corridor position; ft_PosCum is cumulative. Existing consumer uses trial-local bins, not author cumulative interpolation. Actual frame correspondence and units remain unverified."
+    },
+    {
+      "id": "reward_and_phase",
+      "source": [
+        "paper Fig1 and Methods/Visual stimuli/Water reward delivery",
+        "paper Faster task learning after pretraining/Fig5"
+      ],
+      "rule": "Reward-free imaging exposure, postlearning tests with unrewarded stimuli and separate behavior-only pretraining cohorts are distinct histories. A before_learning name is not a prereward certificate, and an unrewarded trial does not imply a prereward animal. No row gets a phase/split/prereward value from spelling or rewType."
+    }
+  ],
+  "existing_consumer": {
+    "git_commit": "8e9eeddf8327094d631a2f015d9334b9078e98f5",
+    "path": "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/evaluator.py",
+    "bytes": 23792,
+    "sha256": "77b4d047e176e52e2212ad5eb8dc814683226f83a25ac53e70c0f17a0f929b21",
+    "exact_schema": "session_id,mname,datexp,blk,phase; unique physical session_id; safe NPZ named session_id.npz",
+    "dependencies": "Literal mname defines train/evaluation routing and mouse-macro score/bootstrap. Existing validator prevents literal mouse or repeated physical stem crossing; no current leak demonstrated. New condition IDs must not become mouse aliases or independent units. Possible cross-name biological/payload aliases remain unknown.",
+    "field_map": "spks from original neural spks chunks; iarea from matched transform; all eight behavior fields from the original group/condition address.",
+    "incompatible_now": [
+      "142 original records contain33 repeated physical stems; current schema cannot express full source roster unchanged.",
+      "Behavior key existence, target/descriptor relationship, condition mask and numeric payload equality remain unverified.",
+      "Row-level biological identity, reward chronology, phase meaning and split remain unselected."
+    ]
+  },
+  "next_input_requirements": [
+    {
+      "question": "Does each group/condition behavior key exist and what are its behavior stim_id, UniqWalls and frame wall mappings? How does this relate to metadata descriptors including NaNs?",
+      "exact_source": "The 23 matched Beh_<original_group>.npy containers; per-row key from notebook9087c6cc. Full asset IDs/names are emitted in the binding.",
+      "limit": "No new payload acquisition or original object loading is authorized by this component."
+    },
+    {
+      "question": "What original condition frame/trial support separates repeated records of one physical session?",
+      "exact_source": "Same original Beh containers and paired neural frame axes, notebook9087c6cc and paper Methods/Visual stimuli; no physical-stem interpolation cache shortcut."
+    },
+    {
+      "question": "Which exact original imaging records establish task-required prereward training and later held-out exposure histories, and are distinct literal mname IDs biological aliases?",
+      "exact_source": "Original experiment logs/cohort metadata corresponding to the142 source records and the paper imaging timeline. Retained code/paper do not prove a complete row-level chronology or alias map.",
+      "limit": "Never borrow the separate Fig5 behavior-only cohort schedule or infer chronology from before_learning."
+    }
+  ],
+  "counting": "142 source records,89 physical stems,19 literal names and23 experiment groups are different dependency layers. No new benchmark, independent animal count, scientific result or model score is created.",
+  "access": "Operator metadata preparation only. Neither native neural understanding nor tool-assisted AI performance measured."
+}

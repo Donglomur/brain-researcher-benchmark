@@ -45,6 +45,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Causal program v2](implementations/causal-program-v2) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Ordinary programme v1](implementations/ordinary-programme-v1) — Reviewed source component.
+  Scope: Ordinary programme admission over already prepared cases; preserves original causal commit-feedback order, private grader, six references and signed scores. Fixed-control qualification is historical; ordinary native or AI execution is not established.
 - [Complete count scorer v1](implementations/complete-count-scorer-v1) — Reviewed source component.
   Scope: Complete count likelihood scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

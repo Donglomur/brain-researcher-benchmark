@@ -1,4 +1,4 @@
-"""Authenticate and execute the unchanged parent from exact captured bytes."""
+"""Authenticate the selected private parent successor from exact captured bytes."""
 import importlib
 import importlib.util
 import os
@@ -8,19 +8,19 @@ import types
 from paper_i_central_safety import need, pin, parse, descriptor, ordinary, relative, fsync_dir, cleanup
 
 PARENT_SCHEMA = 'paper_i_executable_source_manifest_v1'
-PARENT_COUNT = 38
-PARENT_BYTES = 437883
-PARENT_MANIFEST = {'bytes': 6012, 'sha256': '198aff81c325e3cd56414dbff3e6af5bcc1161995196abb94370340b9a3a2e12'}
+PARENT_COUNT = 41
+PARENT_BYTES = 457439
+PARENT_MANIFEST = {'bytes': 6477, 'sha256': 'e0584c0f6b6b27cc196c9fd71dfc56a857dd0002de44e8d99f3df1f59abd496c'}
 
 
 def capture_parent(io, root, manifest_path, manifest_pin):
-    need(manifest_pin == PARENT_MANIFEST, 'Exact accepted parent manifest')
+    need(manifest_pin == PARENT_MANIFEST, 'Exact selected parent manifest')
     raw = io.read(manifest_path, descriptor(manifest_pin), 1048576)
     document = parse(raw)
     need(document.get('schema') == PARENT_SCHEMA and document.get('task') == 'PAPER-FIND-REP-014',
          'Parent manifest identity')
     rows = document['files']
-    need(type(rows) is list and len(rows) == PARENT_COUNT, 'All38 unchanged runtime members')
+    need(type(rows) is list and len(rows) == PARENT_COUNT, 'All41 selected runtime members')
     files, bodies = {}, {}
     root = ordinary(root)
     for row in rows:

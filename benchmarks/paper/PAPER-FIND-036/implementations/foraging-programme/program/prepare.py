@@ -59,7 +59,7 @@ def inspect_inventory(infos, caps):
     names, tokens, roots, selected, inventory = set(), set(), set(), [], []
     ancillary = {'README', 'README.md', 'README.txt', 'LICENSE', 'LICENSE.md', 'LICENSE.txt'}
     for info in infos:
-        name = info.filename
+        name = info.orig_filename
         p = PurePosixPath(name)
         directory = info.is_dir()
         need(type(name) is str and name and name not in names and '\\' not in name

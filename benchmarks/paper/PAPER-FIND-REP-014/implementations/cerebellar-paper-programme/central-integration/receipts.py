@@ -547,8 +547,8 @@ def _validate(parent_root,outer_pin,op,operation_pin,origin,modules,capture):
     require(type(parent_root) is str and PurePosixPath(parent_root).is_absolute() and '..' not in PurePosixPath(parent_root).parts,'Exact qualified absolute parent-output root')
     parent_root=str(PurePosixPath(parent_root));descriptor(outer_pin);descriptor(operation_pin)
     core,planner,supervisor=(modules[k] for k in ('core','planner','supervisor'));files=modules['files'];manifest_pin=descriptor(modules['manifest'])
-    require(core.TASK==TASK and len(files)==38 and sum(d['bytes'] for d in files.values())==437883,'Exactly the immutable accepted38-member runtime')
-    equal(manifest_pin,{'bytes':6012,'sha256':'198aff81c325e3cd56414dbff3e6af5bcc1161995196abb94370340b9a3a2e12'},'Accepted immutable executable manifest identity')
+    require(core.TASK==TASK and len(files)==41 and sum(d['bytes'] for d in files.values())==457439,'Exactly the selected immutable41-member runtime')
+    equal(manifest_pin,{'bytes': 6477, 'sha256': 'e0584c0f6b6b27cc196c9fd71dfc56a857dd0002de44e8d99f3df1f59abd496c'},'Selected immutable executable manifest identity')
     equal(only_pin(op['source_manifest']),manifest_pin,'Literal unchanged operation source manifest')
     require(op['schema']=='paper_i_operation_v1' and op['task']==TASK and op['scientific_authorization'] is True,'Separately admitted complete operation authority')
     require(finite(origin),'Finite original observer clock');end=origin+op['global_limits']['wall_seconds'];work_end=end-op['host']['cleanup_seconds']

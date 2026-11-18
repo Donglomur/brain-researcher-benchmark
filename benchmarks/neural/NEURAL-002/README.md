@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Source pin compiler v1](implementations/source-pin-compiler-v1) — Reviewed source component.
+  Scope: Sibling source-pin compiler for original192 pointer-text and64 event inputs, with original registered-runtime inventory unchanged. Authentic raw neural payloads, marker/channel semantics, runtime and scientific performance remain unqualified.
 - [Typed viewer v1](implementations/typed-viewer-v1) — Reviewed source component.
   Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Content identity v1](implementations/content-identity-v1) — Reviewed source component.

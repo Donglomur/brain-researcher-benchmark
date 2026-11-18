@@ -76,7 +76,7 @@ def qualified_profile(profile, operation, parent_pin):
     source_floor = 67108864 + host['python']['bytes']  # bounded source/metadata plus exact interpreter body
     need(limits['read_bytes'] >= GATE_READ_RESERVATION+source_floor+profile['receipt_read_bytes'],
          'Caller budget includes independent gate, source and complete receipt reads')
-    need(profile['source_copy_retained_bytes'] >= 437883+6012 and
+    need(profile['source_copy_retained_bytes'] >= 457439+6477 and
          limits['retained_bytes'] >= profile['source_copy_retained_bytes']+profile['worker_log_bytes']+524288,
          'Full source/log/control retention separately allocated')
     return {'outer_event_upper':outer_events,'receipt_read_floor':floor,

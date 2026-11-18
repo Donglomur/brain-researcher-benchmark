@@ -45,6 +45,10 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Corpus viewer input v1](implementations/corpus-viewer-input-v1) — Reviewed source component.
+  Scope: Portable typed-map viewer and original-query corpus adapter with original234-context scientific scope preserved. Rendering readability, original input qualification, live transport and native understanding remain unqualified.
+- [Typed map viewer v1](implementations/typed-map-viewer-v1) — Reviewed source component.
+  Scope: Portable typed-map viewer and original-query corpus adapter with original234-context scientific scope preserved. Rendering readability, original input qualification, live transport and native understanding remain unqualified.
 - [Conversion fidelity v1](implementations/conversion-fidelity-v1) — Reviewed source component.
   Scope: Independent canonical-map fidelity checker. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

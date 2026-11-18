@@ -67,7 +67,7 @@ def run(context,repo,here,origin,argv):
     signal.setitimer(signal.ITIMER_REAL,max(.001,min(origin+120,end)-time.monotonic()))
     io.read(python_ref['path'],{k:python_ref[k]for k in('bytes','sha256')},python_ref['bytes'])
     output=io.mkdir(bound['output']);io.mkdir(output/'journal')
-    clone_bytes=sum(len(v)for v in context['bodies'].values())+len(context['own_manifest_raw'])+437883+6012
+    clone_bytes=sum(len(v)for v in context['bodies'].values())+len(context['own_manifest_raw'])+457439+6477
     need(clone_bytes<=profile['source_copy_retained_bytes'],'Actual complete source clones fit declared source partition')
     parent_root=clone_parent(io,bundle,output/'parent_source')
     central_root,central_manifest=clone_central(io,context,output/'caller_source')

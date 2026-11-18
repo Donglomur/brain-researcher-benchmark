@@ -1,0 +1,2 @@
+"""Exact immutable source/cohort identities; no empirical reference."""
+FROZEN={'INPUT_MANIFEST.json': {'bytes': 99663, 'sha256': 'd7c09d5ded556524d0d5ce508f1f55c51cc924a1b283b84193475c34d2a4cc4b'}, 'COHORT.json': {'bytes': 649, 'sha256': '2b6fbce9d8ba9414ce22c048fd3a847db7a81d930b2a80b6576265018febef21'}, 'CODE_PROVENANCE.json': {'bytes': 3601, 'sha256': 'ebb02bb741859afeb49ccf8155dbef5453c7e0a766bdb8008549f8369dd2fbc9'}}

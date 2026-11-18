@@ -43,6 +43,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Acquisition](acquisition) — Reviewed source component.
   Scope: StageA logical metadata route and generated controls only; no HTTP execution, physical payload availability or outer-runtime admission.
+- [Original movie10 input v1](implementations/original-movie10-input-v1) — Reviewed source component.
+  Scope: Portable source-derived original four-file acquisition and binding to the unchanged Movie10 panel preparer/evaluator. Full4subjects/all1000parcels/16strict\_v2 scope preserved; original acquisition and authentic runtime remain unqualified.
 - [Movie10 evaluator v1](implementations/movie10-evaluator-v1) — Reviewed source component.
   Scope: Movie10 whole-film development evaluator. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

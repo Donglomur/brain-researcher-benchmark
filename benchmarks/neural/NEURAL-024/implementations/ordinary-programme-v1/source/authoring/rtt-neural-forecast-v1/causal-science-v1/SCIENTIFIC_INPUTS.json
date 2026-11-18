@@ -1,0 +1,199 @@
+{
+  "schema": "neural024_causal_scientific_inputs_v1",
+  "candidate_id": "NEURAL-024",
+  "protocol": "NEURAL024-causal-v1",
+  "created_utc": "2026-11-02T16:23:48.452893+00:00",
+  "data": {
+    "source_counts": {
+      "path": "artifacts-build/rtt-transfer-conversion-001/attempt/packet/public/source.npz",
+      "worker_path": "/data/source_counts.npz",
+      "bytes": 7705272,
+      "sha256": "839f7bf5b5bde7feed560f0e2f5a6fe9b0fb3b75d8f92f1bbff9c78a789a2bb2",
+      "bins": 18700,
+      "first_seconds": 1288.0,
+      "last_seconds": 1662.0,
+      "worker_decode_members": [
+        "counts",
+        "bin_edges_seconds"
+      ],
+      "host_payload_decode_allowed": false
+    },
+    "calibration_counts": {
+      "path": "artifacts-build/rtt-transfer-conversion-001/attempt/packet/public/calibration.npz",
+      "worker_path": "/data/calibration_counts.npz",
+      "bytes": 1236872,
+      "sha256": "05f7e4535606d4057b48a00b74eb919078875ab7dbcb0f06639174a7216ccac3",
+      "bins": 3000,
+      "first_seconds": 745.0,
+      "last_seconds": 805.0,
+      "worker_decode_members": [
+        "counts",
+        "bin_edges_seconds"
+      ],
+      "host_payload_decode_allowed": false
+    },
+    "query_counts": {
+      "path": "artifacts-build/rtt-transfer-conversion-001/attempt/packet/public/assessment.npz",
+      "worker_path": "/data/query_counts.npz",
+      "bytes": 8752360,
+      "sha256": "af0cb2d84945917009d059c2393ebb36e675ce6602f371507251a6f00347a1bb",
+      "bins": 22100,
+      "first_seconds": 805.0,
+      "last_seconds": 1247.0,
+      "worker_decode_members": [
+        "counts",
+        "bin_edges_seconds"
+      ],
+      "host_payload_decode_allowed": false
+    }
+  },
+  "reference_scores": {
+    "path": "artifacts-build/rtt-neural-forecast-reference-001/reference/scores.json",
+    "bytes": 62575,
+    "sha256": "b4ef446717393b63bd31afa584c79de826dbc9c9e66696ceb59c69774d542943",
+    "worker_path": "/reference/reference_scores.json"
+  },
+  "reference_arms": [
+    "source_rate",
+    "calibration_rate",
+    "self_history_frozen",
+    "self_history_adapted",
+    "self_population_history_frozen",
+    "self_population_history_adapted"
+  ],
+  "held_reference_scoring_sources": {
+    "/source/reference_model_core.py": {
+      "path": "authoring/rtt-neural-forecast-v1/reference-v1/model_core.py",
+      "bytes": 9379,
+      "sha256": "cf5e46206bcb353a509c0544a378cc3ac0cec58df1cdc07ee4733fc60d616abe"
+    },
+    "/source/reference_audit.py": {
+      "path": "authoring/rtt-neural-forecast-v1/reference-v1/audit.py",
+      "bytes": 22765,
+      "sha256": "0ea929d36db5f0ab9fc4172e8e2bb37c7bef5e306bfeb0ec04f6a46c32c229a8"
+    }
+  },
+  "provenance": {
+    "completed_reference_outer": {
+      "path": "artifacts-build/rtt-neural-forecast-reference-001/outer_receipt.json",
+      "bytes": 10685,
+      "sha256": "a586eda805b122fc560b0fbdf1028a56aac78bb9ca233bdb64af38f0026c91c6"
+    },
+    "completed_reference_result": {
+      "path": "authoring/rtt-neural-forecast-v1/reference-v1/completed-reference-v1/RESULTS.json",
+      "bytes": 11488,
+      "sha256": "bf5f4fca7d0e4bbe9f35840f447a88fbeda808a8546438581e4274ffb77c6141"
+    },
+    "qualified_conversion_receipt": {
+      "path": "artifacts-build/rtt-transfer-conversion-001/receipt.json",
+      "bytes": 5763,
+      "sha256": "1562926934ac0af6e631541485bf41dd15bbd3d0f207aa705685b1bbdebc951e"
+    },
+    "frozen_reference_inputs": {
+      "path": "authoring/rtt-neural-forecast-v1/reference-v1/INPUTS.json",
+      "bytes": 5485,
+      "sha256": "44d5807a548b725c22f29135029b59c975ddb7598c6699d01e7e7c081ff6839d"
+    }
+  },
+  "shape": {
+    "channels": 96,
+    "source_rows": 18700,
+    "calibration_rows": 3000,
+    "stream_rows": 22100,
+    "warmup_rows": 10,
+    "scored_rows": 22090,
+    "first_target_bin": 3000,
+    "last_target_bin": 25099,
+    "scored_first_target_bin": 3010,
+    "scored_cells": 2120640
+  },
+  "time_coordinates": {
+    "public_counts_clocks": "original native absolute seconds, unchanged",
+    "wire_intervals": "target native edge minus calibration bin_edges_seconds[0]",
+    "first_wire_begin_nominal_seconds": 60.0,
+    "first_scored_begin_nominal_seconds": 60.2,
+    "last_wire_end_nominal_seconds": 502.0,
+    "physical_boundary_tolerance_seconds": 1e-07
+  },
+  "rules": {
+    "online_learning_from_revealed_prefix_allowed": true,
+    "all_96_means_commit_before_current_observation_release": true,
+    "current_or_future_observation_in_predict_request_forbidden": true,
+    "warmup_predictions_required_positive_finite_but_not_scored": true,
+    "candidate_mean_numbers": "controller normalizes valid finite positive real numbers to Python float before canonical commit",
+    "source_preparer_reads_only_counts_and_clocks": true
+  },
+  "caps": {
+    "prepare": {
+      "source_counts.npz": 7400000,
+      "calibration_counts.npz": 1200000,
+      "observations.jsonl": 45260800,
+      "schedule.json": 2000000,
+      "references.json": 256000,
+      "prepare_receipt.json": 128000
+    },
+    "grade": {
+      "score.json": 131072,
+      "grade_receipt.json": 65536
+    },
+    "observation_line_bytes": 2048,
+    "commit_line_bytes": 4608,
+    "commit_total_bytes": 101836800,
+    "candidate_reply_line_bytes": 4096
+  },
+  "generated_controls": {
+    "prepare_packet": [
+      "canonical_ascii_newline_and_duplicate_rejection",
+      "strict_hash_pins_allow_empty_only_when_declared",
+      "complete_uint32_observation_schema",
+      "finite_increasing_relative_clock_schema",
+      "count_only_projection_has_exact_members_values_and_dtypes",
+      "maximum_uint32_projection_preserves_counts",
+      "bounded_write_once_publication_rejects_existing_final",
+      "post_rename_directory_sync_failure_cannot_overwrite_final"
+    ],
+    "prepare_fixed_candidate": [
+      "hand_rate_excludes_first_ten_calibration_rows",
+      "zero_counts_have_positive_half_count_rate",
+      "maximum_uint32_sum_is_exact_before_smoothing",
+      "calibration_shape_dtype_and_clock_rejections",
+      "only_calibration_file_and_exact_npz_members",
+      "bounded_strict_json_lines",
+      "exact_initialize_contract",
+      "prediction_schema_sequence_clock_and_observation_rejections",
+      "revealed_counts_cannot_update_fixed_rates",
+      "all_22100_rounds_warmup_boundary_and_final_stop",
+      "canonical_finite_reply_and_newline_byte_cap",
+      "ready_initialized_order_and_premature_eof_failure"
+    ],
+    "grade_score": [
+      "tiny_full_poisson_hand_score_and_six_reference_contrasts",
+      "negative_candidate_gain_is_preserved",
+      "zero_spike_denominators_remain_undefined_without_dropping_channels",
+      "missing_reference_arm_or_changed_channel_identity_is_rejected",
+      "reference_counts_and_scalar_aggregates_must_reconcile",
+      "nonfinite_or_nonpositive_means_and_wrong_support_are_rejected",
+      "finite_extreme_means_report_numerical_failure_without_clipping",
+      "public_score_keeps_production_dimensions_and_no_causality_claim"
+    ]
+  },
+  "prospective_resources": {
+    "whole_seconds": 780,
+    "work_seconds": 720,
+    "candidate_seconds": 600,
+    "cleanup_seconds": 60,
+    "prepare_phase_seconds": 30,
+    "grade_phase_seconds": 30,
+    "prepare_compute_seconds": 25,
+    "grade_compute_seconds": 25,
+    "cpu": 1.75,
+    "worker_memory_bytes": 3221225472,
+    "whole_retained_file_reserve_bytes": 176000000,
+    "shared_RTT_prior_known_seconds": 2020,
+    "prospective_after_full_charge_seconds": 2800,
+    "allocation_granted": false
+  },
+  "new_model_fits": 0,
+  "new_data_downloads": 0,
+  "source_only_authoring": true
+}

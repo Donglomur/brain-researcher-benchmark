@@ -57,6 +57,10 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Complete original Table 2 scoring and offline metric transforms across six conditions and all 48 findings. Authentic population/image/weight identities, target-last custody, historical SSIM/SwAV identity, competent reference and scientific acceptance remain unqualified; the modern SSIM backend has a separately declared engineering condition.
 - [Selection features v1](implementations/selection-features-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
+- [Target7 composition v1](implementations/target7-composition-v1) — Reviewed source component.
+  Scope: Portable MindBridge target7 composition and operator-only support: original88-file/32-case input scope,982-image gallery, source1/2/5 and train-only budgets retained. No original archives, checkpoints, scientific reproduction or improvement qualification.
+- [Target7 operator support v1](implementations/target7-operator-support-v1) — Reviewed source component.
+  Scope: Portable MindBridge target7 composition and operator-only support: original88-file/32-case input scope,982-image gallery, source1/2/5 and train-only budgets retained. No original archives, checkpoints, scientific reproduction or improvement qualification.
 - [Source protocol v2](implementations/source-protocol-v2) — Reviewed source component.
   Scope: MindBridge source calibration and reconstruction selection. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
