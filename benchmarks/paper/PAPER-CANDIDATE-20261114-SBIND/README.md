@@ -59,6 +59,11 @@ Package-local task IDs do not override this registered definition; ownership lin
 
 ## Public source citations
 
-No public HTTP(S) citation was extracted for this catalog entry. Consult the authoritative specification and its provenance.
+- [Code](https://github.com/ShanechiLab/SBIND)
+- [Data](https://data.caltech.edu/records/pa710-cdn95)
+- [Data](https://repository.cshl.edu/id/eprint/38599/)
+- [Paper](https://proceedings.mlr.press/v267/hosseini25a.html)
+
+Citations come from the specification; their availability was not rechecked when generating this page.
 
 Generated from the public catalog; edit the authoritative definition and regenerate instead of editing this page.

@@ -88,6 +88,9 @@ Each record keeps the scope of its original report. It is not current runtime qu
 
 - [Author model inference probe](docs/native-cost-characterization.json): Actual selected author-checkpoint inference on the first train and eval chunks only; no complete predictions, scores or 32-repeat baseline.
 - [Author model inference probe](docs/native-cost-characterization.json): Actual selected author-checkpoint inference on the first train and eval chunks only; no complete predictions, scores or 32-repeat baseline.
+- [Author reference calibration](../../../docs/science/smc-author-calibration-20261117.json): Complete selected author predictions and four original aggregate metrics; recovered noncausal output retains its failed supervisor.
+- [Author reference calibration](../../../docs/science/smc-author-calibration-20261117.json): Complete selected author predictions and four original aggregate metrics; recovered noncausal output retains its failed supervisor.
+- [Participant material preparation](docs/official-assets-materials-v2-20261117.json): Complete external 71-file paper/data and author-code/released-model material pair; payloads are not published in this report.
 - [Paper source preparation](docs/source-preparation-evidence.json): Complete original MC\_Maze 20ms input preparation and paired participant materials, with generated source/scorer controls. This report excludes separately recorded author-model timing and all scientific performance evaluation.
 
 Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence PAPER-SMC-RNN-2024`. Programme evidence does not establish direct interpretation.
@@ -106,13 +109,14 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Source preparation and paired-export engineering evidence](docs/source-preparation-evidence.json)
 - [Partial native execution and full-run cost estimates](docs/native-cost-characterization.json)
 - [Official-assets v2 material preparation and inspection receipt](docs/official-assets-materials-v2-20261117.json)
+- [Cached-image dependency metadata inventory; scientific runtime unqualified](docs/scientific-image-inventory-20261117.json)
 
 ## Implementation artifacts
 
 - [Offline nlb outcomes v1](implementations/offline-nlb-outcomes-v1) — Offline whole trial outcome policy delivery and scoring source.
   Scope: Reviewed source for the offline whole-trial NLB outcome successor, including policy, delivery, scoring and generated controls. It reuses retained source-matched scorer, delivery and protocol dependencies. Registration does not activate a runtime or qualify reproduction or improvement; trusted episode policy, authentic execution, receipt provenance and numerical scientific outcomes remain separately required and unestablished. Existing task definitions, histories and retained source artifacts are preserved.
 - [Source matched nlb v1](implementations/source-matched-nlb-v1) — Original panel preparation, paired materials and frozen prediction scoring.
-  Scope: Source-matched MC\_Maze 20-ms preparation and paired paper/data versus paper/data/official-code exports, selected author-checkpoint inference and frozen-prediction scoring for both original proposal arms with all companion metrics. Complete author-score calibration, equal participant budgets, joint superiority admission and scientific qualification remain unestablished. Source delivery and engineering controls are not solver performance; original targets are publicly exposed.
+  Scope: Original MC\_Maze 20-ms input preparation, historical source-only delivery, author reference and scoring routes. Both complete selected author predictions and aggregate metrics are recorded separately in docs/science/smc-author-calibration-20261117.md; the noncausal aggregate is accepted recovered reference output with its failed supervisor preserved. The separately reviewed version2 assisted material pair contains 71 files and ten released assets. These records do not qualify participant execution, exact paper linkage, AI reproduction, improvement or SOTA. Original test targets are publicly exposed.
 - [Continuous outcomes v1](implementations/continuous-outcomes-v1) — Reviewed continuous outcome source.
   Scope: Bounded paired-material preparation, outcome-specific CPU profiles and complete continuous reproduction/improvement measurement preserve the exact prior task and original evaluator. The proposed current task is not activated by artifact registration; exact context/CLI/binder adoption and separately admitted authentic export remain required. AI results are separate from construction readiness, and no binary reproduction or superiority claim is inferred.
 - [Continuous outcomes v2](implementations/continuous-outcomes-v2) — Reviewed continuous outcome source.

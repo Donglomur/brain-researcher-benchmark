@@ -57,6 +57,8 @@ Package-local task IDs do not override this registered definition; ownership lin
 
 ## Public source citations
 
+- [Code](https://github.com/tortugar/Npx)
+- [Data](https://zenodo.org/records/19462601)
 - [Paper](https://www.nature.com/articles/s41593-026-02314-z)
 
 Citations come from the specification; their availability was not rechecked when generating this page.

@@ -61,6 +61,8 @@ Package-local task IDs do not override this registered definition; ownership lin
 
 ## Public source citations
 
+- [Code](https://github.com/heyslab/StructuredExperience_NatNeuro_2026)
+- [Data](https://zenodo.org/api/records/20855879/files/ephys_session_release.tar.gz/content)
 - [Paper](https://www.nature.com/articles/s41593-026-02409-7)
 
 Citations come from the specification; their availability was not rechecked when generating this page.

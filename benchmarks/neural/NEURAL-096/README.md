@@ -53,6 +53,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 ## Implementation artifacts
 
+- [Descriptive trajectories v1](implementations/descriptive-trajectories-v1) — Reviewed source component.
+  Scope: Reviewed descriptive-trajectory source and accepted phase14/phase16 implementation-map chain. Local deterministic arithmetic controls and source delivery do not establish authentic operator execution, raster/model/provider isolation, full-task native or population qualification; later authentic/operator successors remain outside the selected cutoff.
 - [Delivery contracts](../../shared/dmfc/delivery-contracts) — Shared scientific family.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.

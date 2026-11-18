@@ -78,7 +78,8 @@ Package-local task IDs do not override this registered definition; ownership lin
 - [Code](https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/preprocess/bugeon/prepare_data.py)
 - [Code](https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/src/evaluators/bugeon.py)
 - [Code](https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/train.py)
-- [Source](https://figshare.com/articles/dataset/19448531)
+- [Data](https://figshare.com/articles/dataset/19448531)
+- [Paper](https://openreview.net/forum%3Fid=zt3RKc6VBp)
 - [Source](https://ik.imagekit.io/7tkfmw7hc/nuclr/splits.zip)
 
 Citations come from the specification; their availability was not rechecked when generating this page.

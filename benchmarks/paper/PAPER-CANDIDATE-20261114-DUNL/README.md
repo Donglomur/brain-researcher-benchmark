@@ -57,6 +57,10 @@ Package-local task IDs do not override this registered definition; ownership lin
 
 ## Public source citations
 
-No public HTTP(S) citation was extracted for this catalog entry. Consult the authoritative specification and its provenance.
+- [Code](https://github.com/btolooshams/dunl-compneuro)
+- [Data](https://data.mendeley.com/datasets/rzfyr2886h/1)
+- [Paper](https://www.sciencedirect.com/science/article/pii/S0896627325001199)
+
+Citations come from the specification; their availability was not rechecked when generating this page.
 
 Generated from the public catalog; edit the authoritative definition and regenerate instead of editing this page.

@@ -57,6 +57,13 @@ Package-local task IDs do not override this registered definition; ownership lin
 
 ## Public source citations
 
-No public HTTP(S) citation was extracted for this catalog entry. Consult the authoritative specification and its provenance.
+- [Code](https://github.com/nerdslab/poyo)
+- [Data](https://dandiarchive.org/dandiset/000070/0.260528.0919)
+- [Data](https://dandiarchive.org/dandiset/000688/0.250122.1735)
+- [Data](https://portal.nersc.gov/project/crcns/download/dream/data_sets/Flint_2012)
+- [Data](https://zenodo.org/records/583331)
+- [Paper](https://papers.nips.cc/paper_files/paper/2023/hash/8ca113d122584f12a6727341aaf58887-Abstract-Conference.html)
+
+Citations come from the specification; their availability was not rechecked when generating this page.
 
 Generated from the public catalog; edit the authoritative definition and regenerate instead of editing this page.
