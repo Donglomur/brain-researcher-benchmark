@@ -289,6 +289,46 @@ def _entry(identifier, value):
     strings(value["remaining_blockers"], "remaining endpoint blockers", nonempty=True)
 
 
+def _registration_identity(row, previous):
+    """Normalize only a validated append-only documentation suffix for comparison.
+
+    Existing catalog and ownership checks separately authenticate filesystem
+    existence and reject symlinks; this callback has only JSON metadata access.
+    Neither the current row nor the frozen predecessor is modified.
+    """
+    identity = {key: val for key, val in row.items()
+                if key not in ("specification", "paper_outcomes", "title")}
+    if "documentation" not in row:
+        need("documentation" not in previous,
+             "Endpoint documentation cannot remove its registered prefix")
+        return identity
+    records = row["documentation"]
+    prior = previous.get("documentation", [])
+    need(type(records) is list and type(prior) is list,
+         "Endpoint documentation must preserve its registered list")
+    need(len(records) >= len(prior) and records[:len(prior)] == prior,
+         "Endpoint documentation must preserve its exact registered prefix and order")
+    need("documentation" in previous or bool(records),
+         "Endpoint documentation cannot add an empty absent field")
+    home = previous["task_directory"] + "/docs/"
+    seen = set()
+    for record in records:
+        closed(record, ("label", "path"), "endpoint documentation record")
+        text(record["label"], "endpoint documentation label")
+        path = record["path"]
+        need(type(path) is str and path.startswith(home) and "\\" not in path
+             and not any(ord(char) < 32 or ord(char) == 127 for char in path)
+             and all(part not in ("", ".", "..") for part in path.split("/")),
+             "Endpoint documentation must have a normalized task-owned docs path")
+        need(path not in seen, "Endpoint documentation paths must be unique")
+        seen.add(path)
+    if "documentation" in previous:
+        identity["documentation"] = prior
+    else:
+        del identity["documentation"]
+    return identity
+
+
 def authenticate_authority(authority_pin, previous_rows, registry_rows, read_pin):
     """Adopt only a fully populated, independently pinned complete batch.
 
@@ -340,7 +380,7 @@ def authenticate_authority(authority_pin, previous_rows, registry_rows, read_pin
         text(selected_task.get("title"), "selected endpoint task title")
         need(row.get("title") == selected_task["title"],
              "Endpoint registration title differs from authenticated selected task")
-        need({key: val for key, val in row.items() if key not in ("specification", "paper_outcomes", "title")}
+        need(_registration_identity(row, old)
              == {key: val for key, val in old.items() if key not in ("specification", "paper_outcomes", "title")},
              "Endpoint selection cannot change registration identity, status, resources or lineage")
         need(row["specification"] == selected["task"]["pin"]

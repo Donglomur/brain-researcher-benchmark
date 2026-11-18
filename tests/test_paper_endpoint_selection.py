@@ -342,6 +342,206 @@ class EndpointSelectionControls(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "changed prior specification_alias"):
             binding.coverage(altered, self.f.read)
 
+    def documentation_coverage(self, documents=None):
+        """Build real coverage input; None retains the absent historical key."""
+        self.f = Fixture()
+        if documents is not None:
+            self.f.oldrow["documentation"] = copy.deepcopy(documents)
+        import ast
+        from types import SimpleNamespace
+
+        self.f.oldrow["specification_alias"] = False
+        self.f.entry["previous_registry_row"] = copy.deepcopy(self.f.oldrow)
+        self.f.task["title"] = "Pinned selected title after the prior scope"
+        selected_prior = copy.deepcopy(self.f.oldrow)
+        selected_prior.pop("paper_outcomes")
+        selected_prior["specification"] = {
+            **self.f.oldrow["paper_outcomes"]["previous_specification"],
+            "path": self.f.home + "/task.json"}
+
+        # Reuse only the existing pure generated-record factory. Its test setup
+        # and other controls are not imported or executed.
+        factory_path = HERE.parent / "tests/maintenance/test_paper_declaration_gaps.py"
+        parsed = ast.parse(factory_path.read_bytes())
+        factory_ast = ast.Module(body=[node for node in parsed.body
+                                      if isinstance(node, ast.FunctionDef) and node.name == "record"],
+                                type_ignores=[])
+        gaps = binding.declaration_gap_module()
+        factory = {"copy": copy, "binding": binding, "gaps": gaps}
+        exec(compile(factory_ast, str(factory_path), "exec"), factory)
+        cases, gap_rows, gap_history = {}, [], {}
+        for identifier in sorted(gaps.TASK_IDS):
+            home = "benchmarks/paper/" + identifier
+            task = {"id": identifier, "title": "Generated gap predecessor",
+                    "objective": "surpass_source_paper_same_task"}
+            improvement = copy.deepcopy(self.f.improvement)
+            improvement["task_id"] = identifier
+            row = {"id": identifier, "title": task["title"], "track": "paper",
+                   "task_directory": home, "specification_alias": False,
+                   "specification": self.f.put(home + "/task.json", task)["pin"],
+                   "specification_revision": {"improvement_contract":
+                       self.f.put(home + "/improvement.v1.json", improvement)["pin"]}}
+            gap_history[identifier] = self.f.put(home + "/" + binding.HISTORY, task)["pin"]
+            cases[identifier] = SimpleNamespace(prior_row=row, improvement=improvement)
+            gap_rows.append(row)
+        gap_document = factory["record"](cases)
+        gap_pin = self.f.put(binding.SOURCE_DECLARATION_GAP_PATH, gap_document)["pin"]
+        scope = {"schema_version": binding.SCOPE_VERSION, "entries": {
+            identifier: {"task_id": identifier, "primary_goal": "Generated primary goal",
+                         "primary_scope": "Generated primary scope",
+                         "retained_secondary_scope": "Generated retained scope",
+                         "remaining_source_limits": ["No scientific artifacts"],
+                         "primary_same_task_improvement": "unavailable_until_independently_justified",
+                         "paired_bundle_status": "unavailable_primary_secondary_scope_mismatch",
+                         "scientific_outcome": "unknown"}
+            for identifier in sorted(binding.SCOPE_IDS)},
+            "source_gap_confirmations": {IDENTIFIER: {"task_id": IDENTIFIER,
+                "projection_action": "none", "scientific_outcome": "unknown"}}}
+        scope_pin = self.f.put(binding.SCOPE_PATH, scope)["pin"]
+        self.f.previous.scope_decisions, self.f.previous.scope_pin = scope, scope_pin
+        self.f.previous.source_declaration_gaps = gap_document
+        self.f.previous.source_declaration_gap_pin = gap_pin
+        snapshot = {"schema_version": 1, "kind": "neuroscience_benchmark_registry",
+                    "tasks": [selected_prior] + copy.deepcopy(gap_rows)}
+        snapshot_pin = self.f.put(binding.SNAPSHOT, snapshot)["pin"]
+        self.f.refresh(); self.allow_fixture()
+        current_gaps = copy.deepcopy(gap_rows)
+        for row in current_gaps:
+            row["paper_outcomes"] = {"schema_version": binding.VERSION,
+                "previous_specification": gap_history[row["id"]], "source_declaration_gap": gap_pin}
+        registry = {"tasks": [copy.deepcopy(self.f.row)] + current_gaps,
+                    "paper_outcomes": {"schema_version": binding.VERSION,
+                        "coverage_required": True, "registered_count": 3,
+                        "pre_outcomes_registry": snapshot_pin, "scope_decisions": scope_pin,
+                        "source_declaration_gaps": gap_pin,
+                        "endpoint_selections": self.f.authority_identity["pin"]}}
+
+        return registry
+
+    def test_real_coverage_accepts_append_only_documentation_without_mutation(self):
+        original = [{"label": "Complete cohort reference preparation",
+                     "path": self.f.home + "/docs/full-cohort-admission-v1.md"}]
+        registry = self.documentation_coverage(original)
+        addition = {"label": "Public source availability and missing original-cohort evidence",
+                    "path": self.f.home + "/docs/source-availability-2026-11-18.md"}
+        registry["tasks"][0]["documentation"].append(addition)
+        before = copy.deepcopy(registry)
+        authority_before = copy.deepcopy(self.f.authority)
+        previous = binding.coverage(registry, self.f.read)
+        self.assertIs(type(previous.endpoint_selections), selector.Authority)
+        self.assertEqual(binding.endpoint_selection_ids(previous), {IDENTIFIER})
+        self.assertEqual(registry, before)
+        self.assertEqual(self.f.authority, authority_before)
+        self.assertEqual(previous.endpoint_selections.entry(IDENTIFIER)["previous_registry_row"]["documentation"], original)
+        result = binding.context(registry["tasks"][0], self.f.task, previous, self.f.read)
+        self.assertEqual(result["availability"], "available")
+        self.assertTrue(all(cell["scientific_outcome"] == "unknown"
+                            for cell in result["summary"]["cells"]))
+
+    def test_real_coverage_preserves_documentation_presence_and_empty_baseline(self):
+        for original in (None, []):
+            with self.subTest(original=original):
+                registry = self.documentation_coverage(original)
+                before = copy.deepcopy(registry)
+                binding.coverage(registry, self.f.read)
+                self.assertEqual(registry, before)
+                registry["tasks"][0]["documentation"] = [
+                    {"label": "Source-only navigation", "path": self.f.home + "/docs/source-only.md"}]
+                previous = binding.coverage(registry, self.f.read)
+                prior = previous.endpoint_selections.entry(IDENTIFIER)["previous_registry_row"]
+                self.assertEqual("documentation" in prior, original is not None)
+                if original is not None:
+                    self.assertEqual(prior["documentation"], original)
+                changed = copy.deepcopy(registry)
+                if original is None:
+                    changed["tasks"][0]["documentation"] = []
+                else:
+                    del changed["tasks"][0]["documentation"]
+                with self.assertRaises(ValueError):
+                    binding.coverage(changed, self.f.read)
+
+    def test_real_coverage_rejects_documentation_prefix_changes(self):
+        original = [
+            {"label": "First retained note", "path": self.f.home + "/docs/first.md"},
+            {"label": "Second retained note", "path": self.f.home + "/docs/second.md"}]
+        registry = self.documentation_coverage(original)
+        addition = {"label": "New navigation", "path": self.f.home + "/docs/new.md"}
+        registry["tasks"][0]["documentation"].append(addition)
+        binding.coverage(registry, self.f.read)
+        variants = {
+            "delete": [original[1], addition],
+            "reorder": [original[1], original[0], addition],
+            "relabel": [{**original[0], "label": "Rewritten history"}, original[1], addition],
+            "repath": [{**original[0], "path": self.f.home + "/docs/replaced.md"}, original[1], addition],
+            "insert_before_prefix": [addition] + original,
+        }
+        for name, docs in variants.items():
+            altered = copy.deepcopy(registry)
+            altered["tasks"][0]["documentation"] = docs
+            before = copy.deepcopy(altered)
+            with self.subTest(case=name), self.assertRaises(ValueError):
+                binding.coverage(altered, self.f.read)
+            self.assertEqual(altered, before)
+
+    def test_real_coverage_rejects_malformed_or_duplicate_documentation_additions(self):
+        original = [{"label": "Retained", "path": self.f.home + "/docs/retained.md"}]
+        registry = self.documentation_coverage(original)
+        new_path = self.f.home + "/docs/new.md"
+        good = {"label": "New", "path": new_path}
+        bad_suffixes = [
+            [None], [[]], [{}], [{"label": "New"}], [{"path": new_path}],
+            [{"label": "", "path": new_path}], [{"label": " \t", "path": new_path}],
+            [{"label": 1, "path": new_path}], [{"label": True, "path": new_path}],
+            [{"label": "New", "path": None}], [{"label": "New", "path": 1}],
+            [{**good, "unreviewed": True}],
+            [{"label": "Duplicate retained path", "path": original[0]["path"]}],
+            [good, {"label": "Duplicate new path", "path": new_path}],
+        ]
+        for index, suffix in enumerate(bad_suffixes):
+            altered = copy.deepcopy(registry)
+            altered["tasks"][0]["documentation"] += suffix
+            with self.subTest(suffix=index), self.assertRaises(ValueError):
+                binding.coverage(altered, self.f.read)
+        for docs in (None, {}, "not a list", 1, True):
+            altered = copy.deepcopy(registry)
+            altered["tasks"][0]["documentation"] = docs
+            with self.subTest(container=docs), self.assertRaises(ValueError):
+                binding.coverage(altered, self.f.read)
+
+    def test_real_coverage_rejects_noncanonical_or_foreign_documentation_paths(self):
+        registry = self.documentation_coverage([])
+        home = self.f.home
+        paths = [
+            "", "/" + home + "/docs/note.md", "../" + home + "/docs/note.md",
+            home + "/docs/../outside.md", home + "/docs/./note.md",
+            home + "/docs//note.md", home + "/docs/note.md/", home + "/docs",
+            home + "/outside.md", "benchmarks/paper/PAPER-other/docs/note.md",
+            home + "-other/docs/note.md", home + "/docs\\note.md",
+            home + "/docs/note\n.md", home + "/docs/note\t.md", home + "/docs/note\x00.md",
+        ]
+        for path in paths:
+            altered = copy.deepcopy(registry)
+            altered["tasks"][0]["documentation"] = [{"label": "New", "path": path}]
+            with self.subTest(path=repr(path)), self.assertRaises(ValueError):
+                binding.coverage(altered, self.f.read)
+
+    def test_real_coverage_append_does_not_relax_protected_registration_fields(self):
+        registry = self.documentation_coverage([])
+        registry["tasks"][0]["documentation"].append(
+            {"label": "New", "path": self.f.home + "/docs/new.md"})
+        binding.coverage(registry, self.f.read)
+        changes = [
+            ("id", "PAPER-not-reviewed"), ("track", "neural"),
+            ("task_directory", "benchmarks/paper/other"), ("status", "ready"),
+            ("resources", {"cpu_threads": 2}), ("specification_revision", {}),
+            ("specification_alias", True), ("specification_alias", 0),
+        ]
+        for field, changed in changes:
+            altered = copy.deepcopy(registry)
+            altered["tasks"][0][field] = changed
+            with self.subTest(field=field, changed=changed), self.assertRaises(ValueError):
+                binding.coverage(altered, self.f.read)
+
     def test_scope_narrative_can_differ_from_scientific_target(self):
         self.f.task["primary_scope"] = self.f.scope + "; complete source panel and companion controls"
         self.f.entry["scope"]["primary_scope"] = self.f.task["primary_scope"]
