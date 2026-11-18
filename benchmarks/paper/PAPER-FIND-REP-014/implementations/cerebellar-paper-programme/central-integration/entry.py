@@ -14,7 +14,7 @@ import types
 
 HERE = Path(__file__).absolute().parent
 REPO = HERE.parents[5]
-BINDINGS_PIN = {'bytes':1453,'sha256':'a54a13fdf68150ece64f6f98832bc5aa72768e394bddc8c3de894226c8762a91'}
+BINDINGS_PIN = {'bytes': 1453, 'sha256': '3f63aa85f8083e620b35533e3183186681f1e3fdbc54583f7350e1995a7a23b5'}
 BOOTSTRAP_READS = 0
 BOOTSTRAP_CAP = 268435456
 
@@ -108,7 +108,7 @@ def qualified_source():
     need(files.get(parent['path'])==parent_pin,'Parent manifest qualified')
     parent_raw=capture(REPO/parent['path'],parent_pin)
     for row in decode(parent_raw)['files']:
-        need(files.get(bindings['parent_root']+'/'+row['path'])=={k:row[k] for k in ('bytes','sha256')},'All38 parent bodies independently qualified')
+        need(files.get(bindings['parent_root']+'/'+row['path'])=={k:row[k] for k in ('bytes','sha256')},'All41 parent bodies independently qualified')
     q=meta['verification'];qraw=capture(REPO/q['qualification_path'],cap=2097152)
     need(hashlib.sha256(qraw).hexdigest()==q['qualification_sha256'],'Exact qualification raw body')
     return {'bindings':bindings,'own_manifest_raw':own_raw,'own_files':own['files'],'bodies':bodies,

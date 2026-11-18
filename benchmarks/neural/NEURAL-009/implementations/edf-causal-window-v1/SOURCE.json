@@ -1,0 +1,62 @@
+{
+  "ci": {
+    "command": "python3 -I -S -B benchmarks/neural/NEURAL-009/implementations/edf-causal-window-v1/test_edf_window.py",
+    "dependency_group": "stdlib",
+    "enrollment": "requires explicit component registration by sole integrator",
+    "expected_methods": 15,
+    "native_or_model_execution": false
+  },
+  "dependencies": [
+    {
+      "bytes": 21865,
+      "path": "benchmarks/neural/NEURAL-009/implementations/source-admission-v1/admission.py",
+      "sha256": "1c5096ab1a1f75f39cd6de9e8fa71772c7bed9ce35ef3197ac69aacad30720d9"
+    }
+  ],
+  "files": [
+    {
+      "bytes": 11813,
+      "path": "benchmarks/neural/NEURAL-009/implementations/edf-causal-window-v1/edf_window.py",
+      "sha256": "18a09575d432df486c103c87524ee15b8189171200acd7d3fc99146f1f98283d"
+    },
+    {
+      "bytes": 10642,
+      "path": "benchmarks/neural/NEURAL-009/implementations/edf-causal-window-v1/test_edf_window.py",
+      "sha256": "1082f40d657dceb7fb1e1fcc6462d3155a9ebb424f9fb663e209c52fdf79daaa"
+    },
+    {
+      "bytes": 4660,
+      "path": "benchmarks/neural/NEURAL-009/implementations/edf-causal-window-v1/README.md",
+      "sha256": "31e026f77622ad20d1f74d269a266b98152d582ed61a1271b651af1ee9eef2f0"
+    }
+  ],
+  "limits": {
+    "authentic_signal_execution": false,
+    "causality": "returned samples satisfy j/Fs <= endpoint_tick/10; operator authenticates entire file before returning any window",
+    "clock": "classic continuous EDF only; EDF+C/D refusal does not authorize dropping cohort records",
+    "complete_cohort_preparation": false,
+    "isolation": "operator-owned file checks and output projection, not hostile process/filesystem isolation",
+    "participant_mode_delivered": false,
+    "scientific_qualification": false
+  },
+  "role": "operator_calibrated_record_window",
+  "schema": "neural009_edf_causal_window_source_v1",
+  "source_observations": [
+    {
+      "observation": "official webpage read; no authenticated raw capture",
+      "role": "record layout and calibration semantics",
+      "url": "https://www.edfplus.info/specs/edf.html"
+    },
+    {
+      "observation": "official webpage read; no authenticated raw capture",
+      "role": "signed little-endian storage, negative gain and continuous/discontinuous clock distinctions",
+      "url": "https://www.edfplus.info/specs/edfplus.html"
+    },
+    {
+      "observation": "official webpage read; no authenticated raw capture",
+      "role": "CHB-MIT modality/channel/dummy/gap caveats; exact corpus continues to use existing pinned manifests",
+      "url": "https://physionet.org/content/chbmit/1.0.0/"
+    }
+  ],
+  "task_id": "NEURAL-009"
+}
