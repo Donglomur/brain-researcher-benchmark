@@ -1,0 +1,106 @@
+{
+  "assessment_scope": "Numerical error and structured support/qualification consistency are separate. No required positive effect, free-text rationale score, native-specific tolerance or population-inference claim is introduced.",
+  "cells": {
+    "count": 48,
+    "count_fields": {
+      "maximum": 204,
+      "minimum": 0,
+      "names": [
+        "n_long",
+        "n_short"
+      ],
+      "task_requirement": "Report the corresponding counts from the index.",
+      "type": "integer, excluding boolean"
+    },
+    "exact_keys": [
+      "cell_id",
+      "support_status",
+      "n_long",
+      "n_short",
+      "quarter_signed_mean_hz",
+      "quarter_rms_hz"
+    ],
+    "identities": "All unique cell_id values from the index. Canonical order: split train then val; segment 0 through 5; eye 0 then 1; direction 0 then 180. ID format {split}-segment{segment}-eye{eye}-direction{direction}.",
+    "numerical_definition": "For each quarter let d be the 270 long-minus-short prior mean rate differences over 54 units and 5 bins. Signed mean=sum(d)/270; RMS=sqrt(sum(d*d)/270). Units are Hz. Prior rates are equal-trial averages of count/actual-bin-exposure, not pooled-count/exposure averages.",
+    "quarter_bin_slices_zero_based_half_open": [
+      [
+        0,
+        5
+      ],
+      [
+        5,
+        10
+      ],
+      [
+        10,
+        15
+      ],
+      [
+        15,
+        20
+      ]
+    ],
+    "support_status_values": [
+      "supported",
+      "unsupported"
+    ],
+    "supported_values": {
+      "quarter_rms_hz": "Array of four finite nonnegative real numbers, excluding booleans.",
+      "quarter_signed_mean_hz": "Array of four finite real numbers, excluding booleans."
+    },
+    "task_support_rule": "A cell is supported only when both source prior counts are positive. Preserve all cells, including unsupported ones.",
+    "unsupported_values": {
+      "quarter_rms_hz": null,
+      "quarter_signed_mean_hz": null
+    }
+  },
+  "constants": {
+    "method": "neural096-split-stratified-quarter-rate-contrasts/v1",
+    "prior_orientation": "long minus short",
+    "schema": "neural096-descriptive-answer/v1"
+  },
+  "contract_schema": "neural096-participant-answer-contract/v1",
+  "interpretation_scope": {
+    "declared_scope_code": "descriptive_phase_summary",
+    "max_characters": 80,
+    "type": "string"
+  },
+  "scientific_source_sha256": "5f0375f8bb3cced2b33017f296302587f0c91f8486faf8394a5581a0b4e10e99",
+  "submission_encoding": "UTF-8 JSON object; reject duplicate keys, NaN, Infinity and finite-looking numeric overflow; no surrounding prose.",
+  "submission_max_bytes": 131072,
+  "support_conclusion_values": [
+    "complete_support",
+    "partial_support",
+    "no_supported_cells"
+  ],
+  "top_level_exact_keys": [
+    "schema",
+    "method",
+    "prior_orientation",
+    "cells",
+    "support_conclusion",
+    "interpretation_scope",
+    "uncertainty"
+  ],
+  "uncertainty": {
+    "declared_qualification_code": "not_qualified",
+    "exact_keys": [
+      "status",
+      "reason_codes"
+    ],
+    "published_reason_code_vocabulary": [
+      "single_exposed_animal_session",
+      "assignment_and_dependence_unverified",
+      "recording_segments_not_randomized_blocks"
+    ],
+    "reason_codes": {
+      "each_max_characters": 80,
+      "max_items": 8,
+      "type": "array of unique strings"
+    },
+    "status": {
+      "max_characters": 80,
+      "type": "string"
+    }
+  }
+}

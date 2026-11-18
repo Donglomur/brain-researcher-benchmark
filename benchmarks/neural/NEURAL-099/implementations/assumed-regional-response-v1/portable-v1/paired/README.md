@@ -43,10 +43,48 @@ python3 -I -S -B paired/cli.py serve --execution-manifest /ABSOLUTE/OPERATOR/EXE
 
 `serve` handles begin, current, submit and finish operations in one JSONL session. It launches no model or programme and has no production subset flag. Study and procedure bindings are checked before inputs open. The evaluator authenticates the full private packet once, including response bytes, then projects only released histories. That internal authentication is not participant disclosure. Participants must never receive the controller, packet, journal, file descriptors or complete operator stream. The runtime caller's absolute-path, permission, single-link, regular-file, extent, cohort and checksum guards remain required. The operator must qualify filesystem/provider isolation, fresh candidate contexts or processes, resource supervision and saved completion evidence separately.
 
+## Completed-collection evaluation
+
+`evaluate.py` supplies the task-specific connection from a complete private collection journal to the unchanged scorer. It supports only the structured direct/no-tools and frozen-programme pair above. It does not supply a graphical viewer, a live tool agent, model calls or candidate isolation.
+
+The operator must separately select the exact byte counts and SHA-256 values of the collection manifest, successful JSONL finish receipt, and closure evidence. The finish document is the exact `{"operation":"finish","completion":...}` value emitted by the collector. Closure evidence has exactly these fields:
+
+```json
+{"schema":"neural099-selected-collection-closure/v1","study_id":"SAME_STUDY_ID","manifest_sha256":"VERIFIED_MANIFEST_SHA256","finish_receipt_sha256":"VERIFIED_FINISH_SHA256","exit_code":0,"owned_process_group_absent":true,"lease_closed":true}
+```
+
+This is externally selected evidence. Consistent hashes, booleans or a journal chain do not establish that those runtime facts occurred, that a candidate had no tools, or that contexts were isolated. Qualification of the operator's evidence remains separate; copying the template provides none.
+
+A separately admitted operator invokes:
+
+```sh
+python3 -I -S -B /ABSOLUTE/OPERATOR/portable-v1/paired/evaluate.py \
+  --manifest-path /ABSOLUTE/OPERATOR/collection-manifest.json \
+  --manifest-bytes VERIFIED_BYTES --manifest-sha256 VERIFIED_SHA256 \
+  --finish-path /ABSOLUTE/OPERATOR/successful-finish.json \
+  --finish-bytes VERIFIED_BYTES --finish-sha256 VERIFIED_SHA256 \
+  --closure-path /ABSOLUTE/OPERATOR/selected-closure-evidence.json \
+  --closure-bytes VERIFIED_BYTES --closure-sha256 VERIFIED_SHA256 \
+  --output-path /ABSOLUTE/OPERATOR/fresh-private-scores.json \
+  --max-output-bytes 65536
+```
+
+The public entry point has no generated/subset switch. It authenticates the fixed complete case file, five-fold production schedule and packet binding. It requires the exact journal inventory, canonical JSON with newline, hash chain, profiles, procedures, case coverage, final marker and successful finish receipt. **Both complete prediction arms are admitted before history replay.** It then reconstructs every original current-trial observation through `ObservationAdapter` and the packet's history projection, verifying the original tokens and payload hashes. Only after all checks pass may response counts be decoded and both arms scored. Invalid final records or final payloads cannot cause early response access. The count-packet authentication pass hashes bytes opaquely; it is distinct from interpreting response counts.
+
+The fixed 100 one-millisecond bins (101 edges) and coarsening factor five are passed to the original scorer. Supplied finite predictions retain their numeric values, including negatives and large integers. Results stay private, bind the selected document commitments and retain the original metric semantics. The exclusive output is provisional after a write/fsync or supervised-run failure; successful closure and independent result verification are still necessary. No reference fit, new metric or missing-case repair is performed.
+
+The 18 focused controls passed on generated inputs at the 2026-11-17 UTC source/generated-control cutoff. A synthetic full-size roster exercised the internal record boundary in memory; only small fixtures exercised actual scorer arithmetic and physical file guards. Those checks did not establish authentic execution or real candidate performance. The original 120 controls and all original executable/contract members remained unchanged; no full 138-method run is asserted by that historical record.
+
+### Full-cohort engineering execution
+
+On 2026-11-18 UTC, one fixed history-copy control completed authentic collection and completed-collection evaluation for all 26 source-declared animals, 5,238 trials and 9,867 regional cases per arm, retaining all 49 available region cells and 1,387 good/MUA source clusters. The same deterministic procedure copied each case's 100 current history rates unchanged into its response predictions for both schema route identifiers. It ran no AI model, fit or trained baseline. See the [aggregate engineering status](../PAIRED_ENGINEERING_STATUS.json).
+
+Collection took 10.335 seconds and evaluation took 20.452 seconds of recorded native-stage wall time; these timings exclude the interval between stages and review time. Both stages exited successfully, with their owned process groups observed absent and their separate leases closed. The unchanged evaluator verified the complete journal, both arms, and all original observation tokens and payload hashes before decoding responses. Ordered prediction commitments and the complete native/coarsened score objects, including every animal, matched between arms. Saved aggregate evidence was independently reviewed. This verifies this fixed-control workflow; it does not qualify candidate isolation, no-tools enforcement, AI performance, a trained-reference comparison, physiological coverage or benchmark readiness.
+
 ## Interpretation and validation limits
 
 Only fixed instructions, frozen source and permitted initial parameters may persist between trials. Observation-dependent caches, files, provider memory, previous-query results and benchmark labels embedded in programme source are prohibited. Zero evaluator-supplied labels does not establish absence of public-data contamination or relevant pretraining. Timing-only access, rendered viewers, live tool agents and budgeted demonstrations require separate versioned conditions; missing history never silently changes the selected pair.
 
 This endpoint forecasts processed early click responses under an explicit observation-support assumption. It does not establish recording continuity, physical stimulus-onset parity or unknown biological aliases. Source clusters are processed good/MUA recording objects rather than individual neurons; whole-session sorting may use retrospective information. Zero counts do not independently prove neuronal silence. The endpoint differs from the paper's normalized PSTH analysis.
 
-The included tests use generated fixtures. Release validation must identify the exact packaged source and checks exercised; this document imports no private development review or historical run record. Generated checks do not qualify authentic observation exports, collection, isolation, model performance or scientific readiness. No authentic paired collection, baseline fit, model call or score is asserted by this source contract.
+The included tests use generated fixtures. `SOURCE.json` and `VALIDATION.json` retain the 2026-11-17 UTC source/generated-control cutoff, including its then-unexecuted paired runtime fields; they are historical qualification records. The subsequent [engineering status receipt](../PAIRED_ENGINEERING_STATUS.json) records the 2026-11-18 UTC authentic fixed-control execution without changing those source or test records. Candidate execution, trained-reference and AI performance, isolation, physiological coverage and scientific readiness remain unqualified. No private development paths, journals, signal arrays or response gold are included.

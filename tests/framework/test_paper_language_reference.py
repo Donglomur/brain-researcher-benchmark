@@ -3,6 +3,7 @@ import copy
 import importlib.util
 import json
 from pathlib import Path
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -29,10 +30,12 @@ class LanguageReferenceTests(unittest.TestCase):
         cls.original_row = next(row for row in cls.registry['tasks'] if row['id'] == successor.TASK)
         cls.reader = binder.checker.Reader(ROOT)
         cls.previous = binding.coverage(cls.registry, cls.read_pin)
-        cls.current = json.loads((ROOT / successor.HOME / 'task.json').read_bytes())
+        cls.current = cls.read_pin(successor.figure3b_pin('previous_task'), 'Archived LANGUAGE reference task')
 
     @classmethod
     def read_pin(cls, pin, label):
+        if pin == successor.approved_pin('outcomes'):
+            pin = successor.figure3b_pin('previous_outcomes')
         return binder.read_pinned(cls.reader, pin, label)
 
     def setUp(self):
@@ -128,13 +131,27 @@ class LanguageReferenceTests(unittest.TestCase):
                      'author-provided-array/current-runtime measurements'):
             self.assertIn(text, page)
         self.assertIn('LANGUAGE reference successor', catalog.paper_count_text(view))
-        with patch.object(cli, 'public_catalog_module', return_value=catalog), patch.object(catalog, 'load', return_value=view):
-            self.assertEqual(cli.paper_contract(successor.TASK, ROOT), bound['improvement_contract'])
-            self.assertEqual(cli.paper_contract(successor.TASK, ROOT, outcome='reproduction'), bound['reproduction_contract'])
-            result = cli.paper_outcomes(successor.TASK, ROOT)
-            self.assertEqual(result['specification'], successor.approved_pin('task'))
-            self.assertEqual(result['binding']['improvement_contract'], successor.approved_pin('improvement'))
-            self.assertEqual(result['binding']['retained_improvement_contract'], successor.approved_pin('retained_improvement'))
+        # This public view selects the archived reference stage. Its current-path
+        # outcomes pin must resolve to those real archived bytes, independently
+        # of the later Figure3b files in the repository under test.
+        with tempfile.TemporaryDirectory(dir=Path(tempfile.gettempdir()).resolve()) as temporary:
+            reference_root = Path(temporary)
+            for name in ('reproduction', 'improvement', 'outcomes'):
+                selected_pin = successor.approved_pin(name)
+                source_pin = (successor.figure3b_pin('previous_outcomes')
+                              if name == 'outcomes' else selected_pin)
+                raw = (ROOT / source_pin['path']).read_bytes()
+                self.assertEqual(binding.pin(source_pin['path'], raw), source_pin)
+                destination = reference_root / selected_pin['path']
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                destination.write_bytes(raw)
+            with patch.object(cli, 'public_catalog_module', return_value=catalog), patch.object(catalog, 'load', return_value=view):
+                self.assertEqual(cli.paper_contract(successor.TASK, reference_root), bound['improvement_contract'])
+                self.assertEqual(cli.paper_contract(successor.TASK, reference_root, outcome='reproduction'), bound['reproduction_contract'])
+                result = cli.paper_outcomes(successor.TASK, reference_root)
+                self.assertEqual(result['specification'], successor.approved_pin('task'))
+                self.assertEqual(result['binding']['improvement_contract'], successor.approved_pin('improvement'))
+                self.assertEqual(result['binding']['retained_improvement_contract'], successor.approved_pin('retained_improvement'))
 
 
 if __name__ == '__main__':

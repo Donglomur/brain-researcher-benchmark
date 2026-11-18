@@ -71,6 +71,13 @@
       "url": "https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385",
       "locator": "S12A; S14A-D captions; Figure7A and Results2.8",
       "supports": "Area unit counts/FR/Lv; failed-fit versus negativeR2 exclusions; three trial-failure overlap groups; ACF decline,95%CI excluding zero,R2>=.5 indicators; R2/FR/Lv densities and original denominators."
+    },
+    {
+      "id": "staged_qc_source",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/iinnpp/isttc/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/plot_dataset_info.ipynb",
+      "locator": "plot_dataset_info.ipynb threshold cell40c04352-f477-4a8c-b006-cce15738d234 and filter cellf2efb0ed-7a47-4dc1-a2c7-1647b169184e; direct hosted primary text only; local capture failed with zero body bytes. See docs/provenance/empirical-qc-source-resolution.v1.json.",
+      "supports": "Initial amplitude0.1 is followed by strict downstream amplitude<0.01/ISI<0.5/presence>0.9 filtering. This resolves source-policy wording only, not historicalSDK selection, boundaries, actual cohort or panels."
     }
   ],
   "same_task": {
@@ -90,9 +97,10 @@
     },
     "cohort": {
       "status": "unresolved",
-      "description": "Source population is5775 units nested in26 mice across V1,LM,AL,RL,AM,PM,LGN,LP. Authentic unit/session/mouse/area roster and source QC remain unresolved; paper amplitude cutoff0.01 differs from retained loader0.1. Counts are source design statements,not authenticated current identities.",
+      "description": "Source population is5775 units nested in26 mice across V1,LM,AL,RL,AM,PM,LGN,LP. Pinned author source documents an initial amplitude cutoff0.1 followed by the eight-area filter amplitude_cutoff <0.01, isi_violations <0.5 and presence_ratio >0.9. This staged policy explains the threshold contrast; paper inclusive versus source strict boundaries, saved presence minimum0.95 and historical AllenSDK filtering remain unresolved. Authentic unit/session/mouse/area roster, intervals, original trial draws and panel masks remain unresolved. Counts are source design statements,not authenticated current identities. The direct hosted source observation is not a locally authenticated notebook body.",
       "evidence_ids": [
-        "empirical_paper"
+        "empirical_paper",
+        "staged_qc_source"
       ]
     },
     "split": {
@@ -3418,7 +3426,7 @@
   ],
   "panel_rule": "all_declared_findings_and_companions",
   "blocking_issues": [
-    "Authentic original empirical unit/session/mouse/area roster,recordings and window draws remain unresolved; source5775/26/eight counts are not a manifest. Paper amplitude cutoff0.01 and retained loader0.1 conflict.",
+    "The original empirical unit/session/mouse/area roster, interval coordinates and trial-window draws remain unmaterialized. Existing pinned author source documents staged QC: the broader loader amplitude cutoff 0.1 is followed by an eight-area filter using amplitude_cutoff < 0.01, isi_violations < 0.5 and presence_ratio > 0.9. This resolves the unexplained 0.1-versus-0.01 contrast at source-policy level only. Paper inclusive boundaries versus source strict boundaries, the saved presence-ratio minimum 0.95 and exact historical AllenSDK filtering, authentic 5775-unit/26-mouse membership, complete fit failures and panel-specific masks remain unresolved.",
     "Figure7C,7D/E and7F/G require distinct original eligibility and full failure denominators. Original area pooled ACF fitting,unit covariance/source models and native uncertainty must be reconstructed. Prospective masks/windows/bootstrap are not authenticated historical replay.",
     "Source duration/trial notebook reference assignments,all-level masks,100-trial log-error copying,index alignment and R prediction column order conflict with intended source figures. No global formula or corrected policy is declared publication-equivalent.",
     "Exact original sampling identities,anatomical hierarchy score values,native plot/prediction/KDE grids,density kernels,source model outputs and source reference arrays are not authenticated. Known scientific axes do not establish actual array or support identity.",

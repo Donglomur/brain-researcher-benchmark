@@ -1,0 +1,94 @@
+{
+  "schema": "dosei_zero_shot_scoring_policy_v1",
+  "policy_id": "dosei_zero_shot_marker_RPS_v1",
+  "status": "scientific_policy_adopted_for_source_construction",
+  "adopted_by": "/root",
+  "adopted_proposal_sha256": "b9458b1fe0db01605b001349ee76253008ab170e9d68f3c2a1d10e45d4066d00",
+  "condition": "native_marker_relative_30s_v1",
+  "observation_estimand": "retrospective_marker_associated_responsiveness",
+  "target": {
+    "categories": [1, 2, 3, 4, 5],
+    "source_low_merge": [0, 1],
+    "source_high_merge": [5, 6],
+    "merge_policy": "Preserve already grouped source labels; do not reconstruct unobserved original categories.",
+    "nullable": true,
+    "null_policy": "Retain case in complete artifact and coverage; exclude from both graded denominators without imputation."
+  },
+  "population": {
+    "required_case_slots": 7345,
+    "required_source_recordings": 171,
+    "quality_or_runtime_case_exclusions": false,
+    "short_empty_blank_and_endpoint_observations_retained": true,
+    "biological_person_mapping_established": false,
+    "independent_marker_or_record_sampling_assumed": false
+  },
+  "workflows": ["viewer_only", "code_enabled"],
+  "transport": {
+    "dependency": "../source-paired-packets-v1/prediction_contract.py",
+    "sha256": "69fd0c85374240bba63fc212304b4af9882c8afee0ff8b7d0fbeea3e5b6ef048",
+    "input_identity": "Actual canonical observation SHA256 and opaque case ID, identical across workflows.",
+    "probability_order": [1, 2, 3, 4, 5],
+    "probability_sum_tolerance": 0.000001,
+    "renormalize_clip_or_repair": false,
+    "invalid_missing_duplicate_extra_or_mismatched_rows": "invalidate_complete_run",
+    "scorer_inserts_abstentions": false,
+    "driver_error_to_abstention_mapping": "Separate prospective execution policy required; preserve original output and operational reason."
+  },
+  "primary": {
+    "name": "mean_operational_normalized_ordinal_RPS_loss",
+    "direction": "lower_is_better",
+    "cutpoints": [1, 2, 3, 4],
+    "probability_loss_formula": "0.25 * sum((sum(p[0:k]) - int(y <= k))**2 for k in [1,2,3,4])",
+    "stable_summation": true,
+    "labeled_abstention_loss": 1.00001,
+    "abstention_margin_reason": "Exceeds the conservative raw-RPS bound (1 + 0.000001)^2 permitted by the unchanged probability-sum tolerance.",
+    "denominator": "All authenticated non-null source targets, including abstentions and short/empty observations.",
+    "zero_labeled_support": "undefined_null_loss_with_zero_denominator",
+    "properness_scope": "The probabilistic RPS component is strictly proper on the exact probability simplex; the operational aggregate separately adds abstention penalties and numeric tolerance.",
+    "clinical_abstention_utility_claimed": false
+  },
+  "secondary": {
+    "point_prediction": "Smallest category whose supplied cumulative probability is at least 0.5.",
+    "normalized_absolute_error": "abs(point_category - source_category) / 4",
+    "labeled_abstention_absolute_error": 1.0,
+    "exact_category_accuracy": "Labeled abstentions count as incorrect; use the same complete labeled denominator.",
+    "per_category_recall": "All labeled cases in each source category; abstentions are misses; unsupported categories are undefined.",
+    "answered_only_RPS": "Diagnostic only, with explicit answered denominator; never replaces primary loss."
+  },
+  "paired_comparison": {
+    "formula": "mean(L_viewer_only - L_code_enabled) over the same non-null source targets",
+    "positive_difference_favors": "code_enabled",
+    "required_components": ["per_arm_loss", "answered_loss_component", "abstention_loss_component", "complete_coverage_counts"],
+    "interpretation": "Descriptive paired difference on this fixed observed cohort, not a population treatment effect."
+  },
+  "recording_summaries": {
+    "include_all_source_recordings": true,
+    "fields": ["slot_count", "labeled_count", "null_count", "per_arm_coverage", "per_arm_loss", "paired_difference"],
+    "secondary_equal_record_mean": "Mean across the same recordings with nonzero labeled support, with explicit support count.",
+    "person_weighting": false,
+    "bootstrap_confidence_intervals_or_pvalues": false
+  },
+  "fixed_no_training_references": [
+    {"name": "uniform_five_categories", "probabilities": [0.2, 0.2, 0.2, 0.2, 0.2]},
+    {"name": "point_mass_category_3", "probabilities": [0.0, 0.0, 1.0, 0.0, 0.0]}
+  ],
+  "evaluation_assistance": {
+    "dataset_label_training": false,
+    "demonstrations": [],
+    "task_specific_trained_detector": false,
+    "cross_case_feedback_or_persistent_memory": false,
+    "same_target_source_disclosure_and_budget_policy": true,
+    "general_pretraining_contamination_ruled_out": false,
+    "additional_assistance": "Separate named and disclosed workflow condition."
+  },
+  "source_component_obligations": {
+    "authenticate_complete_actual_case_observation_and_target_manifests": "Trusted evaluator driver, before scoring execution.",
+    "seal_both_complete_prediction_artifacts_before_target_scoring": true,
+    "qualify_participant_runtime_isolation": "Separate execution prerequisite; host Python objects are not a sandbox.",
+    "freeze_model_backend_prompts_tools_and_budgets": "Future execution prerequisite, not a source implementation gate.",
+    "activate_historical_7328_slot_person_weighted_scorer": false,
+    "shared_current_definition_adopted_by_this_file": false
+  },
+  "authentic_scoring_or_model_execution_authorized": false,
+  "clinical_diagnosis_or_patient_generalization_claimed": false
+}

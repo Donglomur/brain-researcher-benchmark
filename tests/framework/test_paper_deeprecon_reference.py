@@ -19,7 +19,7 @@ def module(name, path):
 ordinary = module('deeprecon_reference_catalog_controls', ROOT / 'tests/framework/test_paper_outcomes_catalog.py')
 binder = module('deeprecon_reference_binder_controls', ROOT / 'scripts/maintenance/bind_paper_outcomes.py')
 binding, catalog, cli = binder.binding, ordinary.catalog, ordinary.cli
-successor = binding.primary_successor_module('PAPER-paper-method-029')
+successor = module('retained_deeprecon_reference_stage', ROOT / 'src/neurobench/paper_deeprecon_reference.py')
 
 
 class DeepreconReferenceTests(unittest.TestCase):
@@ -29,10 +29,14 @@ class DeepreconReferenceTests(unittest.TestCase):
         cls.original_row = next(row for row in cls.registry['tasks'] if row['id'] == successor.TASK)
         cls.reader = binder.checker.Reader(ROOT)
         cls.previous = binding.coverage(cls.registry, cls.read_pin)
-        cls.current = json.loads((ROOT / successor.HOME / 'task.json').read_bytes())
+        cls.current = json.loads((ROOT / successor.HOME / 'docs/provenance/pre-figure2-complete-20261117/task.json').read_bytes())
 
     @classmethod
     def read_pin(cls, pin, label):
+        pin = copy.deepcopy(pin)
+        for name, filename in (('task', 'task.json'), ('outcomes', 'outcomes.v1.json')):
+            if pin == successor.approved_pin(name):
+                pin['path'] = successor.HOME + '/docs/provenance/pre-figure2-complete-20261117/' + filename
         return binder.read_pinned(cls.reader, pin, label)
 
     def setUp(self):
@@ -142,7 +146,14 @@ class DeepreconReferenceTests(unittest.TestCase):
                      '240 rows and 480 normalized pair means', 'not native replay or candidate results'):
             self.assertIn(text, page)
         self.assertIn('Deeprecon reference successor', catalog.paper_count_text(view))
-        with patch.object(cli, 'public_catalog_module', return_value=catalog), patch.object(catalog, 'load', return_value=view):
+        original_program_pin = cli._program_pin
+        def retained_program_pin(root, relative, sha256, size, **options):
+            for name, filename in (('task', 'task.json'), ('outcomes', 'outcomes.v1.json')):
+                expected = successor.approved_pin(name)
+                if (relative, sha256, size) == (expected['path'], expected['sha256'], expected['bytes']):
+                    relative = successor.HOME + '/docs/provenance/pre-figure2-complete-20261117/' + filename
+            return original_program_pin(root, relative, sha256, size, **options)
+        with patch.object(cli, 'public_catalog_module', return_value=catalog), patch.object(catalog, 'load', return_value=view), patch.object(cli, '_program_pin', side_effect=retained_program_pin):
             self.assertEqual(cli.paper_contract(successor.TASK, ROOT), bound['improvement_contract'])
             self.assertEqual(cli.paper_contract(successor.TASK, ROOT, outcome='reproduction'), bound['reproduction_contract'])
             result = cli.paper_outcomes(successor.TASK, ROOT)

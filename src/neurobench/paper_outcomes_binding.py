@@ -132,7 +132,7 @@ def primary_successor_module(task_id=PRIMARY_SUCCESSOR_TASK):
     elif task_id == "PAPER-ROOT-ADD-001":
         filename = "paper_language_reference.py"
     elif task_id == "PAPER-paper-method-029":
-        filename = "paper_deeprecon_reference.py"
+        filename = "paper_deeprecon_figure2.py"
     elif task_id in SCOPE_POLICY_SUCCESSOR_TASKS:
         filename = "paper_scope_policy_successor.py"
     else:
@@ -271,6 +271,48 @@ def bind_source_declaration_gaps(previous, record_pin, read_pin):
     previous.source_declaration_gap_pin = copy.deepcopy(record_pin)
 
 
+_ISTTC_QC_AUTHORITY = {'resolution_id': 'isttc-staged-qc-prose-v1', 'provenance': {'path': 'benchmarks/paper/PAPER-paper-method-add-004/docs/provenance/empirical-qc-source-resolution.v1.json', 'bytes': 7158, 'sha256': '35909b62820924e97a02282b68a36289a76e3cb6ddff7be88e3212b1b62e7533'}}
+_ISTTC_QC_PRIMARY = 'The original empirical unit/session/mouse/area roster, interval coordinates and trial-window draws remain unmaterialized. Existing pinned author source documents staged QC: the broader loader amplitude cutoff 0.1 is followed by an eight-area filter using amplitude_cutoff < 0.01, isi_violations < 0.5 and presence_ratio > 0.9. This resolves the unexplained 0.1-versus-0.01 contrast at source-policy level only. Paper inclusive boundaries versus source strict boundaries, the saved presence-ratio minimum 0.95 and exact historical AllenSDK filtering, authentic 5775-unit/26-mouse membership, complete fit failures and panel-specific masks remain unresolved.'
+_ISTTC_QC_BLOCK_BEFORE = 'Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved.'
+_ISTTC_QC_BLOCK_AFTER = 'The original 5775-unit/26-mouse empirical cohort, mouse/session identities, intervals, historical trial draws and panel masks remain unresolved. The pinned downstream <0.01 amplitude filter explains the loader 0.1 threshold; exact boundary and historical presence/AllenSDK selection still require qualification.'
+_ISTTC_QC_ACTION_BEFORE = 'Known-timescale synthetic estimation can support an improvement endpoint, but original error semantics, exact baseline aggregates, fitter parity and empirical cohort/window identity remain unresolved. Paper Eq. 21 displays signed REE whereas the registered sensitivity policy uses absolute error; lower signed bias is not automatically greater accuracy. Empirical pseudo-REE uses an estimator-derived reference and cannot establish recovery of true neural timescales. Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation. Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results. Allen5775-unit cohort, amplitude-cutoff discrepancy, original mouse IDs and historical trial/window draws remain unresolved. Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints. No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget.'
+_ISTTC_QC_ACTION_AFTER = 'Known-timescale synthetic estimation can support an improvement endpoint, but original error semantics, exact baseline aggregates, fitter parity and empirical cohort/window identity remain unresolved. Paper Eq. 21 displays signed REE whereas the registered sensitivity policy uses absolute error; lower signed bias is not automatically greater accuracy. Empirical pseudo-REE uses an estimator-derived reference and cannot establish recovery of true neural timescales. Original signed/absolute REE convention and corresponding baseline aggregates require primary figure-code reconciliation. Original fitter/uncertainty parameterization and NaN/quality masks are not verified against published results. The original 5775-unit/26-mouse empirical cohort, mouse/session identities, intervals, historical trial draws and panel masks remain unresolved. The pinned downstream <0.01 amplitude filter explains the loader 0.1 threshold; exact boundary and historical presence/AllenSDK selection still require qualification. Selected finite programme does not cover all duration/trial sensitivity and empirical endpoints. No admitted author rerun, original-task evaluator, meaningful-effect/uncertainty decision or fixed episode access/resource budget.'
+
+
+def _isttc_qc_resolution(entry):
+    """Accept only the reviewed iSTTC prose resolution, never arbitrary edits."""
+    if entry is None or "source_policy_resolution" not in entry:
+        return None
+    need(entry.get("task_id") == "PAPER-paper-method-add-004"
+         and entry.get("source_policy_resolution") == _ISTTC_QC_AUTHORITY
+         and type(entry.get("remaining_source_limits")) is list
+         and bool(entry["remaining_source_limits"])
+         and entry["remaining_source_limits"][0] == _ISTTC_QC_PRIMARY,
+         "Unreviewed iSTTC source-policy resolution")
+    return copy.deepcopy(_ISTTC_QC_AUTHORITY["provenance"])
+
+
+def _project_isttc_qc_resolution(result, entry):
+    if _isttc_qc_resolution(entry) is None:
+        return
+    need(result["blocking_issues"]["retained_secondary_improvement"][2] == _ISTTC_QC_BLOCK_BEFORE
+         and result["next_implementation_action"]["retained_secondary_improvement"]["action"] == _ISTTC_QC_ACTION_BEFORE,
+         "iSTTC source-policy instruction preimage changed")
+    result["blocking_issues"]["retained_secondary_improvement"][2] = _ISTTC_QC_BLOCK_AFTER
+    result["next_implementation_action"]["retained_secondary_improvement"]["action"] = _ISTTC_QC_ACTION_AFTER
+
+
+def _authenticate_isttc_qc_resolution(entry, read_pin):
+    record_pin = _isttc_qc_resolution(entry)
+    if record_pin is None:
+        return None
+    record = read_pin(record_pin, "iSTTC staged QC source-policy provenance")
+    need(type(record) is dict and record.get("task_id") == "PAPER-paper-method-add-004"
+         and record.get("schema") == "isttc_empirical_qc_source_resolution_v1",
+         "Invalid iSTTC source-policy provenance")
+    return record_pin["path"]
+
+
 def project_task(previous, row, improvement, scope_entry=None, *, reproduction_version="paper-reproduction/v1",
                  primary_correction=None):
     """Return the reviewed dual-outcome wording, preserving scientific inputs.
@@ -407,6 +449,7 @@ def project_task(previous, row, improvement, scope_entry=None, *, reproduction_v
             result["holds"] = {"preserved_predecessor_limits": copy.deepcopy(previous["holds"]),
                                "interpretation": "Preserved source, observation, exposure and execution restrictions apply within their retained scope. Secondary or partial-component criteria cannot, alone, qualify or redefine the complete corrected primary findings; retain the exact relationship and coverage stated in retained_secondary_scope.",
                                "primary_source_limits": copy.deepcopy(scope_entry["remaining_source_limits"])}
+        _project_isttc_qc_resolution(result, scope_entry)
     return result
 
 
@@ -442,6 +485,7 @@ def scope_decisions(value):
          "Scope decision must retain the adjudicated tasks and explicit bounded paper identities")
     for identifier, entry in entries.items():
         need(type(entry) is dict and entry.get("task_id") == identifier, "Invalid scope-decision task identity")
+        _isttc_qc_resolution(entry)
         need(entry.get("projection_action", "revise_primary_scope") == "revise_primary_scope",
              "A passive scope confirmation cannot be an active correction")
         need(entry.get("adoption_route", "full_primary_pairing_unavailable") == "full_primary_pairing_unavailable",
@@ -461,6 +505,7 @@ def scope_decisions(value):
     for identifier, entry in corrections.items():
         need(type(identifier) is str and SCOPE_ID.fullmatch(identifier)
              and type(entry) is dict and entry.get("task_id") == identifier, "Invalid same-primary correction identity")
+        need("source_policy_resolution" not in entry, "iSTTC source-policy resolution requires the unavailable scope route")
         need(entry.get("projection_action", "revise_primary_scope") == "revise_primary_scope",
              "A passive scope confirmation cannot be an active correction")
         need(entry.get("adoption_route", "normal_same_primary_unqualified") == "normal_same_primary_unqualified",
@@ -680,6 +725,7 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     retained_improvement, retained_improvement_pin = improvement, improvement_pin
     scope = getattr(previous_rows, "scope_decisions", None)
     scope_entry = scope["entries"].get(identifier) if scope else None
+    source_policy_member = _authenticate_isttc_qc_resolution(scope_entry, read_pin)
     primary_correction = scope.get("same_primary_corrections", {}).get(identifier) if scope else None
     reproduction = read_reproduction(binding["reproduction_contract"], home, read_pin) if "reproduction_contract" in binding else None
     successor = None
@@ -711,7 +757,8 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
         need(engine().contract_digest(retained_improvement) == engine().contract_digest(successor.retained_improvement),
              "Retained improvement differs from authenticated successor lineage")
         improvement, improvement_pin = successor.primary_improvement, binding["primary_improvement_contract"]
-    projected = project_task(previous_document, prior, improvement, scope_entry,
+    projection_policy = successor_module.projection_improvement(successor) if identifier == 'PAPER-ROOT-ADD-001' and successor is not None else improvement
+    projected = project_task(previous_document, prior, projection_policy, scope_entry,
                              reproduction_version=reproduction["schema_version"] if reproduction is not None else "paper-reproduction/v1",
                              primary_correction=primary_correction)
     if successor is not None:
@@ -736,6 +783,8 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     outcomes = read_pin(binding["outcomes"], "Paper outcomes")
     need(type(outcomes) is dict, "Paper outcomes must be an object")
     members = {previous_pin["path"], binding["outcomes"]["path"]}
+    if source_policy_member is not None:
+        members.add(source_policy_member)
     if "reproduction_contract" in binding:
         members.add(binding["reproduction_contract"]["path"])
     successor_provenance = None
@@ -760,7 +809,12 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     else:
         need(reproduction is not None, "Normal paper outcomes require a reproduction contract")
         module = engine(reproduction)
-        errors = module.outcomes_validate(outcomes, reproduction, improvement)
+        selected_language = identifier == 'PAPER-ROOT-ADD-001' and successor_module.is_figure3b(successor)
+        if selected_language:
+            result = successor_module.figure3b_summary(successor, outcomes, reproduction, improvement, module)
+            errors = result['errors']
+        else:
+            errors = module.outcomes_validate(outcomes, reproduction, improvement)
         need(not errors, "Invalid paper outcome contracts for " + identifier + ": " + "; ".join(errors))
         outcome_identity = retained_current if continuous is not None else expected_current
         need(outcomes["task_id"] == identifier and outcomes["original_task_sha256"] == outcome_identity["sha256"],
@@ -770,7 +824,8 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
             need(reproduction["eligibility"] == "source_unresolved"
                  and improvement["disposition"] != "improvement_ready",
                  "Reviewed same-primary correction retains unresolved source eligibility")
-        result = module.summary(outcomes, reproduction, improvement)
+        if not selected_language:
+            result = module.summary(outcomes, reproduction, improvement)
     need(not result["errors"] and result["task_count"] == 1,
          "Invalid independent paper outcome summary")
     retained_temporal_summary = result if continuous is not None else None

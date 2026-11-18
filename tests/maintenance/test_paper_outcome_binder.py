@@ -187,7 +187,7 @@ class PaperOutcomeBinderTests(unittest.TestCase):
         calls = 0
         changed = None
 
-        def change_then_build(root):
+        def change_then_build(root, **kwargs):
             nonlocal calls, changed
             calls += 1
             if calls == 2:
@@ -195,7 +195,7 @@ class PaperOutcomeBinderTests(unittest.TestCase):
                 outcomes["original_task_sha256"] = "0" * 64
                 self.put(self.home + "/" + binding.OUTCOMES, outcomes)
                 changed = self.snapshot()
-            return build(root)
+            return build(root, **kwargs)
 
         with mock.patch.object(binder, "build_outputs", side_effect=change_then_build):
             with self.assertRaisesRegex(ValueError, "raw current task identity"):
@@ -209,9 +209,9 @@ class PaperOutcomeBinderTests(unittest.TestCase):
         calls = 0
         changed = None
 
-        def build_then_change(root):
+        def build_then_change(root, **kwargs):
             nonlocal calls, changed
-            result = build(root)
+            result = build(root, **kwargs)
             calls += 1
             if calls == 2:
                 self.put(self.task_path, self.fixture.prior_task_bytes + b" ")

@@ -28,24 +28,49 @@ Unresolved facts are explicit nulls and blockers, never fabricated scores.
 
 ## Scientific comparison
 
-The original target, dataset version, cohort, split, allowed inputs, metric
-formula, direction and aggregation must match. The `same_task.preprocessing`
-anchor preserves comparability-critical data preparation, quality control and
-observation constraints, and records the author baseline recipe. It does not
+The original target, dataset version, cohort, source-defined splitting protocol,
+allowed inputs, metric formula, direction and aggregation must match. Historical
+assignments must also match wherever the claimed comparison requires them. The
+`same_task.preprocessing` anchor preserves comparability-critical data
+preparation, quality control and observation constraints, and records the author
+baseline recipe. It does not
 require candidates to copy the author feature extractor, normalizer or model.
 Train-only feature engineering and learned representations are allowed within
 the same permitted inputs; dropping test rows, target-informed normalization or
-adding observations changes the comparison. A new split, smaller cohort,
-changed endpoint or easier information condition is an extension and cannot count
-as a source-paper victory. Published paper scores and rerun author baselines are
-distinct; an agent-written local baseline cannot replace either. A current-SOTA
-claim needs separately verified primary sources and a matched comparison.
+adding observations changes the comparison. Changing the split unit, sampling
+population, permitted information, endpoint or evaluation protocol changes the
+comparison. A smaller cohort, changed endpoint or easier information condition
+cannot count as a source-paper victory. Published paper scores and qualified
+rerun author baselines remain distinct; an arbitrary local comparator cannot
+replace either. A current-SOTA claim needs separately verified primary sources
+and a matched comparison.
 
-When the original paper uses stochastic cross-validation or resampling, an author
-method rerun under that exact source protocol can be legitimate with justified
-provenance, reproduction tolerance and paired comparison. An unrecovered original
-random seed is an unresolved source fact; it does not authorize a different
-held-animal split.
+Distinguish the source evaluation protocol from its historical realized
+assignments. Regenerating assignments under a sufficiently specified original
+stochastic protocol can support a same-task comparison, provided the regeneration
+is declared and frozen before candidate selection, and both the qualified
+source-method rerun and candidate use identical protected evaluation cases.
+An unrecovered original random seed remains an unresolved source fact; it does
+not authorize a different held-animal split.
+
+Such evidence supports "improvement over a qualified source-method rerun on
+preregistered new folds." It does not recover historical author assignments,
+establish reproduction of the published score, or establish superiority to a
+published aggregate measured on different cases. Preserve the published
+reference and its unresolved provenance separately. Qualification requires the
+complete original endpoint and controls, a competent verified comparator,
+permitted tuning and resource use, a justified effect criterion, and paired
+uncertainty respecting biological dependence. Animal-aware inference must retain
+the original endpoint weighting and aggregation; it does not authorize replacing
+a session-weighted estimand with an equally weighted animal mean. Folds,
+shuffles and restarts do not add independent animals.
+
+This distinction does not change existing `improvement/v1` admission rules or
+task dispositions. A task needs an explicitly reviewed comparison policy before
+the scoped rerun claim can be admitted. Missing historical assignments remain
+unresolved wherever historical reproduction requires them. A fresh-fold
+comparison establishes no current-SOTA claim, and a new assignment does not erase
+prior public-data exposure.
 
 A contract may select a scientifically meaningful complete original endpoint or
 panel, with its required controls and companion quality metrics. It must name the
@@ -94,6 +119,51 @@ explicit. Their outputs retain their historical numerical meaning and cannot
 establish the `improvement/v1` success objective or independently verified paper
 reproduction. Existing pilot results are preserved as calibration, including
 failures and exposed development endpoints.
+
+## Explicit source-method rerun API
+
+The same `paper_improvement.py` module provides an explicit
+`paper-improvement/v2` contract and `paper-improvement-result/v2` result branch.
+Its runtime schemas are `RERUN_CONTRACT_SCHEMA` and `RERUN_RESULT_SCHEMA`; the
+public schema is [contract.v2.schema.json](contract.v2.schema.json). Supply the
+original v1 source contract to both entry points:
+
+```python
+contract_validate(contract, source_contract=original_v1_contract)
+compare(contract, result, source_contract=original_v1_contract)
+```
+
+Missing original-source evidence rejects admission. The explicit claim is
+`same_task_author_method_improvement`; its published score is contextual and may
+be null. This branch always leaves `paper_win` null and unverified.
+`comparison_admitted` and `criterion_satisfied` describe declared metadata only;
+`scientific_outcome` remains `unknown`. Trusted execution and independent
+scientific verification remain necessary.
+
+This branch covers one ordered scalar endpoint with required granular outputs
+and source-qualified numeric bounded companion controls. Every required control
+must pass for both candidate and baseline; controls never contribute gain. It
+cannot represent vector-panel superiority, and a vector-panel task cannot
+collapse its endpoints into a scalar to use this API.
+
+The qualified author method may use author-released code or an independent
+implementation of the paper method, with explicit primary-source and independent
+qualification evidence. The required output map, source split recipe and source
+blocker adjudications must bind the same qualification record. Paired evidence
+must bind candidate and qualified source-method rerun to the same protected case
+manifest, source identities and required outputs, with explicit assignment,
+freeze and exposure provenance. The bound biological-unit roster and count
+govern paired uncertainty; the source endpoint's weighting and aggregation remain
+unchanged.
+
+The current branch requires separate candidate and baseline executions, with
+independent verification, inside the same final evaluation window. Cached
+baseline reuse is not supported. Cumulative budgets cover both candidate and
+baseline work, including tuning and failed attempts.
+
+Existing v1 semantics and defaults remain unchanged. No task, CLI, catalog or
+paired-outcome envelope is migrated or adopted by adding this API; it changes no
+readiness, task or scientific-result count and establishes no SOTA claim.
 
 ## Maintaining current bindings
 

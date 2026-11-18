@@ -60,7 +60,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 57843 bytes; SHA-256 `ad1d6bd3ab9ade13aae0b97fa1e6270a5410a40422e6a3fc208741b2055a9d5e`.
+- Specification identity: 59222 bytes; SHA-256 `0b186eba585f0d690a8e32724ea1444b23b0d4f4384f2a23168a841eef4c8530`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -75,6 +75,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Calibration only.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original26 input identity v1](contracts/original26-input-identity-v1) — Metadata only source evidence.
+  Scope: Accepted original-26 input identity engineering documents under a dedicated artifact owner. Only the reviewed public locator spelling changes; existing task documentation, endpoint semantics and scientific/runtime readiness remain unchanged.
 - [Prediction interface v1](implementations/prediction-interface-v1) — Reviewed source component.
   Scope: Reviewed prediction interface and trusted fixed-control source with its scoped public engineering receipt. A fixed control is not participant/model execution, a new scientific result or runtime qualification; original evaluation and historical limits remain unchanged.
 - [Trusted fixed control v1](implementations/trusted-fixed-control-v1) — Reviewed source component.

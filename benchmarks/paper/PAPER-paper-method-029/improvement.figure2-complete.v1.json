@@ -1,0 +1,214 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-029",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "source_unresolved",
+  "disposition_reason": "The complete original Figure 2 reporting endpoint is selected: all 20 directed pairs of five Deeprecon subjects, VC/V1/V2/V3/V4/HVC, both pattern and profile axes, and the original overlapping-training condition. All 240 content-loss pair-axis published references are bound as the main method comparator; all 240 brain-loss control values and 72 source-bootstrap companions remain required. This is exposed source binding and complete descriptive reporting, not native computation, calibrated author replay, inferential superiority or scientific qualification. Native ceiling/mask/data/model lineage, justified uncertainty and fixed episode budgets remain unresolved.",
+  "source_paper": {
+    "title": "Inter-individual and inter-site neural code conversion without shared stimuli",
+    "url": "https://www.nature.com/articles/s43588-025-00826-5"
+  },
+  "evidence": [
+    {
+      "id": "n-paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12286860/",
+      "locator": "Results: Neural code conversion; Figure 2c-f; Methods: Evaluation of conversion accuracy; Data availability",
+      "supports": "Defines Deeprecon evaluation, noise-ceiling normalization and source datasets. Figure 2 supplies the comparison; its complete published pair-mean table has been recovered as n-published-figure2, while native evaluation and qualified comparison require separate evidence."
+    },
+    {
+      "id": "n-pattern",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/KamitaniLab/InterSiteNeuralCodeConversion/c264167c2b5a0fa71709a58ae5b50a042f6d7a79/evaluation/conversion_accuracy/fmri_pattern_corr_content_loss.py",
+      "locator": "process_subject_pair; calculate_correlations; main, lines 49-166",
+      "supports": "Uses all directed pairs of five subjects, VC conversion, six ROI reports and all 24-by-24 repeat correlations per test image."
+    },
+    {
+      "id": "n-profile",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/KamitaniLab/InterSiteNeuralCodeConversion/c264167c2b5a0fa71709a58ae5b50a042f6d7a79/evaluation/conversion_accuracy/fmri_profile_corr_content_loss.py",
+      "locator": "process_subject_pair; calculate_correlations; main, lines 41-148",
+      "supports": "Defines normalization, restored target scale and repeat-wise voxel profile calculation."
+    },
+    {
+      "id": "n-plot",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/KamitaniLab/InterSiteNeuralCodeConversion/c264167c2b5a0fa71709a58ae5b50a042f6d7a79/evaluation/conversion_accuracy/plot_figure.py",
+      "locator": "normalize_correlation; aggregate_results; run_analysis, lines 55-127 and 184-211",
+      "supports": "Excludes rows using the supplied noise threshold, divides by noise ceiling, clips to [-1,1], averages within pair/ROI and constructs figure summaries."
+    },
+    {
+      "id": "n-eval-route",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/KamitaniLab/InterSiteNeuralCodeConversion/c264167c2b5a0fa71709a58ae5b50a042f6d7a79/evaluation/conversion_accuracy/README.md",
+      "locator": "Entire evaluation README, lines 0-24",
+      "supports": "Separates raw-correlation scripts from plot_figure.py, which produces the normalized Figure 2E/F results."
+    },
+    {
+      "id": "n-data-route",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/KamitaniLab/InterSiteNeuralCodeConversion/c264167c2b5a0fa71709a58ae5b50a042f6d7a79/data/README.md",
+      "locator": "Available datasets, lines 0-7",
+      "supports": "Author release distinguishes fMRI training/test inputs, stimulus features, pretrained converters and decoders."
+    },
+    {
+      "id": "n-local",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/ncc_evaluator.py",
+      "locator": "SUBJECTS; ROIS; predict; cross_repeat_correlation; evaluator output qualification fields",
+      "supports": "Local numerical evaluator preserves complete-pair inference but is not an authentic empirical author replay or published numeric baseline."
+    },
+    {
+      "id": "n-published-figure2",
+      "kind": "author_data",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs43588-025-00826-5/MediaObjects/43588_2025_826_MOESM4_ESM.csv",
+      "locator": "Source Data Fig. 2, MOESM4; SHA256 f6beffbcad700f3e24208016daabe18d802805404f32a0585e2f9333fd4968fb; 15,637 bytes; keys Source/Target/ROI/Method, columns pattern_mean/profile_mean",
+      "supports": "All 240 original pair/method/ROI rows and 480 normalized pair means are available as exposed published references. The CSV is not a record of submitted computation and contains no converted voxel responses, per-feature ceilings, thresholds or bootstrap replicates."
+    },
+    {
+      "id": "n-complete-figure2-binding",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark",
+      "locator": "PAPER-paper-method-029/figure2-complete-successor.v1.json; complete original Figure 2 reporting selection and exact predecessor/source identities",
+      "supports": "Selects the full original panel already supported by n-pattern, n-profile, n-plot and n-published-figure2; it does not supply new scientific observations or authenticate native execution."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Convert source-subject visual-cortex responses into the target subject native voxel space and assess a complete predeclared original Figure 2 conversion endpoint. Image reconstruction and inter-site transfer are separate original analyses, not universally required companion conditions.",
+      "evidence_ids": [
+        "n-paper"
+      ]
+    },
+    "dataset": {
+      "status": "verified",
+      "description": "Deeprecon: subjects 1-3 from OpenNeuro ds001506 v1.3.1; subjects 4-5 training from ds003430 v1.2.0 and testing from ds003993 v1.0.0. Author code consumes sub-01 through sub-05 NaturalImageTest.h5; exact acquired asset checksums remain an execution gate.",
+      "evidence_ids": [
+        "n-paper",
+        "n-pattern"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "The original Figure 2 cohort contains all five Deeprecon subjects and all 20 directed non-self source-target pairs. Whole-VC conversion is reported in VC, V1, V2, V3, V4 and HVC; a selected original endpoint must retain its full pair population and predeclare its source-defined ROI/reporting scope.",
+      "evidence_ids": [
+        "n-pattern"
+      ]
+    },
+    "split": {
+      "status": "verified",
+      "description": "Retain the original NaturalImageTraining versus NaturalImageTest separation, 6,000 training samples and 50 natural test images with 24 repeats. Figure 2 overlapping-training condition is distinct from the category-disjoint Supplementary Figure 7 condition; neither may substitute for the other.",
+      "evidence_ids": [
+        "n-paper",
+        "n-pattern",
+        "n-profile"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Source fMRI and source stimulus features plus target-trained VGG19 feature decoders for content-loss training; source test fMRI for conversion. Target test fMRI and noise ceilings are evaluator-only. Author pretrained assets are a distinct declared access condition.",
+      "evidence_ids": [
+        "n-data-route",
+        "n-pattern"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Retain author BData ROI mappings and decoder-derived source/target training normalization. Pattern correlations use target-normalized patterns; profile code restores target scaling before correlating voxel response profiles. No test-derived normalization is fitted.",
+      "evidence_ids": [
+        "n-pattern",
+        "n-profile"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "Higher noise-ceiling-normalized Pearson correlation. Pattern scoring averages every measured/predicted repeat combination per image; profile scoring averages repeat-to-repeat correlations across the test-image axis per voxel. Apply the fixed author noise mask and clipping before averaging.",
+      "evidence_ids": [
+        "n-pattern",
+        "n-profile",
+        "n-plot"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Within each source-target/ROI, average eligible normalized pattern values over images or profile values over voxels. Preserve all 20 directed pairs for the selected complete original endpoint. Predeclare pattern, profile or a source-supported co-primary panel and required companion ROI/quality reports; do not select favorable ROIs after results.",
+      "evidence_ids": [
+        "n-plot"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Complete original Figure 2 vector of noise-ceiling-normalized Pearson correlation: all 20 directed pairs x six ROIs x pattern/profile, compared coordinate-wise to the 240 matching published content-loss values. Keep 240 brain-loss control values, all 72 source-bootstrap companions and every endpoint report; no combined scalar.",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "The selected vector reference is bound to exact Source Data Fig. 2 CSV SHA256 f6beffbcad700f3e24208016daabe18d802805404f32a0585e2f9333fd4968fb, 15637 bytes: Source/Target/ROI keys with Method=content_loss and pattern_mean/profile_mean supply all 240 main comparator values. Method=brain_loss supplies all 240 required control values under its own source access condition. The structured panel/key/role binding is in figure2-complete-successor.v1.json. This scalar API field remains null and unresolved because no single combined scalar or qualified scalar comparison is selected. The existing complete continuous reporter retains all 480 discrepancies and 24 descriptive equal-pair summaries; these are not the 72 author-bootstrap mean/lower/upper companions, whose values remain unresolved. The source table does not supply native ceilings, masks, fitted models or author execution provenance.",
+      "evidence_ids": [
+        "n-paper",
+        "n-eval-route",
+        "n-published-figure2",
+        "n-complete-figure2-binding"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Author scripts provide a reproducible route, but no authentic frozen-data/model replay was run here. Raw correlations omit the source normalization and exclusions. Any stochastic rerun must be limited to randomness actually specified by the original protocol, with provenance, predeclared calibration tolerance and paired author/candidate comparison; fixed released splits and evaluation artifacts remain required.",
+      "evidence_ids": [
+        "n-eval-route",
+        "n-plot"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "No task-specific practically meaningful gain is justified yet. Define it after reconciling author replay variability and the normalized score scale, before evaluating a candidate.",
+      "evidence_ids": []
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Predeclare a paired, subject-dependent uncertainty analysis for the selected complete original endpoint and any jointly claimed companions after fixing matched author/candidate output lineage and aggregation. The 480 published pair means are recovered; audit the source bootstrap separately. Their recovery does not establish independent-subject uncertainty.",
+      "independent_unit": "Human subject, with directed conversion pairs sharing source and target subjects; stimuli and voxels are nested measurements.",
+      "rationale": "Twenty directed pairs from five people are dependent. Neither voxel count nor pair count can be treated as independent biological sample size, and a stronger p-value alone is not improvement.",
+      "evidence_ids": [
+        "n-pattern",
+        "n-plot"
+      ]
+    },
+    "paper_win_requires": [
+      "The selected reporting scope is the complete original Figure 2 overlapping-training condition: all five Deeprecon subjects, 20 directed pairs, six source ROIs and both pattern/profile axes, with the 240 matching content-loss published values as the main comparator. Preserve 50 test images, 24 repeats, author scaling, noise-ceiling normalization, fixed eligible-feature masks and clipping before pair averaging; retain all 240 brain-loss controls and 72 source-bootstrap companions. No ROI, pair, axis or control may be dropped.",
+      "Beat the matching source-paper method by a predeclared meaningful amount with valid uncertainty; reproducing a raw-correlation calculation or exceeding a local authored baseline is insufficient. Retain the brain-loss control where required to interpret the source comparison, without changing the permitted input condition.",
+      "Freeze the candidate model, preprocessing, access condition, full original reporting panel and required companions, and any scientifically justified inferential criteria and budgets before final original-test feedback. This binding permits complete descriptive reporting only; it supplies no binary superiority rule.",
+      "Reduced cohorts, post-hoc favorable ROIs, changed fixed splits and easier input conditions cannot define a paper win. An original category-disjoint or inter-site condition may be evaluated only with its own matching original endpoint/baseline; novel conditions remain extensions.",
+      "Report every selected pair/ROI/axis value and every required control and companion. Retain the original units and separate content-loss-matched results, brain-loss controls, published-reference discrepancies and calibrated author/candidate comparisons. Never collapse the panel into a combined score, select favorable cells as a panel win, or generalize this Figure 2 condition to other paper tasks.",
+      "Allow a stochastic rerun only for original stochastic protocol steps with recorded provenance/seeds, predeclared calibration tolerance and paired author/candidate comparison. This does not permit replacing fixed released train/test splits or noise-ceiling artifacts."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "This contract concerns the source-paper result only; no newer SOTA baseline was verified.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "The complete Figure 2 panel and published vector references are selected. Only after qualifying native inputs, matched source/candidate output lineage and candidate access, iterate using training-only development/validation feedback within one fixed access condition. Preserve all 20 directed pairs, six ROIs, both axes, brain-loss controls and source-bootstrap companions; development choices cannot replace the original overlapping-training test condition.",
+    "candidate_freeze": "Freeze converter parameters, training/input/normalization manifests, decoder/features, the selected complete Figure 2 panel, paired author/candidate output identities, access and budgets, and any justified effect/uncertainty and source-conformant stochastic calibration rules before final feedback. Panel selection alone supplies none of these unresolved execution or inference requirements.",
+    "final_evaluation": "With separately qualified native execution, report all 240 content-loss-matched pair/ROI/axis values against their exact published references, all 240 brain-loss controls, and all 72 source-bootstrap companions. The unchanged published-reference-continuous-v1 reporter may report complete normalized replay discrepancies and 24 observed equal-pair summaries; it does not authenticate candidate lineage or evaluate scientific improvement. Keep author replay, candidate comparison and bootstrap summaries distinct, using identical original noise masks. Preserve public-test exposure history; protected new splits are extensions.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published content-loss values, calibrated source-conformant author reruns and current SOTA separate. Brain-loss conversion remains a source control under its own access condition; it cannot replace the matching main paper-method baseline."
+  },
+  "blocking_issues": [
+    "The full original Figure 2 reporting scope and all 480 published pair-axis references are bound. The 72 source-bootstrap companion target values and native execution/verification remain unresolved; complete source binding does not establish an authentic author/candidate comparison.",
+    "Noise-ceiling and random-pair threshold artifacts are not pinned or replayed.",
+    "Author-model and data checksums, training condition and native evaluator equivalence need empirical calibration.",
+    "The selected endpoint and companion roster are fixed, but meaningful effect, stochastic-rerun calibration tolerance and uncertainty accounting for the five shared subjects remain unjustified. Source bootstrap intervals and descriptive pair summaries are not independent-subject inference or a panel-win rule.",
+    "Concrete candidate access, tuning, compute and final-query budgets are not fixed."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve the existing numerical converter evaluator, native-adapter documentation and controls. Structural correctness and raw-correlation replay are calibration; no existing output establishes a paper win."
+  }
+}

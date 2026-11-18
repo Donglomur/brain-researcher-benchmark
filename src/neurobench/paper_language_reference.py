@@ -52,6 +52,11 @@ def has_primary_successor(row):
     if not fields.intersection(declared):
         return False
     _need(fields | {'reproduction_contract'} <= set(declared), 'Incomplete LANGUAGE reference selection')
+    if declared['primary_policy_revision'] == figure3b_pin('descriptor'):
+        for field, name in (('primary_policy_revision', 'descriptor'), ('primary_improvement_contract', 'improvement')):
+            _need(declared[field] == figure3b_pin(name), 'Unreviewed LANGUAGE Figure3b selector')
+        _require_pin(declared['reproduction_contract'], 'reproduction')
+        return True
     for field, name in (('primary_policy_revision', 'descriptor'),
                         ('primary_improvement_contract', 'improvement'), ('reproduction_contract', 'reproduction')):
         _require_pin(declared[field], name)
@@ -110,6 +115,8 @@ class _Authenticated:
 
 def authenticate(*, task_id, revision_pin, primary_pin, reproduction_pin, previous_pin,
                  retained_improvement_pin, read_pin):
+    if revision_pin == figure3b_pin('descriptor'):
+        return _authenticate_figure3b(task_id=task_id, revision_pin=revision_pin, primary_pin=primary_pin, reproduction_pin=reproduction_pin, previous_pin=previous_pin, retained_improvement_pin=retained_improvement_pin, read_pin=read_pin)
     _need(task_id == TASK, 'Unexpected LANGUAGE successor task')
     for selected, name in ((revision_pin, 'descriptor'), (primary_pin, 'improvement'),
                            (reproduction_pin, 'reproduction'), (previous_pin, 'pre_outcomes'),
@@ -164,6 +171,8 @@ def _replace(document, change):
 
 
 def project(base_dual_task, authenticated):
+    if type(authenticated) is _Figure3bAuthenticated:
+        return _project_figure3b(base_dual_task, authenticated)
     _need(type(authenticated) is _Authenticated and authenticated._seal is _SEAL,
           'Authenticated LANGUAGE reference required')
     documents = authenticated.snapshot()
@@ -286,10 +295,10 @@ _APPROVED = {
   "scope": {
     "pin": {
       "path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
-      "bytes": 523120,
-      "sha256": "ba085cfa4294baf51629867997da0c356d21466773884d0412654f2bc75924e2"
+      "bytes": 523962,
+      "sha256": "e71fe3e869e8f48ffcf18d8e685b86f30027e8eb1dde8ce676ac1948c1943aea"
     },
-    "canonical": "2a2a021e74f9dac2eaddabb8ac46df9d1da5649f013d705e27b5573fd1e157b0"
+    "canonical": "a6c4d4d2660ab84cc4e62459e1b67a315903ad6428578b6e6073561bc316c559"
   },
   "descriptor": {
     "pin": {
@@ -302,3 +311,265 @@ _APPROVED = {
 }
 
 SCOPE_PIN = approved_pin("scope")
+
+# A separate, exact second stage. The original reference authority above remains
+# immutable. This stage admits no protocols, submitted results or scientific win.
+_FIGURE3B_SEAL = object()
+
+
+def figure3b_pin(name):
+    return copy.deepcopy(_FIGURE3B_APPROVED[name]['pin'])
+
+
+def is_figure3b_selected(row):
+    return (row.get('id') == TASK and
+            row.get('paper_outcomes', {}).get('primary_policy_revision') == figure3b_pin('descriptor'))
+
+
+def is_figure3b(value):
+    return type(value) is _Figure3bAuthenticated and value._seal is _FIGURE3B_SEAL
+
+
+class _Figure3bAuthenticated:
+    __slots__ = ('_payload', '_legacy', '_seal')
+
+    def __init__(self, documents, legacy, seal):
+        object.__setattr__(self, '_payload', _encode(documents))
+        object.__setattr__(self, '_legacy', legacy)
+        object.__setattr__(self, '_seal', seal)
+
+    def __setattr__(self, name, value):
+        raise AttributeError('Authenticated LANGUAGE Figure3b is immutable')
+
+    def __delattr__(self, name):
+        raise AttributeError('Authenticated LANGUAGE Figure3b is immutable')
+
+    def snapshot(self):
+        return json.loads(self._payload)
+
+    @property
+    def primary_improvement(self):
+        return self.snapshot()['improvement']
+
+    @property
+    def retained_improvement(self):
+        return self._legacy.retained_improvement
+
+    @property
+    def descriptor_pin(self):
+        return figure3b_pin('descriptor')
+
+    @property
+    def candidate_interface(self):
+        return None
+
+    @property
+    def author_reproduction_routes(self):
+        return None
+
+    @property
+    def members(self):
+        return self._legacy.members + [figure3b_pin('descriptor'), figure3b_pin('improvement')]
+
+    @property
+    def public_provenance(self):
+        provenance = self._legacy.public_provenance
+        provenance.update(figure3b_scope_decision=figure3b_pin('root_decision'),
+            figure3b_previous_task=figure3b_pin('previous_task'),
+            figure3b_previous_outcomes=figure3b_pin('previous_outcomes'),
+            selected_input_preparation=figure3b_pin('selected_inputs'),
+            selected_fixed_engineering_control=figure3b_pin('fixed_control'))
+        return provenance
+
+
+def projection_improvement(authenticated):
+    """Keep the initial historical projection independent of current selection."""
+    if is_figure3b(authenticated):
+        return authenticated._legacy.primary_improvement
+    _need(type(authenticated) is _Authenticated and authenticated._seal is _SEAL,
+          'Authenticated LANGUAGE projection context required')
+    return authenticated.primary_improvement
+
+
+def _figure3b_read(name, read_pin):
+    value = read_pin(figure3b_pin(name), 'LANGUAGE Figure3b ' + name)
+    _need(_digest(value) == _FIGURE3B_APPROVED[name]['canonical'],
+          'LANGUAGE Figure3b parsed identity mismatch: ' + name)
+    return value
+
+
+def _authenticate_figure3b(*, task_id, revision_pin, primary_pin, reproduction_pin,
+                          previous_pin, retained_improvement_pin, read_pin):
+    _need(task_id == TASK, 'Unexpected LANGUAGE Figure3b owner')
+    _need(revision_pin == figure3b_pin('descriptor') and primary_pin == figure3b_pin('improvement'),
+          'Unreviewed LANGUAGE Figure3b selection')
+    for selected, name in ((reproduction_pin, 'reproduction'), (previous_pin, 'pre_outcomes'),
+                           (retained_improvement_pin, 'retained_improvement')):
+        _require_pin(selected, name)
+    documents = {name: _figure3b_read(name, read_pin) for name in _FIGURE3B_APPROVED
+                 if name not in ('task', 'outcomes')}
+    _need(_digest(documents['previous_task']) == _APPROVED['task']['canonical'] and
+          _digest(documents['previous_outcomes']) == _APPROVED['outcomes']['canonical'],
+          'LANGUAGE Figure3b predecessor differs from reference authority')
+
+    def reference_read(member_pin, label):
+        # The caller already authenticated these archived raw bytes above. Only
+        # the exact old pin is redirected; path-only and missing-file fallbacks
+        # would let the old stage accidentally consume a new root outcome file.
+        if member_pin == approved_pin('outcomes'):
+            return copy.deepcopy(documents['previous_outcomes'])
+        return read_pin(member_pin, label)
+
+    legacy = authenticate(task_id=TASK, revision_pin=approved_pin('descriptor'),
+        primary_pin=approved_pin('improvement'), reproduction_pin=reproduction_pin,
+        previous_pin=previous_pin, retained_improvement_pin=retained_improvement_pin,
+        read_pin=reference_read)
+    descriptor = documents['descriptor']
+    _need(descriptor['schema_version'] == 'language-figure3b-successor/v1' and descriptor['task_id'] == TASK,
+          'Invalid LANGUAGE Figure3b descriptor')
+    _need(documents['improvement']['disposition'] == 'design_ready' and
+          documents['improvement']['source_paper'] == legacy.primary_improvement['source_paper'],
+          'LANGUAGE Figure3b cannot qualify or replace the source paper')
+    outcomes = copy.deepcopy(documents['previous_outcomes'])
+    for change in descriptor['outcome_replacements']:
+        _replace(outcomes, change)
+    _need(_digest(outcomes) == _FIGURE3B_APPROVED['outcomes']['canonical'] and
+          all(item['status'] == 'unresolved' and item['protocol'] is None for item in outcomes['pairing'].values()),
+          'LANGUAGE Figure3b outcomes must remain the exact unresolved transition')
+    documents['outcomes'] = outcomes
+    return _Figure3bAuthenticated(documents, legacy, _FIGURE3B_SEAL)
+
+
+def _project_figure3b(base_dual_task, authenticated):
+    _need(is_figure3b(authenticated), 'Authenticated LANGUAGE Figure3b required')
+    documents = authenticated.snapshot()
+    result = project(base_dual_task, authenticated._legacy)
+    _need(result == documents['previous_task'], 'LANGUAGE Figure3b reference projection differs')
+    for change in documents['descriptor']['task_replacements']:
+        _replace(result, change)
+    raw = _encode(result)
+    expected = figure3b_pin('task')
+    _need(len(raw) == expected['bytes'] and hashlib.sha256(raw).hexdigest() == expected['sha256'],
+          'LANGUAGE Figure3b current task differs from exact projection')
+    return result
+
+
+def figure3b_summary(authenticated, outcomes, reproduction, improvement, engine):
+    """Closed metadata-only summary; this is not a general scoped-result engine."""
+    _need(is_figure3b(authenticated), 'Authenticated LANGUAGE Figure3b required')
+    documents, legacy = authenticated.snapshot(), authenticated._legacy.snapshot()
+    _need(outcomes == documents['outcomes'] and improvement == documents['improvement'] and
+          reproduction == legacy['reproduction'], 'LANGUAGE Figure3b outcome context differs')
+    policy_errors = engine.improvement.contract_validate(improvement, TASK)
+    _need(not policy_errors, 'Invalid LANGUAGE Figure3b improvement contract: ' + '; '.join(policy_errors))
+    errors = engine.outcomes_validate(legacy['outcomes'], reproduction, legacy['improvement'])
+    _need(not errors, 'LANGUAGE retained full-panel pair is invalid: ' + '; '.join(errors))
+    result = engine.summary(legacy['outcomes'], reproduction, legacy['improvement'])
+    _need(not result['errors'] and len(result['cells']) == 4 and
+          all(cell['scientific_outcome'] == 'unknown' and cell['receipt'] is None for cell in result['cells']),
+          'LANGUAGE retained outcome summary cannot carry a scientific result')
+    for cell in result['cells']:
+        if cell['outcome'] == 'improvement':
+            cell['eligibility'] = improvement['disposition']
+            cell['endpoint_eligible'] = False
+        cell['pairing_status'] = outcomes['pairing'][cell['outcome']]['status']
+        cell['condition_available'] = False
+    result['assurance'] = ('Authenticated original full reproduction and selected Figure3b continuous improvement policies. '
+        'All four cells remain unknown; no instantiated protocol, AI result, binary win, population inference or current SOTA.')
+    return result
+
+
+def adoption(row, read_pin):
+    """Return only the fixed second-stage row and two projected current outputs."""
+    _need(row.get('id') == TASK and row.get('track') == 'paper', 'Unexpected LANGUAGE adoption owner')
+    declared = row['paper_outcomes']
+    for selected, name in ((row['specification'], 'task'), (declared['outcomes'], 'outcomes'),
+        (declared['primary_policy_revision'], 'descriptor'), (declared['primary_improvement_contract'], 'improvement'),
+        (declared['reproduction_contract'], 'reproduction')):
+        _require_pin(selected, name)
+    authenticated = authenticate(task_id=TASK, revision_pin=figure3b_pin('descriptor'),
+        primary_pin=figure3b_pin('improvement'), reproduction_pin=declared['reproduction_contract'],
+        previous_pin=declared['previous_specification'],
+        retained_improvement_pin=row['specification_revision']['improvement_contract'], read_pin=read_pin)
+    task = project(authenticated._legacy.snapshot()['archived_task.json'], authenticated)
+    _need(row['title'] == task['title'], 'LANGUAGE Figure3b cannot change the registry title')
+    result = copy.deepcopy(row)
+    result['specification'] = figure3b_pin('task')
+    result['paper_outcomes'].update(primary_policy_revision=figure3b_pin('descriptor'),
+        primary_improvement_contract=figure3b_pin('improvement'), outcomes=figure3b_pin('outcomes'))
+    return result, task, authenticated.snapshot()['outcomes']
+
+_FIGURE3B_APPROVED = {
+  "descriptor": {
+    "pin": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-001/figure3b-successor.v1.json",
+      "bytes": 40993,
+      "sha256": "3cf4d2893f87ec7dccbed4b6d19af1d4192fdb0e91f0aa8fff5408ed307186d4"
+    },
+    "canonical": "246e5f0907f1f2fa0f09ffb5b4f11cddd850a8101566169a3c0e8a41e86faaee"
+  },
+  "improvement": {
+    "pin": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-001/improvement.figure3b.v1.json",
+      "bytes": 17823,
+      "sha256": "1c54c77b74ae19feb7370ceee6dff14da5cd8bf5de983cb7d145599805ab667f"
+    },
+    "canonical": "7d3e912ca1818d8cd37e4cda7711b1ef836a4d6a9bf6f8ee30060f1de965103a"
+  },
+  "task": {
+    "pin": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-001/task.json",
+      "bytes": 28518,
+      "sha256": "7cc30f5590ebbeb0a8c7114e2df70e1fe2f1d34821684bea4d1998dce2442098"
+    },
+    "canonical": "258f384f38c2679c3caa512de8f39cf6844e498c2479fc01cb4c3b7128b69052"
+  },
+  "outcomes": {
+    "pin": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-001/outcomes.v1.json",
+      "bytes": 1979,
+      "sha256": "12369b155e896161be22d06a294a9a742b25735ebe4a3d12d2328fbe2ca6b382"
+    },
+    "canonical": "63f7963da5820b62bc45f1ba88b56918ec0972664223ba670ccb27075834e946"
+  },
+  "previous_task": {
+    "pin": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/current-definition-pre-figure3b-20261117/task.json",
+      "bytes": 31718,
+      "sha256": "5c4e1af6794f068015c5750e2d99e1560b35f04cb472c56446f01c884a237029"
+    },
+    "canonical": "ebdb3965539591eb489c3d6d3a13650e03d69cba549dfceb3c90dbf510f0a895"
+  },
+  "previous_outcomes": {
+    "pin": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/current-definition-pre-figure3b-20261117/outcomes.v1.json",
+      "bytes": 2579,
+      "sha256": "b357dfcf0f0bf086cfa06e4f2373d5e0748981b20f71af7fe615b5d3d79ebb00"
+    },
+    "canonical": "871ba4890f193dc660b2a5634a37ad80a72d78f4915bdc20715436ed0a3710df"
+  },
+  "root_decision": {
+    "pin": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/proposals/figure3b-improvement-scope-v1/ROOT_SELECTION.json",
+      "bytes": 3075,
+      "sha256": "4038501cc3050e8bbd7f1968c05768f9a0ed0322725f9e167466b694965cb762"
+    },
+    "canonical": "3bdb0ac24e1ee2a06282ffcfe6be16c7022fa48edd34224576ece4b7f8f3fc6e"
+  },
+  "selected_inputs": {
+    "pin": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/original-selected-inputs-20261117/RECEIPT.json",
+      "bytes": 8102,
+      "sha256": "e5b2f32727da09bbaf654a37b82333a5aae6b781af6596cff49865ca305c4b49"
+    },
+    "canonical": "59e0476569050581864194f0a1182bf9ef40fe17da49865658c4f08270448852"
+  },
+  "fixed_control": {
+    "pin": {
+      "path": "benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/original-selected-fixed-control-20261117/RECEIPT.json",
+      "bytes": 9213,
+      "sha256": "c641fe0e764b3fd3f0af517db3391b0c4b38fc72d150b47a0bb51f194d04bbcf"
+    },
+    "canonical": "e867f076297bff527aa0c79ad33820e6978b17d0a5e11017f526bb15a48cfe88"
+  }
+}

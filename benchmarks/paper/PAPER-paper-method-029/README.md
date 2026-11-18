@@ -20,8 +20,8 @@ The current definition supports two independent outcomes: recreate the original 
 
 The reference successor records the recovered publisher table: 240 rows and 480 normalized pair means. These exposed source references are not native replay or candidate results. Qualified comparison, native source and uncertainty obligations remain unresolved; runtime routes are not declared by this policy.
 
-- [Selected current improvement contract](improvement.reference-recovery.v1.json)
-- [Authenticated reference successor](reference-recovery-successor.v1.json)
+- [Selected current improvement contract](improvement.figure2-complete.v1.json)
+- [Authenticated reference successor](figure2-complete-successor.v1.json)
 - [Published reference provenance](implementations/published-reference-v1/SOURCE_PROVENANCE.json)
 
 **Unchanged reproduction/source limits:**
@@ -64,7 +64,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 29884 bytes; SHA-256 `bf0a50c891e2654e310ede3e5e322283db064e990d925f54559b58bcc1ca1eeb`.
+- Specification identity: 31093 bytes; SHA-256 `60d56b21b763b356fec9b5fb74ff171880f7c6578c3f6f418652a8bd7f017a37`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -73,6 +73,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
 - [Before current reference-recovery wording: task.json](docs/provenance/pre-reference-recovery-20261117/task.json)
 - [Before current reference-recovery wording: outcomes.v1.json](docs/provenance/pre-reference-recovery-20261117/outcomes.v1.json)
+- [Immediate predecessor before complete Figure 2 definition adoption — provenance/pre-figure2-complete-20261117/outcomes.v1.json](docs/provenance/pre-figure2-complete-20261117/outcomes.v1.json)
+- [Immediate predecessor before complete Figure 2 definition adoption — provenance/pre-figure2-complete-20261117/task.json](docs/provenance/pre-figure2-complete-20261117/task.json)
 
 ## Implementation artifacts
 

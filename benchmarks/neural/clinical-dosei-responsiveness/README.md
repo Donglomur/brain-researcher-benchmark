@@ -44,8 +44,24 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
-- [Source runtime qualification v1](implementations/source-runtime-qualification-v1) — Metadata only source evidence.
-  Scope: Metadata-only source-runtime diagnostic receipt and observation note. This artifact admits no executable runtime-parent source. Zero of six runtime controls is qualified; three failed attempts remain retained. It changes no EEG, provider/model, scoring, network policy, participant pairing or readiness claim.
+- [Source authenticated paired runner v1](implementations/source-authenticated-paired-runner-v1) — Reviewed source component.
+  Scope: Reviewed source-authenticated paired-runner source and generated controls with its accepted prerequisite chain. Source enrollment does not extend retained native execution or scientific evidence.
+- [Source fixed input adapter v1](implementations/source-fixed-input-adapter-v1) — Reviewed source component.
+  Scope: Reviewed source-fixed input adapter and public bootstrap source. The selected authentication and generated adapter commands exclude the obsolete input-adapter fixture; authentic and native evidence retain their original scope.
+- [Source paired controller v1](implementations/source-paired-controller-v1) — Reviewed source component.
+  Scope: Accepted DoSEI prerequisite source retained under its exact component root. B14 includes this prerequisite source without enrolling additional historical scripts or native execution. The prerequisite collection retains its separate five-script/16-behavioral-group history and original qualification limits.
+- [Source paired delivery v1](implementations/source-paired-delivery-v1) — Reviewed source component.
+  Scope: Accepted DoSEI prerequisite source retained under its exact component root. B14 includes this prerequisite source without enrolling additional historical scripts or native execution. The prerequisite collection retains its separate five-script/16-behavioral-group history and original qualification limits.
+- [Source runtime adapters v1](implementations/source-runtime-adapters-v1) — Reviewed source component.
+  Scope: Accepted DoSEI prerequisite source retained under its exact component root. B14 includes this prerequisite source without enrolling additional historical scripts or native execution. The prerequisite collection retains its separate five-script/16-behavioral-group history and original qualification limits.
+- [Source runtime qualification v1](implementations/source-runtime-qualification-v1) — Reviewed source component.
+  Scope: The historical metadata-only source-runtime diagnostic receipt and observation note remain retained with their original scope: zero of six runtime controls is qualified, and three failed attempts remain historical. The accepted B14 prerequisite modules are now retained as source only under this existing owner. This extension selects no native runtime and changes no EEG, provider/model, scoring, network policy, participant pairing or scientific readiness claim.
+- [Source runtime qualification v2](implementations/source-runtime-qualification-v2) — Reviewed source component.
+  Scope: Accepted DoSEI prerequisite source retained under its exact component root. B14 includes this prerequisite source without enrolling additional historical scripts or native execution. The prerequisite collection retains its separate five-script/16-behavioral-group history and original qualification limits.
+- [Source terminal mapping v1](implementations/source-terminal-mapping-v1) — Reviewed source component.
+  Scope: Accepted DoSEI prerequisite source retained under its exact component root. B14 includes this prerequisite source without enrolling additional historical scripts or native execution. The prerequisite collection retains its separate five-script/16-behavioral-group history and original qualification limits.
+- [Source zero shot scoring v1](implementations/source-zero-shot-scoring-v1) — Reviewed source component.
+  Scope: Accepted DoSEI prerequisite source retained under its exact component root. B14 includes this prerequisite source without enrolling additional historical scripts or native execution. The prerequisite collection retains its separate five-script/16-behavioral-group history and original qualification limits.
 - [Ordinal and paired](implementations/ordinal-and-paired) — Ordinal and paired.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Ordinal metrics v2](implementations/ordinal-metrics-v2) — Task implementation.

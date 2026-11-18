@@ -166,6 +166,15 @@ both paired protocols are specified, their ordered cohort, split, full-panel,
 observation, metric and aggregation identity hashes must also match. Evaluator
 implementations and decision criteria can differ between the two questions.
 
+Current paired bundles require matching split manifests across reproduction and
+improvement protocols. They cannot represent historical replay and a different
+fresh-fold evaluation as the same split. This check remains unchanged. An
+explicitly selected rerun-improvement policy must distinguish source-assignment
+provenance from the evaluation manifest while retaining identical evaluation
+cases within each admitted comparison. It cannot resolve missing historical
+assignments or populate an original-result reproduction claim merely by using
+new folds.
+
 Each outcome has its own pairing status and frozen protocol. Within a pair,
 common input manifest, evaluator, original scientific identity, exposure policy
 and cumulative access/resource budgets are identical. The code manifest is the

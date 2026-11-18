@@ -84,7 +84,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 92570 bytes; SHA-256 `ecd17f3b32905fc3851b3baafea1e966b4b34cc59ae2012a11fddb99de57500e`.
+- Specification identity: 92570 bytes; SHA-256 `fe1f8de046c5a2ca6aa496ffe665959cba32282a39c349d4f0d20702ad4b953a`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -100,6 +100,10 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Conditional 246-feature nested participant-held-out classifier with training-only standardization and complete supplied-protocol support. Canonical feature eligibility, source/cohort/correction joins, upstream functional-connectivity extraction, the matched nuisance comparison, competent references, protected execution and whole-task scientific qualification remain held. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Original feature producer v1](implementations/original-feature-producer-v1) — Reviewed source component.
   Scope: Complete original 94-person input producer has authenticated preparation of94 files,376 windows and1,504,000 finite values. The source four-ROI normalization, six-pair DBA route and ten-fold classifier connect the retained scorer; generated controls use an analytic DBA seam. No native DBA, feature extraction, classifier fit or scientific score ran. Historical release/order/folds and full-precision reference calibration remain unresolved. Two additional mandatory generated controls now exercise the pinned real tslearn 0.6.3 backend; their first hosted execution and locked-wheel runtime compatibility remain pending. The original 40 construction controls and authentic preparation evidence are preserved.
+- [Delivery verifier v1](implementations/delivery-verifier-v1) — Reviewed source component.
+  Scope: Reviewed delivery-verifier source for the existing MEG task. Source and delivery controls do not establish new scientific results or runtime selection.
+- [Paired program v1](implementations/paired-program-v1) — Reviewed source component.
+  Scope: Reviewed paired-program and participant-facing source for the existing MEG task, preserving the stated scientific and runtime limits.
 - [Original fold score v1](implementations/original-fold-score-v1) — Reviewed source component.
   Scope: Original MEG stimulus-decoding accuracy. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

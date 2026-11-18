@@ -1,4 +1,17 @@
 {
+  "completed_collection_evaluator": {
+    "authentic_paired_evaluation_executed": false,
+    "focused_controls": {
+      "log": {
+        "bytes": 3302,
+        "path": "COMPLETION_EVALUATOR_TESTS.txt",
+        "sha256": "50cd6f0bd6683f6f77da765c6c71d54526479082b3bd84753ca28595eefdad2b"
+      },
+      "methods": 18
+    },
+    "scope": "Both complete arms, then all original observation hashes/tokens, then response decoding and the unchanged scorer. Externally pinned finish/closure documents are selected evidence, not runtime or isolation qualification.",
+    "source": "paired/evaluate.py"
+  },
   "condition_id": "processed-regional-early-response-assumed-support-v1",
   "dependencies": "All runtime dependencies needed by Python source are included as members, except the explicitly selected external native stack. Generated tests use the standard library only.",
   "expected_native_versions": {
@@ -25,7 +38,11 @@
     }
   },
   "kernel_preservation": {
-    "paired_python_files_unchanged": true,
+    "added_paired_modules": [
+      "evaluate.py",
+      "test_evaluate.py"
+    ],
+    "existing_paired_python_files_unchanged": true,
     "unchanged_preparation_modules": [
       "runtime_io.py",
       "event_source.py",
@@ -123,6 +140,11 @@
       "sha256": "4dd059367fea59dc14d7be83bdb99449376373140bf752b89fa5a2b48b29f316"
     },
     {
+      "bytes": 21853,
+      "path": "paired/evaluate.py",
+      "sha256": "8432aaf51b15855491e8501c335adad0f61ba4764bf88205e2a52466600f236b"
+    },
+    {
       "bytes": 9300,
       "path": "paired/observations.py",
       "sha256": "d762c44f281e8418b3e2a0beb36eab1bc197447ca38f807f767a67c250bd364b"
@@ -141,6 +163,11 @@
       "bytes": 3233,
       "path": "paired/test_cli.py",
       "sha256": "b16314b6a3fcf35dd872b3b83073fa424785dc1f239747ec5a57a4712b78d5d2"
+    },
+    {
+      "bytes": 31679,
+      "path": "paired/test_evaluate.py",
+      "sha256": "66814b320f9d45f1f065c519d7dac934a9961f98907ebd55ae9a78f626ef8959"
     },
     {
       "bytes": 9658,
@@ -270,7 +297,7 @@
       "path": "RECONSTRUCTION_STATUS.json",
       "sha256": "4994136652f95c3080c671275af2bd0e67745bc1d1d49df8353abf39b7250aee"
     },
-    "successor_scope": "Documentation and status only; all43 executable/contract members match the tested source manifest.",
+    "successor_scope": "The original43 executable/contract members match the tested reconstruction manifest. The two added evaluator files have generated controls only; authentic paired evaluation is not qualified.",
     "tested_source_manifest": {
       "bytes": 8608,
       "sha256": "b2a6cdab4d5b4ab1d244deed266da1a70d98a2b91a2224dc28c17aecd67d4ee0"

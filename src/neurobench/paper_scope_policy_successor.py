@@ -17,10 +17,8 @@ TASKS = frozenset(("PAPER-paper-signal-add-004", "PAPER-paper-method-replacement
                    "PAPER-paper-method-replacement-013", "PAPER-paper-method-add-010"))
 REVISION_FILE = "docs/provenance/improvement.primary-scope.revision.v1.json"
 CURRENT_FILE = "improvement.primary-scope.v1.json"
-SCOPE_PIN = {"path": "docs/provenance/paper-outcome-scope-decisions.v1.json",
-             "bytes": 523120,
-             "sha256": "ba085cfa4294baf51629867997da0c356d21466773884d0412654f2bc75924e2"}
-SCOPE_CANONICAL = "2a2a021e74f9dac2eaddabb8ac46df9d1da5649f013d705e27b5573fd1e157b0"
+SCOPE_PIN = {'path': 'docs/provenance/paper-outcome-scope-decisions.v1.json', 'bytes': 523962, 'sha256': 'e71fe3e869e8f48ffcf18d8e685b86f30027e8eb1dde8ce676ac1948c1943aea'}
+SCOPE_CANONICAL = 'a6c4d4d2660ab84cc4e62459e1b67a315903ad6428578b6e6073561bc316c559'
 SHA = re.compile(r"[0-9a-f]{64}\Z")
 _SEAL = object()
 _SECTIONS = ("objective", "goal", "primary_outputs", "success_criteria", "evaluation",
@@ -55,8 +53,8 @@ _APPROVED = {
         ],
         "descriptor": [
             8855,
-            "2cc2da00586c604daf7f63018cffd6a5bb0b78f7a0ed7b4ea58a61f043864a17",
-            "1258319133200d1bc302ee8b7345374a7e89e38ed74c7f4673f7ddd8d399c411"
+            "934f77be150b91e431e7e38fe46ef57d08349b2788ce3b722506585aef83bb36",
+            "1decd77d0755aa2fc4e6d9c5d6207ba6de875496d095882bbba3a2ebf7f28ef2"
         ],
         "delta_canonical": "33c5f1ab5639d8cd5570d51171d54824e7d3cb9f23be719439e429eed06f29ed",
         "base_projection_canonical": "0e1aadb044fbe43ba6d4807097e21d9653d7e5441f0f80fad69b78730a2f6eb6",
@@ -92,8 +90,8 @@ _APPROVED = {
         ],
         "descriptor": [
             28736,
-            "94d2960efe9e84744f1c2be0124fdb220c28f2fab859ded71f837ca6f453ebd7",
-            "212ce903b65f14cbc5e5a32ac1f1897ec0ba0421b6f64acf0c3e34ac38e9b38a"
+            "ba0dd223ef911016bef87139e1c3f54be3a77090c24e5bc637a1456884582fa8",
+            "8596930920ae866abed8f15ef60096b8004dc3d6064c1b6510d9cfe251a5c71a"
         ],
         "delta_canonical": "ffd3e5986b0d9b8568d00637d5123b22fd1832c2f23b25ef9c137b9a16bd6d6e",
         "base_projection_canonical": "b9ccc707a4f894eee4513d2069c16c1df70742e14b23c0fc5d8fd58a3c176731",
@@ -140,8 +138,8 @@ _APPROVED = {
         ],
         "descriptor": [
             13631,
-            "94af7e066027a1ead4159e5ae9b70f9ea65b8e5b1040cf90e1c69bc817dfb59e",
-            "005071659330dea91926ef03edf2b483f6df75c093ffce5caf759f66ae01eab4"
+            "8b2821dd5a219f5676f26a1f97a7f1af4f19943acb0eb84523a908c97d14e9fa",
+            "b85d8a134ce4386fbaa0d651457e7b063bd149d0cc6f1feceddc55fcbf3ae7f3"
         ],
         "delta_canonical": "571e01b2dc5021c6f50b52d2a5fb8ee00aab45cedd957402c18820a42905d783",
         "base_projection_canonical": "4c7faa2625654ef3b4dff3c1684ec026ca391011a0b7a9f44ad81232222c0427",
@@ -181,8 +179,8 @@ _APPROVED = {
         ],
         "descriptor": [
             12033,
-            "7a4ce612bb415162738a909294fd704b8b47d30f5d2de4f07acc7849cd0fd7bd",
-            "becf16c8554f19932a8f926b69ba46a9fb9ad143e79f6e8e7bd069de8a194b15"
+            "223ada5fe608f910237fa3b3605781e264006411f8cd80c11dc9b3779b2d331b",
+            "cb6e74b7f9566db3617b70d05c26de0e02656458a78470e195f3df56acc79b12"
         ],
         "delta_canonical": "83fb103283f54dfa058b8880015493680e21dbc9fd4fc977af258f7fd7dd1d6c",
         "base_projection_canonical": "72a8a3e68d5bc67d0b3342b887ceaf7f932c3ada3cc1e1e609566d83e332f0ee",

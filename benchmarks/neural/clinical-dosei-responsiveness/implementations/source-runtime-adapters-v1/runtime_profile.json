@@ -1,0 +1,70 @@
+{
+  "schema": "dosei_existing_runtime_source_profile_v1",
+  "selected_image": {
+    "Id": "sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156",
+    "Architecture": "arm64",
+    "Os": "linux",
+    "Size": 539583315,
+    "Config": {
+      "Cmd": ["python3"],
+      "Entrypoint": null,
+      "Env": [
+        "PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "LANG=C.UTF-8",
+        "GPG_KEY=7169605F62C751356D054A26A821E680E5FA6305",
+        "PYTHON_VERSION=3.12.8",
+        "PYTHON_SHA256=c909157bb25ec114e5869124cc2a9c4a4d4c1e957ca4ff553f1edc692101154e",
+        "OPENBLAS_NUM_THREADS=2",
+        "OMP_NUM_THREADS=2",
+        "MKL_NUM_THREADS=2"
+      ],
+      "Labels": null,
+      "OnBuild": null,
+      "User": "",
+      "Volumes": null,
+      "WorkingDir": "/work"
+    }
+  },
+  "retained_package_observations": {"python": "3.12.8", "numpy": "2.2.6"},
+  "source_evidence": {
+    "neural031_image_profile_sha256": "c66ff09a03393be9aa9c6d1e6fd34bb732e41da73442f2e3efd441661c29e44f",
+    "complete_image_inventory_sha256": "71e5988e775de14d46bc3d8f1af4ecdcb72e372be5f99dbf221571897cbf723b",
+    "retained_image_availability_sha256": "4fe72f8e838bf688898b0a6ca68f70b039f7e0b24b7419784a508e2c5e570a37",
+    "retained_image_availability_observed_utc": "2026-11-17T17:29:50Z",
+    "neural034_generated_runtime_saved_proof_sha256": "49592ca86fa84ef2b98391520a9856a7b9d7f963d868c49d64c6b90d649a95c0"
+  },
+  "code_container_policy": {
+    "fresh_container_per_tool_call": true,
+    "stateful_workspace_between_calls": false,
+    "same_case_observation_immutable": true,
+    "user": "65534:65534",
+    "network": "none",
+    "ipc": "none",
+    "cgroup_namespace": "private",
+    "root_read_only": true,
+    "drop_capabilities": ["ALL"],
+    "no_new_privileges": true,
+    "memory_bytes": 536870912,
+    "memory_swap_total_bytes": 536870912,
+    "nano_cpus": 1000000000,
+    "pids_limit": 64,
+    "tmpfs": {"/tmp": "rw,nosuid,nodev,noexec,size=67108864,mode=1777", "/work": "rw,nosuid,nodev,noexec,size=67108864,mode=1777"},
+    "read_only_file_mounts": ["/input/observation.json", "/input/program.py"],
+    "image_pull_or_build": false,
+    "output_transport": "bounded attached CLI stdout/stderr byte capture; no Docker cp or tmpfs snapshot claim",
+    "environment_overrides": {"OMP_NUM_THREADS": "1", "OPENBLAS_NUM_THREADS": "1", "MKL_NUM_THREADS": "1", "VECLIB_MAXIMUM_THREADS": "1", "NUMEXPR_NUM_THREADS": "1", "PYTHONDONTWRITEBYTECODE": "1", "PYTHONHASHSEED": "0"}
+  },
+  "host_generated_control_interpreter": {
+    "path": "/opt/homebrew/bin/python3.11",
+    "bytes": 52640,
+    "sha256": "4959d784e83b29c47836a946a6ce6ac7f8f36bb1edc90b394dde44a6376cb1a1",
+    "scope": "Existing short-pool interpreter binary identity; not a sandbox or complete environment attestation"
+  },
+  "qualification": {
+    "new_live_docker_inventory_performed": false,
+    "another_task_qualification_inherited": false,
+    "dosei_container_qualified": false,
+    "image_archive_or_registry_digest_distribution_established": false,
+    "authentic_EEG_or_model_execution": false
+  }
+}

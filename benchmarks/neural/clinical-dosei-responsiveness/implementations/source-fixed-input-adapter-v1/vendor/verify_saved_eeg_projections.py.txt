@@ -1,0 +1,333 @@
+#!/usr/bin/env python3
+"""Prepared full saved-output verification, gated on separate exact root approval.
+
+No original ZIP/CSV is opened. The only scientific payload inputs are closed
+native output files and the already-created source annotation census/ledgers.
+This script is not a launcher and cannot create approvals or native leases.
+"""
+from collections import Counter
+import argparse
+import hashlib
+import os
+from pathlib import Path
+import re
+import resource
+import signal
+import stat
+import sys
+import time
+import types
+
+HERE=Path(__file__).resolve().parent
+E=HERE.parents[2]
+D=HERE.parent
+N=D/'numeric-preparation-v1'
+RAW=Path('/Users/nicholas/Documents/Codex/neuroscience-benchmark-data/dosei-native-v2-20261117')
+OUTPUT=RAW/'full-eeg-native-v1'
+ORIGINAL_PROTOCOL=N/'FULL_EEG_EXECUTION_PROTOCOL.json'
+ORIGINAL_SHA='94d6d9dec8cdd0038d3bac87a3fdb7fa020d862daf890da503540fd74a762019'
+ORIGINAL_RUN='dosei-full-eeg-native-20261117-v1'
+OWNER='complete_dosei'
+STAT=('st_dev','st_ino','st_size','st_mtime_ns','st_ctime_ns')
+CAPS={'saved_output_read_bytes':2147483648,'source_metadata_read_bytes':16777216,
+      'operational_read_bytes':8388608,'report_bytes':131072,'ram_bytes':268435456,
+      'inner_wall_seconds':580,'outer_wall_seconds':600,'cpu_soft_seconds':530,
+      'cpu_hard_seconds':540,'threads':1,'automatic_retries':0}
+SUFFIX={'time':'time.i64le.provisional','eeg':'eeg.f64le.provisional','quality':'quality.u8.provisional'}
+CORE_SHA='e180b0fab7b0fe9aa71a372271334bc90ef4a31c3ff3316c048e9789df95a0db'
+
+
+def require(value,message):
+    if not value:raise ValueError(message)
+
+
+def hashpin(value):
+    require(type(value) is str and re.fullmatch('[0-9a-f]{64}',value),'strict non-null SHA256 pin required')
+    return value
+
+
+def signature(value):return {key:getattr(value,key) for key in STAT}
+
+
+class Meter:
+    def __init__(self,cap):self.cap=cap;self.charged=0;self.known=0
+    def read(self,fd,count):
+        require(type(count) is int and 0<=count<=1048576,'bounded read grant')
+        require(self.charged+count<=self.cap,'cumulative read budget exhausted')
+        self.charged+=count
+        value=os.read(fd,count)
+        self.known+=len(value);self.charged-=count-len(value)
+        return value
+    def report(self):return {'cap':self.cap,'charged':self.charged,'known':self.known,'unknown_grant_upper_bound':self.charged-self.known}
+
+
+class Reader:
+    def __init__(self,path,meter,cap,expected=None):
+        self.path=Path(path);self.meter=meter;self.expected=expected;self.fd=None
+        if expected is not None:hashpin(expected['sha256'])
+        require(self.path.is_absolute() and self.path.parent.resolve()==self.path.parent,'real absolute parent required')
+        self.fd=os.open(self.path,os.O_RDONLY|os.O_NONBLOCK|getattr(os,'O_NOFOLLOW',0))
+        try:
+            observed=os.fstat(self.fd);self.before=signature(observed)
+            require(stat.S_ISREG(observed.st_mode) and observed.st_size<=cap,'bounded regular saved file')
+            require(self.before==signature(self.path.lstat()),'descriptor/path disagreement')
+            if expected is not None:
+                require(type(expected['bytes']) is int and observed.st_size==expected['bytes'],'bound file extent')
+                if 'closed_file_signature' in expected:require(self.before==expected['closed_file_signature'],'closed source output identity changed')
+            self.digest=hashlib.sha256();self.count=0;self.buffer=bytearray()
+        except BaseException:
+            os.close(self.fd);self.fd=None;raise
+    def raw_read(self,count):
+        value=self.meter.read(self.fd,count);self.digest.update(value);self.count+=len(value);return value
+    def read(self,count):
+        require(type(count) is int and 0<=count<=1048576,'bounded saved stream request')
+        value=bytes(self.buffer[:count]);del self.buffer[:len(value)]
+        while len(value)<count:
+            part=self.raw_read(count-len(value))
+            if not part:break
+            value+=part
+        return value
+    def readline(self,cap):
+        require(type(cap) is int and 0<cap<=1048576,'bounded saved line')
+        while True:
+            end=self.buffer.find(b'\n')
+            if end>=0 and end<cap:
+                result=bytes(self.buffer[:end+1]);del self.buffer[:end+1];return result
+            if len(self.buffer)>=cap:
+                result=bytes(self.buffer[:cap]);del self.buffer[:cap];return result
+            raw=self.raw_read(min(65536,cap-len(self.buffer)))
+            if not raw:
+                result=bytes(self.buffer);self.buffer.clear();return result
+            self.buffer.extend(raw)
+    def finish(self):
+        require(not self.buffer,'saved stream has unconsumed read-ahead bytes')
+        require(self.read(1)==b'' and self.count==self.before['st_size'],'saved file not consumed exactly once')
+        require(self.before==signature(os.fstat(self.fd))==signature(self.path.lstat()),'saved file changed during verification')
+        if self.expected is not None:require(self.digest.hexdigest()==self.expected['sha256'],'saved file SHA256 differs')
+        return {'bytes':self.count,'sha256':self.digest.hexdigest()}
+    def close(self):
+        if self.fd is not None:os.close(self.fd);self.fd=None
+    def __enter__(self):return self
+    def __exit__(self,*args):self.close()
+
+
+def read_bytes(path,meter,cap,sha=None):
+    if sha is not None:hashpin(sha)
+    with Reader(path,meter,cap) as stream:
+        chunks=[]
+        while True:
+            chunk=stream.read(min(1048576,cap+1-stream.count))
+            if not chunk:break
+            chunks.append(chunk)
+            require(stream.count<=cap,'saved metadata expanded beyond cap')
+        result=stream.finish();raw=b''.join(chunks)
+    if sha is not None:require(result['sha256']==sha,'frozen metadata/code hash mismatch')
+    return raw
+
+
+def validate_authority(ledger,plan,args,*,pid,parent_pid):
+    """Pure gate; tests use dictionaries. No output path is accessed here."""
+    binding={'path':str(args.protocol),'sha256':hashpin(args.protocol_sha256)}
+    hashpin(plan['verifier_sha256']);hashpin(plan['core_sha256'])
+    for key in ('observed_exit','launch_status','console','cohort_success'):hashpin(plan[key]['sha256'])
+    require(plan['schema']=='dosei_full_eeg_saved_verification_v1' and plan['owner']==OWNER,'separate verification protocol required')
+    require(plan['source_protocol']=={'path':str(ORIGINAL_PROTOCOL),'sha256':ORIGINAL_SHA} and plan['source_native_run_id']==ORIGINAL_RUN,'exact original source preparation required')
+    require(plan['limits']==CAPS and all(type(x) is int for x in plan['limits'].values()),'verification limits changed')
+    require(all(type(plan[key]) is int for key in ('full_scope_recordings','source_rows','private_event_rows')) and plan['full_scope_recordings']==171 and plan['source_rows']==70760492 and plan['private_event_rows']==13174,'complete source population only')
+    require(plan['expected_clock_anomaly_source_rows']=={'41':[380929],'43':[88083]},'exact released duplicate positions required')
+    require(plan['original_source_reads'] is False and plan['model_execution'] is False and plan['canonical_scoring'] is False,'scientific scope changed')
+    approvals=[row for row in ledger.get('approved_native_protocols',[]) if row['id']==args.approval_id]
+    require(len(approvals)==1 and approvals[0]['owner']==OWNER and approvals[0]['approved_by']=='/root' and approvals[0]['protocol']==binding,'root must approve this exact saved-verification plan')
+    original=[row for row in ledger['native_runs'] if row['id']==ORIGINAL_RUN]
+    require(len(original)==1 and original[0]['owner']==OWNER and original[0]['status']=='succeeded' and type(original[0]['exit_code']) is int and original[0]['exit_code']==0 and original[0].get('error') is None and original[0].get('completed_utc'),'original native lease must be settled successfully')
+    require(original[0]['protocol']==plan['source_protocol'],'settled original protocol differs')
+    require(plan['verification_native_run_id']==args.native_run_id,'verification run identity differs')
+    own=[row for row in ledger['native_runs'] if row['id']==args.native_run_id]
+    command=[plan['python_executable'],'-I','-S','-B',plan['verifier_path'],'--protocol',str(args.protocol),'--protocol-sha256',args.protocol_sha256,'--approval-id',args.approval_id,'--native-run-id',args.native_run_id]
+    require(len(own)==1 and own[0]['owner']==OWNER and own[0]['status']=='running' and own[0]['protocol']==binding and own[0]['approval_id']==args.approval_id and own[0]['command']==command,'owned direct verification lease required')
+    require(type(own[0].get('child_pid')) is int and own[0]['child_pid']==pid and type(own[0]['coordinator_pid']) is int and own[0]['coordinator_pid']==parent_pid,'verification process identity not registered')
+    require(type(own[0]['requested_threads']) is int and own[0]['requested_threads']==1 and type(own[0]['declared_max_working_ram_bytes']) is int and own[0]['declared_max_working_ram_bytes']==CAPS['ram_bytes'],'verification resource declaration differs')
+    return True
+
+
+def validate_gate(ledger,plan,args,observed,launch,*,pid,parent_pid):
+    validate_authority(ledger,plan,args,pid=pid,parent_pid=parent_pid)
+    require(observed['schema']=='dosei_full_eeg_parent_observed_exit_v1' and observed['source_native_run_id']==ORIGINAL_RUN and observed['source_protocol_sha256']==ORIGINAL_SHA and type(observed['launcher_exit_code']) is int and observed['launcher_exit_code']==0 and observed['terminal_session_closed'] is True,'parent observed exit0 required')
+    require(observed['launch_status']==plan['launch_status'] and observed['console']==plan['console'],'parent final capture binding differs')
+    for key in ('producer_exit','receiver_exit','returned_exit','overflow_probe_bytes'):require(launch.get(key)=='0','final bounded capture did not succeed completely')
+    require(launch.get('complete_console_capture')=='true' and launch.get('console_sha256')==plan['console']['sha256'],'final console incomplete or changed')
+    return True
+
+
+def parse_status(raw):
+    result={}
+    for line in raw.decode('ascii').splitlines():
+        key,value=line.split('=',1)
+        require(key not in result,'duplicate capture status key');result[key]=value.strip()
+    return result
+
+
+class Context:
+    def __init__(self,args):
+        self.args=args;self.started=time.monotonic();self.parent=os.getppid();self.opened=set()
+        self.operational=Meter(CAPS['operational_read_bytes']);self.outputs=Meter(CAPS['saved_output_read_bytes']);self.saved=Meter(CAPS['source_metadata_read_bytes'])
+        require(re.fullmatch('[0-9a-f]{64}',CORE_SHA),'verifier core is not frozen')
+        source=read_bytes(HERE/'saved_projection_verify_core.py',self.operational,65536,CORE_SHA)
+        self.core=types.ModuleType('saved_projection_core');exec(compile(source,str(HERE/'saved_projection_verify_core.py'),'exec'),self.core.__dict__)
+        self.plan=self.core.unique_json(read_bytes(args.protocol,self.operational,65536,hashpin(args.protocol_sha256)))
+        p=self.plan
+        require(p['verifier_path']==str(Path(__file__).resolve()) and p['core_sha256']==CORE_SHA,'exact verifier source required')
+        read_bytes(Path(__file__).resolve(),self.operational,65536,hashpin(p['verifier_sha256']))
+        require(p['observed_exit']['path']==str(N/'FULL_EEG_PARENT_OBSERVED_EXIT.json') and p['launch_status']['path']==str(N/'native-eeg-launch-v1/launch.status') and p['console']['path']==str(N/'native-eeg-launch-v1/console.txt'),'exact parent/capture metadata paths required')
+        require(p['report_path']==str(HERE/(args.native_run_id+'.json')),'report must use owned bounded evidence path')
+        # Bounded registration wait accesses only operational root metadata.
+        deadline=time.monotonic()+2
+        while True:
+            ledger=self.core.unique_json(read_bytes(E/'RESOURCES.json',self.operational,8388608))
+            own=[row for row in ledger['native_runs'] if row['id']==args.native_run_id]
+            if len(own)==1 and own[0].get('child_pid') is None and time.monotonic()<deadline:
+                time.sleep(.05);continue
+            validate_authority(ledger,p,args,pid=os.getpid(),parent_pid=self.parent);break
+        observed=self.core.unique_json(read_bytes(Path(p['observed_exit']['path']),self.operational,32768,hashpin(p['observed_exit']['sha256'])))
+        launch=parse_status(read_bytes(Path(p['launch_status']['path']),self.operational,4096,hashpin(p['launch_status']['sha256'])))
+        console=read_bytes(Path(p['console']['path']),self.operational,65536,hashpin(p['console']['sha256']))
+        require(len(console)==int(launch['console_bytes']),'final capture length changed')
+        validate_gate(ledger,p,args,observed,launch,pid=os.getpid(),parent_pid=self.parent)
+        self.original=self.core.unique_json(read_bytes(ORIGINAL_PROTOCOL,self.operational,16384,ORIGINAL_SHA))
+        self.execution={'protocol':p['source_protocol'],'producer':{'path':self.original['producer_path'],'sha256':self.original['producer_sha256']},'guards':{'path':self.original['guards_path'],'sha256':self.original['guards_sha256']},'modules':{key:{'path':self.original[key+'_path'],'sha256':self.original[key+'_sha256']} for key in ('numeric_policy','numeric_stream','annotation_adapter','zip_guard')}}
+        require(p['cohort_success']['path']==str(OUTPUT/'COHORT_SUCCESS.json'),'exact closed native cohort path')
+        # Only now may output metadata or payload files be inspected.
+        self.initial_inventory=self.inventory()
+        require(not any(name=='COHORT_FAILURE.json' or name.endswith('.failure.json') for name in self.initial_inventory),'contradictory failure evidence')
+    def inventory(self):
+        require(OUTPUT.parent.resolve()==OUTPUT.parent and stat.S_ISDIR(OUTPUT.lstat().st_mode),'real output directory required')
+        result={}
+        for path in OUTPUT.iterdir():
+            observed=path.lstat();require(stat.S_ISREG(observed.st_mode),'nonregular native output entry')
+            result[path.name]=signature(observed)
+            require(len(result)<=2049,'output inventory bound')
+        return result
+    def check(self):
+        require(os.getppid()==self.parent,'verification coordinator exited')
+        require(time.monotonic()-self.started<CAPS['inner_wall_seconds'],'complete saved verifier wall limit')
+    def read_json(self,binding,kind,cap=131072):
+        path=Path(binding['path']);self.once(path)
+        meter=self.saved if kind=='saved' else self.outputs
+        require(path.parent==(RAW/'annotation-census-v1' if kind=='saved' else OUTPUT),'exact scientific metadata directory')
+        raw=read_bytes(path,meter,cap,hashpin(binding['sha256']))
+        require(type(binding['bytes']) is int and len(raw)==binding['bytes'],'metadata binding length')
+        if 'closed_file_signature' in binding:require(signature(path.lstat())==binding['closed_file_signature'],'metadata closed identity changed')
+        return self.core.unique_json(raw)
+    def once(self,path):
+        require(str(path) not in self.opened,'saved scientific input cannot be reread');self.opened.add(str(path))
+    def payload(self,binding,name):
+        path=OUTPUT/name;require(binding['path']==str(path),'output binding path differs')
+        self.once(path);return Reader(path,self.outputs,2147483648,binding)
+    def source_ledger(self,binding):
+        path=Path(binding['path']);require(path.parent==RAW/'annotation-census-v1','exact saved ledger directory');self.once(path)
+        raw=read_bytes(path,self.saved,4194304,hashpin(binding['sha256_of_actual_retained_bytes']))
+        require(len(raw)==binding['bytes_successfully_written'] and (not raw or raw.endswith(b'\n')),'saved ledger extent/EOF')
+        rows=[]
+        for line in raw.splitlines(keepends=True):
+            require(len(line)<=262144 and line.endswith(b'\n'),'bounded saved ledger row');rows.append(self.core.unique_json(line))
+        require(len(rows)<=50000,'saved ledger row bound');return rows
+    def resources(self):
+        usage=resource.getrusage(resource.RUSAGE_SELF)
+        return {'output_reads':self.outputs.report(),'source_metadata_reads':self.saved.report(),'operational_reads':self.operational.report(),'wall_seconds':time.monotonic()-self.started,'cpu_user_seconds':usage.ru_utime,'cpu_system_seconds':usage.ru_stime,'maxrss_bytes':usage.ru_maxrss*(1 if sys.platform=='darwin' else 1024)}
+
+
+def verify_collection(ctx):
+    c=ctx.core;p=ctx.plan;original=ctx.original
+    source_raw=read_bytes(Path(original['cohort_path']),ctx.saved,1048576,original['cohort_sha256'])
+    source=c.unique_json(source_raw);ctx.once(Path(original['cohort_path']))
+    require(source['schema']=='dosei_complete_private_annotation_row_census_v1' and source['status']=='succeeded' and source['complete_source_recordings']==171 and source['archive_sha256']==original['archive_sha256'],'complete authenticated original source census required')
+    cohort=ctx.read_json(p['cohort_success'],'output')
+    require(cohort['schema']=='dosei_complete_full_eeg_preparation_v1' and cohort['status']=='succeeded' and cohort['native_run_id']==ORIGINAL_RUN and c.canonical(cohort['execution_binding'])==c.canonical(ctx.execution),'complete original cohort provenance')
+    require(cohort['archive_sha256']==original['archive_sha256'] and cohort['census_cohort_sha256']==original['cohort_sha256'] and cohort['source_manifest_sha256']==original['manifest_sha256'],'cohort source lineage changed')
+    require(c.canonical(cohort['saved_scientific_inputs'])==c.canonical({key:{'path':original[key+'_path'],'sha256':original[key+'_sha256']} for key in ('cohort','census_supervisor','inventory','headers','manifest')}),'all saved scientific input bindings required')
+    require(cohort['complete_source_recordings']==171 and cohort['canonical_scoring_admitted'] is False and cohort['model_or_scoring_execution'] is False and cohort['native_marker_relative_packets_constructed'] is False and cohort['biological_person_mapping_verified'] is False,'cohort scope changed')
+    summaries={row['recording_id']:row for row in source['recordings']}
+    members=cohort['complete_member_receipts']
+    require(len(summaries)==len(source['recordings'])==len(members)==171 and {row['recording_id'] for row in members}==set(summaries),'all171 exact identities once required')
+    expected_names={'cohort-output.lock','COHORT_START.json','COHORT_SUCCESS.json'}
+    for rid in summaries:
+        require(type(rid) is str and re.fullmatch('[1-9][0-9]*',rid),'recording identity')
+        expected_names.update('recording-'+rid+suffix for suffix in ('.start.json','.success.json','.annotation-events.jsonl.provisional'))
+        expected_names.update('recording-'+rid+'.'+suffix for suffix in SUFFIX.values())
+    require(set(ctx.initial_inventory)==expected_names,'missing/extra/contradictory output files')
+    totals=Counter();quality=[Counter(),Counter()];events=Counter();clock=Counter();anomalies={};results=[]
+    for item in members:
+        ctx.check();rid=item['recording_id'];stem='recording-'+rid;summary=summaries[rid]
+        require(item['receipt']['path']==str(OUTPUT/(stem+'.success.json')),'exact member success path')
+        receipt=ctx.read_json(item['receipt'],'output')
+        require(receipt['schema']=='dosei_full_eeg_member_success_v1' and receipt['status']=='succeeded' and receipt['recording_id']==rid and receipt['native_run_id']==ORIGINAL_RUN and c.canonical(receipt['execution_binding'])==c.canonical(ctx.execution),'member receipt provenance differs')
+        for field,sourcefield in (('source_member','member_path'),('source_member_sha256','member_sha256'),('source_header_sha256','header_sha256'),('source_rows','source_data_rows'),('source_expanded_bytes','expanded_bytes_read'),('source_crc32','member_crc32'),('saved_annotation_ledger','annotation_ledger'),('saved_member_report','member_census_report'),('saved_final_member_receipt','final_member_receipt')):
+            require(c.canonical(receipt[field])==c.canonical(summary[sourcefield]),'member/source census binding changed')
+        require(receipt['complete_source_EOF_CRC_SHA'] is True and receipt['all_three_streams_closed_and_size_stat_checked'] is True and receipt['canonical_scoring_admitted'] is False and receipt['biological_person_mapping_verified'] is False and receipt['native_marker_relative_packets_constructed'] is False,'member scientific/completion scope')
+        report=ctx.read_json(summary['member_census_report'],'saved',262144)
+        prior=ctx.read_json(summary['final_member_receipt'],'saved')
+        require(report['status']==prior['status']=='succeeded' and prior['error'] is None and report['recording_id']==prior['recording_id']==rid,'saved member incomplete')
+        require(c.canonical(prior['member_census_report'])==c.canonical(summary['member_census_report']) and c.canonical(prior['annotation_ledger'])==c.canonical(summary['annotation_ledger']),'saved final source receipt binding')
+        require(report['member_sha256']==summary['member_sha256'] and report['source_data_rows']==summary['source_data_rows'] and report['complete_member_EOF'] is True and report['complete_member_CRC_verified'] is True,'saved source census proof')
+        rows=ctx.source_ledger(summary['annotation_ledger'])
+        require(len(rows)==summary['protected_annotation_rows'],'complete saved annotation row count')
+        with ctx.payload(receipt['event_projection'],stem+'.annotation-events.jsonl.provisional') as event_stream:
+            event_result=c.verify_events(event_stream,rid,rows,ctx.check);event_binding=event_stream.finish()
+        require(event_result['bytes']==event_binding['bytes'] and event_result['sha256']==event_binding['sha256'] and c.canonical(event_result['counts'])==c.canonical(receipt['event_projection_counts']),'complete private event projection differs')
+        streams={}
+        try:
+            require(set(receipt['outputs'])==set(SUFFIX),'exactly three numerical output bindings required')
+            for key in SUFFIX:
+                binding=receipt['outputs'][key]
+                require(binding['bytes']==summary['source_data_rows']*c.WIDTHS[key],'exact packed output extent')
+                streams[key]=ctx.payload(binding,stem+'.'+SUFFIX[key])
+            verified=c.scan_binary_triplet(streams,summary['source_data_rows'],report['timestamp_audit'],rows,check=ctx.check)
+            for key,stream in streams.items():require(stream.finish()==verified['outputs'][key],'verified raw output digest differs')
+        finally:
+            for stream in streams.values():stream.close()
+        core_report=receipt['numeric_core_report']
+        require(c.canonical(verified['quality_counts'])==c.canonical(core_report['quality_combination_counts_by_channel']) and c.canonical(verified['outputs'])==c.canonical(core_report['outputs']),'numeric count/hash report differs from all saved rows')
+        if verified['clock_anomaly_source_rows']:anomalies[rid]=verified['clock_anomaly_source_rows']
+        for channel in range(2):quality[channel].update(verified['quality_counts'][channel])
+        clock.update(verified['clock_issue_counts']);events.update(event_result['counts'])
+        totals.update(source_rows=summary['source_data_rows'],expanded_bytes=summary['expanded_bytes_read'],annotation_rows=len(rows),binary_bytes=summary['source_data_rows']*26,event_bytes=event_result['bytes'])
+        results.append({'recording_id':rid,'source_rows':summary['source_data_rows'],'event_rows':len(rows),'all_stream_hashes_and_structural_checks_passed':True})
+    require(dict(totals)==cohort['totals'] and c.canonical([dict(q) for q in quality])==c.canonical(cohort['quality_combination_counts_by_channel']) and dict(clock)==cohort['clock_issue_counts'] and dict(events)==cohort['event_projection_counts'],'whole-cohort saved projection counts disagree')
+    require(totals['source_rows']==p['source_rows'] and totals['annotation_rows']==p['private_event_rows'] and totals['binary_bytes']==p['source_rows']*26,'complete source population required')
+    require(anomalies==p['expected_clock_anomaly_source_rows'],'current released duplicate clocks41/43 changed')
+    require(ctx.inventory()==ctx.initial_inventory,'output directory changed during verification')
+    return {'schema':'dosei_full_saved_projection_verification_v1','status':'succeeded','source_protocol_sha256':ORIGINAL_SHA,
+            'verification_protocol_sha256':ctx.args.protocol_sha256,'source_native_run_id':ORIGINAL_RUN,
+            'recordings':results,'totals':dict(totals),'quality_counts':[dict(q) for q in quality],'clock_anomaly_source_rows':anomalies,
+            'event_projection_counts':dict(events),'all171_projection_hashes_verified_in_one_structural_read':True,
+            'original_EEG_decimal_reclassification_performed':False,'source_payload_reread':False,
+            'participant_packets_or_canonical_scoring_admitted':False,'resources_before_report':ctx.resources()}
+
+
+def timeout(signum,frame):raise TimeoutError('bounded saved verification interrupted')
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    for name in ('protocol','protocol-sha256','approval-id','native-run-id'):parser.add_argument('--'+name,required=True)
+    args=parser.parse_args();args.protocol=Path(args.protocol).absolute();ctx=None;result=None
+    try:
+        ctx=Context(args)
+        for signum in (signal.SIGTERM,signal.SIGINT,signal.SIGALRM,signal.SIGXCPU):signal.signal(signum,timeout)
+        resource.setrlimit(resource.RLIMIT_CPU,(CAPS['cpu_soft_seconds'],CAPS['cpu_hard_seconds']))
+        signal.setitimer(signal.ITIMER_REAL,max(.001,CAPS['inner_wall_seconds']-(time.monotonic()-ctx.started)))
+        result=verify_collection(ctx);code=0
+    except BaseException as error:
+        result={'schema':'dosei_full_saved_projection_verification_v1','status':'incomplete','error_type':type(error).__name__,'error':str(error)[:500],'unknown_costs_require_full_frozen_grants':True}
+        if ctx is not None:result['resources_before_report']=ctx.resources()
+        code=1
+    if ctx is not None:
+        raw=(ctx.core.canonical(result)+'\n').encode()
+        require(len(raw)<=CAPS['report_bytes'],'verification report ceiling')
+        fd=os.open(ctx.plan['report_path'],os.O_WRONLY|os.O_CREAT|os.O_EXCL|getattr(os,'O_NOFOLLOW',0),0o600)
+        with os.fdopen(fd,'wb') as output:require(output.write(raw)==len(raw),'short verification report');output.flush();os.fsync(output.fileno())
+    print('saved_verification_exit='+str(code),flush=True)
+    return code
+
+
+if __name__=='__main__':raise SystemExit(main())
