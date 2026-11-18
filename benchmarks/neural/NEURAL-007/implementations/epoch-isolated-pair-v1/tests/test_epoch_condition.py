@@ -155,8 +155,10 @@ def programme_fixture():
     prior = C.write_new(root / "KNOWLEDGE.json", C.encode(knowledge()))
     code = root / "generated_program.py"
     C.write_new(code, b"# GENERATED_COMPONENT_ONLY; this programme is never executed.\nraise RuntimeError('not selected')\n")
+    # Ordinary declared-bundle preparation is usable without a matching claim.
+    # This freezes generated code only; no Provider/image admission is fabricated.
     prepared = PG.prepare_programme(code, prior, source, root / "prepared",
-                                    image="sha256:" + "1" * 64)
+                                     image="sha256:" + "1" * 64)
     value, frozen, definition, checked_prior = PG.checked_prepared(prepared)
     PROGRAMME_FIXTURE = {"root": root, "source": source, "knowledge": prior, "prepared": prepared,
                          "value": value, "frozen": frozen, "definition": definition,
@@ -459,7 +461,7 @@ class ProgrammeControls(unittest.TestCase):
                                    resources, origin, origin + 200)
         return mounts, packet, request, origin + 300
 
-    def test_exact_same_epoch_file_mounts_and_canonical_resource_limits(self):
+    def test_declared_bundle_preparation_same_epoch_mounts_and_resource_limits(self):
         f, p = fixtures(), programme_fixture()
         mounts, packet, request, deadline = self.phase()
         self.assertEqual(set(mounts), PG.INPUT_TARGETS)
@@ -473,6 +475,8 @@ class ProgrammeControls(unittest.TestCase):
         self.assertIs(p["definition"]["hidden_pretraining_verified"], False)
         self.assertIs(p["definition"]["matched_agent_provenance_qualified"], False)
         self.assertEqual(p["definition"]["additional_training_or_reference_assets"], [])
+        self.assertEqual(p["value"]["comparison_scope"], {"claim_matched_information": False, "matched_access_audit": None})
+        self.assertEqual(p["definition"]["comparison_scope"], p["value"]["comparison_scope"])
         altered = C.decode(C.encode(mounts)); altered["/input/other_epoch.npy"] = altered["/input/signals.npy"]
         with self.assertRaises(ValueError):
             PG.checked_mounts(altered)
@@ -493,40 +497,48 @@ class ProgrammeControls(unittest.TestCase):
             PG.validate_request(programme_runtime(), unaligned, mounts, deadline)
         check_fixture_budget()
 
-    def test_unqualified_exposure_stops_before_execution_and_model_image_mismatches_fail(self):
+    def test_strict_opt_in_refuses_missing_audit_and_ordinary_receipt_promotion(self):
         f, p = fixtures(), programme_fixture()
         root = p["root"]
-        exposure = C.write_new(root / "INVALID_EXPOSURE.json", C.encode({}))
-        boundary = C.write_new(root / "INVALID_BOUNDARY.json", C.encode({}))
+        marker = C.write_new(root / "NEVER_READ_PROMOTION_CANARY.json", C.encode({"generated": True}))
+        scope = {"claim_matched_information": True, "matched_access_audit": PG.plain(marker)}
+        strict = dict(programme_runtime(), claim_matched_information=True,
+                      matched_access_audit=marker, _matched_access=None)
         resources = dict(programme_runtime()["common"].PROGRAMME_RESOURCES)
         origin = time.monotonic()
         class NoExecution:
             calls = 0
             def execute_phase(self, *args, **kwargs):
                 self.calls += 1
-                raise AssertionError("Unqualified exposure reached participant execution")
+                raise AssertionError("Promoted ordinary evidence reached participant execution")
         provider = NoExecution()
-        with self.assertRaises(ValueError):
-            PG.execute_phase(programme_runtime(), provider, p["prepared"], f["descriptors"][0],
-                             exposure, resources, origin, origin + 200, origin + 300, [],
-                             boundary_audit=boundary)
+        with self.assertRaisesRegex(ValueError, "Frozen comparison claim"):
+            PG.execute_phase(strict, provider, p["prepared"], f["descriptors"][0],
+                             marker, resources, origin, origin + 200, origin + 300, [], boundary_audit=marker)
         self.assertEqual(provider.calls, 0)
-        wrong_image = dict(p["definition"], image="sha256:" + "2" * 64)
-        request = PG.phase_request(f["packets"][0].epoch_id, wrong_image, PG.plain(p["value"]["definition"]),
-                                   PG.plain(exposure), resources, origin, origin + 200)
-        request_descriptor = C.write_new(root / "WRONG_IMAGE_REQUEST.json", C.encode(request))
-        empty_receipt = C.write_new(root / "EMPTY_NEGATIVE_RECEIPT.json", C.encode({}))
-        record = {"epoch_id": f["packets"][0].epoch_id, "projection": f["descriptors"][0],
-                  "prepared": p["prepared"], "exposure": exposure, "boundary_audit": boundary,
-                  "request": request_descriptor, "receipt": empty_receipt,
-                  "observer_value": {"receipt": {}, "receipt_pin": PG.plain(empty_receipt),
-                                     "independent_candidate_channel": True},
-                  "prediction": empty_receipt, "result": empty_receipt}
-        # Synthetic incomplete records exercise rejection only, never positive admission.
-        with self.assertRaisesRegex(ValueError, "Exact epoch producer request"):
-            PG.admit_phase(programme_runtime(), record, f["packets"][0], knowledge())
-        with self.assertRaisesRegex(ValueError, "Same pinned shared prior declaration"):
-            PG.admit_phase(programme_runtime(), record, f["packets"][0], knowledge("different-generated-model"))
+        with self.assertRaisesRegex(ValueError, "Frozen comparison claim"):
+            PG.checked_prepared(p["prepared"], runtime=strict)
+        never = root / "NEVER_STRICT_PREPARED"
+        with self.assertRaisesRegex(ValueError, "matched-access"):
+            PG.prepare_programme(p["value"]["programme"]["path"], p["knowledge"], p["source"], never,
+                                 image=p["definition"]["image"], claim_matched_information=True)
+        self.assertFalse(never.exists())
+        record = {"epoch_id": f["packets"][0].epoch_id, "comparison_scope": scope,
+                  "projection": f["descriptors"][0], "prepared": p["prepared"],
+                  "exposure": marker, "boundary_audit": marker, "request": marker,
+                  "receipt": marker, "observer_value": {}, "prediction": marker, "result": marker}
+        # The genuine ordinary freeze must refuse promotion before any canary is opened.
+        active = [True]
+        def reject_canary(event, args):
+            if active[0] and event == "open" and isinstance(args[0], (str, bytes, os.PathLike)):
+                if Path(os.fsdecode(args[0])).absolute() == Path(marker["path"]):
+                    raise AssertionError("Promotion canary read before frozen-claim rejection")
+        sys.addaudithook(reject_canary)
+        try:
+            with self.assertRaisesRegex(ValueError, "Frozen comparison claim"):
+                PG.admit_phase(strict, record, f["packets"][0], knowledge())
+        finally:
+            active[0] = False
         check_fixture_budget()
 
     def test_old_condition_partial_panel_and_both_pretruth_entries_fail_closed(self):
@@ -553,12 +565,12 @@ class ProgrammeControls(unittest.TestCase):
                   "viewer_collection": visual, "programme_collection": programme,
                   "packet_roots": {}, "references": {},
                   "private_locations": {"path": str(never_private), "bytes": 1, "sha256": "0" * 64},
-                  "implementations_root": str(implementations), "finite_bindings_root": str(admission_root),
+                  "implementations_root": str(implementations), "finite_bindings_root": str(admission_root), "matched_access_audit": None, "claim_matched_information": True,
                   "visual_runtime": {"root": str(dependency), "whole_history_integration_root": str(sender_root),
                                      "whole_history_admission_root": str(admission_root)}}
         out = root / "NEVER_START_GRADER"
         with patch.object(PA.subprocess, "Popen", side_effect=AssertionError("Invalid public bundle launched grader")):
-            with self.assertRaisesRegex(ValueError, "Complete5450"):
+            with self.assertRaisesRegex(ValueError, "matched-access"):
                 PA.coordinate_compare(config, out, grader_wall_seconds=1)
         self.assertFalse(out.exists())
         request = C.write_new(root / "PARTIAL_PAIR_REQUEST.json", C.encode(config))
