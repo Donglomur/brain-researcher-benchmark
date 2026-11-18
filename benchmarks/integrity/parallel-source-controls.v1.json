@@ -13256,6 +13256,104 @@
       "fixtures": [
         "mindbridge-invocation-adapt-bridge"
       ]
+    },
+    {
+      "id": "NEURAL-077.command-08",
+      "task_id": "NEURAL-077",
+      "group": "stdlib-a",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/tests",
+        "-p",
+        "test_visual*.py",
+        "-v"
+      ],
+      "runner": "unittest",
+      "expected_tests": 23,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/tests/test_visual_client.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/tests/test_visual_pair.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "PAPER-paper-method-replacement-012.command-08",
+      "task_id": "PAPER-paper-method-replacement-012",
+      "group": "stdlib-a",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-replacement-012/implementations/current-cpu-setup-v1/test_current_setup.py",
+        "--legacy",
+        "benchmarks/paper/PAPER-paper-method-replacement-012/implementations/official-serialization-v1/hosted_original_runtime.py"
+      ],
+      "runner": "unittest",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-replacement-012/implementations/current-cpu-setup-v1/test_current_setup.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "PAPER-paper-method-replacement-012.command-09",
+      "task_id": "PAPER-paper-method-replacement-012",
+      "group": "stdlib-a",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-c",
+        "import importlib.util,json,os,pathlib,sys,unittest\nbase=pathlib.Path('benchmarks/paper/PAPER-paper-method-replacement-012/implementations/current-build-driver-v1').resolve()\nwork=pathlib.Path(sys.argv[1])\nif not work.is_absolute() or work.exists() or work.is_symlink(): raise ValueError('fresh absolute owned fixture root required')\nif len(os.fsencode(work/'backend'/'case-022'/'source'/'setup.py'))>4096: raise ValueError('symlink target-text forecast exceeded')\nwork.mkdir(mode=0o700)\nmodules=[]\nfor name,filename,directory in [('_b20_backend_controls','test_backend_direct.py','backend'),('_b20_denial_controls','test_cleanup_denial.py','denial')]:\n    spec=importlib.util.spec_from_file_location(name,base/filename)\n    if spec is None or spec.loader is None: raise ValueError('fixed test loader unavailable')\n    module=importlib.util.module_from_spec(spec); sys.modules[name]=module; spec.loader.exec_module(module)\n    module.FIXTURES=work/directory; module.FIXTURES.mkdir(mode=0o700); modules.append(module)\nsuite=unittest.TestSuite([unittest.defaultTestLoader.loadTestsFromTestCase(modules[0].BackendControls),unittest.defaultTestLoader.loadTestsFromTestCase(modules[1].CleanupDenialControl)])\nif suite.countTestCases()!=16: raise ValueError('exact sixteen generated controls required')\nresult=unittest.TextTestRunner(verbosity=2).run(suite)\nprint('GENERATED_CONTROL_ACCOUNTING='+json.dumps({'methods':result.testsRun,'backend_put_bytes':modules[0].WRITTEN,'backend_put_limit':modules[0].FIXTURE_CUMULATIVE_LIMIT,'mocked_denial_subcases':2,'scope':'generated source controls and harmless subprocesses only; no actual package build or scientific qualification'},sort_keys=True))\nraise SystemExit(0 if result.wasSuccessful() and result.testsRun==16 and not result.skipped else 1)",
+        "${ARTIFACT_DIR}"
+      ],
+      "runner": "unittest",
+      "expected_tests": 16,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-replacement-012/implementations/current-build-driver-v1/test_backend_direct.py",
+        "benchmarks/paper/PAPER-paper-method-replacement-012/implementations/current-build-driver-v1/test_cleanup_denial.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "NEURAL-063.command-04",
+      "task_id": "NEURAL-063",
+      "group": "neural063-range",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "-c",
+        "import hashlib,os,pathlib,runpy,stat,sys\nbase=pathlib.Path('benchmarks/neural/NEURAL-063/implementations/original-qualifier-v1').resolve()\nsource=base/'tests/fixtures/omission_generated.nwb'\nwith os.fdopen(os.open(source,os.O_RDONLY|os.O_NOFOLLOW),'rb') as stream:\n    info=os.fstat(stream.fileno())\n    if not stat.S_ISREG(info.st_mode) or info.st_nlink!=1 or info.st_size!=25721: raise ValueError('synthetic fixture identity/type')\n    body=stream.read(25722)\nif len(body)!=25721 or hashlib.sha256(body).hexdigest()!='56e99301faa09b2ef4f583e75a200d5473193d87a2b57f7dde1146f837b94a72': raise ValueError('synthetic fixture hash')\nwork=pathlib.Path(sys.argv[1]); work.mkdir(mode=0o700)\nfixture=work/'input-fixture.nwb'\nwith fixture.open('xb') as stream:\n    if stream.write(body)!=len(body): raise OSError('short synthetic fixture write')\nfixture.chmod(stat.S_IMODE(fixture.stat().st_mode)&~0o222)\nscript=base/'tests/test_qualifier_runtime.py'\nsys.argv=[str(script),'--range-source',str(base.parent/'versioned-range-v1'),'--original-root',str(base.parent/'neural-063/complete-omission-v1'),'--fixture',str(fixture),'--evidence-root',str(work)]\nrunpy.run_path(str(script),run_name='__main__')",
+        "${ARTIFACT_DIR}"
+      ],
+      "runner": "unittest",
+      "expected_tests": 5,
+      "expected_skips": 0,
+      "timeout_seconds": 180,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-063/implementations/original-qualifier-v1/tests/test_qualifier_runtime.py"
+      ],
+      "fixtures": []
     }
   ],
   "source_only_assignments": [
