@@ -117,3 +117,20 @@ This qualifies the private target packet. No numerical variance, correlation, mo
 | Private target packet, not published | 278,759 | `b8bcc8aa1d4f856c35c1b24f11a8d0481bfdd748c5f74d9392f7a18c9c93b9ce` |
 | Accepted operation and review handoff | 6,841 | `057e274d9899cbe3dab503937ed28e117d799979437a86a64f47ac8ef5e3dfb0` |
 | Independent target/mask/identity review | 12,547 | `32e36c2c427684318f219f7d82bc1416bff593870d6fccc8273b71faecd6c0bb` |
+
+## Failed original-data batch qualification — 2026-11-19 UTC
+
+One separate representative batch-shape qualification used **TensorFlow 2.15.0 and JAX/JAXlib 0.4.28** with a **7 GiB container memory limit and one CPU**. Installation, runtime verification and generated backend smoke checks passed. The participant archive loaded, model initialization returned, and the loader and optimizer became ready. The first **256-row** update began at **epoch-batch position 0, optimizer-update index 0**.
+
+The scientific child then returned **−9**, and the saved container inspection reported **`State.OOMKilled: true`**. No completed optimizer update or finite loss, gradient, prediction or optimizer-state result was established. The exact internal optimizer state at termination is unknown. Later batch shapes and validation were not reached in the saved source-ordered trace. Independent saved-result review accepted this as a failed representative-batch qualification; the exact recorded process/container scope was closed, with no numerical retry.
+
+The tested resource profile does not establish a minimum memory requirement, the allocation responsible for the OOM event, or full-fit timing. The earlier successful **JAX/JAXlib 0.4.35 initialized-row** result and **0.4.28 import/backend-only** qualification remain separate observations. Neither establishes a completed original-data batch under this profile. Loading the whole participant archive included test-associated input rows, but private test targets were not mounted and no test numerical prediction or score was reached.
+
+This operation establishes no completed epoch, validation-selected model, full fit, held-out score, AI benchmark attempt, paper reproduction, improvement, SOTA result or readiness promotion. Existing registration counts and the whole-record preprocessing/source-default split limitations remain unchanged.
+
+| Saved failed-batch metadata | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Independent accepted saved-result review | 30,151 | `d971f39afc3f9b853f18ab597d22c75daf109a20929ae56886cb88942e49e03d` |
+| Container OOM witness | 1,556 | `b2d517400ac26fc56aef0ed56abffe6acc063707eba5a8000df641b4e67b45fc` |
+| Bounded batch-progress journal | 667 | `ef2d094a9aab6fd03daa86bbe8be05d128c41f3eaad4b431feb2b6f66cc8a2b5` |
+| Recorded-scope closure | 17,173 | `6ee7354318fc2cc85231ffb454ee8e3c14390bc45b9ad459363e86244b3c266e` |
