@@ -180,6 +180,22 @@
       "python": "3.11.6",
       "packages": {},
       "scope": "Generated runtime-tree adapter controls only; exact CPython 3.11.6 tarfile source admission remains mandatory. No provider, native-build or scientific qualification."
+    },
+    "jaxley-input-cpu": {
+      "python": "3.11.18",
+      "packages": {
+        "jax": "0.4.35",
+        "jaxlib": "0.4.35",
+        "ml-dtypes": "0.4.1",
+        "numpy": "1.24.3",
+        "opt-einsum": "3.4.0",
+        "pandas": "2.2.3",
+        "python-dateutil": "2.9.0.post0",
+        "pytz": "2024.1",
+        "scipy": "1.10.1",
+        "six": "1.16.0",
+        "tzdata": "2024.1"
+      }
     }
   },
   "fixtures": {
@@ -14096,6 +14112,125 @@
         "benchmarks/neural/NEURAL-SCOPE-20261114-FUS-DIRECTION/implementations/outer-training-selection-v1/SCALE_POLICY.json"
       ],
       "fixtures": []
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/generated_boundary_controls.py",
+        "--artifacts",
+        "${ARTIFACT_DIR}"
+      ],
+      "cwd": ".",
+      "environment": {
+        "JAX_ENABLE_X64": "true",
+        "JAX_PLATFORMS": "cpu",
+        "XLA_FLAGS": "--xla_cpu_multi_thread_eigen=false intra_op_parallelism_threads=1"
+      },
+      "expected_output": {
+        "controls": [
+          "camera preserves target identity axes source mean and ascending field order",
+          "camera refuses missing source scan field",
+          "crossing preserves repeated source row index",
+          "crossing preserves column order",
+          "crossing preserves exact binary64 labels",
+          "crossing preserves numeric column dtypes",
+          "crossing rejects one-bit-value corruption",
+          "crossing rejects dtype narrowing",
+          "crossing rejects site-order permutation",
+          "crossing rejects nonfinite values",
+          "private RNG equals literal source-default split",
+          "source split counts and complete support",
+          "mask counts observed targets only",
+          "current columns and source synapse scaling",
+          "binding rejects reordered average sites",
+          "candidate receives source training targets",
+          "candidate raw val/test targets excluded",
+          "candidate and evaluator share frozen identities",
+          "released arrays cannot mutate evaluator target storage",
+          "operator field support"
+        ]
+      },
+      "expected_skips": 0,
+      "expected_tests": 20,
+      "fixtures": [],
+      "group": "jaxley-input-cpu",
+      "id": "PAPER-paper-method-002.command-03",
+      "runner": "json-controls",
+      "task_id": "PAPER-paper-method-002",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/README.md",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/SOURCE.json",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/author_kernels.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/bc_producer.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/camera_centers.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/generated_boundary_controls.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/generated_producer_controls.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/input_binding.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/input_composition.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/portable_consumer.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/reporting_transport.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/run_generated_controls.py"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/run_generated_controls.py",
+        "--artifacts",
+        "${ARTIFACT_DIR}"
+      ],
+      "cwd": ".",
+      "environment": {
+        "JAX_ENABLE_X64": "true",
+        "JAX_PLATFORMS": "cpu",
+        "XLA_FLAGS": "--xla_cpu_multi_thread_eigen=false intra_op_parallelism_threads=1"
+      },
+      "expected_output": {
+        "controls": [
+          "actual source convolution CPU/x64",
+          "literal/shared source row-index and column order",
+          "literal/shared exact BC coordinates and one-based IDs",
+          "complete110BC source precision for generated fields",
+          "literal/shared exact numeric equality",
+          "sharing removes only repeated field-invariant convolution calls",
+          "normalization uses all110 BCs separately perfield/frame",
+          "source leftjoin preserves connection-row and duplicated BC order",
+          "all15fields use first1024 source frames in order, BC0",
+          "all15fields use first1024 source frames in order, BC1",
+          "all15fields use first1024 source frames in order, BC2",
+          "source image-major shape and original dtype",
+          "image axes/time/field repeat binding",
+          "loader refuses changed field support order",
+          "loader refuses unmatched source BC identity"
+        ]
+      },
+      "expected_skips": 0,
+      "expected_tests": 15,
+      "fixtures": [],
+      "group": "jaxley-input-cpu",
+      "id": "PAPER-paper-method-002.command-04",
+      "runner": "json-controls",
+      "task_id": "PAPER-paper-method-002",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/README.md",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/SOURCE.json",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/author_kernels.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/bc_producer.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/camera_centers.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/generated_boundary_controls.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/generated_producer_controls.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/input_binding.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/input_composition.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/portable_consumer.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/reporting_transport.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-input-programme-v1/run_generated_controls.py"
+      ],
+      "timeout_seconds": 180
     }
   ],
   "source_only_assignments": [
