@@ -46,6 +46,8 @@ jobs:
             python: '3.11.18'
           - group: neural063-range
             python: '3.11.18'
+          - group: language-rootfs
+            python: '3.11.6'
     env:
       PARALLEL_CONTROL_GROUP: ${{ matrix.group }}
       PIP_DISABLE_PIP_VERSION_CHECK: "1"
@@ -60,9 +62,9 @@ jobs:
           python3 -I -S -B - <<'PY'
           import hashlib, os, stat
           pins = [
-              {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': '2beb92f695c108711962e6c00f90fa0fb7547d9dc4cd469abab0b3546b7f4b4b'},
-              {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': '3d10b97a4bb6dae65681f06b01581efb491d9d3d556b957d8d0909e807a231a1'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 441129, 'sha256': 'f3ee872d1e1431d2b591cd9921e4adde96e90da43404e3504f0a743b4b8edcf4'},
+              {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': '70bc5fd1d4070e3cfec07cd4ed3fb8622b7f0658bbe1cac9e8e5d7bcf5807f3f'},
+              {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': '85ff7138871c8deac7f6307d33684246bd78799323df1d7732dd1f24d6ca87d1'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 442402, 'sha256': '01ea6bf8b191ca7d3027caf39ae2645a1fb10ea6e9e9222f178c9677f0a5cf28'},
           ]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
@@ -85,7 +87,7 @@ jobs:
           umask 077
           PARALLEL_LOCK="${RUNNER_TEMP}/parallel-lock-${PARALLEL_CONTROL_GROUP}.txt"
           case "$PARALLEL_CONTROL_GROUP" in
-            stdlib-a|stdlib-b) ;;
+            stdlib-a|stdlib-b|language-rootfs) ;;
             numpy)
               cat > "$PARALLEL_LOCK" <<'LOCK'
           numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
