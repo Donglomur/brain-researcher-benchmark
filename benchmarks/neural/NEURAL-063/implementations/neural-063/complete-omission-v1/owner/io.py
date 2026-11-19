@@ -151,6 +151,36 @@ def capture(path, cap, *, descriptor=None, meter=None):
         return body
 
 
+def _seal_artifact_fd(fd, size):
+    """Seal the exact exclusively opened owner FD before returning a descriptor."""
+    before = os.fstat(fd)
+    if (not stat.S_ISREG(before.st_mode) or before.st_nlink != 1 or
+            before.st_uid != os.geteuid() or before.st_size != size):
+        raise ContractError("owned ordinary artifact descriptor before seal")
+    os.fchmod(fd, 0o400)
+    after = os.fstat(fd)
+    if ((after.st_dev, after.st_ino) != (before.st_dev, before.st_ino) or
+            not stat.S_ISREG(after.st_mode) or after.st_nlink != 1 or
+            after.st_uid != os.geteuid() or after.st_size != size or
+            stat.S_IMODE(after.st_mode) != 0o400):
+        raise ContractError("exact sealed artifact descriptor")
+    os.fsync(fd)
+
+
+def _close_artifact_fd(fd, primary):
+    try:
+        os.close(fd)
+    except BaseException as exc:
+        if primary is None:
+            raise
+        # Preserve the primary failure; uncertain close is never retried or
+        # represented as a closed-FD/publication success.
+        try:
+            primary.add_note("artifact FD close also failed: " + type(exc).__name__[:64])
+        except BaseException:
+            pass
+
+
 class ArtifactStore:
     """Fresh output namespace; no overwrite, path escape or private-role alias."""
     def __init__(self, root, meter):
@@ -196,15 +226,27 @@ class ArtifactStore:
         self.meter.write(len(body))
         fd = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
                      0o400)
-        with os.fdopen(fd, "wb") as stream:
-            stream.write(body)
-            stream.flush()
-            os.fsync(stream.fileno())
+        primary = None
+        try:
+            # One requested write, already charged above. A short write is a
+            # failed retained artifact; do not retry or return a descriptor.
+            if os.write(fd, body) != len(body):
+                raise ContractError("complete artifact write; no retry")
+            _seal_artifact_fd(fd, len(body))
+        except BaseException as exc:
+            primary = exc
+            raise
+        finally:
+            _close_artifact_fd(fd, primary)
         dfd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+        primary = None
         try:
             os.fsync(dfd)
+        except BaseException as exc:
+            primary = exc
+            raise
         finally:
-            os.close(dfd)
+            _close_artifact_fd(dfd, primary)
         return Artifact(str(path), len(body), hashlib.sha256(body).hexdigest(),
                         role, visibility, producer, media_type)
 

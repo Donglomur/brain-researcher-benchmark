@@ -6,6 +6,7 @@ Representation reservations below are conservative admission models, not OS or
 HDF5 allocator limits. Unknown VLEN payloads are never given a finite bound.
 """
 from collections import defaultdict
+import hashlib
 import math
 
 
@@ -126,7 +127,7 @@ class Writer:
         except Exception as exc:
             self.store.census_write_failures.append({"name": name + ".json", "role": role,
                 "charged_bytes": self.store.meter.write_bytes - before,
-                "failure_class": type(exc).__name__, "ordinary_file_custody": "uncertain_not_authenticated",
+                "failure_class": type(exc).__name__, "failure_evidence": failure_evidence(exc), "ordinary_file_custody": "uncertain_not_authenticated",
                 "certified_artifact": False})
             raise
         finally:
@@ -135,6 +136,25 @@ class Writer:
         self.store.census_artifacts.append(ref)
         if final:
             self.store.census_report = ref
+        return ref
+
+
+    def write_bytes(self, name, body, role, cap):
+        """Byte-identical authenticated seed copy through the maintained sealed store."""
+        require(type(body) is bytes and len(body) <= cap and self.used + len(body) <= self.reserved,
+                "bounded reserved seed copy")
+        before = self.store.meter.write_bytes
+        try:
+            ref = self.store.write(name + ".json", body, role=role, visibility="operator",
+                                   producer="neural063-full-census-v1").object()
+        except Exception as exc:
+            self.store.census_write_failures.append({"name": name + ".json", "role": role,
+                "charged_bytes": self.store.meter.write_bytes - before, "failure_class": type(exc).__name__, "failure_evidence": failure_evidence(exc),
+                "ordinary_file_custody": "uncertain_not_authenticated", "certified_artifact": False})
+            raise
+        finally:
+            self.used += self.store.meter.write_bytes - before
+        self.store.census_artifacts.append(ref)
         return ref
 
 
@@ -437,7 +457,8 @@ def compact_ref(ref):
 
 def mark_failure(states, eid, exc):
     states[eid]["status"] = "failed"
-    states[eid]["reason"] = (type(exc).__name__ + ": " + str(exc))[:160]
+    info = failure_evidence(exc)
+    states[eid]["reason"] = (info["class"] + ": " + info["message"])[:160]
 
 
 def support_for_chunks(indexed, row, schedule_refs, deps, store, profile):
@@ -455,13 +476,156 @@ def support_for_chunks(indexed, row, schedule_refs, deps, store, profile):
     return events, [span for event in events for span in event["spans"]]
 
 
-def run_census(selection, assets_manifest, *, deps, store, ranges, profile, input_bank=None):
+def failure_evidence(exc):
+    """Bounded primary plus secondary closure facts; absence of notes is not closure proof."""
+    try:
+        message = str(exc)[:256]
+    except BaseException:
+        message = "unprintable exception"
+    notes = []
+    raw = getattr(exc, "__notes__", ())
+    if type(raw) in (list, tuple):
+        for item in raw[:4]:
+            try:
+                notes.append(str(item)[:192])
+            except BaseException:
+                notes.append("unprintable secondary note")
+    return {"class": type(exc).__name__[:64], "message": message, "secondary_notes": notes,
+            "secondary_close_failure_recorded": any(x.startswith("artifact FD close also failed: ") for x in notes),
+            "descriptor_custody": "not_established_by_error_receipt"}
+
+
+def run_partial_layouts(selection, assets_manifest, *, deps, store, ranges, profile, partial):
+    """Explicit finite continuation; no scientific method or historical range counters are reused."""
+    validate_profile(profile)
+    require(profile["stage"] == "layouts" and partial.get("schema") == "neural063_admitted_partial_layouts_v1",
+            "typed layout-only continuation")
+    rows = deps.pipeline.full_scope(selection)
+    assets = deps.pipeline.validate_assets(assets_manifest, selection)
+    require(len(rows) == 1936 and len(assets) == 1936, "unchanged full1936 scope")
+    grouped = defaultdict(list)
+    for row in rows:
+        grouped[row["ophys_session_id"]].append(row)
+    require(len(grouped) == 703, "unchanged full703 sessions")
+    require(profile["disposition_bytes"] >= 8192 + 4096 * len(rows) + 2048 * len(grouped),
+            "complete failure disposition reserve required before provider access")
+    items = partial["items"]
+    seeded = {x["entry"]["experiment"]: x for x in items}
+    require(len(seeded) == len(items) and 0 < len(items) < 1936 and
+            set(seeded) <= {r["ophys_experiment_id"] for r in rows}, "unique original seed subset")
+    for eid, item in seeded.items():
+        entry, body = item["entry"], item["body"]
+        require(type(body) is bytes and len(body) == entry["bytes"] and
+                hashlib.sha256(body).hexdigest() == entry["sha256"] and
+                entry["asset_sha256"] == deps.pipeline.digest(vars(assets[eid])), "seed identity preserved at copy boundary")
+    eligible = [r for r in rows if r["ophys_experiment_id"] not in seeded]
+    limit = partial["max_new_planes"]
+    require(type(limit) is int and 0 < limit <= len(eligible), "explicit finite remaining-plane step")
+    scheduled = eligible[:limit]
+    states = new_dispositions(rows, "layouts")
+    writer = Writer(deps, store, profile)
+    layout_upper = 8192 + (6 + 4 * profile["max_presentation_tables"]) * 4096
+    require(layout_upper <= profile["artifact_bytes"], "layout artifact reservation refused")
+    writer.reserve((len(seeded) + limit) * layout_upper + profile["artifact_bytes"] + partial["provenance_bytes"])
+    refs, imports = {}, []
+    current = error = error_info = bank_ref = provenance_ref = None
+    attempted = completed = 0
+    store.census_partial_step = {"seed_count": len(seeded), "eligible_count": len(eligible), "max_new_planes": limit,
+        "new_attempted": 0, "new_complete": 0, "bounded_step_complete": False,
+        "full_layout_bank_complete": False, "import_new_provider_requests": 0, "provenance": None,
+        "authenticated_seed_body_bytes": partial["body_bytes"], "seed_copies_complete": 0,
+        "seed_copy_requested_bytes": 0, "provenance_requested_bytes": 0}
+    try:
+        # Publish every already-authenticated copy/provenance before the first new provider open.
+        for row in rows:
+            eid = row["ophys_experiment_id"]
+            if eid not in seeded:
+                continue
+            current = eid
+            item = seeded[eid]
+            before_copy = store.meter.write_bytes
+            try:
+                ref = writer.write_bytes("layout_" + eid, item["body"], "range_layout", layout_upper)
+            finally:
+                store.census_partial_step["seed_copy_requested_bytes"] += store.meter.write_bytes - before_copy
+            require(ref["bytes"] == item["entry"]["bytes"] and ref["sha256"] == item["entry"]["sha256"],
+                    "byte-identical copied seed")
+            refs[eid] = ref
+            store.census_partial_step["seed_copies_complete"] += 1
+            states[eid].update(status="complete", artifact_sha256=ref["sha256"], reused=True)
+            states[eid]["artifacts"].append(compact_ref(ref))
+            imports.append({"experiment": eid, "name": item["entry"]["name"],
+                            "bytes": item["entry"]["bytes"], "sha256": item["entry"]["sha256"]})
+        current = None
+        before_provenance = store.meter.write_bytes
+        try:
+            provenance_ref = writer.write("partial_layout_provenance", {"schema": "neural063_partial_layout_copy_provenance_v1",
+                "source_manifest": partial["manifest"], "source_report": partial["report"],
+                "source_root": partial["source_root"], "copy_root": str(store.root),
+                "role": "range_layout", "visibility": "operator", "producer": "neural063-full-census-v1", "entries": imports,
+                "seed_count": len(imports), "new_provider_requests": 0, "byte_identical": True},
+                "partial_layout_provenance", partial["provenance_bytes"])
+        finally:
+            store.census_partial_step["provenance_requested_bytes"] += store.meter.write_bytes - before_provenance
+        for row in scheduled:
+            current = eid = row["ophys_experiment_id"]
+            require(eid not in seeded, "seeded experiment must not reach provider")
+            attempted += 1
+            with deps.range.open_versioned(assets[eid], ranges, profile["runtime_versions"]) as file:
+                structure_admission(file, deps.native, profile)
+                fields = deps.pipeline.field_layouts(file, deps.native)
+            value = {"schema": "neural063_range_layout_v1", "experiment": eid,
+                     "asset_sha256": deps.pipeline.digest(vars(assets[eid])), "fields": fields,
+                     "array_values_decoded": False, "full_object_BLAKE2b_verified": False}
+            ref = writer.write("layout_" + eid, value, "range_layout", layout_upper)
+            refs[eid] = ref
+            states[eid].update(status="complete", artifact_sha256=ref["sha256"], reused=False)
+            states[eid]["artifacts"].append(compact_ref(ref))
+            completed += 1
+            del fields, value
+        current = None
+        if len(refs) == 1936:
+            bank = {"schema": "neural063_range_layout_bank_v1",
+                "entries": [{"experiment": r["ophys_experiment_id"], "layout": refs[r["ophys_experiment_id"]]} for r in rows],
+                "selection_sha256": deps.pipeline.SELECTION_SHA256, "assets_sha256": deps.pipeline.digest(assets_manifest),
+                "source_counts": deps.pipeline.EXPECTED, "array_values_decoded": False, "full_object_BLAKE2b_verified": False}
+            bank_ref = writer.write("layout_bank", bank, "range_layout_bank")
+    except Exception as exc:
+        error_info = failure_evidence(exc)
+        error = error_info["class"] + ": " + error_info["message"]
+        if current is not None:
+            mark_failure(states, current, exc)
+    full = error is None and bank_ref is not None and len(refs) == 1936
+    step = error is None and provenance_ref is not None and completed == limit and len(refs) == len(seeded) + limit
+    sessions = [{"session": sid, "status": "complete" if all(states[r["ophys_experiment_id"]]["status"] == "complete" for r in rs) else "held",
+                 "required_planes": len(rs), "artifacts": []} for sid, rs in sorted(grouped.items())]
+    store.census_partial_step.update(new_attempted=attempted, new_complete=completed, bounded_step_complete=step,
+                                    full_layout_bank_complete=full, provenance=provenance_ref)
+    result = {"schema": "neural063_full_census_report_v1", "stage": "layouts", "complete": full,
+        "bounded_step_complete": step, "partial_step": store.census_partial_step,
+        "cohort_status": "complete_for_selected_census_stage" if full else "held_incomplete",
+        "selection_sha256": deps.pipeline.SELECTION_SHA256, "source_counts": deps.pipeline.EXPECTED,
+        "bank": bank_ref if full else None, "error": error, "failure_evidence": error_info, "planes": list(states.values()), "sessions": sessions,
+        "failure_scope": None if error is None else ("cohort_admission_or_finalization" if current is None else "plane_or_session"),
+        "uncertified_write_attempts": store.census_write_failures,
+        "ordinary_artifact_bytes_charged_including_failures": writer.used, "ordinary_artifact_bytes_reserved": writer.reserved,
+        "dff_values_decoded": False, "full_object_BLAKE2b_verified": False, "finite_dff_values_established": False,
+        "memory_is_hard_certificate": False, "benchmark_ready": False}
+    ref = writer.write("census_report", result, "census_dispositions", profile["disposition_bytes"], final=True)
+    store.census_complete, store.census_bank = full, bank_ref if full else None
+    return ref
+
+
+def run_census(selection, assets_manifest, *, deps, store, ranges, profile, input_bank=None, partial_layouts=None):
     """Run one selected stage; return a complete or explicitly incomplete report.
 
     The wrapper owns its separate final budget/failure receipt. This core retains
     every original disposition and successful artifact, and never creates a
     complete bank after a failed or unattempted required plane/session.
     """
+    if partial_layouts is not None:
+        require(input_bank is None, "partial layouts cannot masquerade as complete predecessor bank")
+        return run_partial_layouts(selection, assets_manifest, deps=deps, store=store, ranges=ranges, profile=profile, partial=partial_layouts)
     store.census_complete = False
     store.census_report = store.census_bank = None
     store.census_artifacts = []
