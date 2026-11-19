@@ -84,6 +84,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Checkpoint correspondence v1](implementations/checkpoint-correspondence-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
+- [Original input programme v1](implementations/original-input-programme-v1) — Reviewed source component.
+  Scope: Source-only original-input programme and generated-control entry points for Jaxley, with six unchanged prepared input modules, the unchanged numerical control module and bounded reporting transport. Preserves the existing 20 consumer and 15 numerical controls without transferring historical ARM admission to the prospective hosted CPU profile. Enrollment makes no new original-data decoding, model-fitting, scientific-readiness or hosted-runtime qualification claim.
 - [Retinal heldout](implementations/retinal-heldout) — Reviewed source component.
   Scope: Full retinal held-out comparison. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
