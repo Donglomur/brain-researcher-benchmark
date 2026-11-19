@@ -29,7 +29,7 @@ HELPER_PINS = {
 }
 ORIGINAL = {
     "owner/__init__.py": (80, "d857d613efdca2fad6b20a106349516a410e2837b5f4bff6b6d2db592ba58658"),
-    "owner/io.py": (8483, "3a8c4d0d58be213ab9cbcfcdb2d98781e7bfdedb1839ea109bdc0d9466944f91"),
+    "owner/io.py": (10152, "8e29aa60a95b8433361bda241ee60e25db40c0884547c7bc55d5015c4741ad4e"),
     "owner/scoring.py": (12817, "e85413e3af2b63c919fbfc93fffdb6fc0e37af9d038f693df99da980b04dc0dc"),
     "preparation/__init__.py": (82, "a852591a1dea52c60ea4a6cacb06b150e49397ac9189d2120e8dc7c4f9241d95"),
     "preparation/algorithm.py": (7672, "aa5255ba1d238331cc91122b4b84ce2d90a0d23b7b19964ddb91c72953bac3c8"),
@@ -845,20 +845,20 @@ class Unit:
             need(target in self.mounts and target not in seen and row.get("Type") == "bind"
                  and row.get("Source") == self.mounts[target] and row.get("ReadOnly") is True, "exact readonly mount declaration")
             seen.add(target)
+        # create_args uses legacy --tmpfs, reported in HostConfig.Tmpfs rather
+        # than inspect .Mounts. Its exact options are checked above in every
+        # state; .Mounts must contain only the complete readonly bind roster.
+        mounts = value.get("mounts")
+        need(type(mounts) is list and len(mounts) == len(self.mounts),
+             "complete inspected source/input bind roster")
         mounted = set()
-        scratch = set()
-        for row in value.get("mounts", []):
+        for row in mounts:
             target = row.get("Destination")
-            if row.get("Type") == "tmpfs":
-                need(target in ("/tmp", "/output") and target not in scratch and row.get("RW") is True, "only bounded tmpfs")
-                scratch.add(target)
-            else:
-                need(target in self.mounts and target not in mounted and row.get("Type") == "bind"
-                     and row.get("Source") == self.mounts[target] and row.get("RW") is False
-                     and row.get("Propagation") == "rprivate", "exact effective readonly mount")
-                mounted.add(target)
-        need(mounted == set(self.mounts) and scratch == {"/tmp", "/output"},
-             "complete effective source/input/scratch mount membership")
+            need(target in self.mounts and target not in mounted and row.get("Type") == "bind"
+                 and row.get("Source") == self.mounts[target] and row.get("RW") is False
+                 and row.get("Propagation") == "rprivate", "exact inspected readonly bind")
+            mounted.add(target)
+        need(mounted == set(self.mounts), "complete inspected source/input bind closure")
         current = value.get("state", {})
         need(current.get("Status") == state and current.get("OOMKilled") is False and not current.get("Error"), "known non-OOM container state")
         if state == "created":
