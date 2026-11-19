@@ -44,6 +44,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Native inputs v1](implementations/native-inputs-v1) — Reviewed source component.
   Scope: Complete original three-archive native source producer with authenticated successful preparation and independent output audit: 104 animals, 936 target cases and all support traces retained. The three above-range target annotations, physical/acoustic binding, biological support mapping and competent comparison remain unresolved; candidate conditions and primary scoring are not admitted by source preparation.
+- [Native delivery v1](implementations/native-delivery-v1) — Reviewed source component.
+  Scope: Native-delivery source/manual package and public-asset distribution recipe. Existing 936-case preparation and generated controls do not establish participant-model scoring, physical calibration, clinical equivalence or uploaded public asset availability.
 - [Release annotation agreement v1](implementations/release-annotation-agreement-v1) — Reviewed source component.
   Scope: Separately named zero-labelled-support release-annotation-code agreement condition for all 936 cases/104 animals. Primary equal-animal exact code agreement and descriptive code-unit errors preserve numeric source code 100 without physiological reinterpretation. Exact generated controls passed; authentic model delivery/scoring and the original calibrated expert-threshold/four-stack task remain unadmitted. This component adds no benchmark family.
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
