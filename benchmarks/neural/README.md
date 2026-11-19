@@ -126,7 +126,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-SCOPE-20261114-AASD-REPORT](NEURAL-SCOPE-20261114-AASD-REPORT/README.md) | Offline reported-attention direction inference with motor and mixture controls | 3 | not linked |
 | [NEURAL-SCOPE-20261114-ABR-TRANSFER](NEURAL-SCOPE-20261114-ABR-TRANSFER/README.md) | Cross-laboratory auditory brainstem threshold inference from complete waveform stacks | 5 | not linked |
 | [NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY](NEURAL-SCOPE-20261114-FLY-ODOR-MEMORY/README.md) | Retrospective held-horizon prediction of goal-aligned movement from odor-memory dynamics | 4 | not linked |
-| [NEURAL-SCOPE-20261114-FUS-DIRECTION](NEURAL-SCOPE-20261114-FUS-DIRECTION/README.md) | Calibrated target-direction inference from complete memory-period functional-ultrasound response fields | 6 | not linked |
+| [NEURAL-SCOPE-20261114-FUS-DIRECTION](NEURAL-SCOPE-20261114-FUS-DIRECTION/README.md) | Calibrated target-direction inference from complete memory-period functional-ultrasound response fields | 7 | not linked |
 | [NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT](NEURAL-SCOPE-20261114-HYPOTHALAMIC-DRIFT/README.md) | Predicting longitudinal state-selective calcium activity across identified neurons | 3 | not linked |
 | [NEURAL-SCOPE-20261114-LASER-EEG-REPORT](NEURAL-SCOPE-20261114-LASER-EEG-REPORT/README.md) | Calibrated cross-experiment reported-pain inference from complete laser-evoked EEG epochs | 3 | not linked |
 | [NEURAL-SCOPE-20261114-LOCALIZATION](NEURAL-SCOPE-20261114-LOCALIZATION/README.md) | Patch-identified neuron localization under channel degradation | 2 | not linked |
