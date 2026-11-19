@@ -88,3 +88,32 @@ There was no optimizer update, full training, trained baseline, native LLM reaso
 | Final scoped handoff | 23,480 | `98c261068950cf9c508590517770b2c54eee765eb2b61fc50480eb8198347036` |
 | Saved scientific review | 28,007 | `eb6fea8d5bbc4f564e89655a506ae9451b323456a3942afc5492ef5d316176e1` |
 | Saved runtime review | 50,032 | `d7cda69ef02500c693554a98d7ef5e53fd8d05989b72e568abdfdd9dd54b7c0f` |
+
+## Later import/backend qualification and held-out scoring contract — 2026-11-19 UTC
+
+A separate offline operation successfully installed and checked the prospective full-fit dependency stack, then completed **56 explicit imports in one verifier process** and small generated CPU backend checks. The installed inventory contains **73 distributions** after admission of **67 wheel archives**. TensorFlow **2.15.0**, JAX/JAXlib **0.4.28** and Optax **0.2.4** operated together. The operation exited successfully after **21.131 seconds**, and the recorded process/container scope was closed.
+
+This qualifies installation, imports and generated backend operations. It includes no retinal data, neuronal model construction, full training batch, validation selection or held-out score. The initialized-row result above used **JAX/JAXlib 0.4.35**; it does not establish model behavior or memory requirements under the newly checked 0.4.28 stack. A full fit remains a separate operation.
+
+The existing [held-out scorer](../implementations/retinal-heldout/score.py) accepts the final fit's prediction format directly. Its primary comparison is the **unweighted mean of 147 site-wise Pearson correlations**, using each site's field mask and the same **128 held-out row identities** for the author and candidate. It aligns both row and site identities, retains undefined sites, and returns no all-site mean if any site is undefined. It does not replace this endpoint with a pooled or support-weighted correlation.
+
+The private operator packet is derived from the preserved observed targets and frozen site/split metadata, using the serialization bridge qualified below. The existing input programme's `operator_packet` function selects only the test rows; participant inputs contain no test-target member. The prospective fit selects parameters by validation performance before producing its final test predictions. The private packet construction below is qualified separately; complete model fits and prediction custody remain necessary before the scorer can produce an evaluation result. No held-out score, reproduction, improvement, SOTA result or readiness promotion is reported here.
+
+| Saved runtime metadata | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Import/backend operation handoff | 9,075 | `6bfc0ac6e15aeaa90015ca38b5b4bb5e8535f89f652e1bc1b0c08fa307bedb4a` |
+| Independent runtime review | 17,317 | `4d27063dde8dd0b8f51f8763063a9bb9a809fda2ac50c309be7539b92e7c2f1c` |
+
+## Accepted private target construction — 2026-11-19 UTC
+
+The [serialization bridge](../implementations/heldout-target-binding-v1/target_binding.py) constructed an evaluator-private target packet for the frozen **128 held-out rows and 147 recording sites**. It authenticates the preserved observed-target sidecar and paired metadata, reconstructs the field-local mask, and reuses the existing input programme's `operator_packet` function. This operation used local Python **3.11.6** and NumPy **1.26.3**; it is separate from the model-runtime qualification above.
+
+An independent standard-library reader checked every one of the **18,816 label positions and 18,816 mask positions** without executing the bridge or scorer. All **1,345 active target values** matched the canonical sidecar bit for bit after JSON round-trip, and all **17,471 inactive labels** were null. Row order, site order and the field mask matched the frozen metadata. For every site, its **4–16 selected target values** were finite and not all identical.
+
+This qualifies the private target packet. No numerical variance, correlation, model fit, prediction quality or held-out score was computed. The packet and its target values remain evaluator-private. Complete source-default and candidate fits, validation selection, prediction custody and a matched comparison remain necessary before assessing reproduction or improvement. Whole-record preprocessing and the source-default split limitations remain unchanged.
+
+| Saved construction evidence | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Private target packet, not published | 278,759 | `b8bcc8aa1d4f856c35c1b24f11a8d0481bfdd748c5f74d9392f7a18c9c93b9ce` |
+| Accepted operation and review handoff | 6,841 | `057e274d9899cbe3dab503937ed28e117d799979437a86a64f47ac8ef5e3dfb0` |
+| Independent target/mask/identity review | 12,547 | `32e36c2c427684318f219f7d82bc1416bff593870d6fccc8273b71faecd6c0bb` |
