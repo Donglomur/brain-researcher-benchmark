@@ -21,7 +21,7 @@ import time
 ORIGINAL_OPERATION_ENABLED = False
 SCHEMA = "n007_epoch_host_preflight_v1"
 CASES = (("development-001", 2780), ("development-002", 2670))
-VISUAL_PIN = {"bytes": 15668, "sha256": "46aa524ce965ecb69b4cbbd7b79d93f589f524bce314007da724d8bf8acbaec8"}
+VISUAL_PIN = {"bytes": 15668, "sha256": "56025c814c05f7e3f88571dc8316517f8fae664be93829e4734ba0f4f104205f"}
 MAX_READ = 2 * 2**30
 MAX_WRITE = 32 * 2**20
 TERMINAL_RESERVE = 65536

@@ -302,10 +302,10 @@ send({"action":"respond","epoch_id":view["epoch_id"],"probabilities":[0,1,0,0,0]
 
     def test_nonzero_exit_after_complete_does_not_pass(self):
         path, result = self.run_client("complete()\nraise RuntimeError('after-finish')")
-        self.assert_failed(path, result, "failed after completion")
+        self.assert_failed(path, result, "Owned client cleanup or successful exit unverified")
         self.assertNotEqual(result["client_exit_code"], 0)
 
-    def test_descendant_surviving_successful_leader_fails_and_is_signalled(self):
+    def test_descendant_cleanup_requires_post_reap_group_absence(self):
         script = '''
 complete()
 import subprocess
@@ -314,9 +314,22 @@ subprocess.Popen([sys.executable, "-I", "-S", "-B", "-c", "import time; time.sle
                  close_fds=True)
 '''
         path, result = self.run_client(script)
-        self.assert_failed(path, result, "process group remained")
         self.assertEqual(result["client_exit_code"], 0)
-        self.assertEqual(result["process_group_cleanup"], "signalled")
+        cleanup = result["process_ownership"]
+        self.assertTrue(cleanup["exit_observed_before_stop"])
+        self.assertTrue(cleanup["leader_unreaped_before_signal"])
+        self.assertTrue(cleanup["reaped"])
+        self.assertEqual(cleanup["group_signal"], "sent")
+        self.assertFalse(cleanup["descendant_containment_qualified"])
+        # Orphan reaping is kernel/host dependent. Never admit unresolved group
+        # presence, and never infer no descendants from a successful signal.
+        if cleanup["group_absence_observed"]:
+            self.assertTrue(cleanup["cleanup_complete"])
+            self.assertEqual(result["status"], "complete_unscored")
+            self.assertEqual(result["process_group_cleanup"], "absent")
+        else:
+            self.assertFalse(cleanup["cleanup_complete"])
+            self.assert_failed(path, result, "unverified")
 
     def test_changed_wire_and_missing_journal_refused(self):
         path, _ = self.run_client()

@@ -42,6 +42,21 @@ def load_viewer():
 v = load_viewer()
 
 
+def load_process_owner():
+    # Trusted helper only; the participant never receives this source or path.
+    path = Path(globals().get('IMPLEMENTATIONS_ROOT', HERE.parent)).parents[3] / 'benchmarks/shared/viewer-process-ownership-v1/owned_exit.py'
+    body = v.read_regular(path, 65536)
+    if len(body) != 8088 or hashlib.sha256(body).hexdigest() != 'd1d4aa36bf3893ee07e16f7086fd123c08d81ec47278efd6be3091c862c59426':
+        raise ValueError('Process ownership helper source mismatch')
+    module = importlib.util.module_from_spec(importlib.util.spec_from_loader('viewer_owned_exit', loader=None))
+    module.__file__ = str(path)
+    exec(compile(body, str(path), 'exec'), module.__dict__)
+    return module
+
+
+owner = load_process_owner()
+
+
 @dataclass(frozen=True)
 class Limits:
     max_actions: int = 128
@@ -200,6 +215,7 @@ class Journal:
 def run_episode(dataset, ordinal, mode, output, client, python=sys.executable,
                 sandbox='macos', limits=None, client_launcher=None):
     """Spawn one trusted bridge/script. Participant requests cannot select these arguments."""
+    owner.preflight()
     limits = limits or Limits()
     limits.validate()
     client, python = Path(client).resolve(strict=True), Path(python).resolve(strict=True)
@@ -215,6 +231,7 @@ def run_episode(dataset, ordinal, mode, output, client, python=sys.executable,
     deadline = time.monotonic() + limits.wall_seconds
     started, images, output_bytes = time.monotonic(), 0, 0
     child, reason, terminal, forced_stop = None, None, None, False
+    observer, cleanup = None, None
 
     def send(header, png=b''):
         nonlocal output_bytes, images
@@ -245,6 +262,7 @@ def run_episode(dataset, ordinal, mode, output, client, python=sys.executable,
                 v.need(sandbox == 'protocol_only', 'Trusted provider launcher is not sandboxed')
                 child = client_launcher(command, cwd)
                 v.need(isinstance(child, subprocess.Popen), 'Owned trusted child required')
+            observer = owner.ExitObserver(child)
             os.set_blocking(child.stdout.fileno(), False)
             os.set_blocking(child.stdin.fileno(), False)
             initial, png = projection(session.handle(b'{"action":"inspect"}'))
@@ -284,12 +302,9 @@ def run_episode(dataset, ordinal, mode, output, client, python=sys.executable,
                     projected.pop('remaining_actions')
                 send(projected, png)
             terminal = v.decode((session.output / 'FINAL.json').read_bytes())['status']
-            try:
-                child.wait(timeout=max(0.001, min(2, deadline - time.monotonic())))
-            except subprocess.TimeoutExpired:
-                raise WireFailure('client_did_not_exit') from None
-            if child.returncode != 0:
-                raise WireFailure('client_failed_after_final')
+            if not observer.wait(min(deadline, time.monotonic() + 2.0)):
+                raise WireFailure('client_did_not_exit')
+
     except WireFailure as error:
         reason = error.reason
     except Exception:
@@ -297,19 +312,10 @@ def run_episode(dataset, ordinal, mode, output, client, python=sys.executable,
         reason = 'operator_failure'
     finally:
         if child is not None:
-            # This group was created only for this client; also remove its own
-            # descendants in protocol_only mode. Never signal another group.
-            try:
-                forced_stop = child.poll() is None
-                os.killpg(child.pid, signal.SIGKILL)
-            except ProcessLookupError:
-                pass
-            except PermissionError:
-                # macOS may refuse signaling an already-exiting empty group.
-                # Reap our exact child; if still live, signal only its PID.
-                if child.poll() is None:
-                    child.kill()
-            child.wait()
+            cleanup = owner.stop_and_reap(child, observer, time.monotonic() + 2.0)
+            forced_stop = not cleanup['exit_observed_before_stop']
+            if not cleanup['cleanup_complete'] or cleanup['returncode'] != 0 or forced_stop:
+                reason = reason or 'client_cleanup_or_exit_unverified'
             child.stdin.close()
             child.stdout.close()
         if reason:
@@ -321,7 +327,7 @@ def run_episode(dataset, ordinal, mode, output, client, python=sys.executable,
                    'manifest_sha256': v.digest(v.encode(manifest)), 'images': images, 'output_bytes': output_bytes,
                    'elapsed_seconds': time.monotonic() - started,
                    'client_exit_code': child.returncode if child is not None else None,
-                   'client_forced_stop': forced_stop,
+                   'client_forced_stop': forced_stop, 'process_ownership': cleanup,
                    'viewer_final_sha256': v.digest((session.output / 'FINAL.json').read_bytes())
                        if (session.output / 'FINAL.json').exists() else None,
                    'scoring_performed': False}
@@ -340,6 +346,8 @@ def audit_transport(path, dataset, ordinal, mode):
            for name in ('transport.py', 'SOURCE_BINDINGS.json')}, 'Transport implementation mismatch')
     v.need(end['status'] == 'valid_unscored' and end['reason'] is None and not (path / 'FAILED.json').exists(), 'Transport did not complete')
     v.need(end['client_exit_code'] == 0 and end['client_forced_stop'] is False, 'Client did not close successfully')
+    cleanup = end.get('process_ownership', {})
+    v.need(cleanup.get('cleanup_complete') is True and cleanup.get('leader_unreaped_before_signal') is True and cleanup.get('exit_observed_before_stop') is True and cleanup.get('reaped') is True and cleanup.get('returncode') == 0 and cleanup.get('group_absence_observed') is True, 'Owned cleanup receipt required')
     v.need(end['manifest_sha256'] == v.digest(v.encode(manifest)), 'Manifest mismatch')
     v.need(manifest['sandbox'] in ('macos', 'protocol_only'), 'Unknown recorded sandbox')
     if manifest['sandbox'] == 'macos':

@@ -112,6 +112,21 @@ def load_viewer():
 v = load_viewer()
 
 
+def load_process_owner():
+    # Trusted helper only; the participant never receives this source or path.
+    path = Path(globals().get('DEPENDENCY_ROOT', ROOT)) / 'benchmarks/shared/viewer-process-ownership-v1/owned_exit.py'
+    body = read_body(path, 65536)
+    if len(body) != 8088 or hashlib.sha256(body).hexdigest() != 'd1d4aa36bf3893ee07e16f7086fd123c08d81ec47278efd6be3091c862c59426':
+        raise ValueError('Process ownership helper source mismatch')
+    module = importlib.util.module_from_spec(importlib.util.spec_from_loader('viewer_owned_exit', loader=None))
+    module.__file__ = str(path)
+    exec(compile(body, str(path), 'exec'), module.__dict__)
+    return module
+
+
+owner = load_process_owner()
+
+
 def source_identity():
     return {name: {'bytes': len(body), 'sha256': digest(body)}
             for name in ('transport.py', 'SOURCE_BINDINGS.json')
@@ -288,6 +303,7 @@ def viewer_manifest(packet, limits):
 
 
 def run_person(packet, output, client, python=sys.executable, sandbox='macos', limits=None):
+    owner.preflight()
     need(isinstance(limits, Limits), 'Explicit frozen Limits required')
     limits.validate(packet.epochs)
     need(packet.case in v.CASES and packet.epochs == v.CASES[packet.case], 'Complete declared person required')
@@ -316,6 +332,7 @@ def run_person(packet, output, client, python=sys.executable, sandbox='macos', l
         v.write_new(output / 'sandbox.sb', profile.encode())
     journal = Journal(output / 'transport')
     child, session, action_log = None, None, None
+    observer, cleanup = None, None
     reason, forced_stop, images, outbound = None, False, 0, 0
     started = time.monotonic()
     deadline = started + limits.wall_seconds
@@ -346,6 +363,7 @@ def run_person(packet, output, client, python=sys.executable, sandbox='macos', l
             child = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                      stderr=subprocess.DEVNULL, cwd=cwd, env={'LANG': 'C', 'LC_ALL': 'C'},
                                      close_fds=True, start_new_session=True)
+            observer = owner.ExitObserver(child)
             os.set_blocking(child.stdin.fileno(), False)
             os.set_blocking(child.stdout.fileno(), False)
             send(ready_header(packet, limits, episode))
@@ -373,11 +391,9 @@ def run_person(packet, output, client, python=sys.executable, sandbox='macos', l
             child.stdin.close()
             remaining = min(2.0, deadline - time.monotonic())
             need(remaining > 0, 'Deadline reached before clean client exit')
-            try:
-                exit_code = child.wait(timeout=remaining)
-            except subprocess.TimeoutExpired:
-                raise WireFailure('client_did_not_exit') from None
-            need(exit_code == 0, 'Client failed after completion')
+            if not observer.wait(time.monotonic() + remaining):
+                raise WireFailure('client_did_not_exit')
+
     except Exception as exc:
         reason = {'type': type(exc).__name__, 'message': str(exc)[:1000]}
         failure = {'status': 'failed', 'case_id': packet.case, 'reason': reason}
@@ -388,25 +404,12 @@ def run_person(packet, output, client, python=sys.executable, sandbox='macos', l
                 pass
     finally:
         if child is not None:
-            if child.poll() is None:
-                forced_stop = True
-            # The original group can outlive its leader. Never leave a child
-            # behind merely because the leader has already exited successfully.
-            try:
-                os.killpg(child.pid, signal.SIGKILL)
-                group_cleanup = 'signalled'
-                if reason is None:
-                    reason = {'type': 'ChildProcessError', 'message': 'Client process group remained after completion'}
-            except ProcessLookupError:
-                group_cleanup = 'absent'
-            except OSError as exc:
-                group_cleanup = 'error'
-                reason = {'type': type(exc).__name__, 'message': 'Owned process-group cleanup could not be verified'}
-                if forced_stop:
-                    child.kill()
-            if forced_stop:
-                child.wait(timeout=2)
-            exit_code = child.returncode
+            cleanup = owner.stop_and_reap(child, observer, time.monotonic() + 2.0)
+            forced_stop = not cleanup['exit_observed_before_stop']
+            exit_code = cleanup['returncode']
+            group_cleanup = 'absent' if cleanup['group_absence_observed'] else 'unverified'
+            if not cleanup['cleanup_complete'] or exit_code != 0 or forced_stop:
+                reason = reason or {'type': 'ChildProcessError', 'message': 'Owned client cleanup or successful exit unverified'}
             for stream in (child.stdin, child.stdout):
                 if stream and not stream.closed:
                     stream.close()
@@ -425,7 +428,7 @@ def run_person(packet, output, client, python=sys.executable, sandbox='macos', l
               'images': images, 'output_bytes': outbound, 'wire_bytes': journal.offset,
               'wire_records': journal.sequence, 'last_sha256': journal.previous,
               'client_exit_code': exit_code, 'forced_stop': forced_stop,
-              'process_group_cleanup': group_cleanup,
+              'process_group_cleanup': group_cleanup, 'process_ownership': cleanup,
               'wall_seconds': time.monotonic() - started, 'reason': reason,
               'provider_context_qualified': False, 'scientific_qualification': False}
     v.write_new(output / 'RESULT.json', encode(result))
@@ -532,11 +535,13 @@ def audit_transport(path, packet):
         log.close()
         actions.close()
     result = decode(read_body(path / 'RESULT.json', 16384))
+    cleanup = result.get('process_ownership', {})
+    need(cleanup.get('cleanup_complete') is True and cleanup.get('leader_unreaped_before_signal') is True and cleanup.get('exit_observed_before_stop') is True and cleanup.get('reaped') is True and cleanup.get('returncode') == 0 and cleanup.get('group_absence_observed') is True, 'Owned cleanup receipt required')
     expected = {'schema': 'sleep-viewer-transport-result/v1', 'status': 'complete_unscored', 'case_id': packet.case,
                 'episode_id': episode, 'actions': session.actions, 'images': images, 'output_bytes': outbound,
                 'wire_bytes': offset, 'wire_records': sequence, 'last_sha256': previous, 'client_exit_code': 0,
                 'forced_stop': False, 'wall_seconds': result.get('wall_seconds'), 'reason': None,
-                'process_group_cleanup': 'absent',
+                'process_group_cleanup': 'absent', 'process_ownership': cleanup,
                 'provider_context_qualified': False, 'scientific_qualification': False}
     integer_fields = ('actions', 'images', 'output_bytes', 'wire_bytes', 'wire_records', 'client_exit_code')
     need(result == expected and all(type(result[key]) is int for key in integer_fields)

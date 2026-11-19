@@ -45,3 +45,20 @@ Tests use the installed sibling implementations by default. For an isolated sour
 ## Source provenance
 
 The original source closure was captured from repository commit `a5ae02906f7f35fceb94b115fb311ed44479ccd2`; the per-file identities in `BASE_SOURCES.json` are authoritative. `SOURCE_BINDINGS.json` preserves the original visual viewer dependency pins. No original source, dataset, protected label or historical receipt is replaced by this component.
+
+## Participant process cleanup
+
+The current transport observes child exit without reaping, using Darwin kqueue or
+Linux pidfd. It keeps the session leader owned until its process group has been
+signalled, then reaps that exact child. Later group-presence probes use signal 0;
+they cannot terminate a reused process ID. Missing observer APIs or a nondefault SIGCHLD handler refuse the launch.
+Kernel registration can still fail afterward; that failed session enters owned
+cleanup and cannot be admitted. The trusted operator must retain exclusive
+wait ownership and must not install native automatic child reaping.
+
+The shared [process ownership helper](../../../../shared/viewer-process-ownership-v1/README.md)
+records this cleanup order separately from group absence. A group signal does not
+contain descendants that escaped the group; `protocol_only` remains a trusted
+operator bridge, not a hostile-code sandbox. The macOS participant policy is
+unchanged. Historical execution receipts remain evidence for their original
+source identities and do not qualify this lifecycle revision.

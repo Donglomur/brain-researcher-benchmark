@@ -160,7 +160,7 @@ receive()
 
     def test_client_stderr_and_post_final_failure_are_not_success(self):
         path, receipt = self.run_client("print('operator-like secret/path',file=sys.stderr)\ncontrol()\nraise RuntimeError('after final')")
-        self.assertEqual(receipt['reason'], 'client_failed_after_final')
+        self.assertEqual(receipt['reason'], 'client_cleanup_or_exit_unverified')
         self.assertNotEqual(receipt['client_exit_code'], 0)
         for p in (path / 'transport').glob('*-out.bin'):
             self.assertNotIn(b'operator-like secret/path', p.read_bytes())
