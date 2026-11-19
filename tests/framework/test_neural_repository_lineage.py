@@ -96,6 +96,7 @@ class NeuralRepositoryLineageTests(unittest.TestCase):
             "tests/maintenance/test_parallel_source_controls.py",
         }
         expected_members = maintenance_members | {
+            "scripts/maintenance/check_workflow_syntax.py",
             "benchmarks/paper/PAPER-001/task.json",
             "benchmarks/paper/PAPER-002/task.json",
             "benchmarks/neural/NEURAL-001/task.json",
@@ -112,6 +113,8 @@ class NeuralRepositoryLineageTests(unittest.TestCase):
         }
         self.assertEqual(set(records), expected_members)
         self.assertEqual(result["source_files"], len(expected_members))
+        self.assertEqual(records["scripts/maintenance/check_workflow_syntax.py"]["owner"],
+                         "workflow-syntax-maintenance")
         # The shared fixture's maintenance sources must be read from this temporary root.
         for path in maintenance_members:
             raw = (self.root / path).read_bytes()

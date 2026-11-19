@@ -27,3 +27,29 @@ The destination must be outside both this repository and the input tree. Builder
 `apply_neural_contract_amendment.py` uses the same input/output arguments plus `--proposal`, relative to the input tree. It writes the proposed roster, original roster and receipt into a **fresh** staging directory. The input roster remains unchanged; applying a staged amendment to current task registrations requires a separate reviewed change.
 
 `neurobench_source_queue.py` provides reviewed source commits and root integration. Its commands and controls are described in [the source queue guide](../../docs/development/source-queue.md). It has no push command. Its generated tests are in `source-queue-validation/test_queue.py`; their `authoring/` names are disposable fixture paths, not public repository layout requirements.
+
+`check_workflow_syntax.py` runs [actionlint](https://github.com/rhysd/actionlint)
+1.7.12 before the existing source checks in the shared CI preflight. It checks
+all current GitHub workflows, including expression context availability; a
+well-formed YAML file alone does not establish that GitHub accepts a workflow.
+The optional external shellcheck and pyflakes passes are disabled. Core
+workflow, expression and context checks remain enabled, without blanket ignores.
+
+Run the same check from a checkout with Python 3.11 and internet access:
+
+```sh
+python3 -I -S -B scripts/maintenance/check_workflow_syntax.py
+```
+
+The bootstrap supports Linux x86_64 and macOS arm64. It downloads one official
+[1.7.12 release](https://github.com/rhysd/actionlint/releases/tag/v1.7.12) archive,
+verifies its exact size and SHA256 before parsing it, admits only the reviewed
+regular members, and places only the executable in a temporary directory.
+No executable is committed or installed globally. Asset checksums, rather than
+release-tag immutability, bind the selected release bytes. The Linux archive's
+member roster is checked at runtime; the local qualification used macOS arm64.
+Downloads are limited to 8 MiB and declared expanded members to 16 MiB. The
+linter has a 60-second timeout, one Go scheduler thread, and a 256 MiB Go soft
+memory target; that target is not an operating-system memory limit.
+This source lint pass does not add benchmark tasks, scientific test units,
+model runs, or evidence of reproduced or improved neuroscience results.

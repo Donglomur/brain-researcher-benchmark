@@ -14,7 +14,7 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 An independently recomputed matched-prior difference in measured response-conditioned neural trajectories on complete prespecified interval/modality/direction/block support, with its support and within-session uncertainty. Null, reversed and unsupported contrasts are valid; the empirical value is not supplied by the paper narrative. Authentic raw Set–Go observations are prepared for the declared204-row/54-unit scope; the scientific trajectory basis, matched-support estimand, independent reference and uncertainty remain unqualified.
 
-**Source delivery:** target\_mismatch. Authentic full Set–Go source observations are now prepared for all204 nominal800ms source train/validation rows and all54released units. This resolves observation preparation for the declared retrospective scope, not the current scientific endpoint: a prespecified matched-prior trajectory contrast, independent reference, nuisance controls and defensible within-session uncertainty remain absent. The only scoring adapter still targets the different177-trial pre-Set selected-count calibration and has a missing local dependency. Retain target\_mismatch/different\_target and require explicit calibration for that legacy adapter; the prepared source packet does not make its score a full-target result.
+**Source delivery:** target\_mismatch. Authentic full Set–Go observations are prepared for all 204 nominal 800 ms source train/validation rows and all 54 released units. The separate descriptive-trajectories-v1 condition now has a reference, matched visual/numeric delivery, answer capture and private grading for 48 split-by-segment-by-effector-by-direction cells: 27 supported and 21 explicitly unsupported. Its four signed quarter means and four quarter RMS differences are narrower descriptive quantities, not the current full-trajectory estimand, nuisance controls or defensible within-session uncertainty. The historical 177-trial pre-Set scoring adapter remains separate calibration with a missing local dependency. Retain target\_mismatch/different\_target; neither descriptive construction nor legacy calibration establishes full-target scientific qualification.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
@@ -39,7 +39,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 28299 bytes; SHA-256 `c1b73799f6a3a23fd7e89b6dd6e28ed4d8368a909d5bafa5a1e5e2c4365e8c7b`.
+- Specification identity: 29051 bytes; SHA-256 `5d041b80ddf1e9a40c39a87d438b5a126c64ad0b3c3cecdaaaa8c381e8ca7e3a`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

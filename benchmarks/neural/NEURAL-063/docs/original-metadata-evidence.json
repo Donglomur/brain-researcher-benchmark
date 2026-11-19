@@ -2,7 +2,7 @@
   "schema": "neural063-original-metadata-evidence/v1",
   "task_id": "NEURAL-063",
   "task_title": "Omission-conditional calcium population trajectory prediction",
-  "scope": "One authenticated original NWB and its prescribed dF/F series and referenced ROI table; local metadata/support qualification only.",
+  "scope": "One authenticated original NWB and its prescribed dF/F series and referenced ROI table, plus accepted partial structural-layout progress; metadata/support and structural evidence only.",
   "selected_original": {
     "bytes": 227971260,
     "sha256": "df91c64a8957ec44e2845a2f7d653599719ea60c5fcb59d8a0f0703aec0073bb",
@@ -34,15 +34,15 @@
   "cohort": {
     "planes_total": 1936,
     "local_metadata_support_units_complete": 1,
-    "other_planes_unattempted": 1935,
     "sessions_total": 703,
-    "sessions_incomplete": 703,
     "mice_total": 107,
     "mouse_split": {
       "fit": 73,
       "validation": 15,
       "query": 19
-    }
+    },
+    "other_planes_unattempted_at_original_qualification": 1935,
+    "metadata_support_sessions_incomplete": 703
   },
   "retained_limits": {
     "neural_values_decoded": false,
@@ -55,16 +55,46 @@
     "global_flags_scope": "These global flags remain false even though the selected original passed full-object authentication."
   },
   "layouts_stage": {
-    "preparation_generated_control_groups_passed": 6,
-    "actual_caller_requested_seconds": 1800,
-    "actual_caller_retained_maximum_seconds": 630,
-    "actual_outcome": "Stopped at the time-bound guard before native or provider work.",
-    "provider_requests_by_this_invocation": 0,
-    "complete_layout_bank_established": false,
-    "cohort_download_established": false
+    "historical_preparation_and_guard_stop": {
+      "preparation_generated_control_groups_passed": 6,
+      "actual_caller_requested_seconds": 1800,
+      "actual_caller_retained_maximum_seconds": 630,
+      "actual_outcome": "Stopped at the time-bound guard before native or provider work.",
+      "provider_requests_by_this_invocation": 0,
+      "complete_layout_bank_established": false,
+      "cohort_download_established": false,
+      "scope": "Historical preparation and an earlier stopped invocation; superseded as the latest layout outcome by the accepted partial progress below."
+    },
+    "accepted_partial_progress": {
+      "structural_layouts_complete": 1255,
+      "canonical_planes": 1936,
+      "reused_layouts": 855,
+      "new_layouts": 400,
+      "remaining_planes": 681,
+      "layout_only_complete_sessions": 494,
+      "held_sessions": 209,
+      "total_sessions": 703,
+      "all_output_layout_records_authenticated": true,
+      "all_staged_reused_layouts_authenticated": true,
+      "asset_and_session_joins_verified": true,
+      "all_structural_session_dispositions_match": true,
+      "new_provider_requests": 10817,
+      "new_response_body_bytes": 1417805824,
+      "import_provider_requests": 0,
+      "full_layout_bank_complete": false,
+      "array_values_decoded": false,
+      "projection_performed": false,
+      "finite_dff_values_established": false,
+      "whole_original_blake2b_verification_established": false,
+      "scientific_readiness": false,
+      "benchmark_ready": false,
+      "source_roi_counts_are_roster_metadata_not_verified_valid_roi_counts": true,
+      "proof_scope": "Structural layouts and contained provenance only; layout-complete sessions do not establish metadata/support, neural-response, model or metric completion.",
+      "full_original_authentication_scope": "The earlier selected original remains authenticated; partial range-based structural layouts do not establish cohort-wide full-object authentication."
+    }
   },
   "remaining_steps": [
-    "Complete the fixed-version layout and byte-range bank for all 1,936 planes.",
+    "Complete structural layouts for the remaining 681 planes and assemble the fixed-version layout and byte-range bank for all 1,936 planes.",
     "Complete metadata and all-member session agreement, support and schedules across all 703 sessions; publish the exact metadata/support and range-schedule formats.",
     "Complete the physical storage census for every source column, including zero-event columns, contiguous storage, unallocated or fill regions, and finite extents.",
     "Separately bind, review and select the neural-value projection producer using complete banks, followed by full-cohort equivalence, model and scoring requirements."
@@ -95,10 +125,22 @@
       "supports": "Independent acceptance of bounded layout source preparation, distinct from actual acquisition."
     },
     {
-      "receipt": "layout actual caller known-scope closure",
+      "receipt": "historical layout caller known-scope closure",
       "bytes": 3570,
       "sha256": "e34288359b69cd0caa619cbdd577b203f17bcbf3eea23253077f0ba47ca164a7",
       "supports": "Actual 1,800-versus-630-second guard stop before native/provider work and zero provider requests."
+    },
+    {
+      "receipt": "partial-layout-v2 owner actual closeout",
+      "bytes": 13564,
+      "sha256": "518826a12cb22a2515402766a2d92ce9c3ce74be0266d7ec3cdc05fc3b8736d8",
+      "supports": "855 reused plus 400 new structural layouts; 1,255 authenticated outputs and 855 authenticated staged copies; 681 remaining planes; 494 layout-complete and 209 held sessions; scoped request/byte counts and scientific limitations."
+    },
+    {
+      "receipt": "partial-layout-v2 final settlement",
+      "bytes": 2131,
+      "sha256": "eaa814c72445f0fca4e868a46333a8bbeeefbd266f3de8e92aed03a1709d7ce0",
+      "supports": "Accepted partial structural result and retained false full-bank and scientific-readiness states."
     }
   ]
 }
