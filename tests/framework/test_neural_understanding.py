@@ -312,7 +312,44 @@ class UnderstandingBindingTests(unittest.TestCase):
         self.assertEqual(contract["access_modes"]["typed_viewer"], old_contract["access_modes"]["typed_viewer"])
         for mode in engine.MODES:
             self.assertEqual(contract["access_modes"][mode]["status"], old_contract["access_modes"][mode]["status"])
-        self.assertEqual(contract["evidence"][:len(old_contract["evidence"])], old_contract["evidence"])
+        # The versioned snapshot and every unrelated prefix row stay immutable.
+        # Only the maintained lifecycle source/test identities and the explicit
+        # historical-proof limitation have declared current successors.
+        self.assertEqual(digest(old_body),
+                         "1c3a9e3ba4b6a88e7e79563aab50e54b344ae9a01693897cb22afe66e513f376")
+        self.assertEqual(len(old_contract["evidence"]), 15)
+        expected_prefix = copy.deepcopy(old_contract["evidence"])
+        lifecycle_updates = {
+            11: ("visual-transport",
+                 "Current per-query framed PNG/action transport with unreaped child ownership. "
+                 "Earlier execution receipts retain their original source identity and do not "
+                 "qualify this lifecycle revision."),
+            14: ("transport-controls", None),
+        }
+        for index, (evidence_id, supports) in lifecycle_updates.items():
+            with self.subTest(lifecycle_evidence=evidence_id):
+                expected = expected_prefix[index]
+                historical_sha = expected["sha256"]
+                self.assertEqual(expected["id"], evidence_id)
+                self.assertEqual(expected["kind"], "local_source")
+                source_body = (ROOT / expected["path"]).read_bytes()
+                expected["sha256"] = digest(source_body)
+                self.assertNotEqual(expected["sha256"], historical_sha)
+                if supports is not None:
+                    expected["supports"] = supports
+                # Authenticate the real current file through the maintained
+                # loader, then reject stale pins and altered source bytes.
+                selected = {"evidence": [expected]}
+                self.assertEqual(engine._source_errors(ROOT, selected), [])
+                stale = copy.deepcopy(expected)
+                stale["sha256"] = historical_sha
+                error = ["Evidence SHA-256 mismatch: " + expected["path"]]
+                self.assertEqual(engine._source_errors(ROOT, {"evidence": [stale]}), error)
+                tampered = {expected["path"]: source_body + b"\n# generated source mutation\n"}
+                self.assertEqual(engine._source_errors(ROOT, selected, tampered), error)
+        self.assertEqual(contract["evidence"][:len(expected_prefix)], expected_prefix)
+        self.assertEqual(contract["empirical_claims"]["scientific_qualification"],
+                         "not_established_by_this_revision")
         for field, wrong in (("id", "unselected-control"), ("kind", "local_source"),
                              ("path", "benchmarks/neural/NEURAL-077/other.json"), ("sha256", "0" * 64)):
             changed = copy.deepcopy(contract)
