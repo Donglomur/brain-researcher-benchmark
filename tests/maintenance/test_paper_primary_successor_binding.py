@@ -464,7 +464,7 @@ class PrimarySuccessorBindingTests(SuccessorFixture):
         self.put(checks.CURRENT_BINDINGS, {"generated": "source identities only"})
         self.put(checks.CURRENT_CLOSURES + "/generated/binding.json", {"generated": True})
         self.put(checks.PARALLEL_CONTROL_MANIFEST, {"generated": True})
-        for relative in checks.PARALLEL_CONTROL_SOURCES[1:]:
+        for relative in checks.PARALLEL_CONTROL_SOURCES[1:] + checks.WORKFLOW_SYNTAX_SOURCES:
             self.put(relative, b'raise AssertionError("Generated control source must never execute")\n')
         self.put(checks.RELOCATIONS, {"schema_version": 1, "files": []})
         self.adopt()

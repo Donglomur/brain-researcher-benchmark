@@ -68,7 +68,7 @@ def fixture(root):
     write_json(root / checks.PARALLEL_CONTROL_MANIFEST, {
         "scope": "generated source control metadata only",
         "private_payload_locator": "/private/never-open-this-control.json"})
-    for relative in checks.PARALLEL_CONTROL_SOURCES[1:]:
+    for relative in checks.PARALLEL_CONTROL_SOURCES[1:] + checks.WORKFLOW_SYNTAX_SOURCES:
         path = root / relative
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text("raise AssertionError('CI sources must only be hashed')\n")
@@ -135,7 +135,7 @@ class RepositoryChecksTests(unittest.TestCase):
         self.assertEqual(result["artifacts"], 2)
         self.assertEqual(result["artifact_files"], 2)
         self.assertEqual(result["current_binding_files"], 2)
-        self.assertEqual(result["source_files"], 11)
+        self.assertEqual(result["source_files"], 12)
         self.assertFalse(result["scientific_qualification"])
         self.assertEqual(self.check()["source_check"], "passed")
         runtime = self.root / ".neurobench"
@@ -364,7 +364,7 @@ class RepositoryChecksTests(unittest.TestCase):
     def test_versioned_paper_metadata_is_owned_and_preserves_historical_bytes(self):
         row = self.revise_paper()
         result = self.build()
-        self.assertEqual(result["source_files"], 13)
+        self.assertEqual(result["source_files"], 14)
         self.assertFalse(result["scientific_qualification"])
         self.assertEqual(self.check()["source_check"], "passed")
         inventory = json.loads((self.root / checks.INVENTORY).read_text())
@@ -484,7 +484,7 @@ class RepositoryChecksTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "requires every paper revision"):
             self.build()
         self.revise_paper(1)
-        self.assertEqual(self.build()["source_files"], 16)
+        self.assertEqual(self.build()["source_files"], 17)
         self.assertEqual(self.check()["source_check"], "passed")
         inventory = json.loads((self.root / checks.INVENTORY).read_text())
         self.assertIn(snapshot_path, {item["path"] for item in inventory["files"]})
