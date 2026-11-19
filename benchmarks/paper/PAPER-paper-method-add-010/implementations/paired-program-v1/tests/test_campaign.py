@@ -303,7 +303,7 @@ class CampaignTests(unittest.TestCase):
             path.chmod(0o444)
             changed = decoded(before_document); changed["data"]["files"]["WINDOWS.npy"] = pin(path.read_bytes())
             body = encoded(changed); (self.prepared / "PREPARED.json").write_bytes(body)
-            self.rejected_before_transport("rehashed-bank", prepared_pin=pin(body), error_pattern="anonymous row/source tensor mismatch")
+            self.rejected_before_transport("rehashed-bank", prepared_pin=pin(body), error_pattern="anonymous row/source value mismatch")
         finally:
             path.chmod(0o600)
             with path.open("r+b") as handle: handle.seek(start); handle.write(original[start:start + 8])
