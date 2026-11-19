@@ -80,6 +80,17 @@ image and a mandatory purpose (`development-control` or `model-evaluation`). A
 purpose label does not replace method provenance, protected evaluation or scientific
 qualification. Preserve both successful and failed outputs outside the checkout.
 
+## View ABR observations and record submissions
+
+The [ABR observations release](https://github.com/Donglomur/brain-researcher-benchmark/releases/tag/abr-observations-v1-20261118)
+provides 936 complete case packets from 104 mice: 16,226 traces with all 1,953
+original samples per trace. Download its four assets together, verify
+`CHECKSUMS.sha256`, then follow the release notes and
+[tagged native-delivery operator guide](https://github.com/Donglomur/brain-researcher-benchmark/blob/abr-observations-v1-20261118/benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/native-delivery-v1/OPERATOR_GUIDE.md)
+for viewing and persistent manual submissions through sealing. Axes remain native
+sample indices and raw amplitudes. Scoring requires separate protected evaluator
+inputs. Physical calibration and AI performance remain unestablished.
+
 ## Separate the question from the access condition
 
 For paper tasks, select reproduction or improvement, then paper + data or paper +

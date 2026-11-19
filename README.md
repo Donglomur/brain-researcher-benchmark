@@ -72,6 +72,7 @@ required inputs and unresolved limits. Start with:
 | Route | Available scope and requirements |
 | --- | --- |
 | [EEG and sleep operator guide](docs/operator-routes.md) | Inspect provisioned inputs, prepare packets, and validate or grade completed submissions for NEURAL-077's 400 EEG trials and NEURAL-007's 5,450 sleep epochs. Each uses two already exposed development people. Exact external assets and native dependencies are required; `operator routes` verifies source only. |
+| [ABR observations release](https://github.com/Donglomur/brain-researcher-benchmark/releases/tag/abr-observations-v1-20261118) · [tagged operator guide](https://github.com/Donglomur/brain-researcher-benchmark/blob/abr-observations-v1-20261118/benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/native-delivery-v1/OPERATOR_GUIDE.md) | 936 complete case packets from 104 mice, preserving 16,226 traces on native sample-index/raw-amplitude axes. Supports viewing and manual submissions through sealing; scoring requires protected inputs. Physical calibration and AI performance remain unestablished. |
 | [Original paper endpoints](docs/usage/implementations.md#prepare-original-paper-endpoints) | Preparation and assessment interfaces for REVE, DeepCaImX and SMC-RNN, with task-specific prerequisites. Preparation and author-reference calibration do not establish participant reproduction or improvement. |
 
 Read the selected task contract before running an implementation. A component may
