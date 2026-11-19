@@ -336,8 +336,8 @@ class Provider:
                     count=0
                     for entry in scan:
                         count+=1;need(count<=limits['max_records']+16,'Bounded private control directory')
-                        if re.fullmatch('[0-9]{6}-[A-Z-]+\.json',entry.name):names.append(entry.name)
-                        else:need(entry.name in ('REQUEST.json','POLICY.json','OWNERSHIP.json','RECEIPT.json') or re.fullmatch('RECOVERY-[0-9a-f]{32}-([0-9]{6}|RECEIPT)\.json',entry.name),'Only source-owned control records')
+                        if re.fullmatch(r'[0-9]{6}-[A-Z-]+\.json',entry.name):names.append(entry.name)
+                        else:need(entry.name in ('REQUEST.json','POLICY.json','OWNERSHIP.json','RECEIPT.json') or re.fullmatch(r'RECOVERY-[0-9a-f]{32}-([0-9]{6}|RECEIPT)\.json',entry.name),'Only source-owned control records')
                 need(len(names)<=limits['max_records'],'Bounded lifecycle history')
                 for index,name in enumerate(sorted(names)):
                     raw=local_metadata(control/name,limits['max_record_bytes'],meter);metadata_bytes+=len(raw)

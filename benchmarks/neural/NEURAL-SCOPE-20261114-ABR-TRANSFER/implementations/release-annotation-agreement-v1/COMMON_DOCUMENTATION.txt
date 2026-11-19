@@ -1,0 +1,17 @@
+ABR release-annotation agreement: common candidate instructions
+
+Your task is to predict the numeric annotation code associated with one complete averaged auditory brainstem response waveform stack. The target is the number stored in the released annotation, not a claim about clinical hearing, perceptual accuracy or a physiological measurement. No labelled examples, fitted task decoder or target feedback are provided.
+
+The packet contains an opaque case_id, an explicit tone-or-click stimulus, and every recorded trace in that case. Each trace has its recorded release_level_code and the complete native sample array. Horizontal coordinates are sample indices. Amplitudes are raw numerical values in the native representation. Do not assume milliseconds, volts, microvolts, a calibrated sound-pressure conversion or an acoustic arrival time. Repeated levels and zero-valued traces are retained. No waveform resampling, cropping, normalization or removal was performed by this condition.
+
+Both access arms receive the same complete numeric packet and these identical instructions. Optional plot pages display the same samples with a common per-case amplitude scale. Page enumeration covers all traces; pixels may combine neighboring samples and axis labels have display rounding. The numeric packet remains the authority for exact values. A plot alone has less precision than the numeric packet.
+
+In the direct arm, inspect the supplied numeric packet and optional typed plot views without executing code. In the programme arm, the prediction programme is frozen before target exposure and is applied to this case without target-dependent changes. Both arms use fresh per-case state. Do not obtain target labels, query a scoring service, use network/source lookup, or accumulate information from other target cases. The execution operator enforces the separately frozen resource and access limits; these instructions do not themselves establish that boundary.
+
+Return exactly one JSON object, at most 4096 UTF-8 bytes, with exactly these two keys:
+- case_id: the opaque case_id from the packet, as a JSON string.
+- predicted_annotation_code: one finite JSON number whose magnitude converts to a finite IEEE 754 binary64 value. A number outside that universal representation range is an invalid first final; this is not a target-derived label alphabet.
+
+Do not return a censoring interval, an abstention in place of a number, or an extra explanation in that object. No allowable label alphabet or automatic rounding rule is imposed. The first submitted response is final, including a malformed or oversized response. There is no correctness feedback or second-answer opportunity. Failure to provide a valid required answer keeps the full case denominator and withholds aggregate scores.
+
+The primary outcome is exact numeric agreement with the stored annotation code, averaged within each animal and then equally across animals. Numerical formatting differences do not create a different code. Parsed decimal values retain exact numeric comparison; descriptive distance summaries use finite binary64 output precision. Descriptive secondary outcomes report absolute numeric-code distance and agreement within five and ten code units. These distances are properties of the stored encoding, not physical dB errors. Neither high agreement nor a fluent explanation by itself establishes neural understanding; public-source memorization and stimulus-level priors remain possible explanations.
