@@ -56,6 +56,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Current response identity validation](docs/response-validation.md)
 - [Before waveform-pair current adoption: task.json](docs/understanding-pre-waveform-pair-v1/task.json)
 - [Before waveform-pair current adoption: understanding.v1.json](docs/understanding-pre-waveform-pair-v1/understanding.v1.json)
+- [Full32 packet materialization evidence (2026-11-19)](docs/full32-materialization-20261119.md)
+- [Full32 packet materialization evidence JSON (2026-11-19)](docs/full32-materialization-20261119.json)
 
 ## Implementation artifacts
 
