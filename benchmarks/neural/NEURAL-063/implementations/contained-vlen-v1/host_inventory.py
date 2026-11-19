@@ -395,9 +395,21 @@ class Inventory:
         need(type(receipt["source_setup_read_bytes"]) is int
              and 0 <= receipt["source_setup_read_bytes"] <= cap["source_setup_read_bytes"],
              "complete worker setup-read counter")
-        used = dict(cap)  # Every unmeasured/control/closure residual stays reserved.
+        need(receipt["controller_requested_write_bytes"] == receipt["controller_control_bytes"],
+             "same complete controller/journal requested-write counter")
+        inventory_prefix = self.unit_control_written.get(key)
+        need(type(inventory_prefix) is int and 0 <= inventory_prefix <= cap["control_bytes"] // 2,
+             "precharged inventory control-write prefix")
+        # Both future inventory publications remain reserved at their full 16 KiB
+        # maxima, plus the unchanged 1 KiB copyout-marker residual. A partial or
+        # failed publication cannot release anything: finish_unit releases only
+        # after both complete result and settlement records are durable.
+        retained_control = min(cap["control_bytes"],
+            receipt["controller_requested_write_bytes"] + inventory_prefix + 2 * 16384 + 1024)
+        used = dict(cap)  # Worker-control, setup, closure and other residuals stay reserved.
+        used["control_bytes"] = retained_control
         used["worker_artifact_write_bytes"] = receipt["worker_output"]["bytes_requested"]
-        used["host_write_bytes"] = copyout["write_usage"]["bytes_requested"] + cap["control_bytes"]
+        used["host_write_bytes"] = copyout["write_usage"]["bytes_requested"] + retained_control
         used["export_read_bytes"] = copyout["read_bytes"] + artifact["bytes"] + 1
         # Worker pinned reads omit fixed bootstrap and READY polling reads.
         # Their full jointly admitted envelope stays reserved; never settle it
