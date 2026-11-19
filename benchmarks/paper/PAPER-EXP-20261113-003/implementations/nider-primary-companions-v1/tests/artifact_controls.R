@@ -312,4 +312,5 @@ with_root(function(directory) {
   check(!any(grepl("nider-pending", list.files(directory, all.files = TRUE))))
 })
 
-cat("Generated native artifact checks:", checks, "passed; no estimator called.\n")
+summary_line <- sprintf("Generated native artifact checks: %d passed; no estimator called.\n", checks)
+cat(summary_line)

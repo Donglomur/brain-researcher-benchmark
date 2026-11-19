@@ -1,0 +1,190 @@
+# Prospective hosted qualification. No dispatch is implied by this source.
+name: MEG generated hosted boundary
+run-name: MEG generated boundary · ${{ github.ref_name }}
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: meg-hosted-boundary-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  source-preflight:
+    uses: ./.github/workflows/source-maintenance-preflight.yml
+  boundary:
+    needs: source-preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SOURCE_ROOT: ${{ github.workspace }}/benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1
+      ENTRY: ${{ github.workspace }}/benchmarks/paper/PAPER-paper-method-add-010/implementations/hosted-boundary-v1/boundary_entry.py
+      BINDING: ${{ github.workspace }}/benchmarks/paper/PAPER-paper-method-add-010/implementations/hosted-boundary-v1/BOUNDARY_BINDING.json
+      BINDING_SHA256: ce587b9de5f5d92b33ecde69ddb202e62430ef0f1e868e970cb74ea8d69adc71
+      SOURCE_MANIFEST_SHA256: b138863231c167a2e22e74936aeb063d45ce5174dcf666b838a7b7c82c274b3b
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+          fetch-depth: 1
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.11.18'
+      - name: Admit frozen invocation and create fresh scratch
+        shell: bash
+        run: |
+          set -euo pipefail
+          export SCRATCH="${RUNNER_TEMP}/meg-hosted-boundary-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          [[ "$BINDING_SHA256" =~ ^[0-9a-f]{64}$ ]]
+          [[ "$SOURCE_MANIFEST_SHA256" =~ ^[0-9a-f]{64}$ ]]
+          umask 077
+          mkdir -m 700 "$SCRATCH"
+          printf 'SCRATCH=%s\n' "$SCRATCH" >> "$GITHUB_ENV"
+      - name: Bootstrap the selected image
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          # Collect one overflow byte; <=cap and exit0 imply a complete EOF.
+          exec {stdout_fd}> >(timeout --signal=TERM --kill-after=15s 210s head -c 4097 > "$SCRATCH/BOOTSTRAP_STDOUT.json" 2> "$SCRATCH/BOOTSTRAP_STDOUT_COLLECTOR.log")
+          stdout_pid=$!
+          exec {stderr_fd}> >(timeout --signal=TERM --kill-after=15s 210s head -c 8193 > "$SCRATCH/BOOTSTRAP_STDERR.log" 2> "$SCRATCH/BOOTSTRAP_STDERR_COLLECTOR.log")
+          stderr_pid=$!
+          timeout --signal=TERM --kill-after=15s 180s python -I -B "$ENTRY" bootstrap-image \
+            --source-root "$SOURCE_ROOT" --binding "$BINDING" \
+            --binding-sha256 "$BINDING_SHA256" \
+            --source-manifest-sha256 "$SOURCE_MANIFEST_SHA256" \
+            --output "$SCRATCH/bootstrap" >&$stdout_fd 2>&$stderr_fd
+          worker_rc=$?
+          exec {stdout_fd}>&-
+          exec {stderr_fd}>&-
+          wait "$stdout_pid"
+          stdout_rc=$?
+          wait "$stderr_pid"
+          stderr_rc=$?
+          # Publish terminal status only after the command and both collectors end.
+          timeout --signal=TERM --kill-after=5s 10s python -I -B - "$SCRATCH" "BOOTSTRAP" "$worker_rc" "$stdout_rc" "$stderr_rc" <<'PY_RECEIPT'
+          import json, pathlib, sys
+          root, prefix = pathlib.Path(sys.argv[1]), sys.argv[2]
+          worker, stdout, stderr = map(int, sys.argv[3:])
+          outbytes = (root / (prefix + "_STDOUT.json")).stat().st_size
+          errbytes = (root / (prefix + "_STDERR.log")).stat().st_size
+          out_eof = stdout == 0 and outbytes <= 4096 and (root / (prefix + "_STDOUT_COLLECTOR.log")).stat().st_size == 0
+          err_eof = stderr == 0 and errbytes <= 8192 and (root / (prefix + "_STDERR_COLLECTOR.log")).stat().st_size == 0
+          capture = {"schema": "meg-boundary-shell-capture/v1", "stdout_bytes": outbytes,
+                     "stderr_bytes": errbytes, "stdout_eof": out_eof, "stderr_eof": err_eof,
+                     "collectors_exit_codes": [stdout, stderr]}
+          with (root / (prefix + "_CAPTURE.json")).open("x") as stream:
+              json.dump(capture, stream, sort_keys=True, separators=(",", ":"))
+          with (root / (prefix + "_EXIT.json")).open("x") as stream:
+              json.dump({"schema": "meg-boundary-shell-exit/v1", "exit_code": worker}, stream,
+                        sort_keys=True, separators=(",", ":"))
+          sys.exit(0 if out_eof and err_eof else 1)
+          PY_RECEIPT
+          capture_rc=$?
+          if (( worker_rc != 0 )); then exit "$worker_rc"; fi
+          if (( capture_rc != 0 )); then exit "$capture_rc"; fi
+      - name: Run eight generated boundary phases
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          # Collect one overflow byte; <=cap and exit0 imply a complete EOF.
+          exec {stdout_fd}> >(timeout --signal=TERM --kill-after=15s 750s head -c 4097 > "$SCRATCH/RUN_STDOUT.json" 2> "$SCRATCH/RUN_STDOUT_COLLECTOR.log")
+          stdout_pid=$!
+          exec {stderr_fd}> >(timeout --signal=TERM --kill-after=15s 750s head -c 8193 > "$SCRATCH/RUN_STDERR.log" 2> "$SCRATCH/RUN_STDERR_COLLECTOR.log")
+          stderr_pid=$!
+          timeout --signal=TERM --kill-after=15s 720s python -I -B "$ENTRY" run \
+            --source-root "$SOURCE_ROOT" --binding "$BINDING" \
+            --binding-sha256 "$BINDING_SHA256" \
+            --source-manifest-sha256 "$SOURCE_MANIFEST_SHA256" \
+            --output "$SCRATCH/run" >&$stdout_fd 2>&$stderr_fd
+          worker_rc=$?
+          exec {stdout_fd}>&-
+          exec {stderr_fd}>&-
+          wait "$stdout_pid"
+          stdout_rc=$?
+          wait "$stderr_pid"
+          stderr_rc=$?
+          # Publish terminal status only after the command and both collectors end.
+          timeout --signal=TERM --kill-after=5s 10s python -I -B - "$SCRATCH" "RUN" "$worker_rc" "$stdout_rc" "$stderr_rc" <<'PY_RECEIPT'
+          import json, pathlib, sys
+          root, prefix = pathlib.Path(sys.argv[1]), sys.argv[2]
+          worker, stdout, stderr = map(int, sys.argv[3:])
+          outbytes = (root / (prefix + "_STDOUT.json")).stat().st_size
+          errbytes = (root / (prefix + "_STDERR.log")).stat().st_size
+          out_eof = stdout == 0 and outbytes <= 4096 and (root / (prefix + "_STDOUT_COLLECTOR.log")).stat().st_size == 0
+          err_eof = stderr == 0 and errbytes <= 8192 and (root / (prefix + "_STDERR_COLLECTOR.log")).stat().st_size == 0
+          capture = {"schema": "meg-boundary-shell-capture/v1", "stdout_bytes": outbytes,
+                     "stderr_bytes": errbytes, "stdout_eof": out_eof, "stderr_eof": err_eof,
+                     "collectors_exit_codes": [stdout, stderr]}
+          with (root / (prefix + "_CAPTURE.json")).open("x") as stream:
+              json.dump(capture, stream, sort_keys=True, separators=(",", ":"))
+          with (root / (prefix + "_EXIT.json")).open("x") as stream:
+              json.dump({"schema": "meg-boundary-shell-exit/v1", "exit_code": worker}, stream,
+                        sort_keys=True, separators=(",", ":"))
+          sys.exit(0 if out_eof and err_eof else 1)
+          PY_RECEIPT
+          capture_rc=$?
+          if (( worker_rc != 0 )); then exit "$worker_rc"; fi
+          if (( capture_rc != 0 )); then exit "$capture_rc"; fi
+      - name: Independently verify saved closure and observations
+        if: ${{ always() }}
+        shell: bash
+        run: |
+          set +e
+          set -uo pipefail
+          # Collect one overflow byte; <=cap and exit0 imply a complete EOF.
+          exec {stdout_fd}> >(timeout --signal=TERM --kill-after=15s 210s head -c 4097 > "$SCRATCH/VERIFY_STDOUT.json" 2> "$SCRATCH/VERIFY_STDOUT_COLLECTOR.log")
+          stdout_pid=$!
+          exec {stderr_fd}> >(timeout --signal=TERM --kill-after=15s 210s head -c 8193 > "$SCRATCH/VERIFY_STDERR.log" 2> "$SCRATCH/VERIFY_STDERR_COLLECTOR.log")
+          stderr_pid=$!
+          timeout --signal=TERM --kill-after=15s 180s python -I -B "$ENTRY" verify \
+            --source-root "$SOURCE_ROOT" --binding "$BINDING" \
+            --binding-sha256 "$BINDING_SHA256" \
+            --source-manifest-sha256 "$SOURCE_MANIFEST_SHA256" \
+            --output "$SCRATCH/run" >&$stdout_fd 2>&$stderr_fd
+          worker_rc=$?
+          exec {stdout_fd}>&-
+          exec {stderr_fd}>&-
+          wait "$stdout_pid"
+          stdout_rc=$?
+          wait "$stderr_pid"
+          stderr_rc=$?
+          # Publish terminal status only after the command and both collectors end.
+          timeout --signal=TERM --kill-after=5s 10s python -I -B - "$SCRATCH" "VERIFY" "$worker_rc" "$stdout_rc" "$stderr_rc" <<'PY_RECEIPT'
+          import json, pathlib, sys
+          root, prefix = pathlib.Path(sys.argv[1]), sys.argv[2]
+          worker, stdout, stderr = map(int, sys.argv[3:])
+          outbytes = (root / (prefix + "_STDOUT.json")).stat().st_size
+          errbytes = (root / (prefix + "_STDERR.log")).stat().st_size
+          out_eof = stdout == 0 and outbytes <= 4096 and (root / (prefix + "_STDOUT_COLLECTOR.log")).stat().st_size == 0
+          err_eof = stderr == 0 and errbytes <= 8192 and (root / (prefix + "_STDERR_COLLECTOR.log")).stat().st_size == 0
+          capture = {"schema": "meg-boundary-shell-capture/v1", "stdout_bytes": outbytes,
+                     "stderr_bytes": errbytes, "stdout_eof": out_eof, "stderr_eof": err_eof,
+                     "collectors_exit_codes": [stdout, stderr]}
+          with (root / (prefix + "_CAPTURE.json")).open("x") as stream:
+              json.dump(capture, stream, sort_keys=True, separators=(",", ":"))
+          with (root / (prefix + "_EXIT.json")).open("x") as stream:
+              json.dump({"schema": "meg-boundary-shell-exit/v1", "exit_code": worker}, stream,
+                        sort_keys=True, separators=(",", ":"))
+          sys.exit(0 if out_eof and err_eof else 1)
+          PY_RECEIPT
+          capture_rc=$?
+          if (( worker_rc != 0 )); then exit "$worker_rc"; fi
+          if (( capture_rc != 0 )); then exit "$capture_rc"; fi
+      - name: Retain bounded generated proof and terminal capture joins
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: meg-generated-boundary-${{ github.run_id }}-${{ github.run_attempt }}
+          if-no-files-found: warn
+          include-hidden-files: true
+          retention-days: 14
+          path: |
+            ${{ runner.temp }}/meg-hosted-boundary-${{ github.run_id }}-${{ github.run_attempt }}/run/**
+            ${{ runner.temp }}/meg-hosted-boundary-${{ github.run_id }}-${{ github.run_attempt }}/bootstrap/**
+            ${{ runner.temp }}/meg-hosted-boundary-${{ github.run_id }}-${{ github.run_attempt }}/*_STDOUT.json
+            ${{ runner.temp }}/meg-hosted-boundary-${{ github.run_id }}-${{ github.run_attempt }}/*_STDERR.log
+            ${{ runner.temp }}/meg-hosted-boundary-${{ github.run_id }}-${{ github.run_attempt }}/*_EXIT.json
+            ${{ runner.temp }}/meg-hosted-boundary-${{ github.run_id }}-${{ github.run_attempt }}/*_CAPTURE.json
+            ${{ runner.temp }}/meg-hosted-boundary-${{ github.run_id }}-${{ github.run_attempt }}/*_COLLECTOR.log
