@@ -3,7 +3,7 @@
   "task_id": "PAPER-CANDIDATE-20261114-DPAD",
   "objective": "surpass_source_paper_same_task",
   "disposition": "source_unresolved",
-  "disposition_reason": "Figure 6h-i supplies an ordered neural/behavior prediction task, but this review did not recover its numeric author results or exact random electrode subset. The local candidate session roster and independently implemented scorer do not establish an identical source-paper comparison. The registered held-session and causal-filter proposals are extensions, not paper victory.",
+  "disposition_reason": "Figure 6h-i supplies an ordered neural/behavior prediction task, and the publisher source workbook now supplies the Figure 6i numeric values; the exact random electrode subset and original observation identities remain unresolved. The local candidate session roster and independently implemented scorer do not establish an identical source-paper comparison. The registered held-session and causal-filter proposals are extensions, not paper victory.",
   "source_paper": {
     "title": "Dissociative and prioritized modeling of behaviorally relevant neural dynamics using recurrent neural networks",
     "url": "https://www.nature.com/articles/s41593-024-01731-2"
@@ -50,6 +50,13 @@
       "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/evaluator.py",
       "locator": "SESSIONS; GATES; channel_cc; choose_dimension; protocol; select; companion docs/initial-evaluator-v1.md",
       "supports": "Existing scorer is prediction-evaluation plumbing with unverified session/electrode and source-runtime equivalence; generated controls do not establish author performance."
+    },
+    {
+      "id": "dpad_published_source_data",
+      "kind": "paper",
+      "url": "https://static-content.springer.com/esm/art%3A10.1038%2Fs41593-024-01731-2/MediaObjects/41593_2024_1731_MOESM3_ESM.xlsx",
+      "locator": "Publisher source-data workbook, sheet Fig. 6i; retained extraction and provenance in docs/published-source-provenance.v1.json",
+      "supports": "490 published numeric values across seven methods, two coordinates and 35 anonymous column positions per coordinate, with derived arithmetic means. The source sheet does not identify actual session/fold names, channels or selected architectures; this evidence does not establish observation-level predictions, a native rerun, SEM semantics, reproduction tolerance or scientific admission."
     }
   ],
   "same_task": {
@@ -120,10 +127,11 @@
     "direction": "higher",
     "published_baseline": {
       "status": "unresolved",
-      "description": "No exact numeric Figure 6i coordinate or complete method/session/fold result array was recovered. Reported qualitative frontier membership is not a numeric baseline. Zenodo refh_results.csv reports another paper and cannot supply DPAD scores.",
+      "description": "The publisher source workbook supplies 490 Figure 6i numeric values (seven methods, two coordinates and 35 anonymous column positions per coordinate), with derived arithmetic means recorded in docs/published-source-provenance.v1.json. Named session/fold correspondence, observation-level predictions, selected-model identities and an executed reference remain unresolved. Zenodo refh_results.csv reports another paper and cannot supply DPAD scores.",
       "evidence_ids": [
         "dpad_paper",
-        "sabes_record"
+        "sabes_record",
+        "dpad_published_source_data"
       ],
       "value": null
     },
@@ -175,7 +183,7 @@
     "baseline_policy": "Published Figure 6i numbers, verified native-author rerun numbers and any local calibration outputs must be labeled separately. Existing engineering controls cannot become the scientific baseline. Where the original method defines stochastic sampling, a source-supported protocol-equivalent rerun with recorded new random state, calibration tolerance and paired candidate/reference support is admissible; historical RNG state is not an independent prerequisite. This does not authorize changed sampling rules, population, input privilege or endpoint."
   },
   "blocking_issues": [
-    "Numeric Figure 6i results and complete source method/session/fold scores not recovered.",
+    "Published Figure 6i source values are recovered; original observation-level predictions and named session/fold correspondence remain unresolved.",
     "Exact random 32-electrode identities and source wideband-to-session mapping unresolved.",
     "Historical preparation, full architecture/dimension caller, environment and sanitization behavior unresolved.",
     "No authentic author rerun or protected data/prediction evaluation established.",
