@@ -1,0 +1,66 @@
+{
+  "schema": "erp-full32-paired-bootstrap-source-v1",
+  "component": "Standalone paired-participant bootstrap for existing NEURAL-077 full32 evaluator",
+  "status": "constructed_source_no_actual_bootstrap_or_model_result",
+  "upstream_evaluator": {
+    "repository_path": "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/evaluator.py",
+    "bytes": 25167,
+    "sha256": "509318b7f3f6d0e0fa233e17718a3b53df3ee83d47b42243fad5db803756d81d",
+    "changed": false
+  },
+  "historical_protocol": {
+    "name": "ERP CORE full32 CONDITION_PROTOCOL.v1",
+    "bytes": 18176,
+    "sha256": "170a32bfb9778f0f2d96affe166f78b2f1e8362bfdaebea36a23b91755c4aa02",
+    "body_included": false,
+    "specified": "95% percentile,10000 paired32-person bootstrap resamples,NumPyPCG64 seed20261119,no trial-level independent resampling,finite-cohort scope"
+  },
+  "prospective_policy_completion": {
+    "policy_file": "BOOTSTRAP_POLICY.v1.json",
+    "quantile_method": "linear",
+    "primary": "direct-minus-program participant-macro balanced accuracy",
+    "secondary_unadjusted": "paired direct-minus-program natural log loss and each absolute-arm macro BA/logloss, same draws",
+    "old_protocol_rewritten": false,
+    "no_significance_or_pass_threshold": true
+  },
+  "authors": "Local benchmark engineering adaptation of already-declared evaluation protocol; no third-party implementation source copied.",
+  "dependencies": {
+    "runtime": "Python and NumPy; installed runtime authentication remains the operator responsibility",
+    "source_control_versions": {
+      "python": "3.11.6",
+      "numpy": "1.26.3"
+    },
+    "imports_existing_evaluator": false,
+    "loads_private_data_or_candidates": false
+  },
+  "files": [
+    {
+      "path": "BOOTSTRAP_POLICY.v1.json",
+      "bytes": 1396,
+      "sha256": "bf3dddf5ea64b910ee68f10502eb214b65d4b7ef38c50bfc2f425430ca5cd0c2"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4300,
+      "sha256": "497b0d0525a6beda47e048e726a589784fe7831f72297d9a8597155d1bfb3311"
+    },
+    {
+      "path": "paired_bootstrap.py",
+      "bytes": 14258,
+      "sha256": "e5c1aa0725aa720b96e28a1b9d907b50f91a698b49f9437fb130c3264706b61a"
+    },
+    {
+      "path": "test_paired_bootstrap.py",
+      "bytes": 12884,
+      "sha256": "6878aa1cc54b014cdfb8a41765defb68c7a11e1b605ddea9e5b13400be74c17a"
+    }
+  ],
+  "validation": {
+    "new_generated_methods": 10,
+    "source_control_scope": "Shared paired draws,orientation,person weighting,linear quantiles,seeded determinism,strict cohort admission,pinned input and create-only output",
+    "execution_status_at_source_freeze": "Prepared for one coordinator-owned combined affected campaign; no author execution. Saved outcome recorded separately.",
+    "actual_result_or_model_qualification": false
+  },
+  "benchmark_registrations_added": 0,
+  "upstream_scientific_boundaries_preserved": true
+}
