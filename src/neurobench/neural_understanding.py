@@ -431,6 +431,15 @@ def _current(original, contract, binding, source_id):
             for item in contract["evidence"]):
         current["holds"][6]["requirement"] = "The selected400-case numerical pair has accepted complete local adapter/transport, frozen participant delivery and protected paired fixed-control evaluation against all six existing references. Preserve that scoped engineering result. New candidate/model results, alternative runtimes, author-pipeline or unseen-person claims require separately frozen prospective qualification; fixed0.5 controls are not scientific performance."
         current["next_implementation_action"][0] = "Use benchmarks/neural/NEURAL-077/implementations/waveform-pair-v1/pair.py and its pinned PROVISIONING.md for the completed finite local numerical pair. For a later study, freeze the candidate/model/provider policy and full-prompt capacity, then evaluate new400-case predictions under the same protected scorer. Keep optional adaptive/visual conditions and unseen-person science separately scoped."
+    # Refresh inherited action wording for the narrower descriptive condition only.
+    # Full scientific admission, historical definitions and all holds stay unchanged.
+    if contract["task_id"] == "NEURAL-096" and any(
+            item.get("id") == "descriptive-materialization-status-v1"
+            and item.get("kind") == "local_review"
+            and item.get("path") == "benchmarks/neural/NEURAL-096/implementations/descriptive-trajectories-v1/MATERIALIZATION_STATUS.json"
+            and item.get("sha256") == "f7f3fc368b2778810fe7abf17f3c6c1e80b6b334877be7d9a46d8810c1dafe16"
+            for item in contract["evidence"]):
+        current["next_implementation_action"] = copy.deepcopy(contract["implementation"]["missing"])
     if contract["task_id"] == "NEURAL-095":
         routes = [item for item in contract["evidence"] if item.get("id") == "dmfc095-current-route-v1"
                   and item.get("kind") == "local_source" and
