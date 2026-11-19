@@ -136,7 +136,7 @@ class Delivery(unittest.TestCase):
             path.chmod(0o444)
             doc = decoded(self.original); doc["data"]["files"]["WINDOWS.npy"] = pin(path.read_bytes())
             (self.prepared / "PREPARED.json").write_bytes(encoded(doc))
-            with self.assertRaisesRegex(ValueError, "tensor mismatch"): self.check()
+            with self.assertRaisesRegex(ValueError, "anonymous row/source value mismatch"): self.check()
         finally:
             path.chmod(0o600)
             with path.open("r+b") as handle: handle.seek(start); handle.write(first + second)
@@ -197,8 +197,8 @@ class Delivery(unittest.TestCase):
             private = self.prepared / "PRIVATE_PANEL.json"
             programme = self.prepared / "program-A/submission.py"; before = programme.read_bytes()
             link = self.root / "late-hardlink"
-            def mutate(raw, windows, budget):
-                actual(raw, windows, budget)
+            def mutate(raw, windows, budget, *, generic=False):
+                actual(raw, windows, budget, generic=generic)
                 if change == "permissions": private.chmod(0o644)
                 elif change == "link": os.link(private, link)
                 else:

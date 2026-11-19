@@ -794,6 +794,8 @@ def source_links(catalog):
             if correction is not None:
                 yield correction['root_scope_decision']['path']
             outcomes = row['paper_outcomes']
+            for mode in outcomes.get('scoped_execution_modes', []):
+                yield mode['descriptor']['path']
             continuous = continuous_paper_selection(outcomes)
             if continuous is not None:
                 for field in ('policy', 'entrypoint', 'revision'):
@@ -931,6 +933,10 @@ def validate(catalog, root=ROOT, *, _reader=None):
              and row['local_scoring_adapter_verified'] is None
              and row['local_program_runner_verified'] is None, 'Catalog must not manufacture task qualification')
         outcomes = row.get('paper_outcomes')
+        mode_claim = type(outcomes) is dict and 'scoped_execution_modes' in outcomes
+        need(not mode_claim or (row['id'] == module.MEG_GENERIC_TASK
+             and module.has_meg_generic_classification(source_by_id[row['id']])),
+             'Scoped Generic classification requires its exact selected MEG source binding')
         successor_fields = ((set(PRIMARY_SUCCESSOR_PUBLIC_FIELDS) | {'continuous_outcomes_v1', 'continuous_outcomes_v2'}) & set(outcomes)
                             if type(outcomes) is dict else set())
         if row['id'] in gap_ids:
@@ -1517,6 +1523,14 @@ def render_tracks(catalog):
                     text += ('The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. '
                              'Each uses matched paper+data and paper+data+author-code conditions. '
                              'Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.\n\n')
+                for mode in outcomes.get('scoped_execution_modes', []):
+                    text += ('### Separate Generic classification mode\n\n'
+                             + markdown_text(mode['catalog_scope_note']) + '\n\n'
+                             + '**Scope:** ' + markdown_text(mode['description']) + '\n\n'
+                             + '**Reproduction criterion:** ' + markdown_text(mode['reproduction_description']) + '\n\n'
+                             + '**Score comparison:** ' + markdown_text(mode['improvement_description']) + '\n\n'
+                             + '- ' + markdown_link('Authenticated Generic classification descriptor',
+                                                   mode['descriptor']['path'], task) + '\n\n')
                 correction = outcomes.get('primary_scope_correction')
                 if correction is not None:
                     text += ('**Corrected primary scope; outcomes remain unqualified.** '

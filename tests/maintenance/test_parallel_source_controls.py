@@ -85,15 +85,15 @@ class ProcessControls(unittest.TestCase):
 
 
 class ManifestControls(unittest.TestCase):
-    def test_command_capacity_598_accepts_and_599_refuses(self):
+    def test_command_capacity_599_accepts_and_600_refuses(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);_,_,document=self.fixture(root)
             template=document['commands'][0]
-            document['commands']=[{**template,'id':'control%d'%index} for index in range(598)]
+            document['commands']=[{**template,'id':'control%d'%index} for index in range(599)]
             _,selected=launcher.validate_document(document,'stdlib')
             self.assertEqual(selected,document['commands'])
-            self.assertEqual(len(selected),598)
-            document['commands'].append({**template,'id':'control598','group':'other'})
+            self.assertEqual(len(selected),599)
+            document['commands'].append({**template,'id':'control599','group':'other'})
             with self.assertRaisesRegex(ValueError,'bounded command list required'):
                 launcher.validate_document(document,'stdlib')
 
@@ -182,6 +182,65 @@ class ManifestControls(unittest.TestCase):
                 launcher.run(root,manifest,'stdlib',base/'refused-results')
             execute.assert_not_called()
             self.assertFalse((base/'refused-results').exists())
+
+    def test_meg_whole_artifact_token_materializes_owned_nested_output_and_logs(self):
+        # Exercise the actual maintained runtime handler and the actual manifest
+        # bootstrap. A tiny generated unittest driver replaces scientific work.
+        public=json.loads((ROOT/'benchmarks/integrity/parallel-source-controls.v1.json').read_text())
+        production=next(row for row in public['commands']
+                        if row['id']=='PAPER-paper-method-add-010.command-09')
+        self.assertEqual(production['argv'][-1],'${ARTIFACT_DIR}')
+        self.assertEqual(production['argv'][4],'-c')
+        driver_path=production['argv'][-2]
+        self.assertTrue(driver_path.endswith('/tests_generic_classification/run_controls.py'))
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp);root=base/'repo';root.mkdir()
+            _,manifest,document=self.fixture(root)
+            source=root/driver_path;source.parent.mkdir(parents=True)
+            source.write_text('import argparse,json,stat,sys,unittest\nfrom pathlib import Path\n'
+                'p=argparse.ArgumentParser();p.add_argument("--output",required=True)\n'
+                'args=p.parse_args();out=Path(args.output).resolve()\n'
+                'if out.exists() or not out.parent.is_dir(): raise ValueError("fresh nested output required")\n'
+                'with out.with_suffix(".log").open("x") as f: f.write("GENERATED DRIVER LOG\\n")\n'
+                'out.mkdir(mode=0o700)\n'
+                '(out/"CONTROL_RESULT.json").write_text(json.dumps({"generated_artifact_abi_only":True}))\n'
+                'class GeneratedPathCheck(unittest.TestCase):\n'
+                ' def test_owned_paths(self):\n'
+                '  self.assertEqual(out.name,"meg-generic-classification")\n'
+                '  self.assertEqual(out.parent.name,"PAPER-paper-method-add-010.command-09.artifacts")\n'
+                '  self.assertEqual(stat.S_IMODE(out.parent.stat().st_mode),0o700)\n'
+                'if __name__=="__main__": unittest.main(argv=[sys.argv[0]])\n')
+            raw=source.read_bytes()
+            (root/'benchmarks/integrity/source-ownership.json').write_text(json.dumps({'files':[
+                {'path':driver_path,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()}]}))
+            selected={**production,'group':'stdlib','expected_tests':1,'timeout_seconds':5,
+                      'test_paths':[driver_path]}
+            document['commands']=[selected]
+            manifest.write_text(json.dumps(document))
+            result=launcher.run(root,manifest,'stdlib',base/'results')
+            artifact=base/'results'/(selected['id']+'.artifacts')
+            nested=artifact/'meg-generic-classification'
+            outer_log=base/'results'/(selected['id']+'.log')
+            self.assertEqual(result[0]['artifact_directory'],artifact.name)
+            self.assertEqual((result[0]['tests'],result[0]['skips']),(1,0))
+            self.assertEqual(json.loads((nested/'CONTROL_RESULT.json').read_text()),
+                             {'generated_artifact_abi_only':True})
+            self.assertEqual((artifact/'meg-generic-classification.log').read_text(),
+                             'GENERATED DRIVER LOG\n')
+            self.assertIn('Ran 1 test',outer_log.read_text())
+            self.assertNotEqual(outer_log,(artifact/'meg-generic-classification.log'))
+            with patch.object(launcher,'run_command') as execute,self.assertRaisesRegex(
+                    ValueError,'fresh output directory required'):
+                launcher.run(root,manifest,'stdlib',base/'results')
+            execute.assert_not_called()
+            selected['argv']=['${PYTHON}','-I','-S','-B',driver_path,'--output',
+                              '${ARTIFACT_DIR}/meg-generic-classification']
+            manifest.write_text(json.dumps(document))
+            with patch.object(launcher,'run_command') as execute,self.assertRaisesRegex(
+                    ValueError,'unresolved command placeholder'):
+                launcher.run(root,manifest,'stdlib',base/'legacy-refused')
+            execute.assert_not_called()
+            self.assertFalse((base/'legacy-refused').exists())
 
     def test_mixed_stream_mutant_summary_keeps_actual_order_under_isolation(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -344,8 +403,8 @@ class Opener:
 
 
 class FixtureControls(unittest.TestCase):
-    def test_command_capacity_598_without_fixtures_and_599_refuses(self):
-        self.document={'fixtures':{},'commands':[{'group':'stdlib','fixtures':[]} for _ in range(598)]}
+    def test_command_capacity_599_without_fixtures_and_600_refuses(self):
+        self.document={'fixtures':{},'commands':[{'group':'stdlib','fixtures':[]} for _ in range(599)]}
         result,opener,_=self.run_fetch([])
         self.assertEqual(result['status'],'succeeded')
         self.assertEqual(result['response_bytes_read'],0)

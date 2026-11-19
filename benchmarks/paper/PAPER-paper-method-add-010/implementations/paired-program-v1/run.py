@@ -17,12 +17,14 @@ import types
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import contract
 import grading
+import generic_contract
+import classification_grading
 import transport
 from storage import need, encoded, decoded, pin, descriptor, read, write, directory
 
 JSON_CAP = 2 * 1024**2
 DELIVERY_SOURCE = Path(__file__).resolve().parent.parent / "delivery-verifier-v1/verify.py"
-DELIVERY_SOURCE_PIN = {"bytes": 21300, "sha256": "40469d6b03d9b38d41938b1a0e80caae1f3412b5ac296b02979edf8e02a71ba7"}
+DELIVERY_SOURCE_PIN = {'bytes': 24052, 'sha256': '67d7d8133c314d73e98985de0a00180538fccafddc7fbe586fc34b16813d4fa4'}
 
 
 class CampaignIO:
@@ -55,7 +57,11 @@ def validate_runtime(value):
             "total_seconds", "transport_read_bytes", "transport_write_bytes", "coordinator_read_bytes",
             "coordinator_write_bytes", "paper_pin", "paired_source_manifest", "delivery_read_bytes",
             "delivery_write_bytes", "delivery_seconds"}
-    need(type(value) is dict and set(value) == keys and value["schema"] == "meg-runtime-campaign/v1",
+    generic = type(value) is dict and value.get("input_mode") == generic_contract.MODE
+    if generic:
+        keys.update(("input_mode", "reference_result", "reference_folds"))
+        descriptor(value["reference_result"]); descriptor(value["reference_folds"])
+    need(type(value) is dict and set(value) == keys and value["schema"] == ("meg-runtime-campaign/v2" if generic else "meg-runtime-campaign/v1"),
          "exact externally selected runtime declaration")
     need(value["outcome"] in ("reproduction", "improvement"), "separate declared paper outcome")
     need(type(value["campaign_id"]) is str and re.fullmatch(r"[A-Za-z0-9_-]{1,40}", value["campaign_id"]),
@@ -120,7 +126,8 @@ def admit_delivery(prepared_root, prepared_pin, runtime, output_root, io_budget,
 
 def mounts_for(prepared, role, fold):
     need(role in ("A", "B") and type(fold) is int and 0 <= fold < 10, "declared arm/fold")
-    mounts = {"/input/WINDOWS.npy": prepared["data"],
+    data_target = "/input/FEATURES.npy" if prepared.get("input_mode") == generic_contract.MODE else "/input/WINDOWS.npy"
+    mounts = {data_target: prepared["data"],
         "/input/CONTEXT.json": prepared["contexts"][str(fold)]["mount"],
         "/program": prepared["programmes"][role]["mount"],
         "/paper": prepared["paper"], "/contract": prepared["contract"]}
@@ -138,7 +145,7 @@ def context_from(io_budget, prepared, fold):
     context = contract.decode_json(io_budget.read(mount["path"], mount["files"]["CONTEXT.json"], JSON_CAP))
     # This structural check does not substitute for the externally pinned
     # PREPARED file; private source joins are checked again only after closure.
-    contract._checked_context(context)
+    (generic_contract.checked_context if prepared.get("input_mode") == generic_contract.MODE else contract._checked_context)(context)
     need(context["fold"] == fold and context["context_sha256"] == row["context_sha256"]
          and context["panel_sha256"] == prepared["panel_sha256"], "prepared context identity")
     return context
@@ -166,23 +173,30 @@ def execute(prepared_root, prepared_pin, runtime, output_root, *, _generated=Fal
         delivery_report, delivery_admission = admit_delivery(prepared_root, prepared_pin, runtime, root, io_budget,
             generated_author_hashes=_generated_author_hashes)
         prepared = decoded(io_budget.read(prepared_root / "PREPARED.json", prepared_pin, JSON_CAP))
-        need(prepared["schema"] == "meg-prepared-paired-campaign/v1"
+        generic = runtime.get("input_mode") == generic_contract.MODE
+        need(prepared.get("input_mode") == generic_contract.MODE if generic else "input_mode" not in prepared, "runtime/prepared mode identity")
+        active_contract = generic_contract if generic else contract
+        need(prepared["schema"] == ("meg-prepared-paired-campaign/v2" if generic else "meg-prepared-paired-campaign/v1")
              and prepared["task_id"] == "PAPER-paper-method-add-010"
-             and prepared["rows"] == 376 and prepared["query_rows"] == 188
+             and prepared["rows"] == (188 if generic else 376) and prepared["query_rows"] == 188
              and set(prepared["contexts"]) == {str(f) for f in range(10)}
              and set(prepared["programmes"]) == {"A", "B"}, "complete prepared paired cohort")
         need(delivery_report["panel_sha256"] == prepared["panel_sha256"]
              and delivery_report["programmes"] == {r: prepared["programmes"][r]["source"] for r in ("A", "B")},
              "admitted panel and programme identities")
+        if generic:
+            need(prepared["reference_result"] == runtime["reference_result"]
+                 and prepared["reference_folds"] == runtime["reference_folds"], "externally selected current reference pins")
         frozen_pin = pin(encoded(prepared["programmes"]))
         need(decoded(io_budget.read(prepared_root / "PROGRAMMES_FROZEN.json", frozen_pin, 32768))
              == prepared["programmes"], "both complete programme closures frozen before preparation")
         contexts = {fold: context_from(io_budget, prepared, fold) for fold in range(10)}
         need(delivery_report["contexts"] == [contexts[f]["context_sha256"] for f in range(10)],
              "admitted context identities")
+        row_field = "rows" if generic else "windows"
         all_queries = [q for fold in range(10) for q in contexts[fold]["queries"]]
         need(len(all_queries) == len(set(all_queries)) == 188
-             and all(contexts[f]["windows"] == contexts[0]["windows"] for f in range(10)),
+             and all(contexts[f][row_field] == contexts[0][row_field] for f in range(10)),
              "exact complete held support and same original windows across folds")
         control = directory(root / "control")
         quarantine = directory(root / "quarantine")
@@ -225,7 +239,7 @@ def execute(prepared_root, prepared_pin, runtime, output_root, *, _generated=Fal
                 io_budget.tick()
                 context = context_from(io_budget, prepared, fold)
                 response = contract.decode_json(result["result_bytes"])
-                contract.validate_prediction(response, context, runtime["outcome"])
+                active_contract.validate_prediction(response, context, runtime["outcome"])
                 outputs[role][fold] = response
                 phase_records.append({key: result[key] for key in ("phase_id", "request_pin", "receipt_pin", "result_pin")})
         closure = owned.complete_for_grading()
@@ -238,7 +252,18 @@ def execute(prepared_root, prepared_pin, runtime, output_root, *, _generated=Fal
         target_reads += 1
         panel = contract.decode_json(private_body)
         need(panel["panel_sha256"] == prepared["panel_sha256"], "exact protected panel")
-        result = grading.grade_collections(panel, outputs, runtime["outcome"])
+        if generic:
+            reference = contract.decode_json(io_budget.read(prepared_root / "REFERENCE_RESULT.json", prepared["reference_result"], JSON_CAP))
+            fold_ledger = contract.decode_json(io_budget.read(prepared_root / "FROZEN_FOLDS.json", prepared["reference_folds"], JSON_CAP))
+            reference_binding = contract.decode_json(io_budget.read(prepared_root / "REFERENCE_BINDING.json", prepared["reference_binding"], JSON_CAP))
+            need(reference_binding == generic_contract.reference_binding(panel), "exact private Generic reference mapping")
+            generic_contract.validate_frozen_folds(fold_ledger, panel)
+            collections = {role: generic_contract.collect(panel, outputs[role], runtime["outcome"]) for role in ("A", "B")}
+            result = classification_grading.grade_classification(collections, reference, reference_binding)
+            result["outcome"] = runtime["outcome"]
+            result["reference_provenance"] = {"result": prepared["reference_result"], "folds": prepared["reference_folds"], "input": panel["source_binding"]}
+        else:
+            result = grading.grade_collections(panel, outputs, runtime["outcome"])
         score_pin = io_budget.write(root / "SCORE.json", encoded(result), JSON_CAP)
         io_budget.tick()
         receipt = {"schema": "meg-closed-paired-campaign/v1", "status": "provisional",
@@ -249,7 +274,8 @@ def execute(prepared_root, prepared_pin, runtime, output_root, *, _generated=Fal
             "delivery_admission": delivery_admission,
             "programmes": {r: prepared["programmes"][r]["source"] for r in ("A", "B")},
             "phases": phase_records, "closure": closure, "score": score_pin,
-            "windows": 376, "predictions_per_condition": 188, "private_panel_reads": target_reads,
+            "input_mode": generic_contract.MODE if generic else "raw_windows_v1",
+            "windows": prepared["rows"], "predictions_per_condition": 188, "private_panel_reads": target_reads,
             "private_panel_reads_scope": "post-twenty-phase scoring only; delivery audit recorded separately",
             "journal_counts": journal_counts, "original_deadline": deadline,
             "elapsed_before_final_receipt_seconds": clock() - started,

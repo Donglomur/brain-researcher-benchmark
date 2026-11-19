@@ -144,7 +144,8 @@ def phase_id(campaign_id, role, fold):
 
 def validate_mounts(role, mounts, program_pin=None):
     require(role in ("A", "B"), "A/B assistance role")
-    expected = {"/input/WINDOWS.npy": ("input", "file"),
+    data_target = "/input/FEATURES.npy" if type(mounts) is dict and "/input/FEATURES.npy" in mounts else "/input/WINDOWS.npy"
+    expected = {data_target: ("input", "file"),
                 "/input/CONTEXT.json": ("input", "file"),
                 "/program": ("program", "directory"),
                 "/paper": ("paper", "directory"),

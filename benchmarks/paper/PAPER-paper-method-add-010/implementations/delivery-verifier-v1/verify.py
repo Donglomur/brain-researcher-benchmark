@@ -194,7 +194,7 @@ def inventory(root, expected_files, public_directories, captured=None):
     need(seen_files == set(expected_files) and seen_dirs == dirs, "complete exact delivery tree")
 
 
-def bank_rows(raw, windows, budget):
+def bank_rows(raw, windows, budget, *, generic=False):
     """Validate the fixed NumPy framing and all376 untouched tensor commitments."""
     need(raw[:8] == b"\x93NUMPY\x01\x00", "source np.save version1 framing")
     length = struct.unpack("<H", raw[8:10])[0]
@@ -205,14 +205,15 @@ def bank_rows(raw, windows, budget):
     need(type(shape) is dict and set(shape) == {"descr", "fortran_order", "shape"}
          and shape["descr"] == "<f8" and shape["fortran_order"] is False
          and type(shape["shape"]) is tuple and all(type(n) is int for n in shape["shape"])
-         and shape["shape"] == (376, 4, 1000), "exact original bank dtype/order/geometry")
-    start, width = 10 + length, 4 * 1000 * 8
-    need(len(raw) == start + 376 * width, "no missing or trailing NPY payload")
+         and shape["shape"] == ((188,) if generic else (376, 4, 1000)), "exact selected bank dtype/order/geometry")
+    start, width = 10 + length, 8 if generic else 4 * 1000 * 8
+    need(len(windows) == (188 if generic else 376), "exact selected bank row count")
+    need(len(raw) == start + len(windows) * width, "no missing or trailing NPY payload")
     view = memoryview(raw)
     for index, row in enumerate(windows):
         budget.tick()
         tensor = view[start + index * width:start + (index + 1) * width]
-        need(hashlib.sha256(tensor).hexdigest() == row["tensor_sha256"], "anonymous row/source tensor mismatch")
+        need(hashlib.sha256(tensor).hexdigest() == row["scalar_sha256" if generic else "tensor_sha256"], "anonymous row/source value mismatch")
         need(all(math.isfinite(x[0]) for x in struct.iter_unpack("<d", tensor)), "nonfinite original tensor")
 
 
@@ -237,17 +238,35 @@ def verify(root, prepared_pin, paper_pin, output, *, paired_source_manifest,
             "original_preparation", "programmes", "paper", "author", "contract", "fold_evidence",
             "historical_folds_authenticated", "source_revision", "freeze_order", "preparation_only",
             "native_phases", "scientific_results"}
-    need(set(document) == keys and document["schema"] == "meg-prepared-paired-campaign/v1"
+    generic = document.get("input_mode") == "generic_feature_classification_v1"
+    expected_source = constants["PREPARED_BINDING"]
+    if generic:
+        keys.update(("input_mode", "reference_result", "reference_folds", "reference_binding", "source_qc"))
+        selected = types.ModuleType("meg_delivery_captured_generic_contract")
+        selected.__file__ = str(PAIRED / "generic_contract.py")
+        exec(compile(captured["generic_contract.py"], selected.__file__, "exec"), selected.__dict__)
+        captured_roster = contract.ROSTER_PATH
+        class GenericCapturedRoster:
+            def read_bytes(self):
+                with captured_roster.open("rb") as stream:
+                    return stream.read()
+        selected.ROSTER_PATH = GenericCapturedRoster()
+        selected.decode_json = contract.decode_json
+        selected.ordered_public_windows = selected.ordered_public_rows
+        contract = selected
+        expected_source = {"bytes": 3182215, "sha256": "80b16614e7654a4b0efaafced5abb251ab17e625f264c66c87c0c8658737fa2d"}
+    need(set(document) == keys and document["schema"] == ("meg-prepared-paired-campaign/v2" if generic else "meg-prepared-paired-campaign/v1")
          and document["task_id"] == "PAPER-paper-method-add-010"
-         and type(document["rows"]) is int and document["rows"] == 376
+         and type(document["rows"]) is int and document["rows"] == (188 if generic else 376)
          and type(document["query_rows"]) is int and document["query_rows"] == 188,
          "exact complete selected preparation")
-    need(document["original_preparation"] == constants["PREPARED_BINDING"]
+    need(document["original_preparation"] == expected_source
          and document["source_revision"] == constants["AUTHOR_REVISION"], "accepted declared source identities")
     need(document["historical_folds_authenticated"] is False and document["scientific_results"] is False
          and document["preparation_only"] is True and type(document["native_phases"]) is int
          and document["native_phases"] == 0, "no preparation qualification promotion")
-    need(document["freeze_order"] == "both programmes frozen before any original windows or fold labels were prepared"
+    expected_freeze = "both programmes frozen before any Generic scalar inputs or fold labels were prepared" if generic else "both programmes frozen before any original windows or fold labels were prepared"
+    need(document["freeze_order"] == expected_freeze
          and type(document["fold_evidence"]) is str and 0 < len(document["fold_evidence"]) <= 4096,
          "fixed preparation declaration; not independent history proof")
     need(set(document["programmes"]) == {"A", "B"} and set(document["contexts"]) == {str(f) for f in range(10)},
@@ -255,6 +274,13 @@ def verify(root, prepared_pin, paper_pin, output, *, paired_source_manifest,
     expected_files = {root / "PREPARED.json": (prepared_pin, 0o600, JSON_CAP)}
     expected_files[root / "PROGRAMMES_FROZEN.json"] = (pin(encoded(document["programmes"])), 0o600, 32768)
     expected_files[root / "PRIVATE_PANEL.json"] = (descriptor(document["private_panel"]), 0o600, JSON_CAP)
+    deferred_reference_files = set()
+    if generic:
+        for key, filename in (("reference_result", "REFERENCE_RESULT.json"), ("reference_folds", "FROZEN_FOLDS.json"),
+                              ("reference_binding", "REFERENCE_BINDING.json"), ("source_qc", "SOURCE_QC.json")):
+            expected_files[root / filename] = (descriptor(document[key]), 0o600, JSON_CAP)
+            if key != "source_qc":
+                deferred_reference_files.add(root / filename)
     mounts = {}
     def mount(name, value, relative, purpose, kind, names):
         path = root / relative
@@ -275,11 +301,13 @@ def verify(root, prepared_pin, paper_pin, output, *, paired_source_manifest,
             need(file not in expected_files, "no aliased delivery leaf")
             expected_files[file] = (descriptor(value_pin), 0o444, cap)
         mounts[name] = value
-    mount("data", document["data"], "data/WINDOWS.npy", "input", "file", {"WINDOWS.npy"})
+    data_name = "FEATURES.npy" if generic else "WINDOWS.npy"
+    instruction_name = "GENERIC_PARTICIPANT.md" if generic else "PARTICIPANT.md"
+    mount("data", document["data"], "data/" + data_name, "input", "file", {data_name})
     mount("paper", document["paper"], "paper", "paper", "directory", {"PAPER.bin"})
     need(document["paper"]["files"]["PAPER.bin"] == descriptor(paper_pin), "external selected paper pin")
-    mount("contract", document["contract"], "contract", "contract", "directory", {"PARTICIPANT.md"})
-    need(document["contract"]["files"]["PARTICIPANT.md"] == pin(captured["PARTICIPANT.md"]), "exact participant instructions")
+    mount("contract", document["contract"], "contract", "contract", "directory", {instruction_name})
+    need(document["contract"]["files"][instruction_name] == pin(captured[instruction_name]), "exact participant instructions")
     authors = constants["AUTHOR_FILES"]
     if _generated_author_hashes is not None:
         need(type(_generated_author_hashes) is dict and set(_generated_author_hashes) == set(authors), "complete explicit generated author seam")
@@ -301,15 +329,21 @@ def verify(root, prepared_pin, paper_pin, output, *, paired_source_manifest,
         mount("context-" + str(fold), context["mount"], f"contexts/fold-{fold:02d}/CONTEXT.json", "input", "file", {"CONTEXT.json"})
     public_dirs = [root / n for n in ("program-A", "program-B", "paper", "contract", "author")]
     inventory(root, expected_files, public_dirs)
-    bodies = {}
+    bodies, deferred_signatures = {}, {}
     for path, (expected, mode, cap) in expected_files.items():
-        if path.name != "PREPARED.json":
+        if path in deferred_reference_files:
+            info = path.lstat()
+            need(stat.S_ISREG(info.st_mode) and info.st_nlink == 1 and info.st_uid == os.geteuid()
+                 and stat.S_IMODE(info.st_mode) == mode and 0 < info.st_size == expected["bytes"] <= cap,
+                 "private deferred reference extent/mode; bytes authenticated only after closure")
+            deferred_signatures[path] = signature(info)
+        elif path.name != "PREPARED.json":
             bodies[path] = budget.read(path, expected, cap, mode)
     need(contract.decode_json(bodies[root / "PROGRAMMES_FROZEN.json"]) == document["programmes"], "both frozen programmes match prepared declaration")
     panel = contract.decode_json(bodies[root / "PRIVATE_PANEL.json"])
     windows = contract.ordered_public_windows(panel)
     need(panel["panel_sha256"] == document["panel_sha256"]
-         and panel["source_binding"] == constants["PREPARED_BINDING"], "complete private/source panel identity")
+         and panel["source_binding"] == expected_source, "complete private/source panel identity")
     contexts = []
     for fold in range(10):
         path = root / f"contexts/fold-{fold:02d}/CONTEXT.json"
@@ -318,8 +352,8 @@ def verify(root, prepared_pin, paper_pin, output, *, paired_source_manifest,
              and document["contexts"][str(fold)]["context_sha256"] == expected["context_sha256"],
              "context labels, held queries, participant folds or bank order changed")
         contexts.append(expected["context_sha256"])
-    bank_rows(bodies[root / "data/WINDOWS.npy"], windows, budget)
-    inventory(root, expected_files, public_dirs, budget.captured)
+    bank_rows(bodies[root / "data" / data_name], windows, budget, generic=generic)
+    inventory(root, expected_files, public_dirs, {**budget.captured, **deferred_signatures})
     # Re-pin the small declaration after checking its complete leaf inventory.
     budget.read(root / "PREPARED.json", prepared_pin, JSON_CAP, 0o600)
     budget.final_snapshot()
@@ -328,7 +362,9 @@ def verify(root, prepared_pin, paper_pin, output, *, paired_source_manifest,
               "prepared": prepared_pin, "paper": paper_pin, "paired_source_manifest": paired_source_manifest,
               "programmes": {r: document["programmes"][r]["source"] for r in ("A", "B")},
               "panel_sha256": document["panel_sha256"], "contexts": contexts,
-              "participants": 94, "windows": 376, "predictions_per_condition": 188, "folds": 10,
+              "input_mode": "generic_feature_classification_v1" if generic else "raw_windows_v1",
+              "participants": 94, "windows": document["rows"], "predictions_per_condition": 188, "folds": 10,
+              "reference_body_reads": 0, "reference_authentication_deferred_until_grading": generic,
               "verified_delivery_files": len(expected_files), "read_reserved_bytes": budget.read_reserved,
               "private_panel_reads": 1,
               "original_deadline": budget.deadline, "elapsed_before_report": clock() - budget.started,

@@ -50,7 +50,8 @@ class Root004ConsumerTests(unittest.TestCase):
                     return body, self.binding.pin(path, body)
                 env = dict(binding=self.binding, row=row, identifier=row["id"], home=self.core.HOME,
                     previous=previous, read_pin=self.case.read_pin, improvement=self.case.documents["retained_improvement"],
-                    already_bound=True, adopt_language_figure3b=False, contexts={}, outputs={}, reader=None, raw=raw)
+                    already_bound=True, adopt_language_figure3b=False, adopt_meg_generic_classification=False,
+                    contexts={}, outputs={}, reader=None, raw=raw)
                 if corrupt:
                     with self.assertRaises(ValueError): exec(code, env)
                 else:
