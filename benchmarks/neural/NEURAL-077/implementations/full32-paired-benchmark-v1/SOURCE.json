@@ -1,0 +1,214 @@
+{
+  "schema": "erp-core-full32-portable-source-v1",
+  "component": "full32-paired-benchmark-v1",
+  "task_id": "NEURAL-077",
+  "scope": "Source-coordinate raw-FDT packet construction, per-query projection and collection, and strict offline paired evaluation. The original400 condition remains unchanged.",
+  "scientific_scope": {
+    "people": 32,
+    "queries": 6400,
+    "targets_per_person": 40,
+    "standards_per_person": 160,
+    "same_complete_labeled_demonstrations": 4,
+    "query_shape": [
+      2,
+      1024
+    ],
+    "query_representation": "finite binary64, round-trip decimal serialization including signed zero",
+    "sampling_hz": 1024,
+    "source_anchor": "released SET latency minus one",
+    "epoch_offsets_half_open": [
+      -256,
+      768
+    ],
+    "physical_display_delay_calibration_resolved": false,
+    "additional_shift_filter_or_trial_rejection": false,
+    "metrics": [
+      "equal-participant balanced accuracy at p>=0.5",
+      "equal-participant natural-log loss with metric-only clipping1e-15",
+      "32 paired participant differences; primary direct-minus-program macro balanced accuracy"
+    ],
+    "bootstrap_computed": false,
+    "reference_grade_comparison_completed": false
+  },
+  "runtime": {
+    "builder": {
+      "python": "3.11.6",
+      "numpy": "1.26.3"
+    },
+    "consumer_evaluator": {
+      "python": "3.11",
+      "dependencies": "standard library only"
+    },
+    "new_runtime_installation_performed": false
+  },
+  "scientific_donors": [
+    {
+      "role": "sorted-manifest builder before portable interface extraction",
+      "bytes": 24123,
+      "sha256": "2a6b89833d80a716bf9cfd0bfa379d22d039b14bba238505f3f45dd9ac46fdb9"
+    },
+    {
+      "role": "unchanged scientific recipe",
+      "bytes": 2143,
+      "sha256": "f6a16ba460ae3e3478a358cc499b8b69a3cc9ac0308d3334ebc48dc1d1c6feea"
+    },
+    {
+      "role": "unchanged per-query consumer",
+      "bytes": 21146,
+      "sha256": "6825dc00428b64c20cf23e1ac82068c891c4dd121fd980e0076b0ce89cb7629d"
+    },
+    {
+      "role": "paired evaluator before removal of private execution machinery",
+      "bytes": 38130,
+      "sha256": "a4397ece187d2450361a34488f04f473849dc7d151b4943e71621259a0de1271"
+    },
+    {
+      "role": "unchanged existing repository participant bundle implementation",
+      "repository_path": "benchmarks/neural/NEURAL-077/implementations/waveform-pair-v1/bundle.py",
+      "bytes": 13969,
+      "sha256": "c78870347454935e1bc95d770ef30c1cb5b5fc516d76f5082a5bf721875291ff"
+    }
+  ],
+  "external_unchanged_demonstration_operands": [
+    {
+      "name": "demonstrations.json",
+      "bytes": 129921,
+      "sha256": "19e4018216376af334fd5ead21e2c33d5761d9d56ce5c76d3a89411483906ed2"
+    },
+    {
+      "name": "prompt.txt",
+      "bytes": 1703,
+      "sha256": "2ecc6656d099083f2d87112147430aa1f780c714ce31579e025c69ac74ec77a0"
+    },
+    {
+      "name": "response_schema.json",
+      "bytes": 480,
+      "sha256": "bd0c92c7016a20b039fbb273aad8802be1da088b0f1fec3e15fac0a1070eed12"
+    }
+  ],
+  "observed_source_controls": {
+    "declared_public_methods": 28,
+    "campaign_invocations": 3,
+    "unique_methods_with_observed_pass": 28,
+    "builder_first_attempt": {
+      "methods": 10,
+      "passed": 9,
+      "failed": 1,
+      "python": "3.11.6",
+      "numpy": "2.4.6",
+      "failure": "Exact required NumPy1.26.3 assertion refused the mismatched environment before the full baseline method arrays."
+    },
+    "builder_selected_successor": {
+      "methods": 1,
+      "passed": 1,
+      "failed": 0,
+      "method": "PortableBuilderControls.test_exact_recipe_reference_baseline_and_full_geometry",
+      "python": "3.11.6",
+      "numpy": "1.26.3",
+      "platform": "Darwin arm64",
+      "input_shape": [
+        200,
+        33,
+        1024
+      ],
+      "output_shape": [
+        200,
+        2,
+        1024
+      ],
+      "independent_scalar_baseline": true,
+      "source_unchanged": true,
+      "nine_passing_methods_replayed": false
+    },
+    "consumer_evaluator": {
+      "methods": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "python": "3.11.6",
+      "dependencies": "standard library"
+    },
+    "full_builder_suite_run_under_required_numpy": false,
+    "previous_private76_methods_counted_as_public": false,
+    "hosted_qualification_completed": false
+  },
+  "material_facts": {
+    "metadata_objects_authenticated": 96,
+    "metadata_body_bytes": 30799299,
+    "FDT_objects_acquired_and_independently_hash_checked": 32,
+    "FDT_body_bytes": 1639993344,
+    "original_FDT_bodies_read_in_portability_phase": false,
+    "original_signal_transforms_run": false,
+    "full32_packet_materialized": false,
+    "model_or_AI_evaluation_run": false,
+    "scientific_readiness_established": false
+  },
+  "execution_boundary": "No arm executor or provider/process sandbox is supplied. Both complete externally captured arms, source/bundle/input/first-response/closure commitments are authenticated before opening private material. Receipt consistency does not prove truth of untrusted capture attestations. All original data, trusted metadata descriptors, demonstration operands, private key and targets remain external.",
+  "members": [
+    {
+      "path": "builder.py",
+      "bytes": 20797,
+      "sha256": "8c51dc54d530b0eaa452753bb498a2d7807caa616fedeb3d39c9b8660cebcd8c"
+    },
+    {
+      "path": "recipe.py",
+      "bytes": 2143,
+      "sha256": "f6a16ba460ae3e3478a358cc499b8b69a3cc9ac0308d3334ebc48dc1d1c6feea"
+    },
+    {
+      "path": "test_builder.py",
+      "bytes": 11650,
+      "sha256": "2e6226953badfdaaa7bc544305863a58bb3b25e503161274b999e6fe6f5e8a84"
+    },
+    {
+      "path": "inputs.schema.json",
+      "bytes": 4291,
+      "sha256": "b3858e6b5900ea2a6667a7c226c8747cb885eb8d3b7014b5541b00813a537ff6"
+    },
+    {
+      "path": "PAIR_CONTRACT_TEMPLATE.v1.json",
+      "bytes": 2280,
+      "sha256": "c288725ca1f40e4ba923058d12ea2a5d13e82470c78919a8955a6b09de492474"
+    },
+    {
+      "path": "SOURCE_BINDINGS.json",
+      "bytes": 392,
+      "sha256": "7174a57c8a72d8f79de480bc4523b3f0b10abcd2bd898bf916660fa94f053c28"
+    },
+    {
+      "path": "bundle.py",
+      "bytes": 13969,
+      "sha256": "c78870347454935e1bc95d770ef30c1cb5b5fc516d76f5082a5bf721875291ff"
+    },
+    {
+      "path": "consumer.py",
+      "bytes": 21146,
+      "sha256": "6825dc00428b64c20cf23e1ac82068c891c4dd121fd980e0076b0ce89cb7629d"
+    },
+    {
+      "path": "evaluator.py",
+      "bytes": 25167,
+      "sha256": "509318b7f3f6d0e0fa233e17718a3b53df3ee83d47b42243fad5db803756d81d"
+    },
+    {
+      "path": "test_consumer_evaluator.py",
+      "bytes": 27524,
+      "sha256": "24fed77936ae2eb7e54eeac4eaaf9be9a095c05033098cb64761c385c02749fc"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7616,
+      "sha256": "4dcfaf236b4077eab948f57d5d6487b4b6d2156ed146ee4702f99a76b3951f6a"
+    },
+    {
+      "path": "CAPTURE_FORMAT.md",
+      "bytes": 4080,
+      "sha256": "53dcc4f7fe2a316a7a23704328516a1d6e9587fc1733711448dbe252a2a98442"
+    },
+    {
+      "path": "STATUS.md",
+      "bytes": 3208,
+      "sha256": "ec70187e7ca9f1529b3785b73e8ec622d9ec80c131ac9592c4ea73c0f9858cd7"
+    }
+  ]
+}
