@@ -52,6 +52,13 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Finite paired scorer](implementations/finite-paired-scorer) — Reviewed source component.
   Scope: Finite paired sleep-stage scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
+## Related scientific source (different or narrower scope)
+
+These artifacts provide related scientific context; they are not assigned implementations of this task.
+
+- [Viewer process ownership v1](../../shared/viewer-process-ownership-v1) — Reviewed shared process ownership source.
+  Scope: Shared lifecycle helper for the sleep and EEG viewer transports, with the raw-epoch companion as a related consumer. Observe child exit without reaping, signal only while retaining ownership of the unreaped leader, then reap the exact child. Mocked controls do not qualify native process containment, providers, models or scientific outcomes; exclusive-waiter, SIGCHLD, runtime and escaped-descendant limits remain explicit.
+
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
 ## Public source citations

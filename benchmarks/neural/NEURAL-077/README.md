@@ -45,7 +45,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 23050 bytes; SHA-256 `ceec50eab302148a8b08886097db7af531fbd67b22093e9d42c1f3cccdc94fa7`.
+- Specification identity: 23050 bytes; SHA-256 `d528682c4ba60badc6d2a4bcf70118b766708f4a13ddaa80a48d66bf6060ce0e`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -89,6 +89,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Reviewed waveform-provider source. Preserve the existing completed finite waveform pair checkpoint; this new provider component does not transfer authentic participant/provider execution or scientific qualification.
 - [Paired condition v1](implementations/paired-condition-v1) — Reviewed source component.
   Scope: Complete paired condition comparison. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
+- [Viewer process ownership v1](../../shared/viewer-process-ownership-v1) — Reviewed shared process ownership source.
+  Scope: Shared lifecycle helper for the sleep and EEG viewer transports, with the raw-epoch companion as a related consumer. Observe child exit without reaping, signal only while retaining ownership of the unreaped leader, then reap the exact child. Mocked controls do not qualify native process containment, providers, models or scientific outcomes; exclusive-waiter, SIGCHLD, runtime and escaped-descendant limits remain explicit.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 
