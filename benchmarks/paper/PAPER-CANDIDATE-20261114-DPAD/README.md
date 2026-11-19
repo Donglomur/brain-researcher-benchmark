@@ -51,6 +51,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
 - [Published source-data/evaluator provenance; original-run linkage unresolved](docs/published-source-provenance.v1.json)
 - [Current reference qualification and historical replay scope](docs/reference-qualification-scope.v1.md)
+- [Fresh source-method reference recipe (unexecuted)](docs/source-protocol-reference.v1.json)
 
 ## Implementation artifacts
 
