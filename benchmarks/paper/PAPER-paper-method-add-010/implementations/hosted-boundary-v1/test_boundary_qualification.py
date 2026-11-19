@@ -448,8 +448,9 @@ class BoundaryQualificationTests(unittest.TestCase):
                 self.options = kwargs
                 self.attempted = set()
                 self.control = kwargs["control_root"]
-                self.control.mkdir(mode=0o700)
-                kwargs["quarantine_root"].mkdir(mode=0o700)
+                for root in (self.control, kwargs["quarantine_root"]):
+                    test.assertTrue(root.is_dir())
+                    test.assertEqual(root.stat().st_mode & 0o777, 0o700)
                 state["instances"].append(self)
             def execute_fold(self, role, fold, mounts, exposure_pin, resources, deadline, journal):
                 key = (role, fold)
@@ -511,6 +512,46 @@ class BoundaryQualificationTests(unittest.TestCase):
             stack.enter_context(mock.patch.object(entry.platform, "system", return_value="Linux"))
             stack.enter_context(mock.patch.object(entry.time, "monotonic", return_value=now))
             yield state, binding
+
+    def test_entry_preprovisions_roots_for_real_owned_transport(self):
+        """Real constructors run; only phase execution is stopped before Docker."""
+        class BeforeNativePhase(Exception):
+            pass
+
+        for kind in ("constant", "probe"):
+            with self.subTest(campaign=kind):
+                root = self.scratch / ("real-constructor-" + kind)
+                root.mkdir(mode=0o700)
+                constructed = []
+
+                def stop_before_native(owned, *args, **kwargs):
+                    constructed.append(owned)
+                    raise BeforeNativePhase()
+
+                with self.mocked_entry_boundary() as (state, binding):
+                    # Keep only the exposure/audit fixture mocked. The actual
+                    # adapter and its authenticated concrete Provider construct.
+                    entry.transport.OwnedTransport = existing_transport.OwnedTransport
+                    evidence = entry.Evidence(root, 1000.0, cap=65536)
+                    with mock.patch.object(existing_transport.OwnedTransport, "execute_fold",
+                                           new=stop_before_native):
+                        with self.assertRaises(BeforeNativePhase):
+                            entry.execute_campaign(kind, self.fixture, binding, {},
+                                                   root / kind, 100.0, 1000.0, evidence)
+                self.assertEqual(len(constructed), 1)
+                owned = constructed[0]
+                self.assertIsInstance(owned._provider, existing_transport._vendor().Provider)
+                expected = (root / kind / "control", root / kind / "quarantine")
+                actual = (owned._provider.control_root, owned._provider.quarantine_root)
+                self.assertEqual(actual, expected)
+                self.assertNotEqual(*actual)
+                for directory in actual:
+                    self.assertTrue(directory.is_dir())
+                    self.assertFalse(directory.is_symlink())
+                    self.assertEqual(directory.stat().st_mode & 0o777, 0o700)
+                    self.assertEqual(list(directory.iterdir()), [])
+                self.assertEqual(state["instances"], [])
+                self.assertEqual(state["calls"], [])
 
     def test_entry_uses_two_fresh_namespaces_and_eight_ordered_phases(self):
         output = self.scratch / "mocked-entry-run"

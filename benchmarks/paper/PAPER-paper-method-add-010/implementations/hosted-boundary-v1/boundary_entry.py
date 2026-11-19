@@ -272,6 +272,8 @@ def execute_campaign(kind, fixture, binding, audit, campaign_root, origin, deadl
     require(kind in KINDS, "named engineering campaign")
     campaign_root = fresh_directory(campaign_root)
     exposure_root = fresh_directory(campaign_root / "exposures")
+    control_root = fresh_directory(campaign_root / "control")
+    quarantine_root = fresh_directory(campaign_root / "quarantine")
     selected = fixture["campaigns"][kind]
     campaign_id = "meg-" + kind + "-" + fixture["nonce"][:16]
     approvals, exposure_pins = {}, {}
@@ -298,8 +300,8 @@ def execute_campaign(kind, fixture, binding, audit, campaign_root, origin, deadl
         approvals[descriptor["sha256"]] = str(destination)
         exposure_pins[(role, fold)] = descriptor
     owned = transport.OwnedTransport(campaign_id=campaign_id, image=binding["image"],
-        frozen_programs=selected["frozen_programs"], control_root=campaign_root / "control",
-        quarantine_root=campaign_root / "quarantine", docker_binary=binding["docker_binary"],
+        frozen_programs=selected["frozen_programs"], control_root=control_root,
+        quarantine_root=quarantine_root, docker_binary=binding["docker_binary"],
         docker_socket=binding["docker_socket"], trusted_exposures=approvals,
         source_read_limit=binding["transport_read_bytes"], host_write_limit=binding["transport_write_bytes"],
         origin=origin, original_deadline=deadline)
