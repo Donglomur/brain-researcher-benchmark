@@ -110,8 +110,8 @@ IMMUTABLE_PINS = {
         "sha256": "d857d613efdca2fad6b20a106349516a410e2837b5f4bff6b6d2db592ba58658"
     },
     "owner_io": {
-        "bytes": 8483,
-        "sha256": "3a8c4d0d58be213ab9cbcfcdb2d98781e7bfdedb1839ea109bdc0d9466944f91"
+        "bytes": 10152,
+        "sha256": "8e29aa60a95b8433361bda241ee60e25db40c0884547c7bc55d5015c4741ad4e"
     },
     "owner_scoring": {
         "bytes": 12817,

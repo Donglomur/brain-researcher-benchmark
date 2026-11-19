@@ -23,8 +23,8 @@ IMMUTABLE = {
     ],
     "owner_io": [
         "owner/io.py",
-        8483,
-        "3a8c4d0d58be213ab9cbcfcdb2d98781e7bfdedb1839ea109bdc0d9466944f91"
+        10152,
+        "8e29aa60a95b8433361bda241ee60e25db40c0884547c7bc55d5015c4741ad4e"
     ],
     "owner_scoring": [
         "owner/scoring.py",
