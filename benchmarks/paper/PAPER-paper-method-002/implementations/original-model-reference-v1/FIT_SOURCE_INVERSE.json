@@ -1,0 +1,40 @@
+{
+  "derived_file": "streamed_model_operation.py",
+  "derived_function": "_fit_source_defaults_streamed",
+  "derived_function_sha256": "9cbd9af6b7dc9d54d3d65b9ca261f3eb76ff6dc2197b3f3e029fd8f25bae04f7",
+  "donor_file": "model_operation.py",
+  "donor_function": "fit_source_defaults",
+  "donor_function_sha256": "cbee757d758e3818e8f3a5eb62b5dbe0f8a802a160d480b6969b36aa5d53726f",
+  "donor_sha256": "c74030ec288d451eb29c4b1febd5664896c508471df3dcefcaebe992c9934460",
+  "exact_ordered_replacements": [
+    {
+      "after": "def _fit_source_defaults_streamed(arrays, meta, morphology_prefix, out, checkpoint, stats):",
+      "before": "def fit_source_defaults(arrays, meta, morphology_prefix, out):"
+    },
+    {
+      "after": "    from model_operation import (configure_model_runtime, initialize_model, observed_source_split,\n                                 masked_pearson, save_tree)\n    from streamed_batch import streamed_gradient, streamed_prediction\n    import numpy as np\n",
+      "before": "    import numpy as np\n"
+    },
+    {
+      "after": "    from jax import tree_map, tree_util\n",
+      "before": "    from jax import tree_map\n"
+    },
+    {
+      "after": "    opt, states, predict, gradient, _ = initialize_model(arrays, meta, morphology_prefix)\n\n    def predict_validation(optimum, currents):\n        stats[\"last_validation_batch_completed_rows\"] = 0\n        return streamed_prediction(predict, optimum, currents, np=np, check=checkpoint, stats=stats)\n\n",
+      "before": "    opt, states, predict, gradient, _ = initialize_model(arrays, meta, morphology_prefix)\n"
+    },
+    {
+      "after": "            stats[\"last_training_batch_completed_rows\"] = 0\n            loss, gradients = streamed_gradient(gradient, opt, batch[1].numpy(), batch[2].numpy(),\n                                                 batch[3].numpy(), states, np=np, jnp=jnp,\n                                                 tree_util=tree_util, check=checkpoint, stats=stats)\n",
+      "before": "            loss, gradients = gradient(*opt, batch[1].numpy(), batch[2].numpy(), batch[3].numpy(), states)\n"
+    },
+    {
+      "after": "        val_predictions = np.concatenate([predict_validation(opt, batch[1].numpy()) for batch in val_loader], axis=0)\n",
+      "before": "        val_predictions = np.concatenate([np.asarray(predict(opt, batch[1].numpy())) for batch in val_loader], axis=0)\n"
+    }
+  ],
+  "final_test_call_unchanged": "test_predictions = np.asarray(predict(best_opt, arrays[\"currents\"][test_ids]))",
+  "global_monkeypatches": false,
+  "private_two_update_driver_used": false,
+  "reverse_replacements_restore_exact_donor_function": true,
+  "schema": "jaxley-portable-full-fit-inverse-v1"
+}
