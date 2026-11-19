@@ -35,6 +35,11 @@ Source availability does not establish a qualified runtime. A programme score ca
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Original metadata qualification and remaining cohort work](docs/original-metadata-qualification.md)
+- [Original metadata qualification evidence](docs/original-metadata-evidence.json)
+
 ## Implementation artifacts
 
 - [Neural 063](implementations/neural-063) — Task source archive.
