@@ -14,6 +14,18 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 The current definition supports two independent outcomes: recreate the original findings and exceed them on the same task. Each uses matched paper+data and paper+data+author-code conditions. Contract eligibility and declared protocol availability do not establish a delivered runtime or scientific result.
 
+### Separate Generic classification mode
+
+Explicit 188-scalar fixed-Generic classification mode with accepted author-method calibration, exact numerical reproduction/score-exceedance outcomes, and portable 25-method controls. Existing raw-window mode and full-feature/distribution/AUC/whole-paper limitations remain. No AI result, native qualification, SOTA or benchmark-count increase.
+
+**Scope:** An explicitly separate fixed-Generic-feature classification mode uses 188 selected released post-QC scalars from 94 participants and the accepted author-method reference on identical frozen participant folds. It assesses classifier-summary published-precision numerical reproduction and strict exact same-case reference-score exceedance. These scoped outcomes do not populate raw-feature, paired-distribution, AUC, whole-paper or scientific-superiority claims.
+
+**Reproduction criterion:** The accepted author-method calibration reproduces 64.3% mean accuracy and 9.4pp population fold SD at the paper precision. Candidate published-precision compatibility is computed from exact fold counts and the explicit half-open criterion, with granular discrepancies retained; it is not full-feature or distribution reproduction.
+
+**Score comparison:** reference\_score\_exceeded means a strictly positive exact rational mean-fold accuracy difference from the frozen reference on identical selected cases. Scientific superiority remains unevaluated without a separately selected inferential study; no arbitrary new effect margin or significance threshold is introduced.
+
+- [Authenticated Generic classification descriptor](implementations/paired-program-v1/GENERIC_CLASSIFICATION_MODE.json)
+
 **Corrected primary scope; outcomes remain unqualified.** Both outcome contracts retain the same primary scientific task. Unresolved source criteria still limit receipt admission.
 
 **Primary goal:** Reproduce the published Figure 3c(i–ii) CS↔PFC maximum-squared-DTW-barycenter face-versus-object result during task-irrelevant stimulus onset, including its paired participant feature distribution and corresponding Figure 3a classifier point/fold profile; assess improvement on that same named decoding task and evaluation support.
@@ -84,7 +96,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 92570 bytes; SHA-256 `fe1f8de046c5a2ca6aa496ffe665959cba32282a39c349d4f0d20702ad4b953a`.
+- Specification identity: 97809 bytes; SHA-256 `44aaa144871829bd4dd47de89424d0fae575d1769b250817243c9f9e8ff3a58b`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
