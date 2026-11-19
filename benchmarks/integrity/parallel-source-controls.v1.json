@@ -13650,9 +13650,10 @@
         "-I",
         "-S",
         "-B",
+        "-c",
+        "import pathlib, runpy, sys\nartifact = pathlib.Path(sys.argv[2])\nif (not artifact.is_absolute() or artifact.exists() or artifact.is_symlink()\n        or not artifact.parent.is_dir()):\n    raise ValueError(\"fresh absolute per-command artifact root required\")\nartifact.mkdir(mode=0o700)\ndriver = sys.argv[1]\nsys.argv = [driver, \"--output\", str(artifact / \"meg-generic-classification\")]\nrunpy.run_path(driver, run_name=\"__main__\")\n",
         "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/tests_generic_classification/run_controls.py",
-        "--output",
-        "${ARTIFACT_DIR}/meg-generic-classification"
+        "${ARTIFACT_DIR}"
       ],
       "test_paths": [
         "benchmarks/paper/PAPER-paper-method-add-010/implementations/delivery-verifier-v1/SOURCE_MANIFEST.json",
