@@ -11,6 +11,11 @@ reproduction, paper improvement, native neural interpretation and neural tool/mo
 building. The evidence below keeps these outcomes separate. This design change
 does not itself qualify a reproduction, an improvement or either neural outcome.
 
+The [November 18 public progress update](public-progress-2026-11-18.md) links the
+936-case ABR observation release, the Jaxley original-data diagnostic and the
+NEURAL-063 original metadata qualification. It separates available artifacts and
+remaining scientific work across the paper and neural tracks.
+
 From the repository root:
 
 ```sh
