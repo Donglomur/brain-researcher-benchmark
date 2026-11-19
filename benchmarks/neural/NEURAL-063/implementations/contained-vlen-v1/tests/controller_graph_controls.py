@@ -302,8 +302,7 @@ class Engine:
                     "Source": fields["src"], "Target": fields["dst"], "ReadOnly": fields["readonly"]})
                 self.config["mounts"].append({"Type": fields["type"], "Source": fields["src"],
                     "Destination": fields["dst"], "RW": False, "Propagation": "rprivate"})
-            for target in self.config["tmpfs"]:
-                self.config["mounts"].append({"Type": "tmpfs", "Destination": target, "RW": True})
+            # Legacy --tmpfs is represented in "tmpfs", not inspect .Mounts.
             self.state = "created"
             return self.row(CID + "\n")
         if verb == "inspect":
@@ -637,11 +636,18 @@ def run_cases(controller, inventory_module, adapter, exporter, *, profile_factor
                             and inv.planes[eid]["state"] == "dispatched",
                             "refusal cannot refund or mark unit complete")
                 else:
+                    inventory_prefix = inv.unit_control_written["plane-" + eid]
+                    # Keep two future 16KiB records and the 1KiB marker reserved.
+                    retained_control = 10 + inventory_prefix + 2 * 16384 + 1024
                     inv.finish_unit("plane", eid, artifact=ARTIFACT, closure=closed,
                                     copyout_result=copied, settlement_receipt=evidence)
-                    require(inv.spent["worker_artifact_write_bytes"] == 7
-                            and inv.spent["host_write_bytes"] == 5 + p["unit_caps"]["plane"]["control_bytes"],
-                            "requested totals, not retained artifact size, settle")
+                    require(0 < retained_control < p["unit_caps"]["plane"]["control_bytes"]
+                            and inv.spent["control_bytes"] == retained_control
+                            and inv.spent["worker_artifact_write_bytes"] == 7
+                            and inv.spent["host_write_bytes"] == 5 + retained_control
+                            and all(inv.spent[key] == before[key] for key in
+                                    ("source_setup_read_bytes", "worker_control_bytes", "closure_seconds")),
+                            "requested writes and bounded control residual settle; unmeasured holds stay reserved")
         attempt("settle-positive", None)
         attempt("settle-missing", lambda e, c: e["worker_output"].pop("bytes_requested"))
         attempt("settle-contradictory", lambda e, c: e["worker_output"].update(bytes_requested=1))

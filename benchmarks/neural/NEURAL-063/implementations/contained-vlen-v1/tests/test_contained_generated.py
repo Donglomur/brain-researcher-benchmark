@@ -714,13 +714,19 @@ class Controls:
                 wrong_closure = dict(closure, reservation_sha256="0" * 64)
                 raises(lambda: inv.finish_unit("plane", "10000", artifact=artifact, closure=wrong_closure,
                     copyout_result=copyout, settlement_receipt=receipt), "same owned")
+                cap = reservation["envelope"]
+                inventory_prefix = inv.unit_control_written["plane-10000"]
+                retained_control = min(cap["control_bytes"],
+                    receipt["controller_requested_write_bytes"] + inventory_prefix + 2 * 16384 + 1024)
                 inv.finish_unit("plane", "10000", artifact=artifact, closure=closure,
                                 copyout_result=copyout, settlement_receipt=receipt)
-                cap = reservation["envelope"]
                 require(inv.spent["worker_artifact_write_bytes"] == before["worker_artifact_write_bytes"]
                         - cap["worker_artifact_write_bytes"] + len(payload) + 5, "requested successful worker bytes settled")
                 require(inv.spent["host_write_bytes"] == before["host_write_bytes"] - cap["host_write_bytes"]
-                        + len(payload) + 5 + cap["control_bytes"], "requested host bytes plus control residual")
+                        + len(payload) + 5 + retained_control, "requested host bytes plus bounded control residual")
+                require(0 < retained_control < cap["control_bytes"]
+                        and inv.spent["control_bytes"] == before["control_bytes"] - cap["control_bytes"] + retained_control,
+                        "only unused control reservation released after both final records")
                 require(inv.spent["source_setup_read_bytes"] == before["source_setup_read_bytes"],
                         "unmeasured bootstrap and readiness setup remains fully reserved")
                 require(inv.spent["export_read_bytes"] == before["export_read_bytes"] - cap["export_read_bytes"]
