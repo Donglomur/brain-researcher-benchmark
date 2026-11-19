@@ -196,6 +196,13 @@
         "six": "1.16.0",
         "tzdata": "2024.1"
       }
+    },
+    "erp-core-builder": {
+      "python": "3.11.6",
+      "packages": {
+        "numpy": "1.26.3"
+      },
+      "scope": "Generated ERP full32 builder software compatibility only; exact Python3.11.6 and NumPy1.26.3 are required. Original EEG/FDT processing, provider isolation and scientific performance remain separately qualified."
     }
   },
   "fixtures": {
@@ -14814,6 +14821,54 @@
       ],
       "timeout_seconds": 60,
       "fixtures": []
+    },
+    {
+      "task_id": "NEURAL-077",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/test_builder.py"
+      ],
+      "cwd": ".",
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/builder.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/recipe.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/test_builder.py"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "erp-core-builder",
+      "id": "NEURAL-077.command-09"
+    },
+    {
+      "task_id": "NEURAL-077",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "test_consumer_evaluator.py",
+        "-v"
+      ],
+      "cwd": "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1",
+      "expected_tests": 18,
+      "expected_skips": 0,
+      "test_paths": [
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/test_consumer_evaluator.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/evaluator.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/consumer.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/bundle.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/SOURCE_BINDINGS.json"
+      ],
+      "timeout_seconds": 180,
+      "runner": "unittest",
+      "fixtures": [],
+      "group": "stdlib-b",
+      "id": "NEURAL-077.command-10"
     }
   ],
   "source_only_assignments": [

@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:neural-077:erp-core-full32-packet-inputs-v1",
+  "title": "Trusted external inputs for the full32 ERP packet builder",
+  "description": "No input bodies or target values are bundled. Provider provenance is a caller responsibility. Builder validation additionally requires the exact ordered participant complement, census/source joins and complete byte authentication. Optional legacy path fields are ignored; actual roots are explicit CLI operands.",
+  "type": "object",
+  "required": [
+    "schema",
+    "condition_id",
+    "metadata_census",
+    "participants",
+    "people",
+    "queries"
+  ],
+  "properties": {
+    "schema": {
+      "const": "erp-core-full32-packet-inputs-v1"
+    },
+    "condition_id": {
+      "const": "erp-core-remaining-persons-released-marker-v1"
+    },
+    "people": {
+      "const": 32
+    },
+    "queries": {
+      "const": 6400
+    },
+    "metadata_census": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/pin"
+        },
+        {
+          "properties": {
+            "sha256": {
+              "const": "08df53adeeda8a4d3ba1ae6110490a239155e17678a8ac4753ed6807b2ffc155"
+            }
+          }
+        }
+      ]
+    },
+    "participants": {
+      "type": "array",
+      "minItems": 32,
+      "maxItems": 32,
+      "description": "Exact order: sub-008, sub-009, sub-011 through sub-040. No person omission or substitution.",
+      "items": {
+        "$ref": "#/$defs/participant"
+      }
+    }
+  },
+  "$defs": {
+    "pin": {
+      "type": "object",
+      "required": [
+        "bytes",
+        "sha256"
+      ],
+      "properties": {
+        "bytes": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "participant": {
+      "type": "object",
+      "required": [
+        "participant_id",
+        "metadata",
+        "summary",
+        "fdt"
+      ],
+      "properties": {
+        "participant_id": {
+          "enum": [
+            "sub-008",
+            "sub-009",
+            "sub-011",
+            "sub-012",
+            "sub-013",
+            "sub-014",
+            "sub-015",
+            "sub-016",
+            "sub-017",
+            "sub-018",
+            "sub-019",
+            "sub-020",
+            "sub-021",
+            "sub-022",
+            "sub-023",
+            "sub-024",
+            "sub-025",
+            "sub-026",
+            "sub-027",
+            "sub-028",
+            "sub-029",
+            "sub-030",
+            "sub-031",
+            "sub-032",
+            "sub-033",
+            "sub-034",
+            "sub-035",
+            "sub-036",
+            "sub-037",
+            "sub-038",
+            "sub-039",
+            "sub-040"
+          ]
+        },
+        "metadata": {
+          "$ref": "#/$defs/pin"
+        },
+        "summary": {
+          "type": "object",
+          "required": [
+            "stimuli",
+            "targets",
+            "nontargets",
+            "channels",
+            "sample_rate_hz",
+            "samples"
+          ],
+          "properties": {
+            "stimuli": {
+              "const": 200
+            },
+            "targets": {
+              "const": 40
+            },
+            "nontargets": {
+              "const": 160
+            },
+            "channels": {
+              "const": 33
+            },
+            "sample_rate_hz": {
+              "const": 1024
+            },
+            "samples": {
+              "type": "integer",
+              "minimum": 1024
+            }
+          }
+        },
+        "fdt": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/pin"
+            },
+            {
+              "type": "object",
+              "required": [
+                "basename",
+                "source_path"
+              ],
+              "properties": {
+                "basename": {
+                  "type": "string",
+                  "pattern": "^sub-[0-9]{3}_task-P3_eeg\\.fdt$"
+                },
+                "source_path": {
+                  "type": "string",
+                  "pattern": "^sub-[0-9]{3}/eeg/sub-[0-9]{3}_task-P3_eeg\\.fdt$"
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
