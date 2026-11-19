@@ -26,6 +26,7 @@ EXP003_CONTROL_WORKFLOW = ".github/workflows/exp003-generated-r-controls.yml"
 EXP003_CONTROL_SOURCES = (EXP003_CONTROL_MANIFEST,
                          "scripts/maintenance/run_exp003_generated_r.py",
                          "tests/maintenance/test_exp003_generated_r.py")
+WORKFLOW_SYNTAX_SOURCES = ("scripts/maintenance/check_workflow_syntax.py",)
 CANONICAL_PER_TRACK = 100
 MAX_FILE_BYTES = 8 * 1024 * 1024
 # Finite allowance for the reviewed November 17 source enrollment.
@@ -832,6 +833,11 @@ def prepare(reader):
     binding_files = dict.fromkeys(binding_files, "current-binding-metadata")
     need(not set(members) & set(binding_files), "Current binding metadata overlaps artifact source")
     members.update(binding_files)
+    # The pinned workflow linter is source maintenance, not a benchmark artifact.
+    need(not set(members) & set(WORKFLOW_SYNTAX_SOURCES), "Workflow syntax source overlaps owned source")
+    for path in WORKFLOW_SYNTAX_SOURCES:
+        checked_path(root, path)
+        members[path] = "workflow-syntax-maintenance"
     # Exact reviewed CI sources are owned without executing commands or following locators.
     need(not set(members) & set(PARALLEL_CONTROL_SOURCES), "Parallel control source overlaps owned source")
     for path in PARALLEL_CONTROL_SOURCES:
