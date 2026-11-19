@@ -1,0 +1,378 @@
+{
+  "schema": "meg-public-aggregate-method-qualification/v1",
+  "task_id": "PAPER-paper-method-add-010",
+  "input_mode": "generic_feature_classification_v1",
+  "qualification_kind": "authentic trusted reference-programme method qualification",
+  "status": "accepted",
+  "scope": {
+    "endpoint": "Task-irrelevant face/object classification from released Generic Category_Selective-to-Prefrontal_Cortex bary-sq_dtw_max scalars.",
+    "participants": 94,
+    "observations_per_method": 188,
+    "methods": 2,
+    "participant_grouped_folds": 10,
+    "fold_observation_counts": [
+      20,
+      20,
+      20,
+      20,
+      18,
+      18,
+      18,
+      18,
+      18,
+      18
+    ],
+    "fold_array_order": "Frozen fold indices 0 through 9; no participant membership is disclosed.",
+    "pairing": "Each participant contributes one face and one object observation, both assigned to the same held-out fold. Both methods use identical observations and folds.",
+    "input_construction": "The supplied Generic connectivity scalars derive from oracle category-homogeneous averages after the author full-category QC. Only the selected 188 feature values enter this endpoint.",
+    "source_duration_designation": 1000,
+    "duration_limitation": "This is a retained source designation, not reconstructed physical raw-window timing.",
+    "source_order_and_query_batches": "Original training source order and each complete 18- or 20-row held-out query batch are preserved."
+  },
+  "metric_contract": {
+    "primary": "Unweighted arithmetic mean of the ten fold accuracies; higher is better.",
+    "exact_arithmetic": "Fractions are in accuracy units unless stated otherwise. Fold accuracy is correct/count; population variance is mean((fold_accuracy-mean_accuracy)^2), with ddof=0. Percent and SD display fields are approximations.",
+    "pooled_accuracy": "Descriptive secondary statistic only; it does not replace the primary equal-weight fold mean.",
+    "paper_reported_mean_percent": 64.3,
+    "paper_reported_fold_sd_percentage_points": 9.4,
+    "published_precision_rule": {
+      "mean_lower_inclusive": "257/400",
+      "mean_upper_exclusive": "1287/2000",
+      "population_variance_lower_inclusive": "34969/4000000",
+      "population_variance_upper_exclusive": "35721/4000000",
+      "meaning": "Benchmark criterion corresponding to mean in [64.25,64.35)% and population fold SD in [9.35,9.45) percentage points. Compare exact mean and variance to the stated rational bounds; this is not a recovered historical rounding implementation."
+    },
+    "score_exceedance_rule": "Strictly positive exact primary-mean difference from the frozen author-method reference. This flag is descriptive and is separate from published-precision reproduction.",
+    "reference_mean_accuracy_exact": "1157/1800",
+    "reference_population_fold_variance_exact": "28501/3240000",
+    "decision_rule": "P(object)>0.5 predicts object; a tie predicts face.",
+    "scientific_superiority_rule": "No inference study was selected; scientific_superiority_established remains null."
+  },
+  "methods": [
+    {
+      "method_id": "author-batch-range-logistic-reference-v1",
+      "method_name": "Author batch-range logistic regression",
+      "programme": "programmes/original/submission.py",
+      "preprocessing": "Fit the author sigmoid on training rows; recompute final minimum/range separately for the complete training and held-out transform batches.",
+      "fold_correct_counts": [
+        13,
+        16,
+        13,
+        11,
+        13,
+        13,
+        9,
+        13,
+        10,
+        10
+      ],
+      "mean_fold_accuracy_exact": "1157/1800",
+      "mean_fold_accuracy_percent": 64.27777777777777,
+      "population_fold_variance_exact": "28501/3240000",
+      "population_fold_sd_percentage_points_approx": 9.379021771097243,
+      "pooled_accuracy_descriptive_exact": "121/188",
+      "difference_from_reference_mean_accuracy_exact": "0",
+      "difference_from_paper_mean_accuracy_exact": "-1/4500",
+      "difference_from_paper_sd_percentage_points_approx": -0.02097822890275758,
+      "valid_same_case_evaluation": true,
+      "published_precision_numerical_reproduction": true,
+      "reference_score_exceeded": false,
+      "scientific_superiority_established": null
+    },
+    {
+      "method_id": "training-range-logistic-comparator-v1",
+      "method_name": "Training-range logistic regression",
+      "programme": "programmes/training-range/submission.py",
+      "preprocessing": "Use the same sigmoid and classifier; fit final minimum/range on training rows only, leaving held-out values unclipped.",
+      "fold_correct_counts": [
+        12,
+        18,
+        14,
+        9,
+        13,
+        13,
+        13,
+        14,
+        10,
+        9
+      ],
+      "mean_fold_accuracy_exact": "133/200",
+      "mean_fold_accuracy_percent": 66.5,
+      "population_fold_variance_exact": "54641/3240000",
+      "population_fold_sd_percentage_points_approx": 12.986341352682635,
+      "pooled_accuracy_descriptive_exact": "125/188",
+      "difference_from_reference_mean_accuracy_exact": "1/45",
+      "difference_from_paper_mean_accuracy_exact": "11/500",
+      "difference_from_paper_sd_percentage_points_approx": 3.586341352682634,
+      "valid_same_case_evaluation": true,
+      "published_precision_numerical_reproduction": false,
+      "reference_score_exceeded": true,
+      "scientific_superiority_established": null
+    }
+  ],
+  "paired_comparison": {
+    "direction": "Training-range minus author batch-range",
+    "mean_fold_accuracy_difference_exact": "1/45",
+    "mean_fold_accuracy_difference_percentage_points_exact": "20/9",
+    "mean_fold_accuracy_difference_percentage_points_approx": 2.2222222222222223,
+    "hard_prediction_disagreements": 32,
+    "participant_effect_definition": "Compare each participant's number of correct predictions out of two observations; count improvement, equality or worsening for the training-range method.",
+    "participants_improved": 14,
+    "participants_unchanged": 70,
+    "participants_worsened": 10,
+    "inference": "The 188 observations are paired within 94 participants. No independent-row significance test or statistical-superiority claim is made."
+  },
+  "execution_and_review": {
+    "authentic_campaigns": 1,
+    "fresh_public_cli_invocations": 20,
+    "fresh_fits_per_method": 10,
+    "all_responses_validated_before_scoring": true,
+    "all_twenty_cli_closures_accepted": true,
+    "independent_review": "An independent reviewer recomputed both exact means, population variances and paired participant effects from saved outputs and authenticated execution, custody and scoring joins.",
+    "reference_correspondence": "The authenticated scorer reported zero original-method probability discrepancy and zero hard-prediction disagreement from the frozen reference. This is scorer evidence, not a separate independent reread of the original reference body.",
+    "preparation_examples_preserved": "Previously prepared constant-0.5 programmes remain unchanged engineering examples. This qualification separately froze and executed the two scientific programmes identified here.",
+    "containment_limit": "Trusted local CLI qualification; it does not qualify hostile candidate isolation, a provider or a container. Observed resource admission does not establish hard aggregate RAM/CPU/AS enforcement."
+  },
+  "provenance": {
+    "pin_convention": "All identities use SHA-256 over exact file bytes. Repository paths are intended public package locations. Private artifact pins identify retained audit evidence, not public download links; their bodies are not included.",
+    "public_sources": [
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/reference-programmes-v1/README.md",
+        "bytes": 4562,
+        "sha256": "65ded9834b581d19763961b38269a06b6e878f7e260d7db70003e543a93d5b7d"
+      },
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/reference-programmes-v1/requirements.txt",
+        "bytes": 97,
+        "sha256": "6c460e571a9f69fda21fbde62d977159216fa3157f823341dd809cd6b3381af5"
+      },
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/reference-programmes-v1/DEPENDENCIES.json",
+        "bytes": 1340,
+        "sha256": "4311616a416f7e90b75ed604c781ba3decb9c2c2df9af56d82c316da873251db"
+      },
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/reference-programmes-v1/PROGRAMMES.json",
+        "bytes": 1534,
+        "sha256": "cbb0bbe9f516958ee30470da291dca678a5d5570247fc60093b4588ceb6d49ca"
+      },
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/reference-programmes-v1/programmes/original/submission.py",
+        "bytes": 22304,
+        "sha256": "5680bff87cce7226455d1406e6abdb0563a3ca4acda2aace8684bc6ae3efe46f"
+      },
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/reference-programmes-v1/programmes/training-range/submission.py",
+        "bytes": 22298,
+        "sha256": "3735c76332bf9cb83970d28581d31fee86fef3d15f2a709bde66d84068df9ad6"
+      },
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/reference-programmes-v1/programmes/DERIVATION.json",
+        "bytes": 4822,
+        "sha256": "24c605234e2dd9e88583a1dc1f3589264593b9f9ed37dea051de39645e5d9e30"
+      },
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/classification_grading.py",
+        "bytes": 18116,
+        "sha256": "3b57161f6496b99a4805488f7a7cc027ba103d5649f2238dac751b6b04c90b4c"
+      },
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/generic_contract.py",
+        "bytes": 12977,
+        "sha256": "711cd419eed9b0f78ecb4a846f13a3c843808060814055fe50ff2b94f8b70857"
+      },
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/generic_prepare.py",
+        "bytes": 17943,
+        "sha256": "bb39760021683519f7df6284090753e2e9891e2e2a66768b35515a296fe8cee4"
+      },
+      {
+        "repository_path": "benchmarks/paper/PAPER-paper-method-add-010/implementations/paired-program-v1/GENERIC_PARTICIPANT.md",
+        "bytes": 3954,
+        "sha256": "00bdb545588d805c0bc553a49bf90faef180f713470b54f7a0f1021cc4cd432a"
+      }
+    ],
+    "historical_author_source_revision": "cab648bbe2eab7093f9ab7b9a5fcddabf28e60a0",
+    "historical_author_source_files": [
+      {
+        "repository_relative_path": "MEG_preprocessing/combine_time_series_from_MEG.py",
+        "bytes": 2534,
+        "sha256": "bb25a92893f294e84294141dbdb30a89c6eb813a3409de5ee1ba53605987fe76"
+      },
+      {
+        "repository_relative_path": "MEG_preprocessing/extract_time_series_from_MEG.py",
+        "bytes": 13999,
+        "sha256": "017c29b3fdba1411b739487b7c348fb5846f767ba9708be0ef00e9008965469c"
+      },
+      {
+        "repository_relative_path": "classification/fit_pyspi_classifiers.py",
+        "bytes": 53006,
+        "sha256": "5d84990e591d665777e90ae70a5ad1d75ba8058be559898a7b50c7a3f0855137"
+      },
+      {
+        "repository_relative_path": "classification/mixed_sigmoid_normalisation.py",
+        "bytes": 7587,
+        "sha256": "7714edb2149e597728f7d7eb23294c9758473ed1af7f45c72b6236417659127e"
+      },
+      {
+        "repository_relative_path": "functional_connectivity_analysis/barycenter_sq.yaml",
+        "bytes": 1154,
+        "sha256": "9e632969fcbf0711c4479fe9b7625b5ce5e9bd8fbd659930ac34d8838afd214a"
+      },
+      {
+        "repository_relative_path": "functional_connectivity_analysis/run_barycenter_pyspi_for_subject_averaged_epochs.py",
+        "bytes": 8312,
+        "sha256": "4a6a0b8ba1fefa22750db296dca15fabf464f61deeb6c721fc2dc7b1f83b2bdd"
+      },
+      {
+        "repository_relative_path": "requirements.txt",
+        "bytes": 521,
+        "sha256": "5fadd8dd86442a6910cf525c9d54ec8520b17b79628c34c0bd309bab5006c883"
+      }
+    ],
+    "data": {
+      "released_generic_inventory": {
+        "bytes": 3182215,
+        "sha256": "80b16614e7654a4b0efaafced5abb251ab17e625f264c66c87c0c8658737fa2d"
+      },
+      "prepared_feature_bank": {
+        "bytes": 1632,
+        "sha256": "386477b783ef0ca576614439ae563c7b1be1443a563c7b30e05f6c7dd2293b02"
+      },
+      "frozen_reference_folds": {
+        "bytes": 292670,
+        "sha256": "a650b9c73f756feee54ce49f4c8d903336335ce6b971affc5a3c9aaa78a05b79"
+      },
+      "private_reference_binding": {
+        "bytes": 36287,
+        "sha256": "462a65e89d85a9fedeea96b9b4b10f985d550b67b7b640776d5f1b3f571bf1c6"
+      },
+      "frozen_reference_result": {
+        "bytes": 441245,
+        "sha256": "cdb07c21ba429cd0f44852e62842b95d939632a18cd9575492a7d391e1faf1ba"
+      },
+      "prepared_packet_manifest": {
+        "bytes": 9486,
+        "sha256": "973b0de0f50cdfdef0cf3ea201cffeb24eaf552e5e806aae081091609a99a341"
+      },
+      "fold_provenance": "Accepted fixed Generic-feature reference folds, sealed before the first reference fit; selected CS-to-PFC orientation. This is not an assertion of exact historical fold execution.",
+      "historical_folds_authenticated": false
+    },
+    "paper": {
+      "doi": "10.1093/nc/niag029",
+      "pmcid": "PMC13338905",
+      "retained_representation": "JATS XML article body, captions and links; not a PDF or downloaded figure images.",
+      "retained_article": {
+        "bytes": 197340,
+        "sha256": "f2ce9154b3ea7b0b91097b7a806e07ec27a5f671760846d39458373e45457b46"
+      },
+      "correction_doi": "10.1093/nc/niag071",
+      "correction_limitation": "The correction is acknowledged; this qualification does not establish semantic equivalence of supplement revisions."
+    },
+    "runtime": {
+      "python": "3.11.6",
+      "package_versions": {
+        "joblib": "1.5.3",
+        "numpy": "1.26.3",
+        "pandas": "1.5.3",
+        "scikit-learn": "1.5.0",
+        "scipy": "1.12.0",
+        "threadpoolctl": "3.6.0"
+      },
+      "numerical_threads": 1,
+      "metadata_pins": [
+        {
+          "logical_name": "pyvenv.cfg",
+          "bytes": 397,
+          "sha256": "f558fbada4dc0a5b07e4fb18eef9a6d4c58cd33b1e97ea540683e31fb714ea69"
+        },
+        {
+          "logical_name": "numpy-1.26.3.dist-info/METADATA",
+          "bytes": 115133,
+          "sha256": "3ee1f9ca8f6c8835cdbe5e9b8ef494302c3a86d12179c82e98e2ff4fc2840c1e"
+        },
+        {
+          "logical_name": "pandas-1.5.3.dist-info/METADATA",
+          "bytes": 11900,
+          "sha256": "ef8fafebf59a102fbf9ec76375500989eeda5179e8ac2fe2bd74b24a74058d70"
+        },
+        {
+          "logical_name": "python-executable",
+          "bytes": 52640,
+          "sha256": "4959d784e83b29c47836a946a6ce6ac7f8f36bb1edc90b394dde44a6376cb1a1"
+        },
+        {
+          "logical_name": "scikit_learn-1.5.0.dist-info/METADATA",
+          "bytes": 11771,
+          "sha256": "f8382dba12c6184f78275da9a6851ca452c2c6b49f260bb216d68a1b622e79e3"
+        },
+        {
+          "logical_name": "scipy-1.12.0.dist-info/METADATA",
+          "bytes": 165428,
+          "sha256": "26863e03628933f0d92d9b7243a7e108586816753b3971a29930bc699b029f5b"
+        },
+        {
+          "logical_name": "joblib-1.5.3.dist-info/METADATA",
+          "bytes": 5542,
+          "sha256": "cee9c60896ae4e7a965a840fbde50d111d2f8018f61201d1ed2e9fc3dd4883e6"
+        },
+        {
+          "logical_name": "threadpoolctl-3.6.0.dist-info/METADATA",
+          "bytes": 13843,
+          "sha256": "a45df8d07ea1883d772183a501d7d526076aa70dfcfddb276a2cbdc04def5341"
+        }
+      ],
+      "observed_runtime_record": {
+        "bytes": 3191,
+        "sha256": "0c0d0456fb28002ddfb40f033c5943a496c14ec5a595bc2bd7d6b36630c4b49e"
+      },
+      "limit": "Qualified installed runtime only; metadata and version pins do not establish complete binary, BLAS, operating-system or historical-runtime closure, or portability to another installation."
+    },
+    "private_execution_evidence": {
+      "accepted_final_handoff": {
+        "bytes": 12078,
+        "sha256": "338f493c6864c35c09feb401754aab21011a7de757613c144f68a7d0ec23749e"
+      },
+      "actual_aggregate_and_case_result": {
+        "bytes": 99218,
+        "sha256": "bf08f57f6f0f60c98cb4bf66bf1fdd89e115019596caee625610c25c603c81e4"
+      },
+      "scorer_report": {
+        "bytes": 99103,
+        "sha256": "30c33cc796bd7df1a3d9f7cc439e71dd9cf86a015af32cdbdd0198b28b2e91f9"
+      },
+      "all_cli_closed_barrier": {
+        "bytes": 32069,
+        "sha256": "65869955c95ac0dddd0b6a4ce008887ace4d58cfcffd7ed8945cbad8e2019236"
+      },
+      "closure_and_output_census": {
+        "bytes": 68097,
+        "sha256": "9e89bd06b7b1bdb686adf6e84377d4957a5af787ca469e0fef3c175db0e3b724"
+      },
+      "independent_result_review": {
+        "bytes": 15459,
+        "sha256": "ad8e500e80226ef766c1d2b6d238603d86a2744ca3fad65840e10a12e8ec5f74"
+      },
+      "science_worker": {
+        "bytes": 25470,
+        "sha256": "ceebc3bb2868bc876ffadcccaafcd88d3214ec5e2f06b4b1cd8d097df35fe4e3"
+      },
+      "science_configuration": {
+        "bytes": 7720,
+        "sha256": "90b6b1287caff6f2b8d51f3ead592159f7212d6c52975556210a15321a140414"
+      },
+      "programme_public_source_map": {
+        "bytes": 5014,
+        "sha256": "2a56c3a56676c8fd9e4bcb46c34f0b35a35ebbd1aee8cac9c72ed6d60cf498b7"
+      }
+    }
+  },
+  "limits": [
+    "This is selected-endpoint numerical reproduction and a descriptive same-case method comparison; historical execution hashes and fold identities are not recovered.",
+    "The training-range score is evaluated on already exposed reference folds, not an untouched validation set. No model-selection or statistical-superiority study was performed.",
+    "Raw-window-to-Generic extraction, the 246-measure search, full paired-feature distributions, AUC and whole-paper reproduction are outside this qualification.",
+    "The result evaluates two named non-AI programmes; it does not measure AI ability or the causal effect of paper/data/official-code access.",
+    "No state-of-the-art claim, benchmark admission or benchmark-count change follows from this record.",
+    "No private labels, participant identifiers, feature values, per-case predictions or host paths are included."
+  ]
+}
