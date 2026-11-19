@@ -172,3 +172,20 @@ consumes the initial PNG and always submits 0.5. Use `campaign` followed by
 `collect` with an authenticated existing public packet for the actual full400
 engineering path. Authentic images, responses, submissions, sandbox probes
 containing local paths and evidence directories belong outside public Git.
+
+## Participant process cleanup
+
+The current transport observes child exit without reaping, using Darwin kqueue or
+Linux pidfd. It keeps the session leader owned until its process group has been
+signalled, then reaps that exact child. Later group-presence probes use signal 0;
+they cannot terminate a reused process ID. Missing observer APIs or a nondefault SIGCHLD handler refuse the launch.
+Kernel registration can still fail afterward; that failed session enters owned
+cleanup and cannot be admitted. The trusted operator must retain exclusive
+wait ownership and must not install native automatic child reaping.
+
+The shared [process ownership helper](../../../../shared/viewer-process-ownership-v1/README.md)
+records this cleanup order separately from group absence. A group signal does not
+contain descendants that escaped the group; `protocol_only` remains a trusted
+operator bridge, not a hostile-code sandbox. The macOS participant policy is
+unchanged. Historical execution receipts remain evidence for their original
+source identities and do not qualify this lifecycle revision.

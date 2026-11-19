@@ -12,7 +12,7 @@ import sys
 
 CONDITION = 'epoch_isolated_raw_viewer_zero_shot_v1'
 MEMORY_POLICY = 'immutable_complete_epoch_overview_plus_current_detail_no_history_v1'
-BASE_CLIENT_PIN = {'bytes': 19772, 'sha256': '73cc5445ffda8a525d9091826d7952a06c88ed83786c9bd46c2abcaec887119a'}
+BASE_CLIENT_PIN = {'bytes': 19772, 'sha256': '8244b85cfd0aaef551456e63a1ce65dcc07c1051a32d79f5f752b916bbdce364'}
 COMMON_PIN = {'bytes': 7532, 'sha256': 'ac596c1592ac853c58dc13a5f9b0607cf39822f301ad2d99c8d915316a362fc6'}
 FRESH_PIN = {'bytes': 18270, 'sha256': '09e375031d024dd18cb57ed1666e594aaabfc2c9065edb4113b98c2348937a22'}
 CONTRACT_PIN = {'bytes': 13307, 'sha256': '1458d314982f129614948cc267c43a4292e2036729d5104f5014b92eac93d033'}

@@ -11,7 +11,7 @@ These families retain scientific source used by, related to, or not yet assigned
 
 Scientific and submission readiness remain **unknown**. Stable artifact IDs and original paths remain in [catalog metadata](../catalog/catalog.json).
 
-## Family folders (24)
+## Family folders (25)
 
 These links group current physical locations for browsing; folder names do not assign scientific ownership.
 
@@ -37,10 +37,11 @@ These links group current physical locations for browsing; folder names do not a
 - [Study exposure](study-exposure)
 - [Suns2](suns2)
 - [TMS](tms)
+- [Viewer process ownership v1](viewer-process-ownership-v1)
 - [ZAPBench](zapbench)
 - [ZuCo2](zuco2)
 
-## Assigned source (7 artifacts)
+## Assigned source (8 artifacts)
 
 | Scientific source | Explicit task owners | Related tasks | Role and scientific scope |
 | --- | --- | --- | --- |
@@ -51,6 +52,7 @@ These links group current physical locations for browsing; folder names do not a
 | [Comparison contract](sleep-eog/comparison-contract) | [NEURAL-007](../neural/NEURAL-007/README.md), [NEURAL-008](../neural/NEURAL-008/README.md) | None assigned | Comparison contract: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. |
 | [Programme](reward-spacing/programme) | [NEURAL-045](../neural/NEURAL-045/README.md), [NEURAL-046](../neural/NEURAL-046/README.md), [PAPER-FIND-044](../paper/PAPER-FIND-044/README.md) | None assigned | Programme: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. |
 | [Frozen neural lifecycle v1](frozen-neural-lifecycle-v1) | [NEURAL-007](../neural/NEURAL-007/README.md), [NEURAL-077](../neural/NEURAL-077/README.md) | None assigned | Shared programme lifecycle: Commits source/method before separate per-person development processes, preserves terminal failures, requires all 5450 sleep epochs or 400 EEG trials, and freezes canonical submissions before the unchanged native scoring route. Authentic input staging is verified; Linux hard-memory execution, exact native layouts, four-GiB private grading, protected authoring and scientific qualification remain unestablished. |
+| [Viewer process ownership v1](viewer-process-ownership-v1) | [NEURAL-007](../neural/NEURAL-007/README.md), [NEURAL-077](../neural/NEURAL-077/README.md) | [NEURAL-008](../neural/NEURAL-008/README.md) | Reviewed shared process ownership source: Shared lifecycle helper for the sleep and EEG viewer transports, with the raw-epoch companion as a related consumer. Observe child exit without reaping, signal only while retaining ownership of the unreaped leader, then reap the exact child. Mocked controls do not qualify native process containment, providers, models or scientific outcomes; exclusive-waiter, SIGCHLD, runtime and escaped-descendant limits remain explicit. |
 
 ## Related source only (1 artifact)
 

@@ -72,6 +72,10 @@ Set ABR_PACKAGE to the package directory; ABR_STORE and ABR_STORE_PIN to the adm
 
 Retain the printed session_pin externally as ABR_SESSION_PIN. It binds the CLI, programme, documents, dependencies, roster and store. Initialization exposes no case and opens no private annotation. Freeze the programme and its external environment before target exposure; do not change them between cases in response to observations or outcomes.
 
+Before the first exposure, also declare the intended comparison in the external study record. For each arm, freeze the relevant system/model version, configuration and prompt, and either a fixed participant identity or an explicit case-to-participant assignment. A human study may use multiple respondents under that predeclared assignment; this route does not require one person to answer all 936 cases. Keep the condition and assignment record outside candidate-visible files, and retain its reference with the actual run records identified by `external_run_reference`. The common access, fresh-state and resource rules must also be fixed before exposure.
+
+Report outcomes for the declared conditions and respondent assignment. The per-case `participant_id` field records an operator declaration; it does not enforce a fixed assignment or authenticate a model, prompt, human identity or execution environment. Identical observations alone do not establish a same-system tool-use effect, and pooled responses do not establish population exchangeability. These are study-design and external-custody obligations, not a new session field, scoring gate or claim of clinical accuracy.
+
 ## Deliver one case to both arms
 
 The journal uses observed-order lockstep: complete both arms for one case, retire its view, and then advance. Every operation uses the same ABR_ATTEMPT and ABR_SESSION_PIN.

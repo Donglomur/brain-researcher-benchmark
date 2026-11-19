@@ -5830,7 +5830,8 @@
       "expected_skips": 0,
       "timeout_seconds": 180,
       "test_paths": [
-        "benchmarks/neural/NEURAL-007/implementations/viewer-transport-v1/test_transport.py"
+        "benchmarks/neural/NEURAL-007/implementations/viewer-transport-v1/test_transport.py",
+        "benchmarks/shared/viewer-process-ownership-v1/owned_exit.py"
       ],
       "fixtures": []
     },
@@ -13542,7 +13543,8 @@
         "benchmarks/neural/NEURAL-007/implementations/whole-night-viewer-v1/SOURCE_BINDINGS.json",
         "benchmarks/neural/NEURAL-007/implementations/whole-night-viewer-v1/SOURCE_FACTS.json",
         "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/raster.py",
-        "benchmarks/neural/NEURAL-007/implementations/finite-attempt-audit/vendor/candidate_adapter.py"
+        "benchmarks/neural/NEURAL-007/implementations/finite-attempt-audit/vendor/candidate_adapter.py",
+        "benchmarks/shared/viewer-process-ownership-v1/owned_exit.py"
       ]
     },
     {
@@ -13609,7 +13611,8 @@
         "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/actions.schema.json",
         "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/raster.py",
         "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/viewer.py",
-        "benchmarks/neural/NEURAL-077/implementations/waveform-provider-v1/client.py"
+        "benchmarks/neural/NEURAL-077/implementations/waveform-provider-v1/client.py",
+        "benchmarks/shared/viewer-process-ownership-v1/owned_exit.py"
       ]
     },
     {
@@ -13753,7 +13756,7 @@
         "-I",
         "-B",
         "-c",
-        "import contextlib, io, json, pathlib, runpy, sys\nrepo = pathlib.Path.cwd().resolve(strict=True)\nscratch = pathlib.Path(sys.argv[1])\nassert scratch.is_absolute() and not scratch.exists() and not scratch.is_symlink()\nassert scratch.parent.is_dir() and not any(p.is_symlink() for p in (scratch, *scratch.parents))\nassert not scratch.is_relative_to(repo) and not repo.is_relative_to(scratch)\npackage = repo / \"benchmarks/neural/NEURAL-008/implementations/raw-epoch-companion-v1\"\nentry = package / \"tests_pair.py\"\nnamespace = runpy.run_path(str(entry))\nlog = io.StringIO()\nwith contextlib.redirect_stdout(log):\n    report = namespace[\"main\"]([\"--root\",str(scratch),\"--bindings\",str(package/\"SOURCE_BINDINGS.json\"),\"--bytes\",\"7747\",\"--sha256\",\"ce62ceba337663dc27fd60e23eb4c3b1e72f1d479ee62bb76940f8debaaaeec4\",\"--dependency-root\",str(repo)])\nassert len(log.getvalue().encode()) <= 16384\nassert report[\"status\"] == \"passed\" and report[\"pair_status\"] == \"passed\"\npair_path = scratch / \"pair/PAIR_RESULT.json\"\nassert pair_path.is_file() and not pair_path.is_symlink() and pair_path.stat().st_size <= 65536\npair = json.loads(pair_path.read_bytes())\nexpected_pair = [\"real_preparation_two_physical_modalities_six_mounts_canonical_request\",\"full_5450_first_final_and_duplicate_partial_rejection\",\"four_full_numeric_panels_unchanged_arithmetic_one_generated_target_load\",\"actual_coordinator_and_worker_cli_gates_before_targets\"]\nassert [r[\"name\"] for r in pair[\"tests\"]] == expected_pair\nassert all(r[\"status\"] == \"passed\" for r in pair[\"tests\"])\nassert pair[\"original_material_reads\"] == 0 and pair[\"provider_calls\"] == 0 and not any(pair[\"observations\"].values())\nassert pair[\"participant_execution\"] is False and pair[\"scientific_qualification\"] is False\nviewer = report[\"viewer\"]\nassert viewer[\"status\"] == \"pass\" and viewer[\"generated_only\"] is True\nassert len(viewer[\"shared_epoch_checks\"]) == len(viewer[\"eog_noninterference\"]) == len(viewer[\"runs\"]) == 2\nassert len(viewer[\"refusals\"]) == 13 and viewer[\"public_cli_refusal\"][\"exit_code\"] == 2\nassert viewer[\"original_signal_reads\"] == viewer[\"real_provider_calls\"] == 0\nassert viewer[\"token_capacity_qualified\"] is viewer[\"scientific_qualification\"] is False\nnames = expected_pair + [\"viewer_physical_modalities_fake_https_and_13_refusals\"]\nprint(json.dumps({\"schema\":\"neural008-raw-companion-ci/v1\",\"controls\":[{\"name\":n,\"status\":\"passed\"} for n in names],\"generated_only\":True,\"scientific_qualification\":False},sort_keys=True,allow_nan=False))\n",
+        "import contextlib, io, json, pathlib, runpy, sys\nrepo = pathlib.Path.cwd().resolve(strict=True)\nscratch = pathlib.Path(sys.argv[1])\nassert scratch.is_absolute() and not scratch.exists() and not scratch.is_symlink()\nassert scratch.parent.is_dir() and not any(p.is_symlink() for p in (scratch, *scratch.parents))\nassert not scratch.is_relative_to(repo) and not repo.is_relative_to(scratch)\npackage = repo / \"benchmarks/neural/NEURAL-008/implementations/raw-epoch-companion-v1\"\nentry = package / \"tests_pair.py\"\nnamespace = runpy.run_path(str(entry))\nlog = io.StringIO()\nwith contextlib.redirect_stdout(log):\n    report = namespace[\"main\"]([\"--root\",str(scratch),\"--bindings\",str(package/\"SOURCE_BINDINGS.json\"),\"--bytes\",\"7747\",\"--sha256\",\"1f3ed4876b5092ed292d9340342c82edf1e6020b1a2f7b25d655b01026d0a192\",\"--dependency-root\",str(repo)])\nassert len(log.getvalue().encode()) <= 16384\nassert report[\"status\"] == \"passed\" and report[\"pair_status\"] == \"passed\"\npair_path = scratch / \"pair/PAIR_RESULT.json\"\nassert pair_path.is_file() and not pair_path.is_symlink() and pair_path.stat().st_size <= 65536\npair = json.loads(pair_path.read_bytes())\nexpected_pair = [\"real_preparation_two_physical_modalities_six_mounts_canonical_request\",\"full_5450_first_final_and_duplicate_partial_rejection\",\"four_full_numeric_panels_unchanged_arithmetic_one_generated_target_load\",\"actual_coordinator_and_worker_cli_gates_before_targets\"]\nassert [r[\"name\"] for r in pair[\"tests\"]] == expected_pair\nassert all(r[\"status\"] == \"passed\" for r in pair[\"tests\"])\nassert pair[\"original_material_reads\"] == 0 and pair[\"provider_calls\"] == 0 and not any(pair[\"observations\"].values())\nassert pair[\"participant_execution\"] is False and pair[\"scientific_qualification\"] is False\nviewer = report[\"viewer\"]\nassert viewer[\"status\"] == \"pass\" and viewer[\"generated_only\"] is True\nassert len(viewer[\"shared_epoch_checks\"]) == len(viewer[\"eog_noninterference\"]) == len(viewer[\"runs\"]) == 2\nassert len(viewer[\"refusals\"]) == 13 and viewer[\"public_cli_refusal\"][\"exit_code\"] == 2\nassert viewer[\"original_signal_reads\"] == viewer[\"real_provider_calls\"] == 0\nassert viewer[\"token_capacity_qualified\"] is viewer[\"scientific_qualification\"] is False\nnames = expected_pair + [\"viewer_physical_modalities_fake_https_and_13_refusals\"]\nprint(json.dumps({\"schema\":\"neural008-raw-companion-ci/v1\",\"controls\":[{\"name\":n,\"status\":\"passed\"} for n in names],\"generated_only\":True,\"scientific_qualification\":False},sort_keys=True,allow_nan=False))\n",
         "${ARTIFACT_DIR}"
       ],
       "cwd": ".",
@@ -13831,7 +13834,8 @@
         "benchmarks/neural/NEURAL-008/implementations/raw-epoch-companion-v1/tests_pair.py",
         "benchmarks/neural/NEURAL-008/implementations/raw-epoch-companion-v1/tests_viewer.py",
         "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/raster.py",
-        "benchmarks/neural/NEURAL-077/implementations/waveform-provider-v1/client.py"
+        "benchmarks/neural/NEURAL-077/implementations/waveform-provider-v1/client.py",
+        "benchmarks/shared/viewer-process-ownership-v1/owned_exit.py"
       ]
     },
     {
@@ -14577,6 +14581,170 @@
         "benchmarks/paper/PAPER-paper-method-002/implementations/retinal-heldout/score.py"
       ],
       "timeout_seconds": 60
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "test_sae_imputation.py"
+      ],
+      "cwd": "benchmarks/paper/PAPER-CANDIDATE-20261114-DFINE/implementations/sae-control-inputs-v1",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 30,
+      "id": "PAPER-CANDIDATE-20261114-DFINE.command-01",
+      "task_id": "PAPER-CANDIDATE-20261114-DFINE",
+      "group": "stdlib-b",
+      "test_paths": [
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-DFINE/implementations/sae-control-inputs-v1/sae_imputation.py",
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-DFINE/implementations/sae-control-inputs-v1/test_sae_imputation.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "test_inner_preparation.py"
+      ],
+      "cwd": "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/inner-preparation-v1",
+      "expected_tests": 5,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 30,
+      "id": "PAPER-CANDIDATE-20261114-DPAD.command-02",
+      "task_id": "PAPER-CANDIDATE-20261114-DPAD",
+      "group": "numpy",
+      "test_paths": [
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/inner-preparation-v1/inner_preparation.py",
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/inner-preparation-v1/test_inner_preparation.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "test_cell_support.py"
+      ],
+      "cwd": "benchmarks/paper/PAPER-CANDIDATE-20261114-NPVC/implementations/source-cell-support-v1",
+      "expected_tests": 8,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 30,
+      "id": "PAPER-CANDIDATE-20261114-NPVC.command-03",
+      "task_id": "PAPER-CANDIDATE-20261114-NPVC",
+      "group": "stdlib-b",
+      "test_paths": [
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-NPVC/implementations/source-cell-support-v1/cell_support.py",
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-NPVC/implementations/source-cell-support-v1/test_cell_support.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "test_author_label_correspondence_portable.py"
+      ],
+      "cwd": "benchmarks/paper/PAPER-CANDIDATE-20261114-POYO/implementations/author-label-correspondence-v1",
+      "expected_tests": 3,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 30,
+      "id": "PAPER-CANDIDATE-20261114-POYO.command-02",
+      "task_id": "PAPER-CANDIDATE-20261114-POYO",
+      "group": "stdlib-b",
+      "test_paths": [
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-POYO/implementations/author-label-correspondence-v1/author_label_correspondence.py",
+        "benchmarks/paper/PAPER-CANDIDATE-20261114-POYO/implementations/author-label-correspondence-v1/test_author_label_correspondence_portable.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-ROOT-ADD-001/implementations/original-author-reference-entry-v1/test_author_reference.py",
+        "--artifact-dir",
+        "${ARTIFACT_DIR}",
+        "--execute-generated-controls"
+      ],
+      "cwd": ".",
+      "expected_tests": 5,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 30,
+      "id": "PAPER-ROOT-ADD-001.command-27",
+      "task_id": "PAPER-ROOT-ADD-001",
+      "group": "language-rootfs",
+      "test_paths": [
+        "benchmarks/paper/PAPER-ROOT-ADD-001/implementations/original-author-reference-entry-v1/author_reference.py",
+        "benchmarks/paper/PAPER-ROOT-ADD-001/implementations/original-author-reference-entry-v1/test_author_reference.py"
+      ],
+      "fixtures": []
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-model-reference-v1/test_portable_reference.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 9,
+      "expected_skips": 0,
+      "runner": "unittest",
+      "timeout_seconds": 30,
+      "id": "PAPER-paper-method-002.command-06",
+      "task_id": "PAPER-paper-method-002",
+      "group": "stdlib-b",
+      "test_paths": [
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-model-reference-v1/test_portable_reference.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-model-reference-v1/streamed_model_operation.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-model-reference-v1/model_operation.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-model-reference-v1/streamed_batch.py",
+        "benchmarks/paper/PAPER-paper-method-002/implementations/original-model-reference-v1/FIT_SOURCE_INVERSE.json"
+      ],
+      "fixtures": []
+    },
+    {
+      "id": "shared-viewer-process-ownership-v1.command-01",
+      "task_id": null,
+      "group": "stdlib-b",
+      "runner": "unittest",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "benchmarks/shared/viewer-process-ownership-v1",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "expected_tests": 19,
+      "expected_skips": 0,
+      "timeout_seconds": 30,
+      "test_paths": [
+        "benchmarks/shared/viewer-process-ownership-v1/owned_exit.py",
+        "benchmarks/shared/viewer-process-ownership-v1/test_owned_exit.py",
+        "benchmarks/shared/viewer-process-ownership-v1/test_transport_ownership.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/transport.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/transport.py",
+        "benchmarks/neural/NEURAL-007/implementations/viewer-transport-v1/transport.py",
+        "benchmarks/neural/NEURAL-007/implementations/viewer-provider-integration-v1/transport.py"
+      ],
+      "fixtures": []
     }
   ],
   "source_only_assignments": [

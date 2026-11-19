@@ -103,11 +103,12 @@ the exact bytes actually handled, marked incomplete. Oversized lengths are refus
 from the prefix before allocating or reading their claimed payload. Bytes queued
 after terminal closure are not read or claimed captured. The child must exit zero
 within two seconds and within its person deadline after `finish`; otherwise the
-transport fails. Cleanup checks the owned process group even when its leader has
-already exited; remaining descendants are signaled and make the attempt fail.
-Failure to verify group cleanup also fails and retains its result. Timeouts
-terminate only the owned child process group. The viewer completion marker is
-written only after the client and group checks succeed.
+transport fails. Cleanup signals the still-owned process group before reaping
+its leader, then checks group absence. A successful group signal can refer to a
+zombie leader alone; it does not establish whether descendants existed before
+cleanup. Failure to verify cleanup fails and retains its result. The viewer
+completion marker is written only after successful leader exit and cleanup.
+Escaped-descendant containment remains unqualified in `protocol_only` mode.
 
 The original viewer session formats are retained in `viewer/`. `BOUNDARY.json`
 binds source, client bytes, declared interpreter path, sandbox profile and limits;
@@ -165,3 +166,20 @@ of authentic waveform/model results. Run the suite in the existing NumPy environ
 ```sh
 OPERATOR_PYTHON -I -B -m unittest discover -s . -p test_transport.py -v
 ```
+
+## Participant process cleanup
+
+The current transport observes child exit without reaping, using Darwin kqueue or
+Linux pidfd. It keeps the session leader owned until its process group has been
+signalled, then reaps that exact child. Later group-presence probes use signal 0;
+they cannot terminate a reused process ID. Missing observer APIs or a nondefault SIGCHLD handler refuse the launch.
+Kernel registration can still fail afterward; that failed session enters owned
+cleanup and cannot be admitted. The trusted operator must retain exclusive
+wait ownership and must not install native automatic child reaping.
+
+The shared [process ownership helper](../../../../shared/viewer-process-ownership-v1/README.md)
+records this cleanup order separately from group absence. A group signal does not
+contain descendants that escaped the group; `protocol_only` remains a trusted
+operator bridge, not a hostile-code sandbox. The macOS participant policy is
+unchanged. Historical execution receipts remain evidence for their original
+source identities and do not qualify this lifecycle revision.

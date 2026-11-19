@@ -1,0 +1,121 @@
+{
+  "schema": "dpad-inner-preparation-source-binding/v1",
+  "task": "PAPER-CANDIDATE-20261114-DPAD",
+  "status": "source-supported component; empirical qualification pending",
+  "paper_url": "https://www.nature.com/articles/s41593-024-01731-2",
+  "author_commit": "41f108bc90252ced19fe3c8eda7eaff2e87c57b3",
+  "source_bodies": [
+    {
+      "path": "source/DPAD/tools/tools.py",
+      "url": "https://github.com/ShanechiLab/DPAD/blob/41f108bc90252ced19fe3c8eda7eaff2e87c57b3/source/DPAD/tools/tools.py",
+      "bytes": 32800,
+      "sha256": "76a5d363e9a8577ea5b98ba670b43738b09345fdad6a4db1c7e15660e2bd4327",
+      "git_blob_sha1": "b760f5e7127855806d1adb03019d4fb4aa6484bf"
+    },
+    {
+      "path": "source/DPAD/tools/flexible.py",
+      "url": "https://github.com/ShanechiLab/DPAD/blob/41f108bc90252ced19fe3c8eda7eaff2e87c57b3/source/DPAD/tools/flexible.py",
+      "bytes": 196692,
+      "sha256": "a6b014b34a554071a60884a8aa54ec00c93ef735921303d4a8c4683fcecbd22d",
+      "git_blob_sha1": "7e5084c8cd51f526fd0d09c8e5650e4337565df8"
+    }
+  ],
+  "source_facts": [
+    {
+      "source": "source/DPAD/tools/flexible.py",
+      "lines": [
+        90,
+        142
+      ],
+      "fact": "The selected current method-code path reads _iCVF2 and sets iCVFolds=2."
+    },
+    {
+      "source": "source/DPAD/tools/flexible.py",
+      "lines": [
+        268,
+        315
+      ],
+      "fact": "Inner method selection passes its training arrays to doCVedModelFit with the selected two folds and CVFoldInds=None."
+    },
+    {
+      "source": "source/DPAD/tools/flexible.py",
+      "lines": [
+        557,
+        561
+      ],
+      "fact": "The default caller invokes genCVFoldInds without shuffle arguments."
+    },
+    {
+      "source": "source/DPAD/tools/tools.py",
+      "lines": [
+        165,
+        190
+      ],
+      "fact": "Unshuffled contiguous selection blocks have ceil(N/K) rows except the final tail; remaining rows train. The separate floor/remainder helper at lines 145–162 is not selected."
+    },
+    {
+      "source": "source/DPAD/tools/flexible.py",
+      "lines": [
+        779,
+        787
+      ],
+      "fact": "The CV path invokes prepareTrainingAndTestData with fold indices and explicit YType/ZType/missing marker."
+    },
+    {
+      "source": "source/DPAD/tools/flexible.py",
+      "lines": [
+        3217,
+        3481
+      ],
+      "fact": "Preparation slices folds before learning transforms and retains raw and scaled selection arrays separately."
+    },
+    {
+      "source": "source/DPAD/tools/tools.py",
+      "lines": [
+        193,
+        256
+      ],
+      "fact": "Scaling uses a masked mean and sample SD ddof=1. Z-scoring also centers. Division is restricted to positive-SD dimensions; constant channels retain SD zero."
+    },
+    {
+      "source": "Nature Neuroscience paper, Methods: Fourth dataset",
+      "url": "https://www.nature.com/articles/s41593-024-01731-2",
+      "cached_text_bytes": 158464,
+      "cached_text_sha256": "5e3f4323357705dea5e31a8d4e8b4ce60cc3187b3bd0da45f7079cb0e05abf24",
+      "decoded_text_offset_approx": [
+        105675,
+        106650
+      ],
+      "fact": "The fourth dataset uses 2D cursor position and velocity, and a random 32-electrode subset with 77–99 single units across sessions. This does not reveal the selected electrode identities or original array-column order."
+    }
+  ],
+  "component_design": {
+    "input": "Authenticated, already-preprocessed outer-training rows in their declared original order; float64 finite continuous neural and behavior matrices.",
+    "explicit_choices": [
+      "Four centering/zscore flags",
+      "Ordered row identities",
+      "Ordered neural identities and units",
+      "Canonical behavior positions then velocities with declared units"
+    ],
+    "admitted_profile": "Two inner folds; at least two training rows per fold; 77–99 neural channels and four behavior channels; no missing markers, discarded samples, external inputs, trial lists or shared train/selection rows.",
+    "operator_only": "Selection behavior is returned as reference material. This API does not enforce access isolation, authenticate arrays or ensure causal inference.",
+    "source_not_history": "The pinned current caller establishes an independently supportable source-default inner method. It does not establish the exact historical Figure 6 execution.",
+    "column_order_boundary": "The enforced position_x, position_y, velocity_x, velocity_y order and these ID strings are an explicit caller-admitted representation, not recovered historical original-column order. The caller must establish and document the original-column mapping before input. This component does not reorder columns, infer electrode identity or authenticate the mapping; the source helpers themselves are dimension-general."
+  },
+  "unresolved": [
+    "Raw bin origin, timestamp edges, smoothing boundaries and 50-ms decimation/alignment",
+    "Exact selected session membership and electrodes",
+    "Historical outer-fold row identity and boundary/reset context",
+    "Publication scaling settings and fit/inference configuration",
+    "Native author/reference model fit and 1960/280-grid binding with held-out predictions"
+  ],
+  "preserved_contracts": "Existing evaluators and their divisible-by-five historical outer support are unchanged; no observations are padded, discarded or rounded into those contracts.",
+  "validation": {
+    "private_source_parity": "Seven generated controls passed once, including all 16 scaling-flag combinations and both inner folds against isolated pure author functions. No full author module, original data or model was imported.",
+    "runtime": "Python 3.11.6; NumPy 2.4.6",
+    "portable_controls": "Five public generated controls were prepared after that execution. Their final source requires integration execution; the earlier pass is not claimed for their final bytes.",
+    "scientific_result": false,
+    "benchmark_readiness_increment": 0
+  },
+  "attribution": "No author code, numerical source fixture, original data or model is vendored in this component. Source behavior is attributed above; the generated test fixture uses independently authored arithmetic."
+}

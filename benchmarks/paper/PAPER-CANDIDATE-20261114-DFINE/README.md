@@ -57,6 +57,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Missing observation](implementations/missing-observation) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Sae control inputs v1](implementations/sae-control-inputs-v1) — Reviewed source component.
+  Scope: Upstream source-defined SAE missing-observation inputs only; historical masks, folds, native models/readouts and edge convention remain unresolved; no readiness or result gain.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

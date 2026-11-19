@@ -1,0 +1,50 @@
+--- model_operation.py:fit_source_defaults
++++ streamed_model_operation.py:_fit_source_defaults_streamed
+@@ -1,9 +1,12 @@
+-def fit_source_defaults(arrays, meta, morphology_prefix, out):
++def _fit_source_defaults_streamed(arrays, meta, morphology_prefix, out, checkpoint, stats):
+     """1008 updates and 21 epoch-end validations; final test prediction only."""
++    from model_operation import (configure_model_runtime, initialize_model, observed_source_split,
++                                 masked_pearson, save_tree)
++    from streamed_batch import streamed_gradient, streamed_prediction
+     import numpy as np
+     configure_model_runtime()
+     import jax.numpy as jnp
+-    from jax import tree_map
++    from jax import tree_map, tree_util
+     import tensorflow as tf
+     from tensorflow.data import Dataset
+     import optax
+@@ -11,6 +14,11 @@
+     from jaxley.optimize.utils import l2_norm
+ 
+     opt, states, predict, gradient, _ = initialize_model(arrays, meta, morphology_prefix)
++
++    def predict_validation(optimum, currents):
++        stats["last_validation_batch_completed_rows"] = 0
++        return streamed_prediction(predict, optimum, currents, np=np, check=checkpoint, stats=stats)
++
+     tf.random.set_seed(0)
+     rng = observed_source_split(meta)
+     train_ids = np.asarray(meta["splits"]["train"], dtype=np.int64)
+@@ -37,7 +45,10 @@
+     for epoch in range(21):
+         epoch_loss = 0.0
+         for batch_index, batch in enumerate(dataloader):
+-            loss, gradients = gradient(*opt, batch[1].numpy(), batch[2].numpy(), batch[3].numpy(), states)
++            stats["last_training_batch_completed_rows"] = 0
++            loss, gradients = streamed_gradient(gradient, opt, batch[1].numpy(), batch[2].numpy(),
++                                                 batch[3].numpy(), states, np=np, jnp=jnp,
++                                                 tree_util=tree_util, check=checkpoint, stats=stats)
+             grad_params, grad_basal, grad_somatic = gradients
+             for i in range(3):
+                 weight_norm = l2_norm(grad_params[i])
+@@ -58,7 +69,7 @@
+             updates += 1
+             # No within-epoch evaluation: 48 < source eval_every_nth_batch=100.
+         require(batch_index + 1 == 48, "source epoch extent")
+-        val_predictions = np.concatenate([np.asarray(predict(opt, batch[1].numpy())) for batch in val_loader], axis=0)
++        val_predictions = np.concatenate([predict_validation(opt, batch[1].numpy()) for batch in val_loader], axis=0)
+         metric = masked_pearson(val_predictions, arrays["val_targets"], arrays["mask"][val_ids])
+         scalar_loss = float(np.asarray(epoch_loss))
+         require(np.isfinite(scalar_loss), "nonfinite epoch loss")
