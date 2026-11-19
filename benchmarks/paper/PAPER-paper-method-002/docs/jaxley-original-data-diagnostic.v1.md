@@ -62,3 +62,29 @@ Their prospective hosted profile is **CPython 3.11.18 on Ubuntu 24.04 / x86_64**
 One separately reviewed **17-case stdlib reporting/transport campaign** passed. It exercised bounded artifacts, exact result validation, malformed/partial output and deadline handling; it executed **zero scientific controls**. The new hosted profile and both real suites (**20 + 15 controls**) remain unexecuted at this publication cutoff. Neither the transport result nor the earlier original-input qualification substitutes for those future hosted observations.
 
 Each generated entry requires its exact source closure and a fresh artifact directory. Its declared two-GiB, one-CPU exposure is conservative accounting, not a measured RSS or CPU-affinity guarantee. The input-programme source handoff and reporting review are identified by **18,687 bytes / `820ae1d3ef7e190aaa0494dc87d508c731c0dfb937d696422969dd3668fa1818`** and **13,077 bytes / `1dde145395532aae49b08f41cc15c766019bb072077e65ac35866758d4a86640`**, respectively. No later model/first-row, score or readiness result is included here.
+
+## Later local initialized-row forward and gradient — 2026-11-19 UTC
+
+A separately admitted local operation completed one initialized **training-row forward pass**, followed by **masked, site-summed L1 loss and its gradient**. Independent saved scientific and runtime reviews accepted that limited result and closure of the recorded owned scope. This is distinct from the public input-source package and its prospective hosted generated-control profile; it does not transfer local runtime admission to either.
+
+| Local initialized-row observation | Accepted result |
+| --- | --- |
+| Predictions / observed sites | **147 / 10** |
+| Connection columns | **287** |
+| Finite gradient leaves / parameter scalars | **15 / 607** |
+| Masked L1 value | **13.509893028590039** |
+| Optimizer updates / test-target access | **0 / none** |
+| Native wall time / worker-reported time | **263.324 s / 252.876 s** |
+| Reported process maximum RSS | **7,168,084 KiB (about 6.836 GiB)** |
+
+The loss is a value for one initialized training row, **not a held-out, paper or benchmark score**. Finite-output claims follow the bound worker success predicates and independent saved metadata/source review; reviewers did not decode or rerun the numerical arrays. No row identity, source case, prediction array, target, parameter or gradient values are released. The process maximum RSS is neither a container peak measurement nor a forecast of full-fit or batch memory, and these timings are not extrapolated to training.
+
+The exact prospective local runtime used **29 wheels and 15 admitted Python modules plus `pyproject.toml`**. It is not a proven historical author installation. Source-loader advisories were retained; no change to the numerical programme or task size is claimed. Whole-record preprocessing before the source-default split remains a limitation.
+
+There was no optimizer update, full training, trained baseline, native LLM reasoning result, replication, improvement or SOTA result. Protected competitor isolation and suite readiness are not established. Full-fit runtime/dependency closure and fair held-out evaluation remain outstanding. The earlier diagnostic, input qualification and hosted-control limitations above remain intact.
+
+| Saved first-row metadata | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Final scoped handoff | 23,480 | `98c261068950cf9c508590517770b2c54eee765eb2b61fc50480eb8198347036` |
+| Saved scientific review | 28,007 | `eb6fea8d5bbc4f564e89655a506ae9451b323456a3942afc5492ef5d316176e1` |
+| Saved runtime review | 50,032 | `d7cda69ef02500c693554a98d7ef5e53fd8d05989b72e568abdfdd9dd54b7c0f` |
