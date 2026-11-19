@@ -50,6 +50,8 @@ jobs:
             python: '3.11.6'
           - group: jaxley-input-cpu
             python: '3.11.18'
+          - group: erp-core-builder
+            python: '3.11.6'
     env:
       PARALLEL_CONTROL_GROUP: ${{ matrix.group }}
       PIP_DISABLE_PIP_VERSION_CHECK: "1"
@@ -64,9 +66,9 @@ jobs:
           python3 -I -S -B - <<'PY'
           import hashlib, os, stat
           pins = [
-              {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': '30443680ff05c2bcdcff6418b1242df6ad56c9725cddcb62267680d6faac3429'},
-              {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': '3b7e306ede03bbcfba45b2ad5f021f1d493b8561eda41a3df20bfbdb7a91008c'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 475443, 'sha256': '8cebeb89c8dab02bf553ad427fec0b29915e1e947fb32fa8d2fc761910086f04'},
+              {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': 'c2bf1bf9cba1041400585d3e01b99ec17cb79a044e96c70761c916a4bd6629e3'},
+              {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': 'e7d3ecf66a190e1d6d630c6cbe86864ad2c568cf62fcb8d3ca77bc88345d0c7e'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 477538, 'sha256': 'b884a18a234835e0224b0090bafa1358e5d99bded996c66d683cea7a7ae72fdc'},
           ]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
@@ -238,6 +240,11 @@ jobs:
           scipy @ https://files.pythonhosted.org/packages/21/cd/fe2d4af234b80dc08c911ce63fdaee5badcdde3e9bcd9a68884580652ef0/scipy-1.10.1-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:15a35c4242ec5f292c3dd364a7c71a61be87a3d4ddcc693372813c0b73c9af1d
           six @ https://files.pythonhosted.org/packages/d9/5a/e7c31adbe875f2abbb91bd84cf2dc52d792b5a01506781dbcf25c91daf11/six-1.16.0-py2.py3-none-any.whl --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
           tzdata @ https://files.pythonhosted.org/packages/65/58/f9c9e6be752e9fcb8b6a0ee9fb87e6e7a1f6bcab2cdc73f02bb7ba91ada0/tzdata-2024.1-py2.py3-none-any.whl --hash=sha256:9068bc196136463f5245e51efda838afa15aaeca9903f49050dfa2679db4d252
+          LOCK
+              ;;
+            erp-core-builder)
+              cat >"$PARALLEL_LOCK" <<'LOCK'
+          numpy @ https://files.pythonhosted.org/packages/5a/62/007b63f916aca1d27f5fede933fda3315d931ff9b2c28b9c2cf388cd8edb/numpy-1.26.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:f25e2811a9c932e43943a2615e65fc487a0b6b49218899e62e426e7f0a57eeda
           LOCK
               ;;
             *) exit 2 ;;
