@@ -57,7 +57,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-FIND-REP-013](PAPER-FIND-REP-013/README.md) | Non-allometric expansion and enhanced compartmentalization of Purkinje cell dendrites in the human cerebellum | source_unresolved | ineligible | 6 | [manifest](PAPER-FIND-REP-013/implementations/registered-runtime/manifest.json) |
 | [PAPER-FIND-REP-014](PAPER-FIND-REP-014/README.md) | Predictive and instructive cerebellar encoding of dopamine reward drives motivated behavior | unavailable | unavailable | 1 | not linked |
 | [PAPER-FIND-REP-015](PAPER-FIND-REP-015/README.md) | Cerebellar neural populations orchestrate dopamine reward signaling with single-trial precision | unavailable | unavailable | 3 | not linked |
-| [PAPER-ROOT-ADD-001](PAPER-ROOT-ADD-001/README.md) | Mapping the neuronal building blocks of human language with language models | source_unresolved | design_ready | 22 | not linked |
+| [PAPER-ROOT-ADD-001](PAPER-ROOT-ADD-001/README.md) | Mapping the neuronal building blocks of human language with language models | source_unresolved | design_ready | 23 | not linked |
 | [PAPER-ROOT-ADD-002](PAPER-ROOT-ADD-002/README.md) | Non-invasive decoding of typed sentences from human brain activity | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-ROOT-ADD-003](PAPER-ROOT-ADD-003/README.md) | Driving and suppressing the human language network using large language models | source_unresolved | source_unresolved | 4 | [manifest](PAPER-ROOT-ADD-003/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-004](PAPER-ROOT-ADD-004/README.md) | Respiration shapes the neural dynamics of successful remembering in humans | source_unresolved | source_unresolved | 2 | not linked |

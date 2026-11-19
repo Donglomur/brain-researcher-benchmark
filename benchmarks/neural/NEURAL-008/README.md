@@ -47,6 +47,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Paired program v1](implementations/paired-program-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Raw epoch companion v1](implementations/raw-epoch-companion-v1) — Reviewed source component.
+  Scope: Separate neural008\_raw\_epoch\_four\_panel\_v1 source companion: restricted epoch viewer and same-epoch numerical programme, EEG-only versus EEG+EOG over5450 epochs nested in two exposed development people. Generated controls only; authentic assembly, provider/native qualification and scientific outcomes remain separate. Historical task/conditions and benchmark counts unchanged.
 - [Finite paired scorer](implementations/finite-paired-scorer) — Reviewed source component.
   Scope: Finite paired sleep-stage scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
