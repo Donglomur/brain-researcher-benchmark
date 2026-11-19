@@ -58,6 +58,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Before waveform-pair current adoption: understanding.v1.json](docs/understanding-pre-waveform-pair-v1/understanding.v1.json)
 - [Full32 packet materialization evidence (2026-11-19)](docs/full32-materialization-20261119.md)
 - [Full32 packet materialization evidence JSON (2026-11-19)](docs/full32-materialization-20261119.json)
+- [Full32 numerical delivery evidence (2026-11-19)](docs/full32-numerical-delivery-20261119.md)
+- [Full32 numerical delivery evidence JSON (2026-11-19)](docs/full32-numerical-delivery-20261119.json)
 
 ## Implementation artifacts
 
@@ -77,6 +79,10 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Full32 paired benchmark v1](implementations/full32-paired-benchmark-v1) — Reviewed source component.
   Scope: Source preparation for the 32-person, 6,400-event NEURAL-077 condition: explicit-path packet builder, complete per-query consumer and collector, and offline paired evaluator. Both numeric conditions retain the same four complete labeled demonstrations; the original 400-query condition remains unchanged. Original data, trusted descriptors, demonstrations, private key and targets remain external. Generated controls and accepted source review do not establish a completed full32 packet, waveform validity, physical calibration, paired bootstrap, provider isolation, hosted qualification, model performance or scientific readiness.
+- [Full32 paired bootstrap v1](implementations/full32-paired-bootstrap-v1) — Reviewed source component.
+  Scope: generated paired participant interval calculation; no empirical score/interval
+- [Full32 paired runtime v1](implementations/full32-paired-runtime-v1) — Reviewed source component.
+  Scope: portable binding/profile/generated process controls only; not a macOS native replay
 - [Visual provider pair v1](implementations/visual-provider-pair-v1) — Reviewed source component.
   Scope: Restricted four\_demo visual-provider receipt admission joins unchanged matched\_waveform\_programme protected metrics for all400 trials. Lossless delivered PNG mapping preserves original pixels/history. Provider/context/full-history capability, isolation, genuine campaigns and protected paired scores remain unqualified; both people were exposed development people and target/standard labels do not establish physiological P3 presence.
 - [Waveform transport v1](implementations/waveform-transport-v1) — Reviewed source component.
