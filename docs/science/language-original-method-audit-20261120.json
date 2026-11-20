@@ -1,0 +1,76 @@
+{
+  "benchmark_source_commit": "afc5b8bf9872b0deaefafcb801b2748ab05ebc5c",
+  "changes_from_audit": {
+    "algorithm_changed": false,
+    "benchmark_readiness_promoted": false,
+    "new_model_runs": 0
+  },
+  "date": "2026-11-20",
+  "limits": [
+    "Agreement is conditional on the admitted finite supplied-PCA input domain; original array properties were not measured in this audit.",
+    "C1 raw-feature PCA fallback is outside the selected implementation and this comparison. Supplied PCA provenance does not establish train-only PCA fitting.",
+    "Maintained csv.DictReader/Python float parsing and original pandas.read_csv were not numerically compared; int(time*10) boundary parity remains unverified.",
+    "The helper enforces declared NumPy1.24.3/scikit-learn1.2.2/SciPy1.10.1; historical Python/pandas/BLAS/thread/runtime and numerical prediction equivalence remain unqualified.",
+    "The complete224-array panel is separate from this selected42-job-per-role endpoint.",
+    "No original-data execution, reproduction tolerance, difficulty result, improvement, statistical significance or SOTA follows from static source comparison."
+  ],
+  "schema": "language-selected-method-source-audit/v1",
+  "scientific_performance_measured": false,
+  "selected_endpoint": {
+    "bin_ms": 100,
+    "estimator": "Fresh sklearn.linear_model.Ridge(alpha=0.01) for each held sentence; other estimator settings use library defaults.",
+    "held_sentence_requests_per_role": 5685,
+    "jobs_per_role": 42,
+    "metric": "Pooled Pearson over stitched held-out rows, then mean of three selected lags per session and equal mean of14sessions. Undefined values are retained and propagate.",
+    "people": 8,
+    "post_bins": 20,
+    "prior_bins": 20,
+    "response": "Mean across supplied firing-rate columns, then centered3-bin mean with unchanged zero edges. No extra z-scoring in inspected C1/preparation.",
+    "response_center_ms": [
+      -300,
+      -200,
+      -100
+    ],
+    "selected_lag_indices_zero_based": [
+      17,
+      18,
+      19
+    ],
+    "selected_layer_zero_based": 5,
+    "sessions": 14,
+    "split": "All rows sharing the held sentence identifier are excluded from its fit; original ordering restored for prediction assembly.",
+    "supplied_context": "llama/vicuna7b supplied PCA;30components/33layers"
+  },
+  "source": {
+    "archive": "https://zenodo.org/api/records/20128462/files/analysis.zip/content",
+    "archive_bytes_declared": 18516533,
+    "authentication": "Exact archive members recovered by bounded HTTP ranges; ZIP size/CRC and complete member SHA256 matched declared source identities. Other archive members and numerical arrays were not authenticated by this comparison.",
+    "members": [
+      {
+        "bytes": 21515,
+        "path": "analysis/computation/code/function_code.py",
+        "sha256": "c1a1fa2974646e416dee6c86daf93bcd188527607c8615c9e650870b83eaf2e5"
+      },
+      {
+        "bytes": 4474,
+        "path": "analysis/computation/code/C1_neuron_predictivity_mean_various_llm.py",
+        "sha256": "bf2c3250bd64f2870c170eea3e5312f85675b38b8935a948cfbf758c4197c8d8"
+      }
+    ],
+    "paper": "https://www.nature.com/articles/s41586-026-10691-5",
+    "record": "https://zenodo.org/records/20128462",
+    "whole_archive_checksum_verified": false
+  },
+  "status": "static_source_agreement_on_selected_admitted_domain",
+  "task": "PAPER-ROOT-ADD-001",
+  "timing_interpretation": {
+    "edge_condition": "This interior-window statement excludes recording-edge zero padding.",
+    "minus100ms_target_samples_relative_to_aligned_feature_ms": [
+      -200,
+      -100,
+      0
+    ],
+    "sentence_boundary_smoothing": "Centered response smoothing can span sentence boundaries; preserving the original task does not establish a purged temporal split.",
+    "strictly_pre_feature_or_causal_inference_supported": false
+  }
+}
