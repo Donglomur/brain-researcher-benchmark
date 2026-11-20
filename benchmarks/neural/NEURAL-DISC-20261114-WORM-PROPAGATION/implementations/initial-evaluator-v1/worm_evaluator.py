@@ -270,13 +270,29 @@ def trace_metrics(target, prediction, gap):
         return result
     truth, pred = [target["values"][i] for i in valid], [prediction[i] for i in valid]
     result["mse"] = mean((a - b) ** 2 for a, b in zip(truth, pred))
-    a0, b0 = mean(truth), mean(pred)
-    aa, bb = sum((x - a0) ** 2 for x in truth), sum((x - b0) ** 2 for x in pred)
-    if aa > 0 and bb > 0:
-        result["correlation"] = sum((a - a0) * (b - b0) for a, b in zip(truth, pred)) / math.sqrt(aa * bb)
+    # Pearson correlation is invariant to independent positive rescaling. Work
+    # on centered, unit-norm vectors so aa*bb cannot overflow or underflow for
+    # otherwise representable trace values. Constant status keeps its priority.
+    def unit_centered(values):
+        if min(values) == max(values):
+            return None
+        scale = max(abs(value) for value in values)
+        scaled = [value / scale for value in values]
+        center = mean(scaled)
+        centered = [value - center for value in scaled]
+        norm = math.sqrt(math.fsum(value * value for value in centered))
+        _require(norm > 0 and math.isfinite(norm), "correlation outside numerical range")
+        return [value / norm for value in centered]
+
+    a, b = unit_centered(truth), unit_centered(pred)
+    if a is not None and b is not None:
+        correlation = math.fsum(x * y for x, y in zip(a, b))
+        _require(math.isfinite(correlation) and abs(correlation) <= 1 + 1e-12,
+                 "correlation outside numerical range")
+        result["correlation"] = min(1.0, max(-1.0, correlation))
         result["correlation_status"] = "defined"
     else:
-        result["correlation_status"] = "zero_target_variance" if aa == 0 else "zero_prediction_variance"
+        result["correlation_status"] = "zero_target_variance" if a is None else "zero_prediction_variance"
     area, duration = 0.0, 0.0
     ts, ys = target["times_s"], target["values"]
     for i in range(1, len(ts)):
