@@ -112,7 +112,14 @@ def geometry_from_coefficients(data, labels, beta):
     singular_values = np.linalg.svd(covariance, compute_uv=False)
     nonsingular = bool(singular_values[-1] > tolerance)
     if nonsingular:
-        precision = math.sqrt(float(np.sum((eigenvectors.T @ signal_axis) ** 2 / eigenvalues)))
+        # Form the precision norm before squaring. With a finite, very small
+        # covariance, 1/eigenvalue can overflow although its square root is
+        # representable. hypot also scales its sum of squares internally.
+        components = eigenvectors.T @ signal_axis
+        precision = math.hypot(*(float(value) / math.sqrt(float(eigenvalue))
+                                 for value, eigenvalue in zip(components, eigenvalues)))
+        if not math.isfinite(precision):
+            raise ValueError("data overflowed projected precision calculation")
     else:
         precision = None
     projections = data @ signal_axis
