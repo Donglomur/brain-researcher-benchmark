@@ -178,7 +178,55 @@ def _drain_child(child, candidate_end, state):
                 stream.close()
 
 
-def _output_directory_metadata(output_fd, original_identity):
+def _predicate_entries_metadata(result_entries):
+    """Summarize the already-computed predicate set; do not enumerate the directory."""
+    value = {"type": "set" if type(result_entries) is set else "other",
+             "count": None, "entries": [], "more": None,
+             "truncated": False, "unknown": False}
+    if type(result_entries) is not set:
+        value["unknown"] = True
+        return value
+    value["count"] = len(result_entries)
+    value["more"] = len(result_entries) > 2
+    value["truncated"] = value["more"]
+    entries = iter(result_entries)
+    for _ in range(min(len(result_entries), 2)):
+        name = next(entries)
+        kind = "str" if type(name) is str else "bytes" if type(name) is bytes else "other"
+        row = [kind, None, None]
+        try:
+            if kind == "other":
+                raise TypeError("Unsupported predicate entry type")
+            raw_name = os.fsencode(name)
+            row[1] = base64.b64encode(raw_name[:OUTPUT_DIRECTORY_NAME_BYTES]).decode("ascii")
+            row[2] = len(raw_name) > OUTPUT_DIRECTORY_NAME_BYTES
+            value["truncated"] |= row[2]
+        except BaseException:
+            value["unknown"] = True
+        value["entries"].append(row)
+    return value
+
+
+def _predicate_output_metadata(predicate, later_scan):
+    """Keep predicate evidence first within the existing total metadata allowance."""
+    value = {"v": 2, "predicate": predicate, "later_scan": later_scan}
+    raw = encoded(value)
+    if len(raw) > OUTPUT_DIRECTORY_METADATA_CAP:
+        # Later observations cannot replace the names used by the failed predicate.
+        later_scan = dict(later_scan)
+        later_scan.update(entries=[], truncated=True, unknown=True,
+                          errors=["metadata_cap"])
+        value["later_scan"] = later_scan
+        raw = encoded(value)
+    if len(raw) > OUTPUT_DIRECTORY_METADATA_CAP:
+        value["later_scan"] = {"truncated": True, "unknown": True,
+                              "errors": ["metadata_cap"]}
+        raw = encoded(value)
+    need(len(raw) <= OUTPUT_DIRECTORY_METADATA_CAP, "Bounded predicate metadata")
+    return raw
+
+
+def _output_directory_metadata(output_fd, original_identity, *, predicate=None):
     """Bounded later observation through the checked fd; never read entry contents."""
     value = {"v": 1, "dir": None, "entries": [], "more": None,
              "race": "unknown", "truncated": False, "unknown": False, "errors": []}
@@ -227,6 +275,8 @@ def _output_directory_metadata(output_fd, original_identity):
             value["race"] = "not_observed" if stable else "changed"
     except BaseException:
         value["unknown"] = True; value["errors"].append("after")
+    if predicate is not None:
+        return _predicate_output_metadata(predicate, value)
     raw = encoded(value)
     if len(raw) > OUTPUT_DIRECTORY_METADATA_CAP:
         # Keep valid complete JSON rather than slicing encoded metadata.
@@ -325,12 +375,15 @@ def _run(*, _generated=None, _diagnostic):
         unchanged_directory(paths["output"], output_fd, output_identity)
         result_entries = set(os.listdir(output_fd))
         if result_entries != {"RESULT.json"}:
+            predicate = {"type": "set", "count": len(result_entries), "entries": [],
+                         "more": None, "truncated": True, "unknown": True}
             try:
-                _diagnostic["output_directory_metadata"] = _output_directory_metadata(output_fd, output_identity)
+                predicate = _predicate_entries_metadata(result_entries)
+                _diagnostic["output_directory_metadata"] = _output_directory_metadata(
+                    output_fd, output_identity, predicate=predicate)
             except BaseException:
-                _diagnostic["output_directory_metadata"] = encoded({"v": 1, "entries": [],
-                    "more": None, "race": "unknown", "truncated": True, "unknown": True,
-                    "errors": ["unavailable"]})
+                _diagnostic["output_directory_metadata"] = _predicate_output_metadata(
+                    predicate, {"truncated": True, "unknown": True, "errors": ["unavailable"]})
         need(result_entries == {"RESULT.json"},
              "Exactly one candidate result; no extras or directories")
         result, result_identity = capture("RESULT.json",

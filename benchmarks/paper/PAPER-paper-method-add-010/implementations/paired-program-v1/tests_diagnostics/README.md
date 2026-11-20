@@ -6,7 +6,7 @@ Run with the standard library only, from the paired implementation directory:
 python3 -I -S -B tests_diagnostics/test_diagnostics.py -v
 ```
 
-The three tests execute the production candidate wrapper, owned Provider, bounded
+The five tests execute the production candidate wrapper, owned Provider, bounded
 CLI capture, archive parser, and strict receipt validator. A generated local
 daemon supplies Docker observations; Linux process identity fields and pidfd
 availability are explicit test substitutes. Real child processes and pipes are
@@ -31,10 +31,10 @@ whose parent exists. The tests create that leaf and write only aggregate
 `ARTIFACT_DIR=${ARTIFACT_DIR}` through its existing environment substitution.
 The ordinary unittest transcript remains the pass/fail interface.
 
-All tests share a 100-second clock. Each Provider phase has a 37-second allowance,
+The proposed full suite shares a 180-second clock. The three earlier phases retain a 37-second allowance; each new predicate phase has a 25-second allowance,
 at most 64 CLI processes, 112 KiB of Provider writes, and a 4 MiB Provider read
 budget. Fixture writes are capped at 64 KiB per test. The selected generated
-campaign reserves 640 KiB of cumulative output and 18 MiB of named reads,
+future full campaign reserves 1 MiB of cumulative output and 44 MiB of named reads,
 excluding interpreter and library loading. An unexpected need for Linux signaling
 fails the test; signaling is never emulated as successful cleanup.
 
@@ -52,8 +52,31 @@ python3 -I -S -B tests_diagnostics/test_diagnostics.py DiagnosticRegressionTests
 ```
 
 Aggregate `methods` reports the number selected and completed.
-`available_methods` is three; `full_suite_complete` is false for a one-method
+`available_methods` is five; `full_suite_complete` is false for a one-method
 run. The ordinary unittest result remains authoritative. A one-method campaign
 reserves 256 KiB of generated artifacts and 12 MiB of named reads, with its
 separate supervisor limited to 60 seconds and 256 MiB. The daemon protocol and
 Linux identity observations remain explicit generated substitutes.
+
+The two predicate controls are selected independently from the three earlier
+methods. One uses a quiet child that creates only `RESULT.json`, checking real
+initial-empty and final directory enumeration, unchanged captured result and
+manifest, and no wrapper failure diagnostic. The other uses the existing
+two-entry refusal fixture, requiring metadata from the exact computed rejected
+set, separately labeled from a later fd-based scan. Neither new method patches
+`listdir` or `scandir`. Pure set-summary checks cover empty, bounded/truncated,
+and unknown-type metadata. The legacy two-argument later-scan helper remains
+available to the earlier control.
+
+Run only the two new methods with the selected shorter source-test clock:
+
+```sh
+MEG_DIAGNOSTIC_TEST_SECONDS=55 python3 -I -S -B tests_diagnostics/test_diagnostics.py DiagnosticRegressionTests.test_real_initial_empty_to_sole_result_success DiagnosticRegressionTests.test_rejected_set_and_later_scan_are_distinct -v
+```
+
+The optional test-only clock setting accepts only 55 or 180 seconds; it does not
+configure production execution. The selected pair reserves 512 KiB of cumulative
+artifacts and 20 MiB of named reads, under a 60-second/256 MiB external supervisor.
+The proposed full five-method envelope is 1 MiB/960 phase files plus one aggregate,
+44 MiB named reads and 200 seconds outer time. It is unrun and requires separate
+CI adoption. An aggregate with two selected passes is not full-suite evidence.

@@ -24,8 +24,12 @@ from unittest.mock import patch
 
 HERE = Path(__file__).resolve().parent
 PAIRED = HERE.parent
+CLOCK_TEXT = os.environ.get("MEG_DIAGNOSTIC_TEST_SECONDS", "180")
+if CLOCK_TEXT not in ("55", "180"):
+    raise ValueError("Selected source-test clock preset must be 55 or 180 seconds")
+TEST_SECONDS = int(CLOCK_TEXT)
 START = time.monotonic()
-DEADLINE = START + 100
+DEADLINE = START + TEST_SECONDS
 PROVIDER_WRITE = 114688
 VERBOSE_RESULT = b'{"schema":"generated_verbose_result/v1","emitted_bytes_per_stream":131072}\n'
 
@@ -119,6 +123,20 @@ raise RuntimeError("GENERATED_CHILD_FAILURE")
 '''
 
 
+SOLE_RESULT = b'{"schema":"generated_sole_result/v1","complete":true}\n'
+SOLE_RESULT_CHILD = r'''import os
+import sys
+output = sys.argv[sys.argv.index("--output") + 1]
+raw = b'{"schema":"generated_sole_result/v1","complete":true}\n'
+fd = os.open(output, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o444)
+try:
+    if os.write(fd, raw) != len(raw):
+        raise RuntimeError("Generated sole result write failed")
+    os.fsync(fd)
+finally:
+    os.close(fd)
+'''
+
 OUTPUT_REFUSAL_CHILD = r'''import os
 import sys
 output = sys.argv[sys.argv.index("--output") + 1]
@@ -140,7 +158,9 @@ def prepare_inputs(root, kind, transport, io):
     program.mkdir(mode=0o700); data.mkdir(mode=0o700)
     wrapper = io.read(PAIRED / "candidate_wrapper.py", transport.WRAPPER_PIN)
     child_source = {"verbose": VERBOSE_CHILD, "failure": FAILURE_CHILD,
-                    "output-refusal": OUTPUT_REFUSAL_CHILD}[kind].encode()
+                    "output-refusal": OUTPUT_REFUSAL_CHILD,
+                    "predicate-success": SOLE_RESULT_CHILD,
+                    "predicate-refusal": OUTPUT_REFUSAL_CHILD}[kind].encode()
     # Compile the selected generated runnable before publication or child launch.
     compile(child_source, str(program / "submission.py"), "exec")
     files = {"candidate_wrapper.py": io.publish(program / "candidate_wrapper.py", wrapper, 0o444),
@@ -159,10 +179,13 @@ def prepare_inputs(root, kind, transport, io):
 
 def run_phase(kind, root, io, transport, daemon_type):
     vendor = transport._vendor()
+    successful = kind in ("verbose", "predicate-success")
     root.mkdir(mode=0o700)
     io.root = root
     for name in ("control", "quarantine", "candidate-output"):
         (root / name).mkdir(mode=0o700)
+    if kind in ("predicate-success", "predicate-refusal"):
+        need(list((root / "candidate-output").iterdir()) == [], "Actual generated directory initially empty")
     image = "sha256:" + "7" * 64
     phase = "generated-" + kind + "-A-fold-00"
     program_root = root / "programme"
@@ -180,6 +203,8 @@ def run_phase(kind, root, io, transport, daemon_type):
                  "max_files": 2, "max_directories": 1, "max_file_bytes": 4096, "max_output_bytes": 8192,
                  "manifest_bytes": 4096, "max_cli_calls": 64, "max_cli_bytes": 2097152,
                  "inventory_bytes": 4096, "source_read_bytes": 4194304, "host_write_bytes": PROVIDER_WRITE}
+    if kind in ("predicate-success", "predicate-refusal"):
+        resources.update(setup_seconds=10, producer_seconds=5, capture_seconds=2, cleanup_seconds=8)
     request = transport.make_request("generated-" + kind, "A", 0, image, files["PROGRAM.json"],
                                      exposure_pin, resources, START, DEADLINE)
     need(request["phase_id"] == phase, "Current generated method identity")
@@ -240,7 +265,7 @@ def run_phase(kind, root, io, transport, daemon_type):
             result = provider.execute_phase(request, mounts, DEADLINE, lambda *_: None)
     finally: daemon.close()
     receipt = result["receipt"]
-    expected_code = 0 if kind == "verbose" else 1
+    expected_code = 0 if successful else 1
     need(receipt["natural_exit"] == {"Status": "exited", "Running": False, "Dead": False, "Pid": 0,
                                     "ExitCode": expected_code, "OOMKilled": False}, "Exact actual wrapper exit joined to generated inspect")
     need(receipt["exit_observation_error"] is None and receipt["deadline_exceeded"] is False,
@@ -280,7 +305,7 @@ def run_phase(kind, root, io, transport, daemon_type):
     need(capture["stream_bytes_observed"] == capture["retained_bytes"] == sum(p["bytes"] for p in stream_pins.values()) <= 4096,
          "Exact attached stream byte count")
     need(len(daemon.wrapper_reports) == 1 and daemon.wrapper_reports[0] == {
-        "kind": "wrapper_exit", "exit_code": expected_code, "error_type": None if kind == "verbose" else "SystemExit",
+        "kind": "wrapper_exit", "exit_code": expected_code, "error_type": None if successful else "SystemExit",
         "actual_main_called": True}, "Actual production main executed once")
     need(not daemon.errors and all(not values for values in daemon.resources.values()) and len(daemon.removals) == 3 and
          all(v["private_diagnostic_already_present"] is True for v in daemon.removals),
@@ -288,12 +313,12 @@ def run_phase(kind, root, io, transport, daemon_type):
     need(len(receipt["retired_resources"]) == 3 and all(v["closed"] is True and v["absence_observed"] is True and
          v["creation_outcome_unknown"] is False for v in receipt["retired_resources"]), "No unknown resource creation passed")
     wrapper_summary = None
-    if kind == "verbose":
+    if successful:
         need(receipt["status"] == "captured" and receipt["error"] is None and receipt["producer_closed_before_capture"] is True,
              "Verbose success remains valid through unchanged Provider")
         need(raw_streams == {"stdout": b"", "stderr": b""}, "Successful child logs are not forwarded")
         expected = transport.validate_closed_receipt(receipt, request, mounts, DEADLINE)
-        expected_body = VERBOSE_RESULT
+        expected_body = VERBOSE_RESULT if kind == "verbose" else SOLE_RESULT
         need(expected == pin(expected_body), "Strict consumer accepts exact generated result")
         captured = root / "quarantine" / phase / "RESULT.json"
         need(io.read(captured, expected, 4096) == expected_body, "Actual archive capture preserves result bytes")
@@ -334,7 +359,11 @@ def run_phase(kind, root, io, transport, daemon_type):
         else:
             need({p.name for p in (root / "candidate-output").iterdir()} == {"RESULT.json", "EXTRA_LINK"},
                  "Refused generated entries remain private and no manifest is published")
-            wrapper_summary["collector_controls"] = validate_metadata_disclosure(root, io)
+            if kind == "output-refusal":
+                wrapper_summary["collector_controls"] = validate_metadata_disclosure(root, io)
+            else:
+                need(kind == "predicate-refusal", "Exact new refusal fixture kind")
+                wrapper_summary["predicate_controls"] = validate_predicate_snapshot()
         need(not list((root / "quarantine" / phase).iterdir()) and not daemon.archive_names and not connection_paths,
              "Failure exports no candidate or archive artifact")
     counters = result["final_transport_counters"]
@@ -396,6 +425,34 @@ def decode_directory_metadata(raw):
     return value
 
 
+def decode_predicate_metadata(raw):
+    need(type(raw) is bytes and 0 < len(raw) <= 512, "Whole predicate and later metadata fit unchanged512Bcap")
+    value = json.loads(raw)
+    need(set(value) == {"v", "predicate", "later_scan"} and type(value["v"]) is int and value["v"] == 2,
+         "Explicit predicate/later-scan diagnostic schema")
+    predicate = value["predicate"]
+    need(set(predicate) == {"type", "count", "entries", "more", "truncated", "unknown"}
+         and predicate["type"] in ("set", "other")
+         and (predicate["count"] is None or type(predicate["count"]) is int)
+         and type(predicate["entries"]) is list and len(predicate["entries"]) <= 2
+         and (predicate["more"] is None or type(predicate["more"]) is bool)
+         and type(predicate["truncated"]) is bool and type(predicate["unknown"]) is bool,
+         "Typed bounded predicate summary")
+    for row in predicate["entries"]:
+        need(type(row) is list and len(row) == 3 and row[0] in ("str", "bytes", "other")
+             and (row[1] is None or type(row[1]) is str)
+             and (row[2] is None or type(row[2]) is bool), "Typed predicate name prefix")
+        if row[1] is not None:
+            need(len(base64.b64decode(row[1], validate=True)) <= 32, "Bounded encoded predicate name")
+    later = value["later_scan"]
+    if set(later) == {"truncated", "unknown", "errors"}:
+        need(later["truncated"] is True and later["unknown"] is True
+             and later["errors"] in (["metadata_cap"], ["unavailable"]), "Explicit bounded later-scan omission")
+    else:
+        decode_directory_metadata(encoded(later))
+    return value
+
+
 def validate_output_refusal_envelope(envelope, output):
     need(type(envelope["child_returncode"]) is int and envelope["child_returncode"] == 0,
          "Actual child exited zero before strict output refusal")
@@ -408,18 +465,31 @@ def validate_output_refusal_envelope(envelope, output):
     prefix, raw = trace.rsplit(marker, 1)
     need(b"Exactly one candidate result; no extras or directories" in prefix,
          "Original strict single-result refusal preserved")
-    value = decode_directory_metadata(raw)
-    names = {base64.b64decode(row[0], validate=True): row for row in value["entries"]}
-    need(set(names) == {b"RESULT.json", b"EXTRA_LINK"} and not value["more"]
-         and not value["truncated"] and not value["unknown"] and value["errors"] == []
-         and value["race"] == "not_observed", "Complete two-entry metadata observation")
-    info = output.lstat()
-    need(value["dir"] == [info.st_dev, info.st_ino, info.st_mode], "Actual output-directory identity")
-    for name, kind in (("RESULT.json", "f"), ("EXTRA_LINK", "l")):
-        info = (output / name).lstat()
-        need(names[name.encode()] == [base64.b64encode(name.encode()).decode(), False, kind,
-                                      info.st_dev, info.st_ino, info.st_mode],
-             "Nonfollowing actual entry type and identity")
+    value = decode_predicate_metadata(raw)
+    predicate, later = value["predicate"], value["later_scan"]
+    names = {base64.b64decode(row[1], validate=True): row for row in predicate["entries"]}
+    need(predicate["type"] == "set" and type(predicate["count"]) is int and predicate["count"] == 2
+         and len(predicate["entries"]) == 2 and set(names) == {b"RESULT.json", b"EXTRA_LINK"}
+         and all(row[0] == "str" and row[2] is False for row in predicate["entries"])
+         and predicate["more"] is False and predicate["truncated"] is False and predicate["unknown"] is False,
+         "Actual computed rejected set retained independently of later scan")
+    # Later fd enumeration is a separate observation; it cannot supply or replace
+    # the predicate set/count above, and its bounded omission is not hidden.
+    if later.get("v") == 1:
+        info = output.lstat()
+        need(later["dir"] == [info.st_dev, info.st_ino, info.st_mode], "Actual later directory identity")
+        need(later["race"] == "not_observed", "No changed directory identity observed in this generated case")
+        for row in later["entries"]:
+            name = base64.b64decode(row[0], validate=True).decode()
+            need(name in ("RESULT.json", "EXTRA_LINK") and row[1] is False, "Only generated later entry names")
+            info = (output / name).lstat()
+            need(row[2:] == ["f" if name == "RESULT.json" else "l", info.st_dev, info.st_ino, info.st_mode],
+                 "Nonfollowing actual later entry metadata")
+        if later["unknown"]:
+            need(later["truncated"] is True and later["errors"] == ["metadata_cap"], "Later observation omission explicit")
+        else:
+            need(later["errors"] == [] and later["more"] is False and later["truncated"] is False,
+                 "Bounded later scan completed without hidden uncertainty")
     need(not (output / "GENERATED_ABSENT_TARGET_MUST_NOT_BE_FOLLOWED").exists(), "Symlink target stays absent")
     need(b"GENERATED_RESULT_CONTENT_MUST_NOT_BE_READ" not in trace
          and b"GENERATED_ABSENT_TARGET_MUST_NOT_BE_FOLLOWED" not in trace,
@@ -427,8 +497,30 @@ def validate_output_refusal_envelope(envelope, output):
     for row in envelope["streams"].values():
         need(row["retained_bytes"] == row["observed_bytes"] == 0 and row["prefix_base64"] == ""
              and row["eof"] is True and row["truncated"] is False, "Quiet successful child streams")
-    return {"child_returncode": 0, "metadata_bytes": len(raw), "entries": len(value["entries"]),
-            "race": value["race"], "truncated": value["truncated"], "contents_exported": False}
+    return {"child_returncode": 0, "metadata_bytes": len(raw), "predicate_type": predicate["type"],
+            "predicate_count": predicate["count"], "predicate_names_retained": len(predicate["entries"]),
+            "predicate_unknown": predicate["unknown"], "later_scan_separate": True,
+            "later_scan_truncated": later["truncated"], "later_scan_unknown": later["unknown"],
+            "contents_exported": False}
+
+
+def validate_predicate_snapshot():
+    """Pure actual-set summary checks; no directory enumeration hooks."""
+    wrapper = load_source(PAIRED / "candidate_wrapper.py", "portable_predicate_snapshot")
+    empty = wrapper._predicate_entries_metadata(set())
+    need(empty == {"type": "set", "count": 0, "entries": [], "more": False,
+                   "truncated": False, "unknown": False}, "Zero rejected-set observation is representable")
+    many = wrapper._predicate_entries_metadata({"A" * 64, "B" * 64, "C" * 64})
+    need(many["type"] == "set" and many["count"] == 3 and len(many["entries"]) == 2
+         and many["more"] is True and many["truncated"] is True and many["unknown"] is False
+         and all(row[0] == "str" and row[2] is True and len(base64.b64decode(row[1])) == 32
+                 for row in many["entries"]), "Predicate names/count remain bounded without filesystem enumeration")
+    other = wrapper._predicate_entries_metadata(["RESULT.json"])
+    need(other == {"type": "other", "count": None, "entries": [], "more": None,
+                   "truncated": False, "unknown": True}, "Unsupported predicate type is explicitly unknown")
+    return {"empty_set_explicit": True, "bounded_actual_set_summary": True, "unknown_type_explicit": True,
+            "directory_enumeration_patched": False}
+
 
 
 def validate_metadata_disclosure(root, io):
@@ -474,7 +566,7 @@ class DiagnosticRegressionTests(unittest.TestCase):
     def setUpClass(cls):
         global START, DEADLINE
         START = time.monotonic()
-        DEADLINE = START + 100
+        DEADLINE = START + TEST_SECONDS
         cls.results = []
         cls.transport = load_source(PAIRED / "transport.py", "portable_diagnostic_transport")
         cls.fixtures = load_source(HERE / "fixtures.py", "portable_diagnostic_fixtures")
@@ -489,8 +581,9 @@ class DiagnosticRegressionTests(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         if cls.artifacts is not None:
-            report = {"schema": "meg-portable-diagnostic-controls/v1", "methods": len(cls.results), "available_methods": 3,
-                      "full_suite_complete": len(cls.results) == 3,
+            report = {"schema": "meg-portable-diagnostic-controls/v1", "methods": len(cls.results), "available_methods": 5,
+                      "full_suite_complete": len(cls.results) == 5 and {r["method"] for r in cls.results} ==
+                          {"verbose", "failure", "output-refusal", "predicate-success", "predicate-refusal"},
                       "passed": bool(cls.results) and all(r["status"] == "passed" for r in cls.results),
                       "results": cls.results, "native_isolation_qualified": False,
                       "scientific_qualification": False, "raw_diagnostics_exported": False}
@@ -532,6 +625,12 @@ class DiagnosticRegressionTests(unittest.TestCase):
 
     def test_output_refusal_retains_bounded_private_metadata(self):
         self.exercise("output-refusal")
+
+    def test_real_initial_empty_to_sole_result_success(self):
+        self.exercise("predicate-success")
+
+    def test_rejected_set_and_later_scan_are_distinct(self):
+        self.exercise("predicate-refusal")
 
 
 if __name__ == "__main__":
