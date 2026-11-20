@@ -1,0 +1,41 @@
+{
+  "component_root": "benchmarks/paper/PAPER-paper-method-002/implementations/retinal-streamed-fit-v1",
+  "entry": {
+    "argv": [
+      "python",
+      "full_fit.py",
+      "--input-manifest",
+      "ABSOLUTE_INPUT_MANIFEST",
+      "--output",
+      "ABSENT_ABSOLUTE_OUTPUT_ROOT",
+      "--seconds",
+      "FINITE_POSITIVE_DEADLINE"
+    ],
+    "function": "run(input_manifest, output, seconds)",
+    "module": "full_fit.py",
+    "scientific_overrides": []
+  },
+  "input_guard": {
+    "module": "source_loading.py",
+    "precondition": "exact NPZ members and metadata before materializing any member",
+    "preflight": "packet_preflight(array_path, metadata_path)"
+  },
+  "orchestration": {
+    "module": "fit_loop.py",
+    "private_analytical": "_run_loop(runtime, schedule)",
+    "public": "run_production(runtime)",
+    "schedule": "21 epochs; 47x256+153 TRAIN; 1024+1024+999 VAL;128 TEST"
+  },
+  "schema": "jaxley-complete-streamed-fit-interface-v1",
+  "scientific_qualification": false,
+  "scientific_seam": {
+    "gradient": "frozen/comparison_streamed_batch.py:streamed_gradient",
+    "initializer": "source_bootstrap.py:initialize_fit -> frozen/model_operation.py:initialize_model",
+    "module": "fit_runtime.py",
+    "step": "streamed_step",
+    "test": "fit_runtime.py:streamed_test_prediction",
+    "transition": "source_transition.py:source_transition",
+    "validation": "frozen/model_operation.py:masked_pearson"
+  },
+  "status": "SOURCE_ONLY_NO_NATIVE_COMPLETION"
+}
