@@ -26,6 +26,9 @@ CHILD_PREFIX_BYTES = 512
 CHILD_DRAIN_CHUNK = 65536
 WRAPPER_TRACE_BYTES = 768
 DIAGNOSTIC_ENVELOPE_CAP = 3584
+OUTPUT_DIRECTORY_METADATA_CAP = 512
+OUTPUT_DIRECTORY_NAME_BYTES = 32
+OUTPUT_DIRECTORY_MARKER = b"\noutput_directory="
 
 
 def need(condition, message):
@@ -175,6 +178,64 @@ def _drain_child(child, candidate_end, state):
                 stream.close()
 
 
+def _output_directory_metadata(output_fd, original_identity):
+    """Bounded later observation through the checked fd; never read entry contents."""
+    value = {"v": 1, "dir": None, "entries": [], "more": None,
+             "race": "unknown", "truncated": False, "unknown": False, "errors": []}
+    before = None
+    try:
+        before = os.fstat(output_fd)
+        value["dir"] = [before.st_dev, before.st_ino, before.st_mode]
+    except BaseException:
+        value["unknown"] = True; value["errors"].append("before")
+    try:
+        with os.scandir(output_fd) as entries:
+            for _ in range(2):
+                try:
+                    entry = next(entries)
+                except StopIteration:
+                    value["more"] = False
+                    break
+                name = os.fsencode(entry.name)
+                clipped = len(name) > OUTPUT_DIRECTORY_NAME_BYTES
+                row = [base64.b64encode(name[:OUTPUT_DIRECTORY_NAME_BYTES]).decode("ascii"),
+                       clipped, "?", None, None, None]
+                value["truncated"] |= clipped
+                try:
+                    info = os.stat(entry.name, dir_fd=output_fd, follow_symlinks=False)
+                    row[2] = ("f" if stat.S_ISREG(info.st_mode) else "d" if stat.S_ISDIR(info.st_mode)
+                              else "l" if stat.S_ISLNK(info.st_mode) else "o")
+                    row[3:] = [info.st_dev, info.st_ino, info.st_mode]
+                except BaseException:
+                    value["unknown"] = True; value["errors"].append("entry")
+                value["entries"].append(row)
+            else:
+                try:
+                    next(entries)  # One probe only; no metadata read for this entry.
+                    value["more"] = True; value["truncated"] = True
+                except StopIteration:
+                    value["more"] = False
+    except BaseException:
+        value["unknown"] = True; value["errors"].append("scan")
+    try:
+        after = os.fstat(output_fd)
+        if before is not None:
+            stable = (stat.S_ISDIR(before.st_mode) and stat.S_ISDIR(after.st_mode)
+                      and (before.st_dev, before.st_ino) == original_identity
+                      and (after.st_dev, after.st_ino) == original_identity
+                      and signature(before) == signature(after))
+            value["race"] = "not_observed" if stable else "changed"
+    except BaseException:
+        value["unknown"] = True; value["errors"].append("after")
+    raw = encoded(value)
+    if len(raw) > OUTPUT_DIRECTORY_METADATA_CAP:
+        # Keep valid complete JSON rather than slicing encoded metadata.
+        raw = encoded({"v": 1, "dir": None, "entries": [], "more": None,
+                       "race": "unknown", "truncated": True, "unknown": True,
+                       "errors": ["metadata_cap"]})
+    return raw
+
+
 def _emit_diagnostic(state, error):
     """One bounded private failure envelope; successful runs emit no progress."""
     kind = type(error).__name__.encode("ascii", "replace")[:64].decode("ascii")
@@ -188,6 +249,12 @@ def _emit_diagnostic(state, error):
         lines.append(code.co_filename[-128:] + ":" + str(tb.tb_lineno) + ":" + code.co_name[:64])
         tb = tb.tb_next
     trace = "\n".join(lines).encode("utf-8", "replace")[:WRAPPER_TRACE_BYTES]
+    metadata = state.get("output_directory_metadata")
+    if metadata is not None:
+        need(type(metadata) is bytes and len(metadata) <= OUTPUT_DIRECTORY_METADATA_CAP,
+             "Bounded private directory metadata")
+        suffix = OUTPUT_DIRECTORY_MARKER + metadata
+        trace = trace[:WRAPPER_TRACE_BYTES - len(suffix)] + suffix
     streams = {}
     for name, row in state["streams"].items():
         prefix = bytes(row["prefix"])
@@ -256,7 +323,15 @@ def _run(*, _generated=None, _diagnostic):
         need(code == 0, "Candidate must exit successfully")
         need(time.monotonic() < end, "Original phase deadline after candidate exit")
         unchanged_directory(paths["output"], output_fd, output_identity)
-        need(set(os.listdir(output_fd)) == {"RESULT.json"},
+        result_entries = set(os.listdir(output_fd))
+        if result_entries != {"RESULT.json"}:
+            try:
+                _diagnostic["output_directory_metadata"] = _output_directory_metadata(output_fd, output_identity)
+            except BaseException:
+                _diagnostic["output_directory_metadata"] = encoded({"v": 1, "entries": [],
+                    "more": None, "race": "unknown", "truncated": True, "unknown": True,
+                    "errors": ["unavailable"]})
+        need(result_entries == {"RESULT.json"},
              "Exactly one candidate result; no extras or directories")
         result, result_identity = capture("RESULT.json",
             min(limits["max_file_bytes"], RESULT_CAP), dir_fd=output_fd)

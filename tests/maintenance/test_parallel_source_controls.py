@@ -85,15 +85,15 @@ class ProcessControls(unittest.TestCase):
 
 
 class ManifestControls(unittest.TestCase):
-    def test_command_capacity_660_accepts_and_661_refuses(self):
+    def test_command_capacity_662_accepts_and_663_refuses(self):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp);_,_,document=self.fixture(root)
             template=document['commands'][0]
-            document['commands']=[{**template,'id':'control%d'%index} for index in range(660)]
+            document['commands']=[{**template,'id':'control%d'%index} for index in range(662)]
             _,selected=launcher.validate_document(document,'stdlib')
             self.assertEqual(selected,document['commands'])
-            self.assertEqual(len(selected),660)
-            document['commands'].append({**template,'id':'control660','group':'other'})
+            self.assertEqual(len(selected),662)
+            document['commands'].append({**template,'id':'control662','group':'other'})
             with self.assertRaisesRegex(ValueError,'bounded command list required'):
                 launcher.validate_document(document,'stdlib')
 
@@ -403,8 +403,8 @@ class Opener:
 
 
 class FixtureControls(unittest.TestCase):
-    def test_command_capacity_660_without_fixtures_and_661_refuses(self):
-        self.document={'fixtures':{},'commands':[{'group':'stdlib','fixtures':[]} for _ in range(660)]}
+    def test_command_capacity_662_without_fixtures_and_663_refuses(self):
+        self.document={'fixtures':{},'commands':[{'group':'stdlib','fixtures':[]} for _ in range(662)]}
         result,opener,_=self.run_fetch([])
         self.assertEqual(result['status'],'succeeded')
         self.assertEqual(result['response_bytes_read'],0)

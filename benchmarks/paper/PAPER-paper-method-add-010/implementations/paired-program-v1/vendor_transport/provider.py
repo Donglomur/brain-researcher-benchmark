@@ -66,6 +66,13 @@ def create_args(item,holder,mounts,request,holder_command):
     return args+mounts_argv(mounts)+['--entrypoint',command[0],request['image'],*command[1:]]
 
 
+def enabled_no_new_privileges(values):
+    # Holder and participant roles allow exactly one enabled NNP option.
+    # Docker inspect may spell the requested bare flag as an explicit true.
+    return (type(values) is list and len(values)==1 and type(values[0]) is str
+            and values[0] in ('no-new-privileges', 'no-new-privileges:true'))
+
+
 def admit_container(v,item,holder,mounts,request,holder_command,image_env):
     owned(v,item,item['owner']);h=v['HostConfig'];cfg=v['Config'];r=request['resources']
     command=holder_command if holder else request['command']
@@ -78,7 +85,7 @@ def admit_container(v,item,holder,mounts,request,holder_command,image_env):
     need(h['NetworkMode']=='none' and h['ReadonlyRootfs'] is True and h['CgroupnsMode']=='private'
          and h['LogConfig']['Type']=='none' and h['IpcMode']=='private' and h.get('PidMode') in ('','private'),'Isolated namespaces/no logs')
     need(h.get('Privileged') is False and not h.get('CapAdd') and not h.get('Devices') and not h.get('DeviceRequests')
-         and h['CapDrop']==['ALL'] and 'no-new-privileges' in h['SecurityOpt'] and h['RestartPolicy']['Name']=='no'
+         and h['CapDrop']==['ALL'] and enabled_no_new_privileges(h['SecurityOpt']) and h['RestartPolicy']['Name']=='no'
          and h['AutoRemove'] is False and h.get('Init') is False,'No capabilities/restarts/implicit init')
     actual={}
     for row in v['Mounts']:

@@ -119,13 +119,33 @@ raise RuntimeError("GENERATED_CHILD_FAILURE")
 '''
 
 
+OUTPUT_REFUSAL_CHILD = r'''import os
+import sys
+output = sys.argv[sys.argv.index("--output") + 1]
+fd = os.open(output, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW, 0o600)
+try:
+    raw = b"GENERATED_RESULT_CONTENT_MUST_NOT_BE_READ"
+    if os.write(fd, raw) != len(raw):
+        raise RuntimeError("Generated result write failed")
+    os.fchmod(fd, 0)
+    os.fsync(fd)
+finally:
+    os.close(fd)
+os.symlink("GENERATED_ABSENT_TARGET_MUST_NOT_BE_FOLLOWED", os.path.join(os.path.dirname(output), "EXTRA_LINK"))
+'''
+
+
 def prepare_inputs(root, kind, transport, io):
     program, data = root / "programme", root / "input"
     program.mkdir(mode=0o700); data.mkdir(mode=0o700)
     wrapper = io.read(PAIRED / "candidate_wrapper.py", transport.WRAPPER_PIN)
+    child_source = {"verbose": VERBOSE_CHILD, "failure": FAILURE_CHILD,
+                    "output-refusal": OUTPUT_REFUSAL_CHILD}[kind].encode()
+    # Compile the selected generated runnable before publication or child launch.
+    compile(child_source, str(program / "submission.py"), "exec")
     files = {"candidate_wrapper.py": io.publish(program / "candidate_wrapper.py", wrapper, 0o444),
              "submission.py": io.publish(program / "submission.py",
-                                        (VERBOSE_CHILD if kind == "verbose" else FAILURE_CHILD).encode(), 0o444)}
+                                        child_source, 0o444)}
     raw = json.dumps({"schema": "meg-frozen-program/v1", "files": files},
                      sort_keys=True, separators=(",", ":")).encode()
     files["PROGRAM.json"] = io.publish(program / "PROGRAM.json", raw, 0o444)
@@ -303,13 +323,20 @@ def run_phase(kind, root, io, transport, daemon_type):
              "Only bounded private wrapper failure envelope forwarded")
         envelope = json.loads(raw_streams["stderr"])
         need(envelope["schema"] == "meg_private_wrapper_diagnostics_v1", "Actual wrapper diagnostic schema")
-        wrapper_summary = validate_failure_envelope(envelope)
+        wrapper_summary = (validate_failure_envelope(envelope) if kind == "failure" else
+                           validate_output_refusal_envelope(envelope, root / "candidate-output"))
         refused = False
         try: transport.validate_closed_receipt(receipt, request, mounts, DEADLINE)
         except ValueError: refused = True
         need(refused, "Unchanged consumer refuses failed receipt")
-        need(not list((root / "candidate-output").iterdir()) and not list((root / "quarantine" / phase).iterdir()) and
-             not daemon.archive_names and not connection_paths, "Failure exports no candidate or archive artifact")
+        if kind == "failure":
+            need(not list((root / "candidate-output").iterdir()), "Failed child leaves no candidate output")
+        else:
+            need({p.name for p in (root / "candidate-output").iterdir()} == {"RESULT.json", "EXTRA_LINK"},
+                 "Refused generated entries remain private and no manifest is published")
+            wrapper_summary["collector_controls"] = validate_metadata_disclosure(root, io)
+        need(not list((root / "quarantine" / phase).iterdir()) and not daemon.archive_names and not connection_paths,
+             "Failure exports no candidate or archive artifact")
     counters = result["final_transport_counters"]
     need(counters["write_reserved_bytes"] <= PROVIDER_WRITE and counters["read_bytes"] <= 4194304,
          "Unchanged prospective Provider accounting")
@@ -345,6 +372,103 @@ def validate_failure_envelope(envelope):
 
 
 
+
+def decode_directory_metadata(raw):
+    need(type(raw) is bytes and 0 < len(raw) <= 512, "Bounded complete private directory JSON")
+    value = json.loads(raw)
+    need(set(value) == {"v", "dir", "entries", "more", "race", "truncated", "unknown", "errors"}
+         and type(value["v"]) is int and value["v"] == 1, "Exact metadata-only diagnostic shape")
+    need(value["dir"] is None or (type(value["dir"]) is list and len(value["dir"]) == 3
+         and all(type(x) is int for x in value["dir"])), "Typed observed directory identity")
+    need(type(value["entries"]) is list and len(value["entries"]) <= 2, "At most two metadata entries")
+    for row in value["entries"]:
+        need(type(row) is list and len(row) == 6 and type(row[0]) is str and type(row[1]) is bool
+             and row[2] in ("f", "d", "l", "o", "?"), "Typed bounded metadata row")
+        name = base64.b64decode(row[0], validate=True)
+        need(len(name) <= 32 and (row[3:] == [None, None, None] or all(type(x) is int for x in row[3:])),
+             "Bounded raw name prefix and nonfollowing identity fields")
+    need((value["more"] is None or type(value["more"]) is bool)
+         and value["race"] in ("changed", "not_observed", "unknown")
+         and type(value["truncated"]) is bool and type(value["unknown"]) is bool
+         and type(value["errors"]) is list
+         and all(x in ("before", "entry", "scan", "after", "metadata_cap") for x in value["errors"]),
+         "Explicit bounded uncertainty and truncation")
+    return value
+
+
+def validate_output_refusal_envelope(envelope, output):
+    need(type(envelope["child_returncode"]) is int and envelope["child_returncode"] == 0,
+         "Actual child exited zero before strict output refusal")
+    trace = base64.b64decode(envelope["wrapper_traceback_base64"], validate=True)
+    need(len(trace) == envelope["wrapper_traceback_bytes"] <= 768
+         and envelope["diagnostic_only"] is True and envelope["candidate_artifact"] is False,
+         "Unchanged bounded private envelope")
+    marker = b"\noutput_directory="
+    need(trace.count(marker) == 1, "One actual output-directory diagnostic suffix")
+    prefix, raw = trace.rsplit(marker, 1)
+    need(b"Exactly one candidate result; no extras or directories" in prefix,
+         "Original strict single-result refusal preserved")
+    value = decode_directory_metadata(raw)
+    names = {base64.b64decode(row[0], validate=True): row for row in value["entries"]}
+    need(set(names) == {b"RESULT.json", b"EXTRA_LINK"} and not value["more"]
+         and not value["truncated"] and not value["unknown"] and value["errors"] == []
+         and value["race"] == "not_observed", "Complete two-entry metadata observation")
+    info = output.lstat()
+    need(value["dir"] == [info.st_dev, info.st_ino, info.st_mode], "Actual output-directory identity")
+    for name, kind in (("RESULT.json", "f"), ("EXTRA_LINK", "l")):
+        info = (output / name).lstat()
+        need(names[name.encode()] == [base64.b64encode(name.encode()).decode(), False, kind,
+                                      info.st_dev, info.st_ino, info.st_mode],
+             "Nonfollowing actual entry type and identity")
+    need(not (output / "GENERATED_ABSENT_TARGET_MUST_NOT_BE_FOLLOWED").exists(), "Symlink target stays absent")
+    need(b"GENERATED_RESULT_CONTENT_MUST_NOT_BE_READ" not in trace
+         and b"GENERATED_ABSENT_TARGET_MUST_NOT_BE_FOLLOWED" not in trace,
+         "No entry content or symlink target text in diagnostics")
+    for row in envelope["streams"].values():
+        need(row["retained_bytes"] == row["observed_bytes"] == 0 and row["prefix_base64"] == ""
+             and row["eof"] is True and row["truncated"] is False, "Quiet successful child streams")
+    return {"child_returncode": 0, "metadata_bytes": len(raw), "entries": len(value["entries"]),
+            "race": value["race"], "truncated": value["truncated"], "contents_exported": False}
+
+
+def validate_metadata_disclosure(root, io):
+    """Same real collector, explicit generated race/uncertainty observations."""
+    wrapper = load_source(PAIRED / "candidate_wrapper.py", "portable_output_metadata_collector")
+    directory = root / "metadata-probes"
+    directory.mkdir(mode=0o700)
+    for name in ("L" * 64 + "1", "L" * 64 + "2", "short"):
+        io.publish(directory / name, b"DO_NOT_READ_GENERATED_ENTRY", mode=0)
+    fd = os.open(directory, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
+    original_stat = wrapper.os.stat
+    calls = []
+    def metadata_stat(name, *, dir_fd, follow_symlinks):
+        need(dir_fd == fd and follow_symlinks is False, "Collector never follows entries")
+        calls.append(name)
+        return original_stat(name, dir_fd=dir_fd, follow_symlinks=False)
+    try:
+        identity = os.fstat(fd)
+        original = (identity.st_dev, identity.st_ino)
+        with patch.object(wrapper.os, "open", side_effect=AssertionError("No entry open")), \
+             patch.object(wrapper.os, "read", side_effect=AssertionError("No entry read")), \
+             patch.object(wrapper.os, "stat", metadata_stat):
+            value = decode_directory_metadata(wrapper._output_directory_metadata(fd, original))
+            need(value["more"] is True and value["truncated"] is True and not value["unknown"]
+                 and value["race"] == "not_observed" and len(calls) == 2
+                 and any(row[1] is True for row in value["entries"]), "Explicit bounded entry/name truncation")
+            calls.clear()
+            raced = decode_directory_metadata(wrapper._output_directory_metadata(fd, (identity.st_dev, identity.st_ino + 1)))
+            need(raced["race"] == "changed" and len(calls) == 2, "Mismatched initial directory identity disclosed")
+            with patch.object(wrapper.os, "scandir", side_effect=OSError("generated observation unavailable")):
+                unknown = decode_directory_metadata(wrapper._output_directory_metadata(fd, original))
+            need(unknown["unknown"] is True and unknown["errors"] == ["scan"]
+                 and unknown["entries"] == [] and unknown["more"] is None,
+                 "Unavailable scan remains explicit, without invented inventory")
+    finally:
+        os.close(fd)
+    return {"bounded_names_entries": True, "changed_identity_disclosed": True,
+            "unknown_scan_disclosed": True, "entry_open_read_forbidden": True}
+
+
 class DiagnosticRegressionTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -365,8 +489,9 @@ class DiagnosticRegressionTests(unittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         if cls.artifacts is not None:
-            report = {"schema": "meg-portable-diagnostic-controls/v1", "methods": 2,
-                      "passed": len(cls.results) == 2 and all(r["status"] == "passed" for r in cls.results),
+            report = {"schema": "meg-portable-diagnostic-controls/v1", "methods": len(cls.results), "available_methods": 3,
+                      "full_suite_complete": len(cls.results) == 3,
+                      "passed": bool(cls.results) and all(r["status"] == "passed" for r in cls.results),
                       "results": cls.results, "native_isolation_qualified": False,
                       "scientific_qualification": False, "raw_diagnostics_exported": False}
             raw = encoded(report)
@@ -381,7 +506,7 @@ class DiagnosticRegressionTests(unittest.TestCase):
         io = IO(root)
         try:
             result = run_phase(kind, root, io, self.transport, self.fixtures.FixtureDaemon)
-            files = [p for p in scratch.rglob("*") if p.is_file()]
+            files = [p for p in scratch.rglob("*") if stat.S_ISREG(p.lstat().st_mode)]
             total = sum(p.stat().st_size for p in files)
             need(len(files) <= 192 and total <= 196608, "Finite generated phase file/byte census")
             result.update(generated_files=len(files), generated_bytes=total,
@@ -404,6 +529,9 @@ class DiagnosticRegressionTests(unittest.TestCase):
 
     def test_failure_retains_bounded_private_diagnostics(self):
         self.exercise("failure")
+
+    def test_output_refusal_retains_bounded_private_metadata(self):
+        self.exercise("output-refusal")
 
 
 if __name__ == "__main__":
