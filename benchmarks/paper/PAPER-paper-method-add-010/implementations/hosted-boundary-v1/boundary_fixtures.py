@@ -18,7 +18,7 @@ import types
 DONORS = {
     "generic_contract.py": {"bytes": 12977, "sha256": "711cd419eed9b0f78ecb4a846f13a3c843808060814055fe50ff2b94f8b70857"},
     "generic_fixed_control.py": {"bytes": 834, "sha256": "d2d7c498503adeb9c1111f6968bf45e788912ecaad5c91ad33d92acfde49cbf5"},
-    "candidate_wrapper.py": {"bytes": 17977, "sha256": "c9aec0c6674b69a87259b1db54dfc3ce4b6942dad4b4449cca9311b881e4cab8"},
+    "candidate_wrapper.py": {"bytes": 20461, "sha256": "b7db779c9e69e8f191d043e0296ec02214206efdc95698891c75518da783ffda"},
     "../nested-connectivity-v1/published_participants.txt": {"bytes": 563, "sha256": "6e0970cb1a1a9aab53a35c43c3bcf84af527131631418bfd00594528e43bf70a"},
 }
 GENERATED_WRITE_CAP = 524288

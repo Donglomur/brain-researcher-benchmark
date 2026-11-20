@@ -27,7 +27,7 @@ MODULES = ("engine", "bounds", "contract", "archive", "holder", "provider")
 COMMAND = ["/usr/local/bin/python", "-I", "-B", "/program/candidate_wrapper.py"]
 RESULT_LIMIT = 1024 * 1024
 # Filled from the independently tested adjacent wrapper at this source cutoff.
-WRAPPER_PIN = {"bytes": 17977, "sha256": "c9aec0c6674b69a87259b1db54dfc3ce4b6942dad4b4449cca9311b881e4cab8"}
+WRAPPER_PIN = {"bytes": 20461, "sha256": "b7db779c9e69e8f191d043e0296ec02214206efdc95698891c75518da783ffda"}
 _VENDOR = None
 
 
