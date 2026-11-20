@@ -394,6 +394,18 @@ def _current(original, contract, binding, source_id):
                     "evaluation": {**copy.deepcopy(contract["evaluation"]), "neural_understanding": binding},
                     "admission": {"runnable": False, "research_qualified": False, "submission_ready": False,
                         "reason": "This revised scientific contract has no full-task execution admission; source components and scoped operator routes are described separately."}})
+    # Qualify current ABR storage interpretation without rewriting the original
+    # paper timing claim or admitting an unverified waveform representation.
+    if contract["task_id"] == "NEURAL-SCOPE-20261114-ABR-TRANSFER" and any(
+            item.get("id") == "abr-storage-layout-qualification-v1"
+            and item.get("kind") == "local_review"
+            and item.get("path") == "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/native-inputs-v1/README.md"
+            and item.get("sha256") == "d8a7ad3b6039a368a50489fe6231108fdde90bbd29b67541fa442bdd390032d9"
+            for item in contract["evidence"]):
+        current["units_and_timing"]["preparation_gate"] = (
+            original["units_and_timing"]["preparation_gate"]
+            + " Liberman support has an additional unresolved storage-layout join: the retained 426-value legacy CFTS records are compatible with an EPL reader that splits average-polarity and polarity-difference blocks, while ABRA Supplementary Table S1 describes 426 samples over 17 ms. Preserve every value and withhold both a continuous 17 ms axis and a physiological 213+213 remapping until a release-applicable writer/export specification reconciles the sources; see implementations/native-inputs-v1/README.md for exact primary source pins. The existing uniform-axis header projection does not establish physical continuity."
+        )
     # This adopted DoSEI condition supersedes five inherited dense/pre-onset
     # descriptions. Its original provenance and earlier projection stay intact.
     if contract["task_id"] == "clinical-dosei-responsiveness" and any(
