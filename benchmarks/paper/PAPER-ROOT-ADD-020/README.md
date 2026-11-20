@@ -76,6 +76,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Feature decoding v1](implementations/feature-decoding-v1) — Reviewed source component.
   Scope: Original feature-decoding component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
+- [Feature decoding v2](implementations/feature-decoding-v2) — Reviewed source component.
+  Scope: Supplied-input source endpoint numeric component; no authentic scientific result.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

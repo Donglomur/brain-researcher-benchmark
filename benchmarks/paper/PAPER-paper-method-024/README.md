@@ -49,6 +49,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Cbramod paired program](implementations/cbramod-paired-program) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Original endpoints float64 v2](implementations/original-endpoints-float64-v2) — Arithmetic portability successor not scientific qualification.
+  Scope: Promote only integer operands to float64 before regression arithmetic, retaining original floating reconstruction and frozen predecessor. This fixes older-sklearn portability; current 1.9.1 already promotes internally.
 - [Original endpoints v1](implementations/original-endpoints-v1) — Reviewed source component.
   Scope: CBraMod original endpoint arithmetic. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

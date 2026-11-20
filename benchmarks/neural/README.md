@@ -28,7 +28,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-012](NEURAL-012/README.md) | Cross-cohort seizure robustness | 3 | [manifest](NEURAL-012/implementations/registered-runtime/manifest.json) |
 | [NEURAL-013](NEURAL-013/README.md) | Attempted-speech phoneme-sequence decoding | 2 | [manifest](NEURAL-013/implementations/registered-runtime/manifest.json) |
 | [NEURAL-014](NEURAL-014/README.md) | Speech decoder neural dependence under drift | 5 | not linked |
-| [NEURAL-015](NEURAL-015/README.md) | Word-boundary localization from intracranial activity | 3 | not linked |
+| [NEURAL-015](NEURAL-015/README.md) | Word-boundary localization from intracranial activity | 4 | not linked |
 | [NEURAL-016](NEURAL-016/README.md) | Linguistic effects beyond natural-movie covariates | 3 | not linked |
 | [NEURAL-017](NEURAL-017/README.md) | Motor population co-smoothing | 6 | [manifest](NEURAL-017/implementations/registered-runtime/manifest.json) |
 | [NEURAL-018](NEURAL-018/README.md) | Causal motor-population forecasting | 3 | [manifest](NEURAL-018/implementations/registered-runtime/manifest.json) |
@@ -43,8 +43,8 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-027](NEURAL-027/README.md) | Visual stimulus decoding across learning phases | 4 | not linked |
 | [NEURAL-028](NEURAL-028/README.md) | Reward-free versus rewarded cortical learning | 3 | not linked |
 | [NEURAL-029](NEURAL-029/README.md) | Registered granule-cell reward-delay trajectory transfer | 3 | [manifest](NEURAL-029/implementations/registered-runtime/manifest.json) |
-| [NEURAL-030](NEURAL-030/README.md) | Cerebellar decoding of planned-delay lick-contact counts | 5 | [manifest](NEURAL-030/implementations/registered-runtime/manifest.json) |
-| [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction beyond baseline morphology | 5 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
+| [NEURAL-030](NEURAL-030/README.md) | Cerebellar decoding of planned-delay lick-contact counts | 6 | [manifest](NEURAL-030/implementations/registered-runtime/manifest.json) |
+| [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction beyond baseline morphology | 6 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
 | [NEURAL-032](NEURAL-032/README.md) | Coactivity and compartment investigation from measured spine plasticity | 3 | [manifest](NEURAL-032/implementations/registered-runtime/manifest.json) |
 | [NEURAL-033](NEURAL-033/README.md) | Kir and compartment interaction investigation with measured-data checks | 2 | [manifest](NEURAL-033/implementations/registered-runtime/manifest.json) |
 | [NEURAL-034](NEURAL-034/README.md) | Held-mouse recall-context decoding from processed astrocytic calcium | 14 | [manifest](NEURAL-034/implementations/registered-runtime/manifest.json) |
@@ -102,7 +102,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-086](NEURAL-086/README.md) | EEG reading effects beyond fixation and words | 4 | [manifest](NEURAL-086/implementations/registered-runtime/manifest.json) |
 | [NEURAL-087](NEURAL-087/README.md) | Connectivity prediction from functional tuning | 2 | [manifest](NEURAL-087/implementations/registered-runtime/manifest.json) |
 | [NEURAL-088](NEURAL-088/README.md) | Functional similarity and measured synaptic anatomy | 2 | [manifest](NEURAL-088/implementations/registered-runtime/manifest.json) |
-| [NEURAL-089](NEURAL-089/README.md) | Event-aligned phoneme classification in the original LibriBrain participant | 3 | not linked |
+| [NEURAL-089](NEURAL-089/README.md) | Event-aligned phoneme classification in the original LibriBrain participant | 4 | not linked |
 | [NEURAL-090](NEURAL-090/README.md) | Phoneme information beyond timing and narrative priors in LibriBrain Broad | 1 | not linked |
 | [NEURAL-091](NEURAL-091/README.md) | Stimulus-family response prediction for calibrated Neuropixels units | 2 | not linked |
 | [NEURAL-092](NEURAL-092/README.md) | Within-session count prediction followed by observed state-association investigation | 5 | [manifest](NEURAL-092/implementations/registered-runtime/manifest.json) |

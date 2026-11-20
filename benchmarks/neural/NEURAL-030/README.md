@@ -55,6 +55,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Count scorer v2](implementations/count-scorer-v2) — Reviewed source component.
   Scope: Stable contact-count scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
+- [Count scorer v3](implementations/count-scorer-v3) — Reviewed source component.
+  Scope: Representable count MSE and hierarchical means with explicit refusal when nonzero loss cannot be represented. Generated source controls only; frozen runtime adoption and scientific qualification remain unclaimed.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

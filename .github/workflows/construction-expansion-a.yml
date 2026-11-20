@@ -566,8 +566,8 @@ jobs:
               },
               {
                   "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1670,
-                  "sha256": "6dc24cc27e3b67041ab501419f2ef6b3e5091e2624609f7269db850c6c5e0fb0"
+                  "bytes": 2595,
+                  "sha256": "f5c65e8ce42be93a0a962c46221b38f623abb3f9abbe26e64d7c0fd0147bae28"
               },
               {
                   "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/provenance.json",
@@ -586,20 +586,25 @@ jobs:
               },
               {
                   "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/worm_evaluator.py",
-                  "bytes": 25737,
-                  "sha256": "01bf6d01c9bd6a36fda0e39b990e3c82a472246c57b6e603f5cbc923fb9a7cfb"
+                  "bytes": 26581,
+                  "sha256": "4fde8b08dc090d6b0b3d79d8fb8e10b0e0145e78620c184c6880d83f9f6e0485"
               },
               {
                   "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/historical/task.pre-understanding.v1.json",
                   "bytes": 10863,
                   "sha256": "cdb143e840819271f52a1ab97f78ca1a04a522576518a6ada60e97bb4e47a8dc"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1/tests/test_correlation_scaling.py",
+                  "bytes": 2950,
+                  "sha256": "2522591e1aad85f149d77b3ed91742ca1d0a36f2bbe5984392d1874e886de3e9"
               }
           ]
           packages = [
               "benchmarks/neural/NEURAL-DISC-20261114-WORM-PROPAGATION/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 7 > 0
-          assert sum(row['bytes'] for row in rows) == 155426 <= 33554432
+          assert len(rows) == 8 > 0
+          assert sum(row['bytes'] for row in rows) == 160145 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -642,7 +647,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 155426,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 160145,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

@@ -235,7 +235,7 @@ jobs:
           for PURKINJE_PROGRAM_FILE in verify_source.py source_controls.py ../../artifacts/test_numeric_score.py; do
             PURKINJE_PROGRAM_NAME="${PURKINJE_PROGRAM_FILE##*/}"
             PURKINJE_PROGRAM_ARGS=()
-            if [ "$PURKINJE_PROGRAM_FILE" = verify_source.py ]; then PURKINJE_PROGRAM_ARGS=(2021c9d399196a3a19546b5b84a6c2bc67d630a2a6c8b193d0905f2628a291b6); fi
+            if [ "$PURKINJE_PROGRAM_FILE" = verify_source.py ]; then PURKINJE_PROGRAM_ARGS=(51c7a2c78970a90cd858d6e931a7bd95e648697a20490bf3bf6dfb98d9c9479f); fi
             /usr/bin/timeout --signal=TERM --kill-after=5s 60s python -I -S -B "$PURKINJE_PROGRAM_FILE" "${PURKINJE_PROGRAM_ARGS[@]}" >"$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.stdout" 2>"$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.stderr"
             PURKINJE_PROGRAM_STATUS=$?
             printf '%s\n' "$PURKINJE_PROGRAM_STATUS" >"$PURKINJE_PROGRAM_LOGS/${PURKINJE_PROGRAM_NAME}.status"
