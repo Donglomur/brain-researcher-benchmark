@@ -22,7 +22,7 @@ import uuid
 
 
 HERE = Path(__file__).resolve().parent
-VENDOR_PIN = {"bytes": 987, "sha256": "a3e00c095fc2425a293963b515c3bf4b5c63c2cecc4d7bfcc5312f377e6045e8"}
+VENDOR_PIN = {"bytes": 987, "sha256": "0b9dd9c76837a1f19033f3fb45c1beb606d3b362205b83f457bae4d6edae57a0"}
 MODULES = ("engine", "bounds", "contract", "archive", "holder", "provider")
 COMMAND = ["/usr/local/bin/python", "-I", "-B", "/program/candidate_wrapper.py"]
 RESULT_LIMIT = 1024 * 1024
