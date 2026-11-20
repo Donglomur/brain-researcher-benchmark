@@ -51,6 +51,14 @@ def environment_map(values):
     return out
 
 
+def no_new_privileges_enabled(options):
+    """Accept Docker's two enabled spellings without hiding conflicting flags."""
+    if type(options) is not list or any(type(value) is not str for value in options):
+        return False
+    declarations=[value for value in options if value.startswith('no-new-privileges')]
+    return len(declarations)==1 and declarations[0] in ('no-new-privileges','no-new-privileges:true')
+
+
 def create_args(item,holder,mounts,request,holder_command):
     r=request['resources'];command=holder_command if holder else request['command']
     memory=HOLDER_MEMORY if holder else r['memory_bytes'];nano=HOLDER_CPU_NANOS if holder else r['cpu_nanos'];pids=64 if holder else r['pids']
@@ -78,7 +86,7 @@ def admit_container(v,item,holder,mounts,request,holder_command,image_env):
     need(h['NetworkMode']=='none' and h['ReadonlyRootfs'] is True and h['CgroupnsMode']=='private'
          and h['LogConfig']['Type']=='none' and h['IpcMode']=='private' and h.get('PidMode') in ('','private'),'Isolated namespaces/no logs')
     need(h.get('Privileged') is False and not h.get('CapAdd') and not h.get('Devices') and not h.get('DeviceRequests')
-         and h['CapDrop']==['ALL'] and 'no-new-privileges' in h['SecurityOpt'] and h['RestartPolicy']['Name']=='no'
+         and h['CapDrop']==['ALL'] and no_new_privileges_enabled(h['SecurityOpt']) and h['RestartPolicy']['Name']=='no'
          and h['AutoRemove'] is False and h.get('Init') is False,'No capabilities/restarts/implicit init')
     actual={}
     for row in v['Mounts']:
