@@ -16,7 +16,7 @@ HERE = Path(__file__).resolve().parent
 CONDITIONS = ("SH", "SHN", "SBH", "SBHN")
 PINS = {
     "prepared-support-v2/support.py": "ec960cb594d829abfeca94d3decaa7736e66c1626a094ab5c7ab56959646abe8",
-    "prepared-support-v2/_retained.py": "c0221ab1211df70e92f7cbdb6577e40c20761db5a0c2d2f6f098e2c25cf00a60",
+    "prepared-support-v2/_retained.py": "371ba5adfbbb900ce32e7a34acc1935f085f50059460c7b01b04225cf9c0f423",
     "registered-runtime/complete-process-v1/scientific/__init__.py": "bb5787781385927b7c93bda57d56888b18597a56b45f734350ad8ea0c95ca7ab",
     "registered-runtime/complete-process-v1/scientific/contracts.py": "bfac56e3f7c30fb6a9f8d263706dd7578ee58e383a40d88f626cfcea52098557",
     "registered-runtime/complete-process-v1/scientific/diagnostics.py": "1a3aeb8defa32d1fa5b339a2f2501b176d21e4fb7beb2791a639c436cff87054",
