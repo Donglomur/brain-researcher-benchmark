@@ -201,6 +201,13 @@ def matrix(obj, rows, columns):
     return [vector(row, columns) for row in obj]
 
 
+def percentage(part, total):
+    # Keep multiply-first precision for representable tiny percentages. If
+    # scaling a finite variance overflows, normalize it before multiplying.
+    scaled = 100 * part
+    return scaled / total if math.isfinite(scaled) else 100 * (part / total)
+
+
 def model(record, support):
     keys(record, ("kind", "session", "channels", "dimensions", "loadings", "noise",
                   "selected_cv_loglik", "final_loglik"), "model")
@@ -225,9 +232,9 @@ def model(record, support):
         cw, cl = gram(w, w), gram(l, l)
         total = [finite(cw[i][i] + cl[i][i] + noise[h][i]) for i in range(len(w))]
         require(all(v > 0 for v in total), "zero total variance")
-        fractions = {"across": [100 * cw[i][i] / total[i] for i in range(len(w))],
-                     "within": [100 * cl[i][i] / total[i] for i in range(len(w))],
-                     "private": [100 * noise[h][i] / total[i] for i in range(len(w))]}
+        fractions = {"across": [percentage(cw[i][i], total[i]) for i in range(len(w))],
+                     "within": [percentage(cl[i][i], total[i]) for i in range(len(w))],
+                     "private": [percentage(noise[h][i], total[i]) for i in range(len(w))]}
         sw, dw = spectrum(w)
         sl, dl = spectrum(l)
         result["areas"][h] = {"fractions_percent": fractions,

@@ -243,5 +243,43 @@ class PupilSelection(unittest.TestCase):
         self.assertIsNone(report["numerical_pass"])
 
 
+class PercentageArithmetic(unittest.TestCase):
+    @staticmethod
+    def inputs(across=1.0, within=1.0, noise=1.0):
+        support = {"id": "generated", "channels": {"left": ["L"], "right": ["R"]}}
+        record = {"kind": "model", "session": "generated", "channels": support["channels"],
+                  "dimensions": {"across": 1, "left": 1, "right": 1},
+                  "loadings": {"W_left": [[across]], "W_right": [[across]],
+                               "L_left": [[within]], "L_right": [[within]]},
+                  "noise": {"left": [noise], "right": [noise]},
+                  "selected_cv_loglik": [0.0] * 10, "final_loglik": 0.0}
+        return record, support
+
+    def test_finite_variance_percentages_do_not_overflow_when_scaled(self):
+        for component, parameters in (("across", {"across": 1e154}),
+                                      ("within", {"within": 1e154}),
+                                      ("private", {"noise": 1e308})):
+            with self.subTest(component=component):
+                report = e.model(*self.inputs(**parameters))
+                for area in report["areas"].values():
+                    self.assertEqual(area["mean_percent"][component], 100.0)
+                    self.assertTrue(all(math.isfinite(value)
+                                        for value in area["mean_percent"].values()))
+                    self.assertTrue(all(math.isfinite(value)
+                                        for covariance in area["covariance"].values()
+                                        for row in covariance for value in row))
+
+    def test_representable_subnormal_percentage_is_not_rounded_to_zero(self):
+        tiny = float.fromhex("0x0.0000000000001p-1022")
+        report = e.model(*self.inputs(across=10.0, within=1.0, noise=tiny))
+        for area in report["areas"].values():
+            self.assertEqual(area["fractions_percent"]["private"], [tiny])
+            self.assertEqual(area["mean_percent"]["private"], tiny)
+
+    def test_unrepresentable_covariance_is_still_refused(self):
+        with self.assertRaisesRegex(e.Invalid, "unrepresentable computed metric"):
+            e.model(*self.inputs(across=1.4e154))
+
+
 if __name__ == "__main__":
     unittest.main()
