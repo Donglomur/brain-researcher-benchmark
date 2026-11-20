@@ -504,17 +504,17 @@ _FIGURE3B_APPROVED = {
     "pin": {
       "path": "benchmarks/paper/PAPER-ROOT-ADD-001/figure3b-successor.v1.json",
       "bytes": 40993,
-      "sha256": "3cf4d2893f87ec7dccbed4b6d19af1d4192fdb0e91f0aa8fff5408ed307186d4"
+      "sha256": "1013f10b61350f226e118f06112fde31bd3cd253f66cf5054e8b778fb09a6fc9"
     },
-    "canonical": "246e5f0907f1f2fa0f09ffb5b4f11cddd850a8101566169a3c0e8a41e86faaee"
+    "canonical": "e9be0bcc4df64a134f3db0934ca280c5d04e1757d9d3f2e7da0c7ddd646be2ab"
   },
   "improvement": {
     "pin": {
       "path": "benchmarks/paper/PAPER-ROOT-ADD-001/improvement.figure3b.v1.json",
-      "bytes": 17823,
-      "sha256": "1c54c77b74ae19feb7370ceee6dff14da5cd8bf5de983cb7d145599805ab667f"
+      "bytes": 18134,
+      "sha256": "a386a7008887eedf386613a2e82ae90e21c7222e81ee7653cbc105b442beaf85"
     },
-    "canonical": "7d3e912ca1818d8cd37e4cda7711b1ef836a4d6a9bf6f8ee30060f1de965103a"
+    "canonical": "8e7e087d2a40b5070210fa415859cbf1cf71d4bc4fd41bfedf75c500de2e6ffa"
   },
   "task": {
     "pin": {
@@ -528,9 +528,9 @@ _FIGURE3B_APPROVED = {
     "pin": {
       "path": "benchmarks/paper/PAPER-ROOT-ADD-001/outcomes.v1.json",
       "bytes": 1979,
-      "sha256": "12369b155e896161be22d06a294a9a742b25735ebe4a3d12d2328fbe2ca6b382"
+      "sha256": "ac2c888555b163fdf3879446d5ef4b06377124bf1ef14e16f2464cf9e4cba289"
     },
-    "canonical": "63f7963da5820b62bc45f1ba88b56918ec0972664223ba670ccb27075834e946"
+    "canonical": "f834a661de413e9ff0c591dc7cc6feb4ed84d38e5f9ebcd1d0859fc97122604a"
   },
   "previous_task": {
     "pin": {
