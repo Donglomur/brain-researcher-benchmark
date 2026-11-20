@@ -41,6 +41,11 @@ The report preserves cell/animal identities, actual trial/bin counts and bin siz
 
 The JSON export uses `schema: dentate-author-score-export-v1`, the pinned `source_commit` and `source_class_sha256`, and a `cells` array. Each fitted cell includes source-selected trial indices, original trial numbers, the one-based selected-trial index of every bin, original counts, unspecialized predictions and `cv2NegLnL`, and final hierarchy leaves with their full source-bin indices, trial indices, counts and predictions. The MATLAB exporter defines all exact field names; generated software fixtures in [tests/test_replay.py](tests/test_replay.py) illustrate the format without authentic observations.
 
+Positive integral JSON indices are accepted as either `1` or `1.0` and
+normalized to Python integers for indexing. Fractional, nonpositive, boolean,
+nonfinite and duplicate indices remain invalid. Normalization does not mutate
+the export or change its source-support commitment.
+
 Optional candidate means can be scored on exactly the same supplied support:
 
 ```sh
