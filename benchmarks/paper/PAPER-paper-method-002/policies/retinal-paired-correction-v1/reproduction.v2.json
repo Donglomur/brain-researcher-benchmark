@@ -1,0 +1,644 @@
+{
+  "schema_version": "paper-reproduction/v2",
+  "task_id": "PAPER-paper-method-002",
+  "objective": "recreate_original_findings_same_task",
+  "eligibility": "source_unresolved",
+  "eligibility_reason": "The supplied-cell retinal prediction primary is continuous and independently reproducible in principle. This v2 declaration represents the actual held-out prediction matrix, observation mask, masked per-site correlation and support-count vectors, plus three retained printed scalar summaries. The original registered matched-control question remains mandatory and unresolved in full_panel, without an invented result category or control roster. Exact authentic coordinates, source-paper numerical/population mapping, historical split/cache/checkpoint, native derivation, author/control replay and scientific criteria remain unresolved. Earlier-audit assertions are not newly authenticated paper-body facts. Separate J17/J18/J19/full36 evidence neither replaces nor automatically gates this primary.",
+  "source_paper": {
+    "title": "Jaxley: differentiable simulation enables large-scale training of detailed biophysical models of neural dynamics",
+    "url": "https://www.nature.com/articles/s41592-025-02895-w"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695658/",
+      "locator": "Results: Fitting neural networks to large-scale recordings; Figure 3; Methods: Hybrid model of the retina",
+      "supports": "Retained published-context metadata reports mean held-out Pearson correlation 0.25 over 147 recording sites in final Figure 3. This source description does not establish equivalence of the fresh split, configuration, cache or selected checkpoint and supplies no fresh-assay pass threshold."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/3708064",
+      "locator": "Ran et al. version 1.0 record and file metadata",
+      "supports": "Source archive contains retinal imaging, morphology and recording/ROI metadata; no arrays were acquired for this review."
+    },
+    {
+      "id": "train",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/train.py",
+      "locator": "Cell selection; full-field recording loading; masked per-ROI correlations and validation-selected test tracking",
+      "supports": "Author routine selects 20161028_1, loads avg_recordings.pkl and computes an arithmetic mean of masked per-ROI Pearson correlations."
+    },
+    {
+      "id": "split",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/utils/dataloader.py",
+      "locator": "build_dataloaders",
+      "supports": "The author splitter permutes field-by-frame row indices, allocates test first and then training/validation, and persists indices. Combined with repeated stimulus sequences across recording fields, this is not a stimulus-identity-grouped split."
+    },
+    {
+      "id": "config",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/config/train.yaml",
+      "locator": "Fields, samples, validation fraction and test_num",
+      "supports": "Defaults cover fields 1\u201315, 1024 samples per field, validation fraction 0.2 and test_num 128; these are not proven to be the published mean-0.25 run settings."
+    },
+    {
+      "id": "prep",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/utils/data_utils.py",
+      "locator": "Recording preprocessing, compartment assignment and response masks",
+      "supports": "Author loader uses lowpass labels, combines recording locations assigned to the same morphology compartment and masks unavailable sites."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/CURRENT_SCIENTIFIC_LIMITS.json",
+      "locator": "missing_historical_equivalence, unissued_external_authentic_inputs, grading_not_run",
+      "supports": "Current source retains explicit historical retinal-147-site-cache and input/backend holds."
+    },
+    {
+      "id": "scope",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/CANONICAL_SPEC.json",
+      "locator": "full_programme_conditions and admission",
+      "supports": "Implementation expands to 36 families and four conditions but explicitly remains unrunnable and unqualified; a retinal result cannot silently satisfy this whole programme."
+    },
+    {
+      "id": "retinal-distribution",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695658/",
+      "locator": "Results: Fitting neural networks to large-scale recordings; final Figure 3c and accompanying retinal text; prior improvement comparison.published_baseline",
+      "supports": "Prior source-grounded contract records mean test r=0.25 across147 sites,146 positive sites and maximum0.51. These printed values are expected source targets, not local executed results."
+    },
+    {
+      "id": "retinal-companions",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695658/",
+      "locator": "Retained earlier-audit Figure3/Hybrid model of the retina locator and derived J15-J19 source inventory; original paper body and notebooks were not independently authenticated in this rollout",
+      "supports": "The retained source routes and derived implementation distinguish anatomy/observation lineage, primary prediction, spatial-model simulation, receptive-field analysis and reduced-data comparison. Only prediction-relevant lineage and source-bound primary controls gate the named primary; J17/J18/J19 remain separate source-unqualified results. Their paper mapping, targets and mandatory-control status are not established by this inventory."
+    },
+    {
+      "id": "source-retinal-results",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/notebooks/04_results.ipynb",
+      "locator": "Pinned author result notebook identified in preserved source tree; retained retina.py compartmentalization/receptive_fields adapters",
+      "supports": "Source route for spatial calcium/voltage and experimental-versus-model receptive fields; current adapter equivalence and reference arrays remain unqualified."
+    },
+    {
+      "id": "source-reduced-data",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/notebooks/05_ann_inductive_bias.ipynb",
+      "locator": "Pinned retinal inductive-bias notebook; retained CANONICAL_SPEC J19 and retina.py::baseline_matrix",
+      "supports": "Separate Fig3f seven-field comparison of linear,MLP,hybrid families at32,64,128,256,512 training-size settings. Historical field/split/repeat and aggregation equivalence remains unresolved; this is not the full147site endpoint."
+    },
+    {
+      "id": "original-controls",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/fa92bd1ceb8d6695cbbfc9ebb52e873f86b70cae/benchmarks/paper/PAPER-paper-method-002/historical/task.pre-improvement.v1.json",
+      "locator": "primary_outputs[1]",
+      "supports": "Preserved original retinal task asks for fitted model comparison with fixed/untrained or constrained-parameter controls on identical stimulus splits. Exact original control identities/values are not recovered; no new control choice is made here."
+    },
+    {
+      "id": "retinal-scorer",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-002/implementations/retinal-heldout/score.py",
+      "locator": "compare(operator,author,candidate); validate_sites; validate_split; source_metrics; CLI --targets --author --candidate --output",
+      "supports": "Runnable software scorer aligns complete147site/232ROI/full15field held-out predictions and emits mean and per-site Pearson values,counts and paired deltas. It does not compute predictions or authenticate data,source splits,fit procedure or AI execution."
+    },
+    {
+      "id": "retinal-source-interface",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/programme/scientific/retina.py",
+      "locator": "anatomy; prediction_products; compartmentalization; receptive_fields; baseline_matrix",
+      "supports": "Derived source interface inventory for J15-J19. It establishes available computational roles, not primary-paper authenticity or mandatory primary scope. Prediction lineage remains relevant; J17/J18/J19 outputs remain separately preserved and unqualified."
+    },
+    {
+      "id": "full36-boundary",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/PUBLICATION_SCOPE.md",
+      "locator": "full36/four-condition/144job scope and separate canonical task roster",
+      "supports": "The wider preserved programme is not rewritten or declared reproduced by the retinal outcome; generic native run/score remains unqualified."
+    },
+    {
+      "id": "retinal-metric-kernel",
+      "kind": "registration",
+      "url": "https://github.com/Donglomur/brain-researcher-benchmark/blob/d3a4d4ed420bbab19d253da5b44eefca1d73eb00/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/programme/scientific/retina_model.py",
+      "locator": "metrics(predictions,labels,mask), lines128-137",
+      "supports": "Derived existing kernel computes per-site masked Pearson correlation and valid-count vectors, with arithmetic mean only when every site is defined. It does not authenticate original source arrays, predictions or acceptance criteria."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original task.json retinal target: predict dendritic calcium of the supplied transient Off-alpha retinal ganglion cell from checkerboard stimulation using its detailed morphology. This is final published Figure 3, despite author directory nex/fig4_rgc and historical Fig4 labels. The broader 36-family implementation is retained and must not be declared won by this single endpoint.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "scope"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source retinal recording archive Ran et al. version 1.0 at Zenodo 3708064; cell 20161028_1. The exact historical avg_recordings.pkl cache, morphology-to-ROI joins and source artifact hashes remain unqualified.",
+      "evidence_ids": [
+        "data",
+        "train",
+        "prep",
+        "legacy"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "One source retinal ganglion cell, 20161028_1: 15 recording fields, 232 original ROI constituents and 147 merged model recording sites are repeated or dependent measurements within this one biological cell. They are not 147 biological replicates or independent animals. Preserve the complete source lineage and all sites; do not select favorable sites.",
+      "evidence_ids": [
+        "paper",
+        "prep",
+        "legacy"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The historical published run indices and configuration remain unrecovered; source defaults are not evidence of that realization. The separately prepared fresh source-default assay permutes 15,360 field-by-frame rows into 12,185 training, 3,047 validation and 128 test observations within cell 20161028_1. The source loader repeats the same stimulus sequence across recording fields; this permutation does not group stimulus identities. Its supported scope is held-out observations within the same cell, not demonstrated unseen-image, new-field or cross-cell generalization. The reduced-data Figure 3f experiment has a separate seven-field/512-test design and remains separate.",
+      "evidence_ids": [
+        "paper",
+        "split",
+        "config"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original checkerboard stimuli, cell morphology, training calcium and the same explicitly approved validation-target access for both participant conditions. Structural observation masks are common information when released and are derivable from exposed field, row and site identities. The operator still owns the authoritative scoring mask, and participants cannot choose support. Observed final test calcium and final test-score feedback remain evaluator-private. Fitted conductances need not identify biological truth. If equal approved validation exposure or enforcing transport is unavailable, the paired episode remains unqualified.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "prep"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Retained paper metadata describes the first 1,024 stimuli per field, 7-Hz lowpass calcium filtering, per-ROI standardization and a 1.8-second delay. The accepted source-derived common preprocessing includes whole-cropped-record z-scoring and all-ROI delay selection before the downstream split; it is not train-only preprocessing. The loader merges compartment-assigned recording sites and preserves field-local unavailable-label masks. Bind the exact preprocessing realization equally for the author reference and both participant conditions. Historical cache equivalence remains unresolved.",
+      "evidence_ids": [
+        "paper",
+        "prep"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "For each recording site compute Pearson correlation between predicted and observed held-out calcium on its valid mask; then take the arithmetic mean across the 147 sites. Training loss or neuron-simulator numerical agreement cannot replace this response-prediction score.",
+      "evidence_ids": [
+        "paper",
+        "train"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Arithmetic mean of the complete 147 masked site Pearson correlations within one cell. Sites, stimulus frames, fields and optimization seeds are dependent or conditional observations, not independent biological replicates. A fresh same-split comparison supports only its declared within-cell endpoint. The separate seven-field comparison and broader 36-family programme remain separate.",
+      "evidence_ids": [
+        "paper",
+        "train"
+      ]
+    },
+    "full_panel": {
+      "status": "unresolved",
+      "description": "Retain the complete original supplied-cell stimulus-to-calcium held-out prediction result and the registered matched-control question. The retained contract specifies cell20161028_1, all15fields,1024source images per field,232rawROIs and147model sites; authenticate the historical realization, morphology-to-site correspondence, stimuli, response transforms, observation masks, train/validation/test identities, prediction vector and source-author comparator before qualification. Preserve anatomy/observation lineage necessary to define that computation without turning every illustrative anatomy or mechanism output into a separate success criterion. Resolve the original fixed/untrained OR constrained-parameter control membership, actual primary-source status and matched evaluation support; do not invent a roster, require both alternatives, choose the easiest alternative or silently substitute the separate seven-field comparison. J17 spatial calcium/voltage simulation, J18 measured/model receptive fields, J19 reduced-data learning results and the wider36-family/four-condition programme remain separately named source evidence. Their success is not automatically a gate on primary prediction, and primary prediction alone establishes no mechanistic validity, true conductance recovery, cross-cell generalization or whole-programme result. Represent the complete source-defined held-out prediction matrix, independently held observed calcium and operator-owned observation mask, with per-site Pearson and support-count vectors. Preserve every site and its undefined status; never pool observations across sites, weight by support counts, drop undefined sites, substitute training loss or choose a favorable subset. Exact test-row count and site coordinates are unresolved; neither a default128-row split nor fabricated147site labels are adopted. Final observed calcium remains evaluator-private. The operator owns the authoritative scoring mask, but structural mask values may be common participant-visible information and are derivable from exposed field, row and site identities; confidentiality of these masks is not claimed. Participants cannot alter scoring support. The operator assembles metric/support outputs from the submitted predictions and independently held observations. The unknown registered control outcome is retained as a source-resolution obligation, not populated by a fabricated categorical finding.",
+      "evidence_ids": [
+        "paper",
+        "prep",
+        "train",
+        "original-controls",
+        "retinal-scorer",
+        "retinal-source-interface",
+        "full36-boundary",
+        "retinal-metric-kernel"
+      ]
+    },
+    "permitted_observations": {
+      "status": "verified",
+      "description": "Both conditions receive the same paper, original checkerboard stimuli, morphology, training calcium and explicitly approved validation-target access, with identical ROI/site identities, transformations, split and structural masks. Structural masks are common or derivable information; observed final test calcium and final test feedback remain evaluator-private. B adds only the pinned author-code information, not extra labels, splits, fields, selection privileges or a different reference. Equal validation targets must be explicitly approved and physically enforced; if unavailable, the paired episode is unqualified. Visible labels do not substantiate a 21-query restriction. Printed paper findings are allowed context, so independent actual-data execution and granular-output verification remain necessary.",
+      "evidence_ids": [
+        "paper",
+        "data",
+        "train",
+        "split",
+        "prep"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "original_retinal_heldout_prediction_family",
+      "kind": "indexed_array_family",
+      "description": "Complete supplied-cell held-out calcium prediction family on the original observations: submitted prediction matrix, independently held observed calcium and valid mask, and operator-derived per-site Pearson/support-count vectors. These are existing source-native quantities, not substitute scalar summaries. Observed test calcium remains private;the operator-owned authoritative structural mask may be shared or derived from participant-visible identities; only the independent operator assembles the full comparison family after candidate freeze. Original fit/split/ROI lineage and registered control verification remain required.",
+      "status": "unresolved",
+      "expected": null,
+      "representation": {
+        "status": "unresolved",
+        "family_id": "supplied_cell_original_retinal_heldout_prediction",
+        "family_identity_sha256": null,
+        "members": [
+          {
+            "id": "heldout_predictions",
+            "manifest_key": "heldout_predictions",
+            "source_quantity": "Prediction matrix restricted to the exact original held-out stimulus rows and all147model recording sites; native prediction_products full_site_predictions filtered by admitted test indices, or identity-aligned scorer prediction packets.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              147
+            ],
+            "axes": [
+              {
+                "name": "original_heldout_stimulus_row",
+                "units": "source stimulus row identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original test-row IDs/order and count among the retained15fields x1024source image rows remain unauthenticated. Config test_num128 is not a historical split."
+                }
+              },
+              {
+                "name": "original_model_recording_site",
+                "units": "field/branch/bin site identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Retained147model sites require authentic field,branch,bin order and232rawROI mapping. No fabricated per-site coordinate list is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Original source preprocessed calcium response units; exact transformation/scale remains unqualified.",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "No reduction. Preserve every original held-out row and site in exact admitted identity order; finite candidate predictions are required on all declared sites.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "train",
+              "prep",
+              "retinal-scorer",
+              "retinal-source-interface",
+              "retinal-metric-kernel"
+            ]
+          },
+          {
+            "id": "operator_observed_calcium",
+            "manifest_key": "operator_observed_calcium",
+            "source_quantity": "Original held-out observed calcium matrix on the exact admitted stimulus-row/site grid; independently held operator labels passed to metrics and target packet, not an additional candidate input or solver-produced target.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              147
+            ],
+            "axes": [
+              {
+                "name": "original_heldout_stimulus_row",
+                "units": "source stimulus row identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original test-row IDs/order and count among the retained15fields x1024source image rows remain unauthenticated. Config test_num128 is not a historical split."
+                }
+              },
+              {
+                "name": "original_model_recording_site",
+                "units": "field/branch/bin site identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Retained147model sites require authentic field,branch,bin order and232rawROI mapping. No fabricated per-site coordinate list is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Original source preprocessed calcium response units; exact transformation/scale remains unqualified.",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "No reduction or candidate refitting of labels. Preserve original source filtering,delay,normalization and masked missing support. The independent operator supplies this operand and assembles the family after candidate freeze; it is never exposed as extra solver information.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "train",
+              "prep",
+              "retinal-scorer",
+              "retinal-source-interface",
+              "retinal-metric-kernel"
+            ]
+          },
+          {
+            "id": "operator_observation_mask",
+            "manifest_key": "operator_observation_mask",
+            "source_quantity": "Operator-owned authoritative binary valid-label support for the same held-out row/site grid; native observation_mask and scorer operator mask. Structural values may be common participant-visible or derivable information; they are not confidential observed calcium.",
+            "membership": "fixed",
+            "shape": [
+              null,
+              147
+            ],
+            "axes": [
+              {
+                "name": "original_heldout_stimulus_row",
+                "units": "source stimulus row identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Exact original test-row IDs/order and count among the retained15fields x1024source image rows remain unauthenticated. Config test_num128 is not a historical split."
+                }
+              },
+              {
+                "name": "original_model_recording_site",
+                "units": "field/branch/bin site identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Retained147model sites require authentic field,branch,bin order and232rawROI mapping. No fabricated per-site coordinate list is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Binary observation-valid indicator,0or1.",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "No reduction. The operator supplies and authenticates the source-defined mask; participants cannot choose support. Structural exposure or derivability must be stated honestly. Historical field-to-row/mask correspondence remains unresolved.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "train",
+              "prep",
+              "retinal-scorer",
+              "retinal-source-interface",
+              "retinal-metric-kernel"
+            ]
+          },
+          {
+            "id": "per_site_pearson",
+            "manifest_key": "per_site_pearson",
+            "source_quantity": "Masked Pearson correlation between predictions and operator-held observed calcium separately for every original model recording site; site_metrics and scorer author/candidate per-site r.",
+            "membership": "fixed",
+            "shape": [
+              147
+            ],
+            "axes": [
+              {
+                "name": "original_model_recording_site",
+                "units": "field/branch/bin site identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Retained147model sites require authentic field,branch,bin order and232rawROI mapping. No fabricated per-site coordinate list is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Pearson r, dimensionless; undefined sites retained explicitly.",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Use each site own original valid held-out mask. Compute unweighted arithmetic mean over all147sites only when all are defined; do not drop undefined sites, pool row observations or weight site correlations by valid counts.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "train",
+              "prep",
+              "retinal-scorer",
+              "retinal-source-interface",
+              "retinal-metric-kernel"
+            ]
+          },
+          {
+            "id": "per_site_valid_count",
+            "manifest_key": "per_site_valid_count",
+            "source_quantity": "Number of valid held-out observations used for each original recording-site correlation; metric kernel count and scorer valid_count.",
+            "membership": "fixed",
+            "shape": [
+              147
+            ],
+            "axes": [
+              {
+                "name": "original_model_recording_site",
+                "units": "field/branch/bin site identity",
+                "identity_sha256": null,
+                "coordinates": {
+                  "kind": "unresolved",
+                  "description": "Retained147model sites require authentic field,branch,bin order and232rawROI mapping. No fabricated per-site coordinate list is supplied."
+                }
+              }
+            ],
+            "allowed_dtypes": null,
+            "units": "Count of valid original held-out observations.",
+            "semantic_identity_sha256": null,
+            "support_manifest_sha256": null,
+            "domain_policy_sha256": null,
+            "source_aggregation": "Separate support count for each site; not an aggregation weight or independent biological sample size. Preserve insufficient/constant-support undefined reasons in granular metric records.",
+            "derivation_policy_sha256": null,
+            "collection": null,
+            "evidence_ids": [
+              "paper",
+              "train",
+              "prep",
+              "retinal-scorer",
+              "retinal-source-interface",
+              "retinal-metric-kernel"
+            ]
+          }
+        ],
+        "evidence_ids": [
+          "paper",
+          "train",
+          "prep",
+          "retinal-scorer",
+          "retinal-source-interface",
+          "retinal-metric-kernel"
+        ]
+      },
+      "required_granular_output_ids": [
+        "retinal_heldout_predictions",
+        "retinal_operator_observation_mask",
+        "retinal_operator_observed_calcium",
+        "retinal_per_site_pearson_and_undefined_status",
+        "retinal_per_site_valid_counts",
+        "retinal_fit_split_roi_lineage",
+        "retinal_author_and_registered_control_derivation"
+      ],
+      "comparison": {
+        "status": "unresolved",
+        "comparison_class": "numerical_reference_equivalence",
+        "reference_manifest_sha256": null,
+        "comparison_program_sha256": null,
+        "criterion_policy_sha256": null,
+        "uncertainty_policy_sha256": null,
+        "coverage": "complete_declared_source_support",
+        "method": "Compare actual source-bound original prediction/site-metric arrays under an independently justified reproduction policy after authentic reference and index correspondence are available. Stochastic refits need source-supported protocol equivalence and variability criteria; bitwise identity or a generic tolerance is not assumed.",
+        "independent_unit": "One supplied biological retinal cell.",
+        "dependence": "Sites,recording fields,stimuli and fitting seeds are dependent or conditional observations within onecell; no independent-animal or cross-cell generalization is implied.",
+        "multiplicity": "No acceptance/multiplicity policy is frozen. Any eventual comparison must preserve full original site support and the registered control question without favorable site/metric selection.",
+        "rationale": "Indexed quantities are expressible in v2, but exact reference arrays, authenticated axes, source-equivalent derivation and comparison/uncertainty criteria remain absent. This is a genuine source/criterion gap, not scientific ineligibility or a reason to invent hashes.",
+        "evidence_ids": [
+          "paper",
+          "train",
+          "prep",
+          "retinal-scorer",
+          "retinal-source-interface",
+          "retinal-metric-kernel"
+        ]
+      },
+      "evidence_ids": [
+        "paper",
+        "train",
+        "prep",
+        "retinal-scorer",
+        "retinal-source-interface",
+        "retinal-metric-kernel"
+      ]
+    },
+    {
+      "id": "retinal147_mean_test_pearson",
+      "kind": "scalar",
+      "description": "Full original retinal mean held-out calcium prediction correlation.",
+      "status": "verified",
+      "expected": 0.25,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Arithmetic mean of per-site Pearson correlations on each original valid held-out mask, retaining all147 sites from all15fields; undefined sites are not dropped.",
+      "evidence_ids": [
+        "paper",
+        "retinal-distribution",
+        "train",
+        "prep"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The source mean0.25 is rounded. Rounding precision alone does not justify an equivalence band for a stochastic fitting replay; exact reference outputs, historical split/cache and source variability are not qualified. No0.005 or other tolerance, confidence level or independent-site assumption is invented.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train",
+          "prep"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The source mean0.25 is rounded. Rounding precision alone does not justify an equivalence band for a stochastic fitting replay; exact reference outputs, historical split/cache and source variability are not qualified. No0.005 or other tolerance, confidence level or independent-site assumption is invented.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train",
+          "prep"
+        ]
+      }
+    },
+    {
+      "id": "retinal147_positive_test_site_count",
+      "kind": "scalar",
+      "description": "Number of the complete147 original recording sites with positive held-out Pearson correlation.",
+      "status": "verified",
+      "expected": 146,
+      "units": "recording sites",
+      "aggregation": "Count r>0 over the same complete147site vector used for the mean; retain negative/undefined sites and source identities.",
+      "evidence_ids": [
+        "paper",
+        "retinal-distribution",
+        "train"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The reported146 is a descriptive source target. It does not supply a replay tolerance or significance rule near r=0; exact site correlations, optimization variation and source support must be recovered before a count-matching criterion is frozen.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The reported146 is a descriptive source target. It does not supply a replay tolerance or significance rule near r=0; exact site correlations, optimization variation and source support must be recovered before a count-matching criterion is frozen.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train"
+        ]
+      }
+    },
+    {
+      "id": "retinal147_maximum_test_pearson",
+      "kind": "scalar",
+      "description": "Maximum held-out Pearson correlation in the complete original147site distribution.",
+      "status": "verified",
+      "expected": 0.51,
+      "units": "Pearson r (dimensionless)",
+      "aggregation": "Maximum of the same complete masked147site correlation vector, never a selected site subset or a different split.",
+      "evidence_ids": [
+        "paper",
+        "retinal-distribution",
+        "train"
+      ],
+      "categories": [],
+      "tolerance": {
+        "status": "unresolved",
+        "absolute": null,
+        "rationale": "The rounded maximum0.51 does not establish a tolerance for an extreme statistic or identify its source site. Exact source vector and stochastic/conditional uncertainty remain unresolved.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train"
+        ]
+      },
+      "uncertainty": {
+        "kind": "unresolved",
+        "method": "Source-faithful conditional prediction/analysis uncertainty is not yet frozen.",
+        "independent_unit": "One source biological cell; sites,fields,stimuli and optimization seeds are nested/dependent observations, not independent animals.",
+        "minimum_independent_units": null,
+        "confidence_level": null,
+        "statistic": null,
+        "operator": null,
+        "threshold": null,
+        "rationale": "The rounded maximum0.51 does not establish a tolerance for an extreme statistic or identify its source site. Exact source vector and stochastic/conditional uncertainty remain unresolved.",
+        "evidence_ids": [
+          "paper",
+          "retinal-distribution",
+          "train"
+        ]
+      }
+    }
+  ],
+  "panel_rule": "all_declared_findings_and_companions",
+  "blocking_issues": [
+    "Authenticate the retained cell20161028_1 morphology,232rawROI identities,147merged sites,all15fields, original filtered/delayed normalized calcium and historical cache correspondence; retained population/numeric assertions are not newly verified primary-body evidence.",
+    "Recover exact original training/validation/test identities, selected checkpoint and fitting configuration; defaults including128test rows do not establish the published realization.",
+    "Resolve the registered fixed/untrained OR constrained-parameter control question: actual original-paper status, membership, reported finding and compatibility with the primary matched observations/splits. Do not invent a roster, require both alternatives, choose the easiest alternative or substitute J19.",
+    "Authenticate anatomy, mechanism/observation transformations and fitted source-author model lineage needed for prediction; resolve material parameter/unit/scale/soma/kernel ambiguities for that computation without making every illustrative anatomy or mechanism product a separate success criterion.",
+    "Justify primary finding tolerances and dependence-aware uncertainty from source evidence; rounded0.25/146positive/0.51maximum, site/field/seed repetitions and one-cell measurements supply no automatic equivalence or independent-animal criterion.",
+    "No authentic data manifest, immutable granular-output identities or independent submitted-analysis verification programme is admitted. Omit admission_policy rather than use source-file hashes as data/output identities.",
+    "The retinal-heldout scorer consumes operator-owned targets and two supplied prediction packets; it does not derive predictions, execute a submitted fit, verify author/control execution or attest target isolation. Matching printed aggregates cannot establish reproduction.",
+    "Paired paper_data and paper_data_author_code common inputs, code-only exposure difference, independent execution/custody, author-code manifest and cumulative budgets remain unresolved for both outcomes.",
+    "The indexed family has no authentic reference artifact, family/axis identity manifest or source-equivalent numerical-comparison/uncertainty policy. Shape147 is a retained prior-audit population assertion; test-row count and all coordinates remain unresolved.",
+    "Allowed array dtypes, invalid/undefined-value domain conventions and complete prediction/metric derivation policy remain unbound. The software scorer validity rules do not alone authenticate historical source convention.",
+    "The registered fixed/untrained OR constrained-control question has no authenticated primary-paper membership or scientific target. It stays required in full_panel; no categorical expected outcome, roster or easiest alternative is invented.",
+    "The current v2 metadata comparator implements numerical_reference_equivalence only. Any later control-specific ordinal, directional or model-based scientific assessment requires independent source criteria and an appropriate supported representation; it is not silently inferred from numerical reference equality.",
+    "The fresh paired within-cell interface is source-only. Physical transport, equal approved validation-target exposure, complete paired execution and a supported precommitted scientific decision policy remain unbound. Its repeated-stimulus split and whole-record preprocessing do not establish unseen-image or cross-cell generalization; it cannot qualify legacy historical reproduction."
+  ]
+}

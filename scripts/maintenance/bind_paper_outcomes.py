@@ -145,7 +145,29 @@ def validate_existing(root=ROOT):
             "scientific_qualification": False, "bytes_read": reader.bytes_read}
 
 
-def build_outputs(root=ROOT, *, adopt_language_figure3b=False, adopt_meg_generic_classification=False):
+def retinal_row_outputs(row, current, previous, read_pin, *, adopt=False, improvement_contract=None):
+    """The maintained explicit/default retinal row path, without validation shortcuts.
+
+    build_outputs retains every global validator around this helper, including
+    its later prior_lineage check before returning outputs. Focused controls
+    establish selected-row behavior only, not whole-registry idempotence.
+    """
+    binding.need(row.get("id") == binding.RETINAL_PAIRED_TASK,
+                 "Retinal row planner cannot select another task")
+    selected = binding.has_retinal_paired_revision(row)
+    if not adopt and not selected:
+        return None
+    selected_row, selected_task, context = binding.adopt_retinal_paired_correction(
+        row, current, previous, read_pin, improvement_contract=improvement_contract)
+    body = binding.encode(selected_task)
+    binding.need(binding.pin(selected_row["specification"]["path"], body) == selected_row["specification"],
+                 "Retinal row planner changed its exact task output")
+    return {"row": selected_row, "task": selected_task, "context": context,
+            "outputs": {selected_row["specification"]["path"]: body}}
+
+
+def build_outputs(root=ROOT, *, adopt_language_figure3b=False, adopt_meg_generic_classification=False,
+                  adopt_retinal_paired_correction=False):
     """Validate every supplied contract before returning deterministic outputs."""
     root = root_path(root)
     reader = checker.Reader(root)
@@ -158,6 +180,11 @@ def build_outputs(root=ROOT, *, adopt_language_figure3b=False, adopt_meg_generic
     binding.need(not adopt_language_figure3b or already_bound, "LANGUAGE Figure3b adoption requires the existing reviewed reference binding")
     binding.need(not adopt_meg_generic_classification or already_bound,
                  "MEG Generic adoption requires its existing reviewed primary binding")
+    binding.need(not adopt_retinal_paired_correction or already_bound,
+                 "Retinal paired adoption requires its existing reviewed outcome binding")
+    binding.need(not adopt_retinal_paired_correction or
+                 sum(row["id"] == binding.RETINAL_PAIRED_TASK for row in papers) == 1,
+                 "Retinal paired adoption requires exactly its registered target")
     if already_bound:
         snapshot_pin = registry["paper_outcomes"]["pre_outcomes_registry"]
         snapshot_raw, observed = raw(reader, binding.SNAPSHOT)
@@ -195,6 +222,15 @@ def build_outputs(root=ROOT, *, adopt_language_figure3b=False, adopt_meg_generic
             current = read_pin(row["specification"], "Current paper definition")
             context = binding.context(row, current, previous, read_pin, improvement_contract=improvement)
             contexts[identifier] = context
+            if identifier == binding.RETINAL_PAIRED_TASK:
+                retinal = retinal_row_outputs(
+                    row, current, previous, read_pin, adopt=adopt_retinal_paired_correction,
+                    improvement_contract=improvement)
+                if retinal is not None:
+                    updated_rows[identifier].update(retinal["row"])
+                    outputs.update(retinal["outputs"])
+                    contexts[identifier] = retinal["context"]
+                    continue
             if adopt_meg_generic_classification and identifier == binding.MEG_GENERIC_TASK:
                 selected_row, selected_task, selected_outcomes = binding.meg_generic_classification_adoption(
                     row, current, context["outcomes"], read_pin)
@@ -417,11 +453,12 @@ def build_outputs(root=ROOT, *, adopt_language_figure3b=False, adopt_meg_generic
 
 
 def write_or_check(root=ROOT, *, write=False, check=False, adopt_language_figure3b=False,
-                   adopt_meg_generic_classification=False):
+                   adopt_meg_generic_classification=False, adopt_retinal_paired_correction=False):
     binding.need(not (write and check), "Choose either write or check")
     root = root_path(root)
     outputs, report = build_outputs(root, adopt_language_figure3b=adopt_language_figure3b,
-                                    adopt_meg_generic_classification=adopt_meg_generic_classification)
+                                    adopt_meg_generic_classification=adopt_meg_generic_classification,
+                                    adopt_retinal_paired_correction=adopt_retinal_paired_correction)
     destination_reader = checker.Reader(root)
     before = {}
     for relative in outputs:
@@ -432,7 +469,8 @@ def write_or_check(root=ROOT, *, write=False, check=False, adopt_language_figure
         binding.need(not stale, "Paper outcome bindings are stale or missing: " + ", ".join(stale))
     if write:
         repeated, repeated_report = build_outputs(root, adopt_language_figure3b=adopt_language_figure3b,
-                                                   adopt_meg_generic_classification=adopt_meg_generic_classification)
+                                                   adopt_meg_generic_classification=adopt_meg_generic_classification,
+                                    adopt_retinal_paired_correction=adopt_retinal_paired_correction)
         report["repeat_preflight_bytes_read"] = repeated_report["bytes_read"]
         binding.need(outputs == repeated, "Outcome binding inputs changed during preflight")
         for relative in outputs:
@@ -468,11 +506,14 @@ def main(argv=None):
     parser.add_argument("--adopt-language-figure3b", action="store_true", help="Select only the fixed reviewed LANGUAGE Figure3b successor")
     parser.add_argument("--adopt-meg-generic-classification", action="store_true",
                         help="Select only the fixed reviewed MEG Generic classification description")
+    parser.add_argument("--adopt-retinal-paired-correction", action="store_true",
+                        help="Select only the fixed reviewed retinal paired metadata correction")
     args = parser.parse_args(argv)
     try:
         print(json.dumps(write_or_check(args.root, write=args.write, check=args.check,
                                        adopt_language_figure3b=args.adopt_language_figure3b,
-                                       adopt_meg_generic_classification=args.adopt_meg_generic_classification), indent=2))
+                                       adopt_meg_generic_classification=args.adopt_meg_generic_classification,
+                                       adopt_retinal_paired_correction=args.adopt_retinal_paired_correction), indent=2))
         return 0
     except (ValueError, KeyError, TypeError, OSError, ImportError) as error:
         print("paper outcome binding refused: " + str(error), file=sys.stderr)

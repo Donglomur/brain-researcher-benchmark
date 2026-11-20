@@ -1,0 +1,217 @@
+{
+  "schema_version": "paper-improvement/v1",
+  "task_id": "PAPER-paper-method-002",
+  "objective": "surpass_source_paper_same_task",
+  "disposition": "design_ready",
+  "disposition_reason": "The original retinal endpoint and exact score are documented, but no qualified paper improvement is established. The rounded published 0.25 remains contextual until historical split, configuration, cache and selected-checkpoint correspondence is demonstrated. A fresh source-default comparison requires an executed author reference on the same split with matched compute, complete paired provenance and a scientifically supported precommitted decision policy. Source or K2 numerical qualification does not supply a full-fit endpoint score.",
+  "source_paper": {
+    "title": "Jaxley: differentiable simulation enables large-scale training of detailed biophysical models of neural dynamics",
+    "url": "https://www.nature.com/articles/s41592-025-02895-w"
+  },
+  "evidence": [
+    {
+      "id": "paper",
+      "kind": "paper",
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12695658/",
+      "locator": "Results: Fitting neural networks to large-scale recordings; Figure 3; Methods: Hybrid model of the retina",
+      "supports": "Retained published-context metadata reports mean held-out Pearson correlation 0.25 over 147 recording sites in final Figure 3. This source description does not establish equivalence of the fresh split, configuration, cache or selected checkpoint and supplies no fresh-assay pass threshold."
+    },
+    {
+      "id": "data",
+      "kind": "author_data",
+      "url": "https://zenodo.org/records/3708064",
+      "locator": "Ran et al. version 1.0 record and file metadata",
+      "supports": "Source archive contains retinal imaging, morphology and recording/ROI metadata; no arrays were acquired for this review."
+    },
+    {
+      "id": "train",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/train.py",
+      "locator": "Cell selection; full-field recording loading; masked per-ROI correlations and validation-selected test tracking",
+      "supports": "Author routine selects 20161028_1, loads avg_recordings.pkl and computes an arithmetic mean of masked per-ROI Pearson correlations."
+    },
+    {
+      "id": "split",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/utils/dataloader.py",
+      "locator": "build_dataloaders",
+      "supports": "The author splitter permutes field-by-frame row indices, allocates test first and then training/validation, and persists indices. Combined with repeated stimulus sequences across recording fields, this is not a stimulus-identity-grouped split."
+    },
+    {
+      "id": "config",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/config/train.yaml",
+      "locator": "Fields, samples, validation fraction and test_num",
+      "supports": "Defaults cover fields 1\u201315, 1024 samples per field, validation fraction 0.2 and test_num 128; these are not proven to be the published mean-0.25 run settings."
+    },
+    {
+      "id": "prep",
+      "kind": "author_code",
+      "url": "https://github.com/mackelab/jaxley_experiments/blob/5e7a86282adb9d4603b5546ac5d8dad59aec7cc0/nex/fig4_rgc/utils/data_utils.py",
+      "locator": "Recording preprocessing, compartment assignment and response masks",
+      "supports": "Author loader uses lowpass labels, combines recording locations assigned to the same morphology compartment and masks unavailable sites."
+    },
+    {
+      "id": "legacy",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/CURRENT_SCIENTIFIC_LIMITS.json",
+      "locator": "missing_historical_equivalence, unissued_external_authentic_inputs, grading_not_run",
+      "supports": "Current source retains explicit historical retinal-147-site-cache and input/backend holds."
+    },
+    {
+      "id": "scope",
+      "kind": "registration",
+      "url": "https://github.com/brain-researcher/brain-researcher-benchmark/blob/92373fc08c1b4dfda1ad878085b6ded51bfe4151/benchmarks/paper/PAPER-paper-method-002/implementations/registered-runtime/CANONICAL_SPEC.json",
+      "locator": "full_programme_conditions and admission",
+      "supports": "Implementation expands to 36 families and four conditions but explicitly remains unrunnable and unqualified; a retinal result cannot silently satisfy this whole programme."
+    }
+  ],
+  "same_task": {
+    "target": {
+      "status": "verified",
+      "description": "Original task.json retinal target: predict dendritic calcium of the supplied transient Off-alpha retinal ganglion cell from checkerboard stimulation using its detailed morphology. This is final published Figure 3, despite author directory nex/fig4_rgc and historical Fig4 labels. The broader 36-family implementation is retained and must not be declared won by this single endpoint.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "scope"
+      ]
+    },
+    "dataset": {
+      "status": "unresolved",
+      "description": "Source retinal recording archive Ran et al. version 1.0 at Zenodo 3708064; cell 20161028_1. The exact historical avg_recordings.pkl cache, morphology-to-ROI joins and source artifact hashes remain unqualified.",
+      "evidence_ids": [
+        "data",
+        "train",
+        "prep",
+        "legacy"
+      ]
+    },
+    "cohort": {
+      "status": "verified",
+      "description": "One source retinal ganglion cell, 20161028_1: 15 recording fields, 232 original ROI constituents and 147 merged model recording sites are repeated or dependent measurements within this one biological cell. They are not 147 biological replicates or independent animals. Preserve the complete source lineage and all sites; do not select favorable sites.",
+      "evidence_ids": [
+        "paper",
+        "prep",
+        "legacy"
+      ]
+    },
+    "split": {
+      "status": "unresolved",
+      "description": "The historical published run indices and configuration remain unrecovered; source defaults are not evidence of that realization. The separately prepared fresh source-default assay permutes 15,360 field-by-frame rows into 12,185 training, 3,047 validation and 128 test observations within cell 20161028_1. The source loader repeats the same stimulus sequence across recording fields; this permutation does not group stimulus identities. Its supported scope is held-out observations within the same cell, not demonstrated unseen-image, new-field or cross-cell generalization. The reduced-data Figure 3f experiment has a separate seven-field/512-test design and remains separate.",
+      "evidence_ids": [
+        "paper",
+        "split",
+        "config"
+      ]
+    },
+    "inputs": {
+      "status": "verified",
+      "description": "Original checkerboard stimuli, cell morphology, training calcium and the same explicitly approved validation-target access for both participant conditions. Structural observation masks are common information when released and are derivable from exposed field, row and site identities. The operator still owns the authoritative scoring mask, and participants cannot choose support. Observed final test calcium and final test-score feedback remain evaluator-private. Fitted conductances need not identify biological truth. If equal approved validation exposure or enforcing transport is unavailable, the paired episode remains unqualified.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "prep"
+      ]
+    },
+    "preprocessing": {
+      "status": "verified",
+      "description": "Retained paper metadata describes the first 1,024 stimuli per field, 7-Hz lowpass calcium filtering, per-ROI standardization and a 1.8-second delay. The accepted source-derived common preprocessing includes whole-cropped-record z-scoring and all-ROI delay selection before the downstream split; it is not train-only preprocessing. The loader merges compartment-assigned recording sites and preserves field-local unavailable-label masks. Bind the exact preprocessing realization equally for the author reference and both participant conditions. Historical cache equivalence remains unresolved.",
+      "evidence_ids": [
+        "paper",
+        "prep"
+      ]
+    },
+    "metric": {
+      "status": "verified",
+      "description": "For each recording site compute Pearson correlation between predicted and observed held-out calcium on its valid mask; then take the arithmetic mean across the 147 sites. Training loss or neuron-simulator numerical agreement cannot replace this response-prediction score.",
+      "evidence_ids": [
+        "paper",
+        "train"
+      ]
+    },
+    "aggregation": {
+      "status": "verified",
+      "description": "Arithmetic mean of the complete 147 masked site Pearson correlations within one cell. Sites, stimulus frames, fields and optimization seeds are dependent or conditional observations, not independent biological replicates. A fresh same-split comparison supports only its declared within-cell endpoint. The separate seven-field comparison and broader 36-family programme remain separate.",
+      "evidence_ids": [
+        "paper",
+        "train"
+      ]
+    }
+  },
+  "comparison": {
+    "primary_metric": "Mean masked held-out Pearson correlation across the original 147 retinal recording sites",
+    "direction": "higher",
+    "published_baseline": {
+      "status": "verified",
+      "value": 0.25,
+      "description": "Retained published-context metadata for final Figure 3 reports mean test Pearson r=0.25 across 147 sites (146 positive; maximum 0.51). These rounded summaries are not a pass threshold for a fresh split, an executed author-reference score, the Figure 3f reduced-data result or a whole-paper/full-36 score. Exact historical split, configuration, cache and selected-checkpoint equivalence remains unresolved.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "reproduced_author_baseline": {
+      "status": "unresolved",
+      "value": null,
+      "description": "Pinned author code provides a source-authorized route. The fresh source-default route requires an executed author reference with complete split, site, mask, preprocessing, programme, compute and validation-selected checkpoint provenance matching the candidate episode. No fresh or historical full-fit score is supplied by source or K2 qualification. Historical published-run correspondence remains a distinct unresolved claim.",
+      "evidence_ids": [
+        "train",
+        "split",
+        "config",
+        "prep",
+        "legacy"
+      ]
+    },
+    "minimum_effect": {
+      "status": "unresolved",
+      "value": null,
+      "rationale": "A meaningful effect must be scientifically justified and precommitted for the admitted comparison before candidate or test evaluation. Published rounded 0.25 supplies neither a fresh-split comparator nor a minimum effect; no numeric threshold or post-hoc rule is selected here.",
+      "evidence_ids": [
+        "paper"
+      ]
+    },
+    "uncertainty": {
+      "status": "unresolved",
+      "method": "Require an independently supported precommitted paired uncertainty method that preserves shared field, site and stimulus structure and temporal dependence, and declares optimization variability separately. No IID 147-site bootstrap, confidence level, block length, replication count or decision predicate is selected by this contract.",
+      "independent_unit": "One biological cell. Fields, sites, repeated stimulus frames and fitting seeds do not create independent biological replication; any supported uncertainty is conditional on the declared within-cell assay.",
+      "rationale": "The 147 sites belong to one cell and the source stimuli/labels are temporally and spatially related. Generalization beyond that source cell is a separate extension.",
+      "evidence_ids": [
+        "paper",
+        "train",
+        "prep"
+      ]
+    },
+    "paper_win_requires": [
+      "Pin the original 20161028_1 morphology, all recording-field/ROI identities, 147-site cache and exact published train/validation/test indices.",
+      "Reproduce the source author method on the identical full retinal task and distinguish its score from the rounded published 0.25.",
+      "Freeze candidate and all hyperparameter selection before final labels; compare identical allowable stimuli, masks and normalization with the original mean-Pearson metric.",
+      "Justify task-specific effect and dependence-aware uncertainty, and fix concrete access/resource budgets before admission.",
+      "Do not replace the full original retinal population with the reduced-data seven-field experiment, an Allen cell, simulator parity, or a smaller site subset.",
+      "Resolve task.json retinal scope versus the full36 implementation explicitly; a scoped retinal win cannot be reported as surpassing every source-paper result."
+    ],
+    "current_sota": {
+      "status": "not_claimed",
+      "description": "No current-SOTA comparison is asserted; the source-paper result and any later author rerun remain separate comparators.",
+      "evidence_ids": []
+    }
+  },
+  "episode": {
+    "improvement_loop": "Only after the relevant admission, iterate on permitted training and explicitly approved validation observations under the frozen paired access and compute policy. Both conditions receive identical approved validation-target access if available; B alone receives pinned author code. Visible validation targets do not enforce a 21-query budget. Keep observed final test calcium and final test-score feedback out of participant access.",
+    "candidate_freeze": "Bind the immutable model/programme, optimization recipe, randomization, resource budget and validation-selection procedure before final test evaluation; bind the actual validation-selected checkpoint and its executed provenance. Source defaults use 21 epoch-end checks, but this is not an asserted candidate feedback limit when validation labels are visible.",
+    "final_evaluation": "Historical paper-win qualification still requires the exact original realization and its existing admission gates. A separately declared fresh source-default episode reuses the exact retinal-heldout scorer on the candidate and executed fresh author reference over identical frozen test rows, all 147 sites and authoritative field-local masks. Report scores and paired delta with an explicitly unqualified improvement verdict until supported precommitted scientific policy and complete paired execution/transport evidence exist. Preserve wider programme obligations.",
+    "access_budget": null,
+    "resource_budget": null,
+    "baseline_policy": "Keep published-context summaries, historical reproduced reference, fresh same-split executed author reference and any independently verified current SOTA separate. Fresh reference comparison does not establish historical published-score reproduction or current SOTA."
+  },
+  "blocking_issues": [
+    "Exact published split/index/checkpoint/cache configuration and raw-ROI-to-147-site correspondence unresolved.",
+    "Pinned default config is not proven to reproduce the published 0.25 result.",
+    "Canonical full36 scope differs from retinal task.json; binding must explicitly preserve broader obligations rather than silently narrowing success.",
+    "Native input/backend equivalence, author replay, working candidate evaluation, meaningful effect, uncertainty rule and concrete episode budgets unqualified.",
+    "The additive fresh paired episode has not supplied complete paired materials, equally approved validation-target exposure, the B-only code difference, enforcing transport, executed validation-selected checkpoints or a supported precommitted scientific assessment policy. Self-asserted readiness fields cannot replace these bindings; its scientific verdict remains unqualified."
+  ],
+  "legacy": {
+    "role": "calibration_only",
+    "original_task": "historical/task.pre-improvement.v1.json",
+    "notes": "Preserve registered-runtime full36/four-condition source and Allen selector unchanged. They remain calibration/prospective infrastructure with their existing holds. Simulation agreement, source dispatch completion and retinal prediction are different outcomes; none implies a whole-paper win."
+  }
+}

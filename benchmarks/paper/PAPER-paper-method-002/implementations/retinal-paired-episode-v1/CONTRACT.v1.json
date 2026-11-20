@@ -1,0 +1,187 @@
+{
+  "schema_version": "jaxley-paired-retinal-contract-v1",
+  "task_id": "PAPER-paper-method-002",
+  "version": 1,
+  "kind": "additive_source_contract_not_runtime_admission",
+  "status": "SOURCE_ONLY_UNQUALIFIED",
+  "questions": [
+    "Can a participant reproduce the author method on the original retinal endpoint?",
+    "Can a participant improve that endpoint relative to a fresh same-split author reference under a supported precommitted assessment policy?"
+  ],
+  "endpoint": {
+    "cell": "20161028_1",
+    "biological_cells": 1,
+    "recording_fields": 15,
+    "raw_roi_constituents": 232,
+    "merged_recording_sites": 147,
+    "target": "Dendritic calcium prediction from checkerboard stimulation using the supplied transient Off-alpha retinal ganglion-cell morphology.",
+    "figure": "Final published Figure 3; author directory nex/fig4_rgc.",
+    "scope": "Held-out field-by-frame observations within the same cell under frozen preprocessing. No demonstrated new-stimulus, new-field, cross-cell or animal-population generalization.",
+    "replication": "Fields, ROIs, merged sites, repeated stimulus frames and fitting seeds do not create independent biological cells."
+  },
+  "fresh_source_default_split": {
+    "total_rows": 15360,
+    "train_rows": 12185,
+    "validation_rows": 3047,
+    "test_rows": 128,
+    "row_identity": "field_index * 1024 + stimulus_frame_index; bind the exact source index convention.",
+    "method": "RandomState(seed_membrane + seed_ruler).permutation over field-by-frame rows; test prefix, then training, then validation; validation fraction 0.2 of non-test rows with source rounding.",
+    "caveat": "The loader repeats the same 1024-frame sequence across fields. Row-level partitioning is not stimulus-identity grouping.",
+    "required_binding": "Exact ordered identities, permutation/configuration, randomization, ROI/site/field lineage and masks; counts alone are insufficient.",
+    "historical_equivalence": "UNRESOLVED"
+  },
+  "preprocessing": {
+    "scope": "Whole cropped recordings before downstream split.",
+    "operations": [
+      "Per-ROI z-scoring over the cropped recording.",
+      "7-Hz causal SOS lowpass filtering.",
+      "Delay selection with five-fold negative-MAE fits across all 232 ROI traces before holdout.",
+      "Branch/bin mapping and mean aggregation into 147 sites."
+    ],
+    "caveat": "Not train-only preprocessing. Preserve and disclose the exact same method and realization for author and candidate.",
+    "required_binding": "Input lineage, crop, transform implementation/configuration, delay, ROI-to-site/field mapping and resulting split/mask realization."
+  },
+  "conditions": {
+    "A": "paper+data",
+    "B": "paper+data+code",
+    "common_materials": [
+      "Same paper context.",
+      "Same approved stimuli, morphology, identities and training calcium.",
+      "Same explicitly approved validation-target access if available.",
+      "Same structural masks, preprocessing, split, compute/access policy and scoring support."
+    ],
+    "only_intended_difference": {
+      "B_author_code_commit": "5e7a86282adb9d4603b5546ac5d8dad59aec7cc0",
+      "A_author_code": "excluded"
+    },
+    "validation_access": "The new logical candidate_view_v2 returns detached TRAIN and VAL targets equally for A/B and excludes TEST targets. Its v1 predecessor supplied TRAIN targets only. Bind the exact approved validation material and enforce equal exposure: a detached view does not authenticate approval or physically restrict files, tools or later access. Missing approval, material provenance or enforcement prevents qualification.",
+    "masks": "Common or derivable from exposed field, row and site identities. The evaluator owns the authoritative scoring mask; participants cannot choose support.",
+    "private": [
+      "Observed final test calcium.",
+      "Final test-score feedback before freezing and assessment.",
+      "Trusted reference/evaluator artifacts not approved for participant exposure."
+    ],
+    "physical_transport": "UNBOUND. Descriptive pins, allowlists and readiness fields are not an enforcing transport or authenticated event provenance.",
+    "feedback_limit": "No candidate 21-query limit is asserted: 21 is the author fit validation-check count, not an enforced limit with visible validation targets.",
+    "logical_components": {
+      "train": [
+        "row_ids",
+        "images",
+        "currents",
+        "mask",
+        "targets"
+      ],
+      "val": [
+        "row_ids",
+        "images",
+        "currents",
+        "mask",
+        "targets"
+      ],
+      "test": [
+        "row_ids",
+        "images",
+        "currents",
+        "mask"
+      ]
+    },
+    "manifest_limit": "Candidate-manifest descriptors are metadata, not the actual array payload or proof of delivered access. A/B share the paper and morphology; B author_code must match the pinned author-reference source snapshot."
+  },
+  "programme_and_reference": {
+    "freeze_before_test": [
+      "Immutable executable programme and permitted information.",
+      "Optimization recipe, randomization and matched compute/access budget.",
+      "Validation-selection procedure and allowed data.",
+      "Actual validation-selected checkpoint and executed provenance."
+    ],
+    "fresh_reference": "Execute the pinned author method on the exact same split, all sites, authoritative masks and preprocessing under the precommitted matched resource policy; bind its selected checkpoint, predictions and executed provenance.",
+    "source_fit_context": {
+      "epochs": 21,
+      "training_batches_per_epoch": 48,
+      "updates": 1008,
+      "validation_checks": 21,
+      "final_test_rows": 128,
+      "applies_to": "Frozen author-reference defaults only; candidate recipes are separately frozen under the matched policy and need not use these epoch or batch counts."
+    },
+    "not_supplied": "No full-fit reference, candidate endpoint prediction or benchmark outcome is created by this source contribution.",
+    "compute_context_caveat": "The prepared reference route omits receptive-field plots, the epoch-start/final diagnostic checkpoint stream, and train/test monitoring passes with test-scalar logging. These diagnostics did not select parameters, but their omission changes run cost and must be explicit in the matched-compute policy. Retained endpoint mathematics and 21 validation checks do not establish complete historical-run equivalence."
+  },
+  "scoring": {
+    "implementation": "../retinal-heldout/score.py",
+    "bytes": 10745,
+    "sha256": "b2ac5156fe01d600d32b35e0bbf716bd6dea69f59b6bd3a062a6a6c2b0bb126c",
+    "entrypoint": "compare",
+    "metric": "Per-site Pearson correlation on the evaluator mask, then arithmetic mean across all 147 sites.",
+    "preservation": "Unchanged scorer, strict admission and undefined-site behavior. No pooled samples, support weighting, dropped sites or replacement by training loss or numerical model equivalence.",
+    "descriptive_output": "Complete unchanged legacy comparison, including author/candidate scores and paired delta.",
+    "published_context": {
+      "mean_pearson": 0.25,
+      "role": "Rounded context only; not a fresh-split pass threshold.",
+      "historical_split_config_cache_checkpoint_equivalence": "UNRESOLVED"
+    }
+  },
+  "assessment": {
+    "module": "paired_assessment.py",
+    "entrypoint": "assess_pair(operator, author, candidate, *, episode, trusted_operator_evidence=None, policy_precommit=None)",
+    "report_schema": "jaxley-paired-retinal-assessment-v1",
+    "policy_metadata_schema": "jaxley-retinal-policy-precommit-v1",
+    "policy_requirements": [
+      "Supported estimand and inferential scope.",
+      "Justified reproduction and improvement predicates.",
+      "Supported temporal, field, site and repeated-stimulus dependence treatment.",
+      "Justified meaningful effect and uncertainty, or a justified policy explicitly declining unsupported inference.",
+      "Authenticated policy authority and commitment chronology before candidate/test evaluation."
+    ],
+    "selected_tolerance": null,
+    "selected_minimum_effect": null,
+    "selected_uncertainty": null,
+    "selected_scientific_policy": null,
+    "policy_metadata_limit": "Artifact/receipt pins and an event identifier are descriptive. No policy evaluator, authority/chronology verifier or physical-transport verifier is bound here.",
+    "current_verdict": {
+      "qualification": "UNQUALIFIED",
+      "reproduced": null,
+      "improved": null,
+      "uncertainty": null
+    },
+    "rule": "This source version cannot qualify reproduction or improvement. Scores/deltas do not replace paired execution, physical transport or supported precommitted scientific assessment. No IID 147-site bootstrap or post-hoc rule is selected."
+  },
+  "interfaces": {
+    "episode": "paired_episode.py",
+    "episode_input_schema": "PAIRING_INTERFACE.v1.json",
+    "assessment": "paired_assessment.py",
+    "semantic_contract": "CONTRACT.v1.json",
+    "logical_view": "paired_episode.candidate_view_v2",
+    "episode_metadata_function": "paired_episode.validate_pair",
+    "episode_metadata_schema": "jaxley-paired-retinal-episode-v2",
+    "candidate_manifest_schema": "jaxley-retinal-candidate-manifest-v2",
+    "detached_candidate_input_schema": "jaxley-retinal-candidate-input-v2",
+    "episode_validation_report_schema": "jaxley-paired-retinal-episode-validation-v1"
+  },
+  "legacy_boundary": {
+    "contracts": [
+      "../../reproduction.v2.json",
+      "../../improvement.v1.json",
+      "../../outcomes.v1.json"
+    ],
+    "preservation": "Strict historical admission, source-control uncertainty and unresolved legacy pairing remain unchanged. A fresh same-split result cannot establish historical score reproduction, separate seven-field Figure 3f success, full-36 programme success or current SOTA.",
+    "role": "The three task-root files listed here are immutable historical bindings. They remain preserved when the separate versioned correction is explicitly adopted."
+  },
+  "remaining_work": [
+    "Physically enforcing A/B material transport with equal approved validation access and authenticated exposure/event provenance.",
+    "Complete full-fit singleton integration preserving the original scientific loop, normalization and tolerances.",
+    "Actual fresh-author/candidate execution and immutable programme, validation-selection and checkpoint provenance under matched compute.",
+    "Supported precommitted scientific policy with authority, chronology and evaluator binding."
+  ],
+  "execution_selection": "None. No full256, fullfit, reference, candidate, model, data-body or native execution is authorized or claimed by this contract.",
+  "active_correction": {
+    "descriptor": "../../policies/retinal-paired-correction-v1/ADOPTION.v1.json",
+    "contracts": {
+      "improvement": "../../policies/retinal-paired-correction-v1/improvement.v1.json",
+      "reproduction": "../../policies/retinal-paired-correction-v1/reproduction.v2.json",
+      "outcomes": "../../policies/retinal-paired-correction-v1/outcomes.v1.json"
+    },
+    "maintained_projection": "The maintained task-specific binder supports explicit --adopt-retinal-paired-correction adoption after authenticating the exact task, paired component, descriptor and corrected content. The ordinary subsequent pass preserves the adopted active projection; there is no generic override or fallback.",
+    "historical_preservation": "Adoption selects these separate versioned active contracts; it does not overwrite the three task-root historical contracts or weaken preserved registry fields.",
+    "scientific_status": "UNQUALIFIED. Maintained contract adoption is not scientific policy authorization, physical-transport qualification, completed execution, reproduction or improvement."
+  }
+}

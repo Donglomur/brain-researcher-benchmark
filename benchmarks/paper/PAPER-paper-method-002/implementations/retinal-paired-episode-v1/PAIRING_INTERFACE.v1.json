@@ -1,0 +1,302 @@
+{
+  "current_execution_qualification": "UNQUALIFIED",
+  "dataset_identity": {
+    "cell_id": "20161028_1",
+    "cells": 1,
+    "constituent_rois": 232,
+    "fields": 15,
+    "frames_per_field": 1024,
+    "generalization_scope": "Fresh within-cell field-by-frame holdout with repeated stimulus frames across fields; neither independent-cell nor necessarily unseen-image generalization.",
+    "identity_preimage": "sorted compact JSON withoutLF of {sites:ordered complete roster,splits:ordered three split lists}",
+    "rows": 15360,
+    "site_fields": [
+      "field",
+      "branch",
+      "bin",
+      "raw_roi_ids"
+    ],
+    "site_keys": [
+      "field",
+      "branch",
+      "bin"
+    ],
+    "sites": 147,
+    "split_counts": {
+      "test": 128,
+      "train": 12185,
+      "val": 3047
+    },
+    "split_order": "Source-default legacy MT19937 seed0 permutation; TEST prefix, then TRAIN, then VAL. Validator binds complete disjoint ordered declarations but does not recompute or authenticate the permutation.",
+    "structural_mask_rule": "row_id//1024+1 == site.field",
+    "structural_mask_secret": false
+  },
+  "enforcing_transport_adapter": null,
+  "episode_required_keys": [
+    "schema",
+    "episode_id",
+    "evaluated_condition",
+    "cell_id",
+    "sites",
+    "splits",
+    "identity_sha256",
+    "preprocessing",
+    "validation_access",
+    "participant_budget",
+    "reference_programme",
+    "conditions",
+    "private_materials",
+    "scored_packet_sha256",
+    "execution_provenance"
+  ],
+  "functions": {
+    "candidate_view_v2": {
+      "code_delivery": "B-only author source is separately declared in material manifests; this in-memory function does not deliver or isolate code.",
+      "common_output_keys": [
+        "schema",
+        "cell_id",
+        "information_condition",
+        "identity_sha256",
+        "site_keys",
+        "preprocessing_access",
+        "validation_access_sha256",
+        "splits"
+      ],
+      "conditions": {
+        "A": "paper+data",
+        "B": "paper+data+code"
+      },
+      "copy_behavior": "Detached copies of every released array and row-id vector; site-key lists constructed anew. No TEST target slice is included.",
+      "dependencies": "NumPy imported only when the future release function is explicitly called; no numerical/model work at module import.",
+      "future_trusted_release_only": true,
+      "output_schema": "jaxley-retinal-candidate-input-v2",
+      "physical_isolation_claim": false,
+      "private_binding_schema": "jaxley-original-model-binding-v1",
+      "signature": "candidate_view_v2(private_binding, information_condition, *, validation_access)",
+      "split_fields": {
+        "test": [
+          "row_ids",
+          "images",
+          "currents",
+          "mask"
+        ],
+        "train": [
+          "row_ids",
+          "images",
+          "currents",
+          "mask",
+          "targets"
+        ],
+        "val": [
+          "row_ids",
+          "images",
+          "currents",
+          "mask",
+          "targets"
+        ]
+      }
+    },
+    "validate_pair": {
+      "body_reads": 0,
+      "external_evidence": "Caller-supplied trusted_operator_evidence is never executed, imported or used as an authority shortcut; no verifier is bound.",
+      "filesystem_network_model_scorer_execution": false,
+      "input_schema": "jaxley-paired-retinal-episode-v2",
+      "invalid_declarations": "EpisodeContractError with bounded code/path.",
+      "manifest_schema": "jaxley-retinal-candidate-manifest-v2",
+      "result_schema": "jaxley-paired-retinal-episode-validation-v1",
+      "scoring_granularity": "One reference-versus-candidate comparison for evaluated_condition A or B; both condition assessments are needed for a paired A/B experiment.",
+      "scoring_join_fields": [
+        "scored_packet_sha256",
+        "identity_sha256",
+        "evaluated_condition"
+      ],
+      "signature": "validate_pair(episode, *, trusted_operator_evidence=None)",
+      "valid_declarations": "contract_valid=true, qualification=false, execution_qualified=false, status=UNQUALIFIED."
+    }
+  },
+  "implementation": {
+    "bytes": 25944,
+    "file": "paired_episode.py",
+    "sha256": "563bbf84b2efce0a9beffabbef6308ce40cd1d6bcd4921f0492984a33d7d6e14"
+  },
+  "material_descriptors": {
+    "A_author_code": null,
+    "B_author_code": {
+      "artifact": "Must exactly equal reference_programme.source_snapshot.",
+      "commit": "5e7a86282adb9d4603b5546ac5d8dad59aec7cc0"
+    },
+    "additional_materials": [],
+    "array": [
+      "logical_name",
+      "bytes",
+      "sha256",
+      "shape",
+      "dtype"
+    ],
+    "artifact": [
+      "logical_name",
+      "bytes",
+      "sha256"
+    ],
+    "common_materials": [
+      "paper",
+      "morphology",
+      "ordered row ids",
+      "images for all splits",
+      "currents for all splits",
+      "public structural masks for all splits",
+      "TRAIN targets",
+      "approved VAL targets"
+    ],
+    "condition_keys": [
+      "view",
+      "paper",
+      "morphology",
+      "author_code",
+      "additional_materials"
+    ],
+    "denials": [
+      "Private roles may not match any public material by logical name orSHA256.",
+      "A may not receive known author-source bytes or logical name disguised under another role.",
+      "TEST split has no targets field.",
+      "All A/B arrays, row order, paper and morphology must be exactly equal."
+    ],
+    "meaning": "Bounded declarations of exact raw-byte identities and logical names, not authenticated physical deliveries.",
+    "private_episode": "The full episode and private_materials are operator-side metadata; do not give the operator/private binding or observed TEST calcium to participants.",
+    "private_roles": [
+      "observed_test_calcium",
+      "full_private_binding",
+      "operator_packet"
+    ]
+  },
+  "participant_budget": {
+    "declaration_only": true,
+    "runtime_grant_or_enforcement": false,
+    "shared_required_keys": [
+      "wall_seconds",
+      "cpu_threads",
+      "ram_bytes",
+      "write_bytes"
+    ]
+  },
+  "portability": {
+    "assessment_peer": "paired_assessment.py",
+    "engineering_fixture_not_participant_input": {
+      "bytes": 7410,
+      "file": "tests/generated_episode_fixture.py",
+      "sha256": "d64079838a12d7c8858699c5418e59f93ed0b04c02e97bfce2d8f6beebe1b876"
+    },
+    "legacy_scorer_relative": "../retinal-heldout/score.py",
+    "module_dependencies": "stdlib at import; no source loader/default private roots",
+    "private_absolute_paths_in_public_module": false
+  },
+  "preprocessing": {
+    "access": "whole cropped traces/all ROI delay selection before downstream split",
+    "all_roi_delay_selection_before_split": true,
+    "clean_train_only_preprocessing": false,
+    "provenance": "Optional exact receipt descriptor; absent or unauthenticated provenance never qualifies.",
+    "repeated_stimulus_across_fields": true,
+    "whole_record_trace_preprocessing": true
+  },
+  "public_component": "benchmarks/paper/PAPER-paper-method-002/implementations/retinal-paired-episode-v1",
+  "reference_programme": {
+    "candidate_methods": "Reference fit defaults do not restrict candidate algorithm/training recipe; A/B share the explicitly declared participant budget.",
+    "checkpoint": "Must be a produced epoch in0..21; actual selected snapshot joins a validation selection receipt and output provenance. Source declarations alone cannot establish that selection occurred.",
+    "configuration_schema": "Legacy retina_inputs.validate_config logical fields: profile,manifest,choices,training; choices require explicit source variant rather than guessed defaults.",
+    "frozen_fit_defaults": {
+      "actual_updates": 1008,
+      "batch_size": 256,
+      "batches_per_epoch": 48,
+      "complete_epochs": 21,
+      "eval_every": 100,
+      "last_batch_rows": 153,
+      "requested_iterations": 1000,
+      "validation_snapshots": 21
+    },
+    "historical_0_25": "Context only; never an executable fresh reference threshold or improvement claim.",
+    "required_keys": [
+      "author_code_commit",
+      "source_snapshot",
+      "configuration",
+      "configuration_sha256",
+      "runtime",
+      "selection"
+    ],
+    "selection": {
+      "author_validation_checkpoints": 21,
+      "metric": "validation_mean_pearson",
+      "rule": "maximum",
+      "tie_break": "first"
+    }
+  },
+  "run_provenance": {
+    "absent_value": null,
+    "candidate_manifest": "SHA256 of its exact condition manifest",
+    "context_preimage": [
+      "episode_id",
+      "identity_sha256",
+      "preprocessing",
+      "validation_access",
+      "participant_budget",
+      "reference_programme"
+    ],
+    "qualification": "These metadata joins are checked if supplied. They never replace actual completed-source, checkpoint-selection, process/mount/network or event-provenance verification.",
+    "reference_manifest": "context_sha256",
+    "reference_output": "scored_packet_sha256.author",
+    "required_keys": [
+      "schema",
+      "run_id",
+      "role",
+      "episode_id",
+      "identity_sha256",
+      "context_sha256",
+      "material_manifest_sha256",
+      "source_snapshot",
+      "selected_checkpoint",
+      "selected_validation_event_id",
+      "validation_selection_receipt",
+      "output_packet_sha256",
+      "events",
+      "closure",
+      "transport_receipt"
+    ],
+    "roles": [
+      "reference",
+      "A",
+      "B"
+    ],
+    "schema": "jaxley-retinal-run-provenance-v1",
+    "selected_candidate_output": "scored_packet_sha256.candidate"
+  },
+  "schema": "jaxley-paired-retinal-interface-v1",
+  "source_only": true,
+  "source_provenance": {
+    "predecessor_input_binding": {
+      "bytes": 10007,
+      "copied_logical_identity": "sites/splits/row_ids/images/currents/mask and source-default counts; v2 explicitly adds approvedVAL targets",
+      "file": "input_binding.py",
+      "sha256": "f4bd10b4c40cef74835001937ce3dc5cb4bd16fcc061b4138696b39827a707d9"
+    },
+    "reference_fit_source": {
+      "bytes": 22947,
+      "file": "model_operation.py",
+      "parent_authenticated_lines": "fit_source_defaults277+; eval_every100 at342",
+      "sha256": "c74030ec288d451eb29c4b1febd5664896c508471df3dcefcaebe992c9934460"
+    },
+    "reference_profile": {
+      "bytes": 11024,
+      "file": "OPERATION_PROFILE.v3.json",
+      "parent_authenticated_lines": "182\u2013201",
+      "sha256": "d93bbc36b9639018f6e376679ab86d977246f82ea9895103fb19428fd055e136"
+    }
+  },
+  "trusted_event_provenance_verifier": null,
+  "validation_access": {
+    "approval_descriptor_required": true,
+    "author_validation_checkpoints": 21,
+    "candidate_validation_query_limit": null,
+    "mode": "targets-visible-to-both",
+    "schema": "jaxley-retinal-validation-access-v2",
+    "v1_difference": "Predecessor candidate_view released TRAIN targets only. V2 explicitly releases approved VAL targets to both conditions; 21 source-author checks are not an enforceable candidate query cap."
+  },
+  "validation_completed_by_author": "PinnedPython3.11 compile only; no target imports, control runs, model runs or actual data/reference bodies."
+}
