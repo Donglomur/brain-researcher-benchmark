@@ -115,6 +115,8 @@ def compare_rates(candidate, author, target, *, valid_mask, sampling_rate_hz, sm
     for metric in ("pearson", "smoothed_normalized_absolute_error", "smoothed_normalized_bias"):
         c, a = candidate_score[metric], author_score[metric]
         delta[metric] = None if c is None or a is None else c - a
+        if delta[metric] is not None and not math.isfinite(delta[metric]):
+            raise ValueError("nonfinite paired metric difference: " + metric)
     return {"schema": "gcamp8-paired-rate-metrics/v1", "candidate": candidate_score,
             "author": author_score, "candidate_minus_author": delta}
 
