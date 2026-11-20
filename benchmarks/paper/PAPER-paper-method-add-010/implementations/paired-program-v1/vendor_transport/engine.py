@@ -1,6 +1,7 @@
 """Adapted bounded Docker CLI/resource custody from reviewed paper-program-b.
 
-Local daemon only; no candidate stdout or numeric artifact bytes through CLI.
+Local daemon only. Trusted producer diagnostics use bounded private attachment;
+child progress is drained inside its wrapper and is not graded artifact output.
 No runtime qualification is inherited.
 """
 import hashlib, json, math, os, re, selectors, signal, stat, subprocess, sys, time
@@ -141,14 +142,17 @@ class Docker:
         self.max_calls=max_calls;self.reply_budget=reply_budget;self.reserved=0;self.publish=publish
         self.prefix=[binary,'--host','unix://'+str(path(socket))];self.records=[];self.reaped=True
         self.env={k:v for k,v in os.environ.items() if k not in ('DOCKER_HOST','DOCKER_CONTEXT')}
-    def __call__(self,args,end,phase,cap=131072):
+    def __call__(self,args,end,phase,cap=131072,*,diagnostic=None):
         start=time.monotonic();need(end-start>1,'Command deadline')
+        need(diagnostic is None or (phase=='producer_start' and callable(diagnostic)),
+             'Only trusted producer attach may publish private stream diagnostics')
         need(type(cap)is int and cap==self.phase_caps.get(phase) and len(self.records)<self.max_calls,'exact source-selected command cap/count')
         need(self.reserved+cap<=self.reply_budget,'cumulative CLI response reservation')
         need(hasattr(os,'pidfd_open') and hasattr(signal,'pidfd_send_signal'),'Identity-bound Linux process signaling')
         self.reserve_read(cap);self.reserved+=cap
         self.publish('CLI-INTENT',{'index':len(self.records),'phase':phase,'cap':cap,'original_end':end})
         p=None;s=None;pidfd=None;bufs={'out':bytearray(),'err':bytearray()};primary=None;rc=None
+        eof={'out':False,'err':False};stream_bytes=0;overflow=False;gate_released=False
         previous_reaped=self.reaped;child_reaped=False;cleanup_ok=True
         group_absent=False;survivor_observed=False;cleanup_errors=[];cleanup_failure=None
         self.reaped=False
@@ -162,7 +166,7 @@ class Docker:
             # identity-bound after leader exit/reap or numeric PID reuse.
             pidfd=os.pidfd_open(p.pid,0)
             token=process_identity(p.pid,end,self.account_read,self.reserve_read)
-            release_bootstrap(p,token,self.publish,len(self.records),phase,end)
+            release_bootstrap(p,token,self.publish,len(self.records),phase,end);gate_released=True
             s=selectors.DefaultSelector()
             for key,f in [('out',p.stdout),('err',p.stderr)]:os.set_blocking(f.fileno(),False);s.register(f,selectors.EVENT_READ,key)
             while s.get_map():
@@ -170,9 +174,14 @@ class Docker:
                 for k,_ in s.select(min(.1,left)):
                     try:raw=os.read(k.fileobj.fileno(),min(65536,cap+1-sum(map(len,bufs.values()))))
                     except BlockingIOError:continue
-                    self.account_read(len(raw))
-                    if not raw:s.unregister(k.fileobj);continue
-                    need(sum(map(len,bufs.values()))+len(raw)<=cap,'Streaming CLI cap');bufs[k.data].extend(raw)
+                    stream_bytes+=len(raw);self.account_read(len(raw))
+                    if not raw:eof[k.data]=True;s.unregister(k.fileobj);continue
+                    remaining=cap-sum(map(len,bufs.values()))
+                    if len(raw)>remaining:
+                        overflow=True
+                        if diagnostic is not None:bufs[k.data].extend(raw[:remaining])
+                        need(False,'Streaming CLI cap')
+                    bufs[k.data].extend(raw)
             rc=p.wait(timeout=max(0,end-time.monotonic()));child_reaped=True
             need(rc==0,'Docker command failure')
             group_absent=probe()
@@ -228,6 +237,17 @@ class Docker:
             if pidfd is not None:clean('pidfd.close',lambda:os.close(pidfd))
             cleanup_in_time=time.monotonic()<cleanup_end
             if not cleanup_in_time:clean('original_cutoff',lambda:need(False,'CLI cleanup exceeded original cutoff'))
+            # Capture is private and bounded before Provider container retirement.
+            # Its failure never skips CLI cleanup or replaces an earlier error.
+            if diagnostic is not None:
+                captured={'phase':phase,'cap_bytes':cap,'stdout':bytes(bufs['out']),'stderr':bytes(bufs['err']),
+                    'stdout_eof':eof['out'],'stderr_eof':eof['err'],'overflow':overflow,
+                    'stream_bytes_observed':stream_bytes,'retained_bytes':sum(map(len,bufs.values())),
+                    'returncode':rc,'capture_error_type':None if primary is None else type(primary).__name__[:128],
+                    'process_created':p is not None,'exec_gate_released':gate_released,
+                    'client_reaped':child_reaped,'owned_group_absence_observed':group_absent,
+                    'cleanup_before_original_cutoff':cleanup_in_time,'original_end':end}
+                clean('private_diagnostic.publish',lambda:diagnostic(captured))
             self.reaped=previous_reaped and child_reaped and cleanup_ok and group_absent and cleanup_in_time
             self.records.append({'phase':phase,'returncode':rc,'error_type':None if primary is None else type(primary).__name__,
                 'observed_retained_bytes':sum(map(len,bufs.values())),'seconds':time.monotonic()-start,'client_reaped':child_reaped,

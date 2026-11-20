@@ -6,12 +6,14 @@ retirement. No scientific values or private targets are interpreted here.
 """
 from __future__ import annotations
 
+import base64
 import hashlib
 import json
 import math
 import os
 from pathlib import Path
 import re
+import selectors
 import stat
 import subprocess
 import time
@@ -20,6 +22,10 @@ import time
 REQUEST_CAP = 262144
 RESULT_CAP = 1048576
 MANIFEST_CAP = 4096
+CHILD_PREFIX_BYTES = 512
+CHILD_DRAIN_CHUNK = 65536
+WRAPPER_TRACE_BYTES = 768
+DIAGNOSTIC_ENVELOPE_CAP = 3584
 
 
 def need(condition, message):
@@ -110,7 +116,95 @@ def unchanged_directory(path, fd, original):
          "Output directory identity changed")
 
 
-def run(*, _generated=None):
+def _diagnostic_state():
+    return {"child_returncode": None, "streams": {
+        name: {"prefix": bytearray(), "observed_bytes": 0,
+               "counter_saturated": False, "truncated": False, "eof": False}
+        for name in ("stdout", "stderr")}}
+
+
+def _drain_child(child, candidate_end, state):
+    """Drain while the direct child runs; retained-prefix exhaustion is not failure.
+
+    The Provider still owns the whole producer namespace and its clock. We do
+    not wait for descendant-held pipe EOF after the direct child has exited.
+    """
+    selector = selectors.DefaultSelector()
+    def consume(key):
+        try:
+            block = os.read(key.fileobj.fileno(), CHILD_DRAIN_CHUNK)
+        except BlockingIOError:
+            return
+        row = state["streams"][key.data]
+        if not block:
+            row["eof"] = True
+            selector.unregister(key.fileobj)
+            return
+        count = row["observed_bytes"] + len(block)
+        row["counter_saturated"] |= count > 2**63 - 1
+        row["observed_bytes"] = min(count, 2**63 - 1)
+        room = CHILD_PREFIX_BYTES - len(row["prefix"])
+        row["prefix"].extend(block[:room])
+        row["truncated"] |= len(block) > room
+        # Excess bytes are deliberately discarded, with no byte-volume gate.
+    try:
+        for name in ("stdout", "stderr"):
+            stream = getattr(child, name)
+            os.set_blocking(stream.fileno(), False)
+            selector.register(stream, selectors.EVENT_READ, name)
+        while child.poll() is None:
+            remaining = candidate_end - time.monotonic()
+            if remaining <= 0:
+                raise subprocess.TimeoutExpired(child.args, 0)
+            if not selector.get_map():
+                time.sleep(min(.01, remaining))
+                continue
+            for key, _ in selector.select(min(.05, remaining)):
+                consume(key)
+        state["child_returncode"] = child.returncode
+        # One bounded, nonblocking sweep catches already buffered tail bytes.
+        # Open descendant writers never become a new prediction-admission gate.
+        for key in list(selector.get_map().values()):
+            consume(key)
+        return child.returncode
+    finally:
+        selector.close()
+        for name in ("stdout", "stderr"):
+            stream = getattr(child, name)
+            if stream is not None:
+                stream.close()
+
+
+def _emit_diagnostic(state, error):
+    """One bounded private failure envelope; successful runs emit no progress."""
+    kind = type(error).__name__.encode("ascii", "replace")[:64].decode("ascii")
+    message = error.args[0][:192] if error.args and type(error.args[0]) is str else ""
+    lines = [kind + ": " + message]
+    tb = error.__traceback__
+    for _ in range(8):
+        if tb is None:
+            break
+        code = tb.tb_frame.f_code
+        lines.append(code.co_filename[-128:] + ":" + str(tb.tb_lineno) + ":" + code.co_name[:64])
+        tb = tb.tb_next
+    trace = "\n".join(lines).encode("utf-8", "replace")[:WRAPPER_TRACE_BYTES]
+    streams = {}
+    for name, row in state["streams"].items():
+        prefix = bytes(row["prefix"])
+        streams[name] = {"observed_bytes": row["observed_bytes"],
+            "counter_saturated": row["counter_saturated"], "retained_bytes": len(prefix),
+            "prefix_base64": base64.b64encode(prefix).decode("ascii"),
+            "truncated": row["truncated"], "eof": row["eof"]}
+    raw = encoded({"schema": "meg_private_wrapper_diagnostics_v1",
+        "child_returncode": state["child_returncode"], "streams": streams,
+        "wrapper_traceback_bytes": len(trace),
+        "wrapper_traceback_base64": base64.b64encode(trace).decode("ascii"),
+        "diagnostic_only": True, "candidate_artifact": False})
+    need(len(raw) <= DIAGNOSTIC_ENVELOPE_CAP, "Bounded trusted diagnostic envelope")
+    need(os.write(2, raw) == len(raw), "Complete private diagnostic envelope write")
+
+
+def _run(*, _generated=None, _diagnostic):
     """Run fixed paths; the explicit fixture seam never certifies isolation.
 
     `_generated` selects only absolute generated fixture paths and an existing
@@ -141,11 +235,13 @@ def run(*, _generated=None):
         # this does not renew it or claim whole-descendant cleanup.
         cleanup_reserve = min(1.0, remaining / 10, limits["cleanup_seconds"])
         candidate_end = end - cleanup_reserve
+        # Child progress never enters the bounded outer CLI attachment directly.
+        # Drain and discard excess inside this same producer's resource bounds.
         child = subprocess.Popen(argv, stdin=subprocess.DEVNULL,
-                                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                                 close_fds=True, start_new_session=False)
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                 close_fds=True, start_new_session=False, bufsize=0)
         try:
-            code = child.wait(timeout=max(0, candidate_end - time.monotonic()))
+            code = _drain_child(child, candidate_end, _diagnostic)
         except BaseException:
             # Kill only this exact direct child. Provider containment, not a
             # wrapper-level process-group assertion, retires any descendants.
@@ -155,6 +251,7 @@ def run(*, _generated=None):
                     child.wait(timeout=max(0, end - time.monotonic()))
                 except subprocess.TimeoutExpired:
                     pass
+            _diagnostic["child_returncode"] = child.returncode
             raise
         need(code == 0, "Candidate must exit successfully")
         need(time.monotonic() < end, "Original phase deadline after candidate exit")
@@ -198,8 +295,27 @@ def run(*, _generated=None):
         os.close(output_fd)
 
 
-def main():
-    run()
+def run(*, _generated=None):
+    """Unchanged public ABI; failure diagnostics are private, bounded and optional."""
+    state = _diagnostic_state()
+    try:
+        return _run(_generated=_generated, _diagnostic=state)
+    except BaseException as error:
+        try:
+            _emit_diagnostic(state, error)
+        except BaseException as diagnostic_error:
+            # Never replace the candidate/contract failure with a logging error.
+            error.add_note("Private diagnostic emission failed: " + type(diagnostic_error).__name__[:96])
+        raise
+
+
+def main(*, _generated=None):
+    try:
+        run(_generated=_generated)
+    except BaseException:
+        # run() already emitted the bounded trusted traceback envelope. Avoid an
+        # uncapped duplicate interpreter traceback on the outer attachment.
+        raise SystemExit(1) from None
 
 
 if __name__ == "__main__":

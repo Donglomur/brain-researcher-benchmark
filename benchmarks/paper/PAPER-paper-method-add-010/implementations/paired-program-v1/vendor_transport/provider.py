@@ -4,6 +4,7 @@ The constructor binds operator-owned exposure approvals and transport source.
 Calls launch only locally available immutable images; no pull/install/network.
 Actual producer logical I/O and peak RSS are deliberately not invented.
 """
+import base64
 import hashlib
 import os
 from pathlib import Path
@@ -20,6 +21,7 @@ from .engine import (Docker, LABEL, need, pin, encoded, parse, path, descriptor,
 
 READY_OPTIONS='rw,nosuid,nodev,noexec,size=4096,mode=0700,uid=65534,gid=65534'
 HOLDER_MEMORY=134217728
+PRODUCER_DIAGNOSTIC_FILE_CAP=16384
 ENGINE_FILES={'__init__.py','engine.py','bounds.py','contract.py','archive.py','holder.py','provider.py'}
 
 
@@ -159,7 +161,30 @@ class Provider:
         d=Docker(self.binary,self.socket,max_calls=r['max_cli_calls'],reply_budget=r['max_cli_bytes'],phase_caps=caps(r['inventory_bytes']),
                  publish=record,account_read=meter.read,reserve_read=meter.ensure_read)
         items=[];closures=[];natural=None;capture=None;before=None;after=None;error=None;closed_before=False
-        producer=None;producer_end=None;exit_observation_error=None
+        producer=None;producer_end=None;exit_observation_error=None;producer_diagnostic=None
+        def retain_producer_diagnostic(value):
+            nonlocal producer_diagnostic
+            need(type(value) is dict and value.get('phase')=='producer_start'
+                 and value.get('cap_bytes')==caps(r['inventory_bytes'])['producer_start'],
+                 'Exact source-selected private producer diagnostic')
+            stdout,stderr=value['stdout'],value['stderr']
+            need(type(stdout)is bytes and type(stderr)is bytes and len(stdout)+len(stderr)<=value['cap_bytes'],
+                 'Bounded combined producer/submission streams')
+            capture={k:v for k,v in value.items() if k not in ('stdout','stderr')}
+            streams={name:{'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest(),
+                           'base64':base64.b64encode(raw).decode('ascii')}
+                     for name,raw in (('stdout',stdout),('stderr',stderr))}
+            document={'schema':'osl_private_producer_diagnostics_v1','phase_id':request['phase_id'],
+                'request_sha256':request_pin['sha256'],'scope':'trusted-private producer diagnostics including retained submission prefixes',
+                'capture':capture,'streams':streams,'candidate_output_artifact':False,
+                'scientific_qualification':False,'complete_streams':value['stdout_eof'] and value['stderr_eof'] and not value['overflow']}
+            raw=encoded(document);need(len(raw)<=PRODUCER_DIAGNOSTIC_FILE_CAP,'Finite private diagnostic publication')
+            target=control/'PRODUCER_DIAGNOSTICS.json'
+            retained=publish(target,raw,meter)
+            producer_diagnostic={'path':str(target),'pin':retained,'combined_stream_cap':value['cap_bytes'],
+                'retained_stream_bytes':len(stdout)+len(stderr),'complete_streams':document['complete_streams'],
+                'trusted_private_only':True}
+
         def item(label,kind):
             value=planned[label].copy();need(value['kind']==kind,'Exact predeclared resource kind')
             record('RESOURCE-INTENT',{'resource':value.copy(),'creation_obligation_until_closed':True});items.append(value);return value
@@ -211,11 +236,14 @@ class Provider:
             container(producer,False,bindings,holder_command)
             producer_end=min(work_end-r['capture_seconds'],time.monotonic()+r['producer_seconds'])
             need(producer_end>time.monotonic()+1,'Producer interval remains')
-            call(d,['container','start',producer['id']],setup_end,'producer_start',4096)
-            raw=d(['container','wait',producer['id']],producer_end,'producer_wait',4096)
+            # Attach without stdin. Existing streaming/EOF/group custody owns both
+            # bounded wrapper diagnostics under the producer clock.
+            d(['container','start','--attach',producer['id']],producer_end,'producer_start',4096,
+              diagnostic=retain_producer_diagnostic)
+            attach_returncode=d.records[-1]['returncode']
             state=inspect(d,'container',producer['id'],work_end,'producer_exit');owned(state,producer,producer['owner'])
             natural={k:state['State'][k] for k in ('Status','Running','Dead','Pid','ExitCode','OOMKilled')}
-            need(raw.strip()==str(natural['ExitCode']).encode(),'Wait/inspect exact exit join');validate_natural_exit(natural)
+            need(attach_returncode==natural['ExitCode'],'Attached CLI/inspect exact exit join');validate_natural_exit(natural)
             closure=retire(d,producer,work_end);closures.append(closure);need(closure['closed'] is True,'Producer removed before archive capture')
             items.remove(producer);closed_before=True
             capture_end=min(work_end,time.monotonic()+r['capture_seconds'])
@@ -265,6 +293,7 @@ class Provider:
                 'ownership_pin':ownership_pin,'action':request['action'],'role':request['role'],'image':request['image'],'source':request['source'],'exposure':request['exposure'],
                 'status':'captured' if good else 'failed','natural_exit':natural,'producer_closed_before_capture':closed_before,
                 'output_inventory':capture if good else None,'quarantine_root':str(output),'retired_resources':closures,
+                 'producer_diagnostic':producer_diagnostic,
                 'all_native_resources_closed':len(closures)==3 and all(x['closed'] is True for x in closures),
                 'cli_reaped':d.reaped,'command_metadata':d.records,'input_before':before,'input_after':after,'error':error,'exit_observation_error':exit_observation_error,
                 'oom':None if natural is None else natural.get('OOMKilled'),
