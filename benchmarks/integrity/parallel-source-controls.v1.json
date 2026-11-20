@@ -222,7 +222,7 @@
         "joblib": "1.5.3",
         "threadpoolctl": "3.6.0"
       },
-      "scope": "Generated VALID gain-calibration source controls only; production h5py3.10 admission must refuse under control h5py3.11. No original-data calibration, actual runtime or scientific readiness qualification."
+      "scope": "Generated VALID gain-calibration and TEST candidate-grading source controls only; production h5py3.10 admission must refuse under control h5py3.11. No original-data calibration, actual runtime or scientific readiness qualification."
     }
   },
   "fixtures": {
@@ -16317,6 +16317,158 @@
         "benchmarks/paper/PAPER-ROOT-ADD-001/implementations/original-nested-ridge-v1/SOURCE.json"
       ],
       "timeout_seconds": 60
+    },
+    {
+      "id": "PAPER-SMC-RNN-2024.command-15",
+      "task_id": "PAPER-SMC-RNN-2024",
+      "group": "smc-gain-calibration",
+      "runner": "unittest",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/test_test_candidate.py",
+        "-v"
+      ],
+      "test_paths": [
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/SOURCE.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/TEST_PROFILE.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/test_core.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/transform/test_transform.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/grader/SOURCE.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/grader/gain_transform.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/grader/reference_panel.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/grader/scorer.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/grader/test_pair_child.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/grader/test_pair_grade.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/runtime/SOURCE.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/runtime/bounded_capture.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/runtime/label_policy.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/runtime/owned_exit.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/runtime/test_pair_grade_host.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/SOURCE.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/METHOD.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/gain_core.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/gain_selector.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/gain_transform.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/selector-runtime/SOURCE.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/selector-runtime/bounded_capture.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/selector-runtime/gain_selector_child.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/selector-runtime/gain_selector_host.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/selector-runtime/label_policy.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/gain-kernel/selector-runtime/owned_exit.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/transform_wiring.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/binding_controls.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/paired_grade_controls.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/metric_assertions.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/scale_proof_controls.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/host_controls.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/fixtures/evaluation.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/test-candidate-grading-v1/controls/test_test_candidate.py"
+      ],
+      "timeout_seconds": 180,
+      "expected_tests": 5,
+      "expected_skips": 0,
+      "fixtures": [],
+      "environment": {
+        "ARTIFACT_DIR": "${ARTIFACT_DIR}"
+      }
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-S",
+        "-B",
+        "benchmarks/neural/NEURAL-077/implementations/image-matched-programme-v1/tests/test_image_pair.py",
+        "-v"
+      ],
+      "cwd": ".",
+      "environment": {
+        "ARTIFACT_DIR": "${ARTIFACT_DIR}"
+      },
+      "expected_skips": 0,
+      "expected_tests": 6,
+      "fixtures": [],
+      "group": "stdlib-a",
+      "id": "NEURAL-077.command-17",
+      "runner": "unittest",
+      "task_id": "NEURAL-077",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/delivery.py",
+        "benchmarks/neural/NEURAL-077/implementations/direct-response/portable/response_contract.py",
+        "benchmarks/neural/NEURAL-077/implementations/image-matched-programme-v1/README.md",
+        "benchmarks/neural/NEURAL-077/implementations/image-matched-programme-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/image-matched-programme-v1/adapters.py",
+        "benchmarks/neural/NEURAL-077/implementations/image-matched-programme-v1/pair.py",
+        "benchmarks/neural/NEURAL-077/implementations/image-matched-programme-v1/tests/test_image_pair.py",
+        "benchmarks/neural/NEURAL-077/implementations/paired-condition-v1/compare.py",
+        "benchmarks/neural/NEURAL-077/implementations/registered-runtime/assets.json",
+        "benchmarks/neural/NEURAL-077/implementations/registered-runtime/metrics.py",
+        "benchmarks/neural/NEURAL-077/implementations/registered-runtime/validator.py",
+        "benchmarks/neural/NEURAL-077/implementations/registered-runtime/worker.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/BASE_SOURCES.json",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/protected_compare.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/provider_arm.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/support.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/transfer_png.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/transport.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/visual_bridge.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/visual_client.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/transport.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/actions.schema.json",
+        "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/raster.py",
+        "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/viewer.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-contexts/export_contexts.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-pair-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-pair-v1/bundle.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-pair-v1/pair.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-provider-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-provider-v1/client.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-provider-v1/provider_arm.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-provider-v1/support.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-transport-v1/provider_bridge.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-transport-v1/scripted_client.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-transport-v1/transport.py",
+        "benchmarks/shared/viewer-process-ownership-v1/owned_exit.py"
+      ],
+      "timeout_seconds": 180
+    },
+    {
+      "id": "NEURAL-009.command-05",
+      "task_id": "NEURAL-009",
+      "group": "stdlib-a",
+      "runner": "unittest",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-B",
+        "-c",
+        "import os,sys\nfrom pathlib import Path\nassert len(sys.argv)==4\nroot=Path.cwd().resolve(strict=True)\nartifact=Path(sys.argv[1])\nassert artifact.is_absolute() and artifact.resolve(strict=False)==artifact\nassert artifact!=root and root not in artifact.parents and artifact not in root.parents\nassert artifact.parent.is_dir() and not artifact.exists() and not artifact.is_symlink()\nscript=(root/sys.argv[2]).resolve(strict=True)\nimplementations=(root/sys.argv[3]).resolve(strict=True)\nassert script.is_file() and implementations.is_dir()\nartifact.mkdir(mode=0o700)\npreview=artifact/\"generated-preview.png\"\nos.execv(sys.executable,[sys.executable,\"-B\",str(script),\"--implementations\",str(implementations),\"--preview\",str(preview)])\n",
+        "${ARTIFACT_DIR}",
+        "benchmarks/neural/NEURAL-009/implementations/causal-raster-v1/tests/test_raster.py",
+        "benchmarks/neural/NEURAL-009/implementations"
+      ],
+      "test_paths": [
+        "benchmarks/neural/NEURAL-009/implementations/causal-raster-v1/raster.py",
+        "benchmarks/neural/NEURAL-009/implementations/causal-raster-v1/README.md",
+        "benchmarks/neural/NEURAL-009/implementations/causal-raster-v1/SOURCE.json",
+        "benchmarks/neural/NEURAL-009/implementations/causal-raster-v1/tests/test_raster.py",
+        "benchmarks/neural/NEURAL-009/implementations/causal-presentation-v1/presentation.py",
+        "benchmarks/neural/NEURAL-009/implementations/edf-causal-window-v1/edf_window.py",
+        "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/core.py",
+        "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/recommended_policy.json",
+        "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/record_index.json"
+      ],
+      "timeout_seconds": 60,
+      "expected_tests": 11,
+      "expected_skips": 0,
+      "fixtures": []
     }
   ],
   "source_only_assignments": [
