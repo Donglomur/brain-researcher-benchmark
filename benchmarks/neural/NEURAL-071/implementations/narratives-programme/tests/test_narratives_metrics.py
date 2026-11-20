@@ -8,8 +8,7 @@ import unittest
 
 import numpy as np
 
-ROOT = Path(__file__).resolve().parents[2]
-PACKAGE = ROOT / "benchmarks/neural/NEURAL-071/implementations/narratives-programme"
+PACKAGE = Path(__file__).resolve().parents[1]
 NAMESPACE = "_neural071_stable_metrics_controls"
 package = ModuleType(NAMESPACE)
 package.__path__ = [str(PACKAGE / "n071")]

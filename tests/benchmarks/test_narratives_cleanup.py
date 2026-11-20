@@ -237,7 +237,7 @@ class NarrativesCleanupTests(unittest.TestCase):
         before = {item["path"]: item for item in predecessor["identity_preimage"]["members"]}
         after = {item["path"]: item for item in current["current_identity_preimage"]["members"]}
         self.assertTrue(set(before) <= set(after))
-        self.assertEqual(set(after) - set(before), {"n071/history/pre-stable-pearson/metrics.py", "NUMERICAL_STABILITY.md"})
+        self.assertEqual(set(after) - set(before), {"n071/history/pre-stable-pearson/metrics.py", "NUMERICAL_STABILITY.md", "tests/test_narratives_metrics.py"})
         self.assertEqual([name for name in before if before[name] != after[name]], ["n071/metrics.py", "n071/runtime.py"])
         for name, record in after.items():
             body = (PACKAGE / name).read_bytes()
