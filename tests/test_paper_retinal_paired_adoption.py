@@ -179,7 +179,7 @@ def exact_row(rows):
 
 
 class RetinalPairedAdoptionTests(unittest.TestCase):
-    """Exactly five methods; all new row adoption paths, no old suite replay."""
+    """Six focused methods for adoption and catalog display; no scientific execution."""
 
     @classmethod
     def setUpClass(cls):
@@ -397,6 +397,88 @@ class RetinalPairedAdoptionTests(unittest.TestCase):
         for pair in outcomes["pairing"].values():
             self.assertEqual(pair["status"], "unresolved")
             self.assertIsNone(pair["protocol"])
+
+    def test_catalog_retinal_source_adoption_and_display(self):
+        # The actual row helper authenticates historical/current source and runs
+        # the unchanged context engines. This is not whole-registry validation.
+        selected = self.planned()
+        context = selected["context"]
+        relative = "src/neurobench/catalog.py"
+        catalog = load_source(self.source_root / relative, self.sources.read(relative),
+                              "_retinal_paired_catalog_control")
+        before_row = self.binding.encode(selected["row"])
+        public = self.binding.public_summary(selected["row"], context)
+        self.assertEqual(catalog.retinal_paired_source_ids(self.binding, {TASK: selected["row"]}), {TASK})
+        self.assertEqual(catalog.retinal_paired_source_ids(self.binding, {TASK: self.retained_row}), set())
+        wrong = copy.deepcopy(selected["row"])
+        wrong["paper_outcomes"][self.adoption.SELECTION_FIELD]["sha256"] = "0" * 64
+        with self.assertRaises(ValueError):
+            catalog.retinal_paired_source_ids(self.binding, {TASK: wrong})
+        wrong = copy.deepcopy(selected["row"])
+        wrong["id"] = "PAPER-not-the-retinal-task"
+        with self.assertRaises(ValueError):
+            catalog.retinal_paired_source_ids(self.binding, {wrong["id"]: wrong})
+        self.assertEqual(public["reproduction_contract"], self.adoption.ACTIVE_PINS["reproduction"])
+        self.assertEqual(public["outcomes"], self.adoption.ACTIVE_PINS["outcomes"])
+        self.assertEqual(public["improvement_contract"], self.adoption.ACTIVE_PINS["improvement"])
+        self.assertEqual(public["retained_improvement_contract"], self.adoption.ORIGINAL_PINS["improvement"])
+        for field in ("reproduction_contract", "outcomes", "previous_specification"):
+            self.assertEqual(selected["row"]["paper_outcomes"][field], self.retained_row["paper_outcomes"][field])
+        self.assertEqual(self.binding.encode(selected["row"]), before_row)
+        self.assertEqual(context["previous_row"], self.previous_row)
+        self.assertEqual(context["retained_improvement_contract"], self.handle.original_documents["improvement"])
+        bad_context = copy.deepcopy(context)
+        bad_context["primary_policy_provenance"]["active_contracts"]["outcomes"]["sha256"] = "0" * 64
+        with self.assertRaises(ValueError):
+            self.binding.public_summary(selected["row"], bad_context)
+
+        row = {"id": TASK, "specification": selected["row"]["specification"],
+               "paper_outcomes": public, "registry": None, "runtime_manifest": None}
+        source_catalog = {"registry": {"path": "benchmarks/registry.json"},
+                          "recorded_evidence": {"reports": []}, "implementations": [],
+                          "tasks": [row], "registry_chain": [], "shared_contracts": [],
+                          "components": [], "unmapped_runtime_sources": []}
+        links = set(catalog.source_links(source_catalog))
+        expected_pins = [self.adoption.DESCRIPTOR_PIN, self.handle.current_task_pin]
+        expected_pins.extend(self.adoption.ACTIVE_PINS.values())
+        expected_pins.extend(self.adoption.ORIGINAL_PINS.values())
+        expected_pins.extend(self.adoption.COMPONENT_PINS.values())
+        self.assertTrue({pin["path"] for pin in expected_pins} <= links)
+        section = catalog.render_retinal_paired_policy(row, HOME)
+        for field, label in (("improvement", "Active within-cell improvement contract"),
+                             ("reproduction", "Active historical-reproduction contract"),
+                             ("outcomes", "Active unresolved outcome binding")):
+            self.assertIn(catalog.markdown_link(label, self.adoption.ACTIVE_PINS[field]["path"], HOME), section)
+        for field, label in (("improvement", "Retained historical improvement contract"),
+                             ("reproduction", "Retained historical reproduction contract"),
+                             ("outcomes", "Retained historical outcome binding")):
+            self.assertIn(catalog.markdown_link(label, self.adoption.ORIGINAL_PINS[field]["path"], HOME), section)
+        self.assertIn("UNQUALIFIED", section)
+        self.assertIn("147 merged recording sites", section)
+        self.assertIn("one biological cell, 20161028_1", section)
+        self.assertIn("repeated stimulus sequences", section)
+        self.assertIn("paired difference", section)
+        self.assertIn("no participant result or admitted paired protocol", section)
+        self.assertNotIn("35-bin panel", section)
+        aggregate_row = dict(row, track="paper", paper_improvement={
+            "disposition": context["retained_improvement_contract"]["disposition"]})
+        aggregate = {"tasks": [aggregate_row],
+                     "paper_improvement_counts": catalog.improvement_counts([aggregate_row]),
+                     "paper_outcome_counts": catalog.paper_outcome_counts([aggregate_row])}
+        count_text = catalog.paper_count_text(aggregate)
+        self.assertIn("retinal source correction", count_text)
+        self.assertNotIn("For the revised SMC task", count_text)
+        self.assertIn("unknown and UNQUALIFIED", count_text)
+        self.assertEqual(public["candidate_interface"]["paired_protocol"], None)
+        self.assertIs(public["candidate_interface"]["execution_qualified"], False)
+        self.assertIsNone(public["author_reproduction_routes"])
+        self.assertEqual(public["scientific_outcomes"], {"reproduction": "unknown", "improvement": "unknown"})
+        for cell in public["cells"]:
+            self.assertEqual(cell["scientific_outcome"], "unknown")
+            self.assertIsNone(cell["receipt"])
+        self.assertLessEqual(self.fixtures.write_bytes, 512 * 1024)
+        self.assertLessEqual(type(self).maintained_read_bytes + self.sources.read_bytes + FRAMEWORK_READ_RESERVE,
+                             MAX_SOURCE_READ)
 
     def test_artifact_root_rejects_source_ancestors_descendants_and_aliases(self):
         source = self.source_root

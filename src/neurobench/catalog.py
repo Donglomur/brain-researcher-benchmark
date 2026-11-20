@@ -767,6 +767,19 @@ def discover(root=ROOT):
     return result
 
 
+def retinal_paired_source_ids(module, source_by_id):
+    """Recognize the strict registry selector; validate then authenticates context."""
+    return {identifier for identifier, registered in source_by_id.items()
+            if module.has_retinal_paired_revision(registered)}
+
+
+def retinal_paired_selection(row):
+    """Select public wording only, never authenticate adoption or qualification."""
+    candidate = row.get('paper_outcomes', {}).get('candidate_interface')
+    return (row.get('id') == 'PAPER-paper-method-002' and type(candidate) is dict
+            and candidate.get('schema_version') == 'retinal-paired-candidate-interface/v1')
+
+
 def source_links(catalog):
     yield catalog['registry']['path']
     for report in catalog['recorded_evidence']['reports']:
@@ -809,17 +822,28 @@ def source_links(catalog):
             if outcomes.get('primary_policy_revision') is not None:
                 for field in ('improvement_contract', 'retained_improvement_contract', 'primary_policy_revision'):
                     yield outcomes[field]['path']
-                for field, pin in outcomes['primary_policy_provenance'].items():
-                    if field == 'selection_kind':
-                        need(pin == ENDPOINT_SELECTION_KIND, 'Unsupported primary endpoint selection kind')
-                        continue
-                    yield pin['path']
-                if outcomes['candidate_interface'] is not None:
-                    for field in ('delivery', 'scorer', 'policy'):
+                if retinal_paired_selection(row):
+                    provenance = outcomes['primary_policy_provenance']
+                    for field in ('descriptor', 'current_task'):
+                        yield provenance[field]['path']
+                    for group in ('historical_contracts', 'active_contracts'):
+                        for field in ('improvement', 'reproduction', 'outcomes'):
+                            yield provenance[group][field]['path']
+                    for field in ('contract', 'pairing_interface', 'assessment_interface'):
+                        yield provenance['component_metadata'][field]['path']
                         yield outcomes['candidate_interface'][field]['path']
-                if outcomes['author_reproduction_routes'] is not None:
-                    for field in ('delivery', 'scorer', 'protocol'):
-                        yield outcomes['author_reproduction_routes'][field]['path']
+                else:
+                    for field, pin in outcomes['primary_policy_provenance'].items():
+                        if field == 'selection_kind':
+                            need(pin == ENDPOINT_SELECTION_KIND, 'Unsupported primary endpoint selection kind')
+                            continue
+                        yield pin['path']
+                    if outcomes['candidate_interface'] is not None:
+                        for field in ('delivery', 'scorer', 'policy'):
+                            yield outcomes['candidate_interface'][field]['path']
+                    if outcomes['author_reproduction_routes'] is not None:
+                        for field in ('delivery', 'scorer', 'protocol'):
+                            yield outcomes['author_reproduction_routes'][field]['path']
         if row.get('neural_understanding'):
             yield row['neural_understanding']['contract']['path']
             yield row['neural_understanding']['historical_specification']['path']
@@ -910,6 +934,7 @@ def validate(catalog, root=ROOT, *, _reader=None):
                       if original.get('track') == 'paper' and identifier in fixed_successors}
                      if authenticated_previous_rows is not None else set())
     successor_ids |= endpoint_ids
+    successor_ids |= retinal_paired_source_ids(module, source_by_id)
     successor_ids |= {identifier for identifier, registered in source_by_id.items()
                       if module.has_root004_scope(registered)}
     need(successor_ids <= {row['id'] for row in tasks}, 'Adopted primary successor tasks cannot be omitted')
@@ -1141,8 +1166,10 @@ def paper_count_text(catalog):
     continuous_count = sum(continuous_paper_selection(row.get('paper_outcomes', {})) is not None
                            for row in catalog['tasks'])
     official_assets_count = sum('continuous_outcomes_v2' in row.get('paper_outcomes', {}) for row in catalog['tasks'])
+    retinal_successor_count = sum(retinal_paired_selection(row) for row in catalog['tasks'])
     temporal_successor_count = (successor_count - scope_successor_count - reference_successor_count
-                                - deeprecon_reference_count - continuous_count - endpoint_selection_count)
+                                - deeprecon_reference_count - continuous_count - endpoint_selection_count
+                                - retinal_successor_count)
     dual_text = ''
     if outcomes['covered']:
         eligibility = ', '.join(f"{count} {status.replace('_', ' ')}"
@@ -1181,6 +1208,9 @@ def paper_count_text(catalog):
             if temporal_successor_count:
                 dual_text += ('For the revised SMC task, the old contract remains an author-source policy; '
                               'the selected contract defines the candidate interface.')
+            if retinal_successor_count:
+                dual_text += ('The retinal source correction retains historical reproduction and separates an unexecuted '
+                              'fresh within-cell paired comparison. Both information conditions remain unknown and UNQUALIFIED. ')
             if reference_successor_count:
                 dual_text += ('The LANGUAGE reference successor records author-provided-array/current-runtime reference recovery; '
                               'its selected policy identifies either that reference stage or the separately authenticated original Figure3b continuous improvement scope, with full reproduction retained and no AI outcome or qualification. ')
@@ -1254,6 +1284,47 @@ def evidence_text(catalog, base=OUTPUT):
             + markdown_link('Read the published evidence', 'docs/status/README.md', base)
             + ', or run `python3 scripts/neurobench.py evidence [TASK_ID]`. '
             'These records do not establish current runtime qualification or paper improvement.\n\n')
+
+
+def render_retinal_paired_policy(row, task):
+    """Render only the authenticated retinal view selected by catalog validation."""
+    need(retinal_paired_selection(row), 'Retinal public policy requires its selected interface')
+    outcomes = row['paper_outcomes']
+    candidate = outcomes['candidate_interface']
+    provenance = outcomes['primary_policy_provenance']
+    text = ('The adopted source correction separates historical reproduction from a fresh paired '
+            'within-cell comparison for one biological cell, 20161028_1. Its 147 merged recording sites '
+            'are dependent measurements, not independent biological replicates. The historical endpoint retains '
+            'all sites and '
+            'their masked held-out Pearson correlations; the rounded published mean 0.25 is not '
+            'a threshold for a fresh episode. The fresh endpoint compares candidate and executed '
+            'author reference on identical frozen test rows, all 147 sites and authoritative masks, '
+            'reporting scores and their paired difference. It does not satisfy historical reproduction '
+            'or the broader retained programme. The source-default split holds out observations within repeated '
+            'stimulus sequences; it does not establish unseen-stimulus or cross-cell generalization.\n\n'
+            '**Scientific status:** ' + markdown_text(candidate['scientific_status']) + '. '
+            'Both information conditions remain unknown, with no participant result or admitted paired protocol. '
+            'These source interfaces do not qualify execution or a scientific outcome.\n\n'
+            '**Information conditions:** '
+            + ', '.join(markdown_text(value) for value in candidate['information_conditions']) + '.\n\n')
+    text += ('- ' + markdown_link('Authenticated retinal source adoption', provenance['descriptor']['path'], task) + '\n'
+             '- ' + markdown_link('Current projected task', provenance['current_task']['path'], task) + '\n\n'
+             '#### Active corrected retinal policies\n\n')
+    for field, label in (('improvement', 'Active within-cell improvement contract'),
+                         ('reproduction', 'Active historical-reproduction contract'),
+                         ('outcomes', 'Active unresolved outcome binding')):
+        text += '- ' + markdown_link(label, provenance['active_contracts'][field]['path'], task) + '\n'
+    text += '\n#### Retained historical contracts\n\n'
+    for field, label in (('improvement', 'Retained historical improvement contract'),
+                         ('reproduction', 'Retained historical reproduction contract'),
+                         ('outcomes', 'Retained historical outcome binding')):
+        text += '- ' + markdown_link(label, provenance['historical_contracts'][field]['path'], task) + '\n'
+    text += '\n#### Retinal paired source interfaces\n\n'
+    for field, label in (('contract', 'Paired source contract'),
+                         ('pairing_interface', 'Uninstantiated pairing interface'),
+                         ('assessment_interface', 'Unqualified assessment interface')):
+        text += '- ' + markdown_link(label, candidate[field]['path'], task) + '\n'
+    return text + '\n'
 
 
 def render(catalog):
@@ -1558,6 +1629,7 @@ def render_tracks(catalog):
                     author = outcomes['author_reproduction_routes']
                     text += ('### Current continuous measurement policy\n\n' if continuous is not None else
                              '### Current selected paper endpoint\n\n' if endpoint_selection(outcomes) else
+                             '### Current retinal paired source policy\n\n' if retinal_paired_selection(row) else
                              '### Current primary improvement policy\n\n')
                     text += '**Disposition:** ' + markdown_text(outcomes['improvement_disposition']) + '.\n\n'
                     if continuous is not None:
@@ -1590,6 +1662,8 @@ def render_tracks(catalog):
                         for field in ('delivery', 'scorer', 'protocol'):
                             text += '| ' + readable_label(field) + ' | ' + markdown_link(author[field]['path'].split('/')[-1], author[field]['path'], task) + ' |\n'
                         text += '\n'
+                    elif retinal_paired_selection(row):
+                        text += render_retinal_paired_policy(row, task)
                     elif row['id'] == 'PAPER-ROOT-ADD-001':
                         provenance = outcomes['primary_policy_provenance']
                         if 'figure3b_scope_decision' in provenance:
@@ -1666,6 +1740,7 @@ def render_tracks(catalog):
                 if outcomes.get('reproduction_contract') is not None and continuous is None:
                     text += ('- ' + markdown_link('Reproduction proposal (inspection only)' if unavailable else
                                                  'Selected-endpoint reproduction contract' if endpoint_selection(outcomes) else
+                                                 'Active historical-reproduction contract' if retinal_paired_selection(row) else
                                                  'Original-finding reproduction contract',
                                                  outcomes['reproduction_contract']['path'], task) + '\n')
                 if unavailable:
@@ -1676,6 +1751,7 @@ def render_tracks(catalog):
                     text += '- ' + markdown_link('Source declaration gap record', outcomes['source_declaration_gap']['path'], task) + '\n'
                 elif continuous is None:
                     text += ('- ' + markdown_link('Primary-outcome unavailability record' if unavailable else
+                                                  'Active unresolved outcome binding' if retinal_paired_selection(row) else
                                                   'Paired outcome protocols', outcomes['outcomes']['path'], task) + '\n')
                 text += '- ' + markdown_link('Preserved definition before dual outcomes', outcomes['previous_specification']['path'], task) + '\n\n'
                 if continuous is not None:

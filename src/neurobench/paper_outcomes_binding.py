@@ -1499,6 +1499,15 @@ def public_summary(row, bound):
             "cells": copy.deepcopy(bound["summary"]["cells"]),
             "scientific_outcomes": {"reproduction": "unknown", "improvement": "unknown"},
             "assurance": bound["summary"]["assurance"]}
+    if has_retinal_paired_revision(row):
+        retinal = retinal_paired_module()
+        provenance = bound["primary_policy_provenance"]
+        need(bound["primary_policy_revision"] == retinal.DESCRIPTOR_PIN
+             and provenance["descriptor"] == retinal.DESCRIPTOR_PIN
+             and provenance["active_contracts"] == retinal.ACTIVE_PINS,
+             "Retinal public summary requires its authenticated active policy")
+        result["reproduction_contract"] = copy.deepcopy(retinal.ACTIVE_PINS["reproduction"])
+        result["outcomes"] = copy.deepcopy(retinal.ACTIVE_PINS["outcomes"])
     if bound.get("primary_policy_revision") is not None:
         result.update({
             "improvement_disposition": bound["improvement_contract"]["disposition"],
