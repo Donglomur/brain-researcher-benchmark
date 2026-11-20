@@ -42,7 +42,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18467 bytes; SHA-256 `2169ce3efef713414ded0519e4693b6f10db3ddbbdca28e14d1db94d771949c4`.
+- Specification identity: 18749 bytes; SHA-256 `7e9af2ecd2cfd48c26b404af6244e505bb0dfb05c70d09cede76569f22231d9f`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -80,6 +80,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Shared lifecycle helper for the sleep and EEG viewer transports, with the raw-epoch companion as a related consumer. Observe child exit without reaping, signal only while retaining ownership of the unreaped leader, then reap the exact child. Mocked controls do not qualify native process containment, providers, models or scientific outcomes; exclusive-waiter, SIGCHLD, runtime and escaped-descendant limits remain explicit.
 - [Viewer transport v1](implementations/viewer-transport-v1) — Complete person waveform participant transport.
   Scope: Fresh per-person image/action participant transport with exact capture, audit and complete original response collection. The accepted f1-source scripted software control completed all 5450 epochs; its earlier failed attempt and declared versus observed resources are retained. This is not model interpretation or provider-delivery qualification, and scientific qualification remains unestablished.
+- [Epoch reasoning compatibility v1](implementations/epoch-reasoning-compatibility-v1) — Reviewed source component.
+  Scope: Optional current-turn reasoning compatibility for the existing epoch-isolated NEURAL-007 viewer route, with requested/effective effort and private opaque-response custody bound through whole-arm admission. The original route, 5450 targets across two already-exposed people, current 30-second epoch exposure and first-answer scoring contract remain unchanged. Eleven generated software controls include actual two-turn epoch run/audit and compact mocked full-roster collector seams; they do not establish live provider behavior, complete authentic-cohort execution, information equivalence, scientific improvement or readiness. This is one source component, not a new task or scientific condition.
 - [Viewer provider reasoning v1](implementations/viewer-provider-reasoning-v1) — Reviewed source component.
   Scope: Current-turn reasoning provider source preserves opaque reasoning and full usage privately, exposes only the visible assistant phase and does not replay prior-turn opaque state. Generated controls do not establish live provider behavior or scientific performance. Original viewer, rolling history, canonical memory condition and runtime selection are unchanged.
 - [Viewer provider v1](implementations/viewer-provider-v1) — Reviewed source component.
