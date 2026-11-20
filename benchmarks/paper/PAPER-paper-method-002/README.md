@@ -35,8 +35,39 @@ The current definition supports two independent outcomes: recreate the original 
 **Retained source scope:** Preserve J17 fitted-model spatial calcium/voltage simulation, J18 measured/model receptive-field analysis, J19 reduced-data learning comparison and the wider source programme as separately named, source-unqualified result families. They neither replace nor automatically gate the primary prediction outcome. Retain authentic anatomy/observation lineage needed to define the prediction computation; do not infer every illustrative output as a separate success criterion. A prediction win alone does not establish mechanistic validity, true conductance recovery, all-paper reproduction or cross-cell generalization.
 
 - [Reviewed primary scope correction](../../../docs/provenance/paper-outcome-scope-decisions.v1.json)
-- [Original-finding reproduction contract](reproduction.v2.json)
-- [Paired outcome protocols](outcomes.v1.json)
+### Current retinal paired source policy
+
+**Disposition:** design\_ready.
+
+The adopted source correction separates historical reproduction from a fresh paired within-cell comparison for one biological cell, 20161028_1. Its 147 merged recording sites are dependent measurements, not independent biological replicates. The historical endpoint retains all sites and their masked held-out Pearson correlations; the rounded published mean 0.25 is not a threshold for a fresh episode. The fresh endpoint compares candidate and executed author reference on identical frozen test rows, all 147 sites and authoritative masks, reporting scores and their paired difference. It does not satisfy historical reproduction or the broader retained programme. The source-default split holds out observations within repeated stimulus sequences; it does not establish unseen-stimulus or cross-cell generalization.
+
+**Scientific status:** UNQUALIFIED. Both information conditions remain unknown, with no participant result or admitted paired protocol. These source interfaces do not qualify execution or a scientific outcome.
+
+**Information conditions:** paper\_data, paper\_data\_author\_code.
+
+- [Authenticated retinal source adoption](policies/retinal-paired-correction-v1/ADOPTION.v1.json)
+- [Current projected task](task.json)
+
+#### Active corrected retinal policies
+
+- [Active within-cell improvement contract](policies/retinal-paired-correction-v1/improvement.v1.json)
+- [Active historical-reproduction contract](policies/retinal-paired-correction-v1/reproduction.v2.json)
+- [Active unresolved outcome binding](policies/retinal-paired-correction-v1/outcomes.v1.json)
+
+#### Retained historical contracts
+
+- [Retained historical improvement contract](improvement.v1.json)
+- [Retained historical reproduction contract](reproduction.v2.json)
+- [Retained historical outcome binding](outcomes.v1.json)
+
+#### Retinal paired source interfaces
+
+- [Paired source contract](implementations/retinal-paired-episode-v1/CONTRACT.v1.json)
+- [Uninstantiated pairing interface](implementations/retinal-paired-episode-v1/PAIRING_INTERFACE.v1.json)
+- [Unqualified assessment interface](implementations/retinal-paired-episode-v1/ASSESSMENT_INTERFACE.v1.json)
+
+- [Active historical-reproduction contract](policies/retinal-paired-correction-v1/reproduction.v2.json)
+- [Active unresolved outcome binding](policies/retinal-paired-correction-v1/outcomes.v1.json)
 - [Preserved definition before dual outcomes](historical/task.pre-outcomes.v1.json)
 
 | Outcome | Information condition | Endpoint eligibility | Protocol status | Declared availability | Scientific outcome |
@@ -48,13 +79,13 @@ The current definition supports two independent outcomes: recreate the original 
 
 Author-baseline replay and historical reconstruction attempts retain their original scopes. They are not promoted to qualified AI reproductions or improvements by these contracts.
 
-## Current paper-improvement objective
+## Retained author-source policy
 
-**Improvement outcome:** surpass the source-paper result on its exact original task, with a justified meaningful effect and predeclared uncertainty rule. Paper reproduction is a separate first-class outcome; this currently bound contract assesses improvement.
+This original registration contract remains attached to the author-source reproduction and calibration routes. The selected current policy above defines the offline candidate interface; the retained author restrictions do not govern that candidate.
 
 **Disposition:** design\_ready. The original retinal response-prediction task has an ordered metric, recoverable author route and published mean correlation 0.25. Exact historical cache, published split/checkpoint, author replay and admission remain incomplete. This design is explicitly retinal-scoped; the expanded 36-family implementation remains preserved and cannot receive whole-programme success from this endpoint.
 
-- [Source-grounded improvement contract](improvement.v1.json)
+- [Retained original improvement contract](improvement.v1.json)
 - [Preserved historical task definition](historical/task.pre-improvement.v1.json)
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
@@ -62,7 +93,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 35436 bytes; SHA-256 `0ca58963c4c07298bc258e3abb6a4a0dea1a2415204c681a78182dbad7978644`.
+- Specification identity: 39816 bytes; SHA-256 `a759c38019b7c9ae14317e928eb14f9e5e2b7bdef659ea4d640d0c914a48abb6`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 
@@ -90,6 +121,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Source-only original-input programme and generated-control entry points for Jaxley, with six unchanged prepared input modules, the unchanged numerical control module and bounded reporting transport. Preserves the existing 20 consumer and 15 numerical controls without transferring historical ARM admission to the prospective hosted CPU profile. Enrollment makes no new original-data decoding, model-fitting, scientific-readiness or hosted-runtime qualification claim.
 - [Original model reference v1](implementations/original-model-reference-v1) — Reviewed source component.
   Scope: Source-only original model and streamed-batch reference callable, with explicit reversible source adaptation and a public generated-control entry point. The private generated-control evidence does not establish execution of the public wrapper, an original full fit, numerical reproduction, improvement, hosted-runtime qualification or scientific readiness. Existing original-input and held-out binding components, task endpoints and scientific holds remain unchanged.
+- [Retinal paired episode v1](implementations/retinal-paired-episode-v1) — Reviewed source component.
+  Scope: Source interfaces for paired original-retinal reproduction/improvement assessment against a fresh same-split author reference. Preserves strict retinal-heldout scoring and separate Figure 3f/full-36 programme boundaries. Generated controls and selected maintained-row adoption checks do not establish executed author or candidate models, physical A/B transport, historical paper reproduction, improvement, current SOTA or scientific readiness. Scientific outcome remains UNQUALIFIED; historical comparator, uncertainty and meaningful-effect policy remain unresolved.
 - [Retinal heldout](implementations/retinal-heldout) — Reviewed source component.
   Scope: Full retinal held-out comparison. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

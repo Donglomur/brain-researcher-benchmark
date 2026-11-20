@@ -85,6 +85,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: generated paired participant interval calculation; no empirical score/interval
 - [Full32 paired runtime v1](implementations/full32-paired-runtime-v1) — Reviewed source component.
   Scope: portable binding/profile/generated process controls only; not a macOS native replay
+- [Full32 provider pair v1](implementations/full32-provider-pair-v1) — Reviewed source component.
+  Scope: Source-only full32 trusted-provider and frozen-programme paired producer/admission. Eight generated controls passed once; no original EEG, targets, live provider/model calls or scores. Qualification of remote context/tool policy and a meaningful selected programme remain study requirements.
 - [Full6400 fixed canary delivery v1](implementations/full6400-fixed-canary-delivery-v1) — Reviewed source component.
   Scope: One accepted local macOS driver.run operation completed all6400 fixed0.5 programme episodes and complete direct-request projections; an independent one-pass review verified all57615 saved files and6400 cases. No failed/unattempted cases, retries, model/provider calls or scores. Original400 task and historical two-case evidence remain unchanged. Standalone driver CLI, full6400 visual condition, provider policy/capacity, physiological P3 inference, general solver/escaped-descendant isolation and AI performance remain unqualified; the original outer-owner PGID was not separately observed.
 - [Visual provider pair v1](implementations/visual-provider-pair-v1) — Reviewed source component.
