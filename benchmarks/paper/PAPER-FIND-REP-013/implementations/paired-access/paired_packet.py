@@ -13,7 +13,7 @@ CODE_NAMES = {'HumanvsMousePaperAnalysis.Rmd', 'source_semantics.json'}
 PROGRAM_CAP = 131072
 META_CAP = 65536
 ARTIFACT_SOURCE = {'path':'components/purkinje-artifacts/artifact.py',
-                   'bytes':13254,'sha256':'ebf846517265e562f6111c725d2a264c0e028a6084a2c76bfce7567f30a63201'}
+                   'bytes':13255,'sha256':'de49d99e0ddb08b54bb0ac7d57d833b3fa558827fcbf8a7c88d753f9271f1f3d'}
 # Preserve the historical contract path as identity; resolve its current source explicitly.
 ARTIFACT_CURRENT_PATH = 'benchmarks/paper/PAPER-FIND-REP-013/implementations/artifacts/artifact.py'
 PROFILE = 'benchmarks/paper/PAPER-FIND-REP-013/implementations/registered-runtime/program-v1'

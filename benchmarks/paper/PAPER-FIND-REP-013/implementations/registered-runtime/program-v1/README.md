@@ -39,3 +39,15 @@ python3.11 -I -S -B components/purkinje-artifacts/test_numeric_score.py
 ```
 
 The old scorer in `regression_fixtures/old_numeric_score.py` is a pinned regression fixture only. Production loads the single current scorer from `program-v1`; fixtures contain no authentic reconstructions or reference answers.
+
+## Nonzero aggregate underflow
+
+The maintained scorer now returns `unsupported_derived_numerics` when a positive RMSE or MAE rounds to zero during aggregation. This also covers the outer equal-cell RMSE, preventing a nonzero discrepancy from being reported as a perfect primary score. Representable results, exact-zero discrepancies, coverage and scientific metric definitions are unchanged.
+
+The regression uses generated smallest-subnormal values within the declared finite-number interface. It is a numerical boundary correction, not evidence of a failure in the released biological data, a new reconstruction, or an improvement result. The portable predecessor and historical grades remain unchanged. New attempts must bind the revised scorer and current paired contract.
+
+Run only the four new methods with:
+
+```sh
+python3.11 -I -S -B benchmarks/paper/PAPER-FIND-REP-013/implementations/artifacts/test_aggregate_underflow.py
+```

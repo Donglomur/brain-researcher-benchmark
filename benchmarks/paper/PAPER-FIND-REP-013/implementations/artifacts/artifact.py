@@ -13,7 +13,7 @@ import types
 PROFILE = "released-ten-tree-external-artifact-v1"
 PINS = {
     "schema.py": (2123, "76df29fdab9d70dbcf129788c4201bf75df65c4ce9abd9bf1f5fff334cbc4538"),
-    "numeric_score.py": (9797, "5c80e13c45d04fe7fbecc6f14e2cf2dc45f3a87bcaaf916b46cedcdcac9d732c"),
+    "numeric_score.py": (10034, "ce1d4aba17c3e6cce11e3048599c3023427c31d90cb6d60de4393fe9c8dbea8c"),
     "REFERENCE_PINS.json": (638, "b091a5952a3c0dcacf2e16c49bfa4fa1e862e15af590db0c757cf38e621946cf"),
     "INPUT_PINS.json": (1991, "3478e8bfbfdf7e6ba865f37ac9562427290f9cc770f9b780c6d192a53af4d6fe"),
     "TASK.md": (11039, "f1a3f481639ca70a69e0c761dadaa78cf238bbd05b853b57427b2d83cd82cb00"),

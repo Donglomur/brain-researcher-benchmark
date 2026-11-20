@@ -13,7 +13,7 @@ The shared author Sholl totals are answer-bearing. The numerical TASK is openly 
 
 ## Provisioning and portable use
 
-Use the repository source on a POSIX host with CPython 3.11.6. `Paired(repo, contract_path, expected_pin, provider_root=None)` loads the exact existing artifact adapter and its six public `program-v1` dependencies. It captures and authenticates their source bytes before execution. There is no scientific dependency copy or alternative scorer in this component. The selected contract pins are 1,720 bytes / SHA256 `294838ec512339663761aca362748b62e793f98ad1ff492c1eacd11147cfe253`.
+Use the repository source on a POSIX host with CPython 3.11.6. `Paired(repo, contract_path, expected_pin, provider_root=None)` loads the exact existing artifact adapter and its six public `program-v1` dependencies. It captures and authenticates their source bytes before execution. There is no scientific dependency copy or alternative scorer in this component. The selected contract pins are 1,721 bytes / SHA256 `d33eed13fc27d31c65ddff3afe869390326fe6c7c1db5732eb9a6ff09a685b30`.
 
 The external provider directory must contain the twelve exact empirical names in `COMMON.json`, `paper.html`, and—for B—the exact `HumanvsMousePaperAnalysis.Rmd` and `source_semantics.json`. Provider descriptors start with `provider/`; TASK, SCHEMA and attribution descriptors start with `component/` and resolve beside the selected contract. All file lengths/hashes are fixed. There is no downloader, data synthesis, substitute-file option or implicit search of a local cache. Missing accepted provider members remain a real provisioning gap. The repository contains descriptors, not the original paper/code, SWCs, empirical summaries or private reference bodies.
 
@@ -24,8 +24,8 @@ This example is deliberately **unselected** and refuses before copying original 
 ```sh
 python3.11 -I -S -B components/purkinje-paired-access/paired_packet.py \
   --repo . --contract components/purkinje-paired-access/CONTRACT.json \
-  --contract-bytes 1720 \
-  --contract-sha256 294838ec512339663761aca362748b62e793f98ad1ff492c1eacd11147cfe253 \
+  --contract-bytes 1721 \
+  --contract-sha256 d33eed13fc27d31c65ddff3afe869390326fe6c7c1db5732eb9a6ff09a685b30 \
   --provider-root operator-assets/purkinje --condition A \
   --destination operator-work/fresh-A --receipt operator-work/fresh-A.json
 ```
