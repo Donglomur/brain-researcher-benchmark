@@ -25,6 +25,8 @@ REPRODUCTION = "reproduction.v1.json"
 REPRODUCTION_FILES = {"paper-reproduction/v1": REPRODUCTION,
                       "paper-reproduction/v2": "reproduction.v2.json"}
 OUTCOMES = "outcomes.v1.json"
+RETINAL_PAIRED_TASK = "PAPER-paper-method-002"
+RETINAL_PAIRED_FIELD = "retinal_paired_revision"
 REGISTRY = "benchmarks/registry.json"
 PRIMARY_SUCCESSOR_TASK = "PAPER-SMC-RNN-2024"
 SCOPE_POLICY_SUCCESSOR_TASKS = frozenset((
@@ -745,6 +747,7 @@ def coverage(registry, read_pin):
         need(has_source_declaration_gap(row) == (row["id"] in required_gaps - selected_endpoint_ids),
              "Original source declaration gap task cannot omit its adopted route")
         successor_selected = has_primary_successor(row)
+        has_retinal_paired_revision(row)
         has_continuous_outcomes(row)
         has_meg_generic_classification(row)
         for field in PRESERVED_ROW_FIELDS:
@@ -1048,6 +1051,85 @@ def meg_generic_classification_adoption(row, document, outcomes, read_pin):
     return proposed_row, projected, proposed_outcomes
 
 
+def retinal_paired_module():
+    """Load the one maintained task-specific metadata adoption implementation."""
+    name = "_neurobench_retinal_paired_adoption_v1"
+    if name not in sys.modules:
+        path = Path(__file__).with_name("paper_retinal_paired_adoption.py")
+        spec = importlib.util.spec_from_file_location(name, path)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module
+        try:
+            exec(compile(path.read_bytes(), str(path), "exec"), module.__dict__)
+        except BaseException:
+            sys.modules.pop(name, None)
+            raise
+    return sys.modules[name]
+
+
+def has_retinal_paired_revision(row):
+    declared = row.get("paper_outcomes")
+    selected = type(declared) is dict and RETINAL_PAIRED_FIELD in declared
+    if selected:
+        need(row.get("id") == RETINAL_PAIRED_TASK and row.get("track") == "paper",
+             "Retinal paired revision cannot select another task")
+        module = retinal_paired_module()
+        need(module.DESCRIPTOR_PIN is not None and
+             declared[RETINAL_PAIRED_FIELD] == module.DESCRIPTOR_PIN,
+             "Retinal paired revision must use its exact selected descriptor")
+    return selected
+
+
+def _retinal_preserved_fields(row, previous_rows):
+    need(row.get("id") == RETINAL_PAIRED_TASK and RETINAL_PAIRED_TASK in previous_rows,
+         "Retinal paired adoption requires its authenticated predecessor row")
+    prior = previous_rows[RETINAL_PAIRED_TASK]
+    for field in PRESERVED_ROW_FIELDS:
+        need((field in row) == (field in prior) and encode(row.get(field)) == encode(prior.get(field)),
+             "Retinal paired adoption changed prior " + field)
+
+
+def retinal_paired_context(row, document, previous_rows, read_pin, *, improvement_contract=None):
+    """Validate retained history normally, then expose the fixed active correction."""
+    need(has_retinal_paired_revision(row), "Retinal paired revision must be selected")
+    _retinal_preserved_fields(row, previous_rows)
+    module = retinal_paired_module()
+    handle = module.authenticate(read_pin)
+    historical_row = copy.deepcopy(row)
+    del historical_row["paper_outcomes"][RETINAL_PAIRED_FIELD]
+    historical_row["specification"] = handle.retained_task_pin
+    # Recursion removes only this selector; all ordinary historical gates remain.
+    historical = context(historical_row, handle.retained_task, previous_rows, read_pin,
+                         improvement_contract=improvement_contract)
+    projected = module.project(handle.retained_task, handle)
+    need(document == projected and row.get("specification") == handle.current_task_pin,
+         "Retinal current task differs from its exact supported projection")
+    return module.active_context(historical, document, handle, engine=engine)
+
+
+def adopt_retinal_paired_correction(row, document, previous_rows, read_pin, *, improvement_contract=None):
+    """Plan only the reviewed retinal row; never rewrite scientific contracts."""
+    need(row.get("id") == RETINAL_PAIRED_TASK and row.get("track") == "paper",
+         "Retinal paired adoption cannot select another task")
+    _retinal_preserved_fields(row, previous_rows)
+    if has_retinal_paired_revision(row):
+        bound = context(row, document, previous_rows, read_pin,
+                        improvement_contract=improvement_contract)
+        return copy.deepcopy(row), copy.deepcopy(document), bound
+    module = retinal_paired_module()
+    handle = module.authenticate(read_pin)
+    need(document == handle.retained_task and row.get("specification") == handle.retained_task_pin,
+         "Retinal adoption requires its exact retained current task")
+    context(row, document, previous_rows, read_pin, improvement_contract=improvement_contract)
+    projected = module.project(document, handle)
+    selected = copy.deepcopy(row)
+    selected["paper_outcomes"][RETINAL_PAIRED_FIELD] = handle.descriptor_pin
+    selected["specification"] = handle.current_task_pin
+    bound = context(selected, projected, previous_rows, read_pin,
+                    improvement_contract=improvement_contract)
+    return selected, projected, bound
+
+
 def context(row, document, previous_rows, read_pin, *, improvement_contract=None):
     """Validate current bytes and return prior lineage plus separate outcomes.
 
@@ -1065,6 +1147,9 @@ def context(row, document, previous_rows, read_pin, *, improvement_contract=None
     identifier, home = row["id"], row["task_directory"]
     need(home == "benchmarks/paper/" + identifier, "Paper outcome task home mismatch")
     binding = row.get("paper_outcomes")
+    if has_retinal_paired_revision(row):
+        return retinal_paired_context(row, document, previous_rows, read_pin,
+                                      improvement_contract=improvement_contract)
     meg_generic_selected = has_meg_generic_classification(row)
     selected_endpoint_ids = endpoint_selection_ids(previous_rows)
     endpoint_selected = has_endpoint_selection(row)
