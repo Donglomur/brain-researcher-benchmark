@@ -69,7 +69,7 @@ def mean(values):
 
 
 def pearson(prediction, response):
-    """Pearson r with scaling before centering; undefined remains explicit."""
+    """Pearson r after removing a finite anchor; undefined remains explicit."""
     require(len(prediction) == len(response) and len(response) >= 2, "paired vectors required")
     require(all(math.isfinite(v) for v in prediction + response), "finite vectors required")
     constant_p = all(v == prediction[0] for v in prediction)
@@ -78,10 +78,20 @@ def pearson(prediction, response):
         reason = "constant_both" if constant_p and constant_y else (
             "constant_prediction" if constant_p else "constant_response")
         return {"n_items": len(response), "r": None, "undefined_reason": reason}
-    pscale, yscale = max(map(abs, prediction)), max(map(abs, response))
-    p, y = [v / pscale for v in prediction], [v / yscale for v in response]
-    pm, ym = mean(p), mean(y)
-    p, y = [v - pm for v in p], [v - ym for v in y]
+    def center(values):
+        # Subtract before scaling so representable differences near a large
+        # common offset survive. Only opposite finite extremes need halving.
+        origin = values[0]
+        shifted = [v - origin for v in values]
+        if not all(math.isfinite(v) for v in shifted):
+            shifted = [v * 0.5 - origin * 0.5 for v in values]
+        scale = max(map(abs, shifted))
+        require(scale > 0, "numerically unresolved correlation")
+        scaled = [v / scale for v in shifted]
+        average = mean(scaled)
+        return [v - average for v in scaled]
+
+    p, y = center(prediction), center(response)
     pn, yn = math.hypot(*p), math.hypot(*y)
     require(pn > 0 and yn > 0, "numerically unresolved correlation")
     r = math.fsum((a / pn) * (b / yn) for a, b in zip(p, y))
