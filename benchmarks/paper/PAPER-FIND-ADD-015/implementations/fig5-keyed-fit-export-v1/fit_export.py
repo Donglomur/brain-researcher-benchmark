@@ -16,8 +16,8 @@ import types
 TASK = "PAPER-FIND-ADD-015"
 GROUPS = ("activated", "suppressed")
 MODEL_COLUMNS = ("cell", "basef", "preceding", "opto")
-ALIGNMENT_SHA256 = "4a3e82e7dffbd947bb20c48ca557522bfeac7baae784c17bb56d9eb6cb691891"
-ALIGNMENT_BYTES = 8380
+ALIGNMENT_SHA256 = "97439fccb04a370de12a5f0555f3cd0916d56dea149959baf0af93ad6d2fab63"
+ALIGNMENT_BYTES = 8509
 SOURCE_FORMULA = "opto ~ 1 + basef + (1 + preceding|cell)"
 
 

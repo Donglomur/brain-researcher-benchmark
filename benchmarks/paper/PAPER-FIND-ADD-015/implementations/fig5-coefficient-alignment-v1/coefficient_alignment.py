@@ -19,12 +19,15 @@ class AlignmentError(ValueError):
 def _number(value, name):
     if type(value) not in (int, float):
         raise AlignmentError(name + " must be a finite JSON number, not a bool")
+    original = value
     try:
         value = float(value)
     except (ValueError, OverflowError) as exc:
         raise AlignmentError(name + " is outside binary64") from exc
     if not math.isfinite(value):
         raise AlignmentError(name + " must be finite")
+    if value != original:
+        raise AlignmentError(name + " cannot be represented exactly as binary64")
     return value
 
 

@@ -3,8 +3,8 @@
 This component connects already-produced Figure 5 fit objects and their source
 dataframes to `fig5-coefficient-alignment-v1`. It does not fit a model or read a
 pickle, NPZ, deposited data table, or scientific array. The source notebook's
-cells 5, 7, 8 and 9 provide the dataframe/fit/table connection. The existing
-diagnostic remains unchanged and computes both intercept interpretations.
+cells 5, 7, 8 and 9 provide the dataframe/fit/table connection. The diagnostic computes both intercept interpretations and rejects lossy
+integer-to-binary64 conversion before comparing coefficients and baselines.
 
 `fit_export.export_panel` accepts dictionaries with exactly `activated` and
 `suppressed` keys for models, source dataframes, complete cell rosters and
@@ -53,7 +53,7 @@ string also does not authenticate the actual historical fit.
 The caller must declare `conditional_semantics="fixed_plus_random"` and supply
 `runtime_record={"python": ..., "pymer4": ..., "lme4": ...}` with observed strings
 or null for unknown versions. Neither declaration establishes runtime parity.
-There is no automatic intercept correction. The exact existing diagnostic
+There is no automatic intercept correction. The exact maintained diagnostic
 source is hash checked before use; it returns both literal-notebook and
 conditional-model branches and consistency residuals without a new tolerance.
 
