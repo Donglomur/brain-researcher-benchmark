@@ -429,7 +429,7 @@ def validate_inspection(obj, expected_cid, name, mounts, *, final):
     need(host['Memory']==host['MemorySwap']==MEMORY and host['NanoCpus']==1000000000 and
          host['PidsLimit']==64 and host['NetworkMode']=='none' and
          host['ReadonlyRootfs'] is True and host['CapDrop']==['ALL'] and
-         host['SecurityOpt']==['no-new-privileges'] and host['LogConfig']['Type']=='none','container_limits')
+         host['SecurityOpt'] in (['no-new-privileges'], ['no-new-privileges:true']) and host['LogConfig']['Type']=='none','container_limits')
     need(host['Privileged'] is False and not host.get('CapAdd') and not host.get('Devices') and
          host.get('PidMode','')=='' and host.get('IpcMode')=='private','no_host_or_extra_device_privilege')
     need(host['Tmpfs']=={'/work':'rw,nosuid,nodev,size=134217728,mode=1777',

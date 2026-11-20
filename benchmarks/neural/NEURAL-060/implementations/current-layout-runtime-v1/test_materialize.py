@@ -56,7 +56,7 @@ class RelocationTests(unittest.TestCase):
             loaded.module(module)
         self.assertFalse({"numpy", "h5py", "sklearn"} & set(sys.modules))
 
-    def test_only_roster_locator_changes_and_manifest_covers_full_closure(self):
+    def test_only_declared_compatibility_changes_and_manifest_covers_full_closure(self):
         receipt = relocation.materialize(str(self.repo), str(self.output))
         before = json.loads((self.source / "SOURCE_MANIFEST.json").read_bytes())
         after = json.loads((self.output / "SOURCE_MANIFEST.json").read_bytes())
@@ -68,14 +68,19 @@ class RelocationTests(unittest.TestCase):
             self.assertEqual(after["files"][name], relocation.pin(right))
             if left != right:
                 changed.append(name)
-                self.assertEqual(right.replace(relocation.ROSTER.encode(), relocation.OLD_ROSTER.encode()), left)
-        self.assertEqual(changed, ["bootstrap.py"])
-        self.assertEqual(len(receipt["unchanged_runtime_files"]), 17)
+                if name == "bootstrap.py":
+                    self.assertEqual(right.replace(relocation.ROSTER.encode(), relocation.OLD_ROSTER.encode()), left)
+                else:
+                    self.assertEqual(name, "engine.py")
+                    self.assertEqual(right.replace(relocation.ENGINE_CHECK_AFTER, relocation.ENGINE_CHECK_BEFORE), left)
+        self.assertEqual(changed, ["bootstrap.py", "engine.py"])
+        self.assertEqual(len(receipt["unchanged_runtime_files"]), 16)
         self.assertNotEqual(receipt["predecessor_manifest"], receipt["successor_manifest"])
         self.assertEqual(relocation.pin((self.source / "SOURCE_MANIFEST.json").read_bytes()),
                          relocation.MANIFEST_PIN)
         print(json.dumps({"successor_manifest": receipt["successor_manifest"],
-                          "successor_bootstrap": receipt["change"]["after"]}, sort_keys=True))
+                          "successor_bootstrap": receipt["change"]["after"],
+                          "successor_engine": receipt["inspect_compatibility"]["after"]}, sort_keys=True))
 
     def test_real_entrypoint_help_from_unrelated_working_directory(self):
         relocation.materialize(str(self.repo), str(self.output))

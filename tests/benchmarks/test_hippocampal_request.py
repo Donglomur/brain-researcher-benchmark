@@ -169,7 +169,7 @@ class HippocampalRequestTests(unittest.TestCase):
         new = {r['path']: r for r in current['files']}
         self.assertEqual(set(old), set(new))
         self.assertEqual([name for name in old if old[name] != new[name]],
-                         ['controller.py', 'transport/SOURCE_MANIFEST.json', 'transport/bounds.py'])
+                         ['controller.py', 'transport/SOURCE_MANIFEST.json', 'transport/bounds.py', 'transport/provider.py'])
         for name, record in new.items():
             raw = (PACKAGE / name).read_bytes()
             self.assertEqual(len(raw), record['bytes'], name)

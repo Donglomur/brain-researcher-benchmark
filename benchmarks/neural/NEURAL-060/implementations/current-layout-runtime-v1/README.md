@@ -7,10 +7,18 @@ layout. The exact roster bytes are available in this task's `contracts/delivery`
 
 `materialize.py` repairs that locator in a newly materialized external runtime.
 It authenticates the original 18-file runtime and the current roster before
-writing anything, changes that one string in `bootstrap.py`, and emits a fresh
-`SOURCE_MANIFEST.json` plus `RELOCATION.json`. The remaining 17 runtime source
-files are byte-identical, including preparation, scorer, references, scheduling,
-entrypoint, target-last admission, and process controls. The predecessor and
+writing anything, changes that one string in `bootstrap.py`, and repairs one exact inspect comparison
+in `engine.py`. Docker can report the enabled security option as
+`["no-new-privileges:true"]` even when creation requested `["no-new-privileges"]`.
+The materialized validator admits those two one-element representations; missing,
+false, malformed, duplicate and extra options remain refused. In particular,
+`label=disable` is not added to this runtime's allowed options. All other host
+configuration, resource, namespace, image and process checks remain unchanged.
+
+It emits a fresh `SOURCE_MANIFEST.json` plus a version-2 `RELOCATION.json` that
+records both changed source pins and the explicit inspect compatibility change.
+The remaining 16 runtime source files are byte-identical, including preparation,
+scorer, references, scheduling, entrypoint and target-last admission. The predecessor and
 its historical receipts remain unchanged.
 
 ```sh
@@ -43,3 +51,17 @@ admission and captured imports, complete source identity, deterministic output,
 entrypoint help and inactive-authority refusal, drift rejection, and path/overwrite failures. All fixtures are
 copies of public source files, with no recordings or scientific calculations.
 Run it through the coordinator's reviewed lightweight test pool.
+
+The focused source-only inspect regression command is:
+
+```sh
+python3 -I -B test_inspect_security.py --repository /absolute/current/repository
+```
+
+Run it through the coordinator's reviewed lightweight test pool. It materializes
+one source closure, calls the actual predecessor and successor inspection
+functions on invented configuration objects, demonstrates the original refusal,
+and checks invalid security settings plus unchanged configuration refusals. It
+compares all 18 source members against the predecessor and reports the emitted
+engine/manifest pins. No Docker daemon, data, model or numerical dependency is
+used. These source controls do not qualify an actual daemon or scientific run.
