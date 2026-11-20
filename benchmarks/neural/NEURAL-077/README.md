@@ -83,6 +83,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: generated paired participant interval calculation; no empirical score/interval
 - [Full32 paired runtime v1](implementations/full32-paired-runtime-v1) — Reviewed source component.
   Scope: portable binding/profile/generated process controls only; not a macOS native replay
+- [Full6400 fixed canary delivery v1](implementations/full6400-fixed-canary-delivery-v1) — Reviewed source component.
+  Scope: Prior two-case native run(config) evidence applies only to its executed predecessor. New generated source checks will not qualify full6400 native delivery, standaloneCLI, a provider, physiological inference, a visual condition, or an AI study.
 - [Visual provider pair v1](implementations/visual-provider-pair-v1) — Reviewed source component.
   Scope: Restricted four\_demo visual-provider receipt admission joins unchanged matched\_waveform\_programme protected metrics for all400 trials. Lossless delivered PNG mapping preserves original pixels/history. Provider/context/full-history capability, isolation, genuine campaigns and protected paired scores remain unqualified; both people were exposed development people and target/standard labels do not establish physiological P3 presence.
 - [Waveform transport v1](implementations/waveform-transport-v1) — Reviewed source component.
