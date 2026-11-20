@@ -13,7 +13,9 @@ from pathlib import Path
 
 
 def _dependency(filename, expected_hash):
-    path = Path(__file__).resolve().parent.parent / 'submission-comparison' / filename
+    root = Path(__file__).resolve().parent
+    path = (root / filename if filename == 'metric_primitives_v2.py' else
+            root.parent / 'submission-comparison' / filename)
     body = path.read_bytes()
     if sha256(body).hexdigest() != expected_hash:
         raise RuntimeError('reviewed predecessor changed: ' + filename)
@@ -27,8 +29,8 @@ def _dependency(filename, expected_hash):
 
 c = _dependency('find025_contract.py',
                 'adccd1362fc7f96b967467377ca834b3fbb95581252bd3c8210d79e6eb6d3ce9')
-m = _dependency('metric_primitives.py',
-                '3489e5cbabac7e78c9922076ce8adf45b4ec089bbc245089cb21bcd5808c8193')
+m = _dependency('metric_primitives_v2.py',
+                'd90a741396ca362050697c71426b5e6fcfcd8e7eed536dfa4f028e49d34f7990')
 MAX_PAYLOAD_BYTES = 4 * 1024 * 1024
 MAX_TOTAL_BYTES = 64 * 1024 * 1024
 MAX_ROWS = 100000
