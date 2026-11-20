@@ -202,17 +202,20 @@ class SavedEpisodeAdmission(unittest.TestCase):
         cls.client=cls.helper.client
         cls.sender=cls.client.source(ROOT/'waveform-provider-v1/client.py',cls.client.ORIGINAL_SENDER)
 
-    def fixture(self,root):
+    def fixture(self,root,*,campaign_remaining_seconds=999):
         global FIXTURE_BYTES
         d=self.deps;t=d['transport'];h=self.helper
         session=root/'session';provider=root/'provider';custody=provider/'custody'
         custody.mkdir(parents=True,mode=0o700)
         trial='development-001-'+'0'*24
         limits=arm.budgets(t,30,1000,8388608,8388608,1048576,400*8388608,400*1048576)
-        start=time.monotonic();manifest={'started_monotonic':start-1,'deadline':start+999,
-                                       'model':'generated-model','max_output_tokens':100,
-                                       'limits':limits,'operator':d['operator']}
-        cfg=arm.configuration(d,trial,'generated-model',100,start+28,limits)
+        start=time.monotonic()
+        deadline=start+campaign_remaining_seconds
+        manifest={'started_monotonic':deadline-limits['campaign_seconds'],'deadline':deadline,
+                  'model':'generated-model','max_output_tokens':100,
+                  'limits':limits,'operator':d['operator']}
+        cfg=arm.configuration(d,trial,'generated-model',100,
+                              min(start+limits['query_seconds'],manifest['deadline'])-2,limits)
         raw=d['s'].encode(cfg);put(provider/'CONFIG.json',raw)
         img1,img2=h.png(0),h.png(255)
         context=types.SimpleNamespace(query={'trial_id':trial},prompt=t.v.scientific_prompt(trial,'four_demo'))
@@ -252,6 +255,54 @@ class SavedEpisodeAdmission(unittest.TestCase):
                 result=arm.audit_episode(session,provider,data,0,self.deps,manifest)
             self.assertEqual(result['turns'],2);self.assertEqual(result['probability'],0.5)
             self.assertEqual(result['provider_response_ids'],['resp_generated_1','resp_generated_2'])
+
+    def test_query_clock_rounding_boundary_and_closure_refusals(self):
+        start = float.fromhex('0x1.0000000000005p+1')
+        for remaining in (999, 20):
+            with self.subTest(campaign_remaining_seconds=remaining), tempfile.TemporaryDirectory() as folder:
+                with mock.patch.object(time, 'monotonic', return_value=start):
+                    session, provider, data, manifest, end = self.fixture(
+                        Path(folder).resolve(), campaign_remaining_seconds=remaining)
+                config_path = provider / 'CONFIG.json'
+                closure_path = provider / 'OPERATOR_END.json'
+                original_config = config_path.read_bytes()
+                original_closure = closure_path.read_bytes()
+                config = json.loads(original_config)
+                closure = json.loads(original_closure)
+                self.assertEqual(config['deadline'],
+                                 min(start + manifest['limits']['query_seconds'], manifest['deadline']) - 2)
+                if remaining == 999:
+                    # Different rounding at 30 and 32 makes the former shortcut invalid.
+                    self.assertEqual(config['deadline'], 30.0)
+                    self.assertNotEqual(start + 28, config['deadline'])
+                else:
+                    self.assertEqual(config['deadline'], manifest['deadline'] - 2)
+                    self.assertLess(config['deadline'], start + 28)
+                with mock.patch.object(self.deps['transport'], 'audit_transport', return_value=end):
+                    result = arm.audit_episode(session, provider, data, 0, self.deps, manifest)
+                self.assertEqual(result['turns'], 2)
+                self.assertEqual(result['probability'], 0.5)
+                if remaining != 999:
+                    continue
+                wrong_config = encode(dict(config, deadline=start + 28))
+                wrong_config_closure = encode(dict(closure, config=support.pin(wrong_config)))
+                wrong_transport = dict(closure['transport_end'], sha256='0' * 64)
+                changes = (
+                    ('rounded_shortcut', wrong_config, wrong_config_closure),
+                    ('late_closure', original_config, encode(dict(closure, finished_monotonic=start + 31))),
+                    ('changed_transport_end', original_config, encode(dict(closure, transport_end=wrong_transport))),
+                )
+                for reason, config_body, closure_body in changes:
+                    with self.subTest(reason=reason):
+                        try:
+                            put(config_path, config_body)
+                            put(closure_path, closure_body)
+                            with mock.patch.object(self.deps['transport'], 'audit_transport', return_value=end):
+                                with self.assertRaisesRegex(ValueError, 'Query clock/closure mismatch'):
+                                    arm.audit_episode(session, provider, data, 0, self.deps, manifest)
+                        finally:
+                            put(config_path, original_config)
+                            put(closure_path, original_closure)
 
     def test_tampered_history_image_final_and_http_refused(self):
         with tempfile.TemporaryDirectory() as folder:
