@@ -1,0 +1,32 @@
+--- original/evaluation/eval_nlb.py::eval_nlb
++++ memory-bounded/eval_nlb
+@@ -52,7 +52,7 @@
+                     )[return_idx]
+                     .detach()
+                     .cpu()
+-                    .numpy()
++                    .numpy().mean(axis=-1).transpose(0, 2, 1)
+                     for x_t_chunk, u_t_chunk in zip(
+                         torch.chunk(
+                             x_t,
+@@ -78,7 +78,7 @@
+                     )[return_idx]
+                     .detach()
+                     .cpu()
+-                    .numpy()
++                    .numpy().mean(axis=-1).transpose(0, 2, 1)
+                     for x_e_chunk, u_e_chunk in zip(
+                         torch.chunk(
+                             x_e,
+@@ -94,9 +94,9 @@
+                 ]
+             )
+ 
+-            training_predictions_i = Xs_t.mean(axis=-1).transpose(0, 2, 1)
++            training_predictions_i = Xs_t
+             training_predictions.append(training_predictions_i)
+-            eval_predictions_i = Xs_e.mean(axis=-1).transpose(0, 2, 1)
++            eval_predictions_i = Xs_e
+             eval_predictions.append(eval_predictions_i)
+ 
+     eval_predictions = np.array(eval_predictions).mean(axis=0)

@@ -52,6 +52,8 @@ jobs:
             python: '3.11.18'
           - group: erp-core-builder
             python: '3.11.6'
+          - group: smc-restricted-valid
+            python: '3.11.6'
     env:
       PARALLEL_CONTROL_GROUP: ${{ matrix.group }}
       PIP_DISABLE_PIP_VERSION_CHECK: "1"
@@ -66,9 +68,9 @@ jobs:
           python3 -I -S -B - <<'PY'
           import hashlib, os, stat
           pins = [
-              {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': '39bb273f2b76c53313236ce47aeaa14208e62f45167469d48331d656f6a82f1c'},
-              {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': '0399357cdacd0eec90a42158894ad163ece3a9bb7e7a009c9c0893a32f9c31f7'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 535704, 'sha256': 'b5e7030280c2a1381813bb193250803eb2b003a0ddced31dc045371306f9f653'},
+              {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': 'cfb2fd4bfa353536e314360719332ee9ca49d6424874767598a8e5b0d57899bc'},
+              {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': 'c7e918c452ab94f9e1fbcd8480928f6d3f788f3fd1d9ac63dfdb9d8e514ae7e8'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 543825, 'sha256': 'fa8a5e73d15c041c32b122de14c64a2dee0e2bcbe04d962f29b8196ae19604ab'},
           ]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
@@ -245,6 +247,12 @@ jobs:
             erp-core-builder)
               cat >"$PARALLEL_LOCK" <<'LOCK'
           numpy @ https://files.pythonhosted.org/packages/5a/62/007b63f916aca1d27f5fede933fda3315d931ff9b2c28b9c2cf388cd8edb/numpy-1.26.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:f25e2811a9c932e43943a2615e65fc487a0b6b49218899e62e426e7f0a57eeda
+          LOCK
+              ;;
+            smc-restricted-valid)
+              cat >"$PARALLEL_LOCK" <<'LOCK'
+          numpy @ https://files.pythonhosted.org/packages/5a/62/007b63f916aca1d27f5fede933fda3315d931ff9b2c28b9c2cf388cd8edb/numpy-1.26.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:f25e2811a9c932e43943a2615e65fc487a0b6b49218899e62e426e7f0a57eeda
+          h5py @ https://files.pythonhosted.org/packages/af/26/f231ee425c8df93c1abbead3d90ea4a5ff3d6aa49e0edfd3b4c017e74844/h5py-3.11.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl --hash=sha256:52c416f8eb0daae39dabe71415cb531f95dce2d81e1f61a74537a50c63b28ab3
           LOCK
               ;;
             *) exit 2 ;;

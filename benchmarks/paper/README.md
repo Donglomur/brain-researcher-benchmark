@@ -145,7 +145,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-EXP-20261113-005](PAPER-EXP-20261113-005/README.md) | A prefrontal cortex map based on single-neuron activity | unavailable | unavailable | 7 | not linked |
 | [PAPER-SCOPE-20261114-LATENTCIRCUIT](PAPER-SCOPE-20261114-LATENTCIRCUIT/README.md) | Latent circuit inference from heterogeneous neural responses during cognitive tasks | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-SCOPE-20261114-REM-DYNAMICS](PAPER-SCOPE-20261114-REM-DYNAMICS/README.md) | Low-dimensional population dynamics in the brainstem gate REM sleep | source_unresolved | source_unresolved | 2 | not linked |
-| [PAPER-SMC-RNN-2024](PAPER-SMC-RNN-2024/README.md) | SMC-RNN: reproduce and improve with paper/data versus official code and released models | continuous_measurement | continuous_measurement | 12 | not linked |
+| [PAPER-SMC-RNN-2024](PAPER-SMC-RNN-2024/README.md) | SMC-RNN: reproduce and improve with paper/data versus official code and released models | continuous_measurement | continuous_measurement | 13 | not linked |
 | [paper-pcca-fa-bilateral-pfc-arousal-2026](paper-pcca-fa-bilateral-pfc-arousal-2026/README.md) | Reproduce bilateral prefrontal covariance decomposition and pupil-linked arousal, then test protected neural-to-pupil prediction | unavailable | unavailable | 2 | not linked |
 
 Generated with `python3 scripts/catalog.py` from the repository root. Edit authoritative task definitions, then regenerate; do not edit these browse pages directly.

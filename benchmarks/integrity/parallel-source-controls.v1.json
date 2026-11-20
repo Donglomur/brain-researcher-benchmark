@@ -203,6 +203,14 @@
         "numpy": "1.26.3"
       },
       "scope": "Generated ERP full32 builder and retinal streamed-fit analytical source controls only; exact Python3.11.6 and NumPy1.26.3 are required. Original EEG/FDT processing, native retinal fit, provider isolation and scientific performance remain separately qualified."
+    },
+    "smc-restricted-valid": {
+      "python": "3.11.6",
+      "packages": {
+        "numpy": "1.26.3",
+        "h5py": "3.11.0"
+      },
+      "scope": "Generated restricted-VALID source controls only; exact Python3.11.6, NumPy1.26.3 and h5py3.11.0. No original-data admission, native or inference execution, or scientific performance qualification."
     }
   },
   "fixtures": {
@@ -16044,6 +16052,131 @@
       "expected_tests": 6,
       "expected_skips": 0,
       "timeout_seconds": 180,
+      "fixtures": [],
+      "environment": {
+        "ARTIFACT_DIR": "${ARTIFACT_DIR}"
+      }
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "test_baseline.py",
+        "-v"
+      ],
+      "cwd": "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1",
+      "expected_skips": 0,
+      "expected_tests": 4,
+      "fixtures": [],
+      "group": "stdlib-b",
+      "runner": "unittest",
+      "task_id": "NEURAL-077",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/delivery.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1/BUNDLE_MANIFEST.json",
+        "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1/METHOD.json",
+        "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1/programme/config.json",
+        "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1/programme/erp_template.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1/test_baseline.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/bundle.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/consumer.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/recipe.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-contexts/export_contexts.py"
+      ],
+      "timeout_seconds": 180,
+      "id": "NEURAL-077.command-15",
+      "environment": {
+        "ARTIFACT_DIR": "${ARTIFACT_DIR}"
+      }
+    },
+    {
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "test_reference.py",
+        "-v"
+      ],
+      "cwd": "benchmarks/neural/NEURAL-077/implementations/full32-fixed-reference-v1",
+      "expected_skips": 0,
+      "expected_tests": 4,
+      "fixtures": [],
+      "group": "stdlib-b",
+      "runner": "unittest",
+      "task_id": "NEURAL-077",
+      "test_paths": [
+        "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1/BUNDLE_MANIFEST.json",
+        "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1/METHOD.json",
+        "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1/programme/config.json",
+        "benchmarks/neural/NEURAL-077/implementations/full32-demonstration-baseline-v1/programme/erp_template.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-fixed-reference-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/full32-fixed-reference-v1/producer.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-fixed-reference-v1/reference.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-fixed-reference-v1/test_reference.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/bundle.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/consumer.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/evaluator.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-runtime-v1/diagnostic_episode.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-runtime-v1/profile_successor.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-paired-runtime-v1/runtime.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-provider-pair-v1/SOURCE_BINDINGS.json",
+        "benchmarks/neural/NEURAL-077/implementations/full32-provider-pair-v1/bridge.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-provider-pair-v1/broker.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-provider-pair-v1/client.py",
+        "benchmarks/neural/NEURAL-077/implementations/full32-provider-pair-v1/pair.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-provider-v1/client.py",
+        "benchmarks/neural/NEURAL-077/implementations/waveform-transport-v1/transport.py",
+        "benchmarks/shared/viewer-process-ownership-v1/owned_exit.py"
+      ],
+      "timeout_seconds": 180,
+      "id": "NEURAL-077.command-16",
+      "environment": {
+        "ARTIFACT_DIR": "${ARTIFACT_DIR}"
+      }
+    },
+    {
+      "id": "PAPER-SMC-RNN-2024.command-12",
+      "task_id": "PAPER-SMC-RNN-2024",
+      "group": "smc-restricted-valid",
+      "runner": "unittest",
+      "cwd": ".",
+      "argv": [
+        "${PYTHON}",
+        "-I",
+        "-B",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/controls/test_restricted_validation.py",
+        "-v"
+      ],
+      "test_paths": [
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/SOURCE.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/helpers/author_predict_val.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/helpers/memory_reduction.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/helpers/particle_reduction.patch",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/helpers/prepare.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/helpers/validation_author_manifest.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/validation_adapter.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/validation_reference.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/validation_worker.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/grader/SOURCE.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/grader/VALID_PANEL.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/grader/validation_grade.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/grader/validation_grade_child.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/bounded-grade/SOURCE.json",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/bounded-grade/bounded_capture.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/bounded-grade/label_policy.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/bounded-grade/owned_exit.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/runtime/bounded-grade/validation_grade_host.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/projection/project_validation.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/controls/test_restricted_validation.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/controls/fixtures/retained_worker.py",
+        "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/restricted-validation-v1/controls/fixtures/evaluation.py"
+      ],
+      "expected_tests": 10,
+      "expected_skips": 0,
+      "timeout_seconds": 120,
       "fixtures": [],
       "environment": {
         "ARTIFACT_DIR": "${ARTIFACT_DIR}"
