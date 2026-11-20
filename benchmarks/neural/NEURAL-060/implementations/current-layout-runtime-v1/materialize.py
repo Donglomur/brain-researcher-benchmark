@@ -1,9 +1,9 @@
-"""Materialize the pinned full NEURAL-060 runtime with its current roster locator.
+"""Materialize the pinned full NEURAL-060 runtime for the current repository/daemon.
 
 This is an offline source transformation, not a data preparer or run authority.
 The predecessor's 18-file closure is authenticated before any output is created.
-Only bootstrap.roster's repository-relative locator changes. The successor gets
-its own manifest; none of the predecessor's source pins are relabelled.
+The roster locator and Docker's equivalent enabled no-new-privileges spelling
+are repaired. The successor gets its own manifest; predecessor pins are retained.
 """
 import argparse
 import hashlib
@@ -21,6 +21,15 @@ OLD_ROSTER = "authoring/delivery-20261105/neural060/REQUIRED_SOURCES.json"
 MANIFEST_PIN = {"bytes": 2492, "sha256": "2ca0f30669eb7ae0a5f0a5bbbe04b6f950fa18bfb709890e817ad574bd04d140"}
 BOOTSTRAP_PIN = {"bytes": 4479, "sha256": "3715a7fbb504ebe99703421bed0595f2687f5242a192fe419c36cdff1ded53f1"}
 ROSTER_PIN = {"bytes": 17391, "sha256": "c62ba1c5161287d1915d7dd49165be79ca93632dee686be0ea29f0929c1791cf"}
+ENGINE_PIN = {"bytes": 24489, "sha256": "4eca7625d1fd695237b502db7681020283da37dc534bc82c3c719c7b7479ddf1"}
+ENGINE_CHECK_BEFORE = b"""        need(host[name] == wanted['HostConfig'][name] and type(host[name]) is type(wanted['HostConfig'][name]),
+             'exact native host isolation:' + name)"""
+ENGINE_CHECK_AFTER = b"""        enabled_inspect_spelling = (name == 'SecurityOpt'
+                                    and wanted['HostConfig'][name] == ['no-new-privileges']
+                                    and host[name] == ['no-new-privileges:true'])
+        need((host[name] == wanted['HostConfig'][name] or enabled_inspect_spelling)
+             and type(host[name]) is type(wanted['HostConfig'][name]),
+             'exact native host isolation:' + name)"""
 
 
 def pin(raw):
@@ -97,17 +106,27 @@ def source_plan(repo):
         raise ValueError("exact single predecessor roster locator required")
     bodies = dict(sources.bodies)
     bodies["bootstrap.py"] = bodies["bootstrap.py"].replace(old, new, 1)
+    if (pin(bodies["engine.py"]) != ENGINE_PIN
+            or bodies["engine.py"].count(ENGINE_CHECK_BEFORE) != 1):
+        raise ValueError("exact predecessor Docker inspect comparison required")
+    bodies["engine.py"] = bodies["engine.py"].replace(ENGINE_CHECK_BEFORE, ENGINE_CHECK_AFTER, 1)
     files = {name: pin(body) for name, body in sorted(bodies.items())}
     manifest = encoded({"files": files, "schema": "neural060_runtime_source_v1"})
     return bodies, manifest, {
-        "schema": "neural060_current_layout_source_v1",
+        "schema": "neural060_current_layout_source_v2",
         "task_id": "NEURAL-060",
         "predecessor_manifest": MANIFEST_PIN,
         "successor_manifest": pin(manifest),
         "roster": {"path": ROSTER, **ROSTER_PIN},
         "change": {"file": "bootstrap.py", "old_locator": OLD_ROSTER, "new_locator": ROSTER,
                    "before": BOOTSTRAP_PIN, "after": files["bootstrap.py"]},
-        "unchanged_runtime_files": sorted(set(files) - {"bootstrap.py"}),
+        "inspect_compatibility": {
+            "file": "engine.py", "before": ENGINE_PIN, "after": files["engine.py"],
+            "change": "accept the equivalent enabled no-new-privileges:true inspect spelling",
+            "security_options": [["no-new-privileges"], ["no-new-privileges:true"]],
+            "other_host_configuration_checks": "unchanged",
+        },
+        "unchanged_runtime_files": sorted(set(files) - {"bootstrap.py", "engine.py"}),
     }
 
 
