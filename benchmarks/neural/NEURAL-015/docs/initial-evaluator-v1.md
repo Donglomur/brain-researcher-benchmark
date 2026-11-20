@@ -192,9 +192,9 @@ digests to let the operator audit which targets and comparator were used.
 From the repository root:
 
 ```sh
-python3 benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/evaluator.py validate reference.json --output validation.json
-python3 benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/evaluator.py query reference.json --output query.json
-python3 benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/evaluator.py score reference.json --submission submission.json --output score.json
+python3 benchmarks/neural/NEURAL-015/implementations/fresh-output-v1/evaluator.py validate reference.json --output validation.json
+python3 benchmarks/neural/NEURAL-015/implementations/fresh-output-v1/evaluator.py query reference.json --output query.json
+python3 benchmarks/neural/NEURAL-015/implementations/fresh-output-v1/evaluator.py score reference.json --submission submission.json --output score.json
 python3 -m unittest discover -s benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/tests -v
 ```
 
@@ -227,7 +227,7 @@ merely to make a pause pass. Segment selection, ambiguous repeated movie spans,
 and native trigger/event interpretation remain held; the helper cannot infer them.
 
 ```sh
-python3 benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/evaluator.py align alignment-input.json --output aligned.json
+python3 benchmarks/neural/NEURAL-015/implementations/fresh-output-v1/evaluator.py align alignment-input.json --output aligned.json
 ```
 
 This stricter helper differs from source behavior that breaks after the last
@@ -255,3 +255,5 @@ rights. No archive, neural data, transcript or movie was acquired for this work.
 No model fitting, native scientific campaign, dependency installation, or
 scientific admission occurred. Clinical electrode placement, stimulus overlap
 and ten participants continue to limit anatomical and population claims.
+
+The maintained CLI requires a fresh output file and refuses existing inputs or reports, including linked aliases. The original numerical evaluator remains unchanged and is imported with exact source pins.
