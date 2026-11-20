@@ -10,6 +10,7 @@ import signal
 import subprocess
 import sys
 import time
+from types import ModuleType
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import contract as C
@@ -18,13 +19,57 @@ import epoch_programme as P
 DECLARED_SCOPE = {"claim_matched_information": False, "matched_access_audit": None}
 
 
+def _checked_reasoning_selection(value):
+    if value is None:
+        return None
+    C.need(type(value) is dict and set(value) == {
+        "execution_policy", "reasoning_effort", "adapter", "bindings", "reasoning_provider"},
+        "Exact operator-owned reasoning selection")
+    C.need(value["execution_policy"] == "current_turn_reasoning_v1"
+           and type(value["reasoning_effort"]) is str and value["reasoning_effort"],
+           "Explicit reasoning execution policy and effort")
+    for name in ("adapter", "bindings", "reasoning_provider"):
+        item = value[name]
+        C.need(type(item) is dict and set(item) == {"path", "bytes", "sha256"}
+               and type(item["path"]) is str and Path(item["path"]).is_absolute()
+               and ".." not in Path(item["path"]).parts, "Explicit selected reasoning source")
+        C.checked_pin({key: item[key] for key in ("bytes", "sha256")}, 32768)
+    return C.decode(C.encode(value))
+
+
+def _select_visual_runtime(runtime, selection):
+    """Only operator configuration can select the authenticated optional auditor."""
+    selection = _checked_reasoning_selection(selection)
+    C.need("_epoch_reasoning_adapter" not in runtime and "_epoch_reasoning_policy" not in runtime,
+           "No implicit reasoning auditor in caller runtime")
+    if selection is None:
+        return runtime
+    raw = P.descriptor(selection["adapter"], 32768)
+    # Authenticate all selected source operands before executing adapter source.
+    P.descriptor(selection["bindings"], 8192)
+    P.descriptor(selection["reasoning_provider"], 32768)
+    module = ModuleType("sleep007_selected_epoch_reasoning")
+    module.__file__ = selection["adapter"]["path"]
+    exec(compile(raw, module.__file__, "exec"), module.__dict__)
+    import epoch_provider as V
+    adapter = module.load_selected(selection, V, runtime)
+    selected = dict(runtime)
+    selected["_epoch_reasoning_adapter"] = adapter
+    selected["_epoch_reasoning_policy"] = adapter.policy
+    return selected
+
+
 def _collection(descriptor, condition):
     value = C.decode(P.descriptor(descriptor, 8 * 2**20))
     keys = {"schema", "condition", "knowledge", "source", "rows", "submission"}
-    C.need(type(value) is dict and set(value) in (keys, keys | {"comparison_scope"})
+    C.need(type(value) is dict and keys <= set(value)
+           and set(value) <= keys | {"comparison_scope", "reasoning_compatibility"}
            and value["schema"] == "sleep007_epoch_arm_collection_v1"
            and value["condition"] == condition, "Explicit new condition; no whole-history pooling")
     value = dict(value, comparison_scope=value.get("comparison_scope", dict(DECLARED_SCOPE)))
+    value["reasoning_compatibility"] = value.get("reasoning_compatibility")
+    C.need(condition == C.VISUAL_CONDITION or value["reasoning_compatibility"] is None,
+           "Reasoning compatibility belongs only to the visual execution route")
     scope = value["comparison_scope"]
     P.M.check_claim(scope, {"claim_matched_information": scope.get("claim_matched_information")})
     P.source_freeze(value["source"])
@@ -49,24 +94,34 @@ def _visual_record(record, packet, runtime, knowledge, comparison_scope=None):
     C.need(C.ordinary_path(record["end"]["path"]) == C.ordinary_path(record["session_root"]) / "END.json",
            "Visual terminal evidence belongs to this private session")
     P.descriptor(record["end"], 65536)
+    selected = runtime.get("_epoch_reasoning_adapter")
+    if selected is not None:
+        C.need(selected.policy == runtime["_epoch_reasoning_policy"], "Frozen selected visual auditor policy")
+        return selected.audit_session(record["session_root"], packet, knowledge)
     return V.audit_session(record["session_root"], packet, runtime, knowledge)
 
 
-def _new_collection(condition, knowledge_descriptor, source, rows, answers, root, comparison_scope=None):
+def _new_collection(condition, knowledge_descriptor, source, rows, answers, root, comparison_scope=None,
+                    reasoning_compatibility=None):
     C.need(condition in (C.VISUAL_CONDITION, C.PROGRAMME_CONDITION), "New epoch condition only")
     C.checked_complete_rows(rows)
     complete = answers.complete()
     root = C.ordinary_path(root)
     root.mkdir(mode=0o700)
     submission = C.write_new(root / "predictions.npz", C.submission_bytes(complete))
-    return C.write_new(root / "COLLECTION.json", C.encode({
+    value = {
         "schema": "sleep007_epoch_arm_collection_v1", "condition": condition,
         "knowledge": knowledge_descriptor, "source": source, "rows": rows, "submission": submission,
-        "comparison_scope": dict(DECLARED_SCOPE) if comparison_scope is None else comparison_scope}))
+        "comparison_scope": dict(DECLARED_SCOPE) if comparison_scope is None else comparison_scope}
+    if reasoning_compatibility is not None:
+        C.need(condition == C.VISUAL_CONDITION, "Optional reasoning policy belongs to the visual arm")
+        value["reasoning_compatibility"] = reasoning_compatibility
+    return C.write_new(root / "COLLECTION.json", C.encode(value))
 
 
 def collect_visual(records, knowledge_descriptor, source, runtime, output_root, *,
-                   claim_matched_information=False, matched_access_audit=None):
+                   claim_matched_information=False, matched_access_audit=None,
+                   reasoning_compatibility=None):
     """All5450 terminal sessions, one immutable first answer per target; no raw truth."""
     selection = {"claim_matched_information": claim_matched_information, "matched_access_audit": matched_access_audit}
     scope = P.M.comparison_scope(selection)
@@ -75,6 +130,7 @@ def collect_visual(records, knowledge_descriptor, source, runtime, output_root, 
         C.need(audit["knowledge"] == P.plain(knowledge_descriptor) and audit["source"] == P.plain(source),
                "Visual collection shares the selected source and declared knowledge review")
     P.source_freeze(source)
+    runtime = _select_visual_runtime(runtime, reasoning_compatibility)
     knowledge = C.checked_knowledge(C.decode(P.descriptor(knowledge_descriptor, 8192)))
     C.checked_complete_rows(records)
     C.need(all(set(row) == {"epoch_id", "record"} for row in records), "Complete pinned visual record roster")
@@ -90,7 +146,8 @@ def collect_visual(records, knowledge_descriptor, source, runtime, output_root, 
         C.need(not response_ids.intersection(result["response_ids"]), "No provider response reused across targets")
         response_ids.update(result["response_ids"])
         answers.accept(row["epoch_id"], result["probabilities"], C.pin(raw))
-    return _new_collection(C.VISUAL_CONDITION, knowledge_descriptor, source, records, answers, output_root, scope)
+    return _new_collection(C.VISUAL_CONDITION, knowledge_descriptor, source, records, answers, output_root, scope,
+                           runtime.get("_epoch_reasoning_policy"))
 
 
 def collect_programme(records, knowledge_descriptor, source, runtime, output_root):
@@ -181,6 +238,8 @@ def admit_pair(viewer_collection, programme_collection, packet_roots, references
     matched_access = P.M.selected(runtime)
     visual, visual_knowledge = _collection(viewer_collection, C.VISUAL_CONDITION)
     programme, programme_knowledge = _collection(programme_collection, C.PROGRAMME_CONDITION)
+    C.need(visual["reasoning_compatibility"] == visual_runtime.get("_epoch_reasoning_policy"),
+           "Complete visual collection and selected runtime have the same reasoning policy")
     scope = P.M.comparison_scope(runtime)
     C.need(visual["comparison_scope"] == programme["comparison_scope"] == scope,
            "Both immutable arm scopes must match the selected comparison claim")
@@ -232,12 +291,14 @@ def admit_pair(viewer_collection, programme_collection, packet_roots, references
         finally:
             original.close()
     C.need(ordinal == C.TOTAL and len(sessions) == C.TOTAL, "All5450 targets; two exposed people")
-    return AdmittedPair(specification, view, prog, refs, adapter, assets, helper, visual_knowledge,
-                        {"viewer": viewer_collection, "programme": programme_collection,
+    evidence = {"viewer": viewer_collection, "programme": programme_collection,
                          "knowledge": P.plain(visual["knowledge"]), "source": P.plain(visual["source"]),
                           "comparison_scope": scope,
                           "matched_access_audit": scope["matched_access_audit"],
-                          "programme_generation_origin": matched_access["generation_origin"] if matched_access is not None else None})
+                          "programme_generation_origin": matched_access["generation_origin"] if matched_access is not None else None}
+    if visual["reasoning_compatibility"] is not None:
+        evidence["reasoning_compatibility"] = visual["reasoning_compatibility"]
+    return AdmittedPair(specification, view, prog, refs, adapter, assets, helper, visual_knowledge, evidence)
 
 
 def score_admitted(admitted, target_loader):
@@ -278,11 +339,12 @@ def _checked_config(value):
     required = {"schema", "source", "viewer_collection", "programme_collection", "packet_roots", "references",
                 "private_locations", "implementations_root", "finite_bindings_root", "visual_runtime"}
     C.need(type(value) is dict and required <= set(value)
-           and set(value) <= required | {"matched_access_audit", "claim_matched_information"}
+           and set(value) <= required | {"matched_access_audit", "claim_matched_information", "reasoning_compatibility"}
            and value["schema"] == "sleep007_epoch_pair_request_v1", "Exact separately selected epoch pair request")
     value = dict(value)
     value.setdefault("matched_access_audit", None)
     value.setdefault("claim_matched_information", False)
+    value["reasoning_compatibility"] = _checked_reasoning_selection(value.get("reasoning_compatibility"))
     P.M.claim(value)
     P.source_freeze(value["source"])
     C.need(type(value["visual_runtime"]) is dict and set(value["visual_runtime"]) == {
@@ -300,6 +362,7 @@ def _public(value):
                              claim_matched_information=value["claim_matched_information"])
     P.M.selected(runtime)
     visual_runtime = V.load_runtime(**value["visual_runtime"])
+    visual_runtime = _select_visual_runtime(visual_runtime, value["reasoning_compatibility"])
     admitted = admit_pair(value["viewer_collection"], value["programme_collection"], value["packet_roots"],
                           value["references"], runtime, visual_runtime)
     return admitted, runtime
