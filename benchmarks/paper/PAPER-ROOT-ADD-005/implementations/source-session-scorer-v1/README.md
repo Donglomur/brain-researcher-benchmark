@@ -139,3 +139,17 @@ Suggested integration is a new source-metric software component linked beside
 the preserved prospective evaluator. Keep the canonical task `source_unresolved`
 and the historical results unchanged. No scientific readiness promotion is
 supported by this change.
+
+## Current Pearson arithmetic repair
+
+The current implementation subtracts a finite anchor before scaling each Pearson
+input. This preserves representable variation near a common offset; opposite
+finite extremes are halved only when their difference would overflow. Constant
+columns remain undefined and all original population, grouping, aggregation and
+scientific qualification limits remain unchanged. Historical source/provenance
+records retain their original hashes; `CURRENT_SOURCE.json` identifies this
+maintained numerical revision.
+
+The new `test_centering_regression.py` controls use generated values and an
+independent exact-rational/80-digit Decimal oracle. They do not qualify an
+authentic reference, candidate run, reproduction or improvement.
