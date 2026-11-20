@@ -25,7 +25,7 @@ METRICS = ("contamination", "correct_triplets")
 SHAPES = {"scores_all.npy": (10, 2, 8, 5), "embs_all.npy": (10, 7, 6000, 1)}
 MAX_ARCHIVE_BYTES = 5 * 1024 * 1024
 MAX_HEADER_BYTES = 4096
-SCORER_SHA256 = "392a4ff40fa8764d994d42d978fe3735a983f707552957ade8423a0acf70d4d9"
+SCORER_SHA256 = "3d361bfe232d881d9b96ac3fdbccd80fdbb3b6d7d8ccb7b764dfd9c0472cea83"
 SCORER_PATH = Path(__file__).resolve().parents[1] / "figure1-scorer-v1" / "scorer.py"
 
 

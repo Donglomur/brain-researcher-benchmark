@@ -28,6 +28,12 @@ an unreliable identity join. `coefficient_alignment.py` instead joins explicitly
 on operator-supplied cell identities, retains repeated fluorescence values
 across different cells and rejects varying baseline within a single cell.
 
+Numeric coefficients and covariates must convert exactly to finite binary64.
+An integer that would round during conversion is rejected before the constant
+baseline and coefficient checks, so unequal supplied values cannot silently
+become equal. Exactly representable integers and binary64 inputs keep the same
+arithmetic and both diagnostic branches.
+
 Use `diagnose_panel` on an export containing exactly `activated` and `suppressed`.
 Each group supplies an ordered expected-cell roster, fixed coefficients,
 separate conditional and random coefficient tables, and per-trial cell/baseline

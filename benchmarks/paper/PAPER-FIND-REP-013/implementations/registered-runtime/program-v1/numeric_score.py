@@ -115,6 +115,9 @@ def stats(errors):
        'mae':scale*(math.fsum(map(abs,z))/len(z)),
        'bias':signed_mean(errors),'max_abs_error':scale}
  if not all(math.isfinite(x) for x in vals.values()):raise Unscorable('Aggregate overflow')
+ # A positive error must never be reported as exact reconstruction merely
+ # because the nonnegative aggregate rounded below binary64's minimum.
+ if vals['rmse']==0 or vals['mae']==0:raise Unscorable('Nonzero error aggregate underflow')
  return {'n':len(errors),**vals}
 
 def compare_summary(got,ref,path='summary',rows=None):

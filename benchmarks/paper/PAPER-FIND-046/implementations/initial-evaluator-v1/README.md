@@ -22,3 +22,14 @@ rights and resource qualification remain unresolved gates.
 See the [full scientific contract, input interface and limitations](../../docs/initial-evaluator-v1.md).
 `sources.json` records the exact primary-source revision and file hashes;
 `SOURCE_LICENSE.txt` preserves the source code’s MIT notice.
+
+## Correlation scale stability
+
+The descriptive serum Pearson correlation rescales each complete vector by its
+own largest absolute value before centering, then normalizes the two centered
+norms separately. This preserves the same Pearson statistic while avoiding
+overflow or underflow caused solely by the units of otherwise finite inputs.
+Missing values, constant vectors, fewer than two sessions and all existing
+cohort or scientific qualification limits retain their previous treatment. The
+focused `tests/test_correlation_scale.py` regressions cover independent unit
+scales and the public `evaluate` serum route with generated inputs only.

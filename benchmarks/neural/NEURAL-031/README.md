@@ -49,6 +49,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Reviewed corrected source and generated controls plus the accepted local40-context/1548-prediction ratio-1 construction receipt; first native failure and all costs remain preserved. Canonical runtime selection, submission readiness and scientific qualification are unchanged.
 - [Ratio scoring v1](implementations/ratio-scoring-v1) — Reviewed source component.
   Scope: Recovered ratio endpoint and paired scorer. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
+- [Ratio scoring v2](implementations/ratio-scoring-v2) — Reviewed source component.
+  Scope: Cancellation-safe equal-mouse ratio gains with unchanged schemas, estimand and weights. Generated source controls only; frozen runtime adoption and scientific qualification remain unclaimed.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

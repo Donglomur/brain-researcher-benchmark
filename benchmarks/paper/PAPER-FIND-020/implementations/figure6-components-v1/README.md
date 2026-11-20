@@ -26,7 +26,9 @@ historical biological association runtime remains a separate calibration task.
 
 - `like_to_like_eligible(weight, signal_correlation)` applies **signed**
   `weight > 0.01` and `signal_correlation > 0.2`. Neither an absolute weight nor
-  a newly computed percentile is equivalent. It does not invent which image
+  a newly computed percentile is equivalent. Correlation range checks use the
+  supplied real value before conversion to float; conversion cannot round an
+  out-of-range correlation onto -1 or 1 and make it valid. It does not invent which image
   responses define correlation or which recurrent matrix entries are eligible.
 - `score_curve(target_rows, expected_conditions, prediction_rows)` returns
   correct-image counts and image denominators separately for every condition.

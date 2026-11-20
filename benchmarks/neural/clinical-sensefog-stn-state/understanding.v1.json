@@ -45,6 +45,20 @@
       "url": "https://github.com/PKlocke/SenseFOG-Documentation",
       "locator": "Author README/source provenance",
       "supports": "12 participants and author clinical analysis route, with hard-coded annotation exposure requiring audit."
+    },
+    {
+      "id": "sensefog-primary-scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/clinical-sensefog-stn-state/implementations/primary-scoring-v1/sensefog_score.py",
+      "sha256": "eb784bde679a79488e253a5b86da09ed1cb77103dd0f00af54ca8f2adc23c89e",
+      "supports": "Owner-side full12 participant-macro multiclass log loss, complete case/label/probability admission, support-matched paired lag-loss diagnostics and descriptive participant-cluster intervals. These functions do not authenticate signals, labels or participant execution."
+    },
+    {
+      "id": "sensefog-primary-scope",
+      "kind": "local_source",
+      "path": "benchmarks/neural/clinical-sensefog-stn-state/implementations/primary-scoring-v1/README.md",
+      "sha256": "98e283bfb964c88cb25735b2a6dfdbc40fc0260ec530899c54e6f5f7652284ba",
+      "supports": "Exact protected scoring input schema, original-versus-lagged aggregation, finite probability rule, generated-control scope and remaining authentic clinical preparation, event metrics and participant execution requirements."
     }
   ],
   "empirical_claims": {
@@ -60,7 +74,7 @@
     ]
   },
   "disposition": "partial_delivery",
-  "disposition_reason": "Complete recording-grid lag-map source exists, but no primary gait-state scorer, authentic labels/signal packets or candidate runner is delivered. Target-free lag controls alone do not measure neural understanding.",
+  "disposition_reason": "Complete recording-grid lag-map source and protected primary probability/paired lag-loss scoring source exist. Authenticated clinical labels and signal packets, qualified decoders and protected candidate execution remain unestablished; source availability alone does not measure neural understanding.",
   "scientific_target": {
     "question": "Can bilateral STN local field potentials distinguish freezing, voluntary stopping and other authenticated gait/postural states in an unseen participant?",
     "target_kind": "observation_decoding",
@@ -120,23 +134,25 @@
       "One common integer lag moves all channels and causal support within the same continuous acquisition segment, preserving exact observable mask sequence.",
       "G=max(30 seconds,2 H, L_train); fixed±G...±10 G, no wrap or label-based lag choice. Unestablished H/L_train or invalid donor support remains unsupported."
     ],
-    "uncertainty": "All 12 person results with participant-cluster paired descriptive summaries; overlapping windows/cycles are not independent samples. No permutation p-value or causal interpretation from lag diagnostic; native primary and paired uncertainty remain undelivered.",
-    "failure_policy": "Declare complete original recording grid and retain gaps/unsupported cases. A future scorer must reject missing eligible predictions and preserve nonfreezing people/background; current mapper refuses inconsistent census/whole-operation caps and never returns a primary score."
+    "uncertainty": "The scoring source implements descriptive participant-cluster percentile intervals for the complete12 person primary and support-matched paired lag differences. Overlapping windows and cycles are not independent resampling units. Authentic clinical uncertainty, scientifically accepted policy/replicate selection, permutation calibration and causal interpretation remain unestablished.",
+    "failure_policy": "The mapper declares the complete original recording grid and retains gaps and unsupported cases. The scoring source rejects missing, duplicate, extra or invalid probabilities for any original case, including cases without usable targets; paired predictions must cover exactly map-supported pairs. A participant without evaluable windows makes the full-cohort primary undefined rather than changing its denominator. The mapper alone continues to return no primary score."
   },
   "implementation": {
     "reviewed_paths": [
       "benchmarks/neural/clinical-sensefog-stn-state/implementations/recording-lag-controls/README.md",
-      "benchmarks/neural/clinical-sensefog-stn-state/implementations/recording-lag-controls/sensefog_pairing.py"
+      "benchmarks/neural/clinical-sensefog-stn-state/implementations/recording-lag-controls/sensefog_pairing.py",
+      "benchmarks/neural/clinical-sensefog-stn-state/implementations/primary-scoring-v1/sensefog_score.py",
+      "benchmarks/neural/clinical-sensefog-stn-state/implementations/primary-scoring-v1/README.md"
     ],
-    "scorer_target": "build_maps constructs target-free support and common-channel lag mappings only. It reads no signals, annotations or model predictions and returns primary_score=null.",
-    "target_fidelity": "no_target_evaluator",
-    "delivered_scope": "Source for complete 12 person declared-grid enumeration and 20 lag support accounting, with generated boundary controls. It is an evaluator preparation component rather than gait-state grading.",
+    "scorer_target": "sensefog_score.score consumes owner-supplied grid, frozen policy, complete protected labels and original probabilities to compute ordinary participant-macro multiclass log loss; optional paired probabilities produce supported-case transformed-minus-original loss diagnostics. It calls the unchanged target-free build_maps dependency and retains its full grid/20-lag coverage.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Source for the complete declared12 person recording-grid mapper plus protected primary probability scoring, complete case/participant joins, explicit missing-label and undefined-cohort handling, support-matched paired lag-loss consumption and descriptive participant-cluster intervals. This is numerical evaluation source, not an authenticated clinical benchmark or participant execution.",
     "missing": [
-      "Authentic LFP/clinical interval clocks, exact class dictionary, native channels/rates/montage and person/session census.",
-      "Full primary probability scorer, event metric/matching policy, physical transformed packets and paired-loss consumer.",
-      "Reference models, candidate input transport and protected evaluation."
+      "Authentic LFP/clinical interval clocks, exact class dictionary, native channels/rates/montage, prospective exclusion rules and complete person/session census.",
+      "Event-onset matching, freezing sensitivity, voluntary-stop confusion, false alarms per recorded minute, and physical original/transformed packets with matched information.",
+      "Qualified reference models, participant input/answer transport, protected execution and a frozen programme lifecycle."
     ],
-    "execution_evidence": "Generated invented complete 12 person-grid controls only; fixture 1 Hz is explicitly not a clinical sampling rate. No neural model, authentic clinical score or native viewer result."
+    "execution_evidence": "The mapper and scorer document generated complete12 person-grid software controls with invented1 Hz geometry, explicitly not native clinical sampling. This metadata revision runs no controls or clinical evaluation. No neural model, authentic clinical score, direct observation or native viewer result is established."
   },
   "access_modes": {
     "direct_observation": {
@@ -166,31 +182,33 @@
       "representation": "Proposed same LFP with causal spectral/model tools.",
       "boundary": "Fixed per-case evidence/compute; models fitted only in other 11 people.",
       "evidence_ids": [
-        "sensefog-mapper"
+        "sensefog-mapper",
+        "sensefog-primary-scorer"
       ],
       "missing": [
-        "Full participant inputs, scorer and qualified frozen decoder."
+        "Authenticated full participant inputs, protected tool execution, equal-information transport and a qualified frozen decoder."
       ]
     },
     "frozen_program": {
       "status": "not_delivered",
       "representation": "Proposed precommitted gait-state probability program.",
-      "boundary": "Freeze causal lookback and training recipe; mapper does not execute or grade predictions.",
+      "boundary": "Freeze causal lookback and training recipe; the protected scorer can grade supplied probabilities, but does not execute or authenticate the frozen programme lifecycle.",
       "evidence_ids": [
-        "sensefog-mapper"
+        "sensefog-mapper",
+        "sensefog-primary-scorer"
       ],
       "missing": [
-        "Primary scorer and frozen lifecycle."
+        "Authenticated full participant inputs, qualified reference models and a protected frozen programme lifecycle."
       ]
     }
   },
   "revision": {
-    "date": "2026-11-16",
+    "date": "2026-11-19",
     "summary": [
-      "Expose that delivered code has no target evaluator instead of counting lag controls as task execution.",
-      "Retain natural-coverage participant-macro loss and event false alarms as required endpoints.",
-      "Make actual common-channel recording-grid lag support limits and missing physical packets explicit."
+      "Correct stale scorer-absence statements using the registered primary-scoring-v1 source and its exact pinned documentation.",
+      "Record primary probability and paired lag-loss consumer source availability while retaining partial_delivery and allfour access modes as not_delivered.",
+      "Preserve the original natural-coverage endpoint, clinical data/protocol qualification gaps, historical definitions and zero model/human result claims."
     ],
-    "source_review": "Reviewed preserved scientific registration and named implementation code/documentation; reused cited primary source evidence already verified in these records. No scientific arrays or evaluator labels were opened in this revision."
+    "source_review": "Reviewed current primary-scoring-v1 score/validation/aggregation code and its documented scope alongside the unchanged mapper. Reused already cited primary-source provenance. No scientific arrays, protected labels, model runs or new software test execution."
   }
 }

@@ -28,7 +28,9 @@ def like_to_like_eligible(weight, signal_correlation):
     """
     weight = _number(weight, "weight")
     corr = _number(signal_correlation, "signal_correlation")
-    if not -1 <= corr <= 1:
+    # Validate the supplied Real before float conversion can round an invalid
+    # correlation onto an endpoint (for example Fraction(1) + 10**-100).
+    if not -1 <= signal_correlation <= 1:
         raise ValueError("signal_correlation must lie in [-1, 1]")
     return weight > 0.01 and corr > 0.2
 

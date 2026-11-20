@@ -8,7 +8,7 @@ without a scorer failure. A renamed case or altered preceding-trial relation
 can likewise become the scorer's new expected identity.
 
 `support.py` reconstructs the required eligible-case list from the original
-slots before calling the unchanged probability scorer. It checks:
+slots before calling the probability scorer. It checks:
 
 - The exact ordered 29-session, 13-animal, seven-laboratory roster.
 - The complete original-slot order, raw-to-sorted bijection and inverse.
@@ -59,9 +59,16 @@ runtime acquisition defaults. Successful output remains
 `source_only_unqualified`, with `scientific_qualification=false` inherited from
 the original scorer.
 
-The four unchanged source files loaded from `registered-runtime` are byte-pinned
-in `_retained.py`; their scientific arithmetic is not copied or modified. A
-future reviewed source change requires an explicit pin revision.
+The four predecessor source files in `registered-runtime` remain unchanged and
+byte-pinned in `_retained.py`. The local `evaluation.py` successor preserves all
+metric arithmetic and changes only probability admission: the type and unit
+interval are checked before `math.isfinite` can convert a Python integer to
+binary64. Thus a captured JSON integer such as `10**400` is recorded as an
+`invalid_probability` trial instead of aborting the complete panel with an
+`OverflowError`. Other trial dispositions remain available and incomplete
+required support still makes its aggregate unavailable. The loader authenticates
+the local successor separately and loads it in a distinct package namespace;
+retained dependencies and the original diagnostic route are unchanged.
 
 ## Verification and remaining work
 
@@ -79,3 +86,8 @@ actor, or delivered direct/viewer participant modes. The existing exposed
 93-query history remains unchanged. This is a new optional protected scoring
 entrypoint; selecting it in the canonical registration and existing process
 composition is an integration proposal, not a change made by this package.
+
+`test_probability_validation.py` exercises the immutable predecessor failure,
+oversized positive/negative integer refusals through the actual primary scoring
+entrypoint, complete failure retention, and unchanged valid endpoint arithmetic.
+These generated controls do not establish authentic recording or model results.

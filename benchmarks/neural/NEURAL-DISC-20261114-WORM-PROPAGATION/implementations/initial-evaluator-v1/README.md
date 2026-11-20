@@ -26,3 +26,19 @@ Three imaging subjects lack segmentation partners. Source responses extend after
 stimulation, so this is retrospective conditional reconstruction, not forecasting
 before stimulation or a claim about direct synaptic connectivity. Numerical
 choices are explicitly prospective and require acceptance before authentic use.
+
+## Correlation arithmetic
+
+Pearson correlation now centers independently scaled traces and takes the dot
+product of their normalized vectors. The previous variance-product denominator
+overflowed for identical traces at scale `1e100` (reporting zero correlation)
+and underflowed at `1e-100` (raising division by zero). The metric, constant and
+missing-support behavior, MSE, area and held-worm aggregation are unchanged.
+
+The current participant transport pins the corrected evaluator bytes. Re-freeze
+new custody artifacts against those bytes; a custody artifact bound to an older
+evaluator is not interchangeable. No historical source/task definitions are
+rewritten. `tests/test_correlation_scaling.py` adds three standard-library-only
+controls with analytic correlation oracles across scales and verifies the actual
+transport loader. These are generated software controls, not original-data or
+model-performance evidence.

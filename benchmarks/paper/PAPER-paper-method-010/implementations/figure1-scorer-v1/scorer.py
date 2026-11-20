@@ -113,8 +113,12 @@ def source_benchmarks(xi_all, embeddings, rng):
 
 def validate_original_population(xi_all):
     gt = _vector(xi_all, "xi_all")
+    # Bound the fixed population before _inputs allocates a bincount array
+    # from the largest submitted module coordinate.
+    if gt.shape != (6000,) or (gt < 0).any() or (gt >= len(MODULE_COUNTS)).any():
+        raise ValueError("Figure 1 requires 6000 neurons in module intervals [0,5)")
     _, _, _, counts = _inputs(gt, gt)
-    if gt.shape != (6000,) or tuple(counts) != MODULE_COUNTS:
+    if tuple(counts) != MODULE_COUNTS:
         raise ValueError("Figure 1 requires all 6000 neurons with counts 1000,1000,1000,1000,2000")
     return gt
 

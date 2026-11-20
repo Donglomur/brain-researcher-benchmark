@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Delivery source](implementations/delivery-source) — Task implementation.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Scoring role separation v2](implementations/scoring-role-separation-v2) — Reviewed source component.
+  Scope: Reject protected-target aliases before panel and submission reads while preserving original numerical kernels. Trusted-operator path consistency with stable filesystem paths only; no candidate isolation, original-data execution or benchmark readiness claim.
 - [Preparation v2](implementations/preparation-v2) — Reviewed source component.
   Scope: Exact-source LibriBrain preparation, version 2. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

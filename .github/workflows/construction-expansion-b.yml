@@ -51,8 +51,8 @@ jobs:
           rows = [
               {
                   "path": "benchmarks/neural/NEURAL-015/docs/initial-evaluator-v1.md",
-                  "bytes": 16389,
-                  "sha256": "5c68f483c6a2c1b5ff035a5b0696b8674449cb845ff499164af8e98c6f466f49"
+                  "bytes": 16575,
+                  "sha256": "a48b9d683ea886f2d0331c53669603f04a06d16e0b594d7ea29c923d6a0e7ee0"
               },
               {
                   "path": "benchmarks/neural/NEURAL-015/implementations/initial-evaluator-v1/README.md",
@@ -342,7 +342,7 @@ jobs:
               "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1"
           ]
           assert len(rows) == 56 > 0
-          assert sum(row['bytes'] for row in rows) == 729819 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 730005 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -385,7 +385,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 729819,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 730005,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -439,13 +439,13 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1211,
-                  "sha256": "b639200230b01ca939c2b07911cb9a7d57a6a78d062162d234113a06650e0a70"
+                  "bytes": 1714,
+                  "sha256": "3598f1f9cc2730e3b6a0c7dd8ed89e31d86fd047a1bf9254fb7c67ce7506f17f"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 19170,
-                  "sha256": "dc4ad4be579b73fd58a0a6983e7746c84ab832a1d5cf833e667e65dbbcf35209"
+                  "bytes": 19913,
+                  "sha256": "d4c42871688a1e8f72a77db824ca16652840ddbb484b3bef0902d95172339c1c"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/provenance.json",
@@ -656,6 +656,11 @@ jobs:
                   "path": "benchmarks/paper/PAPER-paper-signal-add-019/historical/task.pre-improvement.v1.json",
                   "bytes": 14781,
                   "sha256": "ee4a4b656d9a0e4575165c9c02d74fd6889741cbd0cf3e934fb5ad7593aacabd"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-013/implementations/initial-evaluator-v1/tests/test_content_binding.py",
+                  "bytes": 6296,
+                  "sha256": "fb6384324a4ac7bede4a18d1df21355d9e99cb13aaa690d7d3fb93f3967470aa"
               }
           ]
           packages = [
@@ -668,8 +673,8 @@ jobs:
               "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1",
               "benchmarks/paper/PAPER-paper-signal-add-019/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 51 > 0
-          assert sum(row['bytes'] for row in rows) == 922009 <= 33554432
+          assert len(rows) == 52 > 0
+          assert sum(row['bytes'] for row in rows) == 929551 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -712,7 +717,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 922009,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 929551,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

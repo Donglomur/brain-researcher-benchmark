@@ -36,7 +36,9 @@ def vector(value, label, positive=False, integer=False):
 def unique_indices(value, label):
     result = vector(value, label, positive=True, integer=True)
     require(len(result) == len(set(result)), label + " contains duplicates")
-    return result
+    # JSON has one number category: admitted integral floats such as 1.0
+    # must become Python indices before indexing the unchanged source arrays.
+    return [int(index) for index in result]
 
 
 def identity(cell):

@@ -74,8 +74,8 @@ def source_folds(session_ids: Any) -> list[np.ndarray]:
 def pearson_columns(observed: np.ndarray, predicted: np.ndarray) -> np.ndarray:
     """Signed Pearson correlations, NaN for zero-variance columns.
 
-    Scale before centering, so finite large/small response units do not cause
-    overflow in products. This is algebraically the source Pearson estimator;
+    Remove a finite anchor before scaling, preserving representable variation
+    near a common offset without overflowing products. This is the source Pearson estimator;
     floating-point execution is independent of the author's implementation.
     """
     observed = np.asarray(observed, dtype=np.float64)
@@ -86,8 +86,17 @@ def pearson_columns(observed: np.ndarray, predicted: np.ndarray) -> np.ndarray:
         raise ValueError("Pearson inputs must be finite")
 
     def centered_unit(x: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
-        amplitude = np.max(np.abs(x), axis=0)
-        scaled = x / np.where(amplitude == 0, 1.0, amplitude)
+        # Raw-value scaling before centering can distort almost-constant
+        # columns. Anchor subtraction preserves their representable variation.
+        with np.errstate(over="ignore", invalid="ignore"):
+            shifted = x - x[:1]
+        overflow = ~np.isfinite(shifted).all(axis=0)
+        if np.any(overflow):
+            # Half-scale only wide-span columns; avoid underflow in unrelated
+            # subnormal columns sharing the same matrix.
+            shifted[:, overflow] = x[:, overflow] * 0.5 - x[:1, overflow] * 0.5
+        amplitude = np.max(np.abs(shifted), axis=0)
+        scaled = shifted / np.where(amplitude == 0, 1.0, amplitude)
         centered = scaled - scaled.mean(axis=0)
         norm = np.sqrt(np.sum(centered * centered, axis=0))
         defined = np.any(x != x[:1], axis=0)

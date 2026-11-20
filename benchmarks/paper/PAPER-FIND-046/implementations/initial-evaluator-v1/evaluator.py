@@ -78,12 +78,20 @@ def pearson_complete_vectors(x, y):
     require(len(x) == len(y), "Pearson vectors must have equal lengths")
     if len(x) < 2 or any(v is None for v in x + y):
         return None
-    mx, my = mean(x), mean(y)
-    dx, dy = [v - mx for v in x], [v - my for v in y]
-    xx, yy = sum(v * v for v in dx), sum(v * v for v in dy)
+    # Pearson correlation is invariant to a positive scale in either vector.
+    # Scale before centering so finite inputs cannot overflow their differences
+    # or squared norms; normalize each norm separately to avoid xx * yy.
+    sx, sy = max(abs(v) for v in x), max(abs(v) for v in y)
+    if sx == 0 or sy == 0:
+        return None
+    scaled_x, scaled_y = [v / sx for v in x], [v / sy for v in y]
+    mx, my = mean(scaled_x), mean(scaled_y)
+    dx, dy = [v - mx for v in scaled_x], [v - my for v in scaled_y]
+    xx, yy = math.fsum(v * v for v in dx), math.fsum(v * v for v in dy)
     if xx == 0 or yy == 0:
         return None
-    return sum(a * b for a, b in zip(dx, dy)) / math.sqrt(xx * yy)
+    nx, ny = math.sqrt(xx), math.sqrt(yy)
+    return math.fsum((a / nx) * (b / ny) for a, b in zip(dx, dy))
 
 
 def unique_object(pairs):

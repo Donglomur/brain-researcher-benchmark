@@ -16,7 +16,7 @@ from pathlib import Path
 
 MODES = ("direct_observation", "typed_viewer", "tool_assisted", "frozen_program")
 SCHEMA = "worm-participant-transport/v2"
-EVALUATOR_SHA256 = "01bf6d01c9bd6a36fda0e39b990e3c82a472246c57b6e603f5cbc923fb9a7cfb"
+EVALUATOR_SHA256 = "4fde8b08dc090d6b0b3d79d8fb8e10b0e0145e78620c184c6880d83f9f6e0485"
 
 
 def require(condition, message):

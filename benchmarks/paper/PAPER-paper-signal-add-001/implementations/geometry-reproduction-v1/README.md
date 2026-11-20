@@ -121,3 +121,22 @@ empirical cohort identities, original trial/ensemble selections, preprocessing,
 author decoding execution, numerical figure targets and protected evaluation
 remain unresolved. A geometry-example result must not be reported as a win on
 the Fig. 6 maintenance decoder or Extended Data Fig. 7a encoding decoder.
+
+## Projected-precision numerical range
+
+The maintained precision calculation uses `hypot(a / sqrt(lambda))`, where
+`a` is the signal axis in covariance-eigenvector coordinates. This is the same
+metric as `sqrt(sum(a**2 / lambda))`. Forming reciprocal-variance terms first
+can overflow on positive covariance near `1e-320`, even though the final
+precision near `1e160` is representable. The former implementation could return
+infinity with a `finite` status. The stable norm avoids that intermediate
+overflow and explicitly refuses a nonfinite computed precision.
+
+No covariance regularization, clipping, singularity threshold, scientific
+metric, classifier fit or source scope changes. Three focused controls in
+`tests/test_precision_range.py` cover the small-scale failure, an ordinary
+analytic diagonal value and inverse-activity units, and retained undefined
+precision for singular covariance. They are separate from the nine historical
+controls above and read no recordings or private targets. Run them with
+`python -B tests/test_precision_range.py`; test execution is recorded by the
+maintained source-control workflow, not inferred from source presence.

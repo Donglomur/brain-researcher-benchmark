@@ -91,3 +91,12 @@ interpret the current contract's shorthand “historical105” as an authenticat
 No authentic data, prediction, checkpoint, or historical private target was read
 to build or test this component. No paper superiority, current SOTA, or full
 benchmark readiness is claimed.
+
+## Paired difference range check
+
+The paired comparison also checks each defined candidate-minus-author difference
+for finiteness. Finite arm metrics can have an unrepresentable difference; that
+comparison is refused before returning or opening a CLI output. Finite results,
+undefined `None` values, fixed support, units, and metric definitions are unchanged.
+`test_comparison_bounds.py` supplies focused generated overflow and preserved-result
+controls. This repair does not change scientific qualification.

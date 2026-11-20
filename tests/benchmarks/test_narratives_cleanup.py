@@ -228,7 +228,7 @@ class NarrativesCleanupTests(unittest.TestCase):
         self.assertTrue(harness.owner.process_records[0]["wait_owned"])
         self.assert_closed(harness)
 
-    def test_current_source_set_preserves_predecessor_and_changes_only_runtime(self):
+    def test_current_source_set_preserves_predecessor_with_declared_repairs(self):
         current = json.loads(CURRENT.read_text())
         predecessor_body = (PACKAGE / "PUBLIC_SOURCE_MANIFEST.json").read_bytes()
         self.assertEqual(hashlib.sha256(predecessor_body).hexdigest(),
@@ -236,8 +236,9 @@ class NarrativesCleanupTests(unittest.TestCase):
         predecessor = json.loads(predecessor_body)
         before = {item["path"]: item for item in predecessor["identity_preimage"]["members"]}
         after = {item["path"]: item for item in current["current_identity_preimage"]["members"]}
-        self.assertEqual(set(before), set(after))
-        self.assertEqual([name for name in before if before[name] != after[name]], ["n071/runtime.py"])
+        self.assertTrue(set(before) <= set(after))
+        self.assertEqual(set(after) - set(before), {"n071/history/pre-stable-pearson/metrics.py", "NUMERICAL_STABILITY.md", "tests/test_narratives_metrics.py"})
+        self.assertEqual([name for name in before if before[name] != after[name]], ["n071/metrics.py", "n071/runtime.py"])
         for name, record in after.items():
             body = (PACKAGE / name).read_bytes()
             self.assertEqual((len(body), hashlib.sha256(body).hexdigest()),

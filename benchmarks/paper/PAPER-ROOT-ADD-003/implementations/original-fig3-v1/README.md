@@ -23,3 +23,17 @@ Predictions are UTF-8 CSV with exactly `item_id,prediction`, one finite predicti
 Only generated software controls have been run in this revision; source metadata inspection was limited to the dictionary and CSV header. Authentic targets were not prepared or scored, author code was not executed, and no candidate/model call occurred. The public source responses and author predictions are historically exposed. Actual evaluation requires operator isolation and a frozen candidate before outcome access. The function itself does not enforce that boundary or establish a whole-registration improvement.
 
 The small standard-library test suite checks analytically known pooling counterexamples, complete panel and stimulus identity, source archive rejection, prediction joins, undefined correlations, signed deterioration, exclusion before numerical conversion, and raw-versus-normalized units. Run it through the coordinator's shared test pool; do not treat generated fixtures as neural evidence.
+
+## Current Pearson arithmetic repair
+
+The current implementation subtracts a finite anchor before scaling each Pearson
+input. This preserves representable variation near a common offset; opposite
+finite extremes are halved only when their difference would overflow. Constant
+columns remain undefined and all original population, grouping, aggregation and
+scientific qualification limits remain unchanged. Historical source/provenance
+records retain their original hashes; `CURRENT_SOURCE.json` identifies this
+maintained numerical revision.
+
+The new `test_centering_regression.py` controls use generated values and an
+independent exact-rational/80-digit Decimal oracle. They do not qualify an
+authentic reference, candidate run, reproduction or improvement.

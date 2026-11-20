@@ -74,8 +74,12 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Paper-described supplementary linear encoding/readout from aligned 160 Hz component/behavior packets through source eligibility, sample pairing, matched support, cross-validated univariate regression, component/parcel averaging and participant consistency contrasts, with a grouped-trial sensitivity. Main MI/II estimator/dispatch/bias/null semantics, authentic complete participant/parcel and MAT/export/resampling parity, native figure references and protected scientific qualification remain held; supplied PCA components were fitted across all trials. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Paired panel v1](implementations/paired-panel-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
+- [Paired panel v2](implementations/paired-panel-v2) — Reviewed source component.
+  Scope: Supplied-input source endpoint numeric component; no authentic scientific result.
 - [Source decoder v2](implementations/source-decoder-v2) — Reviewed source component.
   Scope: Original decoder selection and prediction scoring. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
+- [Source decoder v3](implementations/source-decoder-v3) — Reviewed source component.
+  Scope: Supplied-input source endpoint numeric component; no authentic scientific result.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

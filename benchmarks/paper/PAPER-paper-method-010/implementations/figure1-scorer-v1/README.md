@@ -82,6 +82,9 @@ not an embedding vector. `xi_all` and embedding may be vectors or N-by-1
 matrices. All must be finite and complete. Original module counts are
 1,000/1,000/1,000/1,000/2,000. The scorer rejects smaller fixtures in this route.
 Packets are limited to 1 MiB compressed and expanded; pickle loading is off.
+The fixed 6,000-neuron shape and module-coordinate range `[0,5)` are checked
+before module-count allocation, so malformed finite coordinates are rejected
+without allocating an array sized by their maximum value.
 
 The operator must stage these packets from independently authenticated original
 simulation identities and frozen embeddings. Packet hashes verify bytes and

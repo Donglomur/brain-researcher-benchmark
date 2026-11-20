@@ -74,7 +74,9 @@ def score_participant(logits, image_class, train_ms, test_ms):
     y = _integer_vector(image_class, "image_class")
     if y.shape != (420,) or any(np.sum(y == c) != 60 for c in range(1, 8)):
         raise ValueError("complete seven-class localizer labels required")
-    a = np.asanyarray(logits)
+    if np.ma.is_masked(logits):
+        raise ValueError("masked predictions cannot omit classifier channels")
+    a = np.asarray(logits)
     if a.dtype.kind not in "fiu" or a.shape not in [(420, len(tr), len(te), 3), (420, len(tr), len(te), 7)]:
         raise ValueError("logits require trial x train x test x 3-or-7 channels")
     accuracy = np.empty((len(tr), len(te)))

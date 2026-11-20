@@ -234,8 +234,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-046/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1207,
-                  "sha256": "8de71f04b64f9f52cedf5420df053c7a7d0b6ade4c4f6f1ca2619707d7fa2149"
+                  "bytes": 1853,
+                  "sha256": "3c27f260b45afbf1fba125e72c933fb23b396da9f4b678aa70dbf493957e9ae1"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-046/implementations/initial-evaluator-v1/SOURCE_LICENSE.txt",
@@ -244,8 +244,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-046/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 18854,
-                  "sha256": "46fa645f32072ad971dc04ce1776dfb77e544d87e6f0c3320bc9b252aa6e6e1d"
+                  "bytes": 19338,
+                  "sha256": "8e86c55b3d9cc6293e87880731cc380c6aafc011bd1f3716e10c0fc84053b679"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-046/implementations/initial-evaluator-v1/sources.json",
@@ -336,6 +336,11 @@ jobs:
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-005/historical/task.pre-improvement.v1.json",
                   "bytes": 21764,
                   "sha256": "5bee80c186ade546a9bd3d0ea5d093d6df2428239a407c0f40feace91e1732e6"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-FIND-046/implementations/initial-evaluator-v1/tests/test_correlation_scale.py",
+                  "bytes": 3392,
+                  "sha256": "a7ac7124e0e8e88758787a062ff2f0ced6630ac4f33c42669729729a63cb1e73"
               }
           ]
           packages = [
@@ -348,8 +353,8 @@ jobs:
               "benchmarks/paper/PAPER-FIND-REP-003/implementations/initial-evaluator-v1",
               "benchmarks/paper/PAPER-ROOT-ADD-005/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 57 > 0
-          assert sum(row['bytes'] for row in rows) == 631822 <= 33554432
+          assert len(rows) == 58 > 0
+          assert sum(row['bytes'] for row in rows) == 636344 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -392,7 +397,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 631822,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 636344,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

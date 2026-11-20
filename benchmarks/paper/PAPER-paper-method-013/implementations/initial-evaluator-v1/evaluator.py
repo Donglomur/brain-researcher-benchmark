@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 from pathlib import Path
 from typing import Any
@@ -166,7 +167,8 @@ def _sha256(path: Path) -> str:
     return h.hexdigest()
 
 
-def _read_json(path: Path) -> dict[str, Any]:
+def _json_snapshot(path: Path) -> tuple[dict[str, Any], str]:
+    """Parse and identify one captured manifest, without reopening its path."""
     def reject_constant(value: str) -> None:
         raise ValueError(f"invalid JSON constant: {value}")
     def unique_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -175,9 +177,15 @@ def _read_json(path: Path) -> dict[str, Any]:
             _require(key not in out, f"duplicate JSON key: {key}")
             out[key] = value
         return out
-    value = json.loads(path.read_text(), parse_constant=reject_constant, object_pairs_hook=unique_keys)
+    raw = path.read_bytes()
+    value = json.loads(raw.decode("utf-8"), parse_constant=reject_constant, object_pairs_hook=unique_keys)
     _require(isinstance(value, dict), "manifest must be an object")
-    return value
+    return value, hashlib.sha256(raw).hexdigest()
+
+
+def _read_json(path: Path) -> dict[str, Any]:
+    """Retain the existing parser interface for callers needing no digest."""
+    return _json_snapshot(path)[0]
 
 
 def _validate_common(manifest: dict[str, Any]) -> dict[str, dict[str, Any]]:
@@ -205,9 +213,14 @@ def _load_arrays(row: dict[str, Any], manifest_path: Path) -> tuple[np.ndarray, 
     _require(isinstance(row.get("array_file"), str), "array_file missing")
     path = (manifest_path.parent / row["array_file"]).resolve()
     _require(path.is_file(), "array_file does not exist")
-    _require(row.get("array_sha256") == _sha256(path), "array SHA256 mismatch")
-    with np.load(path, allow_pickle=False) as archive:
-        _require(set(archive.files) == {"masks", "traces"}, "NPZ must contain only masks and traces")
+    # Authenticate and decode the same snapshot. A pathname replacement after
+    # capture cannot change the scored masks or traces. This binds content; it
+    # does not establish filesystem/process isolation or authentic provenance.
+    raw = path.read_bytes()
+    _require(row.get("array_sha256") == hashlib.sha256(raw).hexdigest(), "array SHA256 mismatch")
+    with np.load(io.BytesIO(raw), allow_pickle=False) as archive:
+        _require(set(archive.files) == {"masks", "traces"} and len(archive.files) == 2,
+                 "NPZ must contain only masks and traces, without duplicate members")
         masks, traces = archive["masks"], archive["traces"]
     _require(masks.ndim == 3 and masks.shape[1:] == IMAGE_SHAPE, "wrong full-field mask shape")
     _require(traces.ndim == 2 and traces.shape[1] == N_FRAMES, "wrong full-window trace shape")
@@ -249,12 +262,13 @@ def _aggregate(rows: list[dict[str, Any]]) -> dict[str, Any]:
 def evaluate(reference_path: str | Path, submission_path: str | Path) -> dict[str, Any]:
     """Evaluate every declared method on the same separately supplied reference."""
     ref_path, sub_path = Path(reference_path), Path(submission_path)
-    reference, submission = _read_json(ref_path), _read_json(sub_path)
+    reference, reference_sha256 = _json_snapshot(ref_path)
+    submission, submission_sha256 = _json_snapshot(sub_path)
     refs = _validate_common(reference)
     _require(reference.get("reference_kind") == "author_constructed_fluorescence", "only imaging-derived author reference is supported")
     _require(isinstance(reference.get("source_transformation_receipt"), str) and bool(reference["source_transformation_receipt"].strip()), "reference transformation receipt required")
     _require(submission.get("policy_id") == POLICY_ID, "prospective policy must be acknowledged")
-    _require(submission.get("reference_manifest_sha256") == _sha256(ref_path), "submission targets a different reference manifest")
+    _require(submission.get("reference_manifest_sha256") == reference_sha256, "submission targets a different reference manifest")
     methods = submission.get("methods")
     _require(isinstance(methods, list) and len(methods) >= 2, "candidate and at least one baseline required")
     _require(all(isinstance(m, dict) for m in methods), "each method must be an object")
@@ -323,7 +337,7 @@ def evaluate(reference_path: str | Path, submission_path: str | Path) -> dict[st
                             "baseline_over_candidate_total_runtime": _runtime_ratio(baseline["total_runtime_wall_seconds"], candidate["total_runtime_wall_seconds"])})
     return {"task_id": TASK_ID, "policy_id": POLICY_ID, "scientific_qualification": "unknown",
             "scope": "post_assembly_offline_metrics", "reference_kind": reference["reference_kind"],
-            "reference_manifest_sha256": _sha256(ref_path), "submission_manifest_sha256": _sha256(sub_path),
+            "reference_manifest_sha256": reference_sha256, "submission_manifest_sha256": submission_sha256,
             "runtime_contract": dict(zip(("hardware_id", "scope", "environment_id"), runtime_contract)),
             "methods": results, "all_method_common_reference_trace_endpoint": common_trace, "paired_comparisons": comparisons,
             "holds": ["authentic_reference_and_native_execution_unverified", "source_frame_index_mapping_and_patch_merge_unverified", "donor_identity_and_tuning_exposure_unverified", "rights_and_equal_resource_admission_unverified", "prospective_aggregation_not_historical_reproduction"]}

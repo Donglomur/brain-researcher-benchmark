@@ -17,12 +17,29 @@ def part(pred,target,training_mean):
          "metric-common-support")
     need(np.isfinite(a).all() and np.isfinite(b).all() and np.isfinite(mu).all(),"metric-finite-inputs")
     x=a-mean(a,np.ones(len(a)));y=b-mean(b,np.ones(len(b)))
-    sx=(x*x).sum(axis=0);sy=(y*y).sum(axis=0)
+    # Pearson is invariant to a separate positive scale on each centered
+    # column. Normalize before products: sx*sy can overflow or underflow even
+    # when both variances and the desired correlation are representable.
+    need(np.isfinite(x).all() and np.isfinite(y).all(), "finite-centered-metrics")
     mse=((a-b)**2).mean(axis=0);den=((b-mu)**2).mean(axis=0)
     cor=[];q2=[]
     for k in range(400):
-        cor.append(None if sy[k]==0 else (0. if sx[k]==0 else
-                   max(-1.,min(1.,float((x[:,k]*y[:,k]).sum()/math.sqrt(sx[k]*sy[k]))))))
+        xscale=float(np.max(np.abs(x[:,k])))
+        yscale=float(np.max(np.abs(y[:,k])))
+        if yscale==0:
+            correlation=None
+        elif xscale==0:
+            correlation=0.
+        else:
+            xx=x[:,k]/xscale;yy=y[:,k]/yscale
+            # Each scaled vector contains a magnitude-one member, so neither
+            # norm is zero. Normalize each norm separately before the dot.
+            xx=xx/math.sqrt(float(np.dot(xx,xx)))
+            yy=yy/math.sqrt(float(np.dot(yy,yy)))
+            correlation=float(np.dot(xx,yy))
+            need(math.isfinite(correlation), "finite-correlation-before-roundoff-clamp")
+            correlation=max(-1.,min(1.,correlation))
+        cor.append(correlation)
         q2.append(None if den[k]==0 else float(1-mse[k]/den[k]))
     need(all(v is None or math.isfinite(v) for v in cor+q2+list(mse)),"finite-metric-result")
     return {"signed_r":required_mean(cor),"Q2":required_mean(q2),"MSE":required_mean(list(mse)),

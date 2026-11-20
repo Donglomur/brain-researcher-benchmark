@@ -16,14 +16,14 @@ import uuid
 
 TASK = 'PAPER-FIND-REP-013'
 IMAGE = 'sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156'
-CONTRACT = {'bytes':1720,'sha256':'294838ec512339663761aca362748b62e793f98ad1ff492c1eacd11147cfe253'}
-PAIRED = ('paired_packet.py',21239,'905c3a0a07c5fe35b406801a0a31681394f9eb63be4bee5b430cd57574d8c752')
+CONTRACT = {'bytes':1721,'sha256':'d33eed13fc27d31c65ddff3afe869390326fe6c7c1db5732eb9a6ff09a685b30'}
+PAIRED = ('paired_packet.py',21239,'8e45544d0a2492c26369a4aadfc8c347915d6b09954bbd0a4aebbb8e365d92aa')
 DONORS = {
  'common':(4511,'2683ab2a3fe95b54befca2682c516c28de7c343067d022c9d84fe31a04d17747'),
  'durable_evidence':(4252,'f12894f1f200ece3c110f951e280cd22b2bcb806ebfd85c19da8530bae33b79d'),
  'docker_owner':(33811,'e440c11ed3e0fab18a2b76616f09e48f37aece74e7d83206ebb7ba35cef3d3d5'),
  'schema':(2123,'76df29fdab9d70dbcf129788c4201bf75df65c4ce9abd9bf1f5fff334cbc4538'),
- 'numeric_score':(9797,'5c80e13c45d04fe7fbecc6f14e2cf2dc45f3a87bcaaf916b46cedcdcac9d732c'),
+ 'numeric_score':(10034,'ce1d4aba17c3e6cce11e3048599c3023427c31d90cb6d60de4393fe9c8dbea8c'),
  'bundle':(2303,'99eff24a35d92b8c5b8b2260a99c9abc268769c63b1deb8214a0def79c957699'),
  'boundary':(10750,'5acd474cfca27bd706dd6b715e5c2027b6f5b2d515470fc42250d78d01b059c8'),
  'bridge':(4942,'dcc0d0b8201c687274f104ff9829876818952bebeedc220b790057b522562df4')}
