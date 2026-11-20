@@ -54,6 +54,7 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -B tests/test_paper_endpoint_selection.py
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B tests/test_paper_retinal_paired_adoption.py --source-input-root .
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/benchmarks -p 'test_*.py' -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s tests/maintenance -p 'test_*.py' -v
           python -I -S -B scripts/check_navigation.py
