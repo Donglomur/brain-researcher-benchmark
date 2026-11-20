@@ -20,7 +20,7 @@ METHODS = (
     "gc8-variant-cascade", "default-oasis", "tuned-oasis",
     "default-mlspike", "tuned-mlspike",
 )
-METRIC_SHA256 = "edbc2e6c5b4aa8d32fa27d577e455986de088e149e377fb20180658582210f02"
+METRIC_SHA256 = "222cf71530a1e02c89eeee59db02811cfeba96f31c41d0c09a3a7a506df41e05"
 METRIC_PATH = Path(__file__).resolve().parent.parent / "author-rate-metrics-v1" / "metrics.py"
 
 
