@@ -57,7 +57,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-FIND-REP-013](PAPER-FIND-REP-013/README.md) | Non-allometric expansion and enhanced compartmentalization of Purkinje cell dendrites in the human cerebellum | source_unresolved | ineligible | 6 | [manifest](PAPER-FIND-REP-013/implementations/registered-runtime/manifest.json) |
 | [PAPER-FIND-REP-014](PAPER-FIND-REP-014/README.md) | Predictive and instructive cerebellar encoding of dopamine reward drives motivated behavior | unavailable | unavailable | 1 | not linked |
 | [PAPER-FIND-REP-015](PAPER-FIND-REP-015/README.md) | Cerebellar neural populations orchestrate dopamine reward signaling with single-trial precision | unavailable | unavailable | 3 | not linked |
-| [PAPER-ROOT-ADD-001](PAPER-ROOT-ADD-001/README.md) | Mapping the neuronal building blocks of human language with language models | source_unresolved | design_ready | 25 | not linked |
+| [PAPER-ROOT-ADD-001](PAPER-ROOT-ADD-001/README.md) | Mapping the neuronal building blocks of human language with language models | source_unresolved | design_ready | 26 | not linked |
 | [PAPER-ROOT-ADD-002](PAPER-ROOT-ADD-002/README.md) | Non-invasive decoding of typed sentences from human brain activity | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-ROOT-ADD-003](PAPER-ROOT-ADD-003/README.md) | Driving and suppressing the human language network using large language models | source_unresolved | source_unresolved | 4 | [manifest](PAPER-ROOT-ADD-003/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-004](PAPER-ROOT-ADD-004/README.md) | Respiration shapes the neural dynamics of successful remembering in humans | source_unresolved | source_unresolved | 2 | not linked |
@@ -145,7 +145,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-EXP-20261113-005](PAPER-EXP-20261113-005/README.md) | A prefrontal cortex map based on single-neuron activity | unavailable | unavailable | 7 | not linked |
 | [PAPER-SCOPE-20261114-LATENTCIRCUIT](PAPER-SCOPE-20261114-LATENTCIRCUIT/README.md) | Latent circuit inference from heterogeneous neural responses during cognitive tasks | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-SCOPE-20261114-REM-DYNAMICS](PAPER-SCOPE-20261114-REM-DYNAMICS/README.md) | Low-dimensional population dynamics in the brainstem gate REM sleep | source_unresolved | source_unresolved | 2 | not linked |
-| [PAPER-SMC-RNN-2024](PAPER-SMC-RNN-2024/README.md) | SMC-RNN: reproduce and improve with paper/data versus official code and released models | continuous_measurement | continuous_measurement | 14 | not linked |
+| [PAPER-SMC-RNN-2024](PAPER-SMC-RNN-2024/README.md) | SMC-RNN: reproduce and improve with paper/data versus official code and released models | continuous_measurement | continuous_measurement | 15 | not linked |
 | [paper-pcca-fa-bilateral-pfc-arousal-2026](paper-pcca-fa-bilateral-pfc-arousal-2026/README.md) | Reproduce bilateral prefrontal covariance decomposition and pupil-linked arousal, then test protected neural-to-pupil prediction | unavailable | unavailable | 2 | not linked |
 
 Generated with `python3 scripts/catalog.py` from the repository root. Edit authoritative task definitions, then regenerate; do not edit these browse pages directly.
