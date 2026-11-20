@@ -1,0 +1,13 @@
+# Full-roster numerical delivery evidence — 2026-11-19
+
+The accepted local macOS driver completed all **6,400 fixed-canary programme episodes across 32 people** in 230.907 seconds. Every case returned the fixed, unscored value 0.5. There were no failed or unattempted cases and no retries. All 6,400 complete direct-request projections were retained; no direct-model requests were made.
+
+A separate bounded review then read all 57,615 saved files (2,186,720,485 bytes) once and verified every raw case, census entry, complete prompt, first response and episode closure record. The complete direct and programme inputs differed only in the declared tool-permission sentence. Their largest prompts were 172,446 and 172,502 bytes respectively, below the selected limits. Both conditions included the same four complete demonstrations and one two-channel, 1,024-sample query.
+
+The delivery owner exited successfully and its PID was absent. Its original outer process group was not separately observed before execution, so that absence is not claimed. The accepted owner and independent reviewer verified the recorded ownership and closure of all episode children/groups. The independent review used a separately observed owned process group, which was absent after exit. This is not a proof of general escaped-descendant containment or arbitrary solver isolation.
+
+The prior packet-only reviewer could not verify this delivery. A new one-pass reviewer reused the accepted source-pinned census, closure, matched-input and response validators; one meaningful malformed-evidence control passed before the saved-file review. The review did not open the original packet, arrays, private answers or participant joins, and did not replay a candidate. Receipt commitments and detailed scope are in the [machine-readable record](full6400-numerical-delivery-20261119.json).
+
+This qualifies the executed fixed-canary delivery route only. **Model calls: 0. Scores computed: 0.** It supplies no AI accuracy, native neural understanding, improvement, SOTA, empirical bootstrap interval or provider-capacity result. The standalone driver CLI parser and full-roster visual condition were not exercised. Target/standard event identity remains distinct from physiological P3 detection; the physical 26-ms calibration question is unresolved.
+
+The original 400-case task, its completed local engineering evidence, historical two-case results and benchmark registration count are unchanged. The full-roster driver remains an additive implementation of NEURAL-077. The 2.04 GiB of retained output is distinct from the conservative 4,656,754,539-byte worker write allocation; allocation counters are not measured I/O or memory.

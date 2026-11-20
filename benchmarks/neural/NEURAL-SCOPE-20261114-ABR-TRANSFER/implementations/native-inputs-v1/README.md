@@ -15,7 +15,7 @@ executed by this component.
 
 ## Complete sources and observations
 
-| Lab | Exact release | Archive | Compressed bytes | Waveform tables / traces / samples per trace |
+| Lab | Exact release | Archive | Compressed bytes | Waveform tables / level records / stored values per record |
 | --- | --- | --- | ---: | --- |
 | Manor | Zenodo 17584961 | Manor_Lab_Cleaned.zip | 14,131,356 | 110 / 6,737 / 244 |
 | Liberman | Zenodo 17584961 | ABR_Data_Liberman.zip | 12,392,618 | 748 / 7,293 / 426 |
@@ -50,13 +50,43 @@ units selected at export. For the complete native records, period 40.96 µs,
 offset 0 ms and 244 samples yield last coordinate 9.95328 ms. This is not a
 244-point linspace ending at 10 ms and does not authenticate acoustic onset.
 
-Liberman CFTS headers explicitly give sample period 40 µs and 426 samples,
-so the last-sample coordinate relative to a hypothetical first sample would be
-17.00 ms. The amplitude unit and first-sample/acoustic offset are absent from
-the headers; they remain null. The parser segments all tab-separated header
-fields and preserves the complete ear header and source filename privately.
-Some filenames say `L` when their native header says `R`; no ear is chosen or
-biological repeat identity inferred from that conflict.
+Liberman CFTS headers give a 40 µs sample-period field, and the complete
+retained census contains 426 stored values per level. **Their physical layout
+is unresolved; these values must not be treated as an authenticated continuous
+17 ms waveform.** All 748 tables use legacy CFTS V2.37.1 (R3164) headers. The
+[EPL-maintained legacy reader](https://github.com/EPL-Engineering/abr-peak-analysis/blob/a6b8068ba9177f78ef5c9655728278007776573c/Source/datafile.py)
+splits each stored row into equal average-polarity and polarity-difference
+blocks; for this shape, its interpretation would be 213 + 213 values. The
+published ABRA [Supplementary Table S1](https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13018588/supplementaryFiles?includeInlineImage=false)
+instead describes Lab C as 426 samples over 17 ms. Compatible headers and
+shape do not establish which writer/export transformation produced the release.
+Neither interpretation is adopted as a qualified physical representation.
+
+The paper-named [preprocessing notebook](https://github.com/ucsdmanorlab/abranalysis/blob/0369a215b429002c115af2ac1f0922bb190d5c1f/notebooks/ABR_Preprocessing.ipynb)
+uses its own Liberman parser, selects 250 columns and interpolates to 244 values,
+without the inspected EPL split. This is a source-code observation, not proof
+that an historical execution consumed the deposited values in that exact order.
+A release-applicable acquisition/export specification must reconcile these
+paths before a support baseline or physiological interpretation is admitted.
+
+The complete original values and order remain preserved. The existing loader's
+uniform-axis metadata is an unqualified header projection, not proof of
+continuity across all 426 stored entries. No channel split, cropping, filtering,
+polarity conversion or resampling is applied here. Voltage units and the
+first-sample/acoustic reference remain null. Ear headers and source filenames
+remain private; a filename/header `L`/`R` conflict does not establish an ear or
+biological repeat identity. This correction changes no Marcotti target-only
+annotation-code packet, source count, label or readiness flag.
+
+Source pins for this unresolved layout join: EPL July 2023 reader 12,628 bytes,
+SHA256 `b404bcbd90dd669d3ecf2584260fb8ad8ce69050b21fa2aab80bc0043a6b8531`;
+published supplement PDF 1,897,226 bytes, SHA256
+`268f252074b84d1aef74c903def4b17c4dc953a851395add16ee551a3a80a83b`;
+paper-named notebook 91,611 bytes, SHA256
+`77665f148075e595ffdb2a04383cc3bc77cc05561712b357be3cf763ad02ff6f`.
+The supplement's authenticated text was inspected; separate visual verification
+did not complete and is not claimed. The previous 17.00 ms statement remains
+in repository history; it is superseded by this explicit qualification.
 
 Marcotti waveform CSVs contain 1,953 indexed samples without embedded physical
 period or voltage unit. The associated analysis code's acquisition-rate
@@ -130,7 +160,7 @@ The root-reviewed complete cached-source preparation ran once on 2026-11-17:
 13.212 seconds, 214,089,728 bytes peak child RSS, zero downloads and zero model
 runs. It produced 117 private files containing 271,631,813 logical bytes. A
 separate audit verified every file hash, complete decompression of all 36,440,024
-waveform samples, all 30,256 traces, the 104-animal/936-case target join, all 104
+stored values, all 30,256 traces, the 104-animal/936-case target join, all 104
 private wave1 tables and observation-field separation. All three above-range
 threshold annotations remain unresolved. There were no candidate attempts.
 

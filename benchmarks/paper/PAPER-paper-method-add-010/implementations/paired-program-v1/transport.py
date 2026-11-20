@@ -22,12 +22,12 @@ import uuid
 
 
 HERE = Path(__file__).resolve().parent
-VENDOR_PIN = {"bytes": 987, "sha256": "335f696f47529a115479f543c62cbcab12d12c02f8a62606b8dc133ae92333c4"}
+VENDOR_PIN = {"bytes": 987, "sha256": "a3e00c095fc2425a293963b515c3bf4b5c63c2cecc4d7bfcc5312f377e6045e8"}
 MODULES = ("engine", "bounds", "contract", "archive", "holder", "provider")
 COMMAND = ["/usr/local/bin/python", "-I", "-B", "/program/candidate_wrapper.py"]
 RESULT_LIMIT = 1024 * 1024
 # Filled from the independently tested adjacent wrapper at this source cutoff.
-WRAPPER_PIN = {"bytes": 9016, "sha256": "7b2469be0f2445152c2c405043bcf1023dd8203f304c764b79053bb69ad550d5"}
+WRAPPER_PIN = {"bytes": 14164, "sha256": "3c5a4d665f7e5ad6de82a6c7e2e21b4d5646bd031a4b042752d4f36e9de4736b"}
 _VENDOR = None
 
 

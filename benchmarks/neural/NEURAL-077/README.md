@@ -60,6 +60,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Full32 packet materialization evidence JSON (2026-11-19)](docs/full32-materialization-20261119.json)
 - [Full32 numerical delivery evidence (2026-11-19)](docs/full32-numerical-delivery-20261119.md)
 - [Full32 numerical delivery evidence JSON (2026-11-19)](docs/full32-numerical-delivery-20261119.json)
+- [Full6400 fixed-canary delivery evidence (2026-11-19)](docs/full6400-numerical-delivery-20261119.md)
+- [Full6400 fixed-canary delivery evidence JSON (2026-11-19)](docs/full6400-numerical-delivery-20261119.json)
 
 ## Implementation artifacts
 
@@ -84,7 +86,7 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Full32 paired runtime v1](implementations/full32-paired-runtime-v1) — Reviewed source component.
   Scope: portable binding/profile/generated process controls only; not a macOS native replay
 - [Full6400 fixed canary delivery v1](implementations/full6400-fixed-canary-delivery-v1) — Reviewed source component.
-  Scope: Prior two-case native run(config) evidence applies only to its executed predecessor. New generated source checks will not qualify full6400 native delivery, standaloneCLI, a provider, physiological inference, a visual condition, or an AI study.
+  Scope: One accepted local macOS driver.run operation completed all6400 fixed0.5 programme episodes and complete direct-request projections; an independent one-pass review verified all57615 saved files and6400 cases. No failed/unattempted cases, retries, model/provider calls or scores. Original400 task and historical two-case evidence remain unchanged. Standalone driver CLI, full6400 visual condition, provider policy/capacity, physiological P3 inference, general solver/escaped-descendant isolation and AI performance remain unqualified; the original outer-owner PGID was not separately observed.
 - [Visual provider pair v1](implementations/visual-provider-pair-v1) — Reviewed source component.
   Scope: Restricted four\_demo visual-provider receipt admission joins unchanged matched\_waveform\_programme protected metrics for all400 trials. Lossless delivered PNG mapping preserves original pixels/history. Provider/context/full-history capability, isolation, genuine campaigns and protected paired scores remain unqualified; both people were exposed development people and target/standard labels do not establish physiological P3 presence.
 - [Waveform transport v1](implementations/waveform-transport-v1) — Reviewed source component.

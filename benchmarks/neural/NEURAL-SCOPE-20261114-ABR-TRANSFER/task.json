@@ -126,7 +126,7 @@
     "canonical_signal": "The public signal is an averaged ABR voltage waveform. A trial average is not the raw continuous electrode stream or a single neural spike. No per-trial ABR claim is made.",
     "units": "Target timebase in milliseconds and stimulus level in calibrated dB SPL; tones in Hz/kHz with an explicit click category. Convert voltage to µV only using verified native header/export units. Pinned author code multiplies .arf values by 1e6, allows nV/µV toggles and parses different formats; these rules are evidence of required format-specific conversion, not proof that every native array has one common unit.",
     "reference_grid": "S1 standardizes each waveform to 244 samples covering 10 ms and normalizes each mouse×frequency stack to [0,1]. Higher sampling rates are linearly interpolated; timing endpoint conventions and acoustic zero must be verified per source format.",
-    "preparation_gate": "A canonical physical-unit trace plus explicit sampling/time grid must be validated before serialization. No model-derived features are allowed in the native condition. A shared 244-point label-independent representation may be used after checking aliasing, truncation and index-to-ms conversion. Preserve per-stack voltage range/offset if normalized values are supplied so physical amplitude information is recoverable.",
+    "preparation_gate": "A canonical physical-unit trace plus explicit sampling/time grid must be validated before serialization. No model-derived features are allowed in the native condition. A shared 244-point label-independent representation may be used after checking aliasing, truncation and index-to-ms conversion. Preserve per-stack voltage range/offset if normalized values are supplied so physical amplitude information is recoverable. Liberman support has an additional unresolved storage-layout join: the retained 426-value legacy CFTS records are compatible with an EPL reader that splits average-polarity and polarity-difference blocks, while ABRA Supplementary Table S1 describes 426 samples over 17 ms. Preserve every value and withhold both a continuous 17 ms axis and a physiological 213+213 remapping until a release-applicable writer/export specification reconciles the sources; see implementations/native-inputs-v1/README.md for exact primary source pins. The existing uniform-axis header projection does not establish physical continuity.",
     "signal_window_gate": "Do not copy the v0.1.1 app assumption that the first 244 native samples always equal 10 ms. That function truncates final[:244] despite computing a duration-dependent unused variable. Exact native duration and resampling must be resolved before choosing an adapter."
   },
   "target_and_scoring": {
@@ -345,7 +345,7 @@
       "schema_version": "neural-understanding/v1",
       "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
       "contract_path": "understanding.v1.json",
-      "contract_sha256": "feb7909a03d006bd1917f4869e02575bc4203903f5cca23b00cf0425640eb7a7",
+      "contract_sha256": "e2005073b9ac49ef00d5429d15759cae3a3d932a89983c366458b22720418d67",
       "original_definition_path": "historical/task.pre-understanding.v1.json",
       "original_definition_sha256": "3ac11adf902d863075f6c38ee76365321a1fe44f23fde898e7f13c6b6a3c0f86"
     }
