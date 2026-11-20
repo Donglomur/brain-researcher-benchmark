@@ -858,6 +858,39 @@ def source_links(catalog):
         yield row['manifest']['path']
 
 
+def checked_primary_scope_outcome_bindings(module, registered, outcomes, expected_improvement, bound=None):
+    """Check current display pins without replacing preserved registry history.
+
+    Retinal bound is the context authenticated earlier in this validate call.
+    Every other primary-scope route retains its registered-descriptor predicate.
+    """
+    registered_binding = registered['paper_outcomes']
+    registered_revision = registered.get('specification_revision')
+    expected_binding = registered_binding
+    if module.has_retinal_paired_revision(registered):
+        provenance = bound.get('primary_policy_provenance') if type(bound) is dict else None
+        historical = provenance.get('historical_contracts') if type(provenance) is dict else None
+        need(type(bound) is dict and type(provenance) is dict and type(historical) is dict
+             and bound.get('primary_policy_revision') == registered_binding[module.RETINAL_PAIRED_FIELD]
+             and provenance.get('descriptor') == registered_binding[module.RETINAL_PAIRED_FIELD]
+             and provenance.get('current_task') == registered.get('specification')
+             and registered_binding.get('reproduction_contract') == historical.get('reproduction')
+             and registered_binding.get('outcomes') == historical.get('outcomes'),
+             'Retinal primary scope requires authenticated current and retained bindings')
+        expected = module.public_summary(registered, bound)
+        need(module.encode(outcomes) == module.encode(expected),
+             'Retinal primary scope differs from authenticated active outcome view')
+        expected_binding = dict(registered_binding,
+                                reproduction_contract=expected['reproduction_contract'],
+                                outcomes=expected['outcomes'])
+    need(registered_binding.get('schema_version') == module.VERSION
+         and type(registered_revision) is dict
+         and outcomes.get('improvement_contract') == expected_improvement
+         and all(outcomes.get(field) == expected_binding.get(field)
+                 for field in ('previous_specification', 'reproduction_contract', 'outcomes')),
+         'Primary scope correction differs from current outcome bindings')
+
+
 def validate(catalog, root=ROOT, *, _reader=None):
     need(catalog.get('schema_version') == 1 and catalog.get('kind') == 'public_neuroscience_source_catalog',
          'Unsupported public catalog')
@@ -1102,12 +1135,9 @@ def validate(catalog, root=ROOT, *, _reader=None):
                 registered_revision = registered.get('specification_revision')
                 expected_improvement = (bound['improvement_contract_pin'] if row['id'] in successor_ids else
                                         registered_revision.get('improvement_contract') if type(registered_revision) is dict else None)
-                need(registered_binding.get('schema_version') == module.VERSION
-                     and type(registered_revision) is dict
-                     and outcomes.get('improvement_contract') == expected_improvement
-                     and all(outcomes.get(field) == registered_binding.get(field)
-                             for field in ('previous_specification', 'reproduction_contract', 'outcomes')),
-                     'Primary scope correction differs from current outcome bindings')
+                checked_primary_scope_outcome_bindings(
+                    module, registered, outcomes, expected_improvement,
+                    bound if row['id'] in successor_ids else None)
                 entry = source_corrections.get(row['id'])
                 need(type(entry) is dict
                      and module.encode(correction) == module.encode(module.public_primary_scope_correction(entry, scope_pin, row['id'])),

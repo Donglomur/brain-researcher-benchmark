@@ -432,6 +432,55 @@ class RetinalPairedAdoptionTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.binding.public_summary(selected["row"], bad_context)
 
+        # This exact task carries both the older same-primary correction and
+        # the authenticated active retinal adoption. Exercise their shared
+        # production predicate, including retained versus active identities.
+        self.assertEqual(public["primary_scope_correction"]["disposition"], "same_primary_unqualified")
+        self.assertEqual(public["primary_scope_correction"]["root_scope_decision"]["task_entry_id"], TASK)
+        expected_improvement = context["improvement_contract_pin"]
+        catalog.checked_primary_scope_outcome_bindings(
+            self.binding, selected["row"], public, expected_improvement, context)
+        with self.assertRaisesRegex(ValueError, "Retinal primary scope"):
+            catalog.checked_primary_scope_outcome_bindings(
+                self.binding, selected["row"], public, expected_improvement, None)
+        for field in ("reproduction_contract", "outcomes"):
+            wrong_row = copy.deepcopy(selected["row"])
+            wrong_row["paper_outcomes"][field]["sha256"] = "0" * 64
+            with self.subTest(retained_descriptor=field):
+                with self.assertRaisesRegex(ValueError, "Retinal primary scope"):
+                    catalog.checked_primary_scope_outcome_bindings(
+                        self.binding, wrong_row, public, expected_improvement, context)
+        for field, role in (("reproduction_contract", "reproduction"), ("outcomes", "outcomes")):
+            stale = copy.deepcopy(public)
+            stale[field] = copy.deepcopy(self.adoption.ORIGINAL_PINS[role])
+            with self.subTest(stale_active_display=field):
+                with self.assertRaisesRegex(ValueError, "Retinal primary scope"):
+                    catalog.checked_primary_scope_outcome_bindings(
+                        self.binding, selected["row"], stale, expected_improvement, context)
+        for mutation in ("selector", "task"):
+            wrong_row = copy.deepcopy(selected["row"])
+            if mutation == "selector":
+                wrong_row["paper_outcomes"][self.adoption.SELECTION_FIELD]["sha256"] = "0" * 64
+            else:
+                wrong_row["id"] = "PAPER-not-the-retinal-task"
+            with self.subTest(overlap_selector_refusal=mutation):
+                with self.assertRaises(ValueError):
+                    catalog.checked_primary_scope_outcome_bindings(
+                        self.binding, wrong_row, public, expected_improvement, context)
+        wrong_previous = copy.deepcopy(public)
+        wrong_previous["previous_specification"]["sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "Retinal primary scope"):
+            catalog.checked_primary_scope_outcome_bindings(
+                self.binding, selected["row"], wrong_previous, expected_improvement, context)
+        wrong_context = copy.deepcopy(context)
+        wrong_context["primary_policy_provenance"]["current_task"]["sha256"] = "0" * 64
+        with self.assertRaisesRegex(ValueError, "Retinal primary scope"):
+            catalog.checked_primary_scope_outcome_bindings(
+                self.binding, selected["row"], public, expected_improvement, wrong_context)
+        with self.assertRaisesRegex(ValueError, "Primary scope correction"):
+            catalog.checked_primary_scope_outcome_bindings(
+                self.binding, self.retained_row, public, expected_improvement, context)
+
         row = {"id": TASK, "specification": selected["row"]["specification"],
                "paper_outcomes": public, "registry": None, "runtime_manifest": None}
         source_catalog = {"registry": {"path": "benchmarks/registry.json"},
@@ -476,6 +525,45 @@ class RetinalPairedAdoptionTests(unittest.TestCase):
         for cell in public["cells"]:
             self.assertEqual(cell["scientific_outcome"], "unknown")
             self.assertIsNone(cell["receipt"])
+        # Use the actual repository and complete maintained consumer. This
+        # performs real discover -> validate with both retinal flags present;
+        # no corpus, coverage, Reader or context is mocked or replaced.
+        actual = catalog.discover(self.source_root)
+        actual_row = next(item for item in actual["tasks"] if item["id"] == TASK)
+        self.assertEqual(actual_row["specification"], self.handle.current_task_pin)
+        self.assertEqual(actual_row["paper_outcomes"], public)
+        self.assertEqual(actual_row["paper_outcomes"]["primary_scope_correction"]["disposition"],
+                         "same_primary_unqualified")
+        self.assertEqual(actual_row["paper_outcomes"]["primary_policy_revision"], self.handle.descriptor_pin)
+        rendered = {catalog.OUTPUT + "/" + name: body for name, body in catalog.render(actual).items()}
+        rendered.update(catalog.render_tracks(actual))
+        rendered.update(catalog.render_shared(actual))
+        self.assertEqual(len(rendered), 243)
+        self.assertLessEqual(sum(map(len, rendered.values())), 8 * 1024 * 1024)
+        actual_markdown = rendered[HOME + "/README.md"].decode("utf-8")
+        self.assertIn("Active corrected retinal policies", actual_markdown)
+        self.assertIn("Retained historical contracts", actual_markdown)
+        self.assertIn("UNQUALIFIED", actual_markdown)
+        self.assertNotIn("35-bin panel", actual_markdown)
+        for mutation, message in (
+                ("stale_display", "Primary successor view differs"),
+                ("current_identity", "Primary successor differs from current task identity"),
+                ("promoted_claim", "Paper outcome metadata cannot manufacture scientific results")):
+            altered = copy.deepcopy(actual)
+            altered_row = next(item for item in altered["tasks"] if item["id"] == TASK)
+            if mutation == "stale_display":
+                altered_row["paper_outcomes"]["reproduction_contract"] = copy.deepcopy(
+                    self.adoption.ORIGINAL_PINS["reproduction"])
+            elif mutation == "current_identity":
+                altered_row["specification"]["sha256"] = "0" * 64
+            else:
+                altered_row["paper_outcomes"]["scientific_outcomes"]["improvement"] = "qualified"
+            with self.subTest(actual_catalog_refusal=mutation):
+                with self.assertRaisesRegex(ValueError, message):
+                    catalog.validate(altered, self.source_root)
+        print("Retinal catalog consumer: one complete discover/validate and three complete "
+              "validate refusals; four separate160MiB Reader limits; render-only8MiB payload cap; "
+              "no public output writes", file=sys.stderr)
         self.assertLessEqual(self.fixtures.write_bytes, 512 * 1024)
         self.assertLessEqual(type(self).maintained_read_bytes + self.sources.read_bytes + FRAMEWORK_READ_RESERVE,
                              MAX_SOURCE_READ)
