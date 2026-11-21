@@ -313,13 +313,14 @@ class UnderstandingBindingTests(unittest.TestCase):
         for mode in engine.MODES:
             self.assertEqual(contract["access_modes"][mode]["status"], old_contract["access_modes"][mode]["status"])
         # The versioned snapshot and every unrelated prefix row stay immutable.
-        # Only the maintained lifecycle source/test identities and the explicit
+        # Only the maintained viewer/lifecycle source/test identities and the explicit
         # historical-proof limitation have declared current successors.
         self.assertEqual(digest(old_body),
                          "1c3a9e3ba4b6a88e7e79563aab50e54b344ae9a01693897cb22afe66e513f376")
         self.assertEqual(len(old_contract["evidence"]), 15)
         expected_prefix = copy.deepcopy(old_contract["evidence"])
         lifecycle_updates = {
+            5: ("viewer-source", None),
             11: ("visual-transport",
                  "Current per-query framed PNG/action transport with unreaped child ownership. "
                  "Earlier execution receipts retain their original source identity and do not "
