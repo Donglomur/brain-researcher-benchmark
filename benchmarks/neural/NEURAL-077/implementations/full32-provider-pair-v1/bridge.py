@@ -21,7 +21,7 @@ PROMPT_CAP = 2097152
 PROVIDER_RESPONSE_CAP = 524288
 RESPONSE_CAP = 4096
 NO_TOOLS = "Do not use tools, code execution, external retrieval, files, or memory from other query trials."
-CONSUMER_PIN = {"bytes": 21146, "sha256": "6825dc00428b64c20cf23e1ac82068c891c4dd121fd980e0076b0ce89cb7629d"}
+CONSUMER_PIN = {"bytes": 23062, "sha256": "09d5d6b85e7c5baa59c3e24b3a6d3edaff3d94d2efb9970506613d3fef420706"}
 
 
 def require(ok, message):

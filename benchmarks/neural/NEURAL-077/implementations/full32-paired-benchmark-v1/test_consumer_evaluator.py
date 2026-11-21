@@ -242,6 +242,7 @@ class ConsumerControls(unittest.TestCase):
             body = consumer.encoded({'trial_id': IDS[0], 'channels': [[-0.0] * 1024, [0.12345678901234566] * 1024]})
             (root / name).write_bytes(body)
             session = consumer.PacketSession.__new__(consumer.PacketSession)
+            session._budget = None
             session._root_fd = os.open(root, os.O_RDONLY | os.O_DIRECTORY)
             session._closed = False; session._prompt = PROMPT; session._demos = DEMO_TEXT
             session._files = {name: consumer.descriptor(body)}

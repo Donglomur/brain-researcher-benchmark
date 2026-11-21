@@ -474,14 +474,16 @@ def run_programme(frozen, frozen_pin, output, *, implementations_root=None):
 
 
 def admit_programme(root, expected_receipt, contract, deps, *, budget=None):
+    metadata = _programme_metadata(root, expected_receipt, contract, deps, budget=budget)
     data = packet_data(deps, contract,budget=budget)
     try:
-        return _admit_programme_loaded(root, expected_receipt, contract, deps, data,budget=budget)
+        return _admit_programme_loaded(root, expected_receipt, contract, deps, data,budget=budget, _metadata=metadata)
     finally:
         deps['transport'].v.close_source(data)
 
 
-def _admit_programme_loaded(root, expected_receipt, contract, deps, data, *, budget=None):
+def _programme_metadata(root, expected_receipt, contract, deps, *, budget=None):
+    """Reject incomplete public custody before loading packet material."""
     def captured(path, cap=1048576, expected=None):
         return read(path,cap,expected,budget=budget)
     root = protected_path(root)
@@ -510,6 +512,14 @@ def _admit_programme_loaded(root, expected_receipt, contract, deps, data, *, bud
          and contract['frozen_monotonic'] <= manifest['started_monotonic'] <= arm['finished_monotonic'] <= manifest['deadline']
          and manifest['deadline']==manifest['started_monotonic']+contract['campaign_seconds'], 'Programme frozen clock/closure')
     need(pin(captured(root/'CLIENT.py',1048576)) == contract['bundle']['launcher'], 'Frozen programme bytes changed')
+    return root, raw, arm, manifest
+
+
+def _admit_programme_loaded(root, expected_receipt, contract, deps, data, *, budget=None, _metadata=None):
+    def captured(path, cap=1048576, expected=None):
+        return read(path,cap,expected,budget=budget)
+    root, raw, arm, manifest = (_metadata if _metadata is not None else
+                                _programme_metadata(root, expected_receipt, contract, deps, budget=budget))
     need(all(manifest.get(k) == value for k, value in profile_fields(contract).items())
          and data['packet']==manifest['packet'], 'Programme packet mismatch')
     probabilities=[]; episode_ids=[]

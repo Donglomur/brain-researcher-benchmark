@@ -24,7 +24,7 @@ BASELINE = 'benchmarks/neural/NEURAL-077/implementations/full32-demonstration-ba
 COUNT = 6400
 PEOPLE = 32
 CONDITION = 'numeric_program_four_demo'
-PAIR_BINDING = {'bytes': 2744, 'sha256': '9183eb923163b05560f185f7f23db23a747bc4f83e3a03aee118c5f89f125971'}
+PAIR_BINDING = {'bytes': 2744, 'sha256': 'f96d59bcf585c32f82cd870c1774744245328966b2153922574ecf8c2607a382'}
 BASELINE_PINS = {
     'candidate': {'bytes': 10830, 'sha256': 'e55bd34611eaa3b74a8660d7d6e7c9e55bb769758caee161d5e270178b3d1031'},
     'config': {'bytes': 208, 'sha256': '2e0756770b6d613066e9b4fb11f09c43af461f0e6e11f3e2fc6e48d930cbc0e8'},
