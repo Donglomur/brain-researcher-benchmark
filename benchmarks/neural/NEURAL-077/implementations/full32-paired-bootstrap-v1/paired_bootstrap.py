@@ -61,6 +61,34 @@ POLICY = {
 INPUT_CAP = 262144
 
 
+VISUAL_PROFILE = 'erp-full32-visual-v1'
+VISUAL_CONDITIONS = ('visual_direct_four_demo', 'visual_program_four_demo')
+
+
+def conditions_for(profile='numeric'):
+    need(profile in ('numeric', VISUAL_PROFILE), 'Explicit numeric or visual summary profile')
+    return VISUAL_CONDITIONS if profile == VISUAL_PROFILE else CONDITIONS
+
+
+def metrics_for(profile='numeric'):
+    conditions = conditions_for(profile)
+    return (METRICS[:2] + tuple(condition + '.participant_macro_' + metric
+            for metric in ('balanced_accuracy','natural_log_loss') for condition in conditions))
+
+
+def policy_for(profile='numeric'):
+    conditions_for(profile)
+    if profile == 'numeric':
+        return dict(POLICY)
+    # Only condition/schema plumbing changes. The sampling unit, draws, RNG,
+    # seed, quantiles, orientations and missingness rule are identical.
+    result = dict(POLICY)
+    result.update(profile=VISUAL_PROFILE,
+                  completion_scope='Explicit visual condition names; unchanged frozen full32 participant bootstrap algorithm.',
+                  secondary_unadjusted_intervals=list(metrics_for(profile)[1:]))
+    return result
+
+
 def need(condition, message):
     if not condition:
         raise ValueError(message)
@@ -97,8 +125,9 @@ def finite_number(value, message):
     return float(value)
 
 
-def validate_result(result):
-    """Extract six paired vectors only from the unchanged evaluator schema."""
+def validate_result(result, *, profile='numeric'):
+    """Extract six paired vectors from an explicitly selected completed profile."""
+    conditions = conditions_for(profile); metrics = metrics_for(profile)
     need(type(result) is dict and result.get('schema') == 'erp-full32-protected-pair-evaluation-v1' and
          result.get('status') == 'complete_finite_cohort_pair' and
          type(result.get('people')) is int and result['people'] == 32 and
@@ -106,17 +135,22 @@ def validate_result(result):
          result.get('both_public_arms_and_owned_closures_validated_before_private') is True and
          type(result.get('new_benchmarks')) is int and result['new_benchmarks'] == 0,
          'Complete previously validated full32 evaluator result required')
-    descriptor(result.get('contract'), 65536)
+    if profile == VISUAL_PROFILE:
+        need(result.get('profile') == VISUAL_PROFILE and result.get('conditions') == list(VISUAL_CONDITIONS)
+             and result.get('operator_route') == 'full32_visual_provider_vs_frozen_image_programme_v1'
+             and type(result.get('profile_commitment')) is str
+             and re.fullmatch('[0-9a-f]{64}', result['profile_commitment']), 'Explicit visual upstream condition and display commitment')
+    descriptor(result.get('contract'), 2*1024**2 if profile == VISUAL_PROFILE else 65536)
     arms = result.get('public_arm_receipts')
     need(type(arms) is list and len(arms) == 2, 'Both committed public arm receipts required')
     for arm in arms:
         descriptor(arm, 4 * 1024**2)
     scores = result.get('scores')
-    need(type(scores) is dict and set(scores) == set(CONDITIONS), 'Exact paired numeric conditions required')
+    need(type(scores) is dict and set(scores) == set(conditions), 'Exact paired selected conditions required')
     vectors = {}
     row_keys = {'participant_id', 'trials', 'targets', 'standards', 'target_true_positive',
                 'standard_true_negative', 'balanced_accuracy', 'natural_log_loss'}
-    for condition in CONDITIONS:
+    for condition in conditions:
         score = scores[condition]
         need(type(score) is dict and set(score) == {'participants', 'participant_macro_balanced_accuracy',
                                                  'participant_macro_natural_log_loss'}, 'Exact evaluator score fields')
@@ -143,8 +177,8 @@ def validate_result(result):
     differences = result.get('paired_person_differences')
     need(type(differences) is list and len(differences) == 32, 'All32 paired person differences required')
     for metric in ('balanced_accuracy', 'natural_log_loss'):
-        values = [a - b for a, b in zip(vectors[CONDITIONS[0] + '.participant_macro_' + metric],
-                                        vectors[CONDITIONS[1] + '.participant_macro_' + metric], strict=True)]
+        values = [a - b for a, b in zip(vectors[conditions[0] + '.participant_macro_' + metric],
+                                        vectors[conditions[1] + '.participant_macro_' + metric], strict=True)]
         vectors['direct_minus_program_macro_' + metric] = values
     for index, (person, row) in enumerate(zip(PEOPLE, differences, strict=True)):
         need(type(row) is dict and set(row) == {'participant_id', 'direct_minus_program_balanced_accuracy',
@@ -155,30 +189,31 @@ def validate_result(result):
             need(observed == vectors['direct_minus_program_macro_' + metric][index],
                  'Paired difference must preserve direct-minus-program orientation')
     primary = finite_number(result.get('primary_direct_minus_program_macro_BA'), 'Finite primary contrast')
-    need(primary == sum(vectors[METRICS[0]]) / 32, 'Primary paired participant mean differs')
+    need(primary == sum(vectors[metrics[0]]) / 32, 'Primary paired participant mean differs')
     return vectors
 
 
-def paired_bootstrap(result, policy, *, expected_python_version, expected_numpy_version):
+def paired_bootstrap(result, policy, *, expected_python_version, expected_numpy_version, profile='numeric'):
     """Pure numerical sidecar: fixed local RNG, no files, targets or candidates."""
-    need(type(policy) is dict and encode(policy) == encode(POLICY), 'Exact versioned prospective bootstrap policy required')
+    selected_policy = policy_for(profile); metrics = metrics_for(profile)
+    need(type(policy) is dict and encode(policy) == encode(selected_policy), 'Exact versioned prospective bootstrap policy required')
     need(type(expected_python_version) is str and type(expected_numpy_version) is str and
          re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', expected_python_version) and
          re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', expected_numpy_version), 'Explicit frozen runtime versions required')
     need(platform.python_version() == expected_python_version, 'Python version differs from frozen runtime')
-    vectors = validate_result(result)
+    vectors = validate_result(result, profile=profile)
     # Import the numerical runtime only after policy/input admission. The outer
     # operator authenticates its installation; this function checks versions.
     import numpy as np
     need(np.__version__ == expected_numpy_version, 'NumPy version differs from frozen runtime')
-    matrix = np.asarray([vectors[name] for name in METRICS], dtype=np.float64).T
+    matrix = np.asarray([vectors[name] for name in metrics], dtype=np.float64).T
     generator = np.random.Generator(np.random.PCG64(POLICY['seed']))
     indices = generator.integers(0, 32, size=(10000, 32), dtype=np.int64, endpoint=False)
     # One index array is reused for both arms, both metrics and both contrasts.
     means = matrix[indices].mean(axis=1, dtype=np.float64)
     limits = np.quantile(means, [0.025, 0.975], axis=0, method='linear')
     intervals = {}
-    for column, name in enumerate(METRICS):
+    for column, name in enumerate(metrics):
         intervals[name] = {'point_estimate': sum(vectors[name]) / 32,
                            'lower': float(limits[0, column]), 'upper': float(limits[1, column]),
                            'role': 'primary' if column == 0 else 'secondary_unadjusted'}
@@ -186,8 +221,9 @@ def paired_bootstrap(result, policy, *, expected_python_version, expected_numpy_
     # large replicate array; it contains indices into fixed ordered PEOPLE only.
     draw_body = indices.astype('<i8', copy=False).tobytes(order='C')
     return {'schema': 'erp-full32-paired-participant-bootstrap-v1',
-            'status': 'additive_finite_cohort_summary', 'policy': dict(POLICY),
+            'status': 'additive_finite_cohort_summary', 'policy': dict(selected_policy),
             'people': 32, 'queries': 6400,
+            **({'profile': profile, 'conditions': list(VISUAL_CONDITIONS)} if profile == VISUAL_PROFILE else {}),
             'intervals': intervals,
             'draws': {'shape': [10000, 32], 'encoding': 'C-order signed little-endian int64', **pin(draw_body)},
             'runtime_versions': {'python': platform.python_version(), 'numpy': np.__version__},
@@ -224,6 +260,7 @@ def read_pinned(path, expected):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--profile', choices=('numeric', VISUAL_PROFILE), default='numeric')
     for name in ('result', 'policy'):
         parser.add_argument('--' + name, type=Path, required=True)
         parser.add_argument('--' + name + '-bytes', type=int, required=True)
@@ -235,10 +272,10 @@ def main(argv=None):
     identities = {name: {'bytes': getattr(args, name + '_bytes'), 'sha256': getattr(args, name + '_sha256')}
                   for name in ('result', 'policy')}
     policy = decode(read_pinned(args.policy, identities['policy']))
-    need(type(policy) is dict and encode(policy) == encode(POLICY), 'Exact versioned prospective bootstrap policy required')
+    need(type(policy) is dict and encode(policy) == encode(policy_for(args.profile)), 'Exact versioned prospective bootstrap policy required')
     result = decode(read_pinned(args.result, identities['result']))
     output = paired_bootstrap(result, policy, expected_python_version=args.python_version,
-                              expected_numpy_version=args.numpy_version)
+                              expected_numpy_version=args.numpy_version, profile=args.profile)
     output['input_result'] = identities['result']
     output['input_policy'] = identities['policy']
     body = encode(output)

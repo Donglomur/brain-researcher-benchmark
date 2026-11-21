@@ -3,8 +3,8 @@
   "kind": "public_neuroscience_source_catalog",
   "registry": {
     "path": "benchmarks/registry.json",
-    "bytes": 3066916,
-    "sha256": "267d69e8542a78b263ac4e003e89531a126063a919a176c6e1c6bf46b4a9f7b4"
+    "bytes": 3074758,
+    "sha256": "3ba4632e41cb7dbdded78909015237cf4884f6012de82d2a26834cbe942ad1a1"
   },
   "source_commit": "8a07b93da68e8b9cf193cdba7d09faa17bf56a43",
   "source_counts": {
@@ -4408,8 +4408,8 @@
       "registration_stage": "canonical_source_specification",
       "specification": {
         "path": "benchmarks/neural/NEURAL-009/task.json",
-        "bytes": 17137,
-        "sha256": "92c3d8c1cb60682d363ab0f2303f1b8b8d259259e9956526c39fe71e2046ba31"
+        "bytes": 17268,
+        "sha256": "b6dd60e83662b757283b6d842dde31a54c46c3ff7db0352c131b5430dc5065fb"
       },
       "registry": null,
       "runtime_manifest": null,
@@ -4491,7 +4491,7 @@
         "schema_version": "neural-understanding/v1",
         "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
         "disposition": "partial_delivery",
-        "disposition_reason": "The complete 686-record/23-person normalized event evaluator is delivered. Authentic EEG preparation and a competent signal reference are not qualified; the implemented tolerant event score cannot establish prompt onset detection.",
+        "disposition_reason": "The complete 686-record/23-person normalized event evaluator and descriptive original-event alarm diagnostics are delivered. Authentic EEG preparation and a competent signal reference are not qualified; neither tolerant event F1 nor score-grid alignment establishes prompt onset detection.",
         "primary_target": "Recording-relative annotated seizure intervals, with separate raw annotations and processed intervals under the frozen timescoring merge/split/tolerance policy.",
         "primary_metric": "patient_macro_event_f1",
         "target_fidelity": "scoped_target",
@@ -4532,14 +4532,14 @@
         "blocked_by": [
           "Authenticate all selected EDF/header/annotation joins and normalize causal waveforms.",
           "Execute fixed EEG and timing/montage comparators on complete held-person monitoring.",
-          "Implement and freeze paired uncertainty and onset diagnostics where claimed.",
+          "Freeze paired uncertainty and validate actual decision timing and early/late-only tolerant-credit attribution before timeliness claims; descriptive original-event alarm diagnostics are implemented.",
           "Provision a participant transport with no label access."
         ],
         "scientific_qualification": "not_established_by_this_revision",
         "contract": {
           "path": "benchmarks/neural/NEURAL-009/understanding.v1.json",
-          "bytes": 13302,
-          "sha256": "a32e657e57a63f5617f33801286c296a7dd1dfd115376fc6b2cd0eb58f2a1f3f"
+          "bytes": 14844,
+          "sha256": "41ebde422c311d7961c50ae1d7e31cff682dd599d7169db40edbf5c92d80c256"
         },
         "historical_specification": {
           "path": "benchmarks/neural/NEURAL-009/historical/task.pre-understanding.v1.json",
@@ -4556,8 +4556,8 @@
         },
         "understanding_contract": {
           "path": "benchmarks/neural/NEURAL-009/understanding.v1.json",
-          "bytes": 13302,
-          "sha256": "a32e657e57a63f5617f33801286c296a7dd1dfd115376fc6b2cd0eb58f2a1f3f"
+          "bytes": 14844,
+          "sha256": "41ebde422c311d7961c50ae1d7e31cff682dd599d7169db40edbf5c92d80c256"
         }
       },
       "recorded_evidence": []
@@ -14448,7 +14448,7 @@
       "specification": {
         "path": "benchmarks/neural/NEURAL-077/task.json",
         "bytes": 23050,
-        "sha256": "d528682c4ba60badc6d2a4bcf70118b766708f4a13ddaa80a48d66bf6060ce0e"
+        "sha256": "32cefb09cafadd0aa446c2141db7d21efaf29fdacdd8a42a44a48c323600d061"
       },
       "registry": null,
       "runtime_manifest": {
@@ -14602,7 +14602,7 @@
         "contract": {
           "path": "benchmarks/neural/NEURAL-077/understanding.v1.json",
           "bytes": 31535,
-          "sha256": "2d0acdf6493145ae181168ad6c947b1620636f70fbf59b37f51b7073a5ee2652"
+          "sha256": "335760aac788d3907c2b741eddbdcdd88d162a00c47c4dc001055decdf0ac46c"
         },
         "historical_specification": {
           "path": "benchmarks/neural/NEURAL-077/historical/task.pre-understanding.v1.json",
@@ -14620,7 +14620,7 @@
         "understanding_contract": {
           "path": "benchmarks/neural/NEURAL-077/understanding.v1.json",
           "bytes": 31535,
-          "sha256": "2d0acdf6493145ae181168ad6c947b1620636f70fbf59b37f51b7073a5ee2652"
+          "sha256": "335760aac788d3907c2b741eddbdcdd88d162a00c47c4dc001055decdf0ac46c"
         }
       },
       "recorded_evidence": [
@@ -44507,17 +44507,18 @@
           "Session-local neuron IDs do not establish repeated-cell linkage; label-map and fluorescence-column joins require audit.",
           "No authentic NuCLR rerun or required matching source-comparator rerun for the selected panel is established; EI-inductive selection additionally requires the stronger LOLCAT comparator.",
           "If the inductive panel is selected, its one-mouse test cannot support a general population uncertainty claim by neuron-level resampling.",
-          "Selected original endpoint, required controls/companion metrics, meaningful effect, uncertainty, stochastic-rerun calibration tolerance, protected scorer and concrete episode budgets are not fixed."
+          "Selected original endpoint, required controls/companion metrics, meaningful effect, uncertainty, stochastic-rerun calibration tolerance, protected scorer and concrete episode budgets are not fixed.",
+          "For the E/I inductive-zero-shot panel only, the acquired December 2025 split artifact is known to violate the held-out-subject protocol: all three CV training arrays contain all 3,049 outer-test neurons. The existing implementations/source-splits-v2/source_audit.json (SHA-256 b8cbb7ac30ee0e4601dcb2a3db2803b54119987a45df7edf9d42f89c87898506) records the overlaps, and source_splits.py select_readout_panel rejects this panel. Historical author source contains a compatible recipe-level exposure defect (historical_inductive_split_recipe), but neither that recipe nor the acquired artifact establishes which memberships produced the conference results. Recover a conference-consistent fixed artifact for this panel; do not silently repair memberships or substitute another panel for a same-paper reproduction or improvement claim."
         ],
         "errors": [],
-        "contract_digest": "365d2f1f268b6a83269c817e8a60cb1dad8483841481418219778517c7fb3b87",
+        "contract_digest": "e84c698d664cc7cab025eb23413cb2ecbc7f3c84fdf105955c78ec55eba3cb60",
         "paper_win": false,
         "current_sota": "not_assessed",
         "assurance": "Declared evidence consistency only; artifacts and scientific validity are not independently authenticated.",
         "contract": {
           "path": "benchmarks/paper/PAPER-paper-method-replacement-012/improvement.v1.json",
-          "bytes": 15175,
-          "sha256": "0312ae81862130d11a96eb6b59d974cecd96935cdba29461daf7cf4b96e52e2e"
+          "bytes": 16880,
+          "sha256": "33e4a059f7af6c7080146c717b49b192f934ae30b1c316b416b9a37ab55ca26e"
         },
         "historical_specification": {
           "path": "benchmarks/paper/PAPER-paper-method-replacement-012/historical/task.pre-improvement.v1.json",
@@ -44554,13 +44555,13 @@
         },
         "improvement_contract": {
           "path": "benchmarks/paper/PAPER-paper-method-replacement-012/improvement.v1.json",
-          "bytes": 15175,
-          "sha256": "0312ae81862130d11a96eb6b59d974cecd96935cdba29461daf7cf4b96e52e2e"
+          "bytes": 16880,
+          "sha256": "33e4a059f7af6c7080146c717b49b192f934ae30b1c316b416b9a37ab55ca26e"
         },
         "outcomes": {
           "path": "benchmarks/paper/PAPER-paper-method-replacement-012/outcomes.v1.json",
           "bytes": 1999,
-          "sha256": "bb76d5fe9ed4946cb8831bc8fce4a937f5136793fcdf7b0562e4772adbd0eabb"
+          "sha256": "23f512bfed4f81f02689099eb6c7e0c0a20e7f26701dc471b18906b2190a91b2"
         },
         "reproduction_eligibility": "source_unresolved",
         "reproduction_blocking_issues": [
@@ -64667,6 +64668,13 @@
           "sha256": "c5e53b65539dfb058ca5c50d986c8378ca9ff56dbbb9a7fdd53a41a82c497a93",
           "commit": "17358629b9d4a54162bc5c967ee6a6e83dcb0a7e",
           "claim": "Current SOURCE metadata records only the STATUS member pin and current_status_pointer annotation; historical scientific, code and condition receipts are not requalified."
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/full32-paired-benchmark-v1/SOURCE.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 8005,
+          "sha256": "4d2e882d879505ea387db96ae446dd066a0c53b753cd5af0864d3297fcad6524",
+          "claim": "Current source identity records the authenticated lazy structured-record accessor used by the visual route. Numerical context bytes, original scientific material and historical evidence remain separately scoped."
         }
       ]
     },
@@ -64699,6 +64707,20 @@
           "sha256": "c0dab5080d02a8359b4291e015e43a3244c4f5e13e0987c1e3d8c210cf5ddc53",
           "commit": "17358629b9d4a54162bc5c967ee6a6e83dcb0a7e",
           "claim": "Reviewed source component and explicit qualification limits; no model result"
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/full32-paired-bootstrap-v1/README.md",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 4768,
+          "sha256": "9ae7dc4f04e52f11654dd76b2db3daa8d942330af6aecdf54821b81467b7272b",
+          "claim": "Current source documents the explicit visual comparison profile while preserving the numerical default and paired participant estimator. No empirical model interval is claimed."
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/full32-paired-bootstrap-v1/SOURCE.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 3505,
+          "sha256": "fd17f01fdf80e41b3799db2a9e1669afd4453720ddd7773e0dc796cb7fae0f5a",
+          "claim": "Current source and visual-policy identities only; historical numeric bootstrap evidence and creation commit are preserved."
         }
       ]
     },
@@ -64731,6 +64753,20 @@
           "sha256": "d7ec7d926b201268af42f2e13b191855b12f46c4628f69623fa2c42281815267",
           "commit": "17358629b9d4a54162bc5c967ee6a6e83dcb0a7e",
           "claim": "Reviewed source component and explicit qualification limits; no model result"
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/full32-paired-runtime-v1/SOURCE_BINDINGS.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 2139,
+          "sha256": "bfc90a293b82c475cc5e76c2f500354035e6599f54b7569c35533e9b06e0b0bf",
+          "claim": "Current dependency identity follows the additive consumer accessor; original native evidence is not requalified by this source binding refresh."
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/full32-paired-runtime-v1/CONFIG.template.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 1111,
+          "sha256": "0018080686b1fcfaa5cdbf2b8eb807d94b4e59d1fde85da0f918e6eff5505632",
+          "claim": "Current configuration template follows the new dependency binding only. It does not select a native operation or change historical runtime qualification."
         }
       ]
     },
@@ -64749,6 +64785,13 @@
           "path": "benchmarks/neural/NEURAL-077/implementations/full32-provider-pair-v1/SOURCE.json",
           "sha256": "30f3962a4e610012bf521541fb52ca09d17feb9e4de3dcd7bef8b9243bfbbb3f",
           "commit": "8696d685ae44a39cdcb74375a8c19f9250e8c068"
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/full32-provider-pair-v1/SOURCE.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 5048,
+          "sha256": "3e54eab3cd3fac242b2b865718bd91ddbf354b8f1a94c3085f980712bdd0cb7b",
+          "claim": "Current source identity covers reuse of the existing complete-arm metric helper by the explicit visual route. Original numerical producer evidence, metrics and scientific limitations are preserved."
         }
       ],
       "id": "neural-077-full32-provider-pair-v1",
@@ -64802,6 +64845,20 @@
           "path": "benchmarks/neural/NEURAL-077/docs/full6400-numerical-delivery-20261119.json",
           "sha256": "83b12b47c7090bbe9ffde7e4c8d50a3dd4041b48d5cfeca94c2f2eebb982ea31",
           "commit": "c4ca3fe4d0327bc37d3d245064230a9c9b9cead5"
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/full6400-fixed-canary-delivery-v1/SOURCE_BINDINGS.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 560,
+          "sha256": "e071864afed6657cf3935da7688cad4626c2c2c4a1241b93ae3cf7e66e0419ce",
+          "claim": "Current dependency identity follows the additive consumer accessor only. Accepted full6400 numerical fixed-canary delivery evidence retains its original source and non-AI scope."
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/full6400-fixed-canary-delivery-v1/config.template.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 1192,
+          "sha256": "3d5d1ce2c9a09fe91d88634d23960f4d205ccfd0cd2f4020c0520f8a2fb55300",
+          "claim": "Current configuration template follows the updated source binding only; no new full6400 visual or numerical execution is established."
         }
       ]
     },
@@ -64842,6 +64899,27 @@
           "sha256": "4ebeaa3d203e806db1d0344f17c0e840b15594a59e1e4cfcac57a7a6bb8b056c",
           "commit": "a6e578d36e9e09bfca5d86c308110d47a5c166b1",
           "role": "generated_local_runtime_capability"
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/image-matched-programme-v1/README.md",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 5216,
+          "sha256": "9557b0fd143cfeb40999cb16198e90fd11676c06a88ceffdb60162508411f8a2",
+          "claim": "Current source documents the full32 visual interpretation versus image-matched programme extension with the same four demonstrations and legal actions. No native/provider/model study or scientific readiness is established."
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/image-matched-programme-v1/SOURCE_BINDINGS.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 8201,
+          "sha256": "2abb8808f06c3412f9d28326ee6b019185c8a82e0890111adbc4d300bb26e3d3",
+          "claim": "Exact current source identities for the full32 visual extension. The original sender, immutable legacy validation kernel, complete-arm protection and numerical defaults are retained."
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/image-matched-programme-v1/FULL32_VISUAL_SOURCE_CONTROLS.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 23959,
+          "sha256": "a0670fcc95c6ae9324816ee9354e2823c1e2efa85c391a68951f9da796745095",
+          "claim": "Sixteen generated source controls passed after a preserved zero-method setup failure. This records generated-only geometry, custody and refusal checks, not actual-cohort rendering, native isolation, provider delivery, AI performance or empirical intervals."
         }
       ]
     },
@@ -64875,6 +64953,20 @@
           "sha256": "83b01c3c1c456049fd76857a60e8163d56267c53fbfbddc4dfd7dd94c9c1d9f3",
           "commit": "2fab670cd2941bade4415ee919e959225520e25e",
           "claim": "Reviewed public source scope and exact dependency/code identity only; preserve historical failures, runtime/access holds and all reproduction/improvement/native-understanding limits. Enrollment does not establish readiness or execution."
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/README.md",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 9169,
+          "sha256": "ed91785cfd8637928e9e4a16838d84f401e6f00324a830c3888f01c8e6422800",
+          "claim": "Current source adds explicit full32 visual-provider routing while preserving legacy400 defaults. No live provider/model campaign, remote context policy, capacity or scientific result is established."
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/visual-provider-pair-v1/BASE_SOURCES.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 3688,
+          "sha256": "dbc4abafe40344b168a9d19e754ed6bf410c773bed4aefa5bfbf547f06812546",
+          "claim": "Current dependency identities for shared image projection and custody admission. Historical source identities and observed evidence remain unchanged."
         }
       ]
     },
@@ -66750,6 +66842,13 @@
           "bytes": 11468,
           "sha256": "2ac7a5d85543c91874a7e75d39a04f3ed80deb564df0dad4dfefc5304fa70749",
           "claim": "Reviewed public interface, complete named scope and explicit remaining scientific limits"
+        },
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/SOURCE_BINDINGS.json",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 689,
+          "sha256": "383cca1c9fefc8b58cacb7c5d9dfd89bc9f128b70df0d2c40e9c0963ce188d2b",
+          "claim": "Current viewer source binding for the additive full32 profile only. Historical 400-case transport evidence and unresolved native isolation claims retain their original scope."
         }
       ]
     },
@@ -66765,7 +66864,16 @@
       "original_path": "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1",
       "source_commit": "51cbfba1c81d0b1fe28ace5e0d6682b58bfeff65",
       "scientific_readiness": "unknown",
-      "scope_notes": "Human ERP engineering viewer with typed actions, PNG rendering, captured answers, and separate zero-shot/four-demonstration conditions. Dependency: complete-direct-condition-v1. Portable and complete-array controls do not establish model performance, harness isolation, or image delivery to a model; no model trials or mouse-seizure replication are claimed."
+      "scope_notes": "Human ERP engineering viewer with typed actions, PNG rendering, captured answers, and separate zero-shot/four-demonstration conditions. Dependency: complete-direct-condition-v1. Portable and complete-array controls do not establish model performance, harness isolation, or image delivery to a model; no model trials or mouse-seizure replication are claimed.",
+      "evidence": [
+        {
+          "path": "benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/README.md",
+          "commit": "6ee27eb581f698992b6897031bbf19d5867867db",
+          "bytes": 13386,
+          "sha256": "06da2357c37c121ddda8812a6b4ea60e5684e3ab043449164fb15fd3ede60485",
+          "claim": "Current source documents the explicit full32 visual profile, the same four demonstrations and bounded image actions. Generated source checks do not establish native/provider delivery or scientific readiness."
+        }
+      ]
     },
     {
       "id": "neural077-waveform-pair-v1",

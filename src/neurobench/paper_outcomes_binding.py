@@ -883,12 +883,12 @@ def _project_root004_scope(projected, documents):
     return result
 
 
-# Exact NuCLR uncertainty-reporting correction; scientific policy is unchanged.
+# Exact NuCLR reporting and inductive-source provenance; scientific policy is unchanged.
 _NUCLR_HOME = "benchmarks/paper/PAPER-paper-method-replacement-012"
 _NUCLR_OLD_IMPROVEMENT = {"path": _NUCLR_HOME + "/improvement.v1.json", "bytes": 14982, "sha256": "f2d4275a29ff41e6a37fd674e3f2f50b2a34a0e7bdf7a8b992bfcc209e2f8f22"}
-_NUCLR_IMPROVEMENT = {"path": _NUCLR_HOME + "/improvement.v1.json", "bytes": 15175, "sha256": "0312ae81862130d11a96eb6b59d974cecd96935cdba29461daf7cf4b96e52e2e"}
+_NUCLR_IMPROVEMENT = {"path": _NUCLR_HOME + "/improvement.v1.json", "bytes": 16880, "sha256": "33e4a059f7af6c7080146c717b49b192f934ae30b1c316b416b9a37ab55ca26e"}
 _NUCLR_TASK = {"path": _NUCLR_HOME + "/task.json", "bytes": 31596, "sha256": "cde7612e71a6133fc3d660b2800d9e4c71ede1a687eec81c611918d323ae8ab8"}
-_NUCLR_OUTCOMES = {"path": _NUCLR_HOME + "/outcomes.v1.json", "bytes": 1999, "sha256": "bb76d5fe9ed4946cb8831bc8fce4a937f5136793fcdf7b0562e4772adbd0eabb"}
+_NUCLR_OUTCOMES = {"path": _NUCLR_HOME + "/outcomes.v1.json", "bytes": 1999, "sha256": "23f512bfed4f81f02689099eb6c7e0c0a20e7f26701dc471b18906b2190a91b2"}
 _NUCLR_RETAINED_IMPROVEMENT = {**_NUCLR_OLD_IMPROVEMENT, "path": _NUCLR_HOME + "/historical/improvement.pre-uncertainty-reporting.v1.json"}
 _NUCLR_RETAINED_OUTCOMES = {"path": _NUCLR_HOME + "/historical/outcomes.pre-uncertainty-reporting.v1.json", "bytes": 1999, "sha256": "5f6fd64159dcc2527bd5645c81fe610f52434e2b6a2eff4be151179283e1a6da"}
 
@@ -911,13 +911,24 @@ def _nuclr_corrected_improvement(retained):
          and result["evidence"][0]["supports"] == before,
          "NuCLR uncertainty reporting predecessor changed")
     result["evidence"][0]["supports"] = after
+    # Append only the reviewed inductive source observation and unresolved hold.
+    result["evidence"].append({
+        "id": "historical_inductive_split_recipe",
+        "kind": "author_code",
+        "url": "https://raw.githubusercontent.com/nerdslab/nuclr/407d8970521e505fd7f47596317f585dd0451c79/eval_notebooks/create_bugeon_splits.ipynb",
+        "locator": "Zero-based notebook cells 7 and 8 at the December 4, 2025 commit; raw notebook 11,433 bytes, SHA-256 c82ba730b566a65fb3e81f30e8c4b3bffab6eb3f35b0159f7a5d2c45b1a555b4.",
+        "supports": "The historical E/I inductive recipe takes each CV training membership from the full metadata table, excluding only the CV validation mouse, so held-out SB028 neurons remain eligible. The adjacent subclass recipe instead uses metadata already excluding SB028. This is a source-recipe observation, not evidence that these generated memberships produced the conference results; the notebook has no saved membership outputs."
+    })
+    result["blocking_issues"].append(
+        "For the E/I inductive-zero-shot panel only, the acquired December 2025 split artifact is known to violate the held-out-subject protocol: all three CV training arrays contain all 3,049 outer-test neurons. The existing implementations/source-splits-v2/source_audit.json (SHA-256 b8cbb7ac30ee0e4601dcb2a3db2803b54119987a45df7edf9d42f89c87898506) records the overlaps, and source_splits.py select_readout_panel rejects this panel. Historical author source contains a compatible recipe-level exposure defect (historical_inductive_split_recipe), but neither that recipe nor the acquired artifact establishes which memberships produced the conference results. Recover a conference-consistent fixed artifact for this panel; do not silently repair memberships or substitute another panel for a same-paper reproduction or improvement claim."
+    )
     need(pin(_NUCLR_IMPROVEMENT["path"], encode(result)) == _NUCLR_IMPROVEMENT,
          "NuCLR selected reporting contract changed")
     return result
 
 
 def nuclr_reporting_bundle(read_pin):
-    """Authenticate this exact one-field correction and both retained archives."""
+    """Authenticate the exact reporting correction, two appends and retained archives."""
     task = read_pin(copy.deepcopy(_NUCLR_TASK), "Selected NuCLR reporting task")
     current = read_pin(copy.deepcopy(_NUCLR_IMPROVEMENT), "Selected NuCLR reporting contract")
     outcomes = read_pin(copy.deepcopy(_NUCLR_OUTCOMES), "Selected NuCLR reporting outcomes")

@@ -491,6 +491,28 @@ def admit_program_arm(desc, contract, contract_pin, session, modules, budget, de
     return predictions
 
 
+def paired_metrics(core, a, b, people, conditions=CONDITIONS):
+    """Shared participant metrics, after complete public custody and protected join.
+
+    This helper does not open private data, execute candidates or implement a
+    bootstrap. Both existing numeric and explicit visual routes call the same
+    original core.metric_rows kernel and participant difference calculation.
+    """
+    need(tuple(conditions) in (CONDITIONS, ('visual_direct_four_demo', 'visual_program_four_demo')),
+         'Explicit paired numeric or visual condition identity')
+    need(len(people) == 32 and sum(len(rows) for rows in people.values()) == COUNT,
+         'Complete finite full32 cohort required')
+    expected = {identifier for rows in people.values() for identifier, _ in rows}
+    need(len(expected) == COUNT and set(a) == set(b) == expected, 'Both complete6400 prediction maps')
+    scores = {conditions[0]: core.metric_rows(a, people), conditions[1]: core.metric_rows(b, people)}
+    differences = [{'participant_id': x['participant_id'],
+        'direct_minus_program_balanced_accuracy': x['balanced_accuracy'] - y['balanced_accuracy'],
+        'direct_minus_program_natural_log_loss': x['natural_log_loss'] - y['natural_log_loss']}
+        for x, y in zip(scores[conditions[0]]['participants'], scores[conditions[1]]['participants'], strict=True)]
+    return {'scores': scores, 'paired_person_differences': differences,
+            'primary_direct_minus_program_macro_BA': sum(x['direct_minus_program_balanced_accuracy'] for x in differences) / 32}
+
+
 def evaluate_pair(contract, contract_pin, arms, private_material_descriptor, output, *,
                   modules=None, deadline=None, session_factory=None):
     validate_contract(contract)
@@ -529,14 +551,9 @@ def evaluate_pair(contract, contract_pin, arms, private_material_descriptor, out
             people = modules['core'].load_private_people(private, contract['public_manifest'], set(session.trial_ids), private_budget)
         finally:
             budget.input(private_budget['read'])
-    scores = {CONDITIONS[0]: modules['core'].metric_rows(a, people), CONDITIONS[1]: modules['core'].metric_rows(b, people)}
-    differences = [{'participant_id': x['participant_id'],
-        'direct_minus_program_balanced_accuracy': x['balanced_accuracy'] - y['balanced_accuracy'],
-        'direct_minus_program_natural_log_loss': x['natural_log_loss'] - y['natural_log_loss']}
-        for x, y in zip(scores[CONDITIONS[0]]['participants'], scores[CONDITIONS[1]]['participants'], strict=True)]
+    metrics = paired_metrics(modules['core'], a, b, people)
     result = {'schema': 'erp-full32-protected-pair-evaluation-v1', 'status': 'complete_finite_cohort_pair',
-        'people': 32, 'queries': COUNT, 'scores': scores, 'paired_person_differences': differences,
-        'primary_direct_minus_program_macro_BA': sum(x['direct_minus_program_balanced_accuracy'] for x in differences) / 32,
+        'people': 32, 'queries': COUNT, **metrics,
         'both_public_arms_and_owned_closures_validated_before_private': True, 'contract': contract_pin,
         'public_arm_receipts': [arms[c]['receipt'] for c in CONDITIONS], 'read_bytes_charged': budget.read,
         'read_charge_scope': 'Conservative source/session reservations plus explicit retained-file reads; not physical I/O.',

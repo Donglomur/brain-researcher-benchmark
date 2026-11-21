@@ -20,8 +20,8 @@ PROGRAMME_PERMISSION = ('You may use the frozen programme to compute on the trac
                         'returned by the declared viewer actions. Do not access original raw arrays, '
                         'other files, external retrieval, other tools or memory from other query trials.')
 DONOR_COMMIT = 'e261d08ad5d940d97e4a44665a9c5e828f89f899'
-TRANSPORT_PIN = {'bytes': 25985,
-                 'sha256': 'e7bffc6d8444478a2440bf3b0b16134d03652fab4ced57bc455307795192fb8f'}
+TRANSPORT_PIN = {'bytes': 31626,
+                 'sha256': '762e7a40d9c41b65f9143ba3d0318a572f0bc78ed2a47288624faaccae6f33b7'}
 PROTECTED_PIN = {'bytes': 4642,
                  'sha256': 'dcedb10bba955c01ef149316289e6c64edc299d8bef3aef51e3a8ddaa24c8750'}
 COMPARATOR_PIN = {'bytes': 10963,
@@ -113,30 +113,32 @@ def clone(function, namespace):
     return result
 
 
-def make_transport(deps, adapter_pin):
+def make_transport(deps, adapter_pin, *, profile='legacy400'):
     """A four-demo programme binding; preserve original sandbox/limit semantics.
 
     The caller must independently require the selected production sandbox and
     frozen client. Protocol-only fixtures cannot qualify that boundary.
     """
+    need(profile in ('legacy400', 'erp-full32-visual-v1'), 'Explicit supported visual profile')
+    condition = 'visual_program_four_demo' if profile == 'erp-full32-visual-v1' else PROGRAMME_CONDITION
     donor, donor_path = transport_donor(deps)
     selected_adapter = authenticate_self(adapter_pin)
     permission = {'schema': 'neural077_image_programme_permission_adapter_v1',
-        'condition': PROGRAMME_CONDITION, 'donor_transport': dict(TRANSPORT_PIN),
+        'condition': condition, 'donor_transport': dict(TRANSPORT_PIN),
         'adapter_source': selected_adapter,
         'native_permission_sha256': pin(NATIVE_PERMISSION.encode('utf-8'))['sha256'],
         'programme_permission_sha256': pin(PROGRAMME_PERMISSION.encode('utf-8'))['sha256'],
         'scope': 'Only the first-header permission sentence changes; scientific text, image projection, four demonstrations and limits are unchanged.'}
     private = dict(donor.__dict__)
 
-    def ready_header(session, limits, episode_id):
-        header = donor.ready_header(session, limits, episode_id)
+    def ready_header(session, limits, episode_id, *, budget=None):
+        header = donor.ready_header(session, limits, episode_id,budget=budget)
         replacement = dict(header)
         replacement['prompt'] = programme_prompt(header['prompt'])
         return replacement
 
-    def boundary_manifest(limits, sandbox, client, episode_id, profile):
-        manifest = donor.boundary_manifest(limits, sandbox, client, episode_id, profile)
+    def boundary_manifest(limits, sandbox, client, episode_id, sandbox_profile, dataset=None, *, budget=None):
+        manifest = donor.boundary_manifest(limits, sandbox, client, episode_id, sandbox_profile, dataset=dataset,budget=budget)
         need(MANIFEST_KEY not in manifest, 'Donor manifest unexpectedly defines adapter metadata')
         # Use the donor's strict JSON round-trip for an independent nested value.
         manifest[MANIFEST_KEY] = donor.v.decode(donor.v.encode(permission))
@@ -148,21 +150,26 @@ def make_transport(deps, adapter_pin):
 
     def run_episode(dataset, ordinal, mode, output, client, python=donor.sys.executable,
                     sandbox='macos', limits=None, client_launcher=None):
-        need(mode == 'four_demo', 'Matched image programme requires exactly four demonstrations')
+        need(mode == 'four_demo' and dataset.get('profile', 'legacy400') == profile,
+             'Matched image programme requires exactly four demonstrations and frozen profile')
         return bound_run(dataset, ordinal, mode, output, client, python, sandbox, limits, client_launcher)
 
-    def audit_transport(path, dataset, ordinal, mode):
-        need(mode == 'four_demo', 'Matched image programme audit requires four demonstrations')
-        manifest = donor.v.decode(donor.v.read_regular(Path(path) / 'transport/MANIFEST.json', donor.HEADER_MAX))
+    def audit_transport(path, dataset, ordinal, mode, *, budget=None):
+        need(mode == 'four_demo' and dataset.get('profile', 'legacy400') == profile,
+             'Matched image programme audit requires frozen four-demo profile')
+        manifest = donor.v.decode(donor.v.read_regular(Path(path) / 'transport/MANIFEST.json', donor.HEADER_MAX,budget=budget))
         need(manifest.get(MANIFEST_KEY) == permission, 'Frozen participant permission adapter mismatch')
-        return bound_audit(path, dataset, ordinal, mode)
+        return bound_audit(path, dataset, ordinal, mode,budget=budget)
 
     private.update(run_episode=run_episode, audit_transport=audit_transport)
     bound_collect = clone(donor.collect, dict(private))
 
-    def collect(packet, sessions, mode, output, implementation_root=None):
+    def collect(packet, sessions, mode, output, implementation_root=None, *, manifest_pin=None, profile=profile, budget=None):
         need(mode == 'four_demo', 'Matched image programme collection requires four demonstrations')
-        return bound_collect(packet, sessions, mode, output, implementation_root)
+        need(profile == ('erp-full32-visual-v1' if condition == 'visual_program_four_demo' else 'legacy400'),
+             'Collection profile must equal frozen permission binding')
+        return bound_collect(packet, sessions, mode, output, implementation_root,
+                             profile=profile, manifest_pin=manifest_pin, condition=(condition if profile != 'legacy400' else None), budget=budget)
 
     public = {name: value for name, value in vars(donor).items()
               if not name.startswith('__') and name != 'main'}
@@ -173,7 +180,10 @@ def make_transport(deps, adapter_pin):
                     'donor_commit': DONOR_COMMIT, 'donor_path': str(donor_path),
                     'donor_transport': dict(TRANSPORT_PIN), 'adapter_source': dict(selected_adapter),
                     'effective_binding': 'Private globals for donor run_episode/audit_transport/collect; static permission manifest and first-header replacement.',
-                    'condition': PROGRAMME_CONDITION, 'shared_donor_globals_modified': False,
+                    'condition': condition, 'shared_donor_globals_modified': False,
+                    **({'donor_commit_role':'Historical origin; exact selected successor transport is bound by donor_transport bytes/SHA.',
+                        'source_reference_commit':'de2c2068c5eb469d06607eb7691845abc7d553c9'}
+                       if profile == 'erp-full32-visual-v1' else {}),
                     'provider_context_qualified': False, 'provider_tool_policy_qualified': False,
                     'scientific_qualification': False})
     return types.SimpleNamespace(**public)

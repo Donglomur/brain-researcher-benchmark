@@ -595,6 +595,50 @@ def task_artifact_path_allowed(row, home):
         and row.get("related_task_ids", []) == [])
 
 
+NEURAL_VIEWER_PROVIDER = "benchmarks/neural/NEURAL-007/implementations/viewer-provider-v1"
+NEURAL_VIEWER_BINDINGS = NEURAL_VIEWER_PROVIDER + "/SOURCE_BINDINGS.json"
+NEURAL_VIEWER_MEMBERS = (
+    "benchmarks/neural/NEURAL-007/implementations/viewer-transport-v1/transport.py",
+    "benchmarks/neural/NEURAL-007/implementations/viewer-transport-v1/SOURCE_BINDINGS.json",
+    "benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/transport.py",
+    "benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/SOURCE_BINDINGS.json",
+)
+
+
+def neural_viewer_provider_pins(reader, boundaries, artifact_files, expected_pins):
+    """Enroll one current descriptor's four owned source pins, without recursion."""
+    if NEURAL_VIEWER_PROVIDER not in boundaries:
+        return
+    need(NEURAL_VIEWER_BINDINGS in artifact_files,
+         "Current viewer provider requires its owned source descriptor")
+    document, _ = reader.document(NEURAL_VIEWER_BINDINGS)
+    need(set(document) == {"schema", "members"}
+         and document["schema"] == "neural-viewer-provider-dependencies/v1",
+         "Unsupported current viewer provider source descriptor")
+    declared = document["members"]
+    need(type(declared) is dict and set(declared) == set(NEURAL_VIEWER_MEMBERS),
+         "Current viewer provider requires exactly four source members")
+    proposed = {}
+    for path in NEURAL_VIEWER_MEMBERS:
+        need(path in artifact_files, "Viewer provider dependency is not owned source: " + path)
+        item = declared[path]
+        need(type(item) is dict and set(item) == {"bytes", "sha256"}
+             and type(item["bytes"]) is int and 0 <= item["bytes"] <= MAX_FILE_BYTES
+             and isinstance(item["sha256"], str)
+             and re.fullmatch(r"[0-9a-f]{64}", item["sha256"]),
+             "Invalid current viewer provider source pin: " + path)
+        pin = {"path": path, **item}
+        if path in expected_pins:
+            previous = expected_pins[path]
+            need(type(previous) is dict
+                 and all(previous.get(key) == pin[key] for key in ("path", "bytes", "sha256")),
+                 "Conflicting viewer provider source pin: " + path)
+        proposed[path] = pin
+    # Do not partially enroll malformed descriptors or replace an existing pin.
+    for path, pin in proposed.items():
+        expected_pins.setdefault(path, pin)
+
+
 def prepare(reader):
     root = reader.root
     for relative in RETIRED_ROOTS:
@@ -820,6 +864,7 @@ def prepare(reader):
     artifact_files = artifact_members(root, artifacts, reader=reader)
     need(not set(members) & set(artifact_files), "Artifact overlaps task or provenance metadata")
     members.update(artifact_files)
+    neural_viewer_provider_pins(reader, boundaries, artifact_files, expected_pins)
     # These are live source-binding descriptors, not additional benchmark artifacts.
     # Hash JSON descriptors and their exact README.md guides without following
     # any source or private-payload locators.

@@ -11,6 +11,7 @@ import io
 import math
 import os
 import platform
+import re
 import subprocess
 import sys
 import tempfile
@@ -23,11 +24,45 @@ HERE = Path(__file__).resolve().parent
 ARM = 'neural077_visual_provider_pair_arm_v1'
 ROUTE = 'trusted_image_history_provider_and_numerical_programme_v1'
 CONDITION = 'four_demo'
+FULL32_PROFILE = 'erp-full32-visual-v1'
+FULL32_CONDITION = 'visual_direct_four_demo'
+FULL32_ARM_CAP = 4 * 1024**2
+
+
+def profile_spec(profile='legacy400'):
+    v.need(profile in ('legacy400', FULL32_PROFILE), 'Explicit supported visual profile')
+    return (6400, FULL32_CONDITION, 'trusted_full32_visual_provider_pair_v1') if profile == FULL32_PROFILE else (400, CONDITION, ROUTE)
+
+
+def profile_fields(data):
+    if data.get('profile', 'legacy400') == 'legacy400':
+        return {}
+    v.need(data.get('profile') == FULL32_PROFILE and type(data.get('profile_commitment')) is str
+           and re.fullmatch('[0-9a-f]{64}', data['profile_commitment']), 'Static visual profile identity')
+    return {k: data[k] for k in ('profile', 'profile_commitment')}
+
+
+def session_name(index, profile='legacy400'):
+    count, _, _ = profile_spec(profile)
+    v.need(type(index) is int and 0 <= index < count, 'Bounded complete-roster ordinal')
+    return f'{index:04d}' if profile == FULL32_PROFILE else f'{index:03d}'
+
+
+def arm_cap(profile='legacy400'):
+    profile_spec(profile)
+    return FULL32_ARM_CAP if profile == FULL32_PROFILE else 262144
+
+
+def bridge_fields(dataset, trial_id, deps):
+    fields = profile_fields(dataset)
+    if fields:
+        fields['context_sha256'] = v.pin(deps['transport'].v.scientific_prompt(trial_id, 'four_demo').encode())['sha256']
+    return fields
 
 
 def budgets(transport, query_seconds, campaign_seconds, max_request_bytes,
             max_query_request_bytes, max_query_response_bytes,
-            max_campaign_request_bytes, max_campaign_response_bytes):
+            max_campaign_request_bytes, max_campaign_response_bytes, *, profile='legacy400'):
     for value, lo, hi in ((query_seconds, 5, 3600), (campaign_seconds, query_seconds, 86400)):
         v.need(type(value) in (int, float) and math.isfinite(value) and lo <= value <= hi, 'Finite wall allocation')
     for value, hi in ((max_request_bytes, 8 * 1024**2), (max_query_request_bytes, 512 * 1024**2),
@@ -41,31 +76,44 @@ def budgets(transport, query_seconds, campaign_seconds, max_request_bytes,
             'max_query_response_bytes': max_query_response_bytes,
             'max_campaign_request_bytes': max_campaign_request_bytes,
             'max_campaign_response_bytes': max_campaign_response_bytes,
-            'transport': asdict(t), 'maximum_provider_requests': 400 * (t.max_actions - 1)}
+            'transport': asdict(t), 'maximum_provider_requests': profile_spec(profile)[0] * (t.max_actions - 1)}
 
 
-def dataset_for(deps, packet):
-    data = deps['transport'].v.source(packet, deps['root'])
-    rows = data['rows']
-    v.need(len(rows) == 400 and len({r['trial_id'] for r in rows}) == 400, 'Complete 400 query roster')
-    cases = deps['original']['pair'].CASES
-    deps['original']['comparator'].roster({c: [r['trial_id'] for r in rows if r['trial_id'].startswith(c + '-')] for c in cases})
-    v.need([r['trial_id'] for r in rows] == [r['trial_id'] for r in data['roster']], 'Exact ordered public packet')
-    return data
+def dataset_for(deps, packet, *, profile='legacy400', manifest_pin=None, budget=None):
+    count, _, _ = profile_spec(profile)
+    v.need(budget is None or profile == FULL32_PROFILE, 'Measured shared packet budget is full32 only')
+    data = deps['transport'].v.source(packet, deps['root'], profile=profile, manifest_pin=manifest_pin, budget=budget)
+    try:
+        rows = data['rows']; ids = list(deps['transport'].v.ordered_ids(data))
+        v.need(len(ids) == count and len(set(ids)) == count, 'Complete unique query roster')
+        if profile == FULL32_PROFILE:
+            v.need(profile_fields(data) and ids == sorted(ids)
+                   and all(re.fullmatch('q-[0-9a-f]{32}', x) for x in ids), 'Complete sorted opaque full32 roster')
+        else:
+            cases = deps['original']['pair'].CASES
+            deps['original']['comparator'].roster({c: [x for x in ids if x.startswith(c + '-')] for c in cases})
+        v.need(ids == [r['trial_id'] for r in data['roster']], 'Exact ordered public packet')
+        return data
+    except BaseException:
+        deps['transport'].v.close_source(data)
+        raise
 
 
-def configuration(deps, trial_id, model, max_output_tokens, deadline, limits):
+def configuration(deps, trial_id, model, max_output_tokens, deadline, limits, dataset=None, *, budget=None):
     s = deps['s']
+    def captured(path, cap=1048576, expected=None):
+        return v.capture(path,cap,expected,budget=budget) if budget is not None else s.read(path,cap,expected)
     return {'schema': 'neural077_visual_provider_client_v1', 'model': model,
             'max_output_tokens': max_output_tokens, 'deadline': deadline, 'trial_id': trial_id,
             'implementations_root': str(deps['root']), 'source_bindings': deps['bindings'],
             'max_request_bytes': limits['max_request_bytes'], 'max_requests': limits['transport']['max_actions'] - 1,
             'max_query_request_bytes': limits['max_query_request_bytes'],
             'max_query_response_bytes': limits['max_query_response_bytes'],
-            'bridge_path': str(HERE / 'visual_bridge.py'), 'bridge_pin': v.pin(s.read(HERE / 'visual_bridge.py')),
+            'bridge_path': str(HERE / 'visual_bridge.py'), 'bridge_pin': v.pin(captured(HERE / 'visual_bridge.py')),
             'sender_path': str(deps['root'] / 'waveform-provider-v1/client.py'),
             'sender_pin': deps['bindings']['waveform-provider-v1/client.py'],
-            'codec_path': str(HERE / 'transfer_png.py'), 'codec_pin': v.pin(s.read(HERE / 'transfer_png.py'))}
+            'codec_path': str(HERE / 'transfer_png.py'), 'codec_pin': v.pin(captured(HERE / 'transfer_png.py')),
+            **(bridge_fields(dataset, trial_id, deps) if dataset is not None else {})}
 
 
 def credential(fd, deps):
@@ -129,26 +177,30 @@ def _http(http, config_pin, request, response, deadline):
            and http['started_monotonic'] <= http['finished_monotonic'] <= deadline, 'HTTP deadline exceeded')
 
 
-def audit_episode(root, provider_root, dataset, ordinal, deps, manifest):
+def audit_episode(root, provider_root, dataset, ordinal, deps, manifest, *, budget=None):
     """Rebuild every full image-history request from audited exact viewer frames."""
     s, t, b = deps['s'], deps['transport'], deps['bridge']
+    def captured(path, cap=1048576, expected=None):
+        return v.capture(path,cap,expected,budget=budget) if budget is not None else s.read(path,cap,expected)
     root, provider_root = s.path(root), s.path(provider_root)
     v.need({p.name for p in provider_root.iterdir()} == {'CONFIG.json', 'custody', 'OPERATOR_END.json'},
            'Exact provider episode inventory')
-    end = t.audit_transport(root, dataset, ordinal, CONDITION)
-    transport_manifest = s.decode(s.read(root / 'transport/MANIFEST.json', 32768))
+    end = t.audit_transport(root, dataset, ordinal, 'four_demo', budget=budget)
+    profile = dataset.get('profile', 'legacy400'); condition = profile_spec(profile)[1]
+    binding_fields = bridge_fields(dataset, deps['transport'].v.query_id(dataset, ordinal), deps)
+    transport_manifest = s.decode(captured(root / 'transport/MANIFEST.json', 32768))
     v.need(transport_manifest == t.boundary_manifest(t.Limits(**manifest['limits']['transport']),
-            'protocol_only', HERE / 'visual_client.py', transport_manifest['episode_id'], None),
+            'protocol_only', HERE / 'visual_client.py', transport_manifest['episode_id'], None, dataset=dataset, budget=budget),
             'Exact trusted transport boundary manifest')
     v.need(transport_manifest['sandbox'] == 'protocol_only'
            and transport_manifest['client_sha256'] == manifest['operator']['visual_client.py']['sha256']
            and transport_manifest['limits'] == manifest['limits']['transport'], 'Trusted visual transport profile')
-    config_body = s.read(provider_root / 'CONFIG.json', 32768); cfg = s.decode(config_body)
+    config_body = captured(provider_root / 'CONFIG.json', 32768); cfg = s.decode(config_body)
     v.need(type(cfg['deadline']) in (int, float) and math.isfinite(cfg['deadline'])
-           and cfg == configuration(deps, dataset['rows'][ordinal]['trial_id'], manifest['model'],
-                                    manifest['max_output_tokens'], cfg['deadline'], manifest['limits']),
+           and cfg == configuration(deps, deps['transport'].v.query_id(dataset, ordinal), manifest['model'],
+                                    manifest['max_output_tokens'], cfg['deadline'], manifest['limits'], dataset, budget=budget),
            'Exact query/source configuration')
-    operator_end = s.decode(s.read(provider_root / 'OPERATOR_END.json', 16384))
+    operator_end = s.decode(captured(provider_root / 'OPERATOR_END.json', 16384))
     v.need(set(operator_end) == {'started_monotonic', 'finished_monotonic', 'config', 'transport_end'}
            and all(type(operator_end[k]) in (int, float) and math.isfinite(operator_end[k])
                    for k in ('started_monotonic', 'finished_monotonic'))
@@ -157,13 +209,13 @@ def audit_episode(root, provider_root, dataset, ordinal, deps, manifest):
            and operator_end['finished_monotonic'] - operator_end['started_monotonic'] <= manifest['limits']['query_seconds']
            and cfg['deadline'] == min(operator_end['started_monotonic'] + manifest['limits']['query_seconds'], manifest['deadline']) - 2
            and operator_end['config'] == v.pin(config_body)
-           and operator_end['transport_end'] == v.pin(s.read(root / 'transport/END.json', 32768)), 'Query clock/closure mismatch')
+           and operator_end['transport_end'] == v.pin(captured(root / 'transport/END.json', 32768)), 'Query clock/closure mismatch')
     turns = (end['messages'] - 1) // 2
     v.need(1 <= turns <= cfg['max_requests'], 'Finite actual provider turn count')
     custody = provider_root / 'custody'
     v.need({p.name for p in custody.iterdir()} == {f'{i:03d}' for i in range(turns)} | {'CLIENT_END.json'},
            'Exact complete provider turns')
-    codec = v.module('n077_visual_lossless_auditor', HERE / 'transfer_png.py', s.read(HERE / 'transfer_png.py'))
+    codec = v.module('n077_visual_lossless_auditor', HERE / 'transfer_png.py', captured(HERE / 'transfer_png.py'))
     history = None; provider_ids = []; requests = responses = 0
     usage = {k: 0 for k in ('input_tokens', 'output_tokens', 'total_tokens')}
     prior_action = None; first_frame_pin = None; final_response = None
@@ -171,14 +223,14 @@ def audit_episode(root, provider_root, dataset, ordinal, deps, manifest):
     for i in range(turns):
         row = custody / f'{i:03d}'
         v.need({p.name for p in row.iterdir()} == {'REQUEST.bin', 'RESPONSE.bin', 'HTTP.json', 'BRIDGE.json'}, 'Complete turn custody')
-        frame = s.read(root / f'transport/{2*i:04d}-out.bin', t.PNG_MAX + t.HEADER_MAX + 8)
+        frame = captured(root / f'transport/{2*i:04d}-out.bin', t.PNG_MAX + t.HEADER_MAX + 8)
         header, original_png = t.unpack(frame)
-        wire_action = s.read(root / f'transport/{2*i+1:04d}-in.bin', t.v.MAX_REQUEST + 8)
+        wire_action = captured(root / f'transport/{2*i+1:04d}-in.bin', t.v.MAX_REQUEST + 8)
         action_header, no_png = t.unpack(wire_action, inbound=True)
         action = wire_action[8:]
-        request = s.read(row / 'REQUEST.bin', cfg['max_request_bytes'])
-        response = s.read(row / 'RESPONSE.bin', 524288)
-        binding = s.decode(s.read(row / 'BRIDGE.json', 32768))
+        request = captured(row / 'REQUEST.bin', cfg['max_request_bytes'])
+        response = captured(row / 'RESPONSE.bin', 524288)
+        binding = s.decode(captured(row / 'BRIDGE.json', 32768))
         parsed_request = b.decode(request)
         def delivered_png(raw):
             content = parsed_request['input'][-1]['content']
@@ -189,11 +241,11 @@ def audit_episode(root, provider_root, dataset, ordinal, deps, manifest):
             codec.verify_equivalence(raw, delivered, mapping)
             return delivered, mapping
         if i == 0:
-            history, mapping = b.first_frame(header, original_png, cfg['trial_id'], delivered_png)
+            history, mapping = b.first_frame(header, original_png, cfg['trial_id'], delivered_png, **binding_fields)
             first_frame_pin = v.pin(frame)
         else:
             v.need(final_response is None, 'No provider request after first typed finalize')
-            history, mapping = b.append_frame(history, prior_action, header, original_png, delivered_png)
+            history, mapping = b.append_frame(history, prior_action, header, original_png, delivered_png, profile=profile)
         v.need(request == b.request_body(history, cfg['model'], cfg['max_output_tokens'], cap=cfg['max_request_bytes']),
                'Full exact current-query image history required')
         actual_action, metadata = b.completed_action(response, cfg['model'], cfg['max_output_tokens'])
@@ -205,7 +257,7 @@ def audit_episode(root, provider_root, dataset, ordinal, deps, manifest):
         v.need(requests <= cfg['max_query_request_bytes'] and responses <= cfg['max_query_response_bytes'], 'Query cumulative bytes')
         for key in usage:
             usage[key] += metadata['usage'][key]
-        expected = {'schema': 'neural077_visual_provider_bridge_v1', 'condition': CONDITION,
+        expected = {'schema': 'neural077_visual_provider_bridge_v1', 'condition': condition, **binding_fields,
                     'config_pin': v.pin(config_body), 'turn': i, 'status': 'complete_unscored_action',
                     'frame': v.pin(frame), 'history': v.pin(b.encode(history)), 'image_mapping': mapping,
                     'request': v.pin(request), 'response': v.pin(response), 'action': v.pin(action),
@@ -213,15 +265,15 @@ def audit_episode(root, provider_root, dataset, ordinal, deps, manifest):
                     'retry_count': 0, 'response_charge_is_upper_bound': False, 'provider_context_qualified': False, 'provider_capacity_qualified': False,
                     'scientific_qualification': False}
         v.need(binding == expected, 'Exact provider bridge receipt')
-        http = s.decode(s.read(row / 'HTTP.json', 16384))
+        http = s.decode(captured(row / 'HTTP.json', 16384))
         _http(http, v.pin(config_body), request, response, cfg['deadline'])
         v.need(previous_http_end <= http['started_monotonic'] <= http['finished_monotonic'] <= operator_end['finished_monotonic'],
                'Provider turn order/clock mismatch')
         previous_http_end = http['finished_monotonic']
-    terminal = s.read(root / f'transport/{2*turns:04d}-out.bin', t.HEADER_MAX + 8)
-    v.need(final_response is not None and final_response == s.read(root / 'response.txt', 4096), 'First final response binding')
-    client_end = s.decode(s.read(custody / 'CLIENT_END.json', 65536))
-    expected_end = {'schema': 'neural077_visual_provider_client_end_v1', 'condition': CONDITION,
+    terminal = captured(root / f'transport/{2*turns:04d}-out.bin', t.HEADER_MAX + 8)
+    v.need(final_response is not None and final_response == captured(root / 'response.txt', 4096), 'First final response binding')
+    client_end = s.decode(captured(custody / 'CLIENT_END.json', 65536))
+    expected_end = {'schema': 'neural077_visual_provider_client_end_v1', 'condition': condition, **binding_fields,
                     'config_pin': v.pin(config_body), 'status': 'closed_first_final', 'turns': turns,
                     'request_bytes': requests, 'response_bytes': responses, 'provider_response_ids': provider_ids,
                     'usage': usage, 'initial_frame': first_frame_pin, 'terminal_frame': v.pin(terminal),
@@ -237,14 +289,15 @@ def audit_episode(root, provider_root, dataset, ordinal, deps, manifest):
             'started_monotonic': operator_end['started_monotonic'],
             'finished_monotonic': operator_end['finished_monotonic'],
             'provider_response_ids': provider_ids, 'usage': usage, 'probability': probability,
-            'transport_end': v.pin(s.read(root / 'transport/END.json', 32768)),
-            'client_end': v.pin(s.read(custody / 'CLIENT_END.json', 65536))}
+            'transport_end': v.pin(captured(root / 'transport/END.json', 32768)),
+            'client_end': v.pin(captured(custody / 'CLIENT_END.json', 65536))}
 
 
-def _sum(rows, limits):
-    v.need(len(rows) == 400, 'All 400 episodes required')
-    v.need(len({row['episode_id'] for row in rows}) == 400
-           and all(rows[i]['finished_monotonic'] <= rows[i+1]['started_monotonic'] for i in range(399)),
+def _sum(rows, limits, profile='legacy400'):
+    count = profile_spec(profile)[0]
+    v.need(len(rows) == count, 'Every selected episode required')
+    v.need(len({row['episode_id'] for row in rows}) == count
+           and all(rows[i]['finished_monotonic'] <= rows[i+1]['started_monotonic'] for i in range(count - 1)),
            'Independent fresh ordered query episodes required')
     ids = [p for row in rows for p in row['provider_response_ids']]
     v.need(len(ids) == len(set(ids)), 'No provider response reused across queries')
@@ -256,87 +309,114 @@ def _sum(rows, limits):
     return result
 
 
-def run_arm(implementations_root, packet, output, model, max_output_tokens, credential_fd, python, **allocations):
+def run_arm(implementations_root, packet, output, model, max_output_tokens, credential_fd, python, *,
+            profile='legacy400', manifest_pin=None, **allocations):
     deps = v.load(implementations_root); s, t = deps['s'], deps['transport']
-    limits = budgets(t, **allocations); before = deps['operator']
-    data = dataset_for(deps, packet)
-    executable = Path(python).resolve(strict=True)
-    executable_pin = v.pin(s.read(executable, 64*1024**2))
-    token = credential(credential_fd, deps)
-    output = s.path(output); owned = False; rows = []
+    limits = budgets(t, profile=profile, **allocations); before = deps['operator']
+    count, condition, route = profile_spec(profile)
+    output = s.path(output); owned = False; rows = []; request_bytes = response_bytes = 0
+    data = dataset_for(deps, packet, profile=profile, manifest_pin=manifest_pin)
+    try:
+        executable = Path(python).resolve(strict=True)
+        executable_pin = v.pin(s.read(executable, 64*1024**2))
+        token = credential(credential_fd, deps)
+    except BaseException:
+        t.v.close_source(data)
+        raise
     try:
         output.mkdir(mode=0o700); owned = True
         (output / 'sessions').mkdir(mode=0o700); (output / 'providers').mkdir(mode=0o700)
         started = time.monotonic()
-        manifest = {'schema': 'neural077_visual_provider_campaign_v1', 'route': ROUTE, 'condition': CONDITION,
-                    'queries': 400, 'demonstrations': 4, 'source': deps['bindings'], 'operator': before,
+        manifest = {'schema': 'neural077_visual_provider_campaign_v1', 'route': route, 'condition': condition,
+                    'queries': count, 'demonstrations': 4, 'source': deps['bindings'], 'operator': before,
                     'packet': data['packet'], 'model': model, 'max_output_tokens': max_output_tokens, 'limits': limits,
                     'client_interpreter': {'path': str(executable), 'pin': executable_pin},
                     'started_monotonic': started, 'deadline': started + limits['campaign_seconds'],
                     'retry_policy': 'none', 'local_participant_sandbox': None,
                     'participant_code_executed_locally': False, 'remote_context_qualified': False,
-                    'provider_capacity_qualified': False, 'scientific_qualification': False}
+                    'provider_capacity_qualified': False, 'scientific_qualification': False, **profile_fields(data)}
         s.write(output / 'MANIFEST.json', s.encode(manifest))
-        for i in range(400):
-            provider = output / 'providers' / f'{i:03d}'; provider.mkdir(mode=0o700)
+        for i in range(count):
+            provider = output / 'providers' / f'{session_name(i, profile)}'; provider.mkdir(mode=0o700)
             (provider / 'custody').mkdir(mode=0o700)
             start = time.monotonic()
-            cfg = configuration(deps, data['rows'][i]['trial_id'], model, max_output_tokens,
-                                min(start + limits['query_seconds'], manifest['deadline']) - 2, limits)
+            cfg = configuration(deps, t.v.query_id(data, i), model, max_output_tokens,
+                                min(start + limits['query_seconds'], manifest['deadline']) - 2, limits, data)
             # Future query caps never consume more than the remaining campaign allocation.
-            remaining_request = limits['max_campaign_request_bytes'] - sum(r['request_bytes'] for r in rows)
-            remaining_response = limits['max_campaign_response_bytes'] - sum(r['response_bytes'] for r in rows)
+            remaining_request = limits['max_campaign_request_bytes'] - request_bytes
+            remaining_response = limits['max_campaign_response_bytes'] - response_bytes
             v.need(remaining_request >= limits['max_query_request_bytes']
                    and remaining_response >= limits['max_query_response_bytes'],
                    'Reserve the declared full query cap before starting; never silently narrow it')
             v.need(time.monotonic() < cfg['deadline'], 'Campaign deadline before query')
             raw = s.encode(cfg); s.write(provider / 'CONFIG.json', raw)
-            end = t.run_episode(data, i, CONDITION, output / 'sessions' / f'{i:03d}', HERE / 'visual_client.py',
+            end = t.run_episode(data, i, 'four_demo', output / 'sessions' / f'{session_name(i, profile)}', HERE / 'visual_client.py',
                                 executable, 'protocol_only', t.Limits(**limits['transport']),
                                 client_launcher=lambda command,cwd: launch_client(command,cwd,token,raw,provider,deps))
             s.write(provider / 'OPERATOR_END.json', s.encode({'started_monotonic': start,
                     'finished_monotonic': time.monotonic(), 'config': v.pin(raw),
-                    'transport_end': v.pin(s.read(output / 'sessions' / f'{i:03d}/transport/END.json', 32768))}))
+                    'transport_end': v.pin(s.read(output / 'sessions' / f'{session_name(i, profile)}/transport/END.json', 32768))}))
             v.need(end['status'] == 'valid_unscored', 'Failed first-final query makes campaign unscoreable')
-            rows.append(audit_episode(output / 'sessions' / f'{i:03d}', provider, data, i, deps, manifest))
-        totals = _sum(rows, limits)
-        collection = t.collect(packet, output / 'sessions', CONDITION, output / 'collection', deps['root'])
+            rows.append(audit_episode(output / 'sessions' / f'{session_name(i, profile)}', provider, data, i, deps, manifest))
+            request_bytes += rows[-1]['request_bytes']; response_bytes += rows[-1]['response_bytes']
+        totals = _sum(rows, limits, profile)
+        v.need(totals['request_bytes'] == request_bytes and totals['response_bytes'] == response_bytes,
+               'Cumulative campaign byte counters reconcile with admitted episodes')
+        collection = t.collect(packet, output / 'sessions', 'four_demo', output / 'collection', deps['root'],
+                               profile=profile, manifest_pin=manifest_pin, condition=(condition if profile == FULL32_PROFILE else None))
         v.need(v.identity(s) == before and v.load(implementations_root)['bindings'] == deps['bindings']
                and v.pin(s.read(executable, 64*1024**2)) == executable_pin, 'Source/runtime drift')
         v.need(time.monotonic() <= manifest['deadline'], 'Whole campaign including collection deadline')
-        receipt = {'schema': ARM, 'status': 'closed_unscored_visual_provider_arm', 'route': ROUTE,
-                   'condition': CONDITION, 'queries': 400, 'demonstrations': 4, 'source': deps['bindings'],
+        receipt = {'schema': ARM, 'status': 'closed_unscored_visual_provider_arm', 'route': route,
+                   'condition': condition, 'queries': count, 'demonstrations': 4, 'source': deps['bindings'],
                    'operator': before, 'manifest': v.pin(s.read(output / 'MANIFEST.json', 65536)),
                    'episodes': [{k: row[k] for k in ('transport_end','client_end')} for row in rows],
                    'totals': totals, 'collection': v.pin(s.read(output / 'collection/TRANSPORT_COMPLETE.json', 16384)),
                    'submission': v.pin(s.read(output / 'collection/submission.npz', 1048576)),
                    'local_participant_sandbox': None, 'remote_context_qualified': False,
                    'provider_capacity_qualified': False, 'scientific_qualification': False,
-                   'private_target_reads': 0, 'scoring_performed': False}
+                   'private_target_reads': 0, 'scoring_performed': False, **profile_fields(data)}
         s.write(output / 'ARM.json', s.encode(receipt))
         return receipt
     except BaseException as error:
         if owned:
             s.write(output / 'FAILED.json', s.encode({'status': 'unscoreable_visual_provider_campaign',
                     'completed_queries': len(rows), 'error_type': type(error).__name__, 'retry_allowed': False,
-                    'private_target_reads': 0, 'scoring_performed': False}))
+                    'private_target_reads': 0, 'scoring_performed': False,
+                    **({'expected_queries':6400,'expected_people':32,'no_omissions_or_replacements':True}
+                       if profile==FULL32_PROFILE else {})}))
         raise
     finally:
         token[:] = b'\0' * len(token)
+        t.v.close_source(data)
 
 
-def admit_arm(root, expected_receipt, packet, deps):
+def admit_arm(root, expected_receipt, packet, deps, *, profile='legacy400', manifest_pin=None, budget=None):
+    data = dataset_for(deps, packet, profile=profile, manifest_pin=manifest_pin, budget=budget)
+    try:
+        return _admit_loaded(root, expected_receipt, deps, data, profile, budget=budget)
+    finally:
+        deps['transport'].v.close_source(data)
+
+
+def _admit_loaded(root, expected_receipt, deps, data, profile, *, budget=None):
+    count, condition, route = profile_spec(profile)
     s, t = deps['s'], deps['transport']; root = s.path(root)
+    def captured(path, cap=1048576, expected=None):
+        return v.capture(path,cap,expected,budget=budget) if budget is not None else s.read(path,cap,expected)
     v.need({p.name for p in root.iterdir()} == {'MANIFEST.json','sessions','providers','collection','ARM.json'},
            'Exact complete arm inventory; failed campaigns cannot be admitted')
-    raw = s.read(root / 'ARM.json', 262144, expected_receipt); arm = s.decode(raw)
-    fixed = {'schema': ARM, 'status': 'closed_unscored_visual_provider_arm', 'route': ROUTE,
-             'condition': CONDITION, 'queries': 400, 'demonstrations': 4, 'source': deps['bindings'],
-             'operator': v.identity(s), 'local_participant_sandbox': None, 'remote_context_qualified': False,
+    raw = captured(root / 'ARM.json', arm_cap(profile), expected_receipt); arm = s.decode(raw)
+    fixed = {'schema': ARM, 'status': 'closed_unscored_visual_provider_arm', 'route': route,
+             'condition': condition, 'queries': count, 'demonstrations': 4, 'source': deps['bindings'],
+             'operator': v.identity(s,budget=budget), 'local_participant_sandbox': None, 'remote_context_qualified': False,
              'provider_capacity_qualified': False, 'scientific_qualification': False, 'private_target_reads': 0,
-             'scoring_performed': False}
+             'scoring_performed': False, **profile_fields(data)}
     v.need(all(type(arm.get(k)) is type(x) and arm[k] == x for k,x in fixed.items()), 'Exact visual provider arm')
-    manifest = s.decode(s.read(root / 'MANIFEST.json', 65536, arm['manifest']))
+    if profile == FULL32_PROFILE:
+        v.need(set(arm) == set(fixed) | {'manifest','episodes','totals','collection','submission'},
+               'Exact full32 arm custody fields')
+    manifest = s.decode(captured(root / 'MANIFEST.json', 65536, arm['manifest']))
     v.need(manifest['schema'] == 'neural077_visual_provider_campaign_v1'
            and all(manifest[k] == arm[k] for k in ('route','condition','queries','demonstrations','source','operator'))
            and manifest['retry_policy'] == 'none' and manifest['local_participant_sandbox'] is None
@@ -346,41 +426,59 @@ def admit_arm(root, expected_receipt, packet, deps):
     limits = manifest['limits']
     keys = ('query_seconds','campaign_seconds','max_request_bytes','max_query_request_bytes','max_query_response_bytes',
             'max_campaign_request_bytes','max_campaign_response_bytes')
-    v.need(limits == budgets(t, **{k:limits[k] for k in keys})
+    v.need(limits == budgets(t, profile=profile, **{k:limits[k] for k in keys})
            and all(type(manifest[k]) in (int,float) and math.isfinite(manifest[k]) for k in ('started_monotonic','deadline'))
            and manifest['deadline'] == manifest['started_monotonic'] + limits['campaign_seconds'], 'Exact finite campaign')
-    data = dataset_for(deps, packet)
-    v.need(data['packet'] == manifest['packet'], 'Original public packet changed')
-    expected_names = {f'{i:03d}' for i in range(400)}
+    v.need(all(manifest.get(k) == value for k, value in profile_fields(data).items())
+           and data['packet'] == manifest['packet'], 'Original public packet changed')
+    expected_names = {f'{session_name(i, profile)}' for i in range(count)}
     v.need({p.name for p in (root/'sessions').iterdir()} == expected_names
            and {p.name for p in (root/'providers').iterdir()} == expected_names
-           and len(arm['episodes']) == 400, 'All 400 independent complete episodes required')
-    rows = [audit_episode(root/'sessions'/f'{i:03d}',root/'providers'/f'{i:03d}',data,i,deps,manifest) for i in range(400)]
+           and len(arm['episodes']) == count, 'Every independent complete episode required')
+    rows = [audit_episode(root/'sessions'/f'{session_name(i, profile)}',root/'providers'/f'{session_name(i, profile)}',data,i,deps,manifest,budget=budget) for i in range(count)]
     v.need(arm['episodes'] == [{k:r[k] for k in ('transport_end','client_end')} for r in rows]
-           and arm['totals'] == _sum(rows,limits), 'Every query/turn bound to arm')
-    collection = s.decode(s.read(root/'collection/TRANSPORT_COMPLETE.json',16384,arm['collection']))
+           and arm['totals'] == _sum(rows,limits,profile), 'Every query/turn bound to arm')
+    collection = s.decode(captured(root/'collection/TRANSPORT_COMPLETE.json',16384,arm['collection']))
     v.need(collection['schema'] == 'neural077_transport_collection_v1'
-           and collection['status'] == 'complete_unscored_transport_collection' and collection['condition'] == CONDITION
-           and type(collection['queries']) is int and collection['queries'] == 400
+           and collection['status'] == 'complete_unscored_transport_collection' and collection['condition'] == condition
+           and type(collection['queries']) is int and collection['queries'] == count
            and collection['submission_sha256'] == arm['submission']['sha256']
            and collection['scoring_performed'] is False and collection['provider_qualification'] == 'not_established',
            'Original complete transport collection')
-    predicted = s.read(root/'collection/submission.npz',1048576,arm['submission'])
+    if profile == FULL32_PROFILE:
+        first = s.decode(captured(root/'sessions'/session_name(0,profile)/'transport/MANIFEST.json',32768))
+        expected_collection = {'schema':'neural077_transport_collection_v1','queries':count,
+            'status':'complete_unscored_transport_collection','condition':condition,
+            'submission_sha256':arm['submission']['sha256'],'scoring_performed':False,
+            'configuration_sha256':v.pin(s.encode({k:value for k,value in first.items() if k!='episode_id'}))['sha256'],
+            'performance_claim':'none','provider_qualification':'not_established',
+            **profile_fields(data),'packet_sha256':data['packet']}
+        v.need(collection == expected_collection, 'Full32 collection source/profile/configuration commitment')
+    predicted = captured(root/'collection/submission.npz',1048576,arm['submission'])
     import numpy as np
     # Preserve the original ZIP/NPY expanded-length checks before materializing
     # even public prediction arrays. Snapshot bytes cannot be swapped later.
-    ids = {case: [r['trial_id'] for r in data['rows'] if r['trial_id'].startswith(case+'-')]
-           for case in deps['original']['pair'].CASES}
+    ids = (list(t.v.ordered_ids(data)) if profile == FULL32_PROFILE else
+           {case: [r['trial_id'] for r in data['rows'] if r['trial_id'].startswith(case+'-')]
+            for case in deps['original']['pair'].CASES})
+    if budget is not None:
+        budget.input(8 * len(predicted))  # finite ZIP/header/validation snapshot rereads, conservatively reserved
     with tempfile.TemporaryDirectory(prefix='neural077-visual-public-') as folder:
         snapshot = Path(folder).resolve()/'submission.npz'
+        if budget is not None: budget.output(len(predicted))
         s.write(snapshot,predicted)
         data['validator'].validate(snapshot,ids)
         with np.load(io.BytesIO(predicted),allow_pickle=False) as arrays:
             v.need(set(arrays.files) == {'trial_ids','target_probability'}
-                   and arrays['trial_ids'].tolist() == [r['trial_id'] for r in data['rows']]
+                   and arrays['trial_ids'].tolist() == list(t.v.ordered_ids(data))
                    and np.array_equal(arrays['target_probability'],np.asarray([r['probability'] for r in rows],dtype=np.float64)),
                    'Submission must equal every first-final response')
-    return root/'collection/submission.npz',arm['submission'],v.pin(raw)
+    submission = (root/'collection/submission.npz', arm['submission'], v.pin(raw))
+    if profile == FULL32_PROFILE:
+        ordered = tuple(t.v.ordered_ids(data))
+        return {'submission': submission, 'trial_ids': ordered,
+                'predictions': dict(zip(ordered, (r['probability'] for r in rows), strict=True))}
+    return submission
 
 
 def grade(request_path, expected_sha):
@@ -443,6 +541,8 @@ def dispatch_grade(implementations_root,packet,delivery_root,a,b,private_locatio
 def main(argv=None):
     p=argparse.ArgumentParser(description=__doc__);sub=p.add_subparsers(dest='action',required=True)
     r=sub.add_parser('run')
+    r.add_argument('--profile', choices=('legacy400', FULL32_PROFILE), default='legacy400')
+    r.add_argument('--manifest-pin', help='Exact public manifest descriptor as JSON; full32 only')
     for name in ('implementations-root','packet','output','model','python'):r.add_argument('--'+name,required=True)
     for name in ('credential-fd','max-output-tokens','max-request-bytes','max-query-request-bytes',
                  'max-query-response-bytes','max-campaign-request-bytes','max-campaign-response-bytes'):
@@ -454,6 +554,8 @@ def main(argv=None):
     c.add_argument('--timeout',type=float,default=60)
     g=sub.add_parser('_grade');g.add_argument('--request',required=True);g.add_argument('--sha256',required=True)
     args=vars(p.parse_args(argv));action=args.pop('action')
+    if action == 'run' and args.get('manifest_pin') is not None:
+        args['manifest_pin'] = v.decode(args['manifest_pin'].encode())
     try:
         result=run_arm(**args) if action=='run' else dispatch_grade(**args) if action=='compare' else grade(args['request'],args['sha256'])
         print(result['status']);return 0

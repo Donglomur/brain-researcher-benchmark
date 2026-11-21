@@ -22,7 +22,7 @@ CASES = {'development-001': 2780, 'development-002': 2670}
 SOURCES = {
     'benchmarks/neural/NEURAL-007/implementations/viewer-provider-v1/provider.py': {'bytes': 18476, 'sha256': 'a41bff305cfbcba79c4317be59f97c5cbe7f68d3cbd06a942a523ffc491655fb'},
     'benchmarks/neural/NEURAL-007/implementations/viewer-provider-v1/policy.py': {'bytes': 12079, 'sha256': '4201c0cc95b8db65da3bb034651e0abe5fd9f0ac2456ad81c0ad0a79c0241cb2'},
-    'benchmarks/neural/NEURAL-007/implementations/viewer-provider-v1/SOURCE_BINDINGS.json': {'bytes': 885, 'sha256': '6a2c5016689e7af0a580382b69aed9a67747afbd947c3a525bedf83d30dfba37'},
+    'benchmarks/neural/NEURAL-007/implementations/viewer-provider-v1/SOURCE_BINDINGS.json': {'bytes': 885, 'sha256': '7a5cfab381098d0562fbfaecfeceefd7fb2da9b262cd91718b24a01d887f56cf'},
     'benchmarks/neural/NEURAL-077/implementations/waveform-provider-v1/client.py': {'bytes': 19747, 'sha256': '299d3effae6db940cf2dcd8498a2b43af0b36978e9f892cdd3b8af39391d9aef'},
 }
 TRANSPORT_SOURCES = {

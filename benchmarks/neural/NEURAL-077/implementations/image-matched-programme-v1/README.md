@@ -29,3 +29,7 @@ The target is the released experimental event label, not physiological P3 presen
 Source freezing constrains subsequent changes; it does not establish an author's earlier exposure or a model's pretraining history. Those remain declared or unknown as appropriate. Participant and case structure, uncertainty and reference comparisons must be reported with any future measured result.
 
 Generated controls test construction and refusal behavior. They do not qualify an actual provider, demonstrate operating-system confinement, prove universal process containment, or measure neural understanding. Runtime restrictions and their evidence must be stated separately from instruction-only restrictions. This source contribution includes no live provider call, scientific evaluation, or readiness promotion.
+
+## Full32 visual source extension (2026-11-20)
+
+The explicit `erp-full32-visual-v1` source profile covers all 6,400 queries using the same four demonstrations and image-matched visual arms. See [the source and qualification contract](../image-matched-programme-v1/FULL32_VISUAL.md). The historical 400-query visual default and 6,400-query numerical default remain separate. This extension does not establish a completed visual study or native/provider qualification.

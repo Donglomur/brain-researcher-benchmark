@@ -109,13 +109,14 @@ def compose_context(prompt, demos, query, condition):
 class PacketSession:
     """Operator-side authenticated index. Never provide this object to a solver."""
 
-    def __init__(self, public_root, manifest_pin):
+    def __init__(self, public_root, manifest_pin, budget=None):
         check_pin(manifest_pin, MANIFEST_LIMIT)
         root = Path(public_root).absolute()
         need(root.resolve(strict=True) == root, 'Packet root must resolve directly')
         self._root_fd = os.open(root, os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW)
         self._closed = False
         self.manifest_pin = dict(manifest_pin)
+        self._budget = budget
         try:
             manifest = decode(self._read('PACKET.json', manifest_pin))
             need(type(manifest) is dict and manifest.get('schema') == 'erp-core-full32-public-packet-v1', 'Full32 packet schema')
@@ -194,6 +195,8 @@ class PacketSession:
         fd = self._open(relative, pin['bytes'])
         try:
             before = identity(fd)
+            if self._budget is not None:
+                self._budget.input(pin['bytes'] + 1)
             with os.fdopen(fd, 'rb', closefd=False) as stream:
                 body = stream.read(pin['bytes'] + 1)
             need(descriptor(body) == pin and identity(fd) == before, 'Authenticated member changed or hash mismatch')
@@ -201,13 +204,15 @@ class PacketSession:
         finally:
             os.close(fd)
 
-    def context(self, trial_id, condition):
+    def _query(self, trial_id):
+        """Read exactly one authenticated query span; trusted operator only."""
         need(type(trial_id) is str and trial_id in self._rows, 'Unknown query ID')
-        need(condition in CONDITIONS, 'Unknown numerical condition')
         row = self._rows[trial_id]
         fd = self._open(row['path'], self._files[row['path']]['bytes'])
         try:
             before = identity(fd)
+            if self._budget is not None:
+                self._budget.input(row['bytes'])  # Exact selected span, never a whole shard.
             os.lseek(fd, row['offset'], os.SEEK_SET)
             chunks = []
             remaining = row['bytes']
@@ -227,6 +232,37 @@ class PacketSession:
         channels = query['channels']
         need(type(channels) is list and len(channels) == 2 and all(type(c) is list and len(c) == 1024 for c in channels), 'Complete two-channel 1024-sample query required')
         need(all(type(v) in (int, float) and math.isfinite(v) for c in channels for v in c), 'Finite numeric waveform values required')
+        return body, query
+
+    def query_record(self, trial_id):
+        """Operator-only structured record, never a participant-facing payload.
+
+        The viewer renders this record through its existing image projection.
+        This accessor neither parses a composed prompt nor exposes source joins.
+        """
+        return self._query(trial_id)[1]
+
+    def demonstration_records(self):
+        """Independent structured copies of the same four authenticated demos."""
+        need(not self._closed, 'Packet session closed')
+        demos = decode(self._demos.encode('utf-8'))
+        need(type(demos) is list and len(demos) == 4, 'Exactly four demonstrations')
+        for row in demos:
+            need(type(row) is dict and set(row) == {'trial_id', 'channels', 'target'} and
+                 type(row['trial_id']) is str and type(row['target']) is int and
+                 row['target'] in (0, 1), 'Exact labelled demonstration record')
+            channels = row['channels']
+            need(type(channels) is list and len(channels) == 2 and
+                 all(type(c) is list and len(c) == 1024 for c in channels) and
+                 all(type(v) in (int, float) and math.isfinite(v) for c in channels for v in c),
+                 'Complete finite two-channel demonstration')
+        need(len({row['trial_id'] for row in demos}) == 4, 'Unique demonstration identities')
+        return demos
+
+    def context(self, trial_id, condition):
+        need(type(trial_id) is str and trial_id in self._rows, 'Unknown query ID')
+        need(condition in CONDITIONS, 'Unknown numerical condition')
+        body, _ = self._query(trial_id)
         # Parsing above validates only; compose with unchanged authenticated text.
         prompt = compose_context(self._prompt, self._demos, body.decode('utf-8'), condition)
         return {'trial_id': trial_id, 'condition': condition, 'prompt': prompt,

@@ -7,7 +7,7 @@ from types import SimpleNamespace
 import raw_contract as C
 
 VISUAL_PATH = "benchmarks/neural/NEURAL-007/implementations/epoch-isolated-pair-v1/epoch_visual.py"
-VISUAL_PIN = {"bytes": 15668, "sha256": "56025c814c05f7e3f88571dc8316517f8fae664be93829e4734ba0f4f104205f"}
+VISUAL_PIN = {"bytes": 15668, "sha256": "003bc12b1e9340d56daa2de767ba9156574409361a9da4e953978a23fd0f5828"}
 MEMORY_POLICY = "immutable_complete_epoch_overview_plus_current_detail_no_history_v1"
 need, pin = C.need, C.pin
 

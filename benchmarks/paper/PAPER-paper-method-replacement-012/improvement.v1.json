@@ -57,6 +57,13 @@
       "url": "https://raw.githubusercontent.com/nerdslab/nuclr/0fa409b304147ace00507063d44f03155691af62/eval_scripts/utils.py",
       "locator": "load_emb and load_embs",
       "supports": "Embedding float32 conversion, increasing-epoch ordering and matching neuron IDs across checkpoints."
+    },
+    {
+      "id": "historical_inductive_split_recipe",
+      "kind": "author_code",
+      "url": "https://raw.githubusercontent.com/nerdslab/nuclr/407d8970521e505fd7f47596317f585dd0451c79/eval_notebooks/create_bugeon_splits.ipynb",
+      "locator": "Zero-based notebook cells 7 and 8 at the December 4, 2025 commit; raw notebook 11,433 bytes, SHA-256 c82ba730b566a65fb3e81f30e8c4b3bffab6eb3f35b0159f7a5d2c45b1a555b4.",
+      "supports": "The historical E/I inductive recipe takes each CV training membership from the full metadata table, excluding only the CV validation mouse, so held-out SB028 neurons remain eligible. The adjacent subclass recipe instead uses metadata already excluding SB028. This is a source-recipe observation, not evidence that these generated memberships produced the conference results; the notebook has no saved membership outputs."
     }
   ],
   "same_task": {
@@ -195,7 +202,8 @@
     "Session-local neuron IDs do not establish repeated-cell linkage; label-map and fluorescence-column joins require audit.",
     "No authentic NuCLR rerun or required matching source-comparator rerun for the selected panel is established; EI-inductive selection additionally requires the stronger LOLCAT comparator.",
     "If the inductive panel is selected, its one-mouse test cannot support a general population uncertainty claim by neuron-level resampling.",
-    "Selected original endpoint, required controls/companion metrics, meaningful effect, uncertainty, stochastic-rerun calibration tolerance, protected scorer and concrete episode budgets are not fixed."
+    "Selected original endpoint, required controls/companion metrics, meaningful effect, uncertainty, stochastic-rerun calibration tolerance, protected scorer and concrete episode budgets are not fixed.",
+    "For the E/I inductive-zero-shot panel only, the acquired December 2025 split artifact is known to violate the held-out-subject protocol: all three CV training arrays contain all 3,049 outer-test neurons. The existing implementations/source-splits-v2/source_audit.json (SHA-256 b8cbb7ac30ee0e4601dcb2a3db2803b54119987a45df7edf9d42f89c87898506) records the overlaps, and source_splits.py select_readout_panel rejects this panel. Historical author source contains a compatible recipe-level exposure defect (historical_inductive_split_recipe), but neither that recipe nor the acquired artifact establishes which memberships produced the conference results. Recover a conference-consistent fixed artifact for this panel; do not silently repair memberships or substitute another panel for a same-paper reproduction or improvement claim."
   ],
   "legacy": {
     "role": "calibration_only",

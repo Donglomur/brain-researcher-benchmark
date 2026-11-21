@@ -92,6 +92,119 @@ class RepositoryChecksTests(unittest.TestCase):
         self.addCleanup(self.profile.stop)
         self.registry = fixture(self.root)
 
+    def viewer_provider_fixture(self):
+        members, pins = {}, {}
+        for relative in checks.NEURAL_VIEWER_MEMBERS:
+            path = self.root / relative
+            path.parent.mkdir(parents=True, exist_ok=True)
+            raw = (b"raise AssertionError('provider source must never execute')\n"
+                   if relative.endswith(".py") else
+                   b'{"private_payload_locator":"/private/never-open-provider.json"}\n')
+            path.write_bytes(raw)
+            pins[relative] = {"bytes": len(raw), "sha256": hashlib.sha256(raw).hexdigest()}
+            members[relative] = "artifact:provider-generated-dependency"
+        document = {"schema": "neural-viewer-provider-dependencies/v1", "members": pins}
+        write_json(self.root / checks.NEURAL_VIEWER_BINDINGS, document)
+        members[checks.NEURAL_VIEWER_BINDINGS] = "artifact:provider-generated-descriptor"
+        return document, members, {checks.NEURAL_VIEWER_PROVIDER}
+
+    def test_viewer_provider_exact_sources_enroll_without_execution(self):
+        document, members, boundaries = self.viewer_provider_fixture()
+        reader = checks.Reader(self.root)
+        first = checks.NEURAL_VIEWER_MEMBERS[0]
+        prior = {"path": first, **document["members"][first], "mode": "100644"}
+        expected = {first: prior}
+        with patch.object(reader, "document", wraps=reader.document) as read:
+            checks.neural_viewer_provider_pins(reader, boundaries, members, expected)
+        read.assert_called_once_with(checks.NEURAL_VIEWER_BINDINGS)
+        self.assertEqual(set(expected), set(checks.NEURAL_VIEWER_MEMBERS))
+        self.assertIs(expected[first], prior)
+        for relative in checks.NEURAL_VIEWER_MEMBERS:
+            actual, _ = reader.file(relative)
+            self.assertTrue(all(actual[key] == expected[relative][key]
+                                for key in ("path", "bytes", "sha256")))
+
+    def test_viewer_provider_stale_source_prevents_inventory_refresh(self):
+        _, members, boundaries = self.viewer_provider_fixture()
+
+        def focused_plan(reader):
+            expected = {}
+            checks.neural_viewer_provider_pins(reader, boundaries, members, expected)
+            return {"registry": {}, "relocation_ledger": {}, "counts": {},
+                    "canonical_per_track": {}, "expansion_per_track": {}, "artifacts": [],
+                    "members": members, "expected_pins": expected}
+
+        # Isolate this edge's real Reader/expected_pins/write path; the existing
+        # registry/namespace controls exercise the separate prepare validation.
+        with patch.object(checks, "prepare", side_effect=focused_plan):
+            checks.check_repository(self.root, write=True)
+            inventory = self.root / checks.INVENTORY
+            preserved = inventory.read_bytes()
+            path = self.root / checks.NEURAL_VIEWER_MEMBERS[-1]
+            original = path.read_bytes()
+            for changed in (b"!" + original[1:], original + b" "):
+                with self.subTest(bytes=len(changed)):
+                    path.write_bytes(changed)
+                    with self.assertRaisesRegex(ValueError, "Declared source pin mismatch"):
+                        checks.check_repository(self.root, write=True)
+                    self.assertEqual(inventory.read_bytes(), preserved)
+
+    def test_viewer_provider_conflicting_pin_refuses_without_mutation(self):
+        document, members, boundaries = self.viewer_provider_fixture()
+        last = checks.NEURAL_VIEWER_MEMBERS[-1]
+        expected = {last: {"path": last, **document["members"][last], "sha256": "0" * 64}}
+        preserved = copy.deepcopy(expected)
+        with self.assertRaisesRegex(ValueError, "Conflicting viewer provider"):
+            checks.neural_viewer_provider_pins(checks.Reader(self.root), boundaries, members, expected)
+        self.assertEqual(expected, preserved)
+
+    def test_viewer_provider_non_source_and_unowned_targets_refuse(self):
+        document, members, boundaries = self.viewer_provider_fixture()
+        for substitute in ("/private/unowned-payload.nwb", "benchmarks/shared/unowned/data.bin"):
+            changed = copy.deepcopy(document)
+            changed["members"][substitute] = changed["members"].pop(checks.NEURAL_VIEWER_MEMBERS[0])
+            write_json(self.root / checks.NEURAL_VIEWER_BINDINGS, changed)
+            with self.subTest(path=substitute), self.assertRaisesRegex(ValueError, "exactly four source"):
+                checks.neural_viewer_provider_pins(checks.Reader(self.root), boundaries, members, {})
+        write_json(self.root / checks.NEURAL_VIEWER_BINDINGS, document)
+        del members[checks.NEURAL_VIEWER_MEMBERS[0]]
+        with self.assertRaisesRegex(ValueError, "not owned source"):
+            checks.neural_viewer_provider_pins(checks.Reader(self.root), boundaries, members, {})
+
+    def test_viewer_provider_closed_schema_and_pin_fields_refuse(self):
+        document, members, boundaries = self.viewer_provider_fixture()
+        changes = []
+        changed = copy.deepcopy(document)
+        changed["schema"] = "historical-viewer-provider/v0"
+        changes.append(changed)
+        changed = copy.deepcopy(document)
+        changed["private_payload_locator"] = "/private/never-follow.json"
+        changes.append(changed)
+        for field, value in (("bytes", True), ("bytes", -1), ("bytes", checks.MAX_FILE_BYTES + 1),
+                             ("sha256", "A" * 64), ("extra", "not-source-metadata")):
+            changed = copy.deepcopy(document)
+            changed["members"][checks.NEURAL_VIEWER_MEMBERS[0]][field] = value
+            changes.append(changed)
+        for index, changed in enumerate(changes):
+            write_json(self.root / checks.NEURAL_VIEWER_BINDINGS, changed)
+            expected = {}
+            with self.subTest(case=index), self.assertRaisesRegex(ValueError, "viewer provider"):
+                checks.neural_viewer_provider_pins(checks.Reader(self.root), boundaries, members, expected)
+            self.assertEqual(expected, {})
+
+    def test_viewer_provider_registration_is_conditional_and_requires_descriptor(self):
+        _, members, boundaries = self.viewer_provider_fixture()
+        reader = checks.Reader(self.root)
+        expected = {"historical-retained-pin": {"sha256": "a" * 64}}
+        preserved = copy.deepcopy(expected)
+        with patch.object(reader, "document", side_effect=AssertionError("unregistered read")):
+            checks.neural_viewer_provider_pins(reader, set(), members, expected)
+        self.assertEqual(expected, preserved)
+        del members[checks.NEURAL_VIEWER_BINDINGS]
+        with self.assertRaisesRegex(ValueError, "requires its owned source descriptor"):
+            checks.neural_viewer_provider_pins(reader, boundaries, members, expected)
+        self.assertEqual(expected, preserved)
+
     def build(self):
         return checks.check_repository(self.root, write=True)
 

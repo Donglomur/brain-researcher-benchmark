@@ -62,3 +62,7 @@ contain descendants that escaped the group; `protocol_only` remains a trusted
 operator bridge, not a hostile-code sandbox. The macOS participant policy is
 unchanged. Historical execution receipts remain evidence for their original
 source identities and do not qualify this lifecycle revision.
+
+## Full32 visual source extension (2026-11-20)
+
+The explicit `erp-full32-visual-v1` source profile covers all 6,400 queries using the same four demonstrations and image-matched visual arms. See [the source and qualification contract](../image-matched-programme-v1/FULL32_VISUAL.md). The historical 400-query visual default and 6,400-query numerical default remain separate. This extension does not establish a completed visual study or native/provider qualification.
