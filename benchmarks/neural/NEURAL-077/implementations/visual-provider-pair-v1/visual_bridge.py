@@ -18,6 +18,12 @@ PNG_CAP = 4 * 1024 * 1024
 ACTION_CAP = 8192
 RESPONSE_CAP = 524288
 REQUEST_CAP = 8 * 1024 * 1024
+LEGACY_PROFILE = 'legacy400'
+FULL32_PROFILE = 'erp-full32-visual-v1'
+# Canonical encode() of the unchanged actions.schema.json, not a packet identity.
+ACTION_SCHEMA_SHA256 = '8526cb5ff6bd01b6422ace7ac7796c174b07cfdf732edd2c7b81a0d14b63392a'
+INSTRUCTIONS = ('Use only the declared viewer actions. Image parts are PNG content, not text. '
+                'The first finalize is terminal. No query feedback or other-query context is available.')
 POLICY = ('Return exactly one JSON viewer action from the supplied action schema. '
           'Use only the supplied viewer images, metadata and demonstrations. '
           'Do not use tools, code execution, external retrieval, files, or memory '
@@ -52,10 +58,31 @@ def encode(value):
                        sort_keys=True, separators=(',', ':')) + '\n').encode('utf-8')
 
 
-def identifier(value):
-    need(type(value) is str and re.fullmatch(r'development-00[12]-[0-9a-f]{24}', value),
+def identifier(value, profile=LEGACY_PROFILE):
+    need(profile in (LEGACY_PROFILE, FULL32_PROFILE), 'Unknown explicit visual profile')
+    pattern = r'q-[0-9a-f]{32}' if profile == FULL32_PROFILE else r'development-00[12]-[0-9a-f]{24}'
+    need(type(value) is str and re.fullmatch(pattern, value),
          'Exact original query identity required')
     return value
+
+
+def profile_binding(profile, profile_commitment, context_sha256):
+    need(profile in (LEGACY_PROFILE, FULL32_PROFILE), 'Unknown explicit visual profile')
+    if profile == LEGACY_PROFILE:
+        need(profile_commitment is None and context_sha256 is None, 'Legacy profile has no full32 binding')
+        return {}
+    for value in (profile_commitment, context_sha256):
+        need(type(value) is str and re.fullmatch(r'[0-9a-f]{64}', value), 'Exact full32 profile/context commitment')
+    return {'profile': profile, 'profile_commitment': profile_commitment}
+
+
+def prompt_context(prompt, trial_id, profile, context_sha256):
+    identifier(trial_id, profile)
+    need(type(prompt) is str and 0 < len(prompt.encode()) <= HEADER_CAP, 'Bounded original scientific prompt')
+    pattern = r'q-[0-9a-f]{32}|development-00[12]-[0-9a-f]{24}'
+    need(set(re.findall(pattern, prompt)) == {trial_id}, 'One original scientific prompt required')
+    if profile == FULL32_PROFILE:
+        need(pin(prompt.encode())['sha256'] == context_sha256, 'Full32 exact prompt context mismatch')
 
 
 def take(stream, size):
@@ -92,21 +119,34 @@ def write_action(stream, action):
     return frame
 
 
-def first_frame(header, png, trial_id, encode_png):
-    identifier(trial_id)
+def first_frame(header, png, trial_id, encode_png, *, profile=LEGACY_PROFILE,
+                profile_commitment=None, context_sha256=None):
+    binding = profile_binding(profile, profile_commitment, context_sha256)
+    identifier(trial_id, profile)
     need(set(header) == {'status', 'episode_id', 'trial_id', 'prompt', 'actions', 'limits',
-                         'instructions', 'initial'} and header['status'] == 'ready'
+                         'instructions', 'initial'} | set(binding) and header['status'] == 'ready'
          and header['trial_id'] == trial_id, 'Exact initial viewer projection required')
+    need(all(header[key] == value for key, value in binding.items()), 'Full32 display profile mismatch')
     need(type(header['episode_id']) is str and re.fullmatch(r'[0-9a-f]{32}', header['episode_id']),
          'Fresh viewer episode identity required')
     prompt = header['prompt']
-    need(type(prompt) is str and 0 < len(prompt.encode()) <= HEADER_CAP
-         and set(re.findall(r'development-00[12]-[0-9a-f]{24}', prompt)) == {trial_id},
-         'One original scientific prompt required')
-    projection(header['initial'], png)
+    prompt_context(prompt, trial_id, profile, context_sha256)
+    projection(header['initial'], png, profile=profile)
     need(header['initial']['status'] == 'rendered' and bool(png), 'Initial image required')
     need(type(header['actions']) is dict and type(header['limits']) is dict
          and type(header['instructions']) is str, 'Original declared action interface required')
+    if profile == FULL32_PROFILE:
+        need(pin(encode(header['actions']))['sha256'] == ACTION_SCHEMA_SHA256
+             and header['instructions'] == INSTRUCTIONS, 'Unchanged bounded full32 display/action interface')
+        limits = header['limits']
+        need(set(limits) == {'max_actions', 'max_images', 'max_output_bytes', 'wall_seconds',
+                            'max_request_bytes', 'max_image_bytes'}, 'Exact full32 limits projection')
+        need(type(limits['max_actions']) is int and 2 <= limits['max_actions'] <= 128
+             and type(limits['max_images']) is int and 1 <= limits['max_images'] < limits['max_actions']
+             and type(limits['max_output_bytes']) is int and PNG_CAP + HEADER_CAP + 1024 <= limits['max_output_bytes'] <= 512 * 1024 * 1024
+             and type(limits['wall_seconds']) in (int, float) and 0 < limits['wall_seconds'] <= 3600
+             and limits['max_request_bytes'] == ACTION_CAP and limits['max_image_bytes'] == PNG_CAP,
+             'Finite full32 limits projection')
     # First content remains the exact scientific prompt for inherited Sender's
     # context guard. Policy and display JSON are separate visible content.
     metadata = {key: value for key, value in header.items() if key != 'prompt'}
@@ -119,7 +159,8 @@ def first_frame(header, png, trial_id, encode_png):
          'detail': 'high'}]}], image_mapping
 
 
-def projection(header, png):
+def projection(header, png, *, profile=LEGACY_PROFILE):
+    need(profile in (LEGACY_PROFILE, FULL32_PROFILE), 'Unknown explicit visual profile')
     need(type(header) is dict and type(header.get('status')) is str, 'Exact viewer projection required')
     status = header['status']
     if status == 'rendered':
@@ -130,10 +171,29 @@ def projection(header, png):
              'Exact rendered image projection required')
         need(header['display'].get('record') != 'query'
              or 'demonstration_target' not in header['display'], 'Query labels prohibited')
+        if profile == FULL32_PROFILE:
+            display = header['display']
+            permitted = {'record', 'start_sample', 'stop_sample', 'units_per_division', 'channels', 'display_filter',
+                         'sampling_hz', 'start_ms', 'stop_ms_exclusive', 'last_sample_ms', 'units', 'positive', 'renderer'}
+            need(display.get('record') in ('query', 'demo1', 'demo2', 'demo3', 'demo4'), 'Display record is an opaque local slot')
+            need(set(display) == permitted | ({'demonstration_target'} if display['record'] != 'query' else set()),
+                 'No raw, person, answer or source-order display fields')
+            if display['record'] != 'query':
+                need(type(display['demonstration_target']) is int and display['demonstration_target'] in (0, 1), 'Binary demonstration label')
+            start, stop = display['start_sample'], display['stop_sample']
+            need(type(start) is int and type(stop) is int and -256 <= start < stop <= 768 and stop - start >= 16
+                 and type(display['units_per_division']) is int and display['units_per_division'] in (1, 2, 5, 10, 20, 50, 100, 200, 500, 1000)
+                 and display['channels'] in (['Cz'], ['Pz'], ['Cz', 'Pz']) and display['display_filter'] == 'none'
+                 and display['sampling_hz'] == 1024 and display['start_ms'] == start * 1000 / 1024
+                 and display['stop_ms_exclusive'] == stop * 1000 / 1024 and display['last_sample_ms'] == (stop - 1) * 1000 / 1024
+                 and display['units'] == 'native stored EEG amplitude; calibration unresolved' and display['positive'] == 'up'
+                 and display['renderer'] == 'all samples and adjacent segments; clipping flagged in image', 'Exact full32 display metadata')
     elif status == 'rejected':
         need(set(header) == {'status', 'error', 'remaining_actions'} and not png
              and type(header['error']) is str and type(header['remaining_actions']) is int,
              'Exact rejection projection required')
+        if profile == FULL32_PROFILE:
+            need(header['error'] == 'Invalid action or parameters', 'Bounded full32 rejection text')
     elif status in ('valid_unscored', 'invalid_response'):
         need(set(header) == {'status', 'response_sha256', 'terminal'} and not png
              and header['terminal'] is True and type(header['response_sha256']) is str
@@ -145,8 +205,8 @@ def projection(header, png):
         raise ValueError('Unknown viewer projection')
 
 
-def append_frame(history, action, header, png, encode_png):
-    projection(header, png)
+def append_frame(history, action, header, png, encode_png, *, profile=LEGACY_PROFILE):
+    projection(header, png, profile=profile)
     content = [{'type': 'input_text', 'text': encode(header).decode()}]
     image_mapping = None
     if png:
@@ -228,10 +288,17 @@ class SenderAdapter:
     """Bind the unchanged Sender's prompt guard to the complete exact image request."""
     decode = staticmethod(decode)
 
-    def __init__(self, history, model, max_output_tokens, cap, trial_id):
+    def __init__(self, history, model, max_output_tokens, cap, trial_id, *, profile=LEGACY_PROFILE,
+                 profile_commitment=None, context_sha256=None):
+        binding = profile_binding(profile, profile_commitment, context_sha256)
         self.prompt = history[0]['content'][0]['text']
-        self.model, self.max_output_tokens, self.trial_id = model, max_output_tokens, identifier(trial_id)
-        need(set(re.findall(r'development-00[12]-[0-9a-f]{24}', self.prompt)) == {self.trial_id}, 'Context identity mismatch')
+        self.model, self.max_output_tokens, self.trial_id = model, max_output_tokens, identifier(trial_id, profile)
+        self.profile = profile
+        prompt_context(self.prompt, self.trial_id, profile, context_sha256)
+        if binding:
+            metadata = decode(history[0]['content'][2]['text'].encode())
+            need(all(metadata.get(key) == value for key, value in binding.items())
+                 and metadata.get('trial_id') == self.trial_id, 'Sender profile/context mismatch')
         self.request = request_body(history, model, max_output_tokens, cap)
 
     def query_identity(self, prompt):
