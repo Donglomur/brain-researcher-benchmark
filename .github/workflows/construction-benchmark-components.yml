@@ -875,9 +875,9 @@ jobs:
           import unittest
           suite = unittest.defaultTestLoader.discover('tests/construction', pattern='test_seizure_events.py')
           actual_count = suite.countTestCases()
-          assert actual_count == 39, f"Expected 39 cases, discovered {actual_count}"
+          assert actual_count == 53, f"Expected 53 cases, discovered {actual_count}"
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 39, f"Expected 39 executed cases, ran {result.testsRun}"
+          assert result.testsRun == 53, f"Expected 53 executed cases, ran {result.testsRun}"
           assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
           actual_skips = sorted(case.id() for case, _ in result.skipped)
           assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
