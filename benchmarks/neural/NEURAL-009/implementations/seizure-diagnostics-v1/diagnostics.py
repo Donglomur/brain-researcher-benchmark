@@ -18,7 +18,7 @@ import types
 ROOT = Path(__file__).resolve().parent
 PREDECESSOR = ROOT.parent / "seizure-events-v1"
 PREDECESSOR_CLI_SHA256 = "3b5ca6fe922a5f674a0598cd6912bae62ca139524466c42f5603c5684ae77dca"
-PREDECESSOR_MANIFEST_SHA256 = "5a1601b8a977a4a73774d633f49701d148820bacabc0c99f1cf70aa8f28d26f2"
+PREDECESSOR_MANIFEST_SHA256 = "6e97b56bd2043184f53e9e9be13317ce312bae10ee213dfdd54edaeb5b32fb62"
 
 
 def load_predecessor():

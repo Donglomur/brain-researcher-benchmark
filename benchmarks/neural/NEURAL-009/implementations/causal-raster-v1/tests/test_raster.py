@@ -16,7 +16,7 @@ import unittest
 import zlib
 
 HERE = Path(__file__).resolve().parents[1]
-PRESENTATION_SHA256 = "7a9f8ed31f5554c58c5cef13f23b446ddc59f707f7c1891faa849b7e69767613"
+PRESENTATION_SHA256 = "f78099b8a31efde3e1880669a4dbb4a9af5c088c25bd24ad739b1545013228b8"
 SECRET = b"GENERATED raster key only; not deployment"
 SUCCESS_KEYS = {"case_id", "status", "endpoint_tick", "view_id", "representation",
                 "image_mime_type", "image_png", "image_sha256"}

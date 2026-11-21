@@ -17,8 +17,8 @@ import types
 
 ROOT = Path(__file__).resolve().parent
 DEPENDENCIES = {
-    "seizure-events-v1/core.py": "5b92def65bbfb75368986dff72f66b8a511b077a9f6343b4c5732ab80805b834",
-    "edf-causal-window-v1/edf_window.py": "18a09575d432df486c103c87524ee15b8189171200acd7d3fc99146f1f98283d",
+    "seizure-events-v1/core.py": "9b9a5f90a53ae64abc88ac066441bb32ab78c28bd4d0b9388f7666150fc90fa5",
+    "edf-causal-window-v1/edf_window.py": "906d05543bd445f57e69a98ef41d49d4051406bc5768eab44edaac83c1b2a318",
 }
 
 
