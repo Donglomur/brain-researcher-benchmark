@@ -564,5 +564,226 @@ class CommandLineControls(unittest.TestCase):
         self.assertFalse(self.output.exists())
 
 
+# Original-event alarm diagnostics: hand-computed invented intervals. These are
+# scoring controls, not EEG agreement, measured online latency or model results.
+def event(index, duration, state, first_new_offset, overlap, no_overlap):
+    """Spell the expected diagnostic result shape; no interval calculation occurs."""
+    return {
+        "reference_event_index": index,
+        "reference_duration_ticks": duration,
+        "onset_alarm_state": state,
+        "first_new_alarm_offset_ticks": first_new_offset,
+        "positive_overlap_ticks": overlap,
+        "no_raw_event_overlap": no_overlap,
+    }
+
+
+def diagnostics(*events):
+    return {
+        "schema": "raw-event-alarm-diagnostics-v1",
+        "tick_rate_hz": 10,
+        "events": list(events),
+    }
+
+
+class OriginalEventIntervalControls(unittest.TestCase):
+    def check(self, references, predictions, expected):
+        before = copy.deepcopy((references, predictions))
+        actual = core._original_event_alarm_diagnostics(references, predictions)
+        self.assertEqual(actual, expected)
+        self.assertEqual((references, predictions), before)
+        self.assertIs(type(actual["tick_rate_hz"]), int)
+        for row in actual["events"]:
+            for key in ("reference_event_index", "reference_duration_ticks",
+                        "positive_overlap_ticks"):
+                self.assertIs(type(row[key]), int)
+            offset = row["first_new_alarm_offset_ticks"]
+            if offset is not None:
+                self.assertIs(type(offset), int)
+            self.assertIs(type(row["no_raw_event_overlap"]), bool)
+        return actual
+
+    def test_hand_computed_onset_states_and_later_edges(self):
+        cases = [
+            ([[100, 200]], [], event(0, 100, "negative", None, 0, True)),
+            ([[100, 200]], [[100, 200]], event(0, 100, "new_alarm", 0, 100, False)),
+            ([[100, 200]], [[50, 250]], event(0, 100, "continuing_alarm", None, 100, False)),
+            ([[100, 200]], [[130, 170]], event(0, 100, "negative", 30, 40, False)),
+            ([[100, 200]], [[50, 100]], event(0, 100, "negative", None, 0, True)),
+            ([[100, 200]], [[200, 250]], event(0, 100, "negative", None, 0, True)),
+            ([[100, 200]], [[80, 120], [150, 180]],
+             event(0, 100, "continuing_alarm", 50, 50, False)),
+            ([[0, 100]], [[0, 100]],
+             event(0, 100, "positive_at_record_start", None, 100, False)),
+            ([[0, 100]], [[20, 30]],
+             event(0, 100, "negative_at_record_start", 20, 10, False)),
+            ([[0, 100]], [[0, 20], [50, 60]],
+             event(0, 100, "positive_at_record_start", 50, 30, False)),
+            ([[0, 100]], [],
+             event(0, 100, "negative_at_record_start", None, 0, True)),
+        ]
+        for references, predictions, expected in cases:
+            with self.subTest(references=references, predictions=predictions):
+                self.check(references, predictions, diagnostics(expected))
+
+    def test_touching_predictions_do_not_create_new_alarm_edges(self):
+        expected = diagnostics(event(0, 100, "continuing_alarm", None, 100, False))
+        self.check([[100, 200]], [[50, 220]], expected)
+        self.check([[100, 200]], [[50, 120], [120, 150], [150, 220]], expected)
+
+    def test_one_alarm_bridges_two_distinct_raw_events(self):
+        self.check([[100, 130], [150, 200]], [[110, 190]], diagnostics(
+            event(0, 30, "negative", 10, 20, False),
+            event(1, 50, "continuing_alarm", None, 40, False),
+        ))
+
+    def test_touching_reference_events_are_not_merged(self):
+        self.check([[100, 150], [150, 200]], [[100, 200]], diagnostics(
+            event(0, 50, "new_alarm", 0, 50, False),
+            event(1, 50, "continuing_alarm", None, 50, False),
+        ))
+
+    def test_first_of_multiple_in_event_alarm_edges_is_retained(self):
+        self.check([[100, 200]], [[110, 130], [160, 170]], diagnostics(
+            event(0, 100, "negative", 10, 30, False),
+        ))
+
+    def test_record_start_alarm_has_known_continuity_at_a_later_onset(self):
+        self.check([[100, 200]], [[0, 120]], diagnostics(
+            event(0, 100, "continuing_alarm", None, 20, False),
+        ))
+
+    def test_no_annotations_remains_empty_even_with_positive_predictions(self):
+        self.check([], [], diagnostics())
+        self.check([], [[0, 600]], diagnostics())
+
+    def test_separate_records_do_not_supply_antecedent_alarm_state(self):
+        self.check([[500, 600]], [[550, 600]], diagnostics(
+            event(0, 100, "negative", 50, 50, False),
+        ))
+        self.check([[0, 100]], [[0, 50]], diagnostics(
+            event(0, 100, "positive_at_record_start", None, 50, False),
+        ))
+
+    def test_sparse_large_integer_coordinates_preserve_exact_offsets(self):
+        # All coordinates remain below the existing 2**53-1 admission limit.
+        # Exercise only the interval helper, never the upstream dense scorer.
+        shift = 2**53 - 1000
+        self.check([[shift + 100, shift + 200]],
+                   [[shift + 130, shift + 170]], diagnostics(
+                       event(0, 100, "negative", 30, 40, False),
+                   ))
+
+
+class OriginalEventScorerIntegration(unittest.TestCase):
+    def test_tolerant_credit_is_not_raw_overlap_or_an_onset_detection(self):
+        policy = core.recommended_policy()
+        result = core.evaluate_record([[100, 200]], [[200, 250]], 1000, policy)
+        self.assertEqual(result["raw_event_alarm_diagnostics"], diagnostics(
+            event(0, 100, "negative", None, 0, True),
+        ))
+        # Default tolerance can credit the processed event despite zero overlap
+        # with the original annotation. Preserve both answers, with clear names.
+        self.assertEqual((result["processed_reference_events"], result["true_positives"],
+                          result["false_positives"]), (1, 1, 0))
+        self.assertEqual(result["event_metrics"]["f1"], 1)
+        self.assertEqual(result["sample_true_positive_ticks"], 0)
+        self.assertEqual(result["sample_false_positive_ticks"], 50)
+        self.assertEqual(result["sample_predicted_positive_ticks"], 50)
+
+    def test_existing_record_fields_and_policy_remain_unchanged(self):
+        self.assertEqual(hashlib.sha256((PACKAGE / "recommended_policy.json").read_bytes()).hexdigest(),
+                         "b05ea7b363f4969fd5f1d1230686e6dea391393637028701f9f9f7785469588e")
+        policy = core.recommended_policy()
+        result = core.evaluate_record([[100, 200]], [[0, 600]], 600, policy)
+        result.pop("raw_event_alarm_diagnostics")
+        self.assertEqual(result, {
+            "raw_reference_events": 1, "raw_predicted_events": 1,
+            "processed_reference_events": 1, "processed_predicted_events": 1,
+            "true_positives": 1, "false_positives": 0, "observed_ticks": 600,
+            "event_metrics": {"sensitivity": 1, "precision": 1, "f1": 1,
+                              "false_alarms_per_24_observed_hours": 0},
+            "sample_reference_positive_ticks": 100,
+            "sample_true_positive_ticks": 100,
+            "sample_false_positive_ticks": 500,
+            "sample_predicted_positive_ticks": 600,
+        })
+        self.assertEqual(core._COUNT_FIELDS, (
+            "raw_reference_events", "raw_predicted_events", "processed_reference_events",
+            "processed_predicted_events", "true_positives", "false_positives", "observed_ticks",
+            "sample_reference_positive_ticks", "sample_true_positive_ticks",
+            "sample_false_positive_ticks", "sample_predicted_positive_ticks",
+        ))
+
+
+class OriginalEventCompleteCohortControls(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.admission, cls.policy, cls.candidate, cls.limits = complete_fixture()
+        cls.result = core.evaluate(
+            cls.admission, cls.policy, cls.candidate,
+            expected_policy_sha256=core.canonical_sha256(cls.policy), limits=cls.limits,
+        )
+
+    def test_existing_complete_metrics_occupancy_and_alias_are_preserved(self):
+        result = self.result
+        self.assertEqual(result["counts"]["recordings"], 686)
+        self.assertEqual(result["counts"]["biological_people"], 23)
+        self.assertEqual(result["counts"]["folds"], 23)
+        self.assertEqual(result["counts"]["observed_ticks"], 24696000)
+        self.assertAlmostEqual(result["primary"]["value"], 112 / 115)
+        pooled = result["candidate"]["pooled_diagnostic"]
+        self.assertEqual((pooled["raw_reference_events"], pooled["processed_reference_events"],
+                          pooled["true_positives"], pooled["false_positives"]), (24, 24, 23, 2))
+        self.assertEqual(pooled["sample_predicted_positive_ticks"], 23200)
+        self.assertAlmostEqual(pooled["sample_diagnostics"]["predicted_positive_time_fraction"],
+                               23200 / 24696000)
+        patients = {row["biological_person"]: row for row in result["candidate"]["patients"]}
+        self.assertNotIn("chb21", patients)
+        self.assertEqual(patients["chb01"]["observed_ticks"], 75 * 36000)
+        self.assertEqual(patients["chb01"]["event_metrics"]["f1"], 0.4)
+        positive = result["constant_controls"]["all_positive_control"]["pooled_diagnostic"]
+        self.assertEqual(positive["sample_diagnostics"]["predicted_positive_time_fraction"], 1)
+        self.assertAlmostEqual(positive["event_metrics"]["f1"], 1 / 172)
+        self.assertIs(result["verification"]["training_or_causal_context_verified"], False)
+        self.assertIs(result["verification"]["scientific_qualification"], False)
+
+    def test_all_records_retain_original_event_diagnostics(self):
+        rows = self.result["record_results"]
+        self.assertEqual(len(rows), 686)
+        positive_events = missing_events = total_events = 0
+        for row in rows:
+            observed = row["raw_event_alarm_diagnostics"]
+            self.assertEqual(observed["schema"], "raw-event-alarm-diagnostics-v1")
+            self.assertEqual(observed["tick_rate_hz"], 10)
+            self.assertEqual(len(observed["events"]), row["raw_reference_events"])
+            for original in observed["events"]:
+                total_events += 1
+                if row["recording_id"].startswith("chb21/"):
+                    self.assertEqual(row["biological_person"], "chb01")
+                    self.assertEqual(original, event(0, 1000, "negative", None, 0, True))
+                    missing_events += 1
+                else:
+                    self.assertEqual(original, event(0, 1000, "new_alarm", 0, 1000, False))
+                    positive_events += 1
+        self.assertEqual((total_events, positive_events, missing_events), (24, 23, 1))
+
+    def test_diagnostics_do_not_enter_candidate_or_public_support(self):
+        support = core.public_support(self.admission)
+        changed = copy.deepcopy(self.admission)
+        row = next(row for row in changed["records"] if row["reference_intervals"])
+        row["reference_intervals"] = []
+        row["annotation_status"] = "explicit_zero_events"
+        row["annotation_sha256"] = "0" * 64
+        self.assertEqual(core.public_support(changed), support)
+        self.assertEqual(core.canonical_sha256(support), self.candidate["support_sha256"])
+        for public in (support, self.candidate):
+            self.assertNotIn("raw_event_alarm_diagnostics", public)
+            for record in public["records"]:
+                self.assertNotIn("raw_event_alarm_diagnostics", record)
+                self.assertNotIn("reference_intervals", record)
+
+
+
 if __name__ == "__main__":
     unittest.main()

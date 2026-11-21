@@ -66,8 +66,44 @@ time fraction accompany the event metrics. Full-support all-negative and
 all-positive controls are also scored. Constant probabilities are valid weak
 detectors, not malformed submissions. These controls do not replace a competent
 EEG-derived reference or timing/montage-only control. Sample metrics and occupancy
-do not establish event-onset latency. Latency/miss and early/late-only-credit
-diagnostics are still required before any timely or clinical-performance claim.
+do not establish event-onset latency.
+
+### Original-event alarm diagnostics
+
+Each candidate recording result additionally contains `raw_event_alarm_diagnostics`
+(`raw-event-alarm-diagnostics-v1`, `tick_rate_hz: 10`). Its `events` list follows the
+original reference intervals, before tolerant extension, merging or splitting.
+These diagnostics do not change the primary F1, any existing count, or sample
+occupancy. They are not additional candidate inputs or candidate feedback.
+
+For an original half-open event `[a, b)`, each row contains:
+
+| Field | Meaning |
+| --- | --- |
+| `reference_event_index` | Zero-based position in this recording's original reference list. |
+| `reference_duration_ticks` | `b - a` on the existing 10 Hz grid. |
+| `onset_alarm_state` | `negative`, `new_alarm` for an alarm starting at `a > 0`, or `continuing_alarm` for an alarm already positive before `a`. At `a == 0`, the separate states `positive_at_record_start` and `negative_at_record_start` preserve the unobserved antecedent. |
+| `first_new_alarm_offset_ticks` | First within-record alarm start `s` satisfying `a <= s < b` and `s > 0`, minus `a`; null if none. This can be present even when the onset state is `continuing_alarm`. |
+| `positive_overlap_ticks` | Number of positive ticks inside the original `[a, b)` event, without tolerance. |
+| `no_raw_event_overlap` | True exactly when that overlap is zero; this is not the tolerant scorer's false-negative count. |
+
+Touching positive intervals form one continuous alarm for these diagnostics, so
+partitioning a positive run cannot manufacture new rising edges. Reference events
+remain separate: an alarm bridging two original seizures can start within the
+first and be continuing at the second. An alarm ending exactly at `a` or starting
+exactly at `b` has no overlap with that event. Recordings remain independent; no
+state or time is carried across a recording boundary. An empty reference list
+produces an empty diagnostic list; existing false alarms and occupancy still
+account for predictions in background recordings.
+
+Offsets describe prediction-grid alignment, **not measured online decision
+latency**. In particular, an offset of zero does not establish a zero-delay
+decision: permitted causal observations extend through the prediction-bin
+endpoint, and the evaluator does not verify when a prediction was produced.
+These fields neither establish causal execution nor attribute tolerant credit
+one-to-one to original seizures. Actual timing, early/late-only-credit attribution
+and clinical performance remain unqualified. The new reference-linked fields stay
+inside the owner-only result, including when they reveal original-event duration.
 
 ## Input and output interfaces
 
@@ -100,7 +136,9 @@ threshold intervals are refused.
   not measured native execution guarantees.
 - **Result** (`neural009_result_v1`): complete per-record and per-person counts,
   primary F1, mandatory and sample diagnostics, constant controls, input identities
-  and explicit false scientific-verification flags. Results and the full admission
+  and explicit false scientific-verification flags. Candidate `record_results`
+  also include the original-event diagnostics above; constant-control summaries
+  retain their existing aggregate count/sample interfaces. Results and the full admission
   hash are operator-only artifacts; never return them as candidate feedback.
 
 Reference intervals and score runs use half-open integer intervals on the 10 Hz
@@ -165,6 +203,13 @@ Generated controls exercise full 686-record/23-person support, independently
 calculated event counts, alias grouping, gaps, sample occupancy, null behavior,
 source corruption and public/private admission ordering. They establish software
 behavior on those controls, not authentic-data agreement.
+
+The existing `tests/construction/test_seizure_events.py` suite also checks
+original-event alarm alignment using hand-calculated boundaries, continuing and
+bridging alarms, touching runs and record-start uncertainty. Run that suite from
+the repository root with the existing Python 3.11/NumPy environment. Its generated
+complete-cohort regression preserves the original primary/count/sample outputs
+and checks that new diagnostics do not enter public observation support.
 
 Before scientific qualification, authenticate actual EEG/header/annotation bodies,
 complete clocks and montage roles, causal normalization and source rights; execute
