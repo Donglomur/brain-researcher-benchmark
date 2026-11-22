@@ -1,0 +1,83 @@
+{
+  "schema": "reve-local-cpu-compatibility-observation/v1",
+  "date": "2026-11-22",
+  "task_id": "PAPER-paper-method-003",
+  "status": "passed_training_compatibility_control_only",
+  "profile": "cpu-float32-sdpa-math-microbatch1",
+  "seed": 42,
+  "numeric_threads": 1,
+  "authentic_training_examples": 1,
+  "held_examples": 0,
+  "validation_predictions": 0,
+  "test_predictions": 0,
+  "scored_metrics": 0,
+  "phases": {
+    "linear_probe": {
+      "steps": 2,
+      "zero_learning_rate_step_changed_tensors": 0,
+      "positive_learning_rate_step_changed_tensors": 3,
+      "encoder_tensors_changed": 0
+    },
+    "fine_tuning": {
+      "steps": 1,
+      "changed_tensors": 143,
+      "changed_encoder_tensors": 139,
+      "finite_nonzero_gradients": true
+    }
+  },
+  "checkpoint": {
+    "bytes": 279435937,
+    "sha256": "c12dea5695d440c5762c7cdabadaac0e700f639a571aa65393530c7c086089ee",
+    "reload": "weights_only=True, independently reconstructed model",
+    "tensor_byte_equality": true,
+    "eval_logit_bitwise_equality": true,
+    "published": false
+  },
+  "runtime": {
+    "python": "3.11.6",
+    "platform": "macOS arm64",
+    "versions": {
+      "einops": "0.8.2",
+      "numpy": "2.4.6",
+      "packaging": "26.3",
+      "safetensors": "0.8.0",
+      "tokenizers": "0.22.2",
+      "torch": "2.12.1",
+      "transformers": "4.56.2"
+    },
+    "private_dependency_overlay": true,
+    "shared_environment_changed": false
+  },
+  "timing": {
+    "episode_seconds": 14.498022042011144,
+    "training_control_seconds": 10.12937670800602,
+    "scope": "One cold-start compatibility episode, not a full-batch throughput or full-training estimate."
+  },
+  "memory": {
+    "maximum_child_RSS_bytes": 2233204736,
+    "scope": "RUSAGE_CHILDREN maximum; not simultaneous process-tree RSS or a hard memory quota."
+  },
+  "execution_history": {
+    "owner_admissions": 2,
+    "actual_worker_episodes": 1,
+    "initial_capacity_refusal_before_payload_work": true,
+    "explicit_continuation_after_changed_capacity": true,
+    "automatic_retries": 0,
+    "known_owner_worker_group_and_capture_closed": true
+  },
+  "source_identity": {
+    "benchmark_commit": "ac0b563a8b233d1c421c174a9fd4c7caccfa2188",
+    "author_commit": "06a7059a07c3dabd80aee60c3dbc1eca4bdbe1c7",
+    "private_control_sha256": "f75b82cabcc6a450c25922242a5721d1391e1471fd4f85aca0a77059ce08ea5e",
+    "encoder_sha256": "8ecc650619598748286c2457f81f5c6bd12e8bb59db44f7b02af1955c44de8fe",
+    "permitted_training_packet_manifest_sha256": "1746a272eb889b503faaa6ee9bfc1d643d4ca65e4cac645e0c4ccbb8ca1e8363"
+  },
+  "limits": [
+    "Private compatibility driver, not an installed portable public CPU training profile.",
+    "Original CUDA/fp16 trainer and installation gate unchanged.",
+    "No full baseline, LLM-participant evaluation, historical-paper reproduction, improvement, SOTA or benchmark-readiness promotion.",
+    "Released direct200 preprocessing remains distinct from the unresolved historical 128Hz intermediate and Table12 run/mean/SD lineage.",
+    "Shared-library versions and imported origins were checked; every binary dependency byte was not independently authenticated.",
+    "No neural signal, label, trained checkpoint or private filesystem path is published in this observation."
+  ]
+}
