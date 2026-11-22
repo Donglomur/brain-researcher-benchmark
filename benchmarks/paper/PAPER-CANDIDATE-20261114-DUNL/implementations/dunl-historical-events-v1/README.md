@@ -43,3 +43,22 @@ The CLI rejects duplicate JSON keys, malformed dimensions, mismatched identities
 No new downloads, authentic tensor reads, neural preparation, trained model inference, candidate trial, Figure 4F reproduction or improvement occurred. No raw archive or historical private target was accessed. The smoothed-raster peak-finding curve, author checkpoint/output producer, exact publication split/cohort, biological grouping, resource/access protocol and paired final comparison remain necessary for full same-task qualification. The published schedule remains available to both access arms; perfect mathematical schedule scoring on generated labels is not neural understanding or a measured paper win.
 
 `test_historical_events.py` provides generated mathematical and interface controls, including full 550-row geometry, group-versus-standard support, overlapping target neighborhoods, clip-after-mean and unequal row denominators. Run it through the coordinator's reviewed two-slot generated-test pool during construction. Test outcome and costs are recorded in the external handoff; tests do not establish scientific readiness.
+
+## Whisker source identity follow-up (2026-11-22)
+
+The paper's [Whisker thalamus spiking experiment methods](https://pmc.ncbi.nlm.nih.gov/articles/PMC12006907/) explicitly selects ten pair/neuron IDs from the original 17-pair dataset: `1/2`, `2/1`, `4/1`, `5/1`, `6/1`, `8/2`, `10/2`, `16/2`, `17/1`, `17/2`. It specifies stimulus 3 and excludes nonresponsive or very-low-SNR neurons. These logical IDs match the pinned preprocessor's ten selections. This resolves the documented selection roster, but does not connect the IDs to animal/session identities or explain the eleventh allocated channel.
+
+The same ten selections and eleven-channel allocation are present in the [initial 2024-02-02 source](https://github.com/btolooshams/dunl-compneuro/blob/95ea5294a47b53bc3c63ea28fc021409e7483071/src/preprocess_scripts/preprocess_data_whisker_into_dataformat.py). The [2025-01-08 source](https://github.com/btolooshams/dunl-compneuro/blob/1ad15cbb7401fff48b54eb93e91128bc3e38f552/src/preprocess_scripts/preprocess_data_whisker_into_dataformat.py) is byte-identical to the pinned preprocessor (8,718 bytes; SHA-256 `ec6665b0413bb35cb57caf8bc9ad20845fde81e97d47c98552bb6ba6ef3d0ca2`). This dates the source behavior; it does not establish the publication's invocation, override arguments or executed cohort.
+
+The earlier metadata request's HTTP 401 remains a historical observation. On 2026-11-22, the publisher's [version-1 root files endpoint](https://data.mendeley.com/public-api/datasets/rzfyr2886h/files?folder_id=root&version=1) returned HTTP 200 and six ZIP records; its [version-1 folders endpoint](https://data.mendeley.com/public-api/datasets/rzfyr2886h/folders/1) returned an empty list. The publisher reports the following compressed sizes and SHA-256 values:
+
+| Archive | Bytes | Publisher SHA-256 |
+| --- | ---: | --- |
+| `dopamine-spiking-eshel-uchida.zip` | 1,002,064 | `3b0801453ec31a815ba2c429e320441957ecb75dc85649353ea2a94b0a94a5ca` |
+| `dopamine-spiking-simulated.zip` | 205,125 | `1a8f232c22dde83b4fe43fabc3ffccf63c2a3b88947128ce62bf134b653b16f2` |
+| `local-2kernelfornmf-simulated.zip` | 28,971,339 | `dc631c5f15e1fe24b8005d95419f6e652f1f26b01a8032fe2790a4243c39eead` |
+| `local-deconv-calscenario-longtrial-simulated.zip` | 919,544 | `f35e21e5c976f22d1da1828477f9f8aa08ece6b5dc660e9cb3636a4f19d5b6c0` |
+| `local-deconv-calscenario-shorttrial-structured-simulated.zip` | 857,764 | `01a0652cccbe17808c82e80de72a4acd467b9044d9402b0f5039665c5e84e287` |
+| `local-orthkernels-simulated.zip` | 59,704,578 | `d5534cff35bd14b9b789620d99d4c9cb0a0d8ea85fb536fb502fd3cb475f3c03` |
+
+The listed ZIP sizes sum to 91,660,414 bytes. These are publisher metadata, not independently verified payload digests. No ZIP body or internal file listing was read. None of the six filenames identifies a whisker archive, and the paper states that only part of its data was deposited. This does not prove that the ZIP contents lack whisker members. A source-to-file join for the ten selected neurons, original trial roles and animal/session identities remains necessary; the metadata alone does not establish that the full whisker assay is available in this release. The original Figure 4F missed/false-event endpoint, its smoothed-raster comparators, the eleven-channel software profile and all scientific readiness claims remain unchanged.
