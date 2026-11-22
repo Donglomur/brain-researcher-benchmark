@@ -96,7 +96,7 @@ additional scorer pass for each arm. It is not a resource-isolating runner.
 ## Source and qualification
 
 The component reuses the exact v1 source closure (manifest SHA-256
-`5a1601b8a977a4a73774d633f49701d148820bacabc0c99f1cf70aa8f28d26f2`)
+`6e97b56bd2043184f53e9e9be13317ce312bae10ee213dfdd54edaeb5b32fb62`)
 and [timescoring commit 426f8d2](https://github.com/esl-epfl/timescoring/tree/426f8d2b77974641dc9db71884e0812b249ba93b).
 The pinned [record roster](https://physionet.org/files/chbmit/1.0.0/RECORDS) remains
 686 recordings and 23 biological people. Existing exact source bytes and prior

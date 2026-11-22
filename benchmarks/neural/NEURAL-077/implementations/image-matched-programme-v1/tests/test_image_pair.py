@@ -179,7 +179,7 @@ class ImageProgrammeControls(unittest.TestCase):
             'episodes':[{'client_end':pair.pin(body)} for body in client_ends]})
         b_arm=pair.encode({'manifest':pair.pin(b_manifest_body),'initial_frames':initials})
         seen=[]
-        def read(path,cap=1048576,expected=None):
+        def read(path,cap=1048576,expected=None,*,budget=None):
             global VIRTUAL_BYTES, VIRTUAL_FRAME_READS, VIRTUAL_FRAME_MAX
             path=Path(path);is_b=path.is_relative_to(programme_root)
             if not (path.is_relative_to(provider_root) or is_b):
@@ -197,6 +197,7 @@ class ImageProgrammeControls(unittest.TestCase):
             VIRTUAL_BYTES+=len(body)
             if path.name=='0000-out.bin':
                 VIRTUAL_FRAME_READS+=1;VIRTUAL_FRAME_MAX=max(VIRTUAL_FRAME_MAX,len(body))
+            if budget is not None:budget.input(len(body)+1)
             if len(body)>cap:raise ValueError('Generated read bound')
             if expected is not None and pair.pin(body)!=expected:raise ValueError('Committed content changed')
             return body
@@ -321,7 +322,7 @@ class ImageProgrammeControls(unittest.TestCase):
             pair.match_arm_information(a,b,data,d,c,am,bm,authority['a_receipt'],authority['b_receipt'])
         OBSERVATIONS.append({'control':'matching','first_frames_matched':800,'later_action_identity_required':False})
 
-    def portable_profile(self,client):
+    def portable_profile(self,client,*,visual_profile='legacy400',budget=None):
         """Exact unchanged source with only platform/executable-existence fixture metadata.
 
         No sandbox or process is launched; this never qualifies OS enforcement.
@@ -334,7 +335,7 @@ class ImageProgrammeControls(unittest.TestCase):
         namespace=dict(function.__globals__)
         namespace.update(sys=types.SimpleNamespace(platform='darwin'),Path=ExistingSandbox)
         clone=types.FunctionType(function.__code__,namespace,function.__name__,function.__defaults__,function.__closure__)
-        return clone(client)
+        return clone(client,visual_profile=visual_profile,budget=budget)
 
     def episode_fixture(self,name):
         root=self.location(name);c,_,_,client_body=self.contract(root)
@@ -381,19 +382,21 @@ class ImageProgrammeControls(unittest.TestCase):
         f=self.generated_arm();d=self.deps;trace=[]
         initial,seen,authority=self.frames(f.c,f.provider,f.programme,a_manifest=f.am,b_manifest=f.bm)
         real_read=pair.read
-        def read(path,cap=1048576,expected=None):
+        def read(path,cap=1048576,expected=None,*,budget=None):
             if Path(path).name=='0000-out.bin' or (Path(path).is_relative_to(f.provider) and Path(path).name in ('CLIENT_END.json','ARM.json','MANIFEST.json')):
-                return initial(path,cap,expected)
+                return initial(path,cap,expected,budget=budget)
             if Path(path)==f.private:
                 self.assertEqual(len(seen),1200);self.assertIn('provider-admitted',trace)
                 self.assertIn('generated-public-validations',trace)
                 self.assertEqual(len(audited),400);trace.append('private-descriptor-after-arms')
-            return real_read(path,cap,expected)
+            return real_read(path,cap,expected,budget=budget)
         def admit_provider(*args):
             trace.append('provider-admitted')
             return f.programme/'collection/submission.npz',f.arm['submission'],f.provider_receipt
         audited=[]
-        def audit(*args):audited.append(args[2]);return {'generated_fixture_only':True}
+        def audit(*args,budget=None):
+            self.assertIsNone(budget)  # This control selects the legacy400 route.
+            audited.append(args[2]);return {'generated_fixture_only':True}
         def score(*args):
             # Explicit fixture authority stands in for the unchanged two public
             # NPZ validations; then exercise the production lazy read facade.
@@ -460,8 +463,9 @@ class ImageProgrammeControls(unittest.TestCase):
         response=f.programme/'sessions/000/response.txt';original=response.read_bytes()
         put(response,pair.encode({'trial_id':self.ids[0],'target_probability':0.9}))
         real_read=pair.read
-        def first_frames(path,cap=1048576,expected=None):
-            return f.initial_reader(path,cap,expected) if Path(path).name=='0000-out.bin' else real_read(path,cap,expected)
+        def first_frames(path,cap=1048576,expected=None,*,budget=None):
+            return (f.initial_reader(path,cap,expected,budget=budget) if Path(path).name=='0000-out.bin'
+                    else real_read(path,cap,expected,budget=budget))
         with mock.patch.object(pair,'packet_data',return_value=f.data),\
              mock.patch.object(pair,'audit_programme_episode',return_value={'generated_fixture_only':True}),\
              mock.patch.object(pair,'read',side_effect=first_frames),\

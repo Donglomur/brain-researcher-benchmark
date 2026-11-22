@@ -14,7 +14,7 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Recording-relative annotated seizure intervals, with separate raw annotations and processed intervals under the frozen timescoring merge/split/tolerance policy.
 
-**Source delivery:** partial\_delivery. The complete 686-record/23-person normalized event evaluator is delivered. Authentic EEG preparation and a competent signal reference are not qualified; the implemented tolerant event score cannot establish prompt onset detection.
+**Source delivery:** partial\_delivery. The complete 686-record/23-person normalized event evaluator and descriptive original-event alarm diagnostics are delivered. Authentic EEG preparation and a competent signal reference are not qualified; neither tolerant event F1 nor score-grid alignment establishes prompt onset detection.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
@@ -31,7 +31,7 @@ Source availability does not establish a qualified runtime. A programme score ca
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 17137 bytes; SHA-256 `92c3d8c1cb60682d363ab0f2303f1b8b8d259259e9956526c39fe71e2046ba31`.
+- Specification identity: 17268 bytes; SHA-256 `b6dd60e83662b757283b6d842dde31a54c46c3ff7db0352c131b5430dc5065fb`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 

@@ -90,8 +90,19 @@ class Harness:
         name = "run_person" if self.sleep else "run_episode"
         selected = [node for node in tree.body if isinstance(node, ast.FunctionDef) and node.name == name]
         need(len(selected) == 1, "Exactly one maintained run function required")
-        # Execute the original AST body, without altering its branches or calls.
-        unit = ast.Module(body=selected, type_ignores=[])
+        support = [node for node in tree.body
+                   if isinstance(node, ast.FunctionDef) and node.name == "profile_fields"]
+        if support:
+            need(len(support) == 1, "Exactly one maintained profile helper required")
+            names = {"LEGACY_PROFILE", "FULL32_PROFILE"}
+            constants = [node for node in tree.body
+                         if isinstance(node, ast.Assign) and len(node.targets) == 1
+                         and isinstance(node.targets[0], ast.Name) and node.targets[0].id in names]
+            need(len(constants) == 2 and {node.targets[0].id for node in constants} == names,
+                 "Both maintained profile constants required")
+            support = constants + support
+        # Execute the original AST bodies, without altering their branches or calls.
+        unit = ast.Module(body=support + selected, type_ignores=[])
         exec(compile(unit, str(source), "exec"), self.namespace)
         self.run_function = self.namespace[name]
 
@@ -215,6 +226,10 @@ class Harness:
             path.mkdir()
             return path
 
+        def profile_name(dataset):
+            need(type(dataset) is dict and not dataset, "Ownership fixture requires empty legacy dataset")
+            return "legacy400"
+
         def set_blocking(fd, flag):
             harness.events.append("configure_pipe")
             need("observe" in harness.events, "Observe immediately after launch")
@@ -232,7 +247,7 @@ class Harness:
             Session=SleepSession if self.sleep else EEGSession,
             transition=lambda *args: None, dependencies=lambda: (None, None, None),
             fresh_output=fresh_output, CASES={"development-001": 2780, "development-002": 2670},
-            MODE="whole_person_raw_viewer_zero_shot",
+            MODE="whole_person_raw_viewer_zero_shot", profile_name=profile_name,
         )
         return {
             "owner": SimpleNamespace(preflight=preflight, ExitObserver=Observer, stop_and_reap=stop_and_reap),
@@ -249,7 +264,7 @@ class Harness:
             "read_frame": read_frame, "write_frame": write_frame,
             "projection": lambda response: (dict(response), b""),
             "ready_header": lambda *args: {"fixture": "inert-generated-lifecycle"},
-            "boundary_manifest": lambda *args: {"fixture": "inert-generated-lifecycle"},
+            "boundary_manifest": lambda *args, **kwargs: {"fixture": "inert-generated-lifecycle"},
             "viewer_manifest": lambda *args: {"fixture": "inert-generated-lifecycle"},
             "source_identity": lambda: {"fixture": "inert-generated-lifecycle"},
         }

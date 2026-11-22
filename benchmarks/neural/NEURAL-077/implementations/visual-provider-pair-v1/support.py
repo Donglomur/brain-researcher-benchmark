@@ -43,7 +43,7 @@ def decode(raw):
                       parse_constant=lambda _: (_ for _ in ()).throw(ValueError("Nonfinite request/source")))
 
 
-def capture(path, cap=131072, expected=None):
+def capture(path, cap=131072, expected=None, *, budget=None):
     path = Path(path).absolute()
     need(all(not x.is_symlink() for x in (path, *path.parents)), "No linked source/request")
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
@@ -52,7 +52,9 @@ def capture(path, cap=131072, expected=None):
         fields = lambda x: (x.st_dev,x.st_ino,x.st_size,x.st_mtime_ns,x.st_ctime_ns,x.st_nlink)
         need(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and 0 < before.st_size <= cap,
              "Bounded ordinary source/request")
-        raw = stream.read(cap + 1)
+        if budget is not None:
+            budget.input(before.st_size + 1)
+        raw = stream.read(before.st_size + 1 if budget is not None else cap + 1)
         need(len(raw) == before.st_size and fields(before) == fields(os.fstat(stream.fileno())) == fields(path.lstat()),
              "Source/request changed during capture")
     need(expected is None or pin(raw) == expected, "Exact source/request identity")
@@ -85,5 +87,6 @@ def load(root):
             "bridge": bridge, "bindings": manifest, "original_bodies": bodies, "operator": operator}
 
 
-def identity(s):
-    return {name: pin(s.read(HERE / name, 131072)) for name in FILES}
+def identity(s, *, budget=None):
+    return {name: pin(capture(HERE / name, 131072, budget=budget) if budget is not None
+                      else s.read(HERE / name, 131072)) for name in FILES}

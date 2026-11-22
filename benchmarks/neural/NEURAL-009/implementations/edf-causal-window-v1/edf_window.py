@@ -16,7 +16,7 @@ import struct
 import types
 
 ROOT = Path(__file__).resolve().parent
-ADMISSION_SHA256 = "1c5096ab1a1f75f39cd6de9e8fa71772c7bed9ce35ef3197ac69aacad30720d9"
+ADMISSION_SHA256 = "be6edf7fcfd2145ab37a0aa92661672b91753b81b3e2e69d7933997abbbaa6c8"
 ADMISSION_BYTES = 21865
 UNIT_TO_UV = {"V": Fraction(1000000), "mV": Fraction(1000),
               "uV": Fraction(1), "nV": Fraction(1, 1000)}

@@ -23,6 +23,8 @@ PREFIX = struct.Struct('!II')  # JSON bytes, then PNG bytes; input PNG length mu
 PNG_MAX = 4 * 1024 * 1024
 HEADER_MAX = 32768
 RESERVE = 1024  # Terminal notification, never a silently discarded answer.
+LEGACY_PROFILE = 'legacy400'
+FULL32_PROFILE = 'erp-full32-visual-v1'
 
 
 def load_viewer():
@@ -55,6 +57,15 @@ def load_process_owner():
 
 
 owner = load_process_owner()
+
+
+def load_profile_successor(*, budget=None):
+    """The accepted metadata restriction is selected only for full32."""
+    path = Path(globals().get('IMPLEMENTATIONS_ROOT', HERE.parent)) / 'full32-paired-runtime-v1/profile_successor.py'
+    body = v.read_regular(path, 4096, budget=budget)
+    v.need(len(body) == 2083 and v.digest(body) == '2dbd9c27c8e522880c095fc4b8f7ea12132538a07fc29c83e7fcbce5623689a4',
+           'Full32 sandbox metadata policy source mismatch')
+    return v.load_module('full32_visual_profile_successor', path, body)
 
 
 @dataclass(frozen=True)
@@ -164,35 +175,54 @@ def projection(result):
     return dict(result), b''
 
 
-def boundary_manifest(limits, sandbox, client, episode_id, profile):
-    return {'schema': 'neural077_visual_transport_v1', 'episode_id': episode_id,
-            'limits': asdict(limits), 'sandbox': sandbox, 'client_sha256': v.digest(Path(client).read_bytes()),
+def profile_fields(dataset, *, budget=None):
+    """Only the static display commitment crosses the participant boundary."""
+    profile = v.profile_name(dataset)
+    if profile == LEGACY_PROFILE:
+        return {}
+    v.need(profile == FULL32_PROFILE and len(dataset['rows']) == 6400, 'Complete explicit full32 visual profile')
+    return {'profile': profile, 'profile_commitment': v.profile_commitment(dataset, budget=budget)}
+
+
+def boundary_manifest(limits, sandbox, client, episode_id, profile, dataset=None, *, budget=None):
+    manifest = {'schema': 'neural077_visual_transport_v1', 'episode_id': episode_id,
+            'limits': asdict(limits), 'sandbox': sandbox, 'client_sha256': v.digest(v.read_regular(Path(client), 1048576, budget=budget)),
             'fresh_process_per_query': True, 'provider_context_qualified': False,
             'provider_image_capacity_qualified': False, 'performance_claim': 'none',
             'sandbox_profile_sha256': v.digest(profile.encode()) if profile else None,
-            'implementation_sha256': {name: v.digest((HERE / name).read_bytes())
+            'implementation_sha256': {name: v.digest(v.read_regular(HERE / name, 131072, budget=budget))
                                       for name in ('transport.py', 'SOURCE_BINDINGS.json')}}
+    binding = profile_fields(dataset, budget=budget) if dataset is not None else {}
+    if binding:
+        # Operator evidence only. This dictionary is never put in ready_header.
+        manifest.update(binding, packet_sha256=dataset['packet'], client_path=str(Path(client).resolve()))
+    return manifest
 
 
-def ready_header(session, limits, episode_id):
-    return {'status': 'ready', 'episode_id': episode_id, 'trial_id': session.query['trial_id'], 'prompt': session.prompt,
-            'actions': v.decode((v.HERE / 'actions.schema.json').read_bytes()),
+def ready_header(session, limits, episode_id, *, budget=None):
+    header = {'status': 'ready', 'episode_id': episode_id, 'trial_id': session.query['trial_id'], 'prompt': session.prompt,
+            'actions': v.decode(v.read_regular(v.HERE / 'actions.schema.json', 131072, budget=budget)),
             'limits': dict(asdict(limits), max_request_bytes=v.MAX_REQUEST, max_image_bytes=PNG_MAX),
             'instructions': 'Use only the declared viewer actions. Image parts are PNG content, not text. '
                             'The first finalize is terminal. No query feedback or other-query context is available.'}
+    header.update(profile_fields(getattr(session, 'dataset', {}), budget=budget))
+    return header
 
 
-def sandbox_profile(script):
+def sandbox_profile(script, *, visual_profile=LEGACY_PROFILE, budget=None):
     """macOS scripted-client boundary; not a remote-provider or hostile-kernel proof."""
     v.need(sys.platform == 'darwin' and Path('/usr/bin/sandbox-exec').exists(), 'macOS sandbox-exec required')
-    quoted = json.dumps(str(Path(script).resolve()))
-    return ('(version 1) (deny default) (deny sysctl* process-info* network* process-fork) '
+    v.need(visual_profile in (LEGACY_PROFILE, FULL32_PROFILE), 'Unknown explicit sandbox visual profile')
+    script = Path(script).resolve()
+    quoted = json.dumps(str(script))
+    base = ('(version 1) (deny default) (deny sysctl* process-info* network* process-fork) '
             '(allow process-info* (target self)) (allow process-exec) (allow file-read-metadata) '
             '(allow sysctl-read (sysctl-name "kern.ostype") (sysctl-name "kern.osrelease") '
             '(sysctl-name "kern.version") (sysctl-name "kern.hostname") (sysctl-name "hw.machine")) '
             '(allow file-read-data (literal "/") (subpath "/System") (subpath "/usr") '
             '(subpath "/Library/Frameworks") (literal "/dev/null") (literal "/dev/urandom") '
             '(literal "/dev/random") (literal ' + quoted + '))')
+    return load_profile_successor(budget=budget).successor_profile(base, script) if visual_profile == FULL32_PROFILE else base
 
 
 class Journal:
@@ -218,13 +248,14 @@ def run_episode(dataset, ordinal, mode, output, client, python=sys.executable,
     owner.preflight()
     limits = limits or Limits()
     limits.validate()
+    v.need(not profile_fields(dataset) or mode == 'four_demo', 'Full32 visual profile requires unchanged four demonstrations')
     client, python = Path(client).resolve(strict=True), Path(python).resolve(strict=True)
-    profile = sandbox_profile(client) if sandbox == 'macos' else None
+    profile = sandbox_profile(client, visual_profile=v.profile_name(dataset)) if sandbox == 'macos' else None
     v.need(sandbox in ('macos', 'protocol_only'), 'Unknown sandbox mode')
     session = v.Session(dataset, ordinal, mode, output)
     journal = Journal(session.output / 'transport')
     episode_id = uuid.uuid4().hex
-    manifest = boundary_manifest(limits, sandbox, client, episode_id, profile)
+    manifest = boundary_manifest(limits, sandbox, client, episode_id, profile, dataset=dataset)
     v.write_new(journal.path / 'MANIFEST.json', v.encode(manifest))
     if profile:
         v.write_new(journal.path / 'sandbox.sb', profile.encode())
@@ -335,14 +366,25 @@ def run_episode(dataset, ordinal, mode, output, client, python=sys.executable,
     return receipt
 
 
-def audit_transport(path, dataset, ordinal, mode):
+def audit_transport(path, dataset, ordinal, mode, *, budget=None):
     """Bind complete exact transport messages to the existing viewer action/frame audit."""
     path = Path(path)
     transport = path / 'transport'
-    manifest = v.decode(v.read_regular(transport / 'MANIFEST.json', HEADER_MAX))
-    end = v.decode(v.read_regular(transport / 'END.json', HEADER_MAX))
+    manifest = v.decode(v.read_regular(transport / 'MANIFEST.json', HEADER_MAX, budget=budget))
+    end = v.decode(v.read_regular(transport / 'END.json', HEADER_MAX, budget=budget))
+    binding = profile_fields(dataset, budget=budget)
+    v.need(not binding or mode == 'four_demo', 'Full32 visual profile requires unchanged four demonstrations')
+    expected_binding = dict(binding, packet_sha256=dataset['packet']) if binding else {}
+    v.need({key: manifest[key] for key in ('profile', 'profile_commitment', 'packet_sha256') if key in manifest}
+           == expected_binding, 'Transport profile or operator packet binding mismatch')
+    if binding:
+        client_path = manifest.get('client_path')
+        v.need(type(client_path) is str and Path(client_path).is_absolute() and '..' not in Path(client_path).parts,
+               'Explicit operator client path required for exact sandbox-policy audit')
+    else:
+        v.need('client_path' not in manifest, 'Legacy transport does not admit full32 client-path field')
     limits = Limits(**manifest['limits']); limits.validate()
-    v.need(manifest['implementation_sha256'] == {name: v.digest((HERE / name).read_bytes())
+    v.need(manifest['implementation_sha256'] == {name: v.digest(v.read_regular(HERE / name, 131072, budget=budget))
            for name in ('transport.py', 'SOURCE_BINDINGS.json')}, 'Transport implementation mismatch')
     v.need(end['status'] == 'valid_unscored' and end['reason'] is None and not (path / 'FAILED.json').exists(), 'Transport did not complete')
     v.need(end['client_exit_code'] == 0 and end['client_forced_stop'] is False, 'Client did not close successfully')
@@ -351,12 +393,17 @@ def audit_transport(path, dataset, ordinal, mode):
     v.need(end['manifest_sha256'] == v.digest(v.encode(manifest)), 'Manifest mismatch')
     v.need(manifest['sandbox'] in ('macos', 'protocol_only'), 'Unknown recorded sandbox')
     if manifest['sandbox'] == 'macos':
-        v.need(v.digest(v.read_regular(transport / 'sandbox.sb', HEADER_MAX)) == manifest['sandbox_profile_sha256'], 'Sandbox policy mismatch')
+        recorded_policy = v.read_regular(transport / 'sandbox.sb', HEADER_MAX, budget=budget)
+        v.need(v.digest(recorded_policy) == manifest['sandbox_profile_sha256'], 'Sandbox policy mismatch')
+        if binding:
+            v.need(recorded_policy == sandbox_profile(client_path, visual_profile=FULL32_PROFILE, budget=budget).encode(),
+                   'Exact full32 metadata-restricted sandbox policy required')
     else:
         v.need(manifest['sandbox_profile_sha256'] is None, 'Unexpected sandbox policy')
-    v.need(end['viewer_final_sha256'] == v.digest(v.read_regular(path / 'FINAL.json', HEADER_MAX)), 'Final binding mismatch')
-    v.audit_session(path, dataset, ordinal, mode)
-    final = v.decode((path / 'FINAL.json').read_bytes())
+    final_raw = v.read_regular(path / 'FINAL.json', HEADER_MAX, budget=budget)
+    v.need(end['viewer_final_sha256'] == v.digest(final_raw), 'Final binding mismatch')
+    v.audit_session(path, dataset, ordinal, mode, budget=budget)
+    final = v.decode(final_raw)
     actions = final['actions']
     v.need(2 <= actions <= limits.max_actions and end['messages'] == 2 * actions - 1, 'Message/action count mismatch')
     expected_names = {'MANIFEST.json', 'END.json'} | ({'sandbox.sb'} if manifest['sandbox'] == 'macos' else set())
@@ -364,19 +411,22 @@ def audit_transport(path, dataset, ordinal, mode):
     prompt = v.scientific_prompt(dataset['rows'][ordinal]['trial_id'], mode)
     class Prompt:
         pass
-    context = Prompt(); context.prompt = prompt; context.query = dataset['rows'][ordinal]
+    context = Prompt(); context.prompt = prompt; context.query = dataset['rows'][ordinal]; context.dataset = dataset
+    action_index, action = None, None
     for sequence in range(end['messages']):
         direction = 'out' if sequence % 2 == 0 else 'in'
         name = f'{sequence:04d}-{direction}.bin'
         expected_names.update((name, f'{sequence:04d}.json'))
-        event_raw = v.read_regular(transport / f'{sequence:04d}.json', HEADER_MAX)
+        event_raw = v.read_regular(transport / f'{sequence:04d}.json', HEADER_MAX, budget=budget)
         event = v.decode(event_raw)
-        body = v.read_regular(transport / name, PNG_MAX + HEADER_MAX + PREFIX.size)
+        body = v.read_regular(transport / name, PNG_MAX + HEADER_MAX + PREFIX.size, budget=budget)
         v.need(event == {'sequence': sequence, 'direction': direction, 'file': name, 'bytes': len(body),
                         'sha256': v.digest(body), 'complete': True, 'previous_sha256': previous}, 'Transport chain mismatch')
         previous = v.digest(event_raw)
         index = (sequence + 1) // 2
-        action = v.decode((path / f'action-{index:04d}.json').read_bytes())
+        if index != action_index:
+            action = v.decode(v.read_regular(path / f'action-{index:04d}.json', HEADER_MAX, budget=budget))
+            action_index = index
         if direction == 'in':
             hsize, isize = PREFIX.unpack(body[:PREFIX.size])
             v.need(0 < hsize <= v.MAX_REQUEST and isize == 0 and len(body) == PREFIX.size + hsize, 'Input frame mismatch')
@@ -385,7 +435,7 @@ def audit_transport(path, dataset, ordinal, mode):
         header, png = unpack(body)
         total_output += len(body); images += bool(png)
         if action['status'] == 'rendered':
-            expected_png = v.read_regular(path / action['detail']['frame'], PNG_MAX)
+            expected_png = v.read_regular(path / action['detail']['frame'], PNG_MAX, budget=budget)
             projected = {'status': 'rendered', 'display': action['detail']['display'],
                          'remaining_actions': limits.max_actions - index - 1,
                          'image': {'mime_type': 'image/png', 'bytes': len(expected_png)}}
@@ -396,7 +446,7 @@ def audit_transport(path, dataset, ordinal, mode):
             expected_png = b''
             projected = {'status': 'valid_unscored', 'response_sha256': final['response_sha256'], 'terminal': True}
         if sequence == 0:
-            expected = ready_header(context, limits, manifest['episode_id']); expected['initial'] = projected
+            expected = ready_header(context, limits, manifest['episode_id'], budget=budget); expected['initial'] = projected
         else:
             expected = projected
         v.need(header == expected and png == expected_png, 'Participant response projection mismatch')
@@ -406,25 +456,41 @@ def audit_transport(path, dataset, ordinal, mode):
     return end
 
 
-def collect(packet, sessions, mode, output, implementation_root=None):
-    dataset = v.source(packet, implementation_root)
-    sessions, output = Path(sessions), Path(output)
-    v.need(sorted(p.name for p in sessions.iterdir()) == [f'{i:03d}' for i in range(400)], 'Exactly 400 sessions required')
-    audited = [audit_transport(sessions / f'{i:03d}', dataset, i, mode) for i in range(400)]
-    configurations = []
-    for i in range(400):
-        manifest = v.decode(v.read_regular(sessions / f'{i:03d}/transport/MANIFEST.json', HEADER_MAX))
-        configurations.append({key: value for key, value in manifest.items() if key != 'episode_id'})
-    v.need(all(config == configurations[0] for config in configurations), 'Mixed transport/client/limit configurations')
-    # Existing collector alone assembles/parses/validates the unchanged numerical submission.
-    receipt = v.collect(packet, sessions, mode, output, implementation_root)
-    transport_receipt = {'schema': 'neural077_transport_collection_v1', 'queries': len(audited),
-                         'status': 'complete_unscored_transport_collection', 'condition': mode,
-                         'submission_sha256': receipt['submission_sha256'], 'scoring_performed': False,
-                         'configuration_sha256': v.digest(v.encode(configurations[0])),
-                         'performance_claim': 'none', 'provider_qualification': 'not_established'}
-    v.write_new(output / 'TRANSPORT_COMPLETE.json', v.encode(transport_receipt))
-    return transport_receipt
+def collect(packet, sessions, mode, output, implementation_root=None, *,
+            profile=LEGACY_PROFILE, manifest_pin=None, condition=None, budget=None):
+    v.need((profile == LEGACY_PROFILE and condition is None)
+           or (profile == FULL32_PROFILE and mode == 'four_demo'
+               and condition in ('visual_direct_four_demo', 'visual_program_four_demo')),
+           'Explicit full32 visual arm condition required; legacy condition remains the viewer mode')
+    dataset = v.source(packet, implementation_root, profile=profile, manifest_pin=manifest_pin, budget=budget)
+    try:
+        sessions, output = Path(sessions), Path(output)
+        names = [v.session_name(dataset, i) for i in range(v.collection_count(dataset))]
+        v.need(sorted(p.name for p in sessions.iterdir()) == names, 'Exactly the complete profile sessions required')
+        audited = [audit_transport(sessions / name, dataset, i, mode, budget=budget) for i, name in enumerate(names)]
+        configurations = []
+        for name in names:
+            manifest = v.decode(v.read_regular(sessions / name / 'transport/MANIFEST.json', HEADER_MAX, budget=budget))
+            configurations.append({key: value for key, value in manifest.items() if key != 'episode_id'})
+        v.need(all(config == configurations[0] for config in configurations), 'Mixed transport/client/limit configurations')
+        if profile == FULL32_PROFILE:
+            expected_sandbox = 'macos' if condition == 'visual_program_four_demo' else 'protocol_only'
+            v.need(configurations[0]['sandbox'] == expected_sandbox, 'Selected visual arm transport boundary mismatch')
+        # The maintained viewer collector owns complete response admission.
+        receipt = v.collect(packet, sessions, mode, output, implementation_root,
+                            profile=profile, manifest_pin=manifest_pin, budget=budget)
+        transport_receipt = {'schema': 'neural077_transport_collection_v1', 'queries': len(audited),
+                             'status': 'complete_unscored_transport_collection', 'condition': condition or mode,
+                             'submission_sha256': receipt['submission_sha256'], 'scoring_performed': False,
+                             'configuration_sha256': v.digest(v.encode(configurations[0])),
+                             'performance_claim': 'none', 'provider_qualification': 'not_established'}
+        binding = profile_fields(dataset, budget=budget)
+        if binding:
+            transport_receipt.update(binding, packet_sha256=dataset['packet'])
+        v.write_new(output / 'TRANSPORT_COMPLETE.json', v.encode(transport_receipt))
+        return transport_receipt
+    finally:
+        v.close_source(dataset)
 
 
 def main(argv=None):
@@ -434,10 +500,14 @@ def main(argv=None):
         command = sub.add_parser(name)
         command.add_argument('--packet', type=Path, required=True)
         command.add_argument('--implementation-root', type=Path)
+        command.add_argument('--profile', choices=(LEGACY_PROFILE, FULL32_PROFILE), default=LEGACY_PROFILE)
+        command.add_argument('--manifest-bytes', type=int)
+        command.add_argument('--manifest-sha256')
         command.add_argument('--mode', choices=v.MODES, required=True)
         command.add_argument('--output', type=Path, required=True)
         if name == 'collect':
             command.add_argument('--sessions', type=Path, required=True)
+            command.add_argument('--condition', choices=('visual_direct_four_demo', 'visual_program_four_demo'))
         else:
             command.add_argument('--client', type=Path, required=True)
             command.add_argument('--python', default=sys.executable)
@@ -450,21 +520,29 @@ def main(argv=None):
     args = vars(parser.parse_args(argv))
     name = args.pop('command')
     try:
+        extent, digest = args.pop('manifest_bytes'), args.pop('manifest_sha256')
+        v.need((extent is None) == (digest is None), 'Both exact manifest pin fields are required')
+        args['manifest_pin'] = None if extent is None else {'bytes': extent, 'sha256': digest}
         if name == 'collect':
             result = collect(**args)
         else:
             limits = Limits(**{key: args.pop(key) for key in asdict(Limits())}); limits.validate()
-            dataset = v.source(args.pop('packet'), args.pop('implementation_root'))
-            if name == 'episode':
-                result = run_episode(dataset=dataset, limits=limits, **args)
-            else:
-                root = args.pop('output'); root.mkdir(mode=0o700, parents=False, exist_ok=False)
-                receipts = [run_episode(dataset, i, output=root / f'{i:03d}', limits=limits, **args) for i in range(400)]
-                result = {'attempts': 400, 'valid_unscored': sum(row['status'] == 'valid_unscored' for row in receipts),
-                          'performance_claim': 'none', 'scoring_performed': False}
+            dataset = v.source(args.pop('packet'), args.pop('implementation_root'),
+                               profile=args.pop('profile'), manifest_pin=args.pop('manifest_pin'))
+            try:
+                if name == 'episode':
+                    result = run_episode(dataset=dataset, limits=limits, **args)
+                else:
+                    root = args.pop('output'); root.mkdir(mode=0o700, parents=False, exist_ok=False)
+                    names = [v.session_name(dataset, i) for i in range(v.collection_count(dataset))]
+                    receipts = [run_episode(dataset, i, output=root / item, limits=limits, **args) for i, item in enumerate(names)]
+                    result = {'attempts': len(names), 'valid_unscored': sum(row['status'] == 'valid_unscored' for row in receipts),
+                              'performance_claim': 'none', 'scoring_performed': False}
+            finally:
+                v.close_source(dataset)
         print(json.dumps(result, sort_keys=True))
         success = (result.get('status') == 'valid_unscored' if name == 'episode' else
-                   result.get('valid_unscored') == 400 if name == 'campaign' else
+                   result.get('valid_unscored') == result.get('attempts') if name == 'campaign' else
                    result.get('status') == 'complete_unscored_transport_collection')
         return 0 if success else 2
     except (ValueError, OSError, UnicodeError, KeyError, TypeError):

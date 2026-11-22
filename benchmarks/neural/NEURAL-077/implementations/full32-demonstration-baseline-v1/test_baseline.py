@@ -26,7 +26,7 @@ HERE = Path(__file__).resolve().parent
 BUNDLE = HERE.parent / "full32-paired-benchmark-v1" / "bundle.py"
 BUNDLE_PIN = {"bytes": 13969, "sha256": "c78870347454935e1bc95d770ef30c1cb5b5fc516d76f5082a5bf721875291ff"}
 CONSUMER = BUNDLE.parent / "consumer.py"
-CONSUMER_PIN = {"bytes": 21146, "sha256": "6825dc00428b64c20cf23e1ac82068c891c4dd121fd980e0076b0ce89cb7629d"}
+CONSUMER_PIN = {"bytes": 23062, "sha256": "09d5d6b85e7c5baa59c3e24b3a6d3edaff3d94d2efb9970506613d3fef420706"}
 PROGRAMME_PERMISSION = ("Numerical tools and candidate code execution are allowed for this query. "
                         "Do not use external retrieval, other files, or memory from other query trials.")
 QUERY = "q-" + "1" * 32

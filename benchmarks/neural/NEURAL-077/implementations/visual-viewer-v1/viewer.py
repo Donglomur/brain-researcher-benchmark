@@ -21,6 +21,10 @@ MODES = ('zero_shot', 'four_demo')
 GAINS = (1, 2, 5, 10, 20, 50, 100, 200, 500, 1000)
 MAX_REQUEST = 8192
 MAX_ACTIONS = 128
+PROFILES = ('legacy400', 'erp-full32-visual-v1')
+ENCODING_FIELDS = {'schema', 'original', 'transfer', 'ihdr', 'scanlines', 'dimensions',
+                   'pixel_change', 'filter_change', 'compression_level',
+                   'zlib_compile_version', 'zlib_runtime_version'}
 
 
 def need(ok, message):
@@ -57,15 +61,17 @@ def write_new(path, body):
         os.fsync(stream.fileno())
 
 
-def read_regular(path, cap):
+def read_regular(path, cap, budget=None):
     fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
     with os.fdopen(fd, 'rb') as stream:
         before = os.fstat(stream.fileno())
         need(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and 0 < before.st_size <= cap,
              'Bounded single-link regular file required')
-        body = stream.read(cap + 1)
+        if budget is not None:
+            budget.input(before.st_size + 1)
+        body = stream.read(before.st_size + 1)
         after = os.fstat(stream.fileno())
-        need(len(body) <= cap and all(getattr(before, f) == getattr(after, f)
+        need(len(body) == before.st_size and all(getattr(before, f) == getattr(after, f)
              for f in ('st_dev', 'st_ino', 'st_size', 'st_mtime_ns', 'st_ctime_ns')), 'File changed while read')
         return body
 
@@ -77,13 +83,13 @@ def load_module(name, path, body):
     return module
 
 
-def dependencies(implementation_root=None):
+def dependencies(implementation_root=None, budget=None):
     """Only trusted operator chooses root; every executable dependency is pinned."""
     root = Path(implementation_root) if implementation_root else HERE.parent
-    bindings = decode((HERE / 'SOURCE_BINDINGS.json').read_bytes())
+    bindings = decode(read_regular(HERE / 'SOURCE_BINDINGS.json', 65536, budget))
     bodies = {}
     for relative, pin in bindings['members'].items():
-        body = read_regular(root / relative, pin['bytes'])
+        body = read_regular(root / relative, pin['bytes'], budget)
         need(len(body) == pin['bytes'] and digest(body) == pin['sha256'], 'Dependency pin mismatch')
         bodies[relative] = body
     path = root / 'complete-direct-condition-v1/delivery.py'
@@ -93,8 +99,95 @@ def dependencies(implementation_root=None):
     return delivery, modules
 
 
-def source(packet, implementation_root=None):
-    delivery, modules = dependencies(implementation_root)
+def _profile_dependency(name, implementation_root=None, budget=None):
+    root = Path(implementation_root) if implementation_root else HERE.parent
+    bindings = decode(read_regular(HERE / 'SOURCE_BINDINGS.json', 65536, budget))
+    paths = {'profile': 'visual-viewer-v1/full32_profile.py',
+             'consumer': 'full32-paired-benchmark-v1/consumer.py',
+             'codec': 'visual-provider-pair-v1/transfer_png.py'}
+    need(name in paths, 'Known full32 operator dependency')
+    relative = paths[name]
+    pin = bindings['members'][relative]
+    if name == 'codec':
+        policy = _profile_dependency('profile', implementation_root, budget).DISPLAY_SPEC['encoding']
+        need(relative == policy['codec_implementation'] and pin == policy['codec'], 'Exact static PNG codec binding')
+    body = read_regular(root / relative, pin['bytes'], budget)
+    need(len(body) == pin['bytes'] and digest(body) == pin['sha256'], 'Full32 source pin mismatch')
+    return load_module('viewer_full32_' + name, root / relative, body)
+
+
+def profile_binding(profile, implementation_root=None, budget=None):
+    """Static display policy commitment; never opens a packet or query."""
+    need(profile in PROFILES, 'Unknown explicit visual profile')
+    if profile == 'legacy400':
+        return None
+    return _profile_dependency('profile', implementation_root, budget).PROFILE_COMMITMENT
+
+
+def profile_name(dataset):
+    profile = dataset.get('profile', 'legacy400')
+    need(profile in PROFILES, 'Unknown visual dataset profile')
+    return profile
+
+
+def profile_commitment(dataset, budget=None):
+    if budget is None:
+        budget = dataset.get('_budget')
+    profile = profile_name(dataset)
+    if profile == 'legacy400':
+        need('profile_commitment' not in dataset, 'Legacy profile has no added commitment')
+        return None
+    expected = profile_binding(profile, dataset.get('_implementation_root'), budget)
+    need(dataset.get('profile_commitment') == expected, 'Exact static display profile required')
+    return expected
+
+
+def collection_count(dataset):
+    count = 6400 if profile_name(dataset) == 'erp-full32-visual-v1' else 400
+    need(len(dataset['rows']) == count, 'Complete selected visual roster required')
+    return count
+
+
+def session_name(dataset, ordinal):
+    need(type(ordinal) is int and 0 <= ordinal < collection_count(dataset), 'Valid session ordinal')
+    return format(ordinal, '04d' if profile_name(dataset) == 'erp-full32-visual-v1' else '03d')
+
+
+def ordered_ids(dataset):
+    """Operator-only roster; this must never enter a participant header."""
+    if profile_name(dataset) == 'erp-full32-visual-v1':
+        ids = dataset['trial_ids']
+        need(type(ids) is tuple and len(ids) == collection_count(dataset), 'Complete operator roster')
+        return ids
+    return tuple(row['trial_id'] for row in dataset['rows'])
+
+
+def close_source(dataset):
+    session = dataset.get('_session')
+    if session is not None:
+        dataset['rows'].clear()
+        session.close()
+
+
+def query_id(dataset, ordinal):
+    need(type(ordinal) is int and 0 <= ordinal < len(dataset['rows']), 'Unknown query ordinal')
+    return (dataset['trial_ids'][ordinal] if profile_name(dataset) == 'erp-full32-visual-v1'
+            else dataset['rows'][ordinal]['trial_id'])
+
+
+def source(packet, implementation_root=None, *, profile='legacy400', manifest_pin=None, budget=None):
+    need(profile in PROFILES, 'Unknown explicit visual profile')
+    need((profile == 'legacy400') == (manifest_pin is None), 'Full32 requires exact external manifest pin')
+    need(budget is None or profile == 'erp-full32-visual-v1', 'Measured packet admission is full32 only')
+    if profile == 'erp-full32-visual-v1':
+        _, modules = dependencies(implementation_root, budget)
+        adapter = _profile_dependency('profile', implementation_root, budget)
+        consumer = _profile_dependency('consumer', implementation_root, budget)
+        dataset = adapter.source(packet, manifest_pin, consumer, modules['validator'], budget=budget)
+        dataset['_implementation_root'] = implementation_root
+        return dataset
+
+    delivery, modules = dependencies(implementation_root, budget)
     members = delivery.packet_members(packet, modules['exporter'])
     # Reuse the authenticated complete roster and exact original context checks.
     roster = [{'ordinal': row['ordinal'], 'trial_id': row['trial_id']}
@@ -195,16 +288,23 @@ def display_metadata(state, record):
     return metadata
 
 
-def session_contract(dataset, ordinal, mode):
-    return {'schema': 'neural077_visual_session_v1', 'ordinal': ordinal,
-                         'trial_id': dataset['rows'][ordinal]['trial_id'], 'condition': mode,
+def session_contract(dataset, ordinal, mode, budget=None):
+    if budget is None:
+        budget = dataset.get('_budget')
+    if profile_name(dataset) == 'erp-full32-visual-v1':
+        need(mode == 'four_demo', 'Full32 visual profile requires the same four demonstrations')
+    contract = {'schema': 'neural077_visual_session_v1', 'ordinal': ordinal,
+                         'trial_id': query_id(dataset, ordinal), 'condition': mode,
                          'demonstrations_available': 4 if mode == 'four_demo' else 0,
                          'feedback_available': False, 'max_actions': MAX_ACTIONS,
-                         'packet_sha256': dataset['packet'], 'prompt_sha256': digest(scientific_prompt(dataset['rows'][ordinal]['trial_id'], mode).encode()),
-                         'action_schema_sha256': digest((HERE / 'actions.schema.json').read_bytes()),
-                         'implementation_sha256': {name: digest((HERE / name).read_bytes())
+                         'packet_sha256': dataset['packet'], 'prompt_sha256': digest(scientific_prompt(query_id(dataset, ordinal), mode).encode()),
+                         'action_schema_sha256': digest(read_regular(HERE / 'actions.schema.json', 16384, budget)),
+                         'implementation_sha256': {name: digest(read_regular(HERE / name, 131072, budget))
                              for name in ('viewer.py', 'raster.py', 'SOURCE_BINDINGS.json')},
                          'isolation_qualified': False}
+    if profile_name(dataset) == 'erp-full32-visual-v1':
+        contract.update(profile=profile_name(dataset), profile_commitment=profile_commitment(dataset, budget))
+    return contract
 
 
 class Session:
@@ -212,6 +312,7 @@ class Session:
     def __init__(self, dataset, ordinal, mode, output):
         need(type(ordinal) is int and 0 <= ordinal < len(dataset['rows']), 'Unknown query ordinal')
         need(mode in MODES, 'Unknown condition')
+        need(profile_name(dataset) != 'erp-full32-visual-v1' or mode == 'four_demo', 'Full32 requires four demonstrations')
         self.dataset, self.ordinal, self.mode = dataset, ordinal, mode
         self.query = dataset['rows'][ordinal]
         self.output = Path(output)
@@ -219,7 +320,11 @@ class Session:
         (self.output / 'frames').mkdir(mode=0o700)
         self.state, self.closed, self.sequence = initial_state(), False, 0
         self.previous = '0' * 64
-        self.raster = load_module('viewer_raster', HERE / 'raster.py', (HERE / 'raster.py').read_bytes())
+        self.raster = load_module('viewer_raster', HERE / 'raster.py',
+                                  read_regular(HERE / 'raster.py', 65536, dataset.get('_budget')))
+        self.codec = (_profile_dependency('codec', dataset.get('_implementation_root'), dataset.get('_budget'))
+                      if profile_name(dataset) == 'erp-full32-visual-v1' else None)
+        self.frame_encoding = None
         self.prompt = scientific_prompt(self.query['trial_id'], mode)
         self.contract = session_contract(dataset, ordinal, mode)
         self.contract_hash = digest(encode(self.contract))
@@ -242,6 +347,13 @@ class Session:
 
     def _frame(self):
         png = self.raster.render(self._record(), self.state, self.mode)
+        self.frame_encoding = None
+        if self.codec is not None:
+            original = png
+            png, self.frame_encoding = self.codec.encode_transport_image(original)
+            need(type(self.frame_encoding) is dict and set(self.frame_encoding) == ENCODING_FIELDS,
+                 'Exact operator PNG encoding descriptor')
+            self.codec.verify_equivalence(original, png, self.frame_encoding)
         filename = f'frames/{self.sequence:04d}.png'
         write_new(self.output / filename, png)
         metadata = display_metadata(self.state, self._record())
@@ -287,38 +399,47 @@ class Session:
             return {'status': status, 'response_sha256': digest(response), 'terminal': True}
         self.state = state
         png, filename, metadata = self._frame()
-        self._event(raw, 'rendered', {'frame': filename, 'frame_sha256': digest(png), 'display': metadata})
+        detail = {'frame': filename, 'frame_sha256': digest(png), 'display': metadata}
+        if self.frame_encoding is not None:
+            detail['encoding'] = self.frame_encoding  # Operator-only; never in the participant projection.
+        self._event(raw, 'rendered', detail)
         return {'status': 'rendered', 'display': metadata, 'remaining_actions': MAX_ACTIONS - self.sequence,
                 'image': {'mime_type': 'image/png', 'base64': base64.b64encode(png).decode('ascii')}}
 
 
-def audit_session(path, dataset, ordinal, mode):
+def audit_session(path, dataset, ordinal, mode, budget=None):
     """Trusted-operator integrity audit; hashes do not attest transport isolation."""
+    if budget is None:
+        budget = dataset.get('_budget')
+    def captured(path, cap):
+        return read_regular(path, cap, budget)
     path = Path(path)
-    contract = decode(read_regular(path / 'SESSION.json', 16384))
-    final = decode(read_regular(path / 'FINAL.json', 16384))
+    contract = decode(captured(path / 'SESSION.json', 16384))
+    final = decode(captured(path / 'FINAL.json', 16384))
     row = dataset['rows'][ordinal]
-    need(contract == session_contract(dataset, ordinal, mode), 'Session contract mismatch')
+    need(contract == session_contract(dataset, ordinal, mode, budget), 'Session contract mismatch')
     need(contract['ordinal'] == ordinal and contract['trial_id'] == row['trial_id'] and contract['condition'] == mode,
          'Session identity/condition mismatch')
     need(contract['packet_sha256'] == dataset['packet'] and contract['prompt_sha256'] == digest(scientific_prompt(row['trial_id'], mode).encode()),
          'Session source/prompt mismatch')
     need(contract['demonstrations_available'] == (4 if mode == 'four_demo' else 0) and contract['feedback_available'] is False,
          'Demonstration/feedback condition mismatch')
-    need(contract['implementation_sha256'] == {name: digest((HERE / name).read_bytes())
+    need(contract['implementation_sha256'] == {name: digest(captured(HERE / name, 131072))
          for name in ('viewer.py', 'raster.py', 'SOURCE_BINDINGS.json')} and
-         contract['action_schema_sha256'] == digest((HERE / 'actions.schema.json').read_bytes()), 'Viewer version mismatch')
-    need(read_regular(path / 'prompt.txt', 16384) == scientific_prompt(row['trial_id'], mode).encode(), 'Stored prompt mismatch')
+         contract['action_schema_sha256'] == digest(captured(HERE / 'actions.schema.json', 16384)), 'Viewer version mismatch')
+    need(captured(path / 'prompt.txt', 16384) == scientific_prompt(row['trial_id'], mode).encode(), 'Stored prompt mismatch')
     need(final['status'] == 'valid_unscored' and final['session_sha256'] == digest(encode(contract)), 'Invalid final capture')
     count = final['actions']
     need(type(count) is int and 1 <= count <= MAX_ACTIONS, 'Invalid action count')
     need(sorted(p.name for p in path.glob('action-*.json')) == [f'action-{i:04d}.json' for i in range(count)], 'Action history missing or extended')
     previous = '0' * 64
     state = initial_state()
-    response = read_regular(path / 'response.txt', 4096)
-    raster = load_module('viewer_audit_raster', HERE / 'raster.py', (HERE / 'raster.py').read_bytes())
+    response = captured(path / 'response.txt', 4096)
+    raster = load_module('viewer_audit_raster', HERE / 'raster.py', captured(HERE / 'raster.py', 65536))
+    codec = (_profile_dependency('codec', dataset.get('_implementation_root'), budget)
+             if profile_name(dataset) == 'erp-full32-visual-v1' else None)
     for index in range(count):
-        raw = read_regular(path / f'action-{index:04d}.json', 32768)
+        raw = captured(path / f'action-{index:04d}.json', 32768)
         event = decode(raw)
         need(type(event) is dict and set(event) == {'sequence', 'previous_sha256', 'request_base64', 'request_sha256', 'status', 'detail'}, 'Exact event schema required')
         need(event['sequence'] == index and event['previous_sha256'] == previous, 'Broken action chain')
@@ -341,8 +462,16 @@ def audit_session(path, dataset, ordinal, mode):
             record = row if state['record'] == 'query' else dataset['demos'][int(state['record'][4:]) - 1]
             expected = raster.render(record, state, mode)
             detail = event['detail']
-            need(detail['frame'] == f'frames/{index:04d}.png' and detail['frame_sha256'] == digest(expected), 'Rendered frame mismatch')
-            need(read_regular(path / detail['frame'], 4 * 1024 * 1024) == expected, 'Stored frame mismatch')
+            need(detail['frame'] == f'frames/{index:04d}.png', 'Rendered frame path mismatch')
+            delivered = captured(path / detail['frame'], 4 * 1024 * 1024)
+            if codec is None:
+                need(detail['frame_sha256'] == digest(expected) and delivered == expected, 'Stored frame mismatch')
+            else:
+                need(set(detail) == {'frame', 'frame_sha256', 'display', 'encoding'} and
+                     type(detail['encoding']) is dict and set(detail['encoding']) == ENCODING_FIELDS,
+                     'Exact retained full32 PNG encoding descriptor')
+                codec.verify_equivalence(expected, delivered, detail['encoding'])
+                need(detail['frame_sha256'] == digest(delivered), 'Compressed frame commitment mismatch')
             need(detail['display'] == display_metadata(state, record), 'Rendered metadata mismatch')
     need(previous == final['last_action_sha256'] and digest(response) == final['response_sha256'], 'Final integrity mismatch')
     probability = dataset['parser'].parse(response, row['trial_id'])
@@ -350,32 +479,45 @@ def audit_session(path, dataset, ordinal, mode):
     return probability
 
 
-def collect(packet, sessions, mode, output, implementation_root=None):
-    dataset = source(packet, implementation_root)
+def collect(packet, sessions, mode, output, implementation_root=None, *, profile='legacy400', manifest_pin=None, budget=None):
+    dataset = source(packet, implementation_root, profile=profile, manifest_pin=manifest_pin, budget=budget)
     output = Path(output)
-    output.mkdir(mode=0o700, parents=False, exist_ok=False)
+    owned = False
     try:
+        output.mkdir(mode=0o700, parents=False, exist_ok=False)
+        owned = True
         need(mode in MODES, 'Unknown condition')
         sessions = Path(sessions)
-        need(sorted(p.name for p in sessions.iterdir()) == [f'{i:03d}' for i in range(400)], 'Exactly 400 session directories required')
-        values = [audit_session(sessions / f'{i:03d}', dataset, i, mode) for i in range(400)]
+        count = collection_count(dataset)
+        need(sorted(p.name for p in sessions.iterdir()) == [session_name(dataset, i) for i in range(count)], 'Exactly the full selected session inventory required')
+        values = [audit_session(sessions / session_name(dataset, i), dataset, i, mode, budget) for i in range(count)]
         import numpy as np
-        ids = [row['trial_id'] for row in dataset['rows']]
+        ids = list(ordered_ids(dataset))
         with (output / 'submission.npz').open('xb') as destination:
-            np.savez(destination, trial_ids=np.asarray(ids, dtype='<U48'), target_probability=np.asarray(values, dtype=np.float64))
+            np.savez(destination, trial_ids=np.asarray(ids, dtype='<U34' if profile != 'legacy400' else '<U48'), target_probability=np.asarray(values, dtype=np.float64))
             destination.flush()
             os.fsync(destination.fileno())
-        expected = {case: np.asarray([x for x in ids if x.startswith(case + '-')])
-                    for case in ('development-001', 'development-002')}
+        expected = (ids if profile != 'legacy400' else
+                    {case: np.asarray([x for x in ids if x.startswith(case + '-')])
+                     for case in ('development-001', 'development-002')})
+        submission_body = read_regular(output / 'submission.npz', 1048576, budget)
+        if budget is not None:
+            # Bounded original ZIP/NPY validator replay, separate from capture I/O.
+            budget.input(8 * len(submission_body))
         dataset['validator'].validate(output / 'submission.npz', expected)
         receipt = {'schema': 'neural077_visual_collection_v1', 'status': 'complete_unscored_submission',
-                   'condition': mode, 'queries': 400, 'submission_sha256': digest((output / 'submission.npz').read_bytes()),
+                   'condition': mode, 'queries': count, 'submission_sha256': digest(submission_body),
                    'scoring_performed': False, 'transport_isolation_qualified': False}
+        if profile != 'legacy400':
+            receipt.update(profile=profile, profile_commitment=profile_commitment(dataset, budget))
         write_new(output / 'COMPLETE.json', encode(receipt))
         return receipt
     except Exception:
-        write_new(output / 'FAILED.json', encode({'status': 'incomplete_or_invalid_sessions', 'scoring_performed': False}))
+        if owned:
+            write_new(output / 'FAILED.json', encode({'status': 'incomplete_or_invalid_sessions', 'scoring_performed': False}))
         raise
+    finally:
+        close_source(dataset)
 
 
 def main(argv=None):
@@ -385,6 +527,9 @@ def main(argv=None):
         p = sub.add_parser(name)
         p.add_argument('--packet', type=Path, required=True)
         p.add_argument('--implementation-root', type=Path)
+        p.add_argument('--profile', choices=PROFILES, default='legacy400')
+        p.add_argument('--manifest-bytes', type=int)
+        p.add_argument('--manifest-sha256')
         p.add_argument('--mode', choices=MODES, required=True)
         p.add_argument('--output', type=Path, required=True)
         if name == 'serve':
@@ -393,11 +538,16 @@ def main(argv=None):
             p.add_argument('--sessions', type=Path, required=True)
     args = vars(parser.parse_args(argv))
     command = args.pop('command')
+    manifest_bytes, manifest_sha256 = args.pop('manifest_bytes'), args.pop('manifest_sha256')
+    args['manifest_pin'] = (None if manifest_bytes is None and manifest_sha256 is None else
+                            {'bytes': manifest_bytes, 'sha256': manifest_sha256})
+    dataset = None
     try:
         if command == 'collect':
             print(json.dumps(collect(**args)))
         else:
-            dataset = source(args.pop('packet'), args.pop('implementation_root'))
+            dataset = source(args.pop('packet'), args.pop('implementation_root'),
+                             profile=args.pop('profile'), manifest_pin=args.pop('manifest_pin'))
             session = Session(dataset=dataset, **args)
             print(json.dumps({'status': 'ready', 'prompt': session.prompt,
                               'actions': decode((HERE / 'actions.schema.json').read_bytes()),
@@ -412,6 +562,9 @@ def main(argv=None):
     except (ValueError, OSError, UnicodeError, KeyError, TypeError) as error:
         print('Viewer refused: ' + str(error), file=sys.stderr)
         return 2
+    finally:
+        if dataset is not None:
+            close_source(dataset)
     return 0
 
 

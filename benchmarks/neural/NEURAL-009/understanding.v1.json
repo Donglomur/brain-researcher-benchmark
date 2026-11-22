@@ -4,7 +4,7 @@
   "title": "Pediatric continuous seizure-event detection",
   "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
   "disposition": "partial_delivery",
-  "disposition_reason": "The complete 686-record/23-person normalized event evaluator is delivered. Authentic EEG preparation and a competent signal reference are not qualified; the implemented tolerant event score cannot establish prompt onset detection.",
+  "disposition_reason": "The complete 686-record/23-person normalized event evaluator and descriptive original-event alarm diagnostics are delivered. Authentic EEG preparation and a competent signal reference are not qualified; neither tolerant event F1 nor score-grid alignment establishes prompt onset detection.",
   "scientific_target": {
     "question": "From causal EEG alone, can a fixed detector recover annotated seizure-event presence across complete held-person monitoring, while limiting false alarms and predicted-positive occupancy?",
     "target_kind": "observation_decoding",
@@ -43,7 +43,7 @@
     "secondary": [
       "Person-level and pooled event sensitivity, precision and false alarms per 24 observed hours",
       "Unmerged sample F1, sensitivity, precision and predicted-positive time fraction",
-      "Prospective additional onset-latency/miss and early/late-only-credit diagnostics before timeliness claims"
+      "Descriptive original-event alarm onset state, within-record new-alarm tick offsets and no-raw-overlap flags; not measured online latency or tolerant false-negative counts. Early/late-only tolerant-credit attribution remains prospective."
     ],
     "comparators": [
       {
@@ -76,18 +76,19 @@
       "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/README.md",
       "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/core.py",
       "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/recommended_policy.json",
-      "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/source_provenance.json"
+      "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/source_provenance.json",
+      "tests/construction/test_seizure_events.py"
     ],
-    "scorer_target": "core.evaluate scores normalized private reference intervals against complete candidate probabilities/events, including actual event and sample metrics. It does not load/authenticate EDF signals or train a detector.",
+    "scorer_target": "core.evaluate scores normalized private reference intervals against complete candidate probabilities/events, including event/sample metrics and separate descriptive original-event alarm diagnostics. It does not load/authenticate EDF signals, train a detector or verify online decision timing.",
     "target_fidelity": "scoped_target",
-    "delivered_scope": "Complete-support event-scoring source and generated full-roster engineering controls; no authentic signal-reference or participant run.",
+    "delivered_scope": "Complete-support event-scoring source, descriptive original-event alarm diagnostics and generated full-roster engineering controls; no authentic signal-reference or participant run.",
     "missing": [
       "Authenticate all selected EDF/header/annotation joins and normalize causal waveforms.",
       "Execute fixed EEG and timing/montage comparators on complete held-person monitoring.",
-      "Implement and freeze paired uncertainty and onset diagnostics where claimed.",
+      "Freeze paired uncertainty and validate actual decision timing and early/late-only tolerant-credit attribution before timeliness claims; descriptive original-event alarm diagnostics are implemented.",
       "Provision a participant transport with no label access."
     ],
-    "execution_evidence": "Reviewed source and its recorded generated full-686/23-person tests only; no new execution or model outcome."
+    "execution_evidence": "Reviewed source and generated controls, including the additive 39-method source campaign (14 new and 25 existing methods); no authentic EEG, model outcome or measured online decision latency."
   },
   "access_modes": {
     "direct_observation": {
@@ -132,14 +133,14 @@
       "id": "implementation-1",
       "kind": "local_review",
       "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/README.md",
-      "sha256": "8c98015c07dc2fc5a1afb29040c8953162bc6e031273826d87bac539c432809e",
-      "supports": "core.evaluate scores normalized private reference intervals against complete candidate probabilities/events, including actual event and sample metrics. It does not load/authenticate EDF signals or train a detector."
+      "sha256": "a96ff348f7eee972a0693c9a3ec529409185d0c7d38f8c8652f25c157a3691e2",
+      "supports": "core.evaluate scores normalized private reference intervals against complete candidate probabilities/events, including event/sample metrics and separate descriptive original-event alarm diagnostics. It does not load/authenticate EDF signals, train a detector or verify online decision timing."
     },
     {
       "id": "implementation-2",
       "kind": "local_source",
       "path": "benchmarks/neural/NEURAL-009/implementations/seizure-events-v1/core.py",
-      "sha256": "5b92def65bbfb75368986dff72f66b8a511b077a9f6343b4c5732ab80805b834",
+      "sha256": "9b9a5f90a53ae64abc88ac066441bb32ab78c28bd4d0b9388f7666150fc90fa5",
       "supports": "Inspected implementation scope, source population, access, or numerical policy described in this contract; file presence does not establish execution."
     },
     {
@@ -176,6 +177,13 @@
       "url": "https://raw.githubusercontent.com/esl-epfl/timescoring/426f8d2b77974641dc9db71884e0812b249ba93b/src/timescoring/scoring.py",
       "locator": "Pinned event scoring implementation",
       "supports": "Tolerant processed-event semantics, distinct from one-to-one onset matching."
+    },
+    {
+      "id": "generated-original-event-controls",
+      "kind": "local_source",
+      "path": "tests/construction/test_seizure_events.py",
+      "sha256": "4457e898d9a47835cb2b0885b2625e45510c257ce59d79cda93ca1a8f20fc00d",
+      "supports": "Generated tests distinguish original-event alarm states, within-record rising edges and raw overlap while preserving existing complete-cohort scores, biological aliases and private-result separation. Test source is not a model or authentic-data result."
     }
   ],
   "empirical_claims": {
@@ -190,11 +198,12 @@
     ]
   },
   "revision": {
-    "date": "2026-11-16",
+    "date": "2026-11-21",
     "summary": [
       "Replace generic not-implemented status with the actual complete normalized evaluator scope.",
-      "Make event-presence versus onset-timeliness distinction explicit, retaining raw/processed counts and mandatory occupancy diagnostics."
+      "Make event-presence versus onset-timeliness distinction explicit, retaining raw/processed counts and mandatory occupancy diagnostics.",
+      "Add descriptive original-event alarm diagnostics and generated regression controls without changing tolerant F1, existing counts, access modes or scientific qualification."
     ],
-    "source_review": "Inspected original task/source metadata, assigned implementation and target-relevant code. Reused preserved primary-source audits; dataset/official-source landing pages checked on2026-11-16. No neural payload, private labels or candidate output accessed."
+    "source_review": "Inspected original task/source metadata, assigned implementation and target-relevant code. Reused preserved primary-source audits; dataset/official-source landing pages checked on2026-11-16. No neural payload, private labels or candidate output accessed. Additive source review on2026-11-21 checked interval semantics, unchanged scoring and private-result custody;39 generated methods passed. Primary-source landing pages were not re-fetched for this addition."
   }
 }

@@ -168,6 +168,55 @@ def _metrics(reference_count, tp, fp, ticks):
             "false_alarms_per_24_observed_hours": fp * 864000 / ticks}
 
 
+def _original_event_alarm_diagnostics(reference_intervals, predicted_intervals):
+    """Describe original-event alarm alignment, not tolerant counts or latency.
+
+    Inputs are validated ordered, non-overlapping half-open integer intervals.
+    Adjacent positive intervals form one alarm; original reference events stay
+    separate. A positive run at tick zero has no observed antecedent and is not
+    an observed rising edge. All offsets are score-grid ticks, not measured
+    decision times. This reference-linked output belongs only to the evaluator.
+    """
+    alarms = []
+    for start, end in predicted_intervals:
+        if alarms and alarms[-1][1] == start:
+            alarms[-1][1] = end
+        else:
+            alarms.append([start, end])
+
+    events = []
+    first_alarm = 0
+    for index, (start, end) in enumerate(reference_intervals):
+        while first_alarm < len(alarms) and alarms[first_alarm][1] <= start:
+            first_alarm += 1
+        active = (first_alarm < len(alarms)
+                  and alarms[first_alarm][0] <= start < alarms[first_alarm][1])
+        if start == 0:
+            state = "positive_at_record_start" if active else "negative_at_record_start"
+        elif not active:
+            state = "negative"
+        else:
+            state = "new_alarm" if alarms[first_alarm][0] == start else "continuing_alarm"
+
+        overlap = 0
+        first_new_offset = None
+        current = first_alarm
+        while current < len(alarms) and alarms[current][0] < end:
+            alarm_start, alarm_end = alarms[current]
+            overlap += min(end, alarm_end) - max(start, alarm_start)
+            if first_new_offset is None and start <= alarm_start and alarm_start > 0:
+                first_new_offset = alarm_start - start
+            current += 1
+        events.append({"reference_event_index": index,
+                       "reference_duration_ticks": end - start,
+                       "onset_alarm_state": state,
+                       "first_new_alarm_offset_ticks": first_new_offset,
+                       "positive_overlap_ticks": overlap,
+                       "no_raw_event_overlap": overlap == 0})
+    return {"schema": "raw-event-alarm-diagnostics-v1", "tick_rate_hz": 10,
+            "events": events}
+
+
 def evaluate_record(reference_intervals_ticks, predicted_intervals_ticks, observed_ticks,
                     policy, *, _engine=None):
     """Execute the exact upstream count semantics on explicit aligned intervals.
@@ -205,7 +254,8 @@ def evaluate_record(reference_intervals_ticks, predicted_intervals_ticks, observ
             "sample_reference_positive_ticks": int(sample.refTrue),
             "sample_true_positive_ticks": int(sample.tp),
             "sample_false_positive_ticks": int(sample.fp),
-            "sample_predicted_positive_ticks": int(sample.tp + sample.fp)}
+            "sample_predicted_positive_ticks": int(sample.tp + sample.fp),
+            "raw_event_alarm_diagnostics": _original_event_alarm_diagnostics(ref, hyp)}
 
 
 def _folds(people):

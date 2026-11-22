@@ -23,6 +23,8 @@ CONFIG_KEYS = {'schema', 'model', 'max_output_tokens', 'deadline', 'trial_id',
                'implementations_root', 'source_bindings', 'bridge_path', 'bridge_pin',
                'sender_path', 'sender_pin', 'codec_path', 'codec_pin',
                'max_request_bytes', 'max_requests', 'max_query_request_bytes', 'max_query_response_bytes'}
+FULL32_PROFILE = 'erp-full32-visual-v1'
+PROFILE_KEYS = {'profile', 'profile_commitment', 'context_sha256'}
 
 
 def need(value, message):
@@ -105,13 +107,20 @@ def source(path, expected):
 def configuration(raw):
     need(type(raw) is bytes and 0 < len(raw) <= CONFIG_CAP, 'Bounded configuration required')
     value = decode(raw)
-    need(type(value) is dict and set(value) == CONFIG_KEYS and value['schema'] == 'neural077_visual_provider_client_v1',
+    need(type(value) is dict and set(value) in (CONFIG_KEYS, CONFIG_KEYS | PROFILE_KEYS)
+         and value['schema'] == 'neural077_visual_provider_client_v1',
          'Exact visual provider configuration required')
+    full32 = set(value) == CONFIG_KEYS | PROFILE_KEYS
+    if full32:
+        need(value['profile'] == FULL32_PROFILE, 'Explicit full32 visual profile required')
+        for name in ('profile_commitment', 'context_sha256'):
+            need(type(value[name]) is str and re.fullmatch(r'[0-9a-f]{64}', value[name]), 'Exact display/context commitment')
     need(type(value['model']) is str and re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}', value['model']), 'Explicit model identity')
     need(type(value['max_output_tokens']) is int and 1 <= value['max_output_tokens'] <= 32768, 'Token allocation')
     need(type(value['deadline']) in (int, float) and math.isfinite(value['deadline'])
          and 2 < value['deadline'] - time.monotonic() <= 3600, 'Finite original query deadline')
-    need(type(value['trial_id']) is str and re.fullmatch(r'development-00[12]-[0-9a-f]{24}', value['trial_id']), 'Exact original query identity')
+    pattern = r'q-[0-9a-f]{32}' if full32 else r'development-00[12]-[0-9a-f]{24}'
+    need(type(value['trial_id']) is str and re.fullmatch(pattern, value['trial_id']), 'Exact original query identity')
     for name, maximum in (('max_request_bytes', 8388608), ('max_requests', 127),
                           ('max_query_request_bytes', 512 * 1024 * 1024), ('max_query_response_bytes', 128 * 1024 * 1024)):
         need(type(value[name]) is int and 1 <= value[name] <= maximum, 'Finite configured byte/action cap')
@@ -163,11 +172,16 @@ def serve(config, config_pin, credential, directory, original, bridge, codec, al
     initial = terminal = final_response = None
     finalized = success = False
     error_type = None
+    # Configuration and all full32 context fields are operator-owned. No packet,
+    # person roster or source-order information is projected to the provider.
+    binding = {key: config[key] for key in PROFILE_KEYS} if 'profile' in config else {}
+    condition = 'visual_direct_four_demo' if binding else 'four_demo'
+    profile = config.get('profile', 'legacy400')
     try:
         alarm.arm(config['deadline'] - original.CUSTODY_SECONDS)
         header, png, frame = bridge.read_frame(input_stream)
         initial = bridge.pin(frame)
-        history, mapping = bridge.first_frame(header, png, config['trial_id'], codec.encode_transport_image)
+        history, mapping = bridge.first_frame(header, png, config['trial_id'], codec.encode_transport_image, **binding)
         declared = header['limits']
         need(type(declared.get('max_actions')) is int and 2 <= declared['max_actions'] <= 128
              and config['max_requests'] <= declared['max_actions'] - 1, 'Viewer/provider action allocation mismatch')
@@ -176,7 +190,7 @@ def serve(config, config_pin, credential, directory, original, bridge, codec, al
             original.remaining(config['deadline'] - original.CUSTODY_SECONDS)
             need(turns < config['max_requests'] and not finalized, 'Query request limit or terminal finalize')
             adapter = bridge.SenderAdapter(history, config['model'], config['max_output_tokens'],
-                                            config['max_request_bytes'], config['trial_id'])
+                                            config['max_request_bytes'], config['trial_id'], **binding)
             request = adapter.request
             need(request_bytes + len(request) <= config['max_query_request_bytes'], 'Cumulative query request cap; no history truncation')
             remaining_response = config['max_query_response_bytes'] - response_bytes
@@ -194,7 +208,7 @@ def serve(config, config_pin, credential, directory, original, bridge, codec, al
                               'context_sha256': bridge.pin(prompt.encode())['sha256']}
                 sender = original.Sender(sender_cfg, config_pin, credential, custody, adapter, alarm,
                                          http_factory=http_factory, response_cap=response_cap)
-                receipt = {'schema': 'neural077_visual_provider_bridge_v1', 'condition': 'four_demo',
+                receipt = {'schema': 'neural077_visual_provider_bridge_v1', 'condition': condition,
                            'config_pin': config_pin, 'turn': turns, 'status': 'failed_no_action',
                            'frame': bridge.pin(frame), 'history': bridge.pin(bridge.encode(history)), 'image_mapping': mapping,
                            'request': bridge.pin(request), 'response': None, 'action': None,
@@ -202,7 +216,7 @@ def serve(config, config_pin, credential, directory, original, bridge, codec, al
                            'request_bytes_total': request_bytes + len(request), 'response_bytes_total': response_bytes,
                            'response_charge_is_upper_bound': False,
                            'retry_count': 0, 'provider_context_qualified': False, 'provider_capacity_qualified': False,
-                           'scientific_qualification': False}
+                           'scientific_qualification': False, **binding}
                 request_bytes += len(request)
                 turns += 1
                 send_complete = False
@@ -257,7 +271,7 @@ def serve(config, config_pin, credential, directory, original, bridge, codec, al
                 final_response = bridge.pin(final)
             bridge.write_action(output_stream, action)
             header, png, frame = bridge.read_frame(input_stream)
-            bridge.projection(header, png)
+            bridge.projection(header, png, profile=profile)
             if finalized:
                 terminal = bridge.pin(frame)
                 need(header['status'] in ('valid_unscored', 'invalid_response')
@@ -267,12 +281,12 @@ def serve(config, config_pin, credential, directory, original, bridge, codec, al
                 success = True
                 break
             need(header['status'] in ('rendered', 'rejected'), 'Unexpected terminal viewer state')
-            history, mapping = bridge.append_frame(history, action, header, png, codec.encode_transport_image)
+            history, mapping = bridge.append_frame(history, action, header, png, codec.encode_transport_image, profile=profile)
     except BaseException as error:
         error_type = type(error).__name__
     finally:
         alarm.arm(config['deadline'])
-        value = {'schema': 'neural077_visual_provider_client_end_v1', 'condition': 'four_demo', 'config_pin': config_pin,
+        value = {'schema': 'neural077_visual_provider_client_end_v1', 'condition': condition, 'config_pin': config_pin,
                  'status': 'closed_first_final' if success else 'failed_no_admission', 'turns': turns,
                  'request_bytes': request_bytes, 'response_bytes': response_bytes,
                  'response_charge_contains_upper_bound': response_upper,
@@ -281,7 +295,7 @@ def serve(config, config_pin, credential, directory, original, bridge, codec, al
                  'first_finalize_terminal': finalized, 'no_further_request_after_finalize': True,
                  'decoded_credential_persisted': False, 'raw_response_literal_guard_only': True,
                  'remote_context_qualified': False, 'provider_capacity_qualified': False,
-                 'scientific_qualification': False, 'error_type': error_type}
+                 'scientific_qualification': False, 'error_type': error_type, **binding}
         write_end(directory, value)
     return success
 
