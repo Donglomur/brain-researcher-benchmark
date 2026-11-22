@@ -49,6 +49,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
 - [Current source selection and remaining qualification (2026-11-18)](docs/source-selection-status-20261118.md)
+- [Joint-subject reference and target-7 limits (2026-11-22)](docs/joint-subject-reference-20261122.md)
 
 ## Implementation artifacts
 
