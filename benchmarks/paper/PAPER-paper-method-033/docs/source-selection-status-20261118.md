@@ -63,3 +63,36 @@ rules remain unqualified.
 
 This update authenticates and describes existing source. It performs no original
 input acquisition, feature extraction, inference, numerical replay or model study.
+
+## Dependency provenance inspected on 2026-11-22
+
+The [pinned author evaluator](https://github.com/littlepure2333/MindBridge/blob/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/eval.py)
+and [requirements](https://github.com/littlepure2333/MindBridge/blob/2a3943ff5b619db6f85f16a5e7ff1331d25def55/requirements.txt)
+confirm the metric calls described by the original-panel component. The requirements
+fix torch 2.0.1 and torchvision 0.15.2 but leave scikit-image unpinned. They therefore
+do not resolve which historical SSIM behavior produced the paper's values. Retain
+the literal call and explicitly recorded backend; choosing a modern version does
+not recover the author's environment.
+
+SwAV's public source can be identified more precisely than the branch name alone.
+The inspected upstream `main` resolves to commit
+[`06b1b7cbaf6ba2a792300d79c7299db98b93b7f9`](https://github.com/facebookresearch/swav/commit/06b1b7cbaf6ba2a792300d79c7299db98b93b7f9),
+dated 2021-09-21. Its
+[`hubconf.py`](https://github.com/facebookresearch/swav/blob/06b1b7cbaf6ba2a792300d79c7299db98b93b7f9/hubconf.py)
+is byte-identical to that file at the last file-changing commit,
+[`9a2dc8073884c11de691ffe734bd624a84ccd96d`](https://github.com/facebookresearch/swav/blob/9a2dc8073884c11de691ffe734bd624a84ccd96d/hubconf.py)
+dated 2021-04-02: 2,830 bytes, SHA-256
+`b847cd9fb42479a0abbe457a6442b4dea9e56736e4683d99cbae393dd9c35e2b`.
+
+That constructor defaults to pretrained standard ResNet-50 and names
+[the 800-epoch SwAV checkpoint](https://dl.fbaipublicfiles.com/deepcluster/swav_800ep_pretrain.pth.tar).
+Its loader removes the distributed-training key prefix and allows unmatched state
+keys; the source embeds no checkpoint checksum. This establishes a public
+constructor and weight route, not the bytes or cache used for the paper's run.
+The checkpoint was not downloaded or opened in this inspection.
+
+The remaining distinction is between this recovered source route and an
+authenticated historical/native execution: original weight identity, historical
+scikit-image version, device/batch behavior and numerical parity remain unresolved.
+No scorer, target-aware best-of-eight rule, shared selected image, 982-image
+gallery, six-condition panel or qualification status changes.
