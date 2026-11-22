@@ -5600,6 +5600,11 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B tests/benchmarks/test_reve_original_metrics.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B tests/benchmarks/test_reve_original_panel.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-003/implementations/matched-reference-v1/metadata_tests.py "${RUNNER_TEMP}/reve-metadata-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+      - name: Check MindBridge Table 1 generated feature metrics
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-033/implementations/joint-subject-clip-v1/test_table1_clip.py
       - name: Run complete NEURAL096 numerical controls on Linux
         shell: bash
         run: |

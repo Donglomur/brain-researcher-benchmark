@@ -306,6 +306,12 @@ jobs:
         if: matrix.group == 'stdlib-a' || matrix.group == 'legacy-pandas'
         shell: bash
         run: timeout --signal=TERM --kill-after=5s 60s python -I -S -B tests/maintenance/test_parallel_source_controls.py
+      - name: Check exploratory32 image subset scorer with generated records
+        if: matrix.group == 'erp-core-builder'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-077/implementations/exploratory32-image-scorer-v1/controls/test_score_subset.py
       - name: Acquire exact public source fixtures
         shell: bash
         run: |

@@ -92,7 +92,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-method-030](PAPER-paper-method-030/README.md) | Robust self-supervised denoising of voltage imaging data using CellMincer | source_unresolved | source_unresolved | 4 | not linked |
 | [PAPER-paper-method-031](PAPER-paper-method-031/README.md) | Real-time self-supervised denoising for high-speed fluorescence neural imaging | source_unresolved | source_unresolved | 3 | not linked |
 | [PAPER-paper-method-032](PAPER-paper-method-032/README.md) | MindEye2: Shared-Subject Models Enable fMRI-To-Image With 1 Hour of Data | source_unresolved | design_ready | 2 | not linked |
-| [PAPER-paper-method-033](PAPER-paper-method-033/README.md) | MindBridge: A Cross-Subject Brain Decoding Framework | design_ready | design_ready | 7 | not linked |
+| [PAPER-paper-method-033](PAPER-paper-method-033/README.md) | MindBridge: A Cross-Subject Brain Decoding Framework | design_ready | design_ready | 8 | not linked |
 | [PAPER-paper-method-034](PAPER-paper-method-034/README.md) | MARBLE: interpretable representations of neural population dynamics using geometric deep learning | source_unresolved | source_unresolved | 5 | [manifest](PAPER-paper-method-034/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-042](PAPER-paper-method-042/README.md) | UMBRAE: Unified Multimodal Brain Decoding | source_unresolved | design_ready | 3 | not linked |
 | [PAPER-paper-method-043](PAPER-paper-method-043/README.md) | NeuroPictor: Refining fMRI-to-Image Reconstruction via Multi-individual Pretraining and Multi-level Modulation | source_unresolved | source_unresolved | 3 | not linked |

@@ -90,7 +90,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-074](NEURAL-074/README.md) | Shared cognitive components across tasks | 3 | not linked |
 | [NEURAL-075](NEURAL-075/README.md) | Perception-to-imagery object decoding | 3 | [manifest](NEURAL-075/implementations/registered-runtime/manifest.json) |
 | [NEURAL-076](NEURAL-076/README.md) | Visual-feature hierarchy in mental imagery | 3 | [manifest](NEURAL-076/implementations/registered-runtime/manifest.json) |
-| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 24 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
+| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 25 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
 | [NEURAL-078](NEURAL-078/README.md) | Error-related negativity beyond response timing | 5 | [manifest](NEURAL-078/implementations/registered-runtime/manifest.json) |
 | [NEURAL-079](NEURAL-079/README.md) | Natural-video EEG response encoding | 1 | not linked |
 | [NEURAL-080](NEURAL-080/README.md) | Video dynamics versus eye movements in EEG | 2 | not linked |
