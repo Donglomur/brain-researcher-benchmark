@@ -77,6 +77,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+- [Publisher acquisition identities and remaining qualification (2026-11-22)](docs/publisher-acquisition-identities.v1.json)
 
 ## Implementation artifacts
 

@@ -45,6 +45,10 @@ Within the existing improvement contract, historical graders and pilot scores re
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
+## Task documentation
+
+- [Publisher acquisition findings (2026-11-22)](docs/publisher-acquisition-findings-20261122.md)
+
 ## Implementation artifacts
 
 - [Cbramod paired program](implementations/cbramod-paired-program) — Calibration only.

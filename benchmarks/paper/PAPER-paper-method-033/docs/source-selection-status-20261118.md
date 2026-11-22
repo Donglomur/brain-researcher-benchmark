@@ -96,3 +96,50 @@ authenticated historical/native execution: original weight identity, historical
 scikit-image version, device/batch behavior and numerical parity remain unresolved.
 No scorer, target-aware best-of-eight rule, shared selected image, 982-image
 gallery, six-condition panel or qualification status changes.
+
+## Target-7 reference and input evidence recovered on 2026-11-22
+
+The selected Table 2 cell is **MindBridge (Ours), 4,000 examples, CLIP two-way
+identification: 92.5%**. The matching Vanilla cell is 89.8%. The caption specifies
+target subject 7, reset-tuning from source subjects 1, 2 and 5, and a 4,000-example
+subset of 8,859 target training examples. These are displayed, rounded paper
+values; they do not supply unrounded scores, a repeat roster or uncertainty.
+See the [published paper entry](https://openaccess.thecvf.com/content/CVPR2024/html/Wang_MindBridge_A_Cross-Subject_Brain_Decoding_Framework_CVPR_2024_paper.html)
+and [author manuscript, Table 2](https://arxiv.org/pdf/2404.07850v1).
+
+The cell was visually verified in author arXiv v1 (PDF SHA-256
+`679daa086701b08cce62b7836cf526fc2b6a8bcec49b4eb16efc8e77276dfa91`);
+the publisher's indexed table agrees. Direct publisher-PDF access returned 403,
+so its final PDF bytes were not authenticated by this inquiry. The
+[pinned evaluator](https://github.com/littlepure2333/MindBridge/blob/2a3943ff5b619db6f85f16a5e7ff1331d25def55/src/eval.py#L13-L34)
+uses strict Pearson two-way comparisons against other gallery images.
+**This 92.5% is not 982-way Top-1 accuracy.** Preserve the existing complete
+gallery and target-aware best-of-eight protocol.
+
+The [author-linked model release](https://huggingface.co/littlepure2333/MindBridge/tree/1f2d5151fd96b42c6381146c21455402971e2432)
+declares only `mindbridge_subj1257/last.pth`, 3,814,945,315 bytes, LFS SHA-256
+`e18f292708b22925616956a3c24a5d2b36f7390d2a95ad76b1ad3a068e97f990`.
+These are publisher metadata; the weight payload was not acquired or authenticated.
+Its stated subject set includes target 7 and cannot establish the required
+exclusion of target 7 from source-1/2/5 pretraining. None of the five exposed immutable release trees inspected
+contained the source-125 or adapted-7/4,000 pair. This scoped absence does not prove
+that the artifacts never existed elsewhere. The
+[adaptation script](https://github.com/littlepure2333/MindBridge/blob/2a3943ff5b619db6f85f16a5e7ff1331d25def55/scripts/adapt_bridge.sh)
+names the needed source checkpoint and adapted condition; a filename alone does
+not authenticate their historical execution.
+
+Separately, an operator inspection authenticated both target-7 test archives at
+dataset revision `421fb80ea4ca5600c7364ed400f9a5941380c387` and validated 982
+unique source-key/COCO/JPEG/neural-header joins. The neural headers declare
+float16 arrays shaped `(3, 12682)`; neural values and JPEG pixels were not decoded.
+The selected three member types total 138,450,399 bytes inside 3,685,785,600 bytes
+of original archives. No test-only projection was extracted, and the private
+target join and payloads were not published. This verifies pinned-release test
+membership, not historical paper equivalence or the training/calibration support.
+
+A separately labeled CLIP endpoint can be evaluated once its own reference,
+4,000-example calibration roster, checkpoint exposure, generation and CLIP
+runtime are qualified. It cannot count as passing the registered 48-cell panel.
+Recover the source-125 and adapted-7/4,000 checkpoint/run binding before choosing
+a large retraining programme. Both participant access conditions and all
+reproduction/improvement gates remain unchanged; this evidence adds no score.
