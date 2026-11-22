@@ -56,6 +56,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Authentic participant-material export receipt](docs/authentic-material-export-20261117.json)
+- [CPU compatibility evidence (2026-11-22)](docs/cpu-compatibility-20261122.json)
+- [CPU compatibility result and limitations (2026-11-22)](docs/cpu-compatibility-20261122.md)
 
 ## Implementation artifacts
 
