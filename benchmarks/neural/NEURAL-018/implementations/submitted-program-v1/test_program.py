@@ -451,7 +451,25 @@ class Controls(unittest.TestCase):
             'User':'65534:65534','Env':[k+'=2' for k in grade.THREADS]+['PYTHONDONTWRITEBYTECODE=1','EXPECTED_SUBMISSION_SHA256='+'b'*64]}
         info={'Name':'/'+name,'Image':grade.IMAGE,'HostConfig':host,'Config':config,'State':{'Status':'created','Running':False,'Pid':0},
             'NetworkSettings':{'Networks':{}},'Mounts':[{'Type':'bind','Source':v,'Destination':k,'RW':False} for k,v in mounts.items()]}
-        grade.inspect_contract(info,name,mounts,'score','b'*64)
+        for enabled in ('no-new-privileges', 'no-new-privileges:true'):
+            for extra in ([], ['label=disable']):
+                info['HostConfig']['SecurityOpt'] = [enabled, *extra]
+                with self.subTest(enabled=enabled, extra=extra):
+                    grade.inspect_contract(info,name,mounts,'score','b'*64)
+        invalid = [None, 'no-new-privileges', {'no-new-privileges': True}, [],
+                   ['label=disable'], ['no-new-privileges:false'],
+                   ['no-new-privileges:true', 'no-new-privileges:false'],
+                   ['no-new-privileges', 'no-new-privileges:true'],
+                   ['no-new-privileges:true', 'no-new-privileges:true'],
+                   ['no-new-privileges', 'no-new-privileges'],
+                   ['no-new-privileges:yes'], ['no-new-privileges:true:true'],
+                   ['no-new-privileges=true'], [1], ['no-new-privileges', None]]
+        for options in invalid:
+            bad = copy.deepcopy(info)
+            bad['HostConfig']['SecurityOpt'] = options
+            with self.subTest(options=options), self.assertRaises(ValueError):
+                grade.inspect_contract(bad,name,mounts,'score','b'*64)
+        # Other admission checks must hold under either accepted spelling.
         for mutate in ('thread','memory','extra_mount','submission_digest','duplicate_environment'):
             bad=copy.deepcopy(info)
             if mutate=='thread': bad['Config']['Env'][0]=grade.THREADS[0]+'=1'

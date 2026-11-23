@@ -42,6 +42,14 @@ def alias(actual, expected):
     return actual == expected or (expected.startswith('/Users/') and actual == '/host_mnt' + expected)
 
 
+def no_new_privileges_enabled(options):
+    """Accept both enabled Docker spellings and reject conflicting declarations."""
+    if type(options) is not list or any(type(value) is not str for value in options):
+        return False
+    declarations = [value for value in options if value.startswith('no-new-privileges')]
+    return len(declarations) == 1 and declarations[0] in ('no-new-privileges', 'no-new-privileges:true')
+
+
 def inspect_contract(info, name, mounts, action, submission_sha256):
     h, c, s = info['HostConfig'], info['Config'], info['State']
     require(info['Name'] == '/' + name and info['Image'] == c['Image'] == IMAGE, 'Wrong container/image')
@@ -49,7 +57,7 @@ def inspect_contract(info, name, mounts, action, submission_sha256):
     require(s['Status'] == 'created' and s['Running'] is False and s['Pid'] == 0, 'Must inspect before starting')
     require(h['NetworkMode'] == 'none' and h['ReadonlyRootfs'] and not h['Privileged'] and c['User'] == '65534:65534', 'Isolation mismatch')
     require(set(info.get('NetworkSettings', {}).get('Networks', {})) <= {'none'}, 'Unexpected network attachment')
-    require(h.get('CapDrop') == ['ALL'] and not h.get('CapAdd') and 'no-new-privileges:true' in h.get('SecurityOpt', []), 'Capabilities mismatch')
+    require(h.get('CapDrop') == ['ALL'] and not h.get('CapAdd') and no_new_privileges_enabled(h.get('SecurityOpt')), 'Capabilities mismatch')
     require(not h.get('Devices') and not h.get('DeviceRequests') and h.get('IpcMode') != 'host' and h.get('PidMode') != 'host' and not h.get('PortBindings'), 'Host/device access rejected')
     require(h['Memory'] == h['MemorySwap'] == 4 * 1024**3 and h['NanoCpus'] == 2000000000 and h['PidsLimit'] == 64, 'Resource mismatch')
     require(h['RestartPolicy']['Name'] in ('no', '') and not h['AutoRemove'], 'Lifecycle mismatch')
