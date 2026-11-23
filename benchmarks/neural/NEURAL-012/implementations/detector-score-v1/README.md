@@ -26,20 +26,29 @@ The original endpoint is preserved: all 686 CHB and 41 Siena records, 23 and 14
 disjoint people, four arms, 96 logical jobs and 192 declared phases. Counts pool
 within each person before equal-person averaging. Siena arm differences remain
 paired; source-to-target shifts remain unpaired. Sensitivity and false alarms
-per 24 observed hours remain mandatory. Reconstruction accuracy is a separate
+per 24 observed hours remain mandatory. The wrapper also requires the original
+198 CHB and 47 Siena raw annotation entries, as required by the preserved
+`annotation_binding.py` and `combine_panels.py` preparation paths. These are counts
+of source entries before the fixed merge/split event policy, whose canonical event
+counts can differ. Reconstruction accuracy is a separate
 outcome and is absent from this result.
 
-The software controls construct a full synthetic 727-record packet with 47
-Siena event entries. Hand-calculated unequal event/person support distinguishes
+The software controls construct a full synthetic 727-record packet with 198 CHB
+and 47 Siena raw event entries. Hand-calculated unequal event/person support distinguishes
 person pooling from recording averages and pooled-cohort F1. Controls also
 exercise missing records/arms/phases, person overlap, noncanonical events,
 changed input/source hashes, duplicate JSON keys, and output preservation.
+Lost or added annotation entries are rejected even when all records and people
+remain. Separate controls preserve raw counts while changing event identity or
+merging canonical events, making the count check's limits explicit.
 They do not read authentic EEG, private solver targets or historical predictions.
 Run `test_score_detector.py` through the shared reviewed test pool during this
 revision; ordinary serial execution is sufficient outside that coordinated wave.
 
 This is **packet recalculation**, not new source authentication or execution
-admission. A digest authenticates selected bytes, not their scientific origin.
+admission. A digest authenticates selected bytes, not their scientific origin. Matching the
+two raw annotation totals likewise does not verify event identity, placement or
+original label content; count-preserving alterations remain outside this guard.
 The inherited serialized evidence validator checks consistency and cannot prove
 that its declared phases occurred. Generated controls intentionally demonstrate
 that distinction. All existing qualification gates remain open: complete source

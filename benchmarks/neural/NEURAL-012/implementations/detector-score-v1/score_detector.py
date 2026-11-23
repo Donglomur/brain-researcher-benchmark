@@ -68,6 +68,12 @@ def load_scoring():
                 sys.modules[name] = previous[name]
 
 
+# Raw source annotation entries, before the fixed merge/split event policy.
+# Original annotation_binding.py admits 198 CHB entries; combine_panels.py
+# admits 47 Siena entries. These totals are support checks, not label identity.
+RAW_ANNOTATION_COUNTS = {"CHB": 198, "Siena": 47}
+
+
 def score_bytes(raw, input_sha256, analysis, io):
     """Return the original scientific endpoint bound to its complete input."""
     io.need(type(input_sha256) is str and
@@ -77,7 +83,14 @@ def score_bytes(raw, input_sha256, analysis, io):
             "input SHA256 mismatch")
     # This invokes the original complete-panel, four-arm, profile and 96-lineage
     # validation; it never calls grade() or accepts a reconstruction submission.
-    result = analysis.detector_outcomes(io.strict(raw))
+    packet = io.strict(raw)
+    rows = analysis.validate_packet(packet)
+    counts = {cohort: sum(len(row["annotations"]) for row in rows
+                          if row["cohort"] == cohort)
+              for cohort in RAW_ANNOTATION_COUNTS}
+    io.need(counts == RAW_ANNOTATION_COUNTS,
+            "complete original raw annotation support: 198 CHB and 47 Siena")
+    result = analysis.detector_outcomes(packet)
     result["input_sha256"] = input_sha256
     result["scorer_sources_sha256"] = hashlib.sha256(io.encoded(SOURCE_PINS)).hexdigest()
     result["evidence_scope"] = "post_prediction_packet_recalculation_only"

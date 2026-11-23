@@ -23,7 +23,7 @@ def sha(value):
 
 
 def fixture():
-    """727 synthetic records, 47 Siena events and conspicuously fake lineage.
+    """727 synthetic records, 198 CHB and 47 Siena events and conspicuously fake lineage.
 
     CHB has perfect predictions in every arm. Siena native detects one event in
     one of person zero's three files; harmonized detects all events; normalized
@@ -36,7 +36,7 @@ def fixture():
         for i in range(count):
             person = i % people
             rid = format(len(rows) + 1, "024x")
-            events = [[100, 110]]
+            events = [[100, 110]] if cohort == "Siena" or i < 198 else []
             if cohort == "Siena" and 1 <= i <= 6:
                 events.append([400, 410])
             arms = {arm: copy.deepcopy(events) for arm in ARMS}
@@ -98,6 +98,7 @@ class DetectorScoreTests(unittest.TestCase):
         result = self.score()
         self.assertEqual(result["recordings"], 727)
         self.assertEqual(result["biological_patients"], 37)
+        self.assertEqual(sum(len(r["annotations"]) for r in self.packet["records"] if r["cohort"] == "CHB"), 198)
         self.assertEqual(sum(len(r["annotations"]) for r in self.packet["records"] if r["cohort"] == "Siena"), 47)
         native = result["primary_by_arm"]["native"]
         self.assertEqual(native["n"], 14)
@@ -141,6 +142,44 @@ class DetectorScoreTests(unittest.TestCase):
                 mutate(value)
                 with self.assertRaises(ValueError):
                     self.score(value)
+
+    def test_lost_or_extra_annotations_fail_without_losing_records_or_people(self):
+        for cohort in ("CHB", "Siena"):
+            for delta in (-1, 1):
+                with self.subTest(cohort=cohort, delta=delta):
+                    value = copy.deepcopy(self.packet)
+                    row = next(r for r in value["records"] if r["cohort"] == cohort)
+                    if delta < 0:
+                        row["annotations"].pop()
+                    else:
+                        row["annotations"].append([400, 410])
+                    # The original validator and arithmetic accept this packet;
+                    # every person still has seizures in their other recordings.
+                    self.assertEqual(len(analysis.validate_packet(value)), 727)
+                    self.assertEqual(analysis.detector_outcomes(value)["biological_patients"], 37)
+                    with self.assertRaisesRegex(ValueError, "raw annotation support"):
+                        self.score(value)
+
+    def test_raw_source_entries_are_counted_before_event_merging(self):
+        value = copy.deepcopy(self.packet)
+        # Keep two source entries but move the second within the 90-second
+        # merge gap. The score policy merges them; complete raw support stays47.
+        row = next(r for r in value["records"]
+                   if r["cohort"] == "Siena" and len(r["annotations"]) == 2)
+        row["annotations"][1] = [120, 130]
+        report = analysis.reconstruct(value)
+        canonical_events = sum(p["native"]["reference_events"]
+                               for p in report["patients"]["Siena"].values())
+        self.assertEqual(canonical_events, 46)
+        self.assertEqual(self.score(value)["biological_patients"], 37)
+
+    def test_equal_counts_do_not_authenticate_original_annotation_identity(self):
+        value = copy.deepcopy(self.packet)
+        row = next(r for r in value["records"] if r["cohort"] == "Siena")
+        row["annotations"][0] = [300, 310]
+        result = self.score(value)
+        self.assertFalse(result["interpretation"]["scientifically_qualified"])
+        self.assertEqual(result["evidence_scope"], "post_prediction_packet_recalculation_only")
 
     def test_unfrozen_event_transform_and_false_qualification_fail(self):
         value = copy.deepcopy(self.packet)
