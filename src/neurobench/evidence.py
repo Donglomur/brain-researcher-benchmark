@@ -16,6 +16,9 @@ from pathlib import Path
 import stat
 
 PILOT = 'docs/science/difficulty-pilot-20261117.json'
+ERP_PILOT = 'benchmarks/neural/NEURAL-077/docs/exploratory32-fixed-image-pilot-20261122.json'
+ERP_NARRATIVE = ERP_PILOT.removesuffix('.json') + '.md'
+PUBLIC_ATTACHMENTS = (ERP_NARRATIVE,)
 HISTORY = 'docs/provenance/execution/historical-evidence-v1/profiles.json'
 DIRECT = 'benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json'
 VIEWER = 'benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json'
@@ -34,7 +37,7 @@ NEURAL096_PREPARATION = NEURAL096_HOME + 'AUTHENTIC_PREPARATION.json'
 SMC_ACTUAL_PANEL = '3b160dfb4aef8c68cbae8d4a02d5933576a77e4bc47a7c3a5b484369caf95be5'
 SMC_PUBLIC_PANEL = '209a15e2189499a9e68264df5c9f81057dd919564d98a46fb64d75b3f39af2f3'
 PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR, REVE_PREPARATION, DEEP_PREPARATION,
-                  SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION, SMC_CALIBRATION, SMC_MATERIALS)
+                  SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION, SMC_CALIBRATION, SMC_MATERIALS, ERP_PILOT)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -91,9 +94,9 @@ def stamp(value):
             value.st_size, value.st_mtime_ns, value.st_ctime_ns)
 
 
-def read(root, relative):
-    """Read one allowlisted ordinary report without resolving embedded locators."""
-    require(relative in PUBLIC_REPORTS, 'report is not allowlisted')
+def read_bytes(root, relative):
+    """Read a fixed allowlisted report or narrative, never an embedded locator."""
+    require(relative in PUBLIC_REPORTS + PUBLIC_ATTACHMENTS, 'report is not allowlisted')
     path = root / relative
     for component in (path, *path.parents):
         require(not component.is_symlink(), 'symlink report path')
@@ -112,6 +115,16 @@ def read(root, relative):
         require(stamp(opened) == stamp(os.fstat(stream.fileno())) == stamp(path.lstat()),
                 'report changed during read')
     require(len(raw) == before.st_size, 'report length changed')
+    return raw, {'path': relative, 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+
+
+def read(root, relative):
+    """Read a JSON report from the fixed projection allowlist."""
+    require(relative in PUBLIC_REPORTS, 'JSON report is not allowlisted')
+    captured = read_bytes(root, relative)
+    if captured is None:
+        return None
+    raw, source = captured
     def unique(pairs):
         result = {}
         for key, value in pairs:
@@ -122,7 +135,7 @@ def read(root, relative):
         raise ValueError('Invalid public evidence: nonfinite JSON value ' + value)
     document = json.loads(raw.decode('utf-8'), object_pairs_hook=unique, parse_constant=invalid,
                           parse_float=lambda token: number(float(token)))
-    return obj(document), {'path': relative, 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+    return obj(document), source
 
 
 def metric(name, value, direction, comparators=None):
@@ -207,6 +220,113 @@ def pilot_records(doc, source):
             and integer(declared['existing_endpoints']) == len(tasks)
             and integer(declared['new_benchmark_ids']) == 0, 'pilot declared counts disagree')
     return result
+
+
+def exploratory_erp_records(doc, source, narrative):
+    """Project aggregate observations without treating applications as authorships."""
+    require(type(doc.get('schema_version')) is int and doc['schema_version'] == 1
+            and doc.get('kind') == 'exploratory_fixed_image_erp_pilot'
+            and doc.get('task_id') == 'NEURAL-077'
+            and doc.get('evidence_role') == 'public_aggregate_transcription',
+            'unsupported exploratory ERP report')
+    require(narrative is not None, 'exploratory ERP narrative is missing')
+    declared = obj(doc['narrative'])
+    require(declared == narrative[1] and declared['path'] == ERP_NARRATIVE,
+            'exploratory ERP narrative pin mismatch')
+    require(all(doc.get(key) is False for key in (
+        'original_records_in_publication', 'full_task_completed', 'paper_reproduction',
+        'paper_improvement', 'sota_claim')), 'exploratory report cannot promote qualification')
+    cohort = exact_counts(doc['cohort'], {'query_cases': 32, 'people': 32, 'demonstrations': 4,
+                                        'target_events': 4, 'standard_events': 28}, 'exploratory cohort')
+    protocol = obj(doc['protocol'])
+    require(protocol['target'] == 'experimental_target_versus_standard_event_identity',
+            'exploratory ERP target differs')
+    require(all(protocol.get(key) is True for key in (
+        'same_images_and_demonstrations', 'answers_frozen_before_gold',
+        'programme_frozen_before_queries', 'errors_counted_incorrect'))
+        and all(protocol.get(key) is False for key in (
+        'failed_cases_retried_or_replaced', 'enforced_tool_sandbox',
+        'exact_model_snapshot_available', 'complete_tool_traces_available',
+        'matched_compute_budgets', 'established_model_or_human_baseline_run')),
+        'exploratory ERP protocol or limitations differ')
+    protocol = {key: protocol[key] for key in (
+        'target', 'same_images_and_demonstrations', 'answers_frozen_before_gold',
+        'programme_frozen_before_queries', 'errors_counted_incorrect',
+        'failed_cases_retried_or_replaced', 'enforced_tool_sandbox',
+        'exact_model_snapshot_available', 'complete_tool_traces_available',
+        'matched_compute_budgets', 'established_model_or_human_baseline_run')}
+    limits = texts(doc['limits'])
+    require(bool(limits), 'exploratory interpretation limits required')
+    arms = obj(doc['arms'])
+    require(set(arms) == {'direct', 'programme'}, 'paired exploratory arms required')
+    def interval(values, lower, upper):
+        require(type(values) is list and len(values) == 2, 'two interval bounds required')
+        checked = [number(value) for value in values]
+        require(lower <= checked[0] <= checked[1] <= upper, 'invalid reported interval')
+        return checked
+    rows = []
+    for name, condition, category, valid, errors, error_kind in (
+            ('direct', 'instruction_restricted_direct_fixed_image',
+             'exploratory_direct_interpretation', 31, 1, 'demonstration_image_delivery_error'),
+            ('programme', 'one_frozen_generated_image_programme',
+             'exploratory_frozen_programme', 26, 6, 'runtime_trace_coverage_errors')):
+        arm = obj(arms[name])
+        require(arm['condition'] == condition and arm['error_kind'] == error_kind,
+                'exploratory arm condition or error type differs')
+        coverage = exact_counts(arm, {'query_applications': 32, 'valid_outputs': valid,
+                                     'errors': errors}, 'exploratory application counts')
+        count_key, expected = ('episode_attempts', 32) if name == 'direct' else ('authoring_attempts', 1)
+        coverage[count_key] = integer(arm[count_key])
+        require(coverage[count_key] == expected, 'episodes, authorship and applications differ')
+        value = number(arm['balanced_accuracy_percent'])
+        require(0 <= value <= 100, 'balanced accuracy outside percentage domain')
+        uncertainty = interval(arm['conditional_95_interval_percent'], 0, 100)
+        expected_value, expected_interval = (57.1429, [30.357, 76.786]) if name == 'direct' else (26.7857, [17.857, 35.714])
+        require(value == expected_value and uncertainty == expected_interval,
+                'frozen exploratory report aggregates differ')
+        row = record('exploratory-fixed-image-erp-20261122:' + name, 'NEURAL-077', category,
+                     source, '/arms/' + name,
+                     'One shared 32-image cohort, one image per person; errors remain in all denominators.',
+                     condition, limits)
+        row.update(coverage=coverage, cohort=cohort, protocol=protocol,
+                   metrics=[metric('balanced_accuracy_percent', value, 'higher')],
+                   conditional_95_interval_percent=uncertainty, narrative=narrative[1],
+                   error_kind=error_kind, original_records_in_publication=False,
+                   full_task_completed=False, evidence_role='public_aggregate_transcription')
+        rows.append(row)
+    comparison = obj(doc['paired_comparison'])
+    require(comparison['direction'] == 'direct_minus_programme'
+            and comparison['significance_or_pass_threshold_selected'] is False
+            and integer(comparison['bootstrap_resamples']) == 10000
+            and type(comparison['seed']) is int and comparison['seed'] == 20261122
+            and comparison['bootstrap_rng'] == 'NumPy PCG64'
+            and comparison['resampling'] == 'shared_observed_class_stratified'
+            and comparison['quantiles'] == 'linear_percentile', 'paired uncertainty method differs')
+    difference = number(comparison['difference_percentage_points'])
+    require(abs(difference - (arms['direct']['balanced_accuracy_percent']
+                             - arms['programme']['balanced_accuracy_percent'])) <= 0.001,
+            'reported paired difference is inconsistent with rounded arm scores')
+    bounds = interval(comparison['conditional_95_interval_percentage_points'], -100, 100)
+    require(difference == 30.357 and bounds == [1.786, 53.571], 'frozen paired report aggregates differ')
+    comparison = {key: comparison[key] for key in (
+        'direction', 'difference_percentage_points', 'conditional_95_interval_percentage_points',
+        'bootstrap_resamples', 'bootstrap_rng', 'seed', 'resampling', 'quantiles',
+        'significance_or_pass_threshold_selected')}
+    diagnostic = obj(doc['posthoc_diagnostic'])
+    require(diagnostic['role'] == 'label_free_error_diagnosis_only'
+            and diagnostic['performance_gain_claim'] is False,
+            'error diagnosis cannot become performance evidence')
+    exact_counts(diagnostic, {'decoded_pngs': 7, 'failed_applications_reproduced': 6,
+                             'fixed_success_control_passed': 1, 'new_predictions': 0,
+                             'rescoring_runs': 0}, 'error diagnosis')
+    text(diagnostic['finding'])
+    diagnostic = {key: diagnostic[key] for key in (
+        'role', 'decoded_pngs', 'failed_applications_reproduced', 'fixed_success_control_passed',
+        'finding', 'new_predictions', 'rescoring_runs', 'performance_gain_claim')}
+    for row in rows:
+        row['paired_comparison'] = comparison
+    rows[1]['posthoc_diagnostic'] = diagnostic
+    return rows
 
 
 def historical_records(doc, source):
@@ -1072,7 +1192,9 @@ def load(root, task_ids=None):
                               (SMC_PROBES, lambda doc, source: smc_probe_records(doc, source, captured_reports.get(SMC_PREPARATION))),
                               (NEURAL096_PREPARATION, neural096_preparation_records),
                               (SMC_CALIBRATION, smc_calibration_records),
-                              (SMC_MATERIALS, smc_material_records)):
+                              (SMC_MATERIALS, smc_material_records),
+                              (ERP_PILOT, lambda doc, source: exploratory_erp_records(
+                                  doc, source, read_bytes(root, ERP_NARRATIVE)))):
         try:
             captured = read(root, relative)
             if captured is None:
@@ -1095,7 +1217,14 @@ def load(root, task_ids=None):
         'pilot_attempts': categories['paper_calibration_attempt'] + categories['neural_programme_attempt'],
         'paper_calibration_attempts': categories['paper_calibration_attempt'],
         'neural_programme_attempts': categories['neural_programme_attempt'],
-        'direct_interpretation_attempts': 0, 'viewer_interpretation_attempts': 0,
+        'direct_interpretation_attempts': sum(row['coverage']['episode_attempts'] for items in records.values()
+                                              for row in items if row['category'] == 'exploratory_direct_interpretation'),
+        'exploratory_programme_authoring_attempts': sum(row['coverage']['authoring_attempts'] for items in records.values()
+                                                       for row in items if row['category'] == 'exploratory_frozen_programme'),
+        'exploratory_programme_query_applications': sum(row['coverage']['query_applications'] for items in records.values()
+                                                       for row in items if row['category'] == 'exploratory_frozen_programme'),
+        'exploratory_fixed_image_pilot_reports': categories['exploratory_direct_interpretation'],
+        'viewer_interpretation_attempts': 0,
         'authentic_engineering_reports': categories['authentic_input_materialization'] + categories['authentic_viewer_rendering'] + categories['authentic_viewer_transport'],
         'authentic_viewer_transport_reports': categories['authentic_viewer_transport'],
         'paper_source_preparation_reports': categories['paper_source_preparation'],
@@ -1123,4 +1252,10 @@ def load(root, task_ids=None):
         'engineering_reports_with_generated_controls': sum('software_controls' in row for items in records.values() for row in items),
     }
     return {'schema_version': 1, 'kind': 'public_recorded_evidence_summary',
-            'records': records, 'reports': reports, 'counts': result_counts, 'scope': SCOPE}
+            'records': records, 'reports': reports, 'counts': result_counts, 'scope': SCOPE,
+            'count_definitions': {
+                'pilot_attempts': 'Attempts in the historical November 17 difficulty pilot only.',
+                'neural_programme_attempts': 'Programme attempts in the historical November 17 difficulty pilot only.',
+                'direct_interpretation_attempts': 'Fresh direct-image episode attempts, including delivery failures.',
+                'exploratory_programme_authoring_attempts': 'Generated programmes authored; query applications are counted separately.',
+                'exploratory_programme_query_applications': 'First applications of the frozen programme, including runtime failures.'}}

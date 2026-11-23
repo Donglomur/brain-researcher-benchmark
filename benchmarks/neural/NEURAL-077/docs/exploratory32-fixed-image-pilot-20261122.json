@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "kind": "exploratory_fixed_image_erp_pilot",
+  "task_id": "NEURAL-077",
+  "report_date": "2026-11-22",
+  "narrative": {
+    "path": "benchmarks/neural/NEURAL-077/docs/exploratory32-fixed-image-pilot-20261122.md",
+    "bytes": 6314,
+    "sha256": "ee80d915c8ea27776da654d67efafd8a9de8d34a4ba8da8cbf622a28216c9bed"
+  },
+  "evidence_role": "public_aggregate_transcription",
+  "original_records_in_publication": false,
+  "full_task_completed": false,
+  "paper_reproduction": false,
+  "paper_improvement": false,
+  "sota_claim": false,
+  "cohort": {
+    "query_cases": 32,
+    "people": 32,
+    "demonstrations": 4,
+    "target_events": 4,
+    "standard_events": 28
+  },
+  "protocol": {
+    "target": "experimental_target_versus_standard_event_identity",
+    "same_images_and_demonstrations": true,
+    "answers_frozen_before_gold": true,
+    "programme_frozen_before_queries": true,
+    "errors_counted_incorrect": true,
+    "failed_cases_retried_or_replaced": false,
+    "enforced_tool_sandbox": false,
+    "exact_model_snapshot_available": false,
+    "complete_tool_traces_available": false,
+    "matched_compute_budgets": false,
+    "established_model_or_human_baseline_run": false
+  },
+  "arms": {
+    "direct": {
+      "condition": "instruction_restricted_direct_fixed_image",
+      "episode_attempts": 32,
+      "query_applications": 32,
+      "valid_outputs": 31,
+      "errors": 1,
+      "error_kind": "demonstration_image_delivery_error",
+      "balanced_accuracy_percent": 57.1429,
+      "conditional_95_interval_percent": [
+        30.357,
+        76.786
+      ]
+    },
+    "programme": {
+      "condition": "one_frozen_generated_image_programme",
+      "authoring_attempts": 1,
+      "query_applications": 32,
+      "valid_outputs": 26,
+      "errors": 6,
+      "error_kind": "runtime_trace_coverage_errors",
+      "balanced_accuracy_percent": 26.7857,
+      "conditional_95_interval_percent": [
+        17.857,
+        35.714
+      ]
+    }
+  },
+  "paired_comparison": {
+    "direction": "direct_minus_programme",
+    "difference_percentage_points": 30.357,
+    "conditional_95_interval_percentage_points": [
+      1.786,
+      53.571
+    ],
+    "bootstrap_resamples": 10000,
+    "bootstrap_rng": "NumPy PCG64",
+    "seed": 20261122,
+    "resampling": "shared_observed_class_stratified",
+    "quantiles": "linear_percentile",
+    "significance_or_pass_threshold_selected": false
+  },
+  "posthoc_diagnostic": {
+    "role": "label_free_error_diagnosis_only",
+    "decoded_pngs": 7,
+    "failed_applications_reproduced": 6,
+    "fixed_success_control_passed": 1,
+    "finding": "All six failures reached the unchanged trace-coverage guard; boundary gaps are consistent with clipping. No PNG decoder defect was observed.",
+    "new_predictions": 0,
+    "rescoring_runs": 0,
+    "performance_gain_claim": false
+  },
+  "limits": [
+    "One exploratory cohort: 32 queries from 32 people, only four target events, and one generated programme; no general native-versus-tools advantage is established.",
+    "Direct restrictions were instructions, not an enforced sandbox. Exact model snapshots and complete internal tool traces were unavailable.",
+    "The arms shared image inputs and demonstrations but had unmatched reasoning and compute budgets.",
+    "Both full answer sets and the programme source were frozen before trusted gold scoring; delivery/runtime errors remain incorrect in all 32 denominators.",
+    "Conditional bootstrap intervals use the observed class mix; the direct interval includes the 50% balanced-accuracy baseline. No significance or benchmark-pass threshold was selected.",
+    "No human or established trained-model baseline was run. Pretraining exposure, amplitude calibration and physical display-delay correction remain unresolved.",
+    "The target is experimental event identity, not physiological P3 presence. The result does not qualify the complete 6400-case condition, paper reproduction or SOTA.",
+    "This public aggregate transcription and its narrative hash do not independently authenticate private inputs, predictions, scoring or model execution. No private case records are included."
+  ]
+}

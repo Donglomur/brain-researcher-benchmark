@@ -46,7 +46,7 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result['counts']['pilot_attempts'], 8)
         self.assertEqual(result['counts']['paper_calibration_attempts'], 4)
         self.assertEqual(result['counts']['neural_programme_attempts'], 4)
-        self.assertEqual(result['counts']['direct_interpretation_attempts'], 0)
+        self.assertEqual(result['counts']['direct_interpretation_attempts'], 32)
         self.assertEqual(result['counts']['viewer_interpretation_attempts'], 0)
         self.assertEqual(result['counts']['historical_profiles'], 3)
         self.assertEqual(result['counts']['historical_programme_controls'], 4)
@@ -297,13 +297,14 @@ class EvidenceTests(unittest.TestCase):
     def test_native_repair_adds_distinct_controls_without_new_tasks_or_solver_trials(self):
         for name in evidence.PUBLIC_REPORTS:
             self.install(name)
+        self.install(evidence.ERP_NARRATIVE)
         result = evidence.load(self.root)
         self.assertEqual(result['counts']['native_operator_controls'], 16)
         self.assertEqual(result['counts']['native_operator_control_reports'], 2)
         self.assertEqual(result['counts']['native_control_tasks'], 2)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
         self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
-        self.assertEqual(result['counts']['public_reports'], 14)
+        self.assertEqual(result['counts']['public_reports'], 15)
         rows = [row for items in result['records'].values() for row in items
                 if row['category'] == 'native_operator_control']
         self.assertEqual(len({row['id'] for row in rows}), 4)
@@ -363,8 +364,9 @@ class EvidenceTests(unittest.TestCase):
     def test_preparation_reports_add_source_facts_without_model_or_native_trial_counts(self):
         for name in evidence.PUBLIC_REPORTS:
             self.install(name)
+        self.install(evidence.ERP_NARRATIVE)
         result = evidence.load(self.root)
-        self.assertEqual(result['counts']['public_reports'], 14)
+        self.assertEqual(result['counts']['public_reports'], 15)
         self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
         self.assertEqual(result['counts']['paper_source_preparation_reports'], 3)
         self.assertEqual(result['counts']['paper_source_preparation_tasks'], 3)
