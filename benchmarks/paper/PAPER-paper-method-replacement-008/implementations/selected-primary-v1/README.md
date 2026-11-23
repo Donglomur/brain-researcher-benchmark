@@ -71,6 +71,70 @@ results do not establish scientific reproduction, model performance or readiness
 CI enrollment is proposed as the single component command
 `python3 -I -B test_score.py`; no central manifest is changed by this package.
 
+## Assemble per-run predictions
+
+`assemble.py` builds the scorer's submission from independently produced run
+receipts. It requires every selected context, source control and candidate in both
+information arms. Run receipts may be listed in any order; each probability vector
+must already follow its context's frozen query order. The assembler checks the
+actual ordered query-ID list against the public digest and refuses omitted,
+duplicated or reordered queries. It retains the original probability bytes.
+
+Put all receipt JSON files and their NPY probability files in one directory. A run
+receipt has exactly these fields:
+
+```json
+{
+  "schema": "barista_selected_primary_run_v1",
+  "panel_id": "<public panel_id>",
+  "id": "random_nonoverlap-sub1-sentence_onset-f0-s1",
+  "arm": "<one value from score.ARMS>",
+  "model": "barista_parcels_channels",
+  "query_ids": ["<each actual query ID, in probability order>"],
+  "values": {
+    "path": "run-probabilities.npy",
+    "bytes": 0,
+    "sha256": "<SHA256 of the complete NPY file>",
+    "shape": [0],
+    "dtype": "<f8"
+  }
+}
+```
+
+The zero values and angle-bracket strings are placeholders, not valid inputs.
+`values` is the unchanged primitive NPY descriptor used by the scorer. Provide
+one finite class-one probability per original query; the source uses
+`torch.softmax(logits, dim=1)[:, 1]` in
+[the pinned author training code](https://github.com/ShanechiLab/BaRISTA/blob/83b27375eba60e9eba9da4e7dd8fb283baace376/barista/train.py).
+An AUC log, two-column logits, hard labels, or a missing row is not a substitute.
+
+`RUNS.json` has exactly `schema=barista_selected_primary_run_index_v1`, the same
+`panel_id`, and `runs`: a list of all 5,880 distinct receipt JSON basenames. Every
+receipt binds its own context, arm and model. NPY filenames may be shared where
+the actual bytes are identical; identities and obligations remain separate.
+
+```sh
+python3 -I -B assemble.py --public /operator/PUBLIC.json \
+  --index /candidate/RUNS.json --out /candidate/SUBMISSION.json \
+  --max-output-bytes 32000000
+```
+
+The output must be fresh and beside the index/NPY files so relative array paths
+remain valid. The explicit output allowance includes the manifest's trailing
+newline. Complete receipt identity and numeric admission precedes any output.
+No gold file is accepted or opened. Python producers can call `write_submission`
+with the same complete list of receipt dictionaries to avoid intermediate files.
+`test_assemble.py` exercises the real CLI with all 5,880 generated receipt files,
+then verifies scorer admission of its output. It also covers shuffled run order,
+query-order errors, missing controls, malformed probabilities and refusal before
+writing. It uses four-element invented arrays, not neural data.
+
+This is a submission assembly component, not the missing native inference
+collector. It cannot recover query IDs or probabilities from rounded logs,
+authenticate a checkpoint or execution, repair the author's skipped all-zero
+inputs, establish arm isolation, or create an original public panel. Those remain
+separate prerequisites for scientific use.
+
 ## Source basis
 
 [The primary manuscript](https://arxiv.org/html/2512.12135v1), Tables 2 and 17,
