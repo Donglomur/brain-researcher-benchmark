@@ -200,6 +200,11 @@ comparator contrast; it cannot establish that a candidate improves over ICNet.
 Candidate improvement still requires comparison with the authentic ICNet baseline
 under the separately admitted full-vector uncertainty and exposure policy.
 
+The [candidate comparison interface](CANDIDATE_COMPARISON.md) supplies that paired
+numerical route from two complete, matched prediction panels. It retains each
+model's frozen outputs and full per-unit/per-animal differences. It does not
+authenticate the source baseline or implement the scientific improvement decision.
+
 The source's early/late sampled-count RMSE and probability log-likelihood belong
 to Figs. 1–3 and are not calculated by this Fig. 4 component. A missing likelihood
 log base cannot block the defined Fig. 4 vector. Historical printed-summary
