@@ -118,8 +118,17 @@ def validate_original_population(xi_all):
     if gt.shape != (6000,) or (gt < 0).any() or (gt >= len(MODULE_COUNTS)).any():
         raise ValueError("Figure 1 requires 6000 neurons in module intervals [0,5)")
     _, _, _, counts = _inputs(gt, gt)
-    if tuple(counts) != MODULE_COUNTS:
-        raise ValueError("Figure 1 requires all 6000 neurons with counts 1000,1000,1000,1000,2000")
+    # Generator groups and source metric labels differ at exact boundaries:
+    # sustained xi = 1 - tpref/100 can equal 1, hence xi_all == 2 after
+    # its module offset. The source metric still uses floor(xi_all), so these
+    # rows belong to metric module 2. Other shared endpoints can arise from
+    # sequence inversion or floating-point addition. Permit only count shifts
+    # supported by exact shared endpoints, never an arbitrary count tolerance.
+    if counts[0] != MODULE_COUNTS[0] or (gt == 1).any():
+        raise ValueError("Figure 1 requires 1000 tuning rows and no coordinate at 1")
+    for boundary, prefix in ((2, 2000), (3, 3000), (4, 4000)):
+        if not np.count_nonzero(gt < boundary) <= prefix <= np.count_nonzero(gt <= boundary):
+            raise ValueError("Figure 1 nominal group counts must be recoverable at exact module boundaries")
     return gt
 
 
@@ -218,6 +227,7 @@ def evaluate_request(request):
         controls.append(np.stack(method_controls, axis=1))
         identities.append({"id": row["id"], "metric_seed": seed, "activity_sha256": row["activity_sha256"],
                            "target_sha256": row["target"]["sha256"],
+                           "metric_module_counts": np.bincount(np.floor(gt).astype(int), minlength=5).tolist(),
                            "embedding_sha256": {name: row["embeddings"][name]["sha256"] for name in methods}})
     scores = np.asarray(all_scores)
     report = summarize_panel(scores, range(10))

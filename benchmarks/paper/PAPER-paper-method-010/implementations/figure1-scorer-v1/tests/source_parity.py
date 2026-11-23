@@ -32,6 +32,10 @@ truth = np.concatenate([k + np.linspace(.01, .99, n) for k, n in enumerate([12, 
 fixtures = [truth, np.round(truth * 8) / 8]
 # Keep rounded values inside their original half-open module intervals.
 fixtures[1] = np.floor(truth) + np.minimum(np.round((truth % 1) * 8) / 8, .875)
+# Exact shared boundaries retain source floor membership and its draw counts.
+boundary_truth = truth.copy()
+boundary_truth[[12, 24, 36]] = [2., 3., 4.]
+fixtures.append(boundary_truth)
 for fixture_id, gt in enumerate(fixtures):
     shuffle = np.random.RandomState(38).permutation(len(gt))
     gt = gt[shuffle]
