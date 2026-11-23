@@ -2,15 +2,53 @@
 from .common import require,result,ScientificGate
 
 def population(payload):
+    """Complete finite-roster PR; scaling changes arithmetic, never the target.
+
+    Equation (2) in Chun et al. gives tr(K)^2 / tr(K^2). Both moments are
+    quartic in the response units, so a common power-of-two scale cancels.
+    Center each column at its own scale before choosing the common scale:
+    a large constant column must not erase a small varying column.
+    """
+    import math
     import numpy as np
     G=np.asarray(payload['arrays']['matrix'],dtype=float)
     require(G.ndim==2 and min(G.shape)>0 and np.isfinite(G).all(),'finite matrix')
     axis=payload['request'].get('axis','task')
     require(axis in ('task','neuron','uncentered'),'target axis')
     if axis=='neuron':G=G.T
-    H=G if axis=='uncentered' else G-G.mean(axis=0,keepdims=True)
-    R,C=H.shape;A=float(np.mean(H*H)**2);K=H@H.T/C;B=float(np.mean(K*K))
-    return result({'A':A,'B':B,'gamma':A/B if B else None},dict(R=R,C=C,target='complete_finite_roster',axis=axis),status='ok' if B else 'undefined_denominator')
+    R,C=G.shape
+    column_exponents=np.frexp(np.max(np.abs(G),axis=0))[1]
+    H=np.ldexp(G,-column_exponents)
+    if axis!='uncentered':
+        # Translation by a represented row makes constant columns exactly zero
+        # even when a repeated mantissa has an inexact floating-point mean.
+        H=H-H[:1]
+        H=H-H.mean(axis=0,keepdims=True)
+    maxima=np.max(np.abs(H),axis=0);active=maxima>0
+    support=dict(R=R,C=C,target='complete_finite_roster',axis=axis)
+    if not active.any():
+        return result({'A':0.,'B':0.,'gamma':None},support,status='undefined_denominator')
+    exponent=int(np.max((column_exponents+np.frexp(maxima)[1])[active]))
+    with np.errstate(under='ignore'):
+        H=np.ldexp(H,column_exponents-exponent)
+    # The two Gram matrices have the same nonzero eigenvalues. Use the
+    # smaller one, retaining the original R^2 C^2 moment denominator.
+    gram=H@H.T if R<=C else H.T@H
+    A=float(np.mean(H*H)**2)
+    B=float(np.sum(gram*gram)/(R*C)**2)
+    gamma=A/B
+    diagnostics={}
+    def original_units(value,name):
+        try:restored=math.ldexp(value,4*exponent)
+        except OverflowError:
+            diagnostics[name]='overflow';return None
+        if restored==0. and value>0.:
+            diagnostics[name]='underflow';return None
+        return restored
+    outputs={'A':original_units(A,'A'),'B':original_units(B,'B'),'gamma':gamma}
+    support['scaled_moments']={'A':A,'B':B,'power_of_two_exponent':4*exponent}
+    support['gram_dimension']=min(R,C)
+    return result(outputs,support,diagnostics={'unrepresentable_raw_moments':diagnostics})
 
 def local(payload):
     import numpy as np
