@@ -202,6 +202,36 @@ class CompleteImport(unittest.TestCase):
             with self.assertRaises(ValueError): s.read_pinned(roster, "0"*64)
 
 
+class ProbeSessionOwnership(unittest.TestCase):
+    """A probe insertion belongs to one session, across its endpoint/region cells."""
+
+    def test_same_probe_can_support_multiple_regions_and_endpoints(self):
+        roster, _ = fixture()
+        extra = copy.deepcopy(roster["cells"])
+        for cell in extra:
+            cell["region"] = "second-generated-region"
+            cell["unit_ids"] = [unit + "-second-region" for unit in cell["unit_ids"]]
+        roster["cells"].extend(extra)
+        self.assertEqual(len(s.validate_roster(roster)), 20)
+
+    def test_one_cross_session_probe_collision_is_rejected(self):
+        roster, _ = fixture()
+        roster["cells"][1]["pids"].append(roster["cells"][0]["pids"][0])
+        with self.assertRaisesRegex(ValueError, "probe insertion assigned to different sessions"):
+            s.validate_roster(roster)
+
+    def test_consistent_export_cannot_hide_cross_session_probe_reassignment(self):
+        roster, bundle = fixture()
+        for cell in roster["cells"]:
+            cell["pids"] = ["one-probe-insertion-for-two-sessions"]
+        for row in bundle["records"]:
+            if row["pseudo_id"] == -1:
+                row["pids"] = ["one-probe-insertion-for-two-sessions"]
+        bundle["roster_digest"] = s.digest(roster)
+        with self.assertRaisesRegex(ValueError, "probe insertion assigned to different sessions"):
+            s.evaluate(roster, bundle, include_indexed=True)
+
+
 class IndexedExport(unittest.TestCase):
     """New complete-family export controls; no original data or model fits."""
     @classmethod
