@@ -20,12 +20,15 @@ def _number(value, label):
         return None
     if type(value) not in (int, float):
         raise ValueError(label + " must be a finite number or null")
+    original = value
     try:
         value = float(value)
     except (OverflowError, ValueError) as exc:
         raise ValueError(label + " is outside the finite numeric domain") from exc
     if not math.isfinite(value):
         raise ValueError(label + " must be finite; null represents missing")
+    if value != original:
+        raise ValueError(label + " integer is not exactly representable as binary64")
     return value
 
 

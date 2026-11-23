@@ -34,9 +34,14 @@ Every input row is accounted for once: phase-filter exclusion, retained wrong
 trial, or retained correct channel group. Channel labels associated with multiple
 subjects and duplicate source cells are rejected. All three phases are required.
 The one-million-row format limit refuses oversized inputs; it never truncates a
-cohort. Finite numbers or null are accepted; infinities, booleans and unknown
-phase/accuracy labels are refused. The input digest binds a normalized JSON
-representation, not original CSV bytes or provenance.
+cohort. Finite binary64 numbers or null are accepted; infinities, booleans and
+unknown phase/accuracy labels are refused. Python integer inputs must be exactly
+representable as binary64: otherwise this API refuses them before grouping or
+ranking, rather than silently introducing ties through conversion. Exactly
+representable large integers and finite float inputs remain supported. This is
+a local input-domain safeguard; it does not change the retained historical
+model-artifact JSON schema's ordinary rounding policy. The input digest binds a
+normalized JSON representation, not original CSV bytes or provenance.
 
 ## Deliberate boundary
 
@@ -52,8 +57,9 @@ scientific fit or AI run was performed.
 
 The source observations in `SOURCE.json` came from browser-visible pinned code;
 the upstream raw bodies were not locally captured or authenticated. Local pins
-bind the existing task documents. This is an unadopted additive implementation,
-not a new benchmark, scorer, submission route or readiness promotion.
+bind the existing task documents. This is a registered source component;
+source enrollment does not qualify a scientific reproduction or a submission
+route for the complete primary result.
 
 ## Generated checks
 
@@ -63,8 +69,9 @@ From this directory:
 python3 -I -S -B -m unittest discover -s tests -p test_learnr.py
 ```
 
-Fourteen generated controls cover analytic rank results, ties, eligibility
+Seventeen generated controls cover analytic rank results, ties, eligibility
 boundaries, missing/constant/perfect groups, original selection order, complete
-row accounting and unsupported structure. They do not verify historical MATLAB
-execution or empirical reproduction. Shared CI enrollment must be added by the
-sole repository integrator; this private package is not yet enrolled.
+row accounting, unsupported structure and lossless integer rank inputs. They do not verify historical MATLAB
+execution or empirical reproduction. Shared CI runs this suite through
+`PAPER-FIND-003.command-01` in `benchmarks/integrity/parallel-source-controls.v1.json`;
+its expected count must accompany changes to the suite.

@@ -113,6 +113,35 @@ class SourceLearnRTests(unittest.TestCase):
         rows = bank(); rows[0]["ACC"] = "unknown"
         with self.assertRaises(ValueError): M.analyze_rows(rows)
 
+    def test_unrepresentable_integer_rank_inputs_are_refused(self):
+        # Binary64 would introduce ties into this strictly increasing sequence.
+        large = [2**53 + i for i in range(10)]
+        for trials, rates in ((large, list(range(1, 11))),
+                              (list(range(1, 11)), large)):
+            with self.subTest(trials=trials, rates=rates):
+                with self.assertRaisesRegex(ValueError, "exactly representable"):
+                    M.learn_r_group(trials, rates)
+
+    def test_exact_large_integers_and_explicit_floats_keep_rank_semantics(self):
+        large = [2**53 + 2*i for i in range(10)]
+        expected = M.learn_r_group(list(range(10)), list(range(1, 11)))
+        self.assertEqual(M.learn_r_group(large, list(range(1, 11))), expected)
+        self.assertEqual(M.learn_r_group([float(v) for v in large],
+                                        list(range(1, 11))), expected)
+        self.assertEqual(expected["state"], "positive_infinite_fisher")
+
+    def test_lossy_integer_is_rejected_before_row_bookkeeping(self):
+        for field in ("trial", "ripple"):
+            with self.subTest(field=field):
+                rows = bank(); rows[0][field] = 2**53
+                accepted = M.analyze_rows(rows)
+                rows[0][field] = 2**53 + 1
+                # This API refuses a different integer that would normalize to
+                # the accepted binary64 value before grouping and ranking.
+                with self.assertRaisesRegex(ValueError, "exactly representable"):
+                    M.analyze_rows(rows)
+                self.assertEqual(accepted["raw_row_count"], 30)
+
     def test_all_wrong_rows_are_accounted_without_invented_channel_estimates(self):
         rows = bank()
         for row in rows: row["ACC"] = "wrong"
