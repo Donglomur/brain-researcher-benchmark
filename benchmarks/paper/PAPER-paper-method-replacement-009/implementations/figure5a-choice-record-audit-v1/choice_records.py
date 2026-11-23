@@ -5,7 +5,7 @@ This module neither selects a scalar panel aggregate nor establishes improvement
 """
 from hashlib import sha256
 import json
-from math import isfinite
+from math import exp, isfinite
 from pathlib import Path
 import re
 
@@ -185,6 +185,76 @@ def _metric_function():
     namespace = {"__name__": "figure5_choice_pinned_diagnostics", "__file__": str(path)}
     exec(compile(raw, str(path), "exec"), namespace)
     return namespace["score_case"]
+
+
+def _binary_probability(logits, positive_column):
+    _need(type(logits) is list and len(logits) == 2,
+          "each choice trial requires exactly two pre-argmax logits")
+    values = []
+    for value in logits:
+        _need(type(value) in (int, float), "logits must be real numbers, excluding booleans")
+        try:
+            value = float(value)
+        except OverflowError as exc:
+            raise AuditError("logits must be finite binary64 values") from exc
+        _need(isfinite(value), "logits must be finite binary64 values")
+        values.append(value)
+    # Subtract the larger logit before exponentiation. Extreme finite opposite
+    # signs can subtract to -inf; exp(-inf)=0 is the limiting softmax value.
+    center = max(values)
+    weights = [exp(value - center) for value in values]
+    return weights[positive_column] / sum(weights)
+
+
+def build_choice_predictions(support_bytes, logit_bytes, *, expected_support_sha256):
+    """Convert complete keyed two-logit outputs into the audit's prediction bytes.
+
+    Inputs contain no labels. Each case declares its actual output class order;
+    this function cannot infer or authenticate that order from scores. Trial IDs
+    must travel with model outputs, including the final partial batch. It never
+    guesses IDs from positions or reconstructs discarded argmax scores.
+    """
+    _need(type(support_bytes) is bytes, "captured support bytes required")
+    plan, _, cases, _ = _plan(support_bytes, expected_support_sha256)
+    doc = _document(logit_bytes, "logits")
+    _closed(doc, ("schema", "support_sha256", "cases"), "logits")
+    _need(doc["schema"] == "figure5a-choice-logits/v1", "wrong logit schema")
+    _need(doc["support_sha256"] == expected_support_sha256, "logit support commitment mismatch")
+    _need(type(doc["cases"]) is list and len(doc["cases"]) == len(cases),
+          "complete case logit support required")
+    parsed = {}
+    for result in doc["cases"]:
+        _closed(result, ("case_id", "class_order", "batches"), "logit case")
+        cid = _text(result["case_id"])
+        _need(cid in cases and cid not in parsed, "unexpected or duplicate logit case")
+        classes = result["class_order"]
+        _need(type(classes) is list and len(classes) == 2, "explicit binary class order required")
+        classes = [_text(value) for value in classes]
+        _need(classes[0] != classes[1] and plan["positive_class"] in classes,
+              "distinct class identities including the declared positive class required")
+        positive_column = classes.index(plan["positive_class"])
+        _need(type(result["batches"]) is list and result["batches"], "nonempty logit batches required")
+        values = {}
+        expected = cases[cid][1]
+        for batch in result["batches"]:
+            _closed(batch, ("trial_ids", "logits"), "logit batch")
+            keys = _ordered_ids(batch["trial_ids"])
+            _need(type(batch["logits"]) is list and len(batch["logits"]) == len(keys),
+                  "one two-logit row per supplied trial identity required")
+            for key, logits in zip(keys, batch["logits"]):
+                _need(key not in values, "duplicate trial across logit batches")
+                values[key] = _binary_probability(logits, positive_column)
+        _need(set(values) == set(expected), "complete original trial logit coverage required")
+        parsed[cid] = {"case_id": cid, "predictions": [
+            {"trial_id": trial_id, "positive_probability": values[key]}
+            for trial_id, key in zip(cases[cid][0]["trial_ids"], expected)]}
+    output = {"schema": "figure5a-choice-predictions/v1", "support_sha256": expected_support_sha256,
+              "positive_class": plan["positive_class"], "cases": [parsed[cid] for cid in cases]}
+    raw = json.dumps(output, sort_keys=True, separators=(",", ":"), allow_nan=False).encode("utf-8")
+    # Validate the exact bytes delivered to the existing audit, including its
+    # document limit, instead of maintaining a second prediction contract.
+    _predictions(raw, expected_support_sha256, plan["positive_class"], cases)
+    return raw
 
 
 def audit_choice_profile(support_bytes, prediction_bytes, load_protected_labels, *, expected_support_sha256):
