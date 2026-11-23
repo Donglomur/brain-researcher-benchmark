@@ -180,6 +180,7 @@ def _check_window(records, max_examples, saved):
     folds = records["training_cv_fold"]
     require(len(folds) == 5, "exactly five observed source CV folds required")
     seen_validation = set()
+    fold_scores = []
     for fold in folds:
         fit = indices(fold.get("train_relative_to_training"), len(train), "CV train")
         valid = indices(fold.get("validation_relative_to_training"), len(train), "CV validation")
@@ -189,10 +190,23 @@ def _check_window(records, max_examples, saved):
                 "CV fold lacks both classes")
         require(seen_validation.isdisjoint(valid), "CV validation membership repeats across folds")
         seen_validation.update(valid)
+        result = fold.get("result")
+        require(isinstance(result, dict), "CV fold return unavailable")
+        returned_scores = result.get("test_scores")
+        # cross_val_score calls cross_validate with the single scorer named
+        # "score". The observer preserves _fit_and_score's nested return.
+        require(isinstance(returned_scores, dict) and set(returned_scores) == {"score"},
+                "CV fold return must contain the source single score mapping")
+        require(result.get("fit_error") is None, "CV fold fit failed")
+        fold_scores.append(score(returned_scores["score"], "returned CV fold AUC"))
     require(seen_validation == set(range(len(train))), "CV validation does not cover all training examples")
     cv = records["training_cv_scores"][0].get("scores")
     require(isinstance(cv, list) and len(cv) == 5, "five observed training-CV scores required")
     cv = [score(x, "training-CV AUC") for x in cv]
+    # The endpoint uses a mean: compare complete multisets, not an assumed
+    # correspondence between event completion order and returned vector order.
+    require(all(abs(a - b) <= NUMERICAL_ATOL for a, b in zip(sorted(fold_scores), sorted(cv))),
+            "observed CV fold returns differ from training-CV score vector")
 
     probabilities = records["heldout_probabilities"][0]
     require(probabilities.get("source_column_used") == 1 and type(probabilities.get("source_column_used")) is int,
@@ -292,7 +306,9 @@ def verify(events, prepared, windows, saved_scores, *, max_examples_per_window, 
             "status": "verified_score_arithmetic_for_complete_supplied_support",
             "window_calls_verified": len(seen), "heldout_prediction_rows_verified": test_rows,
             "heldout_auc": "independent_rank_pair_count_from_observed_binary_labels_and_column1",
-            "cv_check": "five_training_only_fold_partitions_and_mean_of_observed_cv_auc_only",
+            "cv_check": "five_training_only_fold_partitions_returned_score_multiset_and_mean",
+            "cv_fold_returns_verified": True,
+            "cv_fold_return_order_assumed": False,
             "cv_prediction_level_auc_recomputed": False,
             "maximum_heldout_auc_absolute_error": maximum_test_error,
             "maximum_cv_mean_absolute_error": maximum_cv_error,

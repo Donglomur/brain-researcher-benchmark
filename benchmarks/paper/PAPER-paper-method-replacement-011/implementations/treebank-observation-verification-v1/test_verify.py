@@ -39,7 +39,7 @@ def fixture():
     for k in range(5):
         valid = [2 * k, 2 * k + 1]
         events.append(event("training_cv_fold", train_relative_to_training=[i for i in range(10) if i not in valid],
-                            validation_relative_to_training=valid, result={"test_scores": .7}))
+                            validation_relative_to_training=valid, result={"test_scores": {"score": .7}, "fit_error": None}))
     events += [event("training_cv_scores", scores=[.7] * 5),
                event("heldout_probabilities", source_column_used=1,
                      class_order={"status": "observed", "values": [0, 1]},
@@ -76,6 +76,8 @@ class ArithmeticTests(unittest.TestCase):
         self.assertEqual(result["window_calls_verified"], 1)
         self.assertEqual(result["heldout_prediction_rows_verified"], 4)
         self.assertFalse(result["cv_prediction_level_auc_recomputed"])
+        self.assertTrue(result["cv_fold_returns_verified"])
+        self.assertFalse(result["cv_fold_return_order_assumed"])
         self.assertFalse(result["original_support_authenticated"])
         self.assertEqual(result["full_primary_reproduction"], "unavailable")
         self.assertNotIn("labels", result)
@@ -99,8 +101,42 @@ class ArithmeticTests(unittest.TestCase):
     def test_cv_is_mean_of_fold_scores_not_claimed_as_prediction_replay(self):
         parts = fixture()
         next(x for x in parts[3] if x["event"] == "training_cv_scores")["scores"][-1] = .1
+        [x for x in parts[3] if x["event"] == "training_cv_fold"][-1]["result"]["test_scores"]["score"] = .1
         with self.assertRaisesRegex(v.VerificationError, "five-CV mean"):
             run_fixture(parts)
+
+    def test_cv_fold_returns_cannot_disagree_with_reported_vector(self):
+        parts = fixture()
+        for fold in (x for x in parts[3] if x["event"] == "training_cv_fold"):
+            fold["result"]["test_scores"]["score"] = .2
+        with self.assertRaisesRegex(v.VerificationError, "fold returns differ"):
+            run_fixture(parts)
+
+    def test_equal_mean_does_not_hide_a_different_cv_score_multiset(self):
+        parts = fixture()
+        next(x for x in parts[3] if x["event"] == "training_cv_scores")["scores"] = [.5, .6, .7, .8, .9]
+        with self.assertRaisesRegex(v.VerificationError, "fold returns differ"):
+            run_fixture(parts)
+
+    def test_cv_fold_completion_order_is_not_used_as_score_vector_order(self):
+        parts = fixture()
+        values = [.5, .6, .7, .8, .9]
+        folds = [x for x in parts[3] if x["event"] == "training_cv_fold"]
+        for fold, value in zip(folds, values):
+            fold["result"]["test_scores"]["score"] = value
+        next(x for x in parts[3] if x["event"] == "training_cv_scores")["scores"] = values[::-1]
+        self.assertTrue(run_fixture(parts)["cv_fold_returns_verified"])
+
+    def test_cv_fold_return_must_be_available_unambiguous_and_finite(self):
+        for returned in (None, {}, {"test_scores": .7},
+                         {"test_scores": {"score": .7, "extra": .7}},
+                         {"test_scores": {"score": True}},
+                         {"test_scores": {"score": float("nan")}},
+                         {"test_scores": {"score": .7}, "fit_error": "failed"}):
+            parts = fixture()
+            next(x for x in parts[3] if x["event"] == "training_cv_fold")["result"] = returned
+            with self.subTest(returned=returned), self.assertRaises(v.VerificationError):
+                run_fixture(parts)
 
     def test_repeated_fold_and_heldout_index_cannot_enter_training_cv(self):
         for mode in ("repeat", "test_index"):
@@ -225,7 +261,7 @@ class ArithmeticTests(unittest.TestCase):
 
     def test_real_observer_generated_fixture_fails_its_invalid_fold_support(self):
         # Use the maintained producer's actual event emitter. Its old fixture
-        # deliberately repeats a fold and has a one-class held-out set; source
+        # deliberately has an out-of-range CV index and a one-class test set; source
         # hook success must not be mistaken for independent numeric validation.
         path = HERE.parent / "treebank-figure4-producer-v2/tests/test_observation.py"
         spec = importlib.util.spec_from_file_location("treebank_emitter_fixture", path)
@@ -244,7 +280,7 @@ class ArithmeticTests(unittest.TestCase):
                 w.append({"source_key": "-0.9", "nominal_start": -.9,
                           "requested_start_sample": 204, "requested_sample_count": 512})
                 saved = {"sub_1": json.loads(json.dumps(saved))}
-                with self.assertRaisesRegex(v.VerificationError, "CV fold|CV validation"):
+                with self.assertRaisesRegex(v.VerificationError, "CV validation contains invalid positional indices"):
                     v.verify(events, p, w, saved, max_examples_per_window=100, max_events=100)
             finally:
                 f.close()
