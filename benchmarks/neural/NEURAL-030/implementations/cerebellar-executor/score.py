@@ -1,9 +1,12 @@
-"""Strict count scorer; all labels and biological bindings are operator-private.
+"""Strict count scorer with representable nonzero losses and stable deviance.
 
-This original implementation scores declared arrays; it does not authenticate
-source data, establish a biological identity join, or sandbox participant code.
+All labels and biological bindings are operator-private. This scores declared
+arrays with the original metric, ID checks and biological hierarchy. It does
+not authenticate source data, establish a biological identity join, or sandbox
+participant code.
 """
 import re
+from fractions import Fraction
 import numpy as np
 
 POISSON_EPSILON = 1e-12
@@ -63,6 +66,36 @@ def _prediction_rows(predictions, expected, name):
     return result
 
 
+def _poisson_terms(y, mu):
+    """Return half-deviance without subtracting almost equal log terms.
+
+    For y > 0 and r = (mu-y)/y, half-deviance is y*(r-log1p(r)).
+    Direct subtraction still loses precision for small r, so use its Taylor
+    series through degree 24 for |r| <= 1/8. The normalized kernel's omitted
+    tail is less than |r|**25 / (25*(1-|r|)); at the boundary it is below
+    1.3e-24. Multiply that bound by y for the half-deviance bound.
+    Outside this region the original logarithmic expression is well scaled.
+    The y=0 expression remains exactly mu, including the declared mean floor.
+    """
+    terms = mu.copy()
+    positive = y > 0
+    yp, mp = y[positive], mu[positive]
+    residual = mp - yp
+    relative = residual / yp
+    close = np.abs(relative) <= 0.125
+    values = np.empty_like(yp)
+    r = relative[close]
+    # r**2 * (1/2 - r/3 + r**2/4 - ... + r**22/24).
+    polynomial = np.full_like(r, 1.0 / 24.0)
+    for degree in range(23, 1, -1):
+        polynomial = ((-1.0) ** degree) / degree + r * polynomial
+    values[close] = yp[close] * (r * r) * polynomial
+    far = ~close
+    values[far] = residual[far] + yp[far] * (np.log(yp[far]) - np.log(mp[far]))
+    terms[positive] = values
+    return terms
+
+
 def _metrics(y, prediction):
     # The floor applies to the entire Poisson mean, including the +mu term.
     # Consequently y=0, prediction=0 has deviance 2*epsilon, not exactly zero.
@@ -70,9 +103,9 @@ def _metrics(y, prediction):
     try:
         with np.errstate(over="raise", invalid="raise", divide="raise"):
             mse = float(np.mean((y - prediction) ** 2))
-            terms = mu - y
-            positive = y > 0
-            terms[positive] += y[positive] * (np.log(y[positive]) - np.log(mu[positive]))
+            if mse == 0.0 and np.any(y != prediction):
+                raise ValueError("nonzero MSE is below floating-point representability")
+            terms = _poisson_terms(y, mu)
             deviance = float(np.mean(np.maximum(0.0, 2 * terms)))
     except FloatingPointError as exc:
         raise ValueError("score arithmetic is not finite") from exc
@@ -82,11 +115,16 @@ def _metrics(y, prediction):
 
 
 def _mean_metrics(records, keys):
-    try:
-        with np.errstate(over="raise", invalid="raise"):
-            result = {key: float(np.sum(np.asarray([row[key] for row in records]) / len(records))) for key in keys}
-    except FloatingPointError as exc:
-        raise ValueError("aggregation arithmetic is not finite") from exc
+    # Divide only after exact accumulation of the finite binary-float metrics.
+    # Dividing each minimal subnormal by the group size first can erase an
+    # entire positive loss, even when the final mean itself is representable.
+    result = {}
+    for key in keys:
+        exact_mean = sum((Fraction(row[key]) for row in records), Fraction()) / len(records)
+        value = float(exact_mean)
+        if exact_mean and value == 0.0:
+            raise ValueError("nonzero aggregate metric is below floating-point representability")
+        result[key] = value
     if not np.isfinite(list(result.values())).all():
         raise ValueError("aggregation arithmetic is not finite")
     return result

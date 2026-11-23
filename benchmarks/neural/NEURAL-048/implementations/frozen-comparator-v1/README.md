@@ -35,6 +35,28 @@ The angle-bracket strings are schema explanations, not usable hashes or receipt 
 
 ## Execution and outputs
 
+First package the independently produced operator behavior probabilities. The
+prediction input is a complete JSON list of `{id, behavior}` objects; the receipt
+input is the five-field object described above.
+
+```sh
+python3 -I -B benchmarks/neural/NEURAL-048/implementations/frozen-comparator-v1/freeze_behavior.py \
+  operator-reference.json behavior-probabilities.json operator-receipt.json \
+  --execution-manifest-sha256 "$OPERATOR_EXECUTION_SHA256" \
+  --output frozen-behavior.json
+```
+
+The command reuses `freeze_behavior` validation and creates a complete new file
+with private permissions, refusing existing files or symlinks. Its only stdout
+payload is `comparator_sha256` and the digest kind. This is the scorer's canonical
+JSON digest, **not the SHA-256 of the formatted file bytes**. Retain it in the
+independent operator protocol as `OPERATOR_COMPARATOR_SHA256` before candidate
+access or outcomes. Packaging a comparator does not prove its fitting history,
+competence or prospective freeze time. The input reference and output comparator
+remain operator artifacts; do not deliver them to the candidate.
+
+Then score the candidate's neural arms against that retained comparator:
+
 ```sh
 python3 benchmarks/neural/NEURAL-048/implementations/frozen-comparator-v1/scorer.py \
   operator-reference.json frozen-behavior.json candidate-neural-arms.json \
@@ -50,5 +72,9 @@ The arithmetic dependency is pinned to `initial-evaluator-v1/evaluator.py` SHA-2
 ## Verification and remaining scope
 
 The task-local tests independently derive the equal-worm loss and paired interval for unequal worm sizes. Adversarial controls cover candidate behavior injection, changed baselines with rebound candidate hashes, provenance mutation, coverage, invalid probabilities, matched-history/split bindings, valid null/negative effects, stable row ordering, copied outputs, strict JSON and the CLI. Test fixtures are invented software examples, never native animal observations or performance results.
+
+The freeze-command controls additionally cover the complete CLI-to-score route,
+the canonical digest, private file permissions, existing-path preservation and
+failure before output publication. They exercise generated operator examples.
 
 Source authenticity, native data preparation, exact causal lineage, independently competent baseline execution, future-free recipe selection, participant delivery and scientific admission remain open. A fixed baseline removes one source of manipulation; it does not turn a positive contrast into evidence of direct neural understanding or a causal mechanism. The output retains the original unqualified status. No historical task, source evidence or numerical prediction was changed.

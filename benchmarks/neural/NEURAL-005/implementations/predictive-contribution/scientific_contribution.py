@@ -140,6 +140,18 @@ def validate_report(report, counts):
                 require(auc is None, "One-class AUC remains undefined without dropping person")
             else:
                 require(auc is not None and 0 <= number(auc, "AUC") <= 1, "Defined mixed-class AUC")
+            if arm == PRIOR:
+                # This arm predicts the same training-only probability for every
+                # case. Counts suffice to check its metrics without reading targets.
+                frequency = row["positive_n"] / row["n"]
+                clipped = min(1 - EPSILON, max(EPSILON, prior))
+                near(values["mean_probability"], prior, "Constant prior mean probability")
+                near(values["log_loss"], -frequency * math.log(clipped) -
+                     (1 - frequency) * math.log1p(-clipped), "Constant prior log loss")
+                near(values["brier"], frequency * (1 - prior) ** 2 +
+                     (1 - frequency) * prior ** 2, "Constant prior Brier score")
+                if auc is not None:
+                    near(auc, 0.5, "Constant prior tied-score AUC")
     means = report.get("equal_participant_arms")
     require(type(means) is dict and set(means) == set(ARMS), "All absolute participant means")
     for arm in ARMS:

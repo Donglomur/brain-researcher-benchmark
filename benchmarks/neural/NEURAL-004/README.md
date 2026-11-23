@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Hmp original source](implementations/hmp-original-source) — Task implementation.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Mixed analysis evidence v1](implementations/mixed-analysis-evidence-v1) — Reviewed source component.
+  Scope: Generated regression controls for the active investigator loop preserving textual and numeric evidence alongside figures, including empty image lists. Existing image handling and output limits remain intact. These controls do not establish provider compatibility, participant isolation, authentic neural execution or scientific performance.
 - [Protected grading identity v1](implementations/protected-grading-identity-v1) — Reviewed source component.
   Scope: Protected grading identity source controls for the existing task; no metric, transport, target, workload or admission change and no runtime or scientific qualification.
 - [Paired contrasts v1](implementations/paired-contrasts-v1) — Reviewed source component.

@@ -7,7 +7,7 @@ This source package contains no neural arrays, target values or reference report
 From a checkout, invoke a dedicated trusted operator process with existing Python and NumPy:
 
 ```sh
-python3 -I -B benchmarks/neuroscience/neural-023/external-artifact-v1/external_score.py \
+python3 -I -B benchmarks/neural/NEURAL-023/implementations/registered-runtime/external-artifact-v1/external_score.py \
   --source-root /absolute/path/to/external-artifact-v1/dependencies \
   --submission /absolute/path/to/predictions.npz \
   --target /absolute/path/to/operator/assessment-targets.npz \

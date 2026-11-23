@@ -14,7 +14,7 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Prespecified within-block differences of matched visual-plus-opto, visual-only and opto-only response summaries, plus available-context support and original-versus-revision-pool discrepancies, independently recomputed from measured traces.
 
-**Source delivery:** partial\_delivery. The full140 route is a public-input structural report admission, not a numerical investigation scorer. Source memberships span three original blocks and a separate revision pool; no independent-cell or animal map justifies pooled140 biological estimates.
+**Source delivery:** partial\_delivery. The current numerical evaluator independently recomputes the complete 140-membership report from pinned public traces, and the recovered full140 programme bridge connects stopped candidate output to that evaluator. These are source components with generated controls, not authentic runtime or participant qualification. Source memberships remain three original blocks and a separate revision pool, without an independent-cell or animal map.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
@@ -24,14 +24,14 @@ Prespecified within-block differences of matched visual-plus-opto, visual-only a
 | Direct observation | not\_delivered | Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present. Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation. | Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance. |
 | Typed viewer | not\_delivered | Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer. Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable. | Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here. |
 | Tool assisted | not\_delivered | Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget. Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback. | No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode. |
-| Frozen program | not\_delivered | A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout. Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode. | Recover the named source/dependency closure and exact public input contract before executing or scoring. |
+| Frozen program | source\_available | Delivered source freezes one programme before exposing all 25 public files, executes the complete 140-membership investigation, and joins captured candidate output to independent numerical recomputation. Separate operator-held source/program/exposure authority, public input provisioning, native containment and observed process closure remain required. Current source and attestations do not establish authentic execution, participant compliance or scientific qualification. | Authenticate complete external inputs and qualify the selected native environment, resources, isolation and all closure gates before a participant study.; Freeze participant authoring and exposure protocol and evaluate actual complete-scope submissions; source controls do not establish programme performance. |
 
 Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
 
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 17330 bytes; SHA-256 `64e737e4fe5d21868af2c89dbea4fea34b20ae5cf61936f379df09eb60d4bcaf`.
+- Specification identity: 19191 bytes; SHA-256 `94b9a886a556dbc58daffab81caeeedbc007b94338f59d2960d0fe301f00f917`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

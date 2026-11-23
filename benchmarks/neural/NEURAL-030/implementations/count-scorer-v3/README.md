@@ -31,10 +31,11 @@ ordinary small paired gains. Run `python -I -B test_score.py` with the existing
 NumPy environment. During private source staging only, `NEUROBENCH_SOURCE_ROOT`
 may identify the read-only repository containing the preserved predecessor.
 
-All earlier scorer bodies and frozen execution routes remain unchanged. No
-existing runtime is implicitly switched to v3: adoption requires that runtime's
-source binding and relevant controls to be updated together. Register this
-package and its new test command as a separate reviewed source component.
+The active [cerebellar executor](../cerebellar-executor/README.md) now adopts these
+exact scorer bytes with a revised captured-source binding and relevant generated
+controls. Earlier standalone scorer bodies and the historical four-cell execution
+package remain unchanged. This source adoption does not qualify authentic execution
+or revise previously recorded scores.
 [The preserved v2 documentation](../count-scorer-v2/README.md) retains the source
 provenance and unresolved data, identity, and scientific qualification limits.
 No original observations, model, native run or neural-understanding result was

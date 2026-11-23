@@ -225,5 +225,67 @@ class AmendmentTests(unittest.TestCase):
         self.assertIsNotNone(created[0].poll())
 
 
+class LimitBindingTests(unittest.TestCase):
+    def test_postvalidation_caller_mutation_cannot_change_sent_limits(self):
+        limits = LIMITS.copy()
+        original_limits = limits.copy()
+        validate = transport.validate_public
+        def validate_then_mutate(public):
+            pin = validate(public)
+            limits['output_bytes'] = True
+            limits['unvalidated_extra'] = 1
+            return pin
+        with patch.object(transport, 'validate_public', side_effect=validate_then_mutate):
+            raw, _ = transport.make_request(packet(), 'frozen_program', limits,
+                                             COMMITMENT, 8192)
+        self.assertEqual(json.loads(raw)['limits'], original_limits)
+
+    def test_output_cap_uses_delivered_limits_after_caller_mutation(self):
+        limits = {**LIMITS, 'output_bytes': 512}
+        make_request = transport.make_request
+        def request_then_mutate(*args, **kwargs):
+            result = make_request(*args, **kwargs)
+            limits['output_bytes'] = 8192
+            return result
+        # Leading JSON whitespace is valid protocol data, but still consumes the
+        # transmitted output cap. The larger caller cap would accept this answer.
+        code = "import sys;sys.stdout.write(' '*1024)\n" + GOOD_CHILD
+        created = []
+        original_launch = subprocess.Popen
+        def launch(*args, **kwargs):
+            proc = original_launch(*args, **kwargs)
+            created.append(proc)
+            return proc
+        with patch.object(transport, 'make_request', side_effect=request_then_mutate), \
+             patch.object(transport.subprocess, 'Popen', side_effect=launch):
+            with self.assertRaisesRegex(Refusal, 'total output cap'):
+                transport.run_case(packet(), 'frozen_program', limits, COMMITMENT,
+                    [sys.executable, '-I', '-S', '-B', '-c', code], Path.cwd(),
+                    max_input_bytes=8192, stderr_limit=0)
+        self.assertEqual(len(created), 1)
+        self.assertIsNotNone(created[0].poll())
+
+    def test_deadline_uses_delivered_limits_before_launch(self):
+        limits = {**LIMITS, 'wall_seconds': 1}
+        make_request = transport.make_request
+        def request_then_mutate(*args, **kwargs):
+            result = make_request(*args, **kwargs)
+            limits['wall_seconds'] = 3
+            return result
+        calls = 0
+        def clock():
+            nonlocal calls
+            calls += 1
+            return 0.0 if calls == 1 else 1.5
+        with patch.object(transport, 'make_request', side_effect=request_then_mutate), \
+             patch.object(transport.time, 'monotonic', side_effect=clock), \
+             patch.object(transport.subprocess, 'Popen', wraps=subprocess.Popen) as launch:
+            with self.assertRaisesRegex(Refusal, 'deadline before participant launch'):
+                transport.run_case(packet(), 'frozen_program', limits, COMMITMENT,
+                    [sys.executable, '-I', '-S', '-B', '-c', GOOD_CHILD], Path.cwd(),
+                    max_input_bytes=8192)
+            launch.assert_not_called()
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

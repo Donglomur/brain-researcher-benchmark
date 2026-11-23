@@ -19,9 +19,11 @@ preparation, independent authority and native isolation remain prerequisites.
 
 The historical package `SOURCE_MANIFEST.json` remains unchanged and authenticated.
 The separate [current descriptor](../../../integrity/current-closures/trust-cerebellar/SOURCE_MANIFEST.json)
-retains the same 15 members and changes only the reviewed controller and loader
-bindings. The candidate view builder, scientific scorers, phase worker and
-transport bodies retain their original identities. The new current source digest
+retains the same 15 members and binds the reviewed role-separation repairs,
+transport permission repair and stable count-scorer adoption. The candidate view
+builder, candidate contract and phase worker retain their original identities.
+The scorer is byte-identical to `count-scorer-v3/score.py`; the historical
+manifest continues to identify its predecessor. The new current source digest
 must be selected in any future operator authority; an authority bound to the old
 source digest does not authorize the changed implementation.
 

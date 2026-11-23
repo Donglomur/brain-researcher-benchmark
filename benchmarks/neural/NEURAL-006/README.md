@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Row eligibility](implementations/row-eligibility) — Row eligibility.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Direct loss v1](implementations/direct-loss-v1) — Reviewed source component.
+  Scope: Bound static numeric-response scoring for the observed development behavior-to-ERP condition, with response admission before protected target access and unchanged paired-loss arithmetic. This does not establish direct neural-waveform interpretation, a full-cohort result, reference competence, participant transport or runtime qualification.
 - [Static direct response v1](implementations/static-direct-response-v1) — Reviewed source component.
   Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Paired loss v2](implementations/paired-loss-v2) — Reviewed source component.

@@ -14,7 +14,7 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 A bounded future-window fraction of the released freeze\_vec proxy under the original finite-task window definition. Until polarity and clock mapping are verified, this is not asserted to equal the animal’s physical freezing fraction.
 
-**Source delivery:** partial\_delivery. The current declaration targets a released freeze\_vec proxy with unresolved raw movement/freezing polarity and clock provenance. It describes a full28-context unscored producer but delivers no executable producer or grader; interpreting its output as verified future freezing would overstate both target identity and causality.
+**Source delivery:** partial\_delivery. Public source provides the literal five-block window/arm projection and a complete 280-prediction released-proxy evaluator. Authentic 14-session preparation and the isolated full 28-context participant route remain undelivered. Unresolved behavior polarity and clock provenance prevent interpreting the target as verified physical freezing or strict online forecasting.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
@@ -24,14 +24,14 @@ A bounded future-window fraction of the released freeze\_vec proxy under the ori
 | Direct observation | not\_delivered | Proposed no-tools numeric or visual presentation of the same permitted measurements specified above. No such participant transport is present. Preserve source support and permitted covariates; remove target values and answer-bearing metadata, except measured outcomes explicitly permitted in an investigation. | Define a bounded complete observation presentation and response collector; do not convert programme scores into direct-observation performance. |
 | Typed viewer | not\_delivered | Potential typed rendering of calcium traces, morphology/coactivity summaries or condition comparisons appropriate to this endpoint; current source has no typed viewer. Only fixed render/selection actions return visuals; query hidden targets, raw evaluator files and unrestricted source lookups stay unavailable. | Implement audited task-specific image transport and complete answer collection; no viewer/model result exists here. |
 | Tool assisted | not\_delivered | Proposed per-case numerical investigation using the same permitted observations, fixed numerical/model tools and accounted budget. Declare fit/analysis actions and reset state at the biological case boundary; no private evaluator feedback. | No matched interactive investigator transport is delivered; a programme/controller declaration alone does not implement this mode. |
-| Frozen program | not\_delivered | A historical frozen-program declaration exists, but its named executable/producer/scorer source is absent from this current checkout. Future recovered programme must freeze before query access and preserve the exact declared complete scope; metadata flags do not establish a runnable mode. | Recover the named source/dependency closure and exact public input contract before executing or scoring. |
+| Frozen program | not\_delivered | The checkout now includes source-window/arm projection and a complete released-proxy evaluator. A producer that authenticates and assembles the full participant packet, plus isolated frozen-program execution across all 28 contexts, is still undelivered. Freeze the programme before query access; expose only the selected role/arm fields and preserve the exact declared complete scope. Projection field selection is not process isolation, and an operator scorer is not a participant runner. | Connect and authenticate the producer, public input packet and isolated frozen-program runner for all 28 contexts before authentic execution or scoring. |
 
 Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
 
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 21601 bytes; SHA-256 `2b4d3c8e0bda79205384657532361f27104dfc150db7d5fb30515e8d67dad8f3`.
+- Specification identity: 22921 bytes; SHA-256 `cf0cdda022de959a881c613b51159a5d68cfc5c5a71bf9045c0a819da29da113`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

@@ -58,3 +58,21 @@ It also verifies that a forged `Schedule` cannot alter early-response eligibilit
 Run from this implementation directory with `python3 -I -S -B test_window_grid.py`
 through the shared construction test pool. These controls do not establish
 hardware timing, acquisition authentication, physical I/O causality or task readiness.
+
+## Target callback roster binding
+
+The scorer snapshots all expected opaque ID sequences before admitting public
+outputs. The same immutable tuples are used to join returned private targets.
+Changes to the caller's mapping or lists inside the target callback cannot
+retarget already admitted predictions. This preserves the existing 26-person,
+two-arm MAE and target-last barrier; it does not authenticate a target producer
+or enforce process isolation.
+
+Previously, the scorer reread the caller's mutable expected roster after the
+callback. A callback that reversed the IDs and target rows could silently pair
+predictions with different trials. `test_target_binding.py` demonstrates that
+failure on the retained `fixtures/scoring_before_roster_snapshot.py` and checks
+snapshot binding, unchanged scores, caller mutation, and refusal before private
+access. All cases are generated software controls, not authentic reaction-time
+observations or evidence that any historical scientific result was affected.
+Run `python3 -I -S -B test_target_binding.py` from this implementation directory.

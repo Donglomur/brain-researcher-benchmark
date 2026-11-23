@@ -63,18 +63,33 @@ records to a candidate or model.
 
 ## Inspect a finished result
 
-Use the current inspector on a complete, operator-held result tree:
+Use the [result-integrity v2 inspector](../implementations/result-integrity-v2/README.md)
+on a complete, operator-held result tree. From the repository root:
 
 ```sh
-python3 -I -S -B "$NEURAL034_PACKAGE/check_result.py" \
+python3 -I -S -B benchmarks/neural/NEURAL-034/implementations/result-integrity-v2/check_result.py \
   --output /ABSOLUTE/operator/finished-candidate-result
 ```
 
-The inspector checks all seven ordered fold commitments, 140 finite probabilities,
-program and output identities, reported closure and all six comparator results.
-It now also requires the private grade's submission hash to match the committed
-aggregate, valid co-primary metric domains, and co-primary values equal to the
-seven per-mouse values reduced with `math.fsum(...)/7`.
+Authenticate this successor against the reviewed release, retaining its sibling
+`neural034-portable/check_result.py`. The successor authenticates and executes
+that predecessor, then checks all six reference metric pairs, both metric
+directions, the score alias and exact candidate-minus-reference arithmetic.
+Balanced accuracy is higher-is-better; log loss is lower-is-better. Both signed
+differences retain candidate minus reference, so mixed outcomes remain visible.
+
+The inherited checks cover all seven ordered fold commitments, 140 finite
+probabilities, program and output identities, reported closure, and the private
+grade's submission hash. Co-primary values must equal the seven per-mouse values
+reduced with `math.fsum(...)/7`. The result includes all seven mouse scores and
+all six aggregate comparator results; it does not infer paired mouse-level
+reference scores or uncertainty intervals from those aggregates.
+
+The portable source descriptor above still provisions its predecessor inspector,
+and the combined workflow's `check-program` command selects that provisioned
+copy. Use the successor command above for the additional comparator checks. It
+is a separately published inspection component; provisioning and runtime source
+selection are unchanged.
 
 These are consistency checks on trusted operator records. The inspector does not
 open labels, recompute predictions against targets, attest actual execution or

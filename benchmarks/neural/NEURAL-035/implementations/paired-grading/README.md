@@ -25,8 +25,8 @@ Both complete 28-query reports and their original closure must pass before the p
 From a normal checkout with Python 3.11, no dependency installation is needed:
 
 ```sh
-python3 -I -S -B benchmarks/scientific_contracts/neural035/closed_paired_grading/operator.py inspect --source-bytes 1644 --source-sha256 01b9b3571f31971defadb1af2fb6b0e798ae36fc108fd93e13af899871daea37 --read-bytes 68537 --write-bytes 101295 --seconds 30
-python3 -I -S -B benchmarks/scientific_contracts/neural035/test_portable_source.py
+python3 -I -S -B benchmarks/neural/NEURAL-035/implementations/paired-grading/closed_paired_grading/operator.py inspect --source-bytes 1644 --source-sha256 01b9b3571f31971defadb1af2fb6b0e798ae36fc108fd93e13af899871daea37 --read-bytes 68537 --write-bytes 101295 --seconds 30
+python3 -I -S -B benchmarks/neural/NEURAL-035/implementations/paired-grading/test_portable_source.py
 ```
 
 The first command reads only the strict local source component. The second checks its actual source and dependency identities, relocation and early refusal behavior using bounded invented engineering inputs. Neither command runs a producer, Docker, numerical model, protected scoring operation or neuroscience study. Keep `-B` so bytecode does not change the strict directory inventory. Resource operands are logical interface bounds, not physical-I/O or heap measurements.

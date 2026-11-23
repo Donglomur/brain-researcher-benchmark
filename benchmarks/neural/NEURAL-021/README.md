@@ -45,6 +45,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
 - [Observation grade v1](implementations/observation-grade-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
+- [Paired observation grade v1](implementations/paired-observation-grade-v1) — Reviewed source component.
+  Scope: Descriptive paired direct-observation and typed-viewer grading of complete original 92-query trajectories, with both histories admitted before one protected target capture and unchanged numerical scoring. Exposure summaries do not prove matched participant execution, actual image delivery, tool isolation, neural understanding or scientific readiness.
 - [Participant transport v1](implementations/participant-transport-v1) — Reviewed source component.
   Scope: Reviewed participant transport source and generated controls for the existing NEURAL-021 task. Authentic runtime selection and scientific qualification remain separate.
 - [Raster participant v1](implementations/raster-participant-v1) — Reviewed source component.

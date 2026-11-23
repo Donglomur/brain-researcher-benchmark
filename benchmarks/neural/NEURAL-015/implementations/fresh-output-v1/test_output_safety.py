@@ -3,6 +3,7 @@ import contextlib
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -22,6 +23,31 @@ def alignment():
 
 
 class FreshOutputTests(unittest.TestCase):
+    def test_private_alignment_and_score_outputs_ignore_permissive_umask(self):
+        fixture_path = e.BASE / "tests" / "test_evaluator.py"
+        fixture_spec = importlib.util.spec_from_file_location("generated_permission_fixture", fixture_path)
+        fixture = importlib.util.module_from_spec(fixture_spec)
+        fixture_spec.loader.exec_module(fixture)
+        reference, submission = fixture.fixture()
+        base = e.load_evaluator()
+        for mask in (0, 0o022):
+            for command in ("align", "score"):
+                with self.subTest(mask=mask, command=command), tempfile.TemporaryDirectory() as directory:
+                    root = Path(directory)
+                    source, response, output = root / "input.json", root / "response.json", root / "output.json"
+                    value = alignment() if command == "align" else reference
+                    source.write_text(json.dumps(value))
+                    response.write_text(json.dumps(submission))
+                    expected = base.align_onsets(**value) if command == "align" else base.evaluate(value, submission)
+                    previous = os.umask(mask)
+                    try:
+                        self.assertEqual(e.main([command, str(source), "--submission", str(response),
+                                                 "--output", str(output)]), 0)
+                    finally:
+                        os.umask(previous)
+                    self.assertEqual(output.stat().st_mode & 0o777, 0o600)
+                    self.assertEqual(json.loads(output.read_text()), expected)
+
     def test_existing_input_aliases_and_reports_are_preserved_before_input_access(self):
         for kind in ("input", "submission", "report", "hardlink", "symlink", "dangling"):
             with self.subTest(kind=kind), tempfile.TemporaryDirectory() as directory:

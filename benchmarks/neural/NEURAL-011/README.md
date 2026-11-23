@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: Complete selected-patient Siena recording evaluation: pinned event matching, clock-annotation normalization, patient-macro F1/sensitivity/false alarms per 24 hours, train-only causal EEG line-length and timing references, and paired patient uncertainty. Authentic EDF/header equality, complete patient protocol and montage, signal-reference competence, rights, isolated protected evaluation and scientific admission remain held; the CHB-training to Siena-confirmation branch is not implemented.
+- [Complete lopo evaluator v1](implementations/complete-lopo-evaluator-v1) — Reviewed source component.
+  Scope: Prospective complete Siena leave-one-person-out evaluation across 14 held-out people and 41 recordings, with complete support, frozen-recipe and optional paired-arm checks using unchanged source scorers. Generated controls do not establish authentic data admission, training provenance, competent reference performance, full-cohort runtime or scientific qualification.
 - [Occupancy evaluator v2](implementations/occupancy-evaluator-v2) — Reviewed source component.
   Scope: Siena complete-recording alarm occupancy companion. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

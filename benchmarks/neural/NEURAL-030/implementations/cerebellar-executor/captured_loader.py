@@ -127,8 +127,8 @@ def load(root, expected, manifest_path, historical_pin):
             or set(manifest["files"]) != MEMBERS):
         raise ValueError("exact inactive current source closure")
     changed = sorted(name for name in MEMBERS if manifest["files"][name] != historical["files"][name])
-    if changed != ["captured_loader.py", "controller.py", "vendor_transport/SOURCE_MANIFEST.json",
-                   "vendor_transport/bounds.py"] or manifest["changed_files"] != changed:
+    if changed != ["captured_loader.py", "controller.py", "score.py",
+                   "vendor_transport/SOURCE_MANIFEST.json", "vendor_transport/bounds.py"] or manifest["changed_files"] != changed:
         raise ValueError("only reviewed source repairs may differ from the predecessor")
     if sum(row["bytes"] for row in manifest["files"].values()) > 16777216:
         raise ValueError("whole captured source ceiling")

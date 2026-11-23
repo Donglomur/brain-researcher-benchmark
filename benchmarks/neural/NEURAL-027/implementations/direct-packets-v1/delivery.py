@@ -10,6 +10,7 @@ from collections import Counter
 import hashlib
 import hmac
 import importlib.util
+import io
 import json
 import math
 from pathlib import Path
@@ -56,7 +57,8 @@ def digest(value):
     return hashlib.sha256(encode(value)).hexdigest()
 
 
-def read_json(path):
+def decode_json(raw):
+    """Parse one captured byte stream, preserving strict JSON checks."""
     def pairs(items):
         result = {}
         for key, value in items:
@@ -67,7 +69,11 @@ def read_json(path):
     def constant(value):
         raise ValueError("nonfinite JSON constant: " + value)
 
-    return json.loads(Path(path).read_text(), object_pairs_hook=pairs, parse_constant=constant)
+    return json.loads(raw, object_pairs_hook=pairs, parse_constant=constant)
+
+
+def read_json(path):
+    return decode_json(Path(path).read_bytes())
 
 
 def load_sessions(plan, directory):
@@ -78,14 +84,14 @@ def load_sessions(plan, directory):
         name = meta["session_id"]
         require(Path(name).name == name and "/" not in name and "\\" not in name, "unsafe source basename")
         path = Path(directory) / (name + ".npz")
-        with np.load(path, allow_pickle=False) as archive:
+        raw = path.read_bytes()
+        with np.load(io.BytesIO(raw), allow_pickle=False) as archive:
             require(set(archive.files) == {"spks", "iarea", *base.SOURCE_FIELDS,
                                           "Corridor_Length", "UniqWalls", "stim_id"}, "safe export fields mismatch")
             sessions.append(dict(meta, spks=archive["spks"], iarea=archive["iarea"],
                                  behavior={k: archive[k] for k in (*base.SOURCE_FIELDS, "Corridor_Length", "UniqWalls", "stim_id")}))
-        with path.open("rb") as handle:
-            sha = hashlib.file_digest(handle, "sha256").hexdigest()
-        pins.append({"session_id": name, "bytes": path.stat().st_size, "sha256": sha})
+        pins.append({"session_id": name, "bytes": len(raw),
+                     "sha256": hashlib.sha256(raw).hexdigest()})
     return sessions, pins
 
 
@@ -239,11 +245,12 @@ def main():
         require(public_dir != private_dir and public_dir not in private_dir.parents and private_dir not in public_dir.parents,
                 "public and private directories must be disjoint")
         require(not public_dir.exists() and not private_dir.exists(), "output directories must be new")
-        plan = read_json(args.plan)
+        plan_raw = args.plan.read_bytes()
+        plan = decode_json(plan_raw)
         sessions, pins = load_sessions(plan, args.session_dir)
         packets, private = build(sessions, plan, read_json(args.demonstration_ids))
         private["input_pins"] = pins
-        private["plan_file_sha256"] = hashlib.sha256(args.plan.read_bytes()).hexdigest()
+        private["plan_file_sha256"] = hashlib.sha256(plan_raw).hexdigest()
         public_dir.mkdir(parents=True, mode=0o700)
         private_dir.mkdir(parents=True, mode=0o700)
         for arm, packet in packets.items():

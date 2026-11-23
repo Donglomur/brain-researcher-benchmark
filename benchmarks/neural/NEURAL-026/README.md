@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Delivery source](implementations/delivery-source) — Task implementation.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Matched ablation grading v1](implementations/matched-ablation-grading-v1) — Reviewed source component.
+  Scope: Complete matched full, context-only and training-trial-shift candidate grading over all 50 cases and 240 biological cells, using shared protected targets and unchanged original grades. Signed paired differences do not establish matched execution, causal neural information, significance, paper improvement or empirical qualification.
 - [Matched input controls v1](implementations/matched-input-controls-v1) — Reviewed source component.
   Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Understanding metrics v1](implementations/understanding-metrics-v1) — Measured target artifact scorer.

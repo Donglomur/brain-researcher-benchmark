@@ -3,13 +3,13 @@
   "task_id": "NEURAL-051",
   "title": "Viewed-object identification from fMRI",
   "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
-  "disposition": "design_only",
-  "disposition_reason": "The public implementation directory contains a manifest, not the named adapter or a numerical image-retrieval evaluator. Its six-case JPEG-RGB-1 scope is a prospective within-person retrieval condition; source recovery and authenticated query/target mapping are required before execution.",
+  "disposition": "partial_delivery",
+  "disposition_reason": "Public metadata-design and six-panel numerical retrieval-scoring components are available for the prospective within-person JPEG-RGB-1 condition. The complete participant adapter, authentic response/image joins, observation delivery and scientific execution remain unqualified; source availability does not establish any access-mode result.",
   "scientific_target": {
     "question": "Can a response from a held-out THINGS-fMRI image identify that image among a frozen candidate set within each measured person and independently selected ROI?",
     "target_kind": "observation_decoding",
     "known_answer": "The actually presented image identity, joined to its source trial/response and the fixed candidate-image roster.",
-    "answer_origin": "THINGS-fMRI stimulus/event metadata and processed-response indexing; exact public task query mapping is not supplied.",
+    "answer_origin": "THINGS-fMRI stimulus/event metadata and processed-response indexing. The published metadata-only builder constructs the protected query-to-image mapping and public roster; its join to authentic neural responses and image pixels has not been qualified.",
     "case_unit": "One person × ROI panel, with image responses as nested scored queries.",
     "independent_unit": "Three measured people; V1/IT and repeated images within a person are paired dependent observations.",
     "inference_scope": "Image retrieval from released measured fMRI responses in three people; the declared six-case successor is not held-person population generalization.",
@@ -27,9 +27,9 @@
       "Query stimulus/image identity, original event order and answer-bearing file names.",
       "Held-out neural labels or ROI/voxel selection using query outcomes."
     ],
-    "case_identity": "Manifest explicitly declares sub-01_V1, sub-01_IT, sub-02_V1, sub-02_IT, sub-03_V1, sub-03_IT; exact 1,540 query IDs per panel are absent.",
-    "split": "Manifest describes six within-person ROI cases, not leave-person-out. Recover exact image/repetition/concept grouping and train-only ROI selection before freezing a complete split.",
-    "coverage": "Declared six cases × 1,540 queries, score matrix [1540,3700], 8,740-image union. These are unexecuted source declarations, not authenticated available cases."
+    "case_identity": "Six declared panels: sub-01_V1, sub-01_IT, sub-02_V1, sub-02_IT, sub-03_V1, sub-03_IT. The metadata builder constructs 1,540 opaque query IDs per panel and the scorer requires their exact ordering; authentic prepared IDs and response joins remain external and unqualified.",
+    "split": "The source metadata builder implements within-person sessions 1–8 training, 9–10 development and 11–12 queries, globally excluding query and retained development images from training across all three people. This image-disjoint split is not concept-disjoint or leave-person-out; authentic source membership, response joins and train-only ROI selection remain to be qualified.",
+    "coverage": "Published components require six panels × 1,540 query-image groups and 3,700 shared candidates, each score matrix [1540,3700]. Per panel, 1,640 presentations form 1,440 singleton groups plus 100 two-presentation groups. These are source-enforced support rules, not an authenticated observation delivery or a scientific result."
   },
   "evaluation": {
     "primary": {
@@ -64,17 +64,21 @@
   },
   "implementation": {
     "reviewed_paths": [
-      "benchmarks/neural/NEURAL-051/implementations/registered-runtime/manifest.json"
+      "benchmarks/neural/NEURAL-051/implementations/registered-runtime/manifest.json",
+      "benchmarks/neural/NEURAL-051/implementations/metadata-design-v1/design.py",
+      "benchmarks/neural/NEURAL-051/implementations/metadata-design-v1/README.md",
+      "benchmarks/neural/NEURAL-051/implementations/retrieval-scorer-v1/scorer.py",
+      "benchmarks/neural/NEURAL-051/implementations/retrieval-scorer-v1/README.md"
     ],
-    "scorer_target": "No numerical scorer is delivered in this directory. The manifest describes complete_unscored outputs and explicitly requires separate future private grading.",
-    "target_fidelity": "no_target_evaluator",
-    "delivered_scope": "Manifest-only six-case JPEG-RGB-1 declaration with runtime/scientific qualification false.",
+    "scorer_target": "The published retrieval-scorer-v1 grades the complete six-panel prospective JPEG-RGB-1 retrieval condition: exact-tie expected Top1/Top5/MRR, separate equal-person V1 and IT summaries, paired ROI differences, and same-concept/singleton/repeat diagnostics. Its deferred-access entry point admits every submitted matrix before loading the protected mapping.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Operator metadata-to-design/public-roster construction and numerical six-panel retrieval evaluation source. The registered-runtime manifest remains a source-only declaration; the participant adapter and all four observation/access modes remain unavailable.",
     "missing": [
-      "Recover and publish the exact cited adapter and numerical scorer under current paths.",
-      "Authenticate response/image mapping, repetition aggregation, split and source versions.",
-      "Run matched signal-derived and nuisance references on the complete declared panel."
+      "Recover and integrate the complete participant adapter and authentic observation delivery; the numerical scorer alone does not provide a direct, viewer, tool or programme episode.",
+      "Authenticate source metadata, response/trial joins, independent ROI masks, repetition aggregation and exact JPEG-RGB-1 candidate pixels under the frozen split.",
+      "Qualify complete source preparation, protected target custody and matched signal-derived/nuisance references on the declared panel; preserve the three-person inference limits."
     ],
-    "execution_evidence": "Manifest says not_run and execution_selected=false. No implementation execution was performed in this revision."
+    "execution_evidence": "This revision inspects existing public source and corrects its discovery contract. The registered manifest still says not_run and execution_selected=false. No authentic inputs, participant episodes, model calls or numerical scoring were executed by this revision."
   },
   "access_modes": {
     "direct_observation": {
@@ -110,7 +114,7 @@
       "boundary": "No public participant delivery route is supplied; any future comparison must bind permitted observations, target-private mapping and complete same-case support.",
       "evidence_ids": [],
       "missing": [
-        "Recover the referenced executable and separately bound numerical grader."
+        "Recover the complete participant adapter and integrate it with the existing numerical grader under a qualified input and isolation boundary."
       ]
     }
   },
@@ -127,7 +131,7 @@
       "kind": "local_source",
       "path": "benchmarks/neural/NEURAL-051/implementations/registered-runtime/manifest.json",
       "sha256": "e9308c75ce4a38c82b274578a63074001b68e34c558443a84f0c4bbc3643f7f7",
-      "supports": "The only registered-runtime body is a source-only declaration: six person/ROI cases and unscored output; its referenced adapter/scorer is absent from this public task directory."
+      "supports": "Historical registered-runtime declaration for six person/ROI cases and unscored output. Its referenced participant adapter remains absent; separately published operator metadata preparation and numerical scoring are pinned below."
     },
     {
       "id": "e3",
@@ -135,6 +139,34 @@
       "url": "https://doi.org/10.7554/eLife.82580",
       "locator": "Original source paper identified and pinned in the preserved registration",
       "supports": "Source recording family and experimental measurement; prospective benchmark comparisons are specified separately."
+    },
+    {
+      "id": "metadata-builder",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-051/implementations/metadata-design-v1/design.py",
+      "sha256": "5f0063e04be6bc4f4e92faf2461263e581cad47539956af48cebc5cb90bf72f7",
+      "supports": "Metadata-only construction of the protected query/image map and public roster with original source split and paired ROI identity; no authentic response or image preparation."
+    },
+    {
+      "id": "metadata-scope",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-051/implementations/metadata-design-v1/README.md",
+      "sha256": "422d9e659a6a61350b84623e360edf60dd316a43fe5a33f441a7393c6ed009f0",
+      "supports": "Declared metadata preparation interface, split/support rules and remaining authentic observation/participant limits."
+    },
+    {
+      "id": "retrieval-scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-051/implementations/retrieval-scorer-v1/scorer.py",
+      "sha256": "d2a4c01e2b2ba2d20e52fc30e735ef9a035344643ddbc1a663661d553e9c2b7d",
+      "supports": "Complete six-panel numerical evaluator with exact-tie ranks, separate three-person ROI means, target identity checks and private mapping access after submission admission."
+    },
+    {
+      "id": "retrieval-scope",
+      "kind": "local_source",
+      "path": "benchmarks/neural/NEURAL-051/implementations/retrieval-scorer-v1/README.md",
+      "sha256": "8d097c3ce956633a1e863f30e19854bac278f9d5c7c03faa0da78e56d43dc830",
+      "supports": "Prospective JPEG-RGB-1 scoring scope, input schema, biological unit and explicit runtime/data qualification limits."
     }
   ],
   "empirical_claims": {
@@ -148,12 +180,26 @@
     ]
   },
   "revision": {
-    "date": "2026-11-16",
+    "date": "2026-11-23",
     "summary": [
-      "Separate the absent public evaluator from the detailed six-case manifest.",
-      "Replace implicit six-case independence with three-person inference and separate paired ROIs.",
-      "Make image identity ground truth and JPEG-versus-original stimulus scope explicit."
+      "Recognize the existing metadata preparation and complete six-panel numerical scorer instead of describing the task as manifest-only.",
+      "Preserve the prospective JPEG-RGB-1 scope, three-person inference limits and all four not-delivered access modes.",
+      "Keep authentic observation joins, participant adapter, runtime and scientific qualification unresolved.",
+      "Refresh current scorer construction guidance using existing bound source evidence; preserve historical holds and scientific admission."
     ],
-    "source_review": "Read original task, task README and the exact implementation/contract files listed below. Source declarations are distinguished from observed execution; primary citations reuse the preserved source audit unless the receipt explicitly records a fresh check."
+    "source_review": "Read the public metadata builder, retrieval scorer, their scope documentation and registered manifest. This source-availability correction retains earlier primary-source attribution; no new primary data, external paper, participant or model execution was performed."
+  },
+  "current_guidance": {
+    "holds": [
+      {
+        "id": "scorer",
+        "requirement": "Qualify the existing six-panel retrieval scorer with authenticated observations, a completed participant adapter and independently checked references; metadata-only preparation is not authentic response preparation.",
+        "evidence_ids": [
+          "retrieval-scorer",
+          "metadata-builder",
+          "retrieval-scope"
+        ]
+      }
+    ]
   }
 }

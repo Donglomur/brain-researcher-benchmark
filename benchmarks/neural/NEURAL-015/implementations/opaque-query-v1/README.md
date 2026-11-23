@@ -82,6 +82,40 @@ separate runner must enforce that boundary and bound untrusted input sizes.
 
 ## Validation and limits
 
+### Participant response preflight
+
+`preflight.py` checks a completed response against the delivered opaque query
+using the Python standard library. It does not import the private-reference
+evaluator or load an operator key, targets, transcripts or signal arrays.
+
+```sh
+python3 preflight.py delivered-query.json response.json --output new-preflight.json
+```
+
+The participant can catch wrong query bindings, missing or duplicate cases,
+fold mismatches, incomplete vectors and invalid probabilities before submission.
+Every one of the 26 case grids must be covered exactly; the preflight never sorts
+probability vectors, fills missing answers, rescales values or computes a score.
+Record rows may appear in any order. Query geometry is checked against its stated
+grid-point count, and unexpected fields or duplicate JSON keys are rejected.
+The report identifies the exact supplied query and response with canonical
+digests. It explicitly records public-schema validation only and does not certify
+operator provenance, alias authenticity, neural access or scientific admission.
+The delivered query still needs an authenticated operator channel; a successful
+local check is not a sealed submission or an accepted scientific result.
+
+Inputs remain subject to the participant runner's resource limits. The CLI
+creates an owner-only report in a fresh file and refuses to overwrite existing
+files or links. `validate_submission(query, response)` exposes the same checks to
+Python callers. The original private restoration and scoring path remains
+authoritative and unchanged.
+
+```sh
+python3 -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-015/implementations/opaque-query-v1/tests -p test_preflight.py -v
+```
+
+### Existing private restoration controls
+
 Fifteen focused generated controls passed once for this revision. The earlier14-method
 run is preserved; independent static review then identified omitted training/unused
 fold membership in the alias context and repeated fixture vectors. Both were

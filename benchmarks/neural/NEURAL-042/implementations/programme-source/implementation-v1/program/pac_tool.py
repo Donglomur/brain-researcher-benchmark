@@ -27,7 +27,12 @@ class Tool:
         need(version=='1.15.3','qualified tool SciPy')
         result=np.empty(shape,dtype=np.complex128)
         for i,row in enumerate(values):
-            self.budget.tick();result[i]=hilbert(convolve(np.pad(row,(pad,pad),mode='edge'),h,mode='valid',method='direct'));self.budget.tick()
+            self.budget.tick()
+            filtered=convolve(np.pad(row,(pad,pad),mode='edge'),h,mode='valid',method='direct')
+            need(filtered.shape==row.shape and np.isfinite(filtered).all(),'finite complete filtered output')
+            analytic=hilbert(filtered)
+            need(analytic.shape==row.shape and np.isfinite(analytic).all(),'finite complete analytic output')
+            result[i]=analytic;self.budget.tick()
         return result
     def histogram(self,phase,amplitude):
         shape=getattr(phase,'shape',None);need(type(shape)is tuple and shape==getattr(amplitude,'shape',None),'same explicit arrays')

@@ -14,6 +14,10 @@ arguments. Output must be a fresh file. Existing files, input aliases and
 symlinks are refused before input bodies are read; exclusive creation also
 prevents a file introduced during scoring from being overwritten. A fresh
 output preserves the original result schema and exit codes (0 or 2).
+New outputs use owner-only creation permissions (`0600`, subject to any more
+restrictive caller umask), including private aligned onsets and operator score
+diagnostics. Serialization finishes before exclusive file creation. Generated
+checks cover permissive `000` and `022` umasks without changing numerical results.
 
 The predecessor source remains available unchanged for its pinned mathematical
 consumers. Use this command for file-producing CLI operations. Generated

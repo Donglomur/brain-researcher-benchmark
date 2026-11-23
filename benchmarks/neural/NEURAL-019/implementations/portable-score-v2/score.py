@@ -7,6 +7,8 @@ from pathlib import Path
 import hashlib
 import argparse
 import importlib.util
+import io
+import stat
 import tempfile
 import json
 import math
@@ -28,22 +30,24 @@ SOURCE_PINS = {
 
 def verified_source(name):
     path = LEGACY / name
-    if hashlib.sha256(path.read_bytes()).hexdigest() != SOURCE_PINS[name]:
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != SOURCE_PINS[name]:
         raise ValueError('Historical source pin changed: ' + name)
-    return path
+    return raw
 
 
 def load_module(name):
-    path = verified_source(name + '.py')
+    path = LEGACY / (name + '.py')
+    raw = verified_source(name + '.py')
     spec = importlib.util.spec_from_file_location('_neural019_v2_' + name, path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    exec(compile(raw, str(path), 'exec'), module.__dict__)
     return module
 
 
 contract = load_module('io_contract')
 metric = load_module('reference_core')
-ASSETS = json.loads(verified_source('assets.json').read_text())
+ASSETS = json.loads(verified_source('assets.json'))
 
 ARMS = ('phase_only', 'raw137', 'pca10', 'random10')
 REFERENCE_FREEZE = '4d004f6bc17b0b26713759ed9b6bb20a53ddfef7e25f90ca56586ac2e8698555'
@@ -64,9 +68,17 @@ def pinned(path, pin, cap):
     require(type(pin['bytes']) is int and 0 < pin['bytes'] <= cap and sha256_text(pin['sha256']),
             'Invalid bounded asset pin')
     path = contract.regular(path, cap)
-    require(path.stat().st_size == pin['bytes'] and contract.sha(path) == pin['sha256'],
+    # Parse only this bounded, immutable capture, never a later path read.
+    # In particular, private assets are still captured only after validation.
+    fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    with os.fdopen(fd, 'rb') as source:
+        opened = os.fstat(source.fileno())
+        require(stat.S_ISREG(opened.st_mode) and opened.st_nlink == 1
+                and opened.st_size == pin['bytes'], 'Bounded pinned asset required')
+        raw = source.read(pin['bytes'] + 1)
+    require(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'],
             'Pinned operator/public asset changed: ' + str(path))
-    return path
+    return raw
 
 
 def score_value(value, name):
@@ -94,10 +106,10 @@ def close_reference_value(value, independent, name):
 
 def qualified_reference(assets, reference_grade, reference_commit):
     """Read only pinned reference evidence, after the candidate validation gate."""
-    grade_path = pinned(reference_grade, assets['private']['reference_grade'], 2000000)
-    commit_path = pinned(reference_commit, assets['private']['reference_commit'], 262144)
-    grade = json.loads(grade_path.read_text())
-    commit = json.loads(commit_path.read_text())
+    grade_raw = pinned(reference_grade, assets['private']['reference_grade'], 2000000)
+    commit_raw = pinned(reference_commit, assets['private']['reference_commit'], 262144)
+    grade = json.loads(grade_raw)
+    commit = json.loads(commit_raw)
     require(assets['reference_source_freeze'] == REFERENCE_FREEZE
             and commit['source_freeze_sha256'] == REFERENCE_FREEZE
             and commit['status'] == 'predictions_frozen_before_private_grade'
@@ -189,11 +201,12 @@ def evaluate(action, submission, public_packet, *, private_targets=None,
         require(action in ('score', 'validate'), 'Action must be score or validate')
         assets = ASSETS
         require(assets['candidate_id'] == 'NEURAL-019', 'Exact task asset manifest required')
-        path = pinned(public_packet, assets['public']['packet'], 65000000)
-        with np.load(path, allow_pickle=False) as packet:
+        public_raw = pinned(public_packet, assets['public']['packet'], 65000000)
+        with np.load(io.BytesIO(public_raw), allow_pickle=False) as packet:
             public = {key: packet['assessment_trial_ids' if key == 'trial_ids' else key]
                       for key in ('trial_ids', 'velocity_left_edges_ms', 'velocity_axes',
                                   'velocity_units', 'panel_fingerprint')}
+        del public_raw
         stage = 'candidate_validation'
         source = contract.regular(submission, contract.MAX_BYTES)
         expected = contract.sha(source)
@@ -208,10 +221,11 @@ def evaluate(action, submission, public_packet, *, private_targets=None,
         require(all(path is not None for path in (private_targets, reference_grade, reference_commit)),
                 'Score requires explicit private target and reference paths')
         references, reference_counts = qualified_reference(assets, reference_grade, reference_commit)
-        gold_path = pinned(private_targets, assets['private']['targets'], 1000000)
+        gold_raw = pinned(private_targets, assets['private']['targets'], 1000000)
         result['target_loader_invocations'] = 1
-        with np.load(gold_path, allow_pickle=False) as archive:
+        with np.load(io.BytesIO(gold_raw), allow_pickle=False) as archive:
             gold = {key: archive[key] for key in archive.files}
+        del gold_raw
         require(set(gold) == {'velocity', 'trial_ids', 'trial_types', 'velocity_left_edges_ms',
                              'velocity_axes', 'velocity_units', 'panel_fingerprint'},
                 'Exact private target field allowlist required')

@@ -20,13 +20,13 @@ Current primary improvement dispositions: 1 continuous measurement, 18 design re
 
 Retained registration-policy audit: **117/117 covered**; **0 improvement-ready**, **21 source-grounded designs**, **87 source-unresolved**, **9 ineligible**, **0 not audited**. Eligibility means an ordered source task was identified; it does not establish an executable or scientifically qualified comparison. Paper reproduction is a separate first-class outcome; these counts describe the existing improvement contracts, including retained contracts with their declared coverage, not primary-outcome availability or reproduction qualification. Numerical fidelity remains a necessary comparison check. A new split is an extension, never a same-task paper victory.
 
-Neural understanding revision: **118/118 covered**; 13 delivered named scope, 7 design only, 95 partial delivery, 3 target mismatch. These describe delivered source scope. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes have separate access conditions and evidence. Native interpretation and tool/model building are separate first-class outcomes. Programme performance does not establish direct interpretation.
+Neural understanding revision: **118/118 covered**; 13 delivered named scope, 6 design only, 96 partial delivery, 3 target mismatch. These describe delivered source scope. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes have separate access conditions and evidence. Native interpretation and tool/model building are separate first-class outcomes. Programme performance does not establish direct interpretation.
 
 Browse **235 registered questions**: [117 paper tasks](paper.md) and [118 neural/behavioral tasks](neural.md). The roster combines 200 canonical specifications with 35 expansion drafts.
 
 Browse the task folders in [paper research](../paper/README.md) and [neural-data understanding](../neural/README.md). Each track separates its original 100 from expansion drafts.
 
-The checkout also contains 95 one-level runtime manifests and 73 historical [source component collections](components.md). The current registry assigns 954 implementation artifacts, including 5 with unresolved ownership. Participants, conditions, folds, seeds and controls are nested task units, not additional benchmarks.
+The checkout also contains 95 one-level runtime manifests and 73 historical [source component collections](components.md). The current registry assigns 963 implementation artifacts, including 5 with unresolved ownership. Participants, conditions, folds, seeds and controls are nested task units, not additional benchmarks.
 
 The [machine-readable catalog](catalog.json) includes exact specification pins and links to existing public files. External citations are copied from public specifications; their availability was not rechecked.
 

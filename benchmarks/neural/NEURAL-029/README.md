@@ -43,6 +43,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Neural029 programme](implementations/neural029-programme) — Task implementation source.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Public source view v1](implementations/public-source-view-v1) — Reviewed source component.
+  Scope: Public-only source-trajectory rendering that preserves all 61 samples for a selected permitted trial and registered cell, with authenticated source loading and no target-response lookup. This is a prospective viewer representation; transport, action audit, isolation, authentic-input qualification and participant performance remain unestablished.
 - [Public warp reference v1](implementations/public-warp-reference-v1) — Reviewed source component.
   Scope: Public-input fixed-delay-warp reference. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

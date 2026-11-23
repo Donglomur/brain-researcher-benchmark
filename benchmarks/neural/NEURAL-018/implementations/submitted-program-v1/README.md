@@ -86,6 +86,12 @@ This repairs a source-level access mismatch, not an observed native run.
 The trusted `grade.py` adapts the original launcher only for operator path/source
 binding and individual file mounts. The original numerical `worker.py`,
 `scoring_core.py`, `assets.json`, and strict absence parser remain unchanged.
+The active grader accepts Docker inspect's equivalent enabled security-option
+spellings `no-new-privileges` and `no-new-privileges:true`, while rejecting
+missing, disabled, malformed, duplicate or conflicting declarations. This is a
+source-level admission correction; native execution still requires qualification.
+Historical standalone scorer snapshots retain their original code.
+
 Its original 60-second phase (48 seconds work), 4 GiB/2 CPU, two threads,
 128 MiB `/tmp`, 40:42-second CPU ulimit and 34 MiB file limit remain intact.
 The grader is sequential after the candidate and holder are absent; it is not

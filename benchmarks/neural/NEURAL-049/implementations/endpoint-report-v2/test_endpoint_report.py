@@ -1,5 +1,6 @@
 """Generated endpoint controls; no source recordings, native libraries or model calls."""
 import json
+import importlib.util
 import math
 from pathlib import Path
 import sys
@@ -13,6 +14,8 @@ sys.path[:0] = [str(HERE), str(ORIGINAL)]
 import grade
 from contracts import DAY_COUNTS, ENDPOINTS, FAMILIES, PEOPLE, cells
 from endpoint_metrics import finite_mean, paired_day_score, person_score
+from selection_worker import choose
+from contracts import CONFIGS
 
 
 class Array:
@@ -97,6 +100,62 @@ def evaluate_generated(a, admitted, arrays):
          patch.object(grade, 'verify_selection_values'), \
          patch.object(grade, 'intervals', return_value={'control': 'not_executed'}):
         return grade.evaluate(a, admitted, Meter())
+
+
+def selection_scores(n=3, sse=10.):
+    return {configuration: {'sse': sse, 'n': n} for configuration in CONFIGS}
+
+
+def predecessor_choose(scores):
+    spec = importlib.util.spec_from_file_location('neural049_predecessor_selection', ORIGINAL / 'selection_worker.py')
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module.choose(scores)
+
+
+class SelectionControls(unittest.TestCase):
+    def test_division_tie_must_not_replace_minimum_sse_configuration(self):
+        scores = selection_scores()
+        scores['R00']['sse'] = 1.5000000000000004
+        scores['R01']['sse'] = 1.5000000000000002
+        self.assertGreater(scores['R00']['sse'], scores['R01']['sse'])
+        self.assertEqual(scores['R00']['sse'] / 3, scores['R01']['sse'] / 3)
+        self.assertEqual(predecessor_choose(scores)[0]['R'], 'R00')
+        self.assertEqual(choose(scores)[0]['R'], 'R01')
+
+    def test_division_tie_must_not_replace_minimum_sse_family(self):
+        scores = selection_scores()
+        scores['R00']['sse'] = 1.5000000000000004
+        scores['B00']['sse'] = 1.5000000000000002
+        self.assertEqual(predecessor_choose(scores)[1], 'R')
+        self.assertEqual(choose(scores)[1], 'B')
+
+    def test_exact_sse_ties_keep_declared_order(self):
+        selected, strongest = choose(selection_scores())
+        self.assertEqual(selected, {'R': 'R00', 'B': 'B00', 'T': 'T00'})
+        self.assertEqual(strongest, 'R')
+
+    def test_unequal_support_cannot_select_normalized_error(self):
+        scores = selection_scores()
+        scores['R01'] = {'sse': 1., 'n': 1}
+        with self.assertRaisesRegex(ValueError, 'identical complete inner support'):
+            choose(scores)
+
+    def test_all_configurations_required(self):
+        scores = selection_scores()
+        del scores['T07']
+        with self.assertRaisesRegex(ValueError, 'all 25 configurations'):
+            choose(scores)
+
+    def test_invalid_inner_counts_refused(self):
+        for count in (0, -1, True, 3.):
+            with self.subTest(count=count), self.assertRaises(ValueError):
+                choose(selection_scores(n=count))
+
+    def test_invalid_inner_sse_refused(self):
+        for sse in (-1., float('nan'), float('inf'), True, 10 ** 400):
+            with self.subTest(sse=repr(sse)), self.assertRaises(ValueError):
+                choose(selection_scores(sse=sse))
 
 
 class EndpointControls(unittest.TestCase):

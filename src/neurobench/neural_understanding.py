@@ -74,6 +74,13 @@ CONTRACT_SCHEMA = {
     })}
 
 
+# Optional source-grounded construction guidance. Existing contracts and their
+# historical task projections remain byte-stable until this field is selected.
+CONTRACT_SCHEMA["properties"]["current_guidance"] = _object({
+    "holds": _array(_object({"id": TEXT, "requirement": TEXT,
+                              "evidence_ids": _array(TEXT, 1)}), 1)})
+
+
 def _shape(value, schema, path="$", active=None):
     """Validate the small explicit JSON Schema subset above without dependencies."""
     active = set() if active is None else active
@@ -180,6 +187,15 @@ def validate_contract(contract, task_id=None):
         if record["status"] == "source_available" and not any(
                 evidence.get(key, {}).get("kind") == "local_source" for key in record["evidence_ids"]):
             errors.append("$.access_modes." + mode + ": source_available requires local_source evidence")
+    guidance = contract.get("current_guidance", {}).get("holds", [])
+    seen_holds = set()
+    for hold in guidance:
+        if hold["id"] in seen_holds:
+            errors.append("$.current_guidance.holds: duplicate hold ID " + hold["id"])
+        seen_holds.add(hold["id"])
+        for key in hold["evidence_ids"]:
+            if evidence.get(key, {}).get("kind") not in ("local_source", "local_review"):
+                errors.append("$.current_guidance.holds: expected known local evidence ID " + key)
     return errors
 
 
@@ -536,6 +552,16 @@ def _current(original, contract, binding, source_id):
             and item.get("sha256") == '13a8c7e945182679c950d642af73b944c841a8c6f489014297c9b41dc6285368'
             for item in contract["evidence"]):
         current['reference']['data_url'] = 'https://doi.org/10.48324/dandi.001419/0.250521.2343'
+    # Change only an existing requirement's wording and the construction queue.
+    # Never remove a hold, rewrite historical bytes, or promote admission.
+    if "current_guidance" in contract:
+        for update in contract["current_guidance"]["holds"]:
+            matches = [hold for hold in current.get("holds", [])
+                       if hold.get("id") == update["id"]]
+            if len(matches) != 1:
+                raise ValueError("Current guidance requires one existing hold: " + update["id"])
+            matches[0]["requirement"] = update["requirement"]
+        current["next_implementation_action"] = copy.deepcopy(contract["implementation"]["missing"])
     return current
 
 

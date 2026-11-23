@@ -456,6 +456,11 @@ jobs:
         run: 'python -I -m pip install --disable-pip-version-check --only-binary=:all: --no-deps -r benchmarks/neural/NEURAL-030/implementations/cerebellar-contract/requirements.txt'
       - name: Check cerebellar imports and invented arithmetic
         run: python -I -B benchmarks/neural/NEURAL-030/implementations/cerebellar-contract/smoke_contract.py
+      - name: Test NEURAL-003 admitted target-roster binding
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-003/implementations/causal-reaction-time/test_target_binding.py
 
   sleep-scientific-contracts:
     needs: source-preflight
@@ -5601,6 +5606,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B tests/benchmarks/test_reve_original_panel.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-003/implementations/matched-reference-v1/metadata_tests.py "${RUNNER_TEMP}/reve-metadata-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-003/implementations/matched-reference-v1/cpu_profile_tests.py "${RUNNER_TEMP}/reve-cpu-profile-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-042/implementations/programme-source/implementation-v1/tests/test_pac_tool.py -v
       - name: Check MindBridge Table 1 generated feature metrics
         shell: bash
         run: |

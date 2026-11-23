@@ -1,6 +1,8 @@
 """Generated transport/scorer controls; no authentic data or participant trial."""
 import copy
 import importlib.util
+import hashlib
+import io
 import json
 import math
 from pathlib import Path
@@ -8,6 +10,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -209,6 +212,73 @@ class DeliveryTests(unittest.TestCase):
             result = subprocess.run(command, capture_output=True, text=True)
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("must be new", result.stderr)
+
+    def test_npz_replacement_cannot_change_captured_identity(self):
+        plan, sessions = fixture.fixture()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for session in sessions:
+                np.savez(root/(session["session_id"]+".npz"),
+                         spks=np.concatenate(session["spks"]),
+                         iarea=session["iarea"], **session["behavior"])
+            first = sessions[0]
+            target = root/(first["session_id"]+".npz")
+            captured = target.read_bytes()
+            replacement = io.BytesIO()
+            np.savez(replacement, spks=np.concatenate(first["spks"]) + 77,
+                     iarea=first["iarea"], **first["behavior"])
+            original_load = np.load
+            replaced = False
+
+            def load_then_replace(*args, **kwargs):
+                nonlocal replaced
+                archive = original_load(*args, **kwargs)
+                if not replaced:
+                    alternate = root/"replacement.npz"
+                    alternate.write_bytes(replacement.getvalue())
+                    alternate.replace(target)
+                    replaced = True
+                return archive
+
+            with mock.patch.object(d.np, "load", side_effect=load_then_replace):
+                loaded, pins = d.load_sessions(plan, root)
+            self.assertTrue(replaced)
+            np.testing.assert_array_equal(loaded[0]["spks"], np.concatenate(first["spks"]))
+            self.assertNotEqual(target.read_bytes(), captured)
+            self.assertEqual(pins[0]["sha256"], hashlib.sha256(captured).hexdigest())
+            self.assertEqual(pins[0]["bytes"], len(captured))
+
+    def test_plan_replacement_cannot_change_captured_identity(self):
+        plan, sessions = fixture.fixture()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            plan_path = root/"plan.json"
+            captured = json.dumps(plan).encode()
+            plan_path.write_bytes(captured)
+            (root/"demos.json").write_text("[]")
+            for session in sessions:
+                np.savez(root/(session["session_id"]+".npz"),
+                         spks=np.concatenate(session["spks"]),
+                         iarea=session["iarea"], **session["behavior"])
+            original_loader = d.load_sessions
+
+            def load_then_replace(*args, **kwargs):
+                result = original_loader(*args, **kwargs)
+                changed = copy.deepcopy(plan)
+                changed["pre_reward_training_attestation"] = False
+                plan_path.write_text(json.dumps(changed))
+                return result
+
+            command = [str(MODULE), "build", "--plan", str(plan_path),
+                       "--session-dir", tmp, "--demonstration-ids", str(root/"demos.json"),
+                       "--public-dir", str(root/"public"), "--private-dir", str(root/"private")]
+            with mock.patch.object(sys, "argv", command), \
+                 mock.patch.object(d, "load_sessions", side_effect=load_then_replace):
+                d.main()
+            binding = d.read_json(root/"private/binding.json")
+            self.assertFalse(d.read_json(plan_path)["pre_reward_training_attestation"])
+            self.assertEqual(binding["plan_sha256"], d.digest(plan))
+            self.assertEqual(binding["plan_file_sha256"], hashlib.sha256(captured).hexdigest())
 
     def test_nested_output_directories_rejected_before_reading_input(self):
         with tempfile.TemporaryDirectory() as tmp:

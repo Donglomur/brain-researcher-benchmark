@@ -146,7 +146,7 @@ def candidate_vector(value, query_keys):
     return result
 
 
-def score_case(case, held_rows, reference, candidates, *, training_case=None):
+def _score_modes(case, held_rows, reference, candidates, modes, *, training_case=None):
     """Return the predecessor score shape from independently reconstructed inputs.
 
     `held_rows` is the complete private projected trajectory, including missing
@@ -164,8 +164,8 @@ def score_case(case, held_rows, reference, candidates, *, training_case=None):
         reference_keys = reference.get("source_rows")
         require(type(reference_keys) is list and all(type(key) is int for key in reference_keys) and
                 reference_keys == keys, "reference_query_order")
-        require(type(candidates) is dict and set(candidates) == set(MODES), "matched_modes")
-        parsed = {mode: candidate_vector(candidates[mode], set(keys)) for mode in MODES}
+        require(type(candidates) is dict and set(candidates) == set(modes), "matched_modes")
+        parsed = {mode: candidate_vector(candidates[mode], set(keys)) for mode in modes}
         require(type(reference.get("results")) is dict and set(reference["results"]) == set(TARGETS),
                 "reference_target_inventory")
         scores = {}
@@ -189,7 +189,7 @@ def score_case(case, held_rows, reference, candidates, *, training_case=None):
             for value in vectors["mean"].values():
                 same_number(value, mean, "independent_mean_reference")
             vectors.update({mode: {key: values[component] for key, values in parsed[mode].items()}
-                            for mode in MODES})
+                            for mode in modes})
             scores[target] = {}
             for name, vector in vectors.items():
                 residuals = [truth[key][component] - vector[key] for key in truth]
@@ -201,3 +201,13 @@ def score_case(case, held_rows, reference, candidates, *, training_case=None):
         return {"participant": case["participant"], "paired_scored_rows": len(truth), "components": scores}
     except (OverflowError, ZeroDivisionError) as error:
         raise InvalidScoreInput("unsupported_derived_numerics") from error
+
+
+def score_case(case, held_rows, reference, candidates, *, training_case=None):
+    """Evaluate the unchanged frozen-program/adaptive-investigation pair.
+
+    The private shared arithmetic also supports the separately bound direct
+    response companion. This entry point still requires exactly MODES.
+    """
+    return _score_modes(case, held_rows, reference, candidates, MODES,
+                        training_case=training_case)

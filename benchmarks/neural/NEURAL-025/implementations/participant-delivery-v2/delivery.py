@@ -167,15 +167,16 @@ def reference_response(packet: dict, *, expected_packet_sha256: str,
             "predictions": predictions}
 
 
-def collect_response(response: dict, packet: dict, index: dict, *, expected_packet_sha256: str,
-                     expected_index_sha256: str, expected_mode: str,
-                     expected_program_sha256: str | None = None) -> dict:
-    """Reject partial/extra cases, wrong endpoint/grid, identity drift and invalid numbers."""
+def validate_response(response: dict, packet: dict, *, expected_packet_sha256: str,
+                      expected_mode: str, expected_program_sha256: str | None = None) -> dict:
+    """Validate complete predictions using participant-visible inputs only.
+
+    Return finite float64-compatible trajectories keyed by public session/case.
+    This is schema and coverage validation, not scoring or executed-code proof.
+    The expected packet digest and access mode are independently supplied by the
+    operator. No private index, target arrays or model execution is required.
+    """
     sessions = _bound_packet(packet, expected_packet_sha256)
-    p._sha(expected_index_sha256, "Operator index identity")
-    p.require(p.digest(index) == expected_index_sha256, "Operator index digest mismatch")
-    p.require(index.get("schema") == INDEX_SCHEMA and index.get("task_id") == p.TASK_ID and
-              index.get("packet_sha256") == expected_packet_sha256, "Wrong paired operator index")
     p.require(expected_mode in MODES, "Unknown access mode")
     try:
         fields = {"schema", "task_id", "packet_sha256", "mode", "target_field", "target_units",
@@ -195,29 +196,55 @@ def collect_response(response: dict, packet: dict, index: dict, *, expected_pack
             p.require(response[field] == packet[field], "Response endpoint or grid differs: " + field)
         p.require(all(type(t) is int for t in response["time_ms"]), "Response grid requires integer milliseconds")
         predictions = response["predictions"]
-        p.require(isinstance(predictions, dict) and set(predictions) == set(sessions) == set(index["sessions"]),
+        p.require(isinstance(predictions, dict) and set(predictions) == set(sessions),
                   "Complete ten-session predictions required")
         result = {}
         for sid, session in sessions.items():
             expected_cases = {row["case_id"] for row in session["query"]}
-            mapping = index["sessions"][sid]
             values = predictions[sid]
-            p.require(isinstance(values, dict) and set(values) == expected_cases == set(mapping["query"]),
+            p.require(isinstance(values, dict) and set(values) == expected_cases,
                       "Complete selected query trials required")
-            p.require(mapping["session_id"] not in result, "Repeated native session mapping")
-            native = {}
+            result[sid] = {}
             for case, value in values.items():
                 y = p.matrix(value, "Response trajectory")
                 p.require(y.shape == (len(packet["time_ms"]), 24), "Complete time-by-24 trajectory required")
+                result[sid][case] = y.tolist()
+        return result
+    except p.Refusal:
+        raise
+    except (KeyError, TypeError, ValueError) as exc:
+        raise p.Refusal("Malformed participant response") from exc
+
+
+def collect_response(response: dict, packet: dict, index: dict, *, expected_packet_sha256: str,
+                     expected_index_sha256: str, expected_mode: str,
+                     expected_program_sha256: str | None = None) -> dict:
+    """Validate public predictions, then map them through the private operator index."""
+    public = validate_response(response, packet, expected_packet_sha256=expected_packet_sha256,
+                               expected_mode=expected_mode,
+                               expected_program_sha256=expected_program_sha256)
+    p._sha(expected_index_sha256, "Operator index identity")
+    p.require(p.digest(index) == expected_index_sha256, "Operator index digest mismatch")
+    p.require(index.get("schema") == INDEX_SCHEMA and index.get("task_id") == p.TASK_ID and
+              index.get("packet_sha256") == expected_packet_sha256, "Wrong paired operator index")
+    try:
+        p.require(set(public) == set(index["sessions"]), "Complete ten-session operator mapping required")
+        result = {}
+        for sid, values in public.items():
+            mapping = index["sessions"][sid]
+            p.require(set(values) == set(mapping["query"]), "Complete selected query trial mapping required")
+            p.require(mapping["session_id"] not in result, "Repeated native session mapping")
+            native = {}
+            for case, value in values.items():
                 tid = mapping["query"][case]
                 p.require(tid not in native, "Repeated native trial mapping")
-                native[tid] = y.tolist()
+                native[tid] = value
             result[mapping["session_id"]] = native
         return result
     except p.Refusal:
         raise
     except (KeyError, TypeError, ValueError) as exc:
-        raise p.Refusal("Malformed participant response or operator index") from exc
+        raise p.Refusal("Malformed operator index") from exc
 
 
 def score_response(dataset: dict, protocol: dict, response: dict, packet: dict, index: dict, *,

@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Epoch reader v2](implementations/epoch-reader-v2) — Reviewed source component.
+  Scope: Successor epoch reader using public NumPy NPY 1.0/2.0 header APIs while preserving existing header, dtype, allocation, region and epoch-geometry checks. Ten generated controls establish selected software behavior only. Historical runtime selections remain unchanged; authentic preparation, isolated execution and scientific qualification remain open.
 - [Modality retention v2](implementations/modality-retention-v2) — Reviewed source component.
   Scope: Preserve spike-only maintenance trials. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -96,7 +96,11 @@ def make_request(public, arm, limits, recipe_commitment, max_input_bytes):
     supplied digest does not establish pre-query freezing or immutable code.
     """
     require(arm in ARMS, 'fixed participant arm')
-    require(type(limits) is dict and set(limits) == LIMIT_KEYS and
+    require(type(limits) is dict, 'exact positive limits')
+    # The allowed values are immutable integers. Copy before validation so a
+    # caller's later changes cannot alter the limits sent with this request.
+    limits = limits.copy()
+    require(set(limits) == LIMIT_KEYS and
             all(type(v) is int and v > 0 for v in limits.values()), 'exact positive limits')
     require(type(max_input_bytes) is int and max_input_bytes > 0, 'positive input cap')
     _hash(recipe_commitment, 'host-issued recipe commitment')
@@ -173,7 +177,11 @@ def run_case(public, arm, limits, recipe_commitment, command, cwd,
             'main-thread lifecycle owner required')
     request, packet_digest = make_request(public, arm, limits, recipe_commitment,
                                           max_input_bytes)
-    expected = json.loads(request)['public_packet']
+    delivered = json.loads(request)
+    expected = delivered['public_packet']
+    # Enforce the exact limits in the serialized request, never the caller's
+    # still-mutable mapping. This binds admission, deadline and output caps.
+    limits = delivered['limits']
     require(type(command) in (list, tuple) and command and
             all(type(x) is str and x and '\x00' not in x for x in command),
             'explicit argument vector without a shell')

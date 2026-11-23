@@ -70,3 +70,23 @@ repair. Source clock calibration, bounded NWB conversion, motor anatomy/wrist
 laterality, source QC and pose geometry, full cohort coverage, protected
 participant delivery, and authentic reference qualification remain unresolved.
 The roundoff bound is not evidence of source synchronization accuracy.
+
+## Raw payload identity during preparation
+
+The preparer now captures each bounded exported NPZ once, verifies its SHA-256,
+and decodes that same immutable byte snapshot. Previously, hashing the path and
+then reopening it allowed a replacement file to supply features under the first
+file's recorded hash. Replacement after capture no longer changes the decoded
+observations; a mismatched captured payload is rejected before decoding.
+
+This retains one complete compressed NPZ in memory while its arrays materialize,
+in addition to the decoded arrays. The snapshot is released before clock and
+feature processing. Provision bounded exports with this additional memory cost;
+this change does not make an arbitrarily large archive admissible.
+
+The generated replacement regression retains a predecessor counterexample,
+checks the revised path against analytic gamma power and wrist speed, and checks
+rejection before decoder entry when captured bytes fail the expected hash. The
+historical 39-control receipt in `provenance.json` remains evidence for its prior
+revision. Neither the identity repair nor generated checks qualify authentic
+source exports or participant performance.

@@ -20,6 +20,13 @@ complete endpoint. Negative R² remains negative.
 
 ## Source changes
 
+- `selection_worker.py` compares total inner SSE directly, as required by the
+  scoring contract. Dividing equal-support SSE by the event count can round
+  distinct totals to the same binary64 MSE and select a worse configuration or
+  family under the tie rule. Exact SSE ties retain the declared ordering. The
+  selector also requires all 25 configurations to have the same positive event
+  count and finite, nonnegative SSE. No authentic reference selection was rerun.
+
 - `admission.py` is a successor copy of the existing admission module with one
   change: it retains the already authenticated candidate raw descriptor. Every
   prior public-output, raw/projection, source, isolation and target-last check
@@ -46,10 +53,11 @@ person/day identities and target statistics are not participant observations.
 ## Use and integration
 
 `endpoint_metrics.py` is independently importable with the standard library.
-`grade.py` and `admission.py` are replacement source bodies for the matching
+`grade.py`, `admission.py` and `selection_worker.py` are replacement source bodies for the matching
 programme instance; they use its original sibling modules. In a new isolated
-source assembly, place all three successor files beside the original programme
-modules, selecting these two bodies instead of their predecessors. Bind the
+source assembly, place all four successor modules beside the original programme
+modules, selecting these three bodies instead of their predecessors. Both reference
+selection and target-last selection verification must import the successor selector. Bind the
 resulting full source closure and report schema before admission. The portable
 release, runtime manifests, current contract, registry and original source pins
 have deliberately not been rewritten. An existing sealed instance must not be
@@ -62,12 +70,14 @@ paired diagnostic calculation. Actual full-study resources and serialized
 report limits must be qualified with the new closure; this component does not
 increase an existing approved budget.
 
-Run `test_endpoint_report.py` through the shared two-slot test pool. It uses
+Run `test_endpoint_report.py` within the selected source-test allocation. It uses
 generated values and a standard-library array-reader stand-in to exercise the
 actual evaluation loop on all 55 day positions, 12 unequal-sized people,
 27 selected model conditions and three endpoints. File custody, native array
 loading, full reference selection and bootstrap execution are outside that
-generated loop control. Separate controls cover folded-angle arithmetic,
+generated loop control. Selection controls exercise the actual predecessor rounding defect for both
+configuration and family selection, exact ties and incomplete/invalid support.
+Separate controls cover folded-angle arithmetic,
 projection, unequal participant weighting, numerical overflow and rejection
 before target reads when admission is incomplete.
 
