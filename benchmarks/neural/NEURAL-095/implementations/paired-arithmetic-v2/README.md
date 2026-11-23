@@ -3,8 +3,24 @@
 This task-local component preserves NEURAL-095's paired endpoint,
 `mean(abs(cue - tp) - abs(neural - tp))`, over all 258 query trials, its 40
 condition groups and eight contexts. It replaces only the two functions in
-the predecessor [paired.py](../neural-095-four-cell/paired.py). It is not yet
-selected by the registered scorer or protected runtime.
+the predecessor [paired.py](../neural-095-four-cell/paired.py).
+
+The two explicit [current operator routes](../../current-operator-routes.v1.json)
+select this arithmetic:
+
+- `stateful_case_investigator/v2` uses
+  [adaptive-owner-v2/configure.py](../adaptive-owner-v2/configure.py) to authenticate
+  this source and replace the two paired functions in its isolated pair worker.
+- `restricted_count_viewer/v1` uses the
+  [participant transport](../participant-transport-v1/README.md) and
+  [count viewer source manifest](../count-viewer-v1/SOURCE.json) to load it for
+  paired grading. The [cross-access comparison](../cross-access-pairing-v1/README.md)
+  also reuses that viewer dependency.
+
+These selections do not rewrite the retained `registered-runtime` package or
+the standalone [four-cell score.py](../neural-095-four-cell/score.py), which still
+imports its local predecessor. Source selection does not establish qualification
+of a numerical runtime, participant model or scientific result.
 
 The predecessor first rounds both absolute errors to binary64 and then
 subtracts them. For a generated target of 1000 ms, cue prediction 0 ms and
@@ -22,10 +38,13 @@ the existing refusal of nonfinite or overflowing individual residuals and the
 envelope is neither a scientific threshold nor an uncertainty interval.
 
 `pair_difference` and `verify_paired_arithmetic` keep the predecessor's callable
-interface. The caller must still perform all four public captures, exact ID
-alignment and trusted private loading. Integration must explicitly bind this
-module into the scorer and revise its source pins; predecessor packages and
-past scores remain unchanged. The generated test exercises that binding through
+interface. Each route must complete its public captures before private loading:
+four cells for the stateful owner or cross-access comparison, and two cue/neural
+sessions for the restricted viewer. Exact ID alignment remains mandatory.
+A new caller must explicitly bind this
+module and its source identity rather than assume that importing a historical
+scorer selects it. The routes above already perform that binding; predecessor
+packages and past scores remain unchanged. The generated test exercises that binding through
 the existing complete four-cell `evaluate` path, including shuffled IDs and an
 invalid last submission that must prevent reference/target access.
 
