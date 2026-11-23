@@ -6,6 +6,7 @@ import argparse
 from collections import defaultdict
 from datetime import datetime
 import hashlib
+import io
 import json
 import math
 from pathlib import Path
@@ -169,11 +170,16 @@ def prepare(manifest, directory=Path(".")):
         require(day == local_day, "day must match local date at recording origin")
         path = (Path(directory) / rec["path"]).resolve()
         expected = rec.get("sha256")
-        require(isinstance(expected, str) and len(expected) == 64 and digest(path) == expected, "raw payload SHA256 mismatch")
-        with np.load(path, allow_pickle=False) as data:
+        require(isinstance(expected, str) and len(expected) == 64, "raw payload SHA256 mismatch")
+        # Bind the decoded arrays to exactly the bytes authenticated here. A
+        # later replacement of the pathname must not change these features.
+        payload = path.read_bytes()
+        require(hashlib.sha256(payload).hexdigest() == expected, "raw payload SHA256 mismatch")
+        with np.load(io.BytesIO(payload), allow_pickle=False) as data:
             required = {"ecog", "ecog_time_s", "ecog_valid", "pose_xy", "pose_time_s", "pose_confidence", "pose_valid"}
             require(set(data.files) == required, "raw array fields differ from contract")
             arrays = {k: data[k] for k in required}
+        del payload
         et, fs = regular_clock(arrays["ecog_time_s"], "ecog")
         rate_roundoff = rate_roundoff_bound(et)
         pt, pose_fs = regular_clock(arrays["pose_time_s"], "pose")
