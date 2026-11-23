@@ -33,11 +33,17 @@ history or participant compliance.
 
 ## Exact sources and external inputs
 
-`runtime/` is the byte-identical 15-member original
-`neural038/full140-investigation-program-v2` closure plus SOURCE_MANIFEST.json.
-The manifest is 2,070 bytes, SHA-256
-`fe11a6c975d01f14882ff087e324f7e276fc4969bf165d8c0687ba25cbac17e6`.
-Its members total 109,119 bytes. BINDINGS.json retains exact operator-relative
+`runtime/` retains the 15-member recovered
+`neural038/full140-investigation-program-v2` closure with the documented
+[public-directory-mode repair](../publication-mode-repair-v1/README.md) applied
+to `common.py` and `controller.py`. The current SOURCE_MANIFEST.json is 2,070
+bytes, SHA-256
+`d40d9c4c5d0cd10c3e286ae4e8f3019ba7f7865a015569f140ccf48a6f07cb61`;
+its members total 109,910 bytes. This is the closure selected by `library.py`.
+The original recovered manifest remains historical evidence: SHA-256
+`fe11a6c975d01f14882ff087e324f7e276fc4969bf165d8c0687ba25cbac17e6`,
+2,070 bytes, with 109,119 member bytes. The repair changes public directory
+permissions without changing the numerical endpoint. BINDINGS.json retains exact operator-relative
 source/export locators and the complete 65-row package inventory, including
 private metadata descriptors. Only the 25 public members are authenticated and
 staged for the candidate. The private rows are not a request to expose or read
