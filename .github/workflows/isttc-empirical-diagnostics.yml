@@ -22,3 +22,9 @@ jobs:
       - name: Check complete generated support and relocated CLI
         timeout-minutes: 3
         run: python3 -I -S -B benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-diagnostics/test_public_package.py
+      - name: Check PAPER-paper-method-add-004 generated source controls
+        shell: bash
+        working-directory: benchmarks/paper/PAPER-paper-method-add-004/implementations/empirical-diagnostics
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python3 -S -B -m unittest -v test_generated test_arithmetic

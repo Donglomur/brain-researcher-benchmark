@@ -1886,8 +1886,8 @@ jobs:
           rows = [
               {
                   "path": "benchmarks/paper/PAPER-paper-method-029/docs/initial-evaluator-v1.md",
-                  "bytes": 9756,
-                  "sha256": "b6e9f057cb6ac4a920bed8888c35d143c95c09b20f9477c752fbc57b394e2515"
+                  "bytes": 10299,
+                  "sha256": "b74a1fd111a3b7bba80c942c0c58a75543cfda404f1ff40f372eb1e7d61e5158"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/README.md",
@@ -1906,13 +1906,13 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/ncc_evaluator.py",
-                  "bytes": 21817,
-                  "sha256": "cbd0755ced8f46832c2cfbc035fa73d3a145590b68a4e332f2b0c30d44f65fb6"
+                  "bytes": 22288,
+                  "sha256": "94555aa2dc263dbbd2887ec242a133d9cea437be606b71b4c24c4fb867617b6b"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1/tests/test_evaluator.py",
-                  "bytes": 12343,
-                  "sha256": "121751207095f09d12cd32c637eeb22bc2aa3fcafcc7352a1afb9713dac281eb"
+                  "bytes": 14814,
+                  "sha256": "13b4f6aeeed6d1ffdd10eadaddbe5889014da2a0f805d509076b3b9c36827dc1"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-029/historical/task.pre-improvement.v1.json",
@@ -1924,7 +1924,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-029/implementations/initial-evaluator-v1"
           ]
           assert len(rows) == 7 > 0
-          assert sum(row['bytes'] for row in rows) == 82977 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 86462 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -1967,7 +1967,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 82977,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 86462,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -2008,11 +2008,11 @@ jobs:
               if isinstance(item, unittest.TestSuite):
                   return [value for child in item for value in case_ids(child)]
               return [item.id()]
-          expected_ids = ['test_evaluator.EndToEnd.test_artifact_tampering_rejected', 'test_evaluator.EndToEnd.test_complete_pair_inference_and_cli', 'test_evaluator.EndToEnd.test_duplicate_trial_id_and_missing_repeat_rejected', 'test_evaluator.EndToEnd.test_generated_shape_cannot_claim_public_population', 'test_evaluator.EndToEnd.test_missing_pair_rejected', 'test_evaluator.EndToEnd.test_model_voxel_reorder_rejected', 'test_evaluator.EndToEnd.test_numpy_brain_affine_oracle', 'test_evaluator.EndToEnd.test_numpy_content_scalar_topology_oracle', 'test_evaluator.EndToEnd.test_pinned_ceiling_csv_end_to_end', 'test_evaluator.EndToEnd.test_shared_training_cannot_be_nonshared', 'test_evaluator.EndToEnd.test_training_test_leak_rejected', 'test_evaluator.MetricControls.test_ceiling_threshold_clipping_and_missing', 'test_evaluator.MetricControls.test_cross_repeat_is_not_repeat_mean', 'test_evaluator.MetricControls.test_pattern_profile_axes_and_order', 'test_evaluator.MetricControls.test_scalar_pearson_oracle', 'test_evaluator.MetricControls.test_source_bootstrap_deterministic_and_not_subject_claim', 'test_evaluator.MetricControls.test_undefined_is_not_zero']
+          expected_ids = ['test_evaluator.EndToEnd.test_artifact_tampering_rejected', 'test_evaluator.EndToEnd.test_complete_pair_inference_and_cli', 'test_evaluator.EndToEnd.test_duplicate_trial_id_and_missing_repeat_rejected', 'test_evaluator.EndToEnd.test_generated_shape_cannot_claim_public_population', 'test_evaluator.EndToEnd.test_missing_pair_rejected', 'test_evaluator.EndToEnd.test_model_voxel_reorder_rejected', 'test_evaluator.EndToEnd.test_numpy_brain_affine_oracle', 'test_evaluator.EndToEnd.test_numpy_content_scalar_topology_oracle', 'test_evaluator.EndToEnd.test_pinned_ceiling_csv_end_to_end', 'test_evaluator.EndToEnd.test_shared_training_cannot_be_nonshared', 'test_evaluator.EndToEnd.test_training_test_leak_rejected', 'test_evaluator.MetricControls.test_ceiling_threshold_clipping_and_missing', 'test_evaluator.MetricControls.test_cross_repeat_is_not_repeat_mean', 'test_evaluator.MetricControls.test_pattern_profile_axes_and_order', 'test_evaluator.MetricControls.test_scalar_pearson_oracle', 'test_evaluator.MetricControls.test_source_bootstrap_deterministic_and_not_subject_claim', 'test_evaluator.MetricControls.test_source_bootstrap_ignores_input_mapping_insertion_order', 'test_evaluator.MetricControls.test_source_bootstrap_matches_author_first_occurrence_orders', 'test_evaluator.MetricControls.test_source_bootstrap_rejects_incomplete_or_self_pair_panel', 'test_evaluator.MetricControls.test_undefined_is_not_zero']
           assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
-          assert suite.countTestCases() == 17 > 0
+          assert suite.countTestCases() == 20 > 0
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 17, "Executed case count differs from reviewed roster"
+          assert result.testsRun == 20, "Executed case count differs from reviewed roster"
           assert not result.skipped, "Skipped controls are forbidden"
           assert not result.expectedFailures, "Expected failures are forbidden"
           assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"

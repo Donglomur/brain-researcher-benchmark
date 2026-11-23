@@ -72,7 +72,7 @@ jobs:
           pins = [
               {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': 'be8cd8c31fe82a671e899cf020861e89464d9bbc00f833c88df27e61679553e3'},
               {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': 'd1fc0abb98e02a8d9afb1f49d01f418f2922369a575a40fa531def0f569e178a'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 594790, 'sha256': '1dedfccfdb3249f9ef0d4b380f46b12f45ac34c3de6abdea2e2cc86d51c9fc94'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 595484, 'sha256': '5ff13c05528c695e823ed603126a23a70e345431c4844321277b1e8742359c28'},
           ]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
@@ -453,6 +453,137 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-048/implementations/frozen-comparator-v1/tests/test_freeze_behavior.py -v
+      - name: Check PAPER-paper-method-001 generated test_finite_population controls
+        if: matrix.group == 'scientific'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-001/implementations/dimensionality-programme/test_finite_population.py
+      - name: Check PAPER-paper-method-007 generated test_prepare_summary controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-007/implementations/paper-cited-source-v1/test_prepare_summary.py -v
+      - name: Check PAPER-paper-method-012 generated test_decoder_information controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-012/implementations/decoder-information-v1 -p test_decoder_information.py -v
+      - name: Check PAPER-paper-method-018 generated test_components controls
+        if: matrix.group == 'numpy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-018/implementations/likelihood-components-v1/tests -p test_components.py -v
+      - name: Check PAPER-paper-method-024 generated test_alignment controls
+        if: matrix.group == 'scientific'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-024/implementations/original-endpoints-float64-v2/test_alignment.py
+      - name: Check PAPER-paper-method-034 generated test_panel controls
+        if: matrix.group == 'scientific'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-034/implementations/figure5d-endpoint-v1/test_panel.py
+      - name: Check PAPER-paper-method-050 generated test_scorer controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-method-050/implementations/figure5-joint-sort-v1/tests/test_scorer.py
+      - name: Check PAPER-paper-method-add-008 generated source controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-method-add-008/implementations/initial-evaluator-v1/tests/test_prepare_exports.py -v
+      - name: Check PAPER-paper-method-replacement-003 generated source controls
+        if: matrix.group == 'scientific'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-replacement-003/implementations/paper-method-replacement-003/tests/spike_order_checks.py --work-dir "${RUNNER_TEMP}"
+      - name: Check PAPER-paper-method-replacement-005 generated source controls
+        if: matrix.group == 'numpy'
+        shell: bash
+        working-directory: benchmarks/paper/PAPER-paper-method-replacement-005/implementations/table10-comparators-v1
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B test_decoder_comparators.py -v
+      - name: Check PAPER-paper-method-replacement-006 generated source controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        working-directory: benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -S -B -m unittest -v test_score_native
+      - name: Check PAPER-paper-method-replacement-008 generated source controls
+        if: matrix.group == 'numpy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-replacement-008/implementations/selected-primary-v1/test_assemble.py
+      - name: Check PAPER-paper-method-replacement-012 generated source controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        working-directory: benchmarks/paper/PAPER-paper-method-replacement-012/implementations/seed-summary-v1
+        env:
+          NUCLR_IMPLEMENTATIONS: "${{ github.workspace }}/benchmarks/paper/PAPER-paper-method-replacement-012/implementations"
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -S -B -m unittest -v test_summary
+      - name: Check PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113 generated interfaces
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B benchmarks/paper/PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113/implementations/original-fold-bridge-v1/tests/test_loader.py
+      - name: Check PAPER-CANDIDATE-20261114-CONSENSUS generated interfaces
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-CONSENSUS/implementations/likelihood-terms-v1/test_likelihood_terms.py
+      - name: Check PAPER-CANDIDATE-20261114-DPAD generated interfaces
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -B benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/test_candidate_preflight.py -v
+      - name: Check PAPER-CANDIDATE-20261114-DUNL generated interfaces
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/implementations/dunl-paired-events-v1/test_paired_events.py
+      - name: Check PAPER-CANDIDATE-20261114-POYO generated interfaces
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-POYO/implementations/paired-grid-evaluator/test_compare.py
+      - name: Check PAPER-FIND-004 generated interfaces
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -B benchmarks/paper/PAPER-FIND-004/implementations/journal-metrics-v2/tests/test_pairing_receipts.py
+      - name: Check PAPER-FIND-024 generated interfaces
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B -m unittest discover -s benchmarks/paper/PAPER-FIND-024/implementations/paired-window-quantities-v1/tests -v
+      - name: Check Kilosort4 supported source20 representations
+        if: matrix.group == 'erp-core-builder'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-006/implementations/registered-runtime/tests -p 'test_source20_admission.py' -v
       - name: Acquire exact public source fixtures
         shell: bash
         run: |

@@ -59,6 +59,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Author label correspondence v1](implementations/author-label-correspondence-v1) — Reviewed source component.
   Scope: 158 ordered author-project source-label correspondences only, preserving 100 literal labels and 58 suffix relations. No physical-session/subject/train-test/checkpoint/score qualification. Public fixture-free harness and README projection have a separate static portability inspection.
+- [Paired grid evaluator](implementations/paired-grid-evaluator) — Reviewed source component.
+  Scope: Paired prospective POYO grid comparison admitting both complete public submissions before one shared protected-target capture, while preserving unchanged evaluator reports and descriptive differences. Condition names do not prove separate authorship, access isolation, matched budgets, authentic source joins, original transfer populations or scientific performance.
 - [Protected grid evaluator](implementations/protected-grid-evaluator) — Reviewed source component.
   Scope: Protected POYO adaptation grid. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

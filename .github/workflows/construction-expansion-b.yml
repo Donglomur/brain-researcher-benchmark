@@ -1437,6 +1437,34 @@ jobs:
                             'generated_controls_only': True, 'scientific_qualification': False}))
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
+      - name: Check AJILE native preparation with generated NetCDF fixtures
+        shell: bash
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: |
+          set -euo pipefail
+          umask 077
+          AJILE_LOCK="${RUNNER_TEMP}/ajile-native-preparation-requirements.txt"
+          cat > "${AJILE_LOCK}" <<'REQUIREMENTS'
+          numpy==2.4.6 --hash=sha256:89cd468399cfd2504718f0ba50e410dca55a170b61a02ad92bb18c8a65186e93
+          scipy==1.17.1 --hash=sha256:43af8d1f3bea642559019edfe64e9b11192a8978efbd1539d7bc2aaa23d92de4
+          xarray==2025.6.1 --hash=sha256:8b988b47f67a383bdc3b04c5db475cd165e580134c1f1943d52aee4a9c97651b
+          pandas==3.0.3 --hash=sha256:8a1e45c80cceb3b4a21bc5939d52e8cbd8d9b7305309219d59e9754d9ce09e27
+          packaging==26.3 --hash=sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c
+          python-dateutil==2.9.0.post0 --hash=sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427
+          six==1.16.0 --hash=sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254
+          REQUIREMENTS
+          timeout --signal=TERM --kill-after=5s 180s python -I -B -m pip install --isolated --disable-pip-version-check --no-cache-dir --only-binary=:all: --no-deps --require-hashes -r "${AJILE_LOCK}"
+          timeout --signal=TERM --kill-after=5s 30s python -I -B - <<'PYVERSIONS'
+          import importlib.metadata
+          import json
+          expected = {'numpy': '2.4.6', 'scipy': '1.17.1', 'xarray': '2025.6.1', 'pandas': '3.0.3', 'packaging': '26.3', 'python-dateutil': '2.9.0.post0', 'six': '1.16.0'}
+          actual = {name: importlib.metadata.version(name) for name in expected}
+          assert actual == expected, actual
+          print(json.dumps({'verified_ajile_dependency_versions': actual}))
+          PYVERSIONS
+          timeout --signal=TERM --kill-after=5s 60s python -I -B benchmarks/paper/PAPER-paper-method-add-005/implementations/original-rf-endpoint-v1/tests/test_native_preparation.py
 
   expansion-b-paper-paper-method-replacement-006:
     needs: expansion-b-source-identities
