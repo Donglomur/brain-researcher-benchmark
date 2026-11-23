@@ -16,14 +16,22 @@ tasks**; see the [retained audit dispositions](benchmarks/catalog/paper.md).
 Current task pages describe supported and unsupported conditions, available
 source and remaining requirements.
 
-The [recorded difficulty pilot](docs/science/difficulty-pilot-20261117.md) contains
+The [fixed-image EEG pilot](benchmarks/neural/NEURAL-077/docs/exploratory32-fixed-image-pilot-20261122.md)
+compared **32 fresh direct-image episodes with one generated programme** on the
+same 32 queries and four demonstrations. Balanced accuracy was **57.1% versus
+26.8%**, counting all failures as incorrect; 31 direct responses and 26 programme
+responses were valid. With only four target events, the direct arm's conditional
+95% interval was **30.4–76.8%**, including the 50% baseline. Tool restrictions were
+instruction-only and compute budgets were unmatched. This is exploratory evidence,
+with no established general advantage, full-task qualification or SOTA result.
+
+The earlier [difficulty pilot](docs/science/difficulty-pilot-20261117.md) retains
 **eight scored AI-agent attempts on four authentic-data endpoints**: four historical
-paper-calibration attempts and four neural prediction-programme attempts. There
-are **no direct/viewer AI predictions** in that evidence. The neural attempts use
-previously exposed development people and prepared features. Direct/viewer AI
-interpretation, provider delivery and complete scientific qualification remain
-unestablished. Preparation, author calibration and software controls retain their
-separate scopes in [evidence and status](docs/status/README.md).
+paper-calibration attempts and four neural prediction-programme attempts on exposed
+development people. That earlier report has no direct/viewer AI predictions.
+No source-paper reproduction or improvement is established. Preparation, author
+calibration, engineering controls and participant results retain their separate
+scopes in [evidence and status](docs/status/README.md).
 
 ## Four outcomes across two tracks
 
