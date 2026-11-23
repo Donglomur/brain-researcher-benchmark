@@ -23,11 +23,14 @@ class BridgeError(ValueError):
 
 def _load_scorer():
     path = Path(__file__).resolve().parent.parent / "original-row-score-v1/scorer.py"
-    if hashlib.sha256(path.read_bytes()).hexdigest() != SCORER_SHA256:
+    source = path.read_bytes()
+    if hashlib.sha256(source).hexdigest() != SCORER_SHA256:
         raise BridgeError("original-row scorer differs from the reviewed dependency")
     spec = importlib.util.spec_from_file_location("structured_original_row_score", path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # Execute the verified snapshot, never a changed path or an accepted .pyc.
+    module.__file__ = str(path)
+    exec(compile(source, str(path), "exec"), module.__dict__)
     return module
 
 
