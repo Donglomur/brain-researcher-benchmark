@@ -21,7 +21,7 @@ HERE = Path(__file__).resolve().parent
 MAX_JSON_BYTES = 8 * 1024 * 1024
 SOURCES = {
     "recipe": (HERE / "recipe.py",
-               "0c1bc432f3386d2a673e9f1f50776e4c4885d6d9609b1083068569c552dbe801"),
+               "83a85f43997b83839e2462470778af36558beda0e9c7707db060395b4323b470"),
     "adapter": (HERE.parent / "opaque-submission-v1/adapter.py",
                 "5e57a4de3f5a0d0015f04e576a78d8a13fe18f5df475864e0f0f62a82c6b4bcf"),
 }
@@ -120,8 +120,9 @@ def check_fit(args):
     info, _ = _document(args.info, args.info_sha256)
     document, _ = _document(args.fit_receipt)
     recipe = _module("recipe")
-    recipe.validate_fit_receipt(document, info, args.fit_identity)
+    recipe.validate_fit_receipt(document, info, args.fit_identity, profile=args.profile)
     return {"schema": "reve-fit-metadata-check-v1", "status": "metadata_valid",
+            "profile": args.profile,
             "fit_identity": document["identity"], "data_identity": document["data_identity"],
             "selected_stage": document["selected_stage"], "selected_epoch": document["selected_epoch"],
             "checkpoint_descriptor": document["checkpoint"], "checkpoint_body_authenticated": False,
@@ -142,6 +143,8 @@ def _parser():
     check.add_argument("--info-sha256", required=True, type=_digest)
     check.add_argument("--fit-receipt", required=True, type=Path)
     check.add_argument("--fit-identity", required=True, type=_digest)
+    check.add_argument("--profile", choices=("cuda-fp16", "cpu-fp32-math"), default="cuda-fp16",
+                       help="Independently selected execution profile; defaults to the original CUDA recipe.")
     return parser
 
 

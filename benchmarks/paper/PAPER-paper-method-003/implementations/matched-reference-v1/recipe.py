@@ -25,6 +25,18 @@ LICENSE_PIN = {'bytes':17760, 'sha256':'cda77c38a1fcf002009678642608748f221458f8
 ARCHITECTURE_PIN = {'bytes':1394, 'sha256':'e04116c0986236bab99a624f1b0b5f67e5fa0bea31800925f0e080a6fc1eaeec'}
 
 
+CUDA_PROFILE = 'cuda-fp16'
+CPU_PROFILE = 'cpu-fp32-math'
+CPU_OVERLAY_VERSIONS = {'einops':'0.8.2','transformers':'4.56.2','tokenizers':'0.22.2'}
+CPU_RUNTIME_VERSIONS = {**CPU_OVERLAY_VERSIONS,'torch':'2.12.1','numpy':'2.4.6',
+                        'safetensors':'0.8.0','packaging':'26.3'}
+
+
+def validate_profile(profile):
+    need(profile in (CUDA_PROFILE, CPU_PROFILE), 'explicit known execution profile required')
+    return profile
+
+
 class Refusal(ValueError): pass
 
 
@@ -75,7 +87,8 @@ def validate_shapes(shapes, *, complete_classifier=False):
     return {'tensor_count': len(expected), 'parameters': sum(math.prod(s) for s in expected.values())}
 
 
-def reference_spec(seed):
+def reference_spec(seed, *, profile=CUDA_PROFILE):
+    validate_profile(profile)
     need(type(seed) is int and seed in SEEDS, 'root-provisional reference seed roster required')
     result = {
         'schema': 'reve-matched-reference-recipe-v1', 'classification': 'prospective_released_reference',
@@ -113,6 +126,22 @@ def reference_spec(seed):
         'maximum_test_predictions_per_selected_fit': 1803,
         'scientific_budget_fields_required': required_budget_fields(),
     }
+    if profile == CPU_PROFILE:
+        # A separate prospective identity; the original CUDA recipe is unchanged.
+        result.update(schema='reve-matched-reference-recipe-v2',
+                      classification='prospective_cpu_reference',
+                      execution_profile={'name':CPU_PROFILE,'device':'cpu','dtype':'float32',
+                                         'attention':'cpu_sdpa_math','autocast':False,
+                                         'runtime_versions':dict(CPU_RUNTIME_VERSIONS)},
+                      autocast='disabled_cpu_float32',
+                      grad_scaler_reason='explicit_cpu_float32_without_loss_scaling',
+                      RNG='seed_Python_NumPy_Torch_once_before_native_construction; no_CUDA_RNG',
+                      inference='selected_complete_native_state; eval; cpu_float32_math_attention; no_position_noise; pointwise')
+        budgets = dict(result['scientific_budget_fields_required'])
+        for name in ('physical_GPU_profile','accelerator_allocation_seconds','vram_bytes'):
+            budgets.pop(name)
+        budgets['physical_CPU_profile'] = None
+        result['scientific_budget_fields_required'] = budgets
     result['recipe_identity'] = identity(result)
     return result
 
@@ -252,8 +281,9 @@ def require_installation():
     adapter()._require_installation()
 
 
-def validate_fit_receipt(document, info, expected_fit_identity):
+def validate_fit_receipt(document, info, expected_fit_identity, *, profile=CUDA_PROFILE):
     """Authenticate operator-selected metadata; this is not execution admission."""
+    validate_profile(profile)
     fields = {'selected_stage','selected_epoch','history','training_presentations','validation_panels',
               'historical_Table12_equivalent','held_predictions_generated','schema','recipe','materials_identity',
               'data_identity','checkpoint','audit','initial_rng','final_rng','attention_profile','runtime',
@@ -263,7 +293,7 @@ def validate_fit_receipt(document, info, expected_fit_identity):
     need(type(expected_fit_identity) is str and len(expected_fit_identity) == 64 and
          expected_fit_identity == claimed == identity(body), 'independently selected fit identity differs')
     need(document['schema'] == 'reve-matched-fit-receipt-v1' and document['data_identity'] == info['data_identity'] and
-         document['recipe'] == reference_spec(document['recipe'].get('seed')) and
+         document['recipe'] == reference_spec(document['recipe'].get('seed'), profile=profile) and
          document['reuse_policy'] == 'operator_reference_only_same_data_identity_across_both_primary_conditions',
          'recipe/data/operator-reference reuse policy differs')
     need(all(document[name] is False for name in ('historical_Table12_equivalent','historical_classifier_authenticated','scientific_qualification')) and
@@ -271,9 +301,13 @@ def validate_fit_receipt(document, info, expected_fit_identity):
     a = adapter(); a.descriptor(document['checkpoint'])
     for name in ('initial_rng','final_rng','initial_head_identity','materials_identity','data_identity'):
         need(isinstance(document[name],str) and a.HEX.fullmatch(document[name]), 'fixed fit identity required: '+name)
-    need(document['attention_profile'] in ('native_flash_attn','native_sdpa_dispatch') and
+    attention_profiles = ('cpu_sdpa_math',) if profile == CPU_PROFILE else ('native_flash_attn','native_sdpa_dispatch')
+    need(document['attention_profile'] in attention_profiles and
          type(document['runtime']) is dict and set(document['runtime']) == {'torch','numpy','safetensors'} and
          all(isinstance(v,str) and 0 < len(v) < 128 for v in document['runtime'].values()), 'frozen observed runtime required')
+    if profile == CPU_PROFILE:
+        need(document['runtime'] == {key:CPU_RUNTIME_VERSIONS[key] for key in ('torch','numpy','safetensors')},
+             'CPU runtime differs from its declared profile')
     history = document['history']; audit = document['audit']
     need(type(history) is list and 0 < len(history) <= 25 and type(audit) is list and len(audit) == len(history), 'bounded complete fit trace')
     cursor = 0; selected = None

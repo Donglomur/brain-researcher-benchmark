@@ -306,6 +306,11 @@ jobs:
         if: matrix.group == 'stdlib-a' || matrix.group == 'legacy-pandas'
         shell: bash
         run: timeout --signal=TERM --kill-after=5s 60s python -I -S -B tests/maintenance/test_parallel_source_controls.py
+      - name: Check fixed-image ERP payload preparation with generated PNGs
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        working-directory: benchmarks/neural/NEURAL-077/implementations/fixed-image-dispatch-v1
+        run: timeout --signal=TERM --kill-after=5s 90s python -B -m unittest test_dispatch_manifest -v
       - name: Check exploratory32 image subset scorer with generated records
         if: matrix.group == 'erp-core-builder'
         shell: bash

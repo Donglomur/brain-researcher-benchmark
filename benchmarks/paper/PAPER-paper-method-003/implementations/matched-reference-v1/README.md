@@ -1,10 +1,21 @@
 # REVE prospective matched reference
 
 This package supplies an offline native reference construction, an executable
-training-stage controller, dormant CUDA fitting/inference code, and the literal
+training-stage controller, default CUDA and explicit CPU fitting/inference
+interfaces, and the literal
 paper/data versus paper/data/official-code request interface. It does **not**
 contain a trained classifier, a qualified GPU installation or a scientific
-result. All native entrypoints retain the existing installation refusal.
+result. The default CUDA profile retains its existing installation refusal.
+The opt-in CPU profile and operator CLI are described in [CPU_PROFILE.md](CPU_PROFILE.md);
+resource admission remains the enclosing operator's responsibility.
+The integrated CPU batch32/tail28 diagnostic passed numerical checks but
+exceeded its selected 8 GiB child-RSS ceiling; overall runtime qualification
+failed. This is not an executable scientific benchmark qualification.
+
+`SOURCE.json` is preserved as the original construction-cutoff record: its
+member hashes and environment observations describe that prior source state,
+not the current CPU additions. See [CPU_PROFILE.md](CPU_PROFILE.md) and the
+current source-validation results below for this revision's status.
 
 The examined official release contains a pretrained encoder and query token,
 not an authenticated four-class PhysioNet downstream checkpoint. The reference
@@ -36,7 +47,14 @@ parameters. An encoder alone fails complete-classifier admission. Main-source
 constructor defaults initialize the new head; the unused legacy `init_cls`
 helper is deliberately not called because it can reinitialize encoder layers.
 
-The recipe follows the settings actually consumed by the released main path:
+The frozen LP+FT recipe prospectively selects that branch of the released main
+path; it is not a recovered historical PhysioNet launch. The released
+`config_dt.yaml` defaults to seed 42, `n_runs: 10` and `training_mode: lp`.
+`n_runs` supplies Optuna's trial count, not ten historical repeats. The cached
+README's LP+FT example is for BCIC-IV2a, so it does not authenticate a PhysioNet
+LP+FT command. The original Table 12 run recipe remains uncertain.
+
+The selected branch consumes these settings:
 
 | Operation | Frozen reference behavior |
 | --- | --- |
@@ -47,7 +65,7 @@ The recipe follows the settings actually consumed by the released main path:
 | FT | Up to five epochs; all parameters train, starting from terminal LP weights, without reloading LP best. |
 | Batches | 32, retaining the final partial batch: 197 training and 55 validation batches per full epoch. |
 | Optimizer | New native StableAdamW each stage: LR 1e-4, weight decay .01, betas (.92,.999), epsilon 1e-9; one group of all trainable parameters. |
-| Precision | CUDA fp16 autocast; GradScaler explicitly disabled, preserving the source's top-level versus trainer dtype-key mismatch. Global gradient norm cap 2. |
+| Default precision | CUDA fp16 autocast; GradScaler explicitly disabled, preserving the source's top-level versus trainer dtype-key mismatch. Global gradient norm cap 2. |
 | Warmup | LP five epochs/985 updates; exponential LambdaLR begins at zero LR. No FT warmup. |
 | Plateau schedule | Fresh ReduceLROnPlateau each stage, mode max/factor .5/patience 5, using validation **accuracy** only when zero-based epoch > warmup epochs. FT receives only four calls, so cannot reduce LR within five epochs. |
 | Selection | Strict improvement in validation **balanced accuracy**, starting from zero separately in each stage. Ties retain the earlier selected state. |
@@ -64,7 +82,10 @@ The final training weights and selected inference weights are distinct.
 Selected states own detached CPU tensor copies, so later updates cannot change
 them. Only the final selected state is serialized; this replaces repeated source
 disk saves with bounded retained snapshots while preserving the selected tensor
-values. The native code has not yet been executed to establish numerical parity.
+values. A complete native fit has not been executed to establish numerical parity.
+The separate CPU profile changes precision and attention dispatch and has its
+own recipe identity; a bounded compatibility check cannot establish full-fit
+or historical-paper equivalence.
 
 ## Explicit prospective reproducibility choices
 
@@ -124,10 +145,12 @@ and accounting before execution. No current route is activated here.
    both material identities and private map. Preserve all 1,803 test events.
    Provision the exact weights/config/license/common architecture and, privately
    for the operator reference, the pinned source. This cutoff acquired nothing.
-2. Freeze a real Linux/GPU provider, an exact scientific software image and the
-   physical GPU profile. Qualify its custody, boundaries, input authentication,
-   output capture and cleanup. The existing reused provider is CPU-only and
-   rejects GPU requests. Toolchain image `229045` is not this scientific image.
+2. Select the numerical profile and freeze its exact runtime and physical
+   resources. The default CUDA route still requires a real Linux/GPU provider
+   and scientific image; the reused provider is CPU-only and rejects GPU
+   requests. The explicit CPU profile is a distinct prospective choice, with
+   no CUDA equivalence claim. Qualify custody, boundaries, input authentication,
+   output capture and cleanup. Toolchain image `229045` is not a scientific image.
 3. Adopt equal numerical scientific and agent budgets before either outcome;
    the null fields returned by `required_budget_fields()` identify the actual
    decisions still needed. Separately charge operator reference calibration.
@@ -136,8 +159,10 @@ and accounting before execution. No current route is activated here.
    `native.fit_reference(info=..., packet_root=..., source=..., encoder_path=...,
    seed=..., checkpoint_output=...)`. It uses only the full training/validation
    rows, runs `drive_fit`, restores the selected state and produces the bare
-   complete native checkpoint plus a recipe-bound receipt. Presently this call
-   refuses before imports or data/model access.
+   complete native checkpoint plus a recipe-bound receipt. The default CUDA
+   call refuses before imports or data/model access. Explicit CPU execution
+   requires its qualified overlay and separately selected runtime/resource
+   admission; exposing a callable API does not supply that admission.
 5. Independently admit and freeze the fit receipt/checkpoint identity. Call
    `native.predict_selected(..., fit_receipt=..., expected_fit_identity=...)`
    in a separately qualified inference phase. It checks the exact recipe,
@@ -177,8 +202,9 @@ trials are not historical repeats. One final release contains ten complete test
 panels per condition; a separate five-seed operator reference remains separately
 charged. These are construction defaults, not an admitted campaign.
 
-Root must choose the actual GPU and immutable image/provider; accelerator
-allocation time; CPU time/threads; wall time; RAM/VRAM; cumulative writes and
+Root must choose the physical profile and immutable image/provider; accelerator
+allocation time and VRAM for CUDA, or the CPU profile for CPU; CPU time/threads;
+wall time; RAM; cumulative writes and
 input reads; complete-panel inference deadline; and agent model/scaffold, token,
 request, tool-call and time limits. Scientific uncertainty and success criteria
 also remain unadopted.
@@ -204,14 +230,22 @@ Twenty-seven generated controls cover complete metadata, strict tensor schema,
 stage transitions/selection/scheduling, full work horizons, validation accuracy
 versus balanced accuracy, exact primary asset exclusions, independently selected
 receipt identities, 1,803 opaque outputs and closed native entrypoints.
-Twenty-five independent controls also passed. All were in memory: no generated
+The earlier source revision also had twenty-five independent controls; those
+are historical evidence, not a new run on this CPU revision. All were in memory: no generated
 fixture files, scientific package imports, actual arrays, native model runs,
 fits, scoring or performance measurements. Inert integer states validate the
 controller; they do not establish native tensor/backend parity.
 
-Remaining concrete execution requirements are the real GPU installation/image,
-actual pinned pretrained artifact provision, adopted budgets and participant
-development boundary, native source/runtime qualification, and a supervised
+For the CPU-profile publication candidate, the 27 reference controls, 11
+metadata controls and 18 profile/CLI controls passed on Python 3.11.6. The new
+controls use generated JSON and inert native-call doubles, without scientific
+imports or signal/checkpoint reads. See [CPU_PROFILE.md](CPU_PROFILE.md) for
+commands and the separate numerical-pass/over-budget runtime outcome.
+
+Remaining concrete execution requirements are a qualified selected-profile
+environment (including a real GPU installation/image for CUDA), authenticated
+pinned pretrained provision, adopted budgets and participant development
+boundary, native source/runtime qualification, and a supervised
 reference fit followed by independently admitted complete inference. The
 original trained-head identity remains absent; a successful new refit would
 not erase that historical limitation.

@@ -62,6 +62,7 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Full32 numerical delivery evidence JSON (2026-11-19)](docs/full32-numerical-delivery-20261119.json)
 - [Full6400 fixed-canary delivery evidence (2026-11-19)](docs/full6400-numerical-delivery-20261119.md)
 - [Full6400 fixed-canary delivery evidence JSON (2026-11-19)](docs/full6400-numerical-delivery-20261119.json)
+- [Exploratory fixed-image pilot aggregates and limits (2026-11-22)](docs/exploratory32-fixed-image-pilot-20261122.md)
 
 ## Implementation artifacts
 
@@ -79,8 +80,12 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Authenticates all 400 development queries and four demonstrations against pinned raw signals; delivers matched no-tools/waveform-programme contexts and strict request-bound complete native submissions. The auxiliary feature programme has 1200 training labels and different observations. No-tools transport, fresh per-query execution, hidden evaluation and scientific qualification remain unestablished; no model was run.
 - [Channel declaration v1](implementations/channel-declaration-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
+- [Exploratory32 image programme v1](implementations/exploratory32-image-programme-v1) — Reviewed source component.
+  Scope: Byte-exact frozen participant programme for one exploratory 32-case fixed-image pilot: 26 valid first outputs and six recorded runtime errors, all retained in the published aggregate denominator. It is not an established reference, SOTA result, full6400 qualification, independent benchmark or readiness promotion. Private inputs and individual predictions are excluded; no new execution or rescoring accompanied publication.
 - [Exploratory32 image scorer v1](implementations/exploratory32-image-scorer-v1) — Reviewed source component.
   Scope: Exploratory 32-case image-subset scoring with complete first-response admission, explicit failure denominators, a pre-gold gate and paired stratified bootstrap. Sixteen generated controls qualify source behavior only. The official full6400 scorer is unchanged; physiological P3, population, provider isolation, actual participant performance and scientific readiness are not established.
+- [Fixed image dispatch v1](implementations/fixed-image-dispatch-v1) — Reviewed source component.
+  Scope: Prepare portable five-image payloads using committed anonymous descriptors and authenticated PNG bytes. Sixteen generated controls establish source behavior only. No actual transport adapter, participant delivery, image inspection, tool isolation, prediction or scientific performance is established.
 - [Full32 demonstration baseline v1](implementations/full32-demonstration-baseline-v1) — Reviewed source component.
   Scope: Deterministic four-demonstration reference programme through the accepted frozen-bundle ABI. Four generated source controls passed in the closed source phase; one later original EEG input produced a valid ungraded prediction with known process closure. No established accuracy/calibration, strong-comparator, direct-arm or scientific readiness qualification. Existing6400 paired condition and grader unchanged.
 - [Full32 fixed reference v1](implementations/full32-fixed-reference-v1) — Reviewed source component.
