@@ -163,7 +163,10 @@ byte-identical numeric aggregate observations. These are local API/integrity
 checks, not evidence of operating-system isolation, provider image transport or
 AI performance. Configured request/byte ceilings are engineering limits, not a
 validated model-budget policy. A separately accepted three-render generated raster probe established
-limited local runtime and fixture legibility; small labels and overlapping
-unsupported-panel gridlines remain documented. It establishes neither authentic
+limited local runtime and fixture legibility. That historical probe documented
+small labels and gridlines crossing unsupported-panel text. The current renderer
+places the missing-support annotation above the grid on an opaque background;
+a generated preview confirms that label is unobstructed. Previously materialized
+images retain their original rendering and source bindings. It establishes neither authentic
 48-image semantics nor provider delivery or model readiness. The scientific summaries, numerical
 error report and uncertainty limitations above are unchanged.
