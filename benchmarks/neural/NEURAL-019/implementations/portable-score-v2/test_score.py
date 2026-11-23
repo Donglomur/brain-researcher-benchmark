@@ -3,6 +3,7 @@ from pathlib import Path
 import copy
 import hashlib
 import importlib.util
+import io
 import json
 import math
 import tempfile
@@ -41,6 +42,8 @@ class NeverResolve:
 
 
 class PortableControls(unittest.TestCase):
+    fixture_payload_bytes_written = 0
+
     def setUp(self):
         self.scratch = tempfile.TemporaryDirectory(prefix='neural019-generated-')
         self.addCleanup(self.scratch.cleanup)
@@ -105,13 +108,30 @@ class PortableControls(unittest.TestCase):
         self.asset_patch = patch.object(score, 'ASSETS', self.assets)
         self.asset_patch.start()
         self.addCleanup(self.asset_patch.stop)
+        original_freeze = score.frozen_submission
+        def counted_freeze(source, destination, expected):
+            try:
+                return original_freeze(source, destination, expected)
+            finally:
+                if Path(destination).exists():
+                    type(self).fixture_payload_bytes_written += Path(destination).stat().st_size
+        frozen_patch = patch.object(score, 'frozen_submission', counted_freeze)
+        frozen_patch.start()
+        self.addCleanup(frozen_patch.stop)
+
+    def write_bytes(self, path, raw):
+        path.write_bytes(raw)
+        type(self).fixture_payload_bytes_written += len(raw)
 
     def write_npz(self, name, values):
-        np.savez(self.paths[name], **values)
+        # Compress deterministic fixtures to keep repeated complete-panel controls small.
+        stream = io.BytesIO()
+        np.savez_compressed(stream, **values)
+        self.write_bytes(self.paths[name], stream.getvalue())
 
     def write_references(self):
-        self.paths['grade'].write_text(json.dumps(self.grade))
-        self.paths['commit'].write_text(json.dumps(self.commit))
+        self.write_bytes(self.paths['grade'], json.dumps(self.grade).encode())
+        self.write_bytes(self.paths['commit'], json.dumps(self.commit).encode())
         self.assets['private']['reference_grade'] = pin(self.paths['grade'])
         self.assets['private']['reference_commit'] = pin(self.paths['commit'])
 
@@ -142,7 +162,10 @@ class PortableControls(unittest.TestCase):
         order = np.arange(125, -1, -1)
         candidate = dict(self.public, trial_ids=self.public['trial_ids'][order],
                          velocity=np.asfortranarray(self.prediction[order]))
-        self.write_npz('submission', candidate)
+        # Keep an explicit stored-NPZ control alongside compressed fixtures.
+        stream = io.BytesIO()
+        np.savez(stream, **candidate)
+        self.write_bytes(self.paths['submission'], stream.getvalue())
         reordered, code = self.evaluate()
         self.assertEqual(code, 0)
         self.assertEqual(reordered['metrics'], original['metrics'])
@@ -185,12 +208,12 @@ class PortableControls(unittest.TestCase):
         for name in ('public', 'gold'):
             with self.subTest(name=name):
                 original = self.paths[name].read_bytes()
-                self.paths[name].write_bytes(original + b'x')
+                self.write_bytes(self.paths[name], original + b'x')
                 result, code = self.evaluate()
                 self.assertEqual(code, 2)
                 self.assertFalse(result['scientific_score_computed'])
                 self.assertEqual(result['target_loader_invocations'], 0)
-                self.paths[name].write_bytes(original)
+                self.write_bytes(self.paths[name], original)
 
     def test_constant_group_axis_retained_and_primary_undefined(self):
         self.truth[self.groups == 8, :, 0] = 0.1
@@ -221,6 +244,74 @@ class PortableControls(unittest.TestCase):
                                      reference_grade=NeverResolve(), reference_commit=NeverResolve())
         self.assertEqual((code, result['status'], result['target_loader_invocations']),
                          (2, 'invalid_submission', 0))
+
+
+    def evaluate_with_replacement(self, name, replace):
+        original = score.pinned
+        replaced = []
+        def captured(path, *args):
+            value = original(path, *args)
+            if path == self.paths[name]:
+                replace()
+                replaced.append(name)
+            return value
+        with patch.object(score, 'pinned', captured):
+            result, code = self.evaluate()
+        self.assertEqual(replaced, [name])
+        self.assertEqual((code, result['status']), (0, 'scored'))
+        return result
+
+    def test_public_metadata_parsed_from_authenticated_capture(self):
+        changed = {'assessment_trial_ids' if key == 'trial_ids' else key: value
+                   for key, value in self.public.items()}
+        changed['panel_fingerprint'] = np.asarray('2' * 64)
+        result = self.evaluate_with_replacement('public', lambda: self.write_npz('public', changed))
+        self.assertEqual(result['panel_fingerprint'], '1' * 64)
+
+    def test_target_metrics_use_authenticated_capture(self):
+        changed = dict(self.public, velocity=self.truth + 1000, trial_types=self.groups)
+        result = self.evaluate_with_replacement('gold', lambda: self.write_npz('gold', changed))
+        expected = math.fsum(scalar_r2(self.truth[self.groups == group], self.prediction[self.groups == group])
+                             for group in np.unique(self.groups)) / 8
+        self.assertAlmostEqual(result['primary_metric'], expected, places=12)
+        self.assertEqual(result['target_loader_invocations'], 1)
+
+    def test_reference_values_use_authenticated_capture(self):
+        changed = copy.deepcopy(self.grade)
+        for arm in score.ARMS:
+            changed['metrics'][arm]['macro_r2'] = -10.0
+            changed['metrics'][arm]['pooled']['uniform_axis_r2'] = -10.0
+            changed['independent_arithmetic']['metrics'][arm]['macro_r2'] = -10.0
+            changed['independent_arithmetic']['metrics'][arm]['pooled']['uniform_axis_r2'] = -10.0
+        result = self.evaluate_with_replacement('grade',
+                    lambda: self.write_bytes(self.paths['grade'], json.dumps(changed).encode()))
+        self.assertEqual(result['reference_values']['phase_only']['macro_r2'], -2.0)
+
+    def test_reference_lineage_uses_authenticated_capture(self):
+        changed = dict(self.commit, producer_removed_and_absent=False)
+        result = self.evaluate_with_replacement('commit',
+                    lambda: self.write_bytes(self.paths['commit'], json.dumps(changed).encode()))
+        self.assertTrue(result['scientific_score_computed'])
+
+    def test_historical_module_executes_authenticated_source_bytes(self):
+        source = self.root / 'probe.py'
+        original_body = b'SENTINEL = 1\n'
+        self.write_bytes(source, original_body)
+        original = score.verified_source
+        def captured(name):
+            value = original(name)
+            self.write_bytes(source, b'SENTINEL = 2\n')
+            return value
+        with patch.object(score, 'LEGACY', self.root), \
+             patch.object(score, 'SOURCE_PINS', {'probe.py': hashlib.sha256(original_body).hexdigest()}), \
+             patch.object(score, 'verified_source', captured):
+            module = score.load_module('probe')
+        self.assertEqual(module.SENTINEL, 1)
+
+    def test_active_submitted_program_dependency_matches_scorer(self):
+        manifest = json.loads((HERE.parent / 'submitted-program-v1' / 'DEPENDENCIES.json').read_text())
+        expected = manifest['files']['benchmarks/neural/NEURAL-019/implementations/portable-score-v2/score.py']
+        self.assertEqual(expected, pin(HERE / 'score.py'))
 
 
 if __name__ == '__main__':
