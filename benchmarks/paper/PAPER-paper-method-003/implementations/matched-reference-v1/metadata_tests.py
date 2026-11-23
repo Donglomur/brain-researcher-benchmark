@@ -233,9 +233,52 @@ def main():
             self.assertEqual(status,0,stderr)
             result = json.loads(stdout)
             self.assertEqual((result["selected_stage"],result["selected_epoch"]),("ft",4))
+            self.assertEqual(result["profile"],"cuda-fp16")
             self.assertFalse(result["training_execution_verified"])
             self.assertFalse(result["checkpoint_body_authenticated"])
             self.assertFalse(result["scientific_qualification"])
+
+        def test_complete_cpu_fit_requires_explicit_matching_profile(self):
+            cpu=copy.deepcopy(self.fit)
+            cpu["recipe"]=recipe.reference_spec(42,profile=recipe.CPU_PROFILE)
+            cpu["attention_profile"]="cpu_sdpa_math"
+            cpu["runtime"]={key:recipe.CPU_RUNTIME_VERSIONS[key] for key in ("torch","numpy","safetensors")}
+            cpu.pop("identity");cpu["identity"]=identity(cpu)
+            args=list(self.check_args);args[args.index("--fit-identity")+1]=cpu["identity"]
+            original_read=metadata._document
+            def selected_read(path,expected_sha256=None):
+                return (cpu,canonical(cpu)) if Path(path)==self.fit_path else original_read(path,expected_sha256)
+            with mock.patch.object(metadata,"_document",side_effect=selected_read):
+                status,stdout,_=call(args)
+                self.assertEqual(status,2);self.assertEqual(stdout,"")
+                status,stdout,stderr=call(args+["--profile","cpu-fp32-math"])
+            self.assertEqual(status,0,stderr)
+            result=json.loads(stdout)
+            self.assertEqual(result["profile"],"cpu-fp32-math")
+            self.assertFalse(result["training_execution_verified"])
+            self.assertFalse(result["checkpoint_body_authenticated"])
+            self.assertFalse(result["scientific_qualification"])
+            status,stdout,_=call(self.check_args+["--profile","cpu-fp32-math"])
+            self.assertEqual(status,2);self.assertEqual(stdout,"")
+
+        def test_cpu_runtime_and_attention_cannot_be_relabelled(self):
+            cpu=copy.deepcopy(self.fit)
+            cpu["recipe"]=recipe.reference_spec(42,profile=recipe.CPU_PROFILE)
+            cpu["attention_profile"]="cpu_sdpa_math"
+            cpu["runtime"]={key:recipe.CPU_RUNTIME_VERSIONS[key] for key in ("torch","numpy","safetensors")}
+            original_read=metadata._document
+            for field in ("runtime","attention_profile"):
+                changed=copy.deepcopy(cpu)
+                if field=="runtime":changed[field]["torch"]="foreign"
+                else:changed[field]="native_sdpa_dispatch"
+                changed.pop("identity");changed["identity"]=identity(changed)
+                args=list(self.check_args)+["--profile","cpu-fp32-math"]
+                args[args.index("--fit-identity")+1]=changed["identity"]
+                def selected_read(path,expected_sha256=None):
+                    return (changed,canonical(changed)) if Path(path)==self.fit_path else original_read(path,expected_sha256)
+                with self.subTest(field=field),mock.patch.object(metadata,"_document",side_effect=selected_read):
+                    status,stdout,_=call(args)
+                    self.assertEqual(status,2);self.assertEqual(stdout,"")
 
         def test_independent_fit_and_info_identity_rejections(self):
             for option in ("--info-sha256","--fit-identity"):
@@ -244,7 +287,7 @@ def main():
                     status,stdout,_=call(args)
                     self.assertEqual(status,2);self.assertEqual(stdout,"")
 
-        def test_incomplete_compatibility_changed_data_and_CPU_receipts_rejected(self):
+        def test_incomplete_compatibility_changed_data_and_malformed_cpu_receipts_rejected(self):
             incomplete=copy.deepcopy(self.fit)
             incomplete["history"].pop();incomplete["audit"].pop()
             changed_data=copy.deepcopy(self.fit);changed_data["data_identity"]="c"*64
