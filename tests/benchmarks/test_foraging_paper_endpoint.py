@@ -3,6 +3,7 @@ import copy
 import hashlib
 import importlib
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
@@ -10,18 +11,19 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
 PROGRAM = ROOT / 'benchmarks/paper/PAPER-FIND-036/implementations/foraging-programme/program'
+DEPENDENCIES = Path(os.environ.get('FORAGING_EXISTING_SOURCE_ROOT', str(PROGRAM)))
 
 
 class ForagingEndpointTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        names = ('common', 'prepare', 'support', 'paper_endpoint')
+        names = ('common', 'prepare', 'support', 'author_replay', 'paper_endpoint')
         prior = {name: sys.modules.pop(name, None) for name in names}
-        sys.path.insert(0, str(PROGRAM))
+        sys.path[:0] = [str(PROGRAM), str(DEPENDENCIES)]
         try:
             cls.endpoint = importlib.import_module('paper_endpoint')
         finally:
-            sys.path.remove(str(PROGRAM))
+            del sys.path[:2]
             for name, module in prior.items():
                 sys.modules.pop(name, None)
                 if module is not None:
@@ -174,6 +176,137 @@ class ForagingEndpointTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.endpoint.read_pinned_json(path, hashlib.sha256(raw).hexdigest())
             with self.assertRaises(ValueError): self.endpoint.read_pinned_json(path, '0' * 64)
+
+    @staticmethod
+    def pin(value):
+        raw = (json.dumps(value) + '\n').encode()
+        return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
+
+    def author_fixture(self, bundle):
+        """Invented report metadata only; no original arrays or fits exist."""
+        sessions, vectors = {}, {}
+        for source in bundle['records']:
+            sid = source['session_id']
+            a, b = (source['source_HW_counts'][name] for name in ('avoidance', 'escape'))
+            sessions[sid] = {'source_member': source['source_member'], 'fits': 5,
+                             'confusion_counts': [[a, 0], [b, 0]],
+                             'class_counts': [a, b], 'rows': a+b,
+                             'avoidance_recall': 1., 'escape_recall': 0.,
+                             'balanced_accuracy': .5}
+            vectors[sid] = {'file': sid+'.f64', 'rows': a+b, 'dtype': '<f8',
+                            'bytes': 8*(a+b), 'sha256': '0'*64}
+        author_pin = {'bytes': self.endpoint.AUTHOR_BYTES,
+                      'sha256': self.endpoint.AUTHOR_SHA256}
+        numeric = sum(row['bytes'] for row in vectors.values())
+        component = {'schema': 'foraging_source_api_real_branch_v1',
+                     'task_id': self.endpoint.TASK, 'source_classifier': author_pin,
+                     'runtime_versions': dict(self.endpoint.VERSIONS),
+                     'completed_real_fits': 200, 'sessions': sessions,
+                     'output_numeric_bytes': numeric, 'equal_session_balanced_accuracy': .5,
+                     'unchanged_whole_script_execution': False,
+                     'historical_environment_equivalence': False,
+                     'source_shuffle_companions_executed': False,
+                     'permutation_importance_executed': False,
+                     'source_or_custody_qualification_established': False,
+                     'paper_reproduced': None, 'paper_win': None, 'improvement_ready': False}
+        result = {'schema': 'foraging_source_api_cli_result_v1',
+                  'task_id': self.endpoint.TASK, 'status': 'complete_author_api_component_only',
+                  'complete_sessions': 40, 'completed_real_fits': 200, 'probabilities': vectors,
+                  'author_component': {'file': 'AUTHOR_COMPONENT.json', **self.pin(component)},
+                  'prepared': self.pin(bundle), 'author_source': author_pin,
+                  'numeric_output_bytes': numeric,
+                  'paper_reproduced': None, 'paper_win': None, 'overall_benchmark_ready': False}
+        return component, result
+
+    def compare(self, inputs, component, replay_result):
+        return self.endpoint.compare_author_replay(
+            *inputs, component, replay_result, self.pin(inputs[1]), self.pin(component))
+
+    def test_source_api_comparison_preserves_three_comparators_and_limits(self):
+        inputs = self.fixture()
+        component, replay_result = self.author_fixture(inputs[1])
+        before = copy.deepcopy((inputs, component, replay_result))
+        report = self.compare(inputs, component, replay_result)
+        self.assertEqual((inputs, component, replay_result), before)
+        self.assertEqual(report['operator_bnb_reconstruction'], .75)
+        self.assertEqual(report['author_replay'], .5)
+        self.assertEqual(report['published'], .7271)
+        self.assertEqual(report['methods']['A']['difference_from_author_api_replay'], .5)
+        self.assertEqual(report['methods']['A']['difference_from_operator_bnb'], .25)
+        self.assertEqual(report['methods']['B']['difference_from_author_api_replay'], .25)
+        self.assertFalse(report['author_replay_scope']['probability_vectors_reopened'])
+        self.assertFalse(report['author_calibration_established'])
+        self.assertFalse(report['improvement_ready'])
+        self.assertIsNone(report['paper_win'])
+        self.assertIsNone(report['uncertainty']['population_interval'])
+
+    def test_source_api_chain_roster_recipe_and_qualification_tampering_refused(self):
+        mutations = ('prepared', 'component_pin', 'source', 'missing_session', 'member',
+                     'fits', 'complete_fits', 'runtime', 'BA', 'mean', 'counts',
+                     'missing_vector', 'vector_rows', 'vector_bytes', 'numeric_total',
+                     'whole_script', 'custody', 'reproduced', 'ready')
+        for mutation in mutations:
+            inputs = self.fixture()
+            component, replay_result = self.author_fixture(inputs[1])
+            sid = inputs[1]['records'][0]['session_id']
+            row, vector = component['sessions'][sid], replay_result['probabilities'][sid]
+            if mutation == 'prepared': replay_result['prepared']['sha256'] = 'f'*64
+            if mutation == 'source': replay_result['author_source']['sha256'] = 'f'*64
+            if mutation == 'missing_session': component['sessions'].pop(sid)
+            if mutation == 'member': row['source_member'] = 'another_session.mat'
+            if mutation == 'fits': row['fits'] = 4
+            if mutation == 'complete_fits': component['completed_real_fits'] = 199
+            if mutation == 'runtime': component['runtime_versions']['scikit_learn'] = 'unknown'
+            if mutation == 'BA': row['balanced_accuracy'] = .6
+            if mutation == 'mean': component['equal_session_balanced_accuracy'] = .7
+            if mutation == 'counts': row['confusion_counts'][0][0] -= 1
+            if mutation == 'missing_vector': replay_result['probabilities'].pop(sid)
+            if mutation == 'vector_rows': vector['rows'] += 1
+            if mutation == 'vector_bytes': vector['bytes'] += 8
+            if mutation == 'numeric_total': replay_result['numeric_output_bytes'] -= 8
+            if mutation == 'whole_script': component['unchanged_whole_script_execution'] = True
+            if mutation == 'custody': component['source_or_custody_qualification_established'] = True
+            if mutation == 'reproduced': component['paper_reproduced'] = True
+            if mutation == 'ready': replay_result['overall_benchmark_ready'] = True
+            # Exercise content validation beyond the report hash itself.
+            replay_result['author_component'].update(self.pin(component))
+            if mutation == 'component_pin': replay_result['author_component']['sha256'] = 'f'*64
+            with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                self.compare(inputs, component, replay_result)
+
+    def test_source_api_cli_binds_reports_without_opening_vector_paths(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            result, bundle, collection = self.fixture()
+            component, replay_result = self.author_fixture(bundle)
+            def write(name, obj):
+                path = root/name
+                path.write_bytes((json.dumps(obj)+'\n').encode())
+                return path, self.pin(obj)
+            bp, bd = write('prepared.json', bundle)
+            collection['prepared'] = bd
+            cp, cd = write('collection.json', collection)
+            result['collection'] = cd
+            rp, rd = write('result.json', result)
+            ap, ad = write('AUTHOR_COMPONENT.json', component)
+            xp, xd = write('COMPONENT_RESULT.json', replay_result)
+            args = ['--result', str(rp), '--result-sha256', rd['sha256'],
+                    '--prepared', str(bp), '--prepared-sha256', bd['sha256'],
+                    '--collection', str(cp), '--collection-sha256', cd['sha256'],
+                    '--author-component', str(ap), '--author-component-sha256', ad['sha256'],
+                    '--author-result', str(xp), '--author-result-sha256', xd['sha256'],
+                    '--output', str(root/'comparison.json')]
+            self.endpoint.main(args)
+            report = json.loads((root/'comparison.json').read_bytes())
+            self.assertEqual(report['author_replay'], .5)
+            self.assertEqual(report['inputs']['author_component'], ad)
+            self.assertEqual(report['inputs']['author_result'], xd)
+            self.assertEqual(list(root.glob('*.f64')), [])
+            with self.assertRaisesRegex(ValueError, 'both expected digests together'):
+                incomplete = args.copy()
+                position = incomplete.index('--author-result-sha256')
+                del incomplete[position:position+2]
+                self.endpoint.main(incomplete)
 
 
 if __name__ == '__main__':
