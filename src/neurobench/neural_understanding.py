@@ -400,11 +400,11 @@ def _current(original, contract, binding, source_id):
             item.get("id") == "abr-storage-layout-qualification-v1"
             and item.get("kind") == "local_review"
             and item.get("path") == "benchmarks/neural/NEURAL-SCOPE-20261114-ABR-TRANSFER/implementations/native-inputs-v1/README.md"
-            and item.get("sha256") == "d8a7ad3b6039a368a50489fe6231108fdde90bbd29b67541fa442bdd390032d9"
+            and item.get("sha256") == "afae1d86ba77dcd31bbea737fd1079f90fb2af8c10ec2e4a4f245f56afd4838f"
             for item in contract["evidence"]):
         current["units_and_timing"]["preparation_gate"] = (
             original["units_and_timing"]["preparation_gate"]
-            + " Liberman support has an additional unresolved storage-layout join: the retained 426-value legacy CFTS records are compatible with an EPL reader that splits average-polarity and polarity-difference blocks, while ABRA Supplementary Table S1 describes 426 samples over 17 ms. Preserve every value and withhold both a continuous 17 ms axis and a physiological 213+213 remapping until a release-applicable writer/export specification reconciles the sources; see implementations/native-inputs-v1/README.md for exact primary source pins. The existing uniform-axis header projection does not establish physical continuity."
+            + " Liberman support has an additional unresolved storage-layout join: the retained 426-value legacy CFTS records are compatible with an EPL reader that splits average-polarity and polarity-difference blocks, while ABRA Supplementary Table S1 describes 426 samples over 17 ms. Preserve every value and withhold both a continuous 17 ms axis and a physiological 213+213 remapping until a release-applicable writer/export specification reconciles the sources; see implementations/native-inputs-v1/README.md for exact primary source pins. The corrected native-inputs source emits sample-index axes with null physical sample periods and retains the header period as explicitly unqualified metadata. Existing sealed preparations retain their historical uniform-axis header projection, which does not establish physical continuity; this source amendment does not rewrite or requalify them."
         )
     # This adopted DoSEI condition supersedes five inherited dense/pre-onset
     # descriptions. Its original provenance and earlier projection stay intact.
