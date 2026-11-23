@@ -20,10 +20,12 @@ No heterogeneous aggregate or numeric paper pass is produced. The reporter alway
 From the repository root, using only the Python standard library:
 
 ```sh
-python3.11 -I -S -B -m unittest discover -s benchmarks/scientific_contracts/find025 -p test_find025_contract.py
+python3.11 -I -S -B -m unittest discover -s benchmarks/paper/PAPER-FIND-025/implementations/submission-comparison -p test_find025_contract.py
 ```
 
 Ordinary readable source files and directories suffice; no executable bit, dependency installation, dataset, model, network or MATLAB runtime is required. The command tests invented declarations and arithmetic. It does not run a scientific benchmark.
+
+For numerical scoring from candidate bytes, use the [artifact evaluator](../artifact-evaluator-v1/README.md), which selects the scale-stable arithmetic successor while retaining this contract. The separate [normalized covariance-variance component](../normalized-variance-v1/README.md) operates on adjudicated matrices; it does not activate the canonical task's unresolved variance groups.
 
 The Python API is `validate_plan(plan)`, `validate_submission(plan, submission)` and `report(plan, submissions, evaluator_records)`. Inputs are decoded bounded JSON objects. Artifact descriptors are never followed as filesystem paths, and candidate self-scores are not accepted in submissions. The integration operator supplies and validates the authentic plan and separate evaluator records before any real use.
 
