@@ -67,8 +67,9 @@ python3 -I -S -B scripts/neurobench.py operator routes
 ```
 
 These standard-library commands inspect public metadata and reports; they do not
-open datasets, call models or run experiments. Use `list --track paper` or
-`list --track neural` to browse tasks. `paper-contract` defaults to improvement;
+open datasets, call models or run experiments. Use `list --track paper --compact`
+or `list --track neural --compact` for IDs, titles and declared scope; omit
+`--compact` for full nested metadata. `paper-contract` defaults to improvement;
 the examples also expose unavailable outcomes. `evidence` keeps historical results
 separate from current runtime qualification.
 
