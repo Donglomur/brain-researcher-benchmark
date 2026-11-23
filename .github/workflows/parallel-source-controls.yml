@@ -72,7 +72,7 @@ jobs:
           pins = [
               {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': 'be8cd8c31fe82a671e899cf020861e89464d9bbc00f833c88df27e61679553e3'},
               {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': 'd1fc0abb98e02a8d9afb1f49d01f418f2922369a575a40fa531def0f569e178a'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 594487, 'sha256': '2b8b0905b41649cad78b397115acfc0ff5ac0d19d56776a867fadbd350be3286'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 594790, 'sha256': '41fe8227e6b54533b6a6b18525b4ef2648a4db7221e12e408a3d9826854d3da1'},
           ]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
@@ -338,6 +338,121 @@ jobs:
         if: matrix.group == 'erp-core-builder'
         shell: bash
         run: timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-007/implementations/submission-builder-v1/test_compose.py -v
+      - name: Check mixed investigator evidence preservation
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-004/implementations/mixed-analysis-evidence-v1/test_mixed_evidence.py
+      - name: Check direct NEURAL-006 loss admission
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-006/implementations/direct-loss-v1 -p test_direct_loss.py -v
+      - name: Check complete Siena LOPO comparison
+        if: matrix.group == 'numpy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-011/implementations/complete-lopo-evaluator-v1/tests/test_lopo.py -v
+      - name: Check PER public preflight
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        working-directory: benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 30s python -E -S -B test_preflight.py
+      - name: Check calcium opaque-query preflight
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-015/implementations/opaque-query-v1/tests -p test_preflight.py -v
+      - name: Check NEURAL-021 generated source controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-021/implementations/paired-observation-grade-v1/test_compare.py
+      - name: Check NEURAL-025 generated source controls
+        if: matrix.group == 'scientific'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-025/implementations/participant-delivery-v2/test_preflight.py -v
+      - name: Check NEURAL-026 generated source controls
+        if: matrix.group == 'numpy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-026/implementations/matched-ablation-grading-v1/test_compare.py
+      - name: Check NEURAL-029 generated source controls
+        if: matrix.group == 'numpy226'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-029/implementations/public-source-view-v1/test_view_source.py
+      - name: Check NEURAL-030 generated source controls
+        if: matrix.group == 'numpy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -B benchmarks/neural/NEURAL-030/implementations/cerebellar-executor/test_active_score.py -v
+      - name: Check NEURAL-031 generated source controls
+        if: matrix.group == 'numpy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-031/implementations/context-preflight-v1/test_preflight.py
+      - name: Check NEURAL-037 generated source controls
+        if: matrix.group == 'erp-core-builder'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-037/implementations/condition-reference-v1/test_reference.py
+      - name: Check NEURAL-039 generated source controls
+        if: matrix.group == 'numpy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B -c "import runpy,sys; from pathlib import Path; p=Path('benchmarks/neural/NEURAL-039/implementations/movie10-evaluator-v1').resolve(); sys.path.insert(0,str(p)); sys.argv=['test_submission.py','-v']; runpy.run_path(str(p/'test_submission.py'),run_name='__main__')"
+      - name: Check NEURAL-040 generated source controls
+        if: matrix.group == 'numpy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-040/implementations/fixed-fit-evaluator-v2/tests/test_input_snapshots.py -v
+      - name: Check NEURAL-041 generated source controls
+        if: matrix.group == 'erp-core-builder'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-041/implementations/epoch-reader-v2/test_epoch_io.py --scratch "${RUNNER_TEMP}"
+      - name: Check NEURAL-043 generated source controls
+        if: matrix.group == 'scientific'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B -m unittest discover -s benchmarks/neural/NEURAL-043/implementations/direction-scoring-v2 -p 'test_submission_preflight.py' -v
+      - name: Check NEURAL-046 generated source controls
+        if: matrix.group == 'stdlib-b'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-046/implementations/joined-scoring-v1/test_preflight_submission.py
+      - name: Check NEURAL-047 generated source controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-047/implementations/neural-047/history-delivery-v1/test_compare.py
+      - name: Check NEURAL-048 generated source controls
+        if: matrix.group == 'stdlib-b'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-048/implementations/frozen-comparator-v1/tests/test_freeze_behavior.py -v
       - name: Acquire exact public source fixtures
         shell: bash
         run: |

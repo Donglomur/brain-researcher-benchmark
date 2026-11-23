@@ -4,7 +4,7 @@
 
 Native interpretation and tool/model building are separate first-class outcomes. Infer specified targets from permitted neural and behavioral observations. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes are distinct conditions; each requires its own competent comparator and evidence.
 
-Neural understanding revision: **118/118 covered**; 13 delivered named scope, 7 design only, 95 partial delivery, 3 target mismatch. These describe delivered source scope. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes have separate access conditions and evidence. Native interpretation and tool/model building are separate first-class outcomes. Programme performance does not establish direct interpretation.
+Neural understanding revision: **118/118 covered**; 13 delivered named scope, 6 design only, 96 partial delivery, 3 target mismatch. These describe delivered source scope. Direct observation, typed-viewer interpretation, tool-assisted investigation and frozen prediction programmes have separate access conditions and evidence. Native interpretation and tool/model building are separate first-class outcomes. Programme performance does not establish direct interpretation.
 
 **118 registered task drafts: 100 original specifications + 18 expansion drafts.** Scientific and submission readiness remain **unknown**.
 
@@ -17,14 +17,14 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-001](NEURAL-001/README.md) | Audiobook-calibrated sentence-envelope inference from MEG | 3 | not linked |
 | [NEURAL-002](NEURAL-002/README.md) | Early marker-window stimulus-ID inference from MorseEEG | 4 | [manifest](NEURAL-002/implementations/registered-runtime/manifest.json) |
 | [NEURAL-003](NEURAL-003/README.md) | Fixed-deadline reaction-time inference from causal EEG | 2 | not linked |
-| [NEURAL-004](NEURAL-004/README.md) | Conditional contrast inference and HMP evidence investigation | 4 | not linked |
+| [NEURAL-004](NEURAL-004/README.md) | Conditional contrast inference and HMP evidence investigation | 5 | not linked |
 | [NEURAL-005](NEURAL-005/README.md) | ERP contribution to subsequent social choice | 4 | [manifest](NEURAL-005/implementations/registered-runtime/manifest.json) |
-| [NEURAL-006](NEURAL-006/README.md) | Reward versus emotion prediction-error physiology | 4 | not linked |
+| [NEURAL-006](NEURAL-006/README.md) | Reward versus emotion prediction-error physiology | 5 | not linked |
 | [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 19 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
 | [NEURAL-008](NEURAL-008/README.md) | EOG information beyond EEG and sleep timing | 6 | [manifest](NEURAL-008/implementations/registered-runtime/manifest.json) |
 | [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 7 | not linked |
 | [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 7 | not linked |
-| [NEURAL-011](NEURAL-011/README.md) | Adult clinical seizure-event detection | 2 | not linked |
+| [NEURAL-011](NEURAL-011/README.md) | Adult clinical seizure-event detection | 3 | not linked |
 | [NEURAL-012](NEURAL-012/README.md) | Cross-cohort seizure robustness | 3 | [manifest](NEURAL-012/implementations/registered-runtime/manifest.json) |
 | [NEURAL-013](NEURAL-013/README.md) | Attempted-speech phoneme-sequence decoding | 2 | [manifest](NEURAL-013/implementations/registered-runtime/manifest.json) |
 | [NEURAL-014](NEURAL-014/README.md) | Speech decoder neural dependence under drift | 5 | not linked |
@@ -34,27 +34,27 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-018](NEURAL-018/README.md) | Causal motor-population forecasting | 3 | [manifest](NEURAL-018/implementations/registered-runtime/manifest.json) |
 | [NEURAL-019](NEURAL-019/README.md) | Movement information in neural latent representations | 5 | [manifest](NEURAL-019/implementations/registered-runtime/manifest.json) |
 | [NEURAL-020](NEURAL-020/README.md) | Somatosensory population co-smoothing | 2 | not linked |
-| [NEURAL-021](NEURAL-021/README.md) | Somatosensory hand-velocity decoding | 7 | [manifest](NEURAL-021/implementations/registered-runtime/manifest.json) |
+| [NEURAL-021](NEURAL-021/README.md) | Somatosensory hand-velocity decoding | 8 | [manifest](NEURAL-021/implementations/registered-runtime/manifest.json) |
 | [NEURAL-022](NEURAL-022/README.md) | Active-versus-passive sensory coding | 5 | not linked |
 | [NEURAL-023](NEURAL-023/README.md) | Continuous reaching across recording days | 4 | [manifest](NEURAL-023/implementations/registered-runtime/manifest.json) |
 | [NEURAL-024](NEURAL-024/README.md) | Stable population dynamics across days | 5 | [manifest](NEURAL-024/implementations/registered-runtime/manifest.json) |
 | [NEURAL-025](NEURAL-025/README.md) | Fine reach-kinematics decoding from calcium | 7 | not linked |
-| [NEURAL-026](NEURAL-026/README.md) | Fine-joint information beyond reach phase | 5 | not linked |
+| [NEURAL-026](NEURAL-026/README.md) | Fine-joint information beyond reach phase | 6 | not linked |
 | [NEURAL-027](NEURAL-027/README.md) | Visual stimulus decoding across learning phases | 4 | not linked |
 | [NEURAL-028](NEURAL-028/README.md) | Reward-free versus rewarded cortical learning | 3 | not linked |
-| [NEURAL-029](NEURAL-029/README.md) | Registered granule-cell reward-delay trajectory transfer | 3 | [manifest](NEURAL-029/implementations/registered-runtime/manifest.json) |
+| [NEURAL-029](NEURAL-029/README.md) | Registered granule-cell reward-delay trajectory transfer | 4 | [manifest](NEURAL-029/implementations/registered-runtime/manifest.json) |
 | [NEURAL-030](NEURAL-030/README.md) | Cerebellar decoding of planned-delay lick-contact counts | 6 | [manifest](NEURAL-030/implementations/registered-runtime/manifest.json) |
-| [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction beyond baseline morphology | 6 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
+| [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction beyond baseline morphology | 7 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
 | [NEURAL-032](NEURAL-032/README.md) | Coactivity and compartment investigation from measured spine plasticity | 3 | [manifest](NEURAL-032/implementations/registered-runtime/manifest.json) |
 | [NEURAL-033](NEURAL-033/README.md) | Kir and compartment interaction investigation with measured-data checks | 2 | [manifest](NEURAL-033/implementations/registered-runtime/manifest.json) |
 | [NEURAL-034](NEURAL-034/README.md) | Held-mouse recall-context decoding from processed astrocytic calcium | 14 | [manifest](NEURAL-034/implementations/registered-runtime/manifest.json) |
 | [NEURAL-035](NEURAL-035/README.md) | Chronological astrocytic peak-order prediction within sessions | 5 | not linked |
 | [NEURAL-036](NEURAL-036/README.md) | Retrospective prediction of released glial-behavior state proxy | 3 | [manifest](NEURAL-036/implementations/registered-runtime/manifest.json) |
-| [NEURAL-037](NEURAL-037/README.md) | Acquisition-local held-condition calcium response prediction | 3 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
+| [NEURAL-037](NEURAL-037/README.md) | Acquisition-local held-condition calcium response prediction | 4 | [manifest](NEURAL-037/implementations/registered-runtime/manifest.json) |
 | [NEURAL-038](NEURAL-038/README.md) | Sensory-context modulation of optogenetic calcium response investigation | 4 | [manifest](NEURAL-038/implementations/registered-runtime/manifest.json) |
 | [NEURAL-039](NEURAL-039/README.md) | Natural-movie parcel-response encoding | 4 | [manifest](NEURAL-039/implementations/registered-runtime/manifest.json) |
 | [NEURAL-040](NEURAL-040/README.md) | Audio, visual and language contributions to fMRI | 2 | not linked |
-| [NEURAL-041](NEURAL-041/README.md) | Working-memory load decoding | 2 | [manifest](NEURAL-041/implementations/registered-runtime/manifest.json) |
+| [NEURAL-041](NEURAL-041/README.md) | Working-memory load decoding | 3 | [manifest](NEURAL-041/implementations/registered-runtime/manifest.json) |
 | [NEURAL-042](NEURAL-042/README.md) | Load-dependent theta-gamma coupling | 5 | [manifest](NEURAL-042/implementations/registered-runtime/manifest.json) |
 | [NEURAL-043](NEURAL-043/README.md) | Tongue-reach direction decoding from ALM | 2 | [manifest](NEURAL-043/implementations/registered-runtime/manifest.json) |
 | [NEURAL-044](NEURAL-044/README.md) | Tuning-dependent targeted perturbation responses | 3 | [manifest](NEURAL-044/implementations/registered-runtime/manifest.json) |

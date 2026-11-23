@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Context preflight v1](implementations/context-preflight-v1) — Reviewed source component.
+  Scope: Single-context participant submission preflight using only the participant export and existing pinned query decoder. Complete ordered coverage and nonnegative ratio checks do not grade outputs, expose other contexts, authenticate original source custody or retarget the historical frozen executor. Runtime and scientific qualification remain unchanged.
 - [Paired delivery v1](implementations/paired-delivery-v1) — Reviewed task source component.
   Scope: Accepted source and generated-control evidence only. Artifact enrollment does not change task IDs, access modes, runtime selection, submission readiness, reproduction or improvement qualification.
 - [Paired executor v1](implementations/paired-executor-v1) — Reviewed source component.
