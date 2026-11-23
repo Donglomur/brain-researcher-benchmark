@@ -14,6 +14,14 @@ Keep all 26 training people and 3,254 training examples; all seven development p
 
 The adapter checks the previously admitted report's scalar scope and recomputes its equal-person summaries and six signed contrasts. It retains four absolute arms (the three views and the training-participant-macro prior), all person scores, and all six contrasts: history minus all ERP; history minus prestimulus; prestimulus minus all ERP; and each view minus the prior. Undefined AUC in a one-class person remains undefined without dropping that person from log-loss or Brier scoring.
 
+The mandatory prior arm must also agree with its declared constant training-only
+probability. Its mean probability, clipped log loss, Brier score and mixed-class
+AUC are checked analytically from that probability and each person's class
+counts. A constant predictor has tied-score AUC 0.5 for mixed-class people;
+one-class AUC remains undefined. This rejects internally consistent summaries
+that nevertheless describe a different prior. It does not authenticate how the
+training prior was estimated or replace upstream admission.
+
 Seven leave-one-person-out gain summaries show sensitivity to individual people. They are descriptive summaries of the same result, not confidence intervals, cross-validation refits, favorable subset selection, or additional benchmarks. The primary result always includes all seven people. Previously exposed development people held out of training are not a newly unexposed confirmation cohort.
 
 ## The exact matched-history control is infeasible

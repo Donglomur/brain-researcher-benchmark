@@ -14,7 +14,7 @@ PEOPLE = [str(i) for i in range(1, 8)]  # Deliberately invented identities.
 COUNTS = [144, 144, 144, 144, 144, 48, 48]
 
 
-def fixture(history=None, all_erp=None):
+def fixture(history=None, all_erp=None, prior=0.5):
     """Generate analytic constant-probability metrics and target-free identities."""
     history = history or [0.2, 0.7, 0.6, 0.8, 0.5, 0.5, 0.8]
     all_erp = all_erp or [0.1, 0.5, 0.5, 0.5, 0.7, 0.8, 0.6]
@@ -28,7 +28,6 @@ def fixture(history=None, all_erp=None):
                "widths": {"history": 50, "prestimulus": 53, "all_erp": 57},
                "canonical_support_checked_before_mask": True}
     people = []
-    prior = 0.5
     for index, (p, n) in enumerate(zip(PEOPLE, COUNTS)):
         positive = 0 if index == 0 else n // 2
         f = positive / n
@@ -174,6 +173,47 @@ class ContributionTests(unittest.TestCase):
         args = fixture()
         args[0]["signed_comparisons"]["history_minus_all_erp"]["equal_participant_mean"]["log_loss"] = 100
         with self.assertRaises(ValueError): c.assess(*args)
+
+    def test_constant_prior_boundaries_use_original_clipping(self):
+        for probability in (0.0, 0.2, 1.0):
+            with self.subTest(probability=probability):
+                result = c.assess(*fixture(prior=probability))
+                self.assertAlmostEqual(result["absolute_arms"][c.PRIOR]["mean_probability"], probability)
+                self.assertEqual(result["absolute_arms"][c.PRIOR]["auc_defined_participant_n"], 6)
+                self.assertEqual(result["absolute_arms"][c.PRIOR]["auc_undefined_participant_n"], 1)
+
+    def test_declared_prior_must_match_its_metrics(self):
+        args = fixture()
+        args[0]["training_participant_macro_prior"] = 0.8
+        with self.assertRaisesRegex(ValueError, "Constant prior"):
+            c.assess(*args)
+
+    def test_consistent_summaries_do_not_hide_nonconstant_prior(self):
+        for metric, delta in (("mean_probability", 0.2), ("log_loss", 0.1),
+                              ("brier", 0.1), ("auc", 0.25)):
+            with self.subTest(metric=metric):
+                report, receipt, schedule = fixture()
+                changed = report["per_participant"][1]["arms"][c.PRIOR]
+                changed[metric] += delta
+                if metric == "mean_probability":
+                    changed["calibration_mean_error"] += delta
+                # Reseal every affected scalar summary/contrast. The prior's
+                # defining constant-probability equation is the only failed rule.
+                for key in c.MEASURES:
+                    report["equal_participant_arms"][c.PRIOR][key] = math.fsum(
+                        p["arms"][c.PRIOR][key] for p in report["per_participant"]) / 7
+                defined = [p["arms"][c.PRIOR]["auc"] for p in report["per_participant"]
+                           if p["arms"][c.PRIOR]["auc"] is not None]
+                report["equal_participant_arms"][c.PRIOR]["auc_mean_defined_only"] = math.fsum(defined) / len(defined)
+                for left, right in c.PAIRS:
+                    item = report["signed_comparisons"][left + "_minus_" + right]
+                    for row, person in zip(item["per_participant"], report["per_participant"]):
+                        for key in ("log_loss", "brier"):
+                            row[key] = person["arms"][left][key] - person["arms"][right][key]
+                    item["equal_participant_mean"] = {key: math.fsum(
+                        row[key] for row in item["per_participant"]) / 7 for key in ("log_loss", "brier")}
+                with self.assertRaisesRegex(ValueError, "Constant prior"):
+                    c.assess(report, receipt, schedule)
 
     def test_refuses_dropped_person_prior_or_contrast(self):
         for mutation in ("person", "prior", "contrast", "count"):
