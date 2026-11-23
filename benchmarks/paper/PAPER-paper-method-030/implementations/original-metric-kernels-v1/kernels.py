@@ -77,6 +77,14 @@ def _weighted_mean(values: list[float], weights: list[float]) -> float:
     return result
 
 
+def _ticks(x: Any, name: str) -> list[int]:
+    items = _vector(x, name, empty=True)
+    _require(all(type(v) is int and abs(v) < 2**128 for v in items),
+             f"{name}: bounded integer ticks required")
+    _require(all(a < b for a, b in zip(items, items[1:])), f"{name}: strictly increasing ticks required")
+    return items
+
+
 def fuzzy_peak_score(reference_ticks: Any, predicted_ticks: Any, *,
                      ticks_per_second: int, clock_identity: str) -> dict:
     """Eq.21/22 on an explicit exact tick clock, with strict distance <2 ms.
@@ -88,14 +96,8 @@ def fuzzy_peak_score(reference_ticks: Any, predicted_ticks: Any, *,
     _require(type(ticks_per_second) is int and 0 < ticks_per_second < 2**128,
              "positive bounded integer ticks_per_second required")
     _identity(clock_identity, "clock_identity")
-    def ticks(x: Any, name: str) -> list[int]:
-        items = _vector(x, name, empty=True)
-        _require(all(type(v) is int and abs(v) < 2**128 for v in items),
-                 f"{name}: bounded integer ticks required")
-        _require(all(a < b for a, b in zip(items, items[1:])), f"{name}: strictly increasing ticks required")
-        return items
-    ref = ticks(reference_ticks, "reference")
-    pred = ticks(predicted_ticks, "predicted")
+    ref = _ticks(reference_ticks, "reference")
+    pred = _ticks(predicted_ticks, "predicted")
     if not ref or not pred:
         raise UndefinedMetric("empty-set convention is not supplied by the original equations")
     def matched(query: list[int], other: list[int]) -> int:
@@ -116,6 +118,28 @@ def fuzzy_peak_score(reference_ticks: Any, predicted_ticks: Any, *,
             "precision": float(precision), "recall": float(recall),
             "f1": float(2 * precision * recall / (precision + recall)),
             "clock_identity": clock_identity, "clock_authenticated": False}
+
+
+def _reduce_bins(maxima: list[float], bins: Any, value_key: str) -> list[dict]:
+    output = []
+    used = set()
+    names = set()
+    for item in _vector(bins, "bins"):
+        _require(isinstance(item, dict) and set(item) == {"id", "p_indices", "weights"},
+                 "each bin requires only id, p_indices and weights")
+        name = item["id"]
+        _require(isinstance(name, str) and 0 < len(name) <= 256 and name not in names, "unique bounded bin id required")
+        names.add(name)
+        indices = _vector(item["p_indices"], "bin p indices")
+        _require(all(type(i) is int and 0 <= i < len(maxima) for i in indices), "invalid bin p index")
+        _require(len(set(indices)) == len(indices), "duplicate p index within bin")
+        weights = [_number(w, "bin weight") for w in _vector(item["weights"], "bin weights")]
+        _require(len(weights) == len(indices) and all(w > 0 for w in weights), "positive complete bin weights required")
+        used.update(indices)
+        output.append({"id": name, "p_indices": indices, "weights": weights,
+                       value_key: _weighted_mean([maxima[i] for i in indices], weights)})
+    _require(used == set(range(len(maxima))), "bins must retain every supplied p threshold")
+    return output
 
 
 def prominence_bin_profile(*, ep_thresholds_mv: Any, optical_thresholds_mv: Any,
@@ -147,27 +171,76 @@ def prominence_bin_profile(*, ep_thresholds_mv: Any, optical_thresholds_mv: Any,
                  "optical threshold lies outside the source plus/minus0.2mV interval")
         _require(all(0 <= value <= 1 for value in scores), "F1 outside [0,1]")
         maxima.append(max(scores))
-    output = []
-    used = set()
-    names = set()
-    for item in _vector(bins, "bins"):
-        _require(isinstance(item, dict) and set(item) == {"id", "p_indices", "weights"},
-                 "each bin requires only id, p_indices and weights")
-        name = item["id"]
-        _require(isinstance(name, str) and 0 < len(name) <= 256 and name not in names, "unique bounded bin id required")
-        names.add(name)
-        indices = _vector(item["p_indices"], "bin p indices")
-        _require(all(type(i) is int and 0 <= i < len(ps) for i in indices), "invalid bin p index")
-        _require(len(set(indices)) == len(indices), "duplicate p index within bin")
-        weights = [_number(w, "bin weight") for w in _vector(item["weights"], "bin weights")]
-        _require(len(weights) == len(indices) and all(w > 0 for w in weights), "positive complete bin weights required")
-        used.update(indices)
-        output.append({"id": name, "p_indices": indices, "weights": weights,
-                       "mean_supplied_grid_max_f1": _weighted_mean([maxima[i] for i in indices], weights)})
-    _require(used == set(range(len(ps))), "bins must retain every supplied p threshold")
+    output = _reduce_bins(maxima, bins, "mean_supplied_grid_max_f1")
     return {"ep_thresholds_mv": p_text, "supplied_grid_max_f1": maxima, "bins": output,
             "grid_identity": grid_identity, "bin_rule_identity": bin_rule_identity,
             "continuous_optimum_established": False, "historical_recipe_authenticated": False}
+
+
+def peak_prominence_bin_profile(*, reference_ticks: Any, reference_prominences_mv: Any,
+                                predicted_ticks: Any, predicted_prominences_mv: Any,
+                                ep_thresholds_mv: Any, threshold_relation: str,
+                                ticks_per_second: int, clock_identity: str,
+                                peak_set_identity: str, bins: Any,
+                                bin_rule_identity: str) -> dict:
+    """Enumerate every q-induced peak set in inclusive p +/- 0.2 mV.
+
+    The declared relation (">=" or ">") applies to both peak sets. Prominences
+    and thresholds are exact rational strings; no floating epsilon or sampled
+    q grid is used. Maxima are conditional on the supplied detected peaks and
+    relation, not an authenticated historical detector or threshold convention.
+    Any undefined F1 state refuses the whole profile rather than disappearing
+    from the maximization. No optimizing q or EP-derived peak counts are returned.
+    """
+    _require(threshold_relation in (">=", ">"), "explicit >= or > threshold relation required")
+    _require(type(ticks_per_second) is int and 0 < ticks_per_second < 2**128,
+             "positive bounded integer ticks_per_second required")
+    for name, value in (("clock_identity", clock_identity), ("peak_set_identity", peak_set_identity),
+                        ("bin_rule_identity", bin_rule_identity)):
+        _identity(value, name)
+    ref_ticks = _ticks(reference_ticks, "reference")
+    pred_ticks = _ticks(predicted_ticks, "predicted")
+    def prominences(raw: Any, ticks: list[int], name: str) -> list[Fraction]:
+        values = [_rational(v, name) for v in _vector(raw, name, empty=True)]
+        _require(len(values) == len(ticks) and all(v >= 0 for v in values),
+                 f"{name}: one nonnegative prominence per peak required")
+        return values
+    rp = prominences(reference_prominences_mv, ref_ticks, "reference prominences")
+    pp = prominences(predicted_prominences_mv, pred_ticks, "predicted prominences")
+    p_text = _vector(ep_thresholds_mv, "EP thresholds")
+    ps = [_rational(p, "EP threshold") for p in p_text]
+    _require(all(p >= 0 for p in ps) and all(a < b for a, b in zip(ps, ps[1:])),
+             "EP thresholds must be nonnegative and strictly increasing")
+    retains = (lambda prominence, threshold: prominence >= threshold) if threshold_relation == ">=" else (
+        lambda prominence, threshold: prominence > threshold)
+    maxima, state_counts = [], []
+    for p in ps:
+        ref = [tick for tick, prominence in zip(ref_ticks, rp) if retains(prominence, p)]
+        low, high = p - Fraction(1, 5), p + Fraction(1, 5)
+        edges = sorted({low, high, *(v for v in pp if low <= v <= high)})
+        # Equality points and one exact interior point from each open interval
+        # exhaust the states for either declared threshold relation, including ties.
+        thresholds = sorted(edges + [(a + b) / 2 for a, b in zip(edges, edges[1:])])
+        previous, scores = None, []
+        for q in thresholds:
+            pred = tuple(tick for tick, prominence in zip(pred_ticks, pp) if retains(prominence, q))
+            if pred == previous:
+                continue
+            previous = pred
+            try:
+                score = fuzzy_peak_score(ref, pred, ticks_per_second=ticks_per_second,
+                                         clock_identity=clock_identity)
+            except UndefinedMetric as exc:
+                raise UndefinedMetric(f"EP threshold {p}: at least one optical state has undefined F1: {exc}") from exc
+            scores.append(score["f1"])
+        maxima.append(max(scores))
+        state_counts.append(len(scores))
+    return {"ep_thresholds_mv": p_text, "supplied_peak_max_f1": maxima,
+            "bins": _reduce_bins(maxima, bins, "mean_supplied_peak_max_f1"),
+            "threshold_states_evaluated": state_counts, "threshold_relation": threshold_relation,
+            "supplied_peak_search_complete": True, "clock_identity": clock_identity,
+            "peak_set_identity": peak_set_identity, "bin_rule_identity": bin_rule_identity,
+            "historical_recipe_authenticated": False}
 
 
 def residual_noise_profile(*, frequency_hz: Any, window_ids: Any, ep_power: Any,
