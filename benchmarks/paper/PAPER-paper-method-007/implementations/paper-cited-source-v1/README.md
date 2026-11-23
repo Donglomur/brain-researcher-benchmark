@@ -34,6 +34,61 @@ The five-mouse/two-day release remains useful separately scoped evidence. It can
 
 ## Remaining work
 
+### Prepare an explicit native summary roster
+
+`prepare_summary.py` turns an operator-selected mouse/location roster into a
+MATLAB invocation. This closes two practical hazards in the recovered function:
+omitting `groupVector` treats every input file as a different animal (lines
+16–17), and missing input files are silently skipped (lines 82–85). The native
+aggregation also indexes groups as `1:length(groups)` (lines 320–331), so the
+preparer assigns dense positive group numbers in first-appearance order while
+retaining the supplied animal identifiers. Different locations for one animal
+receive the same group number even when their rows are nonadjacent.
+
+The roster is JSON, with one record per selected animal/recording-location file:
+
+```json
+{
+  "schema": "unitmatch-summary-roster/v1",
+  "records": [
+    {"mouse_id": "example-animal", "location_id": "example-location", "unitmatch_file": "example-location/UnitMatch.mat"}
+  ]
+}
+```
+
+These identifiers illustrate the format; they are not an original-study roster.
+Use Python 3.10 or newer:
+
+```text
+python prepare_summary.py --roster SELECTED_ROSTER.json --input-root DATA_ROOT --output FRESH_PREPARATION_DIRECTORY
+```
+
+Every path must be a relative POSIX path ending in `UnitMatch.mat`, resolve
+inside the selected input root, and identify a nonempty regular file. The
+preparer rejects missing files, duplicate animal/location identities, repeated
+files (including hard-link aliases), malformed rosters and unsafe path forms
+before creating its output. It reads only the roster and file metadata; it
+neither opens MAT payloads nor validates their scientific contents. The exact
+roster bytes are retained in `roster.json`. Input files are not copied or
+cryptographically frozen; bind and protect authentic inputs separately before
+any admitted evaluation.
+
+After configuring the complete selected author checkout and dependencies in
+MATLAB, run the generated `run_summary.m`. It rechecks file presence, calls
+`summaryFunctionalPlots(UMFiles, 'Corr', groupVector, 0, 0)` unchanged, and saves
+the returned per-file native products, file order, mouse/location identifiers,
+grouping and resolved summary-function path in `native_summary.mat`. It refuses
+an existing result file. The preparation directory and native results may
+contain private paths/identities and belong in operator-controlled storage.
+
+The helper does not infer the original cohort, alter pair eligibility or native
+weighting, select between plotted and slope-qualified support, reconstruct
+functional scores, or assert that the configured MATLAB source/environment is
+qualified. It preserves a supplied grouping for inspection; the original
+16-mouse roster, provenance and exact manuscript invocation remain unresolved.
+Generated tests cover grouping and preparation failures only; MATLAB and
+authentic-data parity have not been tested by these controls.
+
 Recover the original full recordings and eligible roster, exact invocation and grouping, original metadata duration/date joins, complete transitive environment, and author results. Resolve the weighting and slope-support questions before selecting a definitive reproduction scorer. Then freeze source/data exposure and run the complete author comparison under an approved native protocol. Historical private targets and solver answers were not read in this recovery.
 
 The unchanged author functions retain **CC BY-NC-SA 4.0** under `native/LICENSE`; the repository's license does not relicense them. This directory contains no data, predictions, weights, or private paths.
