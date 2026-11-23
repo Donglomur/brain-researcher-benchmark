@@ -23,7 +23,11 @@ The cohort contained 4 target and 28 standard events. Balanced accuracy is the m
 
 The prespecified paired difference, direct minus programme, was **30.357 percentage points**, with a conditional 95% paired bootstrap interval of **1.786–53.571 points**. The absolute intervals and paired interval used 10,000 shared observed-class-stratified resamples, NumPy PCG64 seed `20261122`, and linear percentile quantiles. The intervals condition on this small cohort and its observed class mix; no significance or benchmark-pass threshold was selected.
 
-The direct delivery error was an incorrect demonstration-image path during dispatch. The programme's six first attempts exited with `ValueError`; the original report did not qualify their detailed cause. The frozen source contains an explicit rejection when visible blue trace columns cover less than 97% of either crop, but source inspection alone does not establish that this caused the six observed failures. The original outcomes are preserved, and no revised programme is evaluated by this report.
+The direct delivery error was an incorrect demonstration-image path during dispatch. The programme's six first attempts exited with `ValueError`. The frozen source contains an explicit rejection when visible blue trace columns cover less than 97% of either crop.
+
+### Diagnostic update — 23 November 2026
+
+A subsequent label-blind diagnostic of the six programme failures and one fixed successful control found that every selected PNG decoded successfully. All six failures arose at the frozen programme's minimum trace-coverage guard, while the control passed. Missing blue trace spans met plot boundaries, consistent with clipping in the fixed display. This identifies an extraction coverage limitation; it does not establish the cause of errors among valid predictions or a better predictive method. The original failed attempts and scores remain unchanged.
 
 ## Interpretation
 
@@ -41,4 +45,4 @@ The [programme README](../implementations/exploratory32-image-programme-v1/READM
 
 The reusable [subset scorer](../implementations/exploratory32-image-scorer-v1/README.md) was published separately in [PR #247](https://github.com/Donglomur/brain-researcher-benchmark/pull/247). Generated source checks on that scorer are engineering evidence, not participant performance.
 
-This release contains aggregate results and frozen programme code. Private images, case identities, image hashes, label joins, individual predictions, and links to private individual records are excluded. Consequently, the public artifacts permit code inspection and describe the reported experiment, but do not independently reproduce its exact empirical scores or direct-model episodes. The experimental account and aggregates are transcribed from the completed pilot report; source identity is verified against the frozen file. No programme execution, new prediction, or rescoring was performed to prepare this release.
+This release contains aggregate results and frozen programme code. Private images, case identities, image hashes, label joins, individual predictions, and links to private individual records are excluded. Consequently, the public artifacts permit code inspection and describe the reported experiment, but do not independently reproduce its exact empirical scores or direct-model episodes. The experimental account and aggregates are transcribed from the completed pilot report; source identity is verified against the frozen file. The diagnostic update comes from a separately reviewed post hoc analysis. The publication preparation itself performed no programme execution, new prediction, or rescoring.
