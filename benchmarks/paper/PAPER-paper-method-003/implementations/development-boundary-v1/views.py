@@ -19,7 +19,7 @@ from types import ModuleType
 
 HERE = Path(__file__).resolve().parent
 RECIPE = HERE.parent / 'matched-reference-v1/recipe.py'
-RECIPE_SHA = '0c1bc432f3386d2a673e9f1f50776e4c4885d6d9609b1083068569c552dbe801'
+RECIPE_SHA = '83a85f43997b83839e2462470778af36558beda0e9c7707db060395b4323b470'
 raw = RECIPE.read_bytes()
 if hashlib.sha256(raw).hexdigest() != RECIPE_SHA:
     raise ValueError('matched reference recipe changed')
