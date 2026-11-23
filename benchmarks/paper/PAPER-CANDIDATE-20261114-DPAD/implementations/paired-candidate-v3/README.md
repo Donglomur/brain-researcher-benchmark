@@ -54,3 +54,32 @@ authentic author predictions, reference protection, paired participant delivery
 and scientific inference gaps documented in the predecessor remain unresolved.
 The numerical policy evaluates float64 Pearson arithmetic; it does not claim
 bitwise agreement with the original scientific runtime.
+
+## Check a candidate before protected scoring
+
+`preflight` validates a complete submission using only the candidate plan and
+predictions. It needs no held-out target arrays or author-reference artifact:
+
+```sh
+python3 paired.py preflight --plan PLAN --predictions CANDIDATE_PREDICTIONS --plan-sha256 OWNER_PLAN_DIGEST --output CHECK
+```
+
+It shares candidate validation with `compare`: all 35 session-folds, all eight
+dimensions (280 prediction cases), selected-dimension recomputation, code and
+configuration identities, channel identities/units, exact sample order, finite
+arrays and full shapes. The supplied digest should come from the owner's freeze
+record; matching a user-supplied digest alone does not authenticate that record.
+
+The output reports structural acceptance and input digests, without correlation
+scores or scientific success. Constant predictions may pass preflight and still
+produce undefined correlations at protected scoring. Preflight does not establish
+training chronology, permitted observations, preparation fidelity or a qualified
+author baseline. It does not release or inspect protected targets and does not
+change the existing source-panel restrictions or metrics.
+
+Run `python3 -B -m unittest -v test_candidate_preflight test_stable_pearson` for the
+new generated input-boundary controls and the existing numerical/full-grid
+regressions. These controls are software checks rather than scientific results.
+
+`provenance.json` retains the earlier numerical-revision record. The current
+source binding also identifies the added preflight interface and its controls.
