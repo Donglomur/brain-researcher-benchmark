@@ -1,4 +1,5 @@
 """Generated ObjectStore descriptor-ownership controls; no native/data execution."""
+from copy import deepcopy
 import errno
 import hashlib
 import json
@@ -136,30 +137,113 @@ class ObjectStoreDescriptors(unittest.TestCase):
         for fd in self.opened:
             self.assert_closed(fd)
 
-    def test_current_descriptor_preserves_historical_members(self):
-        descriptor = json.loads((ROOT / DESCRIPTOR).read_text())
+    def assert_current_descriptor(self, descriptor=None, reader=None):
+        descriptor = descriptor or json.loads((ROOT / DESCRIPTOR).read_text())
+        reader = reader or (lambda path: (ROOT / path).read_bytes())
         self.assertFalse(descriptor["scientific_qualification"])
         self.assertFalse(descriptor["execution_authority"])
-        self.assertEqual(descriptor["changed_members"], [SOURCE])
+        # These original byte identities are retained, not refreshed from current
+        # files when a later source generation is published.
+        anchors = {
+            "SOURCE_FREEZE.json": (13083, "15b9127b865743b6373d6040850eacb6671898553a92ee3610f25414a0782d93"),
+            "ACCEPTED_SOURCE_MANIFEST.json": (30460, "47d9ec892bfe27b53d38fc09597ce252ea6594706cc4659d56640c384b1dda01"),
+            "INSTALLED_SOURCE_RESOLUTION.json": (62403, "5cba82ed4458ee4a89af7bca8e7aacb7bf7b25fa21568799d4de3fcfa6e3db11"),
+            "ACCEPTED_SOURCE_API.json": (125877, "32f6693ae720834e8ddf6418ab021abf70b0b3ce85e506a4b37309e9e52e871f"),
+        }
+        history_root = "benchmarks/integrity/current-closures/trust-kilosort/history/original-v1/"
+        historical = {}
+        self.assertEqual(len(descriptor["predecessor_manifests"]), len(anchors))
         for pin in descriptor["predecessor_manifests"]:
-            body = (ROOT / pin["path"]).read_bytes()
-            self.assertEqual((len(body), hashlib.sha256(body).hexdigest()),
-                             (pin["bytes"], pin["sha256"]))
-        frozen = json.loads((ROOT / PACKAGE / "SOURCE_FREEZE.json").read_text())
+            name = Path(pin["original_path"]).name
+            self.assertNotIn(name, historical)
+            self.assertEqual(pin["original_path"], PACKAGE + "/" + name)
+            self.assertEqual(pin["path"], history_root + name)
+            self.assertEqual((pin["bytes"], pin["sha256"]), anchors[name])
+            self.assertEqual(pin["captured_from_commit"], descriptor["comparison_commit"])
+            body = reader(pin["path"])
+            self.assertEqual((len(body), hashlib.sha256(body).hexdigest()), anchors[name])
+            historical[name] = json.loads(body)
+        self.assertEqual(set(historical), set(anchors))
+        freeze_pin = descriptor["current_source_freeze"]
+        self.assertEqual(freeze_pin["path"], PACKAGE + "/SOURCE_FREEZE.json")
+        raw = reader(freeze_pin["path"])
+        self.assertEqual((len(raw), hashlib.sha256(raw).hexdigest()),
+                         (freeze_pin["bytes"], freeze_pin["sha256"]))
+        frozen = json.loads(raw)
         original_prefix = "benchmarks/neuroscience/paper-method-006/"
-        expected = {PACKAGE + "/" + path.removeprefix(original_prefix): pin
-                    for path, pin in frozen["files"].items()}
-        self.assertEqual(set(descriptor["members"]), set(expected))
-        for path, pin in descriptor["members"].items():
-            body = (ROOT / path).read_bytes()
+        def translated(document):
+            self.assertTrue(all(path.startswith(original_prefix) for path in document["files"]))
+            return {PACKAGE + "/" + path.removeprefix(original_prefix): pin
+                    for path, pin in document["files"].items()}
+        expected = translated(frozen)
+        previous = translated(historical["SOURCE_FREEZE.json"])
+        current = descriptor["members"]
+        self.assertEqual(set(current), set(expected))
+        for path, pin in current.items():
+            body = reader(path)
             self.assertEqual((len(body), hashlib.sha256(body).hexdigest()),
                              (pin["bytes"], pin["sha256"]), path)
-            if path != SOURCE:
-                self.assertEqual(pin, expected[path], path)
+        # The ObjectStore correction remains the only override of the current
+        # package freeze. R2 and its current metadata are in that freeze itself.
+        overrides = sorted(path for path in current if current[path] != expected[path])
+        self.assertEqual(overrides, [SOURCE])
+        self.assertEqual(descriptor["changed_members"], overrides)
+        changes = sorted(path for path in set(previous) | set(current)
+                         if previous.get(path) != current.get(path))
+        reviewed_changes = sorted(PACKAGE + "/" + path for path in (
+            "ACCEPTED_SOURCE_API.json", "ACCEPTED_SOURCE_MANIFEST.json",
+            "INSTALLED_SOURCE_RESOLUTION.json", "README.md",
+            "payload/legacy/banks/r2/bank.py", "payload/legacy/k4bench/protocol.py",
+            "tests/test_source20_admission.py"))
+        self.assertEqual(changes, reviewed_changes)
+        self.assertEqual(descriptor["historical_changed_members"], changes)
         test_pin = descriptor["regression_test"]
-        body = (ROOT / test_pin["path"]).read_bytes()
+        self.assertEqual(test_pin["path"], "tests/benchmarks/test_kilosort_object_store.py")
+        body = reader(test_pin["path"])
         self.assertEqual((len(body), hashlib.sha256(body).hexdigest()),
                          (test_pin["bytes"], test_pin["sha256"]))
+
+    def test_current_descriptor_preserves_historical_members(self):
+        self.assert_current_descriptor()
+
+    def test_historical_metadata_cannot_be_rebased_to_current(self):
+        for index in range(4):
+            descriptor = json.loads((ROOT / DESCRIPTOR).read_text())
+            pin = descriptor["predecessor_manifests"][index]
+            body = (ROOT / pin["original_path"]).read_bytes()
+            pin.update(bytes=len(body), sha256=hashlib.sha256(body).hexdigest())
+            with self.subTest(manifest=pin["original_path"]), self.assertRaises(AssertionError):
+                self.assert_current_descriptor(descriptor)
+
+    def test_changed_historical_snapshot_bytes_are_rejected(self):
+        descriptor = json.loads((ROOT / DESCRIPTOR).read_text())
+        path = descriptor["predecessor_manifests"][0]["path"]
+        def changed_reader(member):
+            body = (ROOT / member).read_bytes()
+            return body + b"\n" if member == path else body
+        with self.assertRaises(AssertionError):
+            self.assert_current_descriptor(descriptor, changed_reader)
+
+    def test_member_omission_or_unreported_change_is_rejected(self):
+        original = json.loads((ROOT / DESCRIPTOR).read_text())
+        for mutation in ("omitted_member", "omitted_history_change", "omitted_override", "stale_bank"):
+            descriptor = deepcopy(original)
+            if mutation == "omitted_member":
+                del descriptor["members"][PACKAGE + "/tests/test_source20_admission.py"]
+            elif mutation == "omitted_history_change":
+                descriptor["historical_changed_members"].pop()
+            elif mutation == "omitted_override":
+                descriptor["changed_members"] = []
+            else:
+                descriptor["members"][PACKAGE + "/payload/legacy/banks/r2/bank.py"]["sha256"] = "0" * 64
+            with self.subTest(mutation=mutation), self.assertRaises(AssertionError):
+                self.assert_current_descriptor(descriptor)
+
+    def test_current_freeze_has_separate_content_binding(self):
+        descriptor = json.loads((ROOT / DESCRIPTOR).read_text())
+        descriptor["current_source_freeze"]["sha256"] = descriptor["predecessor_manifests"][0]["sha256"]
+        with self.assertRaises(AssertionError):
+            self.assert_current_descriptor(descriptor)
 
 
 if __name__ == "__main__":
