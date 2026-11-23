@@ -52,10 +52,9 @@ def _index(packets, expected, name):
     return index
 
 
-def _validate_case(submission, public, private):
+def _validate_public_submission(submission, public):
     _fields(public, ("task", "case_id", "classes", "claim", "feature_kind", "ids"), "public")
     _fields(submission, ("case_id", "classes", "ids", "probabilities"), "submission")
-    _fields(private, ("case_id", "ids", "labels", "units"), "private")
     _require(public["task"] == TASK, "wrong task")
     _require(public["claim"] in CLAIMS, "unknown split claim")
     _require(public["feature_kind"] in FEATURES, "unknown feature family")
@@ -63,16 +62,9 @@ def _validate_case(submission, public, private):
     _texts(classes, "classes", unique=True)
     _require(len(classes) in (16, 25), "retain all 16 or 25 native directions")
     _texts(ids, "trial IDs", unique=True)
-    _require(submission["case_id"] == public["case_id"] == private["case_id"], "case identity mismatch")
+    _require(submission["case_id"] == public["case_id"], "case identity mismatch")
     _require(type(submission["classes"]) is list and submission["classes"] == classes, "class order mismatch")
-    _require(type(submission["ids"]) is list and type(private["ids"]) is list
-             and submission["ids"] == ids == private["ids"], "trial ID/order mismatch")
-    labels, units = private["labels"], private["units"]
-    _texts(labels, "private labels")
-    _texts(units, "private mouse units")
-    _require(len(labels) == len(units) == len(ids), "per-case private target/unit count mismatch")
-    _require(set(labels) <= set(classes), "target outside native class space")
-    _require(len(set(units)) == 1, "one held block or held mouse must have one mouse unit")
+    _require(type(submission["ids"]) is list and submission["ids"] == ids, "trial ID/order mismatch")
     probabilities = submission["probabilities"]
     _require(type(probabilities) is list and len(probabilities) == len(ids), "prediction count mismatch")
     for row in probabilities:
@@ -80,6 +72,57 @@ def _validate_case(submission, public, private):
         _require(all(type(v) in (float, int) and 0 <= v <= 1 and math.isfinite(v) for v in row),
                  "probabilities must be finite numbers in [0,1]")
         _require(abs(math.fsum(row) - 1) <= 1e-8, "probability simplex mismatch")
+
+
+def _validate_case(submission, public, private):
+    _validate_public_submission(submission, public)
+    _fields(private, ("case_id", "ids", "labels", "units"), "private")
+    _require(public["case_id"] == private["case_id"], "case identity mismatch")
+    _require(type(private["ids"]) is list and public["ids"] == private["ids"], "trial ID/order mismatch")
+    labels, units, ids = private["labels"], private["units"], public["ids"]
+    _texts(labels, "private labels")
+    _texts(units, "private mouse units")
+    _require(len(labels) == len(units) == len(ids), "per-case private target/unit count mismatch")
+    _require(set(labels) <= set(public["classes"]), "target outside native class space")
+    _require(len(set(units)) == 1, "one held block or held mouse must have one mouse unit")
+
+
+def validate_submission_cohort(submissions, public_packets, *, expected_case_ids, access_mode):
+    """Check a complete submission using only participant-visible metadata.
+
+    This is a structural preflight, not scoring, target authentication, submission
+    sealing, or evidence that the declared access mode was actually delivered.
+    The independently frozen expected roster must come from the evaluator.
+    """
+    _require(access_mode in MODES, "unknown access mode")
+    _texts(expected_case_ids, "expected cases", unique=True)
+    submissions = _index(submissions, expected_case_ids, "submission")
+    public = _index(public_packets, expected_case_ids, "public")
+    class_orders, trial_layouts, seen, families, strata = {}, {}, set(), set(), defaultdict(int)
+    for case_id in expected_case_ids:
+        submission, packet = submissions[case_id], public[case_id]
+        _validate_public_submission(submission, packet)
+        classes = tuple(packet["classes"])
+        _require(class_orders.setdefault(len(classes), classes) == classes,
+                 "class identity/order differs within native layout")
+        families.add(packet["feature_kind"])
+        key = (len(classes), packet["claim"])
+        for trial_id in packet["ids"]:
+            _require(trial_layouts.setdefault(trial_id, classes) == classes,
+                     "same held-out trial has inconsistent layout")
+            occurrence = (packet["claim"], trial_id)
+            _require(occurrence not in seen, "duplicate held-out trial within split claim")
+            seen.add(occurrence)
+        strata[key] += len(packet["ids"])
+    _require(len(families) == 1, "feature families must be scored separately")
+    roster_hash = hashlib.sha256(json.dumps(sorted(expected_case_ids), separators=(",", ":")).encode()).hexdigest()
+    return {"task": TASK, "access_mode": access_mode, "feature_kind": next(iter(families)),
+            "expected_case_roster_sha256": roster_hash, "n_cases": len(expected_case_ids),
+            "n_predictions": sum(strata.values()), "submission_structure_valid": True,
+            "strata": [{"classes": list(class_orders[width]), "claim": claim, "n_trials": count}
+                       for (width, claim), count in sorted(strata.items())],
+            "targets_checked": False, "submission_sealed": False,
+            "access_mode_delivery_verified": False, "scientific_qualification": False}
 
 
 def _interval(values):
