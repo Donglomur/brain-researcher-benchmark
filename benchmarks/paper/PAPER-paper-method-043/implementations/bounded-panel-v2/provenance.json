@@ -30,11 +30,22 @@
   ],
   "software_validation": {
     "pool_attempts": [
-      {"id": "paper_02-method043-bounded-check01", "status": "busy", "launched": false},
-      {"id": "paper_02-method043-bounded-check02", "status": "succeeded", "tests": 9,
-       "unittest_seconds": 2.615, "child_cpu_seconds": 2.157353,
-       "child_peak_rss_bytes": 353796096, "thread_environment": 1,
-       "declared_ram_bytes": 1073741824, "timeout_seconds": 180}
+      {
+        "id": "paper_02-method043-bounded-check01",
+        "status": "busy",
+        "launched": false
+      },
+      {
+        "id": "paper_02-method043-bounded-check02",
+        "status": "succeeded",
+        "tests": 9,
+        "unittest_seconds": 2.615,
+        "child_cpu_seconds": 2.157353,
+        "child_peak_rss_bytes": 353796096,
+        "thread_environment": 1,
+        "declared_ram_bytes": 1073741824,
+        "timeout_seconds": 180
+      }
     ],
     "controls": [
       "All982 generated distractors with duplicated correct feature at final index; strict tie and complete denominator.",
@@ -74,5 +85,55 @@
     "Released model and encoder ancestry, component rights, trusted operator preparation.",
     "Authentic complete author reproduction, paired participant delivery and separately frozen reproduction/improvement decision rules.",
     "Full-population native memory, I/O, wall-time and resource approval protocol."
-  ]
+  ],
+  "strict_tie_repair": {
+    "source": {
+      "url": "https://github.com/jingyanghuo/neuropictor/blob/b676b5be320ebb1b12919afd4cf6152e2c45db5d/eval_metrics.py",
+      "lines": "119-130",
+      "observation": "Per-prediction strict Pearson comparisons; ties contribute no success and every other real image remains a distractor.",
+      "rechecked_primary_source": true
+    },
+    "defect": "Separate matrix products for congruents and short distractor blocks can use different BLAS reduction kernels and give success credit to identical real feature rows.",
+    "repair": "Make feature rows contiguous before normalization and apply the same contiguous feature-axis sum for every matching and distractor dot product. No comparison tolerance is introduced.",
+    "before_repair_generated_probe": [
+      {
+        "n": 17,
+        "feature_width": 7,
+        "nonzero_tie_scores": 3,
+        "maximum_score": 1.0
+      },
+      {
+        "n": 17,
+        "feature_width": 129,
+        "nonzero_tie_scores": 6,
+        "maximum_score": 1.0
+      },
+      {
+        "n": 33,
+        "feature_width": 513,
+        "nonzero_tie_scores": 17,
+        "maximum_score": 0.03125
+      },
+      {
+        "n": 982,
+        "feature_width": 7,
+        "nonzero_tie_scores": 0,
+        "maximum_score": 0.0
+      }
+    ],
+    "fixture_recipe": "NumPy default_rng(43): tile one normal feature row for every real image; independent normal predicted rows. All genuine identification scores are zero because all real features tie.",
+    "validation": {
+      "status": "passed",
+      "new_test_methods": 3,
+      "existing_affected_methods": 3,
+      "executed_methods": 6,
+      "unittest_seconds": 0.981,
+      "process_peak_rss_bytes": 60129280,
+      "default_bounded_suite_methods": 12,
+      "full_default_suite_rerun": false,
+      "scope": "Generated in-memory arithmetic only. Existing file/pixel panel controls were not replayed; no native features, images or model outputs."
+    },
+    "review": "One ordinary read-only review accepted after normalization-layout and bounded-lifetime repairs; reviewer did not rerun tests.",
+    "limits": "Strict ties and all-distractor arithmetic only. No source-data score, historical native numerical equivalence, native runtime or scientific qualification is established. Row-wise products add at most one feature-block temporary and may change runtime; full-population timing is unmeasured."
+  }
 }
