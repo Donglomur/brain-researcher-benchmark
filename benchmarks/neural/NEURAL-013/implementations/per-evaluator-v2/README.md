@@ -7,6 +7,23 @@ registered 45-session partition: sessions 001–027 training, 028–036 developm
 and 037–045 query. It is an operator scoring component, not a prepared benchmark
 or a candidate execution environment.
 
+Participants can check a complete submission before handing it to the operator:
+
+```sh
+python3 -B preflight.py --public /participant/manifest.json \
+  --submission /participant/submission.json --output /participant/new-check.json
+```
+
+This command opens only public metadata and the submitted predictions. It reuses
+the same complete-query and token validator as scoring, accepts valid empty
+sequences, and reports coverage and token counts without a score. Exit codes are
+0 for valid output, 2 for invalid submission and 3 for invalid public metadata.
+The report must not already exist. Feature arrays, training labels and private
+targets are unnecessary. Passing does not authenticate the source panel, prove
+model execution or qualify the complete-panel dynamic-programming budget: the
+reference sequence lengths needed for that budget are private. Final operator
+scoring remains necessary.
+
 Run with Python 3's standard library:
 
 ```sh
