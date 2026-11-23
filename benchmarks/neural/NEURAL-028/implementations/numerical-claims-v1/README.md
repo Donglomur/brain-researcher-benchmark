@@ -10,7 +10,7 @@ Every declared session and every session-local neuron must be present, including
 
 The primary result includes session means within each animal/phase, paired after-minus-before changes, equal-animal regime means, frozen animal-bootstrap intervals, and supervised-minus-unsupervised changes. Both phase session lists and denominators remain visible when a phase is undefined. Absent regions, constant cells, incomplete estimates and singleton uncertainty remain `null`; null, negative and positive scientific outcomes are equally valid answers. The checker requires every section, so reporting only a favorable contrast or dropping an undefined region fails.
 
-The calculation reuses the pinned, previously reviewed numerical evaluator rather than accepting precomputed truths from a submission. Its SHA-256 is checked before import:
+The calculation reuses the pinned, previously reviewed numerical evaluator rather than accepting precomputed truths from a submission. The checker captures the evaluator source once, verifies its SHA-256, and executes those exact bytes. Replacing the file after capture or leaving stale timestamp-valid bytecode cannot substitute a different reference. The pinned SHA-256 is:
 `67777d97d6d00037efff66ff58774a49f4cd28b27b0ed018f79f77ae218e12d7`.
 The original source revision is `ba64ac697f5d9914926baac79399e80707a5f3a6`; source definitions and acquisition limits remain in the predecessor's [provenance](../initial-evaluator-v1/source-provenance.json). No author code or native data is copied here.
 

@@ -27,11 +27,14 @@ def require(condition, message):
 
 def _backend():
     path = HERE.parent / "initial-evaluator-v1" / "evaluator.py"
-    require(hashlib.sha256(path.read_bytes()).hexdigest() == REFERENCE_SHA256,
+    source = path.read_bytes()
+    require(hashlib.sha256(source).hexdigest() == REFERENCE_SHA256,
             "numerical reference changed; review and version the checker before use")
     spec = importlib.util.spec_from_file_location("neural028_claim_reference", path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # Execute the bytes just authenticated, without a second source read or a
+    # timestamp-based bytecode cache that could contain a different reference.
+    exec(compile(source, str(path), "exec"), module.__dict__)
     return module
 
 

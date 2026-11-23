@@ -1,12 +1,16 @@
 """Generated analytical controls only; no native recordings or solver trial."""
 import copy
+import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
+import py_compile
 import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 HERE = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("neural028_claims", HERE / "claims.py")
@@ -217,6 +221,62 @@ class SubmissionTests(unittest.TestCase):
                 else:
                     with self.assertRaises(c.ClaimError):
                         c.read_json(report)
+
+
+class ReferenceCaptureTests(unittest.TestCase):
+    def test_replacement_after_capture_cannot_change_executed_reference(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source_dir = root / "initial-evaluator-v1"
+            source_dir.mkdir()
+            source = source_dir / "evaluator.py"
+            pinned = b'MARKER = "pinned"\n'
+            source.write_bytes(pinned)
+            original_read = Path.read_bytes
+
+            def replace_after_read(path):
+                raw = original_read(path)
+                if path == source:
+                    path.write_bytes(b'MARKER = "substitute"\n')
+                return raw
+
+            with mock.patch.object(c, "HERE", root / "numerical-claims-v1"), \
+                    mock.patch.object(c, "REFERENCE_SHA256", hashlib.sha256(pinned).hexdigest()), \
+                    mock.patch.object(Path, "read_bytes", replace_after_read):
+                self.assertEqual(c._backend().MARKER, "pinned")
+            self.assertIn(b"substitute", source.read_bytes())
+
+    def test_timestamp_valid_bytecode_cannot_replace_pinned_source(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source_dir = root / "initial-evaluator-v1"
+            source_dir.mkdir()
+            source = source_dir / "evaluator.py"
+            cached = b'MARKER = "cached"\n'
+            pinned = b'MARKER = "pinned"\n'
+            self.assertEqual(len(cached), len(pinned))
+            source.write_bytes(cached)
+            stamp = 1700000000
+            os.utime(source, (stamp, stamp))
+            py_compile.compile(str(source), doraise=True,
+                               invalidation_mode=py_compile.PycInvalidationMode.TIMESTAMP)
+            source.write_bytes(pinned)
+            os.utime(source, (stamp, stamp))
+            with mock.patch.object(c, "HERE", root / "numerical-claims-v1"), \
+                    mock.patch.object(c, "REFERENCE_SHA256", hashlib.sha256(pinned).hexdigest()):
+                self.assertEqual(c._backend().MARKER, "pinned")
+
+    def test_changed_source_is_rejected_before_execution(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            source_dir = root / "initial-evaluator-v1"
+            source_dir.mkdir()
+            source = source_dir / "evaluator.py"
+            source.write_text('raise RuntimeError("must not execute")\n')
+            with mock.patch.object(c, "HERE", root / "numerical-claims-v1"), \
+                    mock.patch.object(c, "REFERENCE_SHA256", "0" * 64):
+                with self.assertRaisesRegex(c.ClaimError, "numerical reference changed"):
+                    c._backend()
 
 
 if __name__ == "__main__":
