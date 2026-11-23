@@ -37,7 +37,10 @@ limits, never permission to crop a person or omit a run.
 For later protected grading, `reorder_intervals(source_target, source_offsets,
 private_mapping["projected_to_source_zero_based"])` applies the identical full
 permutation to a source-order target vector. It rejects duplicate or missing
-intervals. Shared-sentence dependency groups must follow the same permutation;
+intervals. Every boundary must lie within the supplied sample array before
+signed differences are computed; malformed int64 offsets cannot wrap into
+apparently valid lengths or invoke negative-index slicing. Shared-sentence
+dependency groups must follow the same permutation;
 that protected identity adapter and source preparation are still required.
 
 After preparing all 24 people, pass the complete returned record mapping to the

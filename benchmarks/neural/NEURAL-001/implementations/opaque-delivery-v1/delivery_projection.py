@@ -35,9 +35,11 @@ def _array(value, dtype, shape, label):
 
 
 def _offsets(value, rows, count=None):
+    # Bound before signed subtraction: out-of-range int64 differences may wrap.
     require(type(value) is np.ndarray and value.dtype.str == "<i8" and value.ndim == 1 and
             (count is None or len(value) == count + 1) and len(value) >= 3 and
-            value[0] == 0 and value[-1] == rows and np.all(np.diff(value) >= 4),
+            value[0] == 0 and value[-1] == rows and
+            np.all((value >= 0) & (value <= rows)) and np.all(np.diff(value) >= 4),
             "Complete interval support; no cropping or artificial padding")
 
 

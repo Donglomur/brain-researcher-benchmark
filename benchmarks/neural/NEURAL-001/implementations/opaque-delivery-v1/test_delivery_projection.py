@@ -130,6 +130,29 @@ class ProjectionControls(unittest.TestCase):
         with self.assertRaises(ValueError):
             d.reorder_intervals(np.arange(8), np.array([0, 4, 8], dtype="<i8"), [0, 0])
 
+    def test_rejects_wrapped_offsets_before_interval_slicing(self):
+        values = np.arange(12, dtype="<f8")
+        malformed = np.array([0, np.iinfo(np.int64).max, -5, 12], dtype="<i8")
+        # These signed differences wrap positive; neither the giant index nor
+        # the negative slice is a permissible native interval boundary.
+        self.assertTrue(np.all(np.diff(malformed) >= 4))
+        for supplied in (values, np.column_stack((values, -values))):
+            with self.subTest(dimensions=supplied.ndim):
+                with self.assertRaisesRegex(ValueError, "Complete interval support"):
+                    d.reorder_intervals(supplied, malformed, [0, 1, 2])
+        valid = np.array([0, 4, 12], dtype="<i8")
+        actual, offsets = d.reorder_intervals(values, valid, [1, 0])
+        np.testing.assert_array_equal(actual, np.r_[values[4:], values[:4]])
+        np.testing.assert_array_equal(offsets, [0, 8, 12])
+
+    def test_rejects_wrapped_native_training_offsets(self):
+        training, queries = inputs("sub-02")
+        training["offsets"] = np.array(
+            [0, np.iinfo(np.int64).max, -9, -5, len(training["meg"])], dtype="<i8")
+        self.assertTrue(np.all(np.diff(training["offsets"]) >= 4))
+        with self.assertRaisesRegex(ValueError, "Complete interval support"):
+            d.project_person("sub-02", training, queries, secret=SECRET)
+
     def test_deterministic_files_and_no_overwrite_or_nested_custody(self):
         projected = d.project_person("sub-01", *inputs("sub-01"), secret=SECRET)
         with tempfile.TemporaryDirectory() as tmp:
