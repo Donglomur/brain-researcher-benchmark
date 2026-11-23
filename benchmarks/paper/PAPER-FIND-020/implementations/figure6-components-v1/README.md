@@ -28,7 +28,11 @@ historical biological association runtime remains a separate calibration task.
   `weight > 0.01` and `signal_correlation > 0.2`. Neither an absolute weight nor
   a newly computed percentile is equivalent. Correlation range checks use the
   supplied real value before conversion to float; conversion cannot round an
-  out-of-range correlation onto -1 or 1 and make it valid. It does not invent which image
+  out-of-range correlation onto -1 or 1 and make it valid. Strict threshold
+  comparisons also use the original validated real values, so a value just
+  above a threshold cannot round onto it and become ineligible. The existing
+  Python binary64 literals `0.01` and `0.2` are retained; this does not redefine
+  the thresholds as exact decimal fractions. It does not invent which image
   responses define correlation or which recurrent matrix entries are eligible.
 - `score_curve(target_rows, expected_conditions, prediction_rows)` returns
   correct-image counts and image denominators separately for every condition.
