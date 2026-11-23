@@ -29,3 +29,19 @@ This is a **prospective diagnostic**, not the author's analysis, a finite-sample
 [Source pins](SOURCE_PINS.json) retain immutable author revisions and local dependency identities. The prior exact source audit was reused; no source downloads, annotations, fMRI, tensors, predictions, weights or private historical solver targets were accessed for this revision. The new tests use generated boxes only. An independently hand-enumerated two-image case exercises unequal query counts, joint resampling and the 12-contrast max-deviation radius. Further controls cover a losing subject hidden by a favorable pooled mean, first-box scorer integration, strict threshold, identical arms, zero-query draws, all subjects/arms, key multiplicity, order invariance, invalid inputs and the actual CLI.
 
 Run tests through the project's coordinated two-slot lightweight test pool. Native baseline/candidate execution and scientific qualification remain absent. Registration status remains design-ready; this component does not make the benchmark improvement-ready.
+
+## Source traversal alignment
+
+`source_alignment.py` audits the unresolved identity-joining seam before native comparison. The [pinned author scorer](https://raw.githubusercontent.com/weihaox/BrainHub/4838666f1a04d0521c2184fa50b5b77e7e7ac5ee/eval_bbox_rec.py) independently traverses annotation and response image dictionaries, intersects category keys with source category lists, then pairs flattened boxes by position. The local scorer instead joins query identities. Equal counts can conceal different positional pairings; omitted categories can shift later pairs.
+
+```sh
+python3 source_alignment.py --contract CONTRACT.json --annotations ANNOTATIONS.json --image-order ORDER.json --category-groups coco_categorized_labels.json --output NEW_ALIGNMENT.json
+```
+
+Use the same complete four-arm/four-subject operator contract as the vector scorer and the source [category-group file](https://raw.githubusercontent.com/weihaox/BrainHub/4838666f1a04d0521c2184fa50b5b77e7e7ac5ee/data/processing/coco/coco_categorized_labels.json). Membership of all five category groups is checked while retaining each supplied list's order. Each input is bounded to 16 MiB and parsed and hashed from one byte snapshot. This is an explicit engineering limit, not a paper limit.
+
+The result retains S1/S2/S5/S7 flags separately for each arm, with counts for incorrect positional pairings, missing/extra query identities, unpaired tails, image-count assertion failures and extraction-index errors. Empty-query images remain relevant to the author's image-count assertion. A `null` response has a valid missingness meaning in the keyed scorer, but the source's `len(value)` operation would fail; this difference is reported. An empty source group has no evaluable queries and is not marked compatible.
+
+Category intersection produces a Python set. The audit reports traversal in its current process, runtime version and ordered-sequence hashes; it does not recover the original process's hash behavior. These diagnostics do not compute IoU or accuracy, execute the author scorer, or qualify numerical/source parity. Tensor precision, invalid coordinates, annotation order/authenticity, parsing, baseline execution and the scientific decision remain unresolved. Reports reference protected query populations and belong on the operator side. No new source-time or whole-task qualification is implied.
+
+Generated controls include twelve numeric image IDs versus lexicographic JSON order, reversed images, missing middle queries, equal-size wrong category populations, omitted empty images, null/malformed extraction, the complete panel, input-pin failures and exclusive CLI output.
