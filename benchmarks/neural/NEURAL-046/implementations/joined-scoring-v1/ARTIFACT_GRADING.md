@@ -9,9 +9,42 @@ targets. Existing source pins and arithmetic remain unchanged.
 The complete bundle, manifest, state directory and report are custodian-only.
 They must not be mounted into a participant environment: the bundle contains
 targets and identity mappings, and the report retains per-trial/animal losses.
-This source component supplies neither a participant interface nor a production
+The grading adapter supplies neither a participant interface nor a production
 sandbox. It is not connected to the canonical dispatcher and does not establish
 authentic-data execution, direct neural understanding or benchmark readiness.
+
+## Participant prediction preflight
+
+`preflight_submission.py` checks primary and mandatory sensitivity predictions
+using only `public.json`, `submission.json` and `sensitivity.json`. It reuses the
+unchanged primary validator and requires the exact sensitivity model and query
+IDs permitted by the public cell. A control without MEN requires an empty
+sensitivity object. Values must be finite; missing or extra cases are rejected.
+
+```sh
+python3 -I -S -B preflight_submission.py --public public.json \
+  --submission submission.json --sensitivity sensitivity.json \
+  --report preflight.json
+```
+
+The report path must be absent. Strict JSON and bounded regular-file reads reuse
+the artifact adapter below; each of the three inputs is capped at 64 MiB. These
+are file admission limits, not measured memory requirements. The report records
+the three object commitments and complete model/case coverage. It does not
+accept the operator's binding, closure, private targets or state directory, and
+does not invoke grading or fitting. No target-access consumption marker is made.
+
+This preflight checks prediction shape and coverage only. The existing primary
+validator checks model-artifact commitment keys; the referenced artifacts and
+their provenance are not authenticated here. A successful preflight does not
+establish producer closure, private identity binding, allowed training, model
+competence, scientific acceptance or a benchmark score. Operator grading still
+requires the complete committed bundle and its external custody obligations.
+
+`test_preflight_submission.py` covers complete and opaque public cases, primary
+and sensitivity omissions, unavailable model slots, invalid values, source-task
+binding, strict file parsing and a fresh CLI process with only the three public
+files. It uses small generated data and supplies no neural performance evidence.
 
 ## Input and invocation
 
