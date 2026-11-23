@@ -11,7 +11,8 @@ import math
 from pathlib import Path
 
 from common import TASK, descriptor, need
-from prepare import ARCHIVE, SESSION
+from prepare import ARCHIVE, SESSION, VERSIONS
+from author_replay import AUTHOR_BYTES, AUTHOR_SHA256
 from support import REFERENCES, animal_description, equal_sessions, phases, validate_prepared
 
 PUBLISHED = 0.7271
@@ -171,6 +172,108 @@ def score_endpoint(result, bundle, collection, animal_mapping=None):
     }
 
 
+def compare_author_replay(result, bundle, collection, component, replay_result,
+                          prepared_pin, component_pin, animal_mapping=None):
+    """Join a complete source-API replay to the same protected preparation.
+
+    Pins identify operator-selected metadata bytes; they do not establish source
+    custody, execution, array correctness or comparator competence. The CLI
+    obtains the expected pins from its independently selected receipt inputs.
+    No probability-vector paths are opened by this comparison.
+    """
+    output = score_endpoint(result, bundle, collection, animal_mapping)
+    records = bundle['records']
+    ids = {r['session_id'] for r in records}
+    author_pin = {'bytes': AUTHOR_BYTES, 'sha256': AUTHOR_SHA256}
+    need(replay_result['schema'] == 'foraging_source_api_cli_result_v1'
+         and replay_result['task_id'] == TASK
+         and replay_result['status'] == 'complete_author_api_component_only'
+         and type(replay_result['complete_sessions']) is int
+         and replay_result['complete_sessions'] == 40
+         and type(replay_result['completed_real_fits']) is int
+         and replay_result['completed_real_fits'] == 200,
+         'complete original40-session200-fit source-API result')
+    need(descriptor(replay_result['prepared']) == descriptor(prepared_pin)
+         and descriptor(replay_result['author_component']) == descriptor(component_pin)
+         and replay_result['author_component']['file'] == 'AUTHOR_COMPONENT.json'
+         and descriptor(replay_result['author_source']) == author_pin,
+         'same preparation and exact source-API component/source descriptor chain')
+    need(component['schema'] == 'foraging_source_api_real_branch_v1'
+         and component['task_id'] == TASK
+         and type(component['completed_real_fits']) is int
+         and component['completed_real_fits'] == 200
+         and descriptor(component['source_classifier']) == author_pin
+         and component['runtime_versions'] == VERSIONS,
+         'original author branch and adopted runtime report')
+    need(replay_result['paper_reproduced'] is None
+         and replay_result['paper_win'] is None
+         and replay_result['overall_benchmark_ready'] is False
+         and component['paper_reproduced'] is None
+         and component['paper_win'] is None
+         and component['improvement_ready'] is False
+         and all(component[name] is False for name in (
+             'unchanged_whole_script_execution', 'historical_environment_equivalence',
+             'source_shuffle_companions_executed', 'permutation_importance_executed',
+             'source_or_custody_qualification_established')),
+         'source-API component retains its scientific qualification limits')
+    need(set(component['sessions']) == ids
+         and set(replay_result['probabilities']) == ids,
+         'complete same40-session source-API metadata roster')
+    author_scores = {}
+    numeric_bytes = 0
+    for source in records:
+        sid = source['session_id']
+        row = component['sessions'][sid]
+        need(row['source_member'] == source['source_member']
+             and type(row['fits']) is int and row['fits'] == 5,
+             'source member and all five fits for every original session')
+        author_scores[sid] = _pooled_score(row, source)
+        vector = replay_result['probabilities'][sid]
+        pin = descriptor(vector)
+        need(vector['file'] == sid + '.f64' and vector['dtype'] == '<f8'
+             and type(vector['rows']) is int and vector['rows'] == source['rows']
+             and pin['bytes'] == 8 * source['rows'],
+             'complete original-row source-API probability descriptor')
+        numeric_bytes += pin['bytes']
+    need(type(component['output_numeric_bytes']) is int
+         and component['output_numeric_bytes'] == numeric_bytes
+         and type(replay_result['numeric_output_bytes']) is int
+         and replay_result['numeric_output_bytes'] == numeric_bytes,
+         'complete source-API numerical extent metadata')
+    mean = equal_sessions(author_scores, records)
+    _close(component['equal_session_balanced_accuracy'], mean,
+           'source-API equal-session aggregate agrees with pooled confusion')
+    output['author_replay'] = mean
+    output['author_replay_scope'] = {
+        'kind': 'source_API_real_label_component_metadata',
+        'prepared': descriptor(prepared_pin), 'component': descriptor(component_pin),
+        'source_classifier': author_pin, 'runtime_versions': dict(VERSIONS),
+        'probability_vectors_reopened': False,
+        'source_or_execution_authenticated_by_this_check': False,
+        'complete_paper_reproduction': False,
+    }
+    output['author_rounding_check'] = {
+        'comparator': 'source_API_real_label_component',
+        'absolute_tolerance': ROUNDING_TOLERANCE,
+        'within_predeclared_rounding_interval':
+            abs(mean - PUBLISHED) <= ROUNDING_TOLERANCE + 1e-15,
+        'source_equivalence_established_by_this_check': False,
+    }
+    for method in METHODS:
+        panel = result['hidden_label_improvement'][method]['sessions']
+        differences = {sid: panel[sid]['balanced_accuracy'] - author_scores[sid]
+                       for sid in ids}
+        output['methods'][method]['difference_from_author_api_replay'] = equal_sessions(
+            differences, records)
+        output['methods'][method]['author_api_rat_descriptive_stability'] = animal_description(
+            differences, records, animal_mapping)
+    output['interpretation'] += (
+        ' The optional source-API comparison checks the bound report arithmetic and '
+        'complete same-preparation metadata only. Its arrays, execution, custody, '
+        'shuffle companions and strongest-comparator qualification remain external.')
+    return output
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('result', 'prepared', 'collection'):
@@ -178,6 +281,10 @@ def main(argv=None):
         parser.add_argument('--' + name + '-sha256', required=True)
     parser.add_argument('--animal-mapping')
     parser.add_argument('--animal-mapping-sha256')
+    parser.add_argument('--author-component')
+    parser.add_argument('--author-component-sha256')
+    parser.add_argument('--author-result')
+    parser.add_argument('--author-result-sha256')
     parser.add_argument('--output', required=True)
     args = parser.parse_args(argv)
     loaded = {name: read_pinned_json(getattr(args, name), getattr(args, name + '_sha256'))
@@ -189,7 +296,20 @@ def main(argv=None):
     need(bool(args.animal_mapping) == bool(args.animal_mapping_sha256), 'mapping and digest together')
     mapping = None if not args.animal_mapping else read_pinned_json(
         args.animal_mapping, args.animal_mapping_sha256)[0]
-    output = score_endpoint(result, bundle, collection, mapping)
+    author_arguments = (args.author_component, args.author_component_sha256,
+                        args.author_result, args.author_result_sha256)
+    need(not any(author_arguments) or all(author_arguments),
+         'author component, result and both expected digests together')
+    if all(author_arguments):
+        component, component_pin = read_pinned_json(
+            args.author_component, args.author_component_sha256)
+        replay_result, result_pin = read_pinned_json(args.author_result, args.author_result_sha256)
+        output = compare_author_replay(result, bundle, collection, component, replay_result,
+                                      loaded['prepared'][1], component_pin, mapping)
+        loaded['author_component'] = (component, component_pin)
+        loaded['author_result'] = (replay_result, result_pin)
+    else:
+        output = score_endpoint(result, bundle, collection, mapping)
     output['inputs'] = {name: loaded[name][1] for name in loaded}
     if args.animal_mapping:
         output['animal_mapping_sha256'] = args.animal_mapping_sha256

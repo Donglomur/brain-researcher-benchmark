@@ -14,7 +14,8 @@ from pathlib import Path
 
 
 SUBJECTS = ("1", "2", "3", "4", "5", "6", "7", "9", "11")
-METHODS = ("candidate", "EEGPT", "BENDR", "BIOT", "LaBraM")
+SOURCE_METHODS = ("EEGPT", "BENDR", "BIOT", "LaBraM")
+METHODS = ("candidate",) + SOURCE_METHODS
 METRICS = ("auroc", "balanced_accuracy", "cohen_kappa")
 
 
@@ -124,8 +125,8 @@ def validate_roster(roster):
     return subjects
 
 
-def score_panel(roster, predictions):
-    """Compute every original method cell and paired candidate-control delta.
+def _metric_cells(roster, predictions, methods, prediction_schema):
+    """Validate and compute exactly one operator-selected method roster.
 
     Exact event joins prevent row order from becoming identity. Completeness
     means relative to the supplied roster, whose historical authenticity this
@@ -133,14 +134,14 @@ def score_panel(roster, predictions):
     """
     subjects = validate_roster(roster)
     fields(predictions, ("schema", "repetitions", "cells"), "prediction panel")
-    require(predictions["schema"] == "physiop300_predictions_v1", "prediction schema")
+    require(predictions["schema"] == prediction_schema, "prediction schema")
     repetitions = predictions["repetitions"]
     require(type(repetitions) is list and len(repetitions) == 3, "three repetition identities required")
     for repetition in repetitions:
         token(repetition, "repetition")
     require(len(set(repetitions)) == 3, "distinct repetition identities required")
     require(type(predictions["cells"]) is list, "cell list required")
-    expected = set(itertools.product(SUBJECTS, repetitions, METHODS))
+    expected = set(itertools.product(SUBJECTS, repetitions, methods))
     indexed = {}
     for cell in predictions["cells"]:
         fields(cell, ("subject_id", "repetition", "method", "probabilities"), "prediction cell")
@@ -158,7 +159,9 @@ def score_panel(roster, predictions):
         require(set(by_event) == set(subjects[key[0]]),
                 "every method/repetition must predict the exact same complete subject event set")
         indexed[key] = by_event
-    require(set(indexed) == expected, "all 135 cells required: nine subjects x three repetitions x five methods")
+    require(set(indexed) == expected,
+            "all %d cells required: nine subjects x three repetitions x %d methods"
+            % (len(expected), len(methods)))
 
     cells = []
     computed = {}
@@ -170,7 +173,7 @@ def score_panel(roster, predictions):
         supports.append({"subject_id": sid, "events": len(events),
                          "recordings": len({e["recording_id"] for e in events.values()}),
                          "event_recording_identity_sha256": support_digest})
-        for repetition, method in itertools.product(repetitions, METHODS):
+        for repetition, method in itertools.product(repetitions, methods):
             key = sid, repetition, method
             measured = binary_metrics([events[eid]["target"] for eid in eids],
                                       [indexed[key][eid] for eid in eids])
@@ -178,8 +181,15 @@ def score_panel(roster, predictions):
             cells.append({"subject_id": sid, "repetition": repetition, "method": method,
                           "event_recording_identity_sha256": support_digest, **measured})
 
+    return repetitions, cells, computed, supports
+
+
+def score_panel(roster, predictions):
+    """Compute the retained 135-cell candidate-plus-four-reference comparison."""
+    repetitions, cells, computed, supports = _metric_cells(
+        roster, predictions, METHODS, "physiop300_predictions_v1")
     deltas = []
-    for sid, repetition, method in itertools.product(SUBJECTS, repetitions, METHODS[1:]):
+    for sid, repetition, method in itertools.product(SUBJECTS, repetitions, SOURCE_METHODS):
         candidate = computed[sid, repetition, "candidate"]
         baseline = computed[sid, repetition, method]
         available = candidate["status"] == baseline["status"] == "computed"
@@ -203,6 +213,30 @@ def score_panel(roster, predictions):
             "paper_improvement_established": False}
 
 
+
+def score_reproduction_panel(roster, predictions):
+    """Compute the original four-method 108-cell reproduction input panel.
+
+    Method names describe the submitted outputs; they do not authenticate model
+    execution or AI provenance. This route adds no candidate or copied fifth
+    method and does not invent the unresolved fold-to-run aggregate.
+    """
+    repetitions, cells, _computed, supports = _metric_cells(
+        roster, predictions, SOURCE_METHODS, "physiop300_reproduction_predictions_v1")
+    undefined = sum(cell["status"] != "computed" for cell in cells)
+    return {"schema": "physiop300_reproduction_metric_cells_v1",
+            "task_id": "PAPER-paper-method-023", "panel_role": "original_four_method_reproduction",
+            "status": "complete_metric_cells" if not undefined else "complete_panel_with_undefined_metrics",
+            "qualification": "software_component_only_not_source_calibrated",
+            "support": supports, "repetitions": repetitions, "methods": list(SOURCE_METHODS),
+            "cells": cells, "undefined_cells": undefined, "source_panel_aggregate": None,
+            "aggregate_limit": "Source epoch selection, fold-to-run reduction and repetition SD remain unresolved; no aggregate or reproduced finding is inferred.",
+            "input_limit": "Exact support relative to operator roster only; source event coverage, biological identity, LOSO training, exposure and model provenance require separate qualification.",
+            "threshold_limit": "Both >=0.5 (ge) and >0.5 (gt) are reported until source PyHealth dependency parity is established.",
+            "independent_unit": "biological participant, unresolved mapping from nominal subject tokens",
+            "paper_reproduction_established": False}
+
+
 def load_json(path):
     def unique(pairs):
         value = {}
@@ -221,9 +255,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--operator-roster", required=True)
     parser.add_argument("--predictions", required=True)
+    parser.add_argument("--panel", choices=("improvement", "reproduction"), default="improvement",
+                        help="135 candidate/reference cells or original 108 method cells; no scientific win decision")
     args = parser.parse_args()
     try:
-        result = score_panel(load_json(args.operator_roster), load_json(args.predictions))
+        scorer = score_panel if args.panel == "improvement" else score_reproduction_panel
+        result = scorer(load_json(args.operator_roster), load_json(args.predictions))
     except (PanelError, OSError, UnicodeError, json.JSONDecodeError) as error:
         parser.exit(2, "Panel rejected: " + str(error) + "\n")
     print(json.dumps(result, sort_keys=True, indent=2, allow_nan=False))

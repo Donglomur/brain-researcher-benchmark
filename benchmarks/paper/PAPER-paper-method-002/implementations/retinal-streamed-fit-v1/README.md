@@ -27,6 +27,8 @@ python full_fit.py --input-manifest /admitted-inputs/INPUT_FILES.json \
 
 The deadline is a resource bound, not a shortened scientific profile. There is no epoch, split, update-count or batch-size CLI override. The example deadline is not a duration prediction. Cooperative checks surround singleton operations; an external owner must enforce hard process and memory limits, because a compiling or executing native call can outlast a check.
 
+Before reporting completion, the wrapper authenticates the original input file commitments again. A changed input with an updated, self-consistent manifest is rejected; harmless JSON key reordering retains the same commitments. This check cannot detect a temporary mutation that is restored before the final check, so physical read-only input custody remains an external requirement.
+
 The output root must be absent, with ordinary directory ancestry, and disjoint from sources and inputs. Complete output includes immutable epoch records, selected and last parameter packets, final optimizer state, context commitments, global validation history, selected VAL predictions, RNG provenance, and the legacy `jaxley-retinal-prediction-v1` TEST submission. `RESULT.json` distinguishes a complete fresh reference fit from failed or partial work. Complete counters are 255,885 training singletons, 63,987 validation singletons, 128 test singletons, 1,008 gradient batches and 63 validation chunks. Partial work is not a complete benchmark result and is not a resume checkpoint.
 
 ## Scope and verification
@@ -38,3 +40,13 @@ The component is primarily fresh **author-reference** execution. Publishing sour
 `frozen/` preserves seven exact source bodies. `source_bootstrap.py` copies the original fit initialization/loader/optimizer span and appends an observational return bundle. `source_transition.py` is the unchanged function extracted from the accepted numerical source. `SOURCE_CLOSURE.v1.json` records all component file pins and exact source anchors. Source and runtime paths are component-relative, with no private evidence-tree loader.
 
 Streaming changes floating-point accumulation order. Earlier accepted short numerical comparisons are limited evidence, not a proof for all 1,008 updates. No full-fit execution is claimed here. Sustained memory use, compiler residency and wall time remain unmeasured for this complete program; the prior gradient-only extrapolation is not an execution guarantee.
+
+### Input commitment controls
+
+Run `python3 -I -S -B tests/test_input_commitments.py` from this component.
+The seven standard-library controls exercise unchanged commitments, JSON key
+reordering, coherent replacement of each input, an uncommitted file change and
+wrong input-root identity. The two wrapper controls substitute the scientific
+runtime and check complete-versus-failed reporting; they do not execute a model
+or establish numerical equivalence. The original analytical-control record in
+`SOURCE_VERIFICATION.v1.json` retains its historical scope.

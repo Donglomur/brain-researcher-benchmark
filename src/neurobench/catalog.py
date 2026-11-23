@@ -1303,6 +1303,12 @@ def evidence_text(catalog, base=OUTPUT):
     if material:
         later_text += ('The separate SMC material report records a **71-file participant-material pair**, '
                        'with no participant execution. ')
+    exploratory_text = ''
+    if counts.get('exploratory_fixed_image_pilot_reports', 0):
+        exploratory_text = (f"The separate fixed-image ERP pilot records **{counts['direct_interpretation_attempts']} direct-image episode attempts** "
+                            f"and **{counts['exploratory_programme_authoring_attempts']} generated programme**, applied to "
+                            f"{counts['exploratory_programme_query_applications']} shared query images. "
+                            'Delivery/runtime failures are retained; tool restrictions were instruction-only and compute budgets unmatched. ')
     return (f"Recorded public evidence covers **{counts['tasks_with_recorded_evidence']} distinct task IDs**. "
             f"The pilot reports **{counts['paper_calibration_attempts']} historical paper-calibration attempts** and "
             f"**{counts['neural_programme_attempts']} neural-programme attempts**; "
@@ -1310,7 +1316,7 @@ def evidence_text(catalog, base=OUTPUT):
             f"{counts.get('paper_source_preparation_reports', 0)} paper and "
             f"{counts.get('neural_source_preparation_reports', 0)} neural source-preparation reports, and "
             f"{counts['native_operator_controls']} native software controls are separate from model attempts. "
-            + probe_text + later_text
+            + probe_text + later_text + exploratory_text
             + markdown_link('Read the published evidence', 'docs/status/README.md', base)
             + ', or run `python3 scripts/neurobench.py evidence [TASK_ID]`. '
             'These records do not establish current runtime qualification or paper improvement.\n\n')

@@ -31,7 +31,7 @@ Source availability does not establish a qualified runtime. A programme score ca
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 36542 bytes; SHA-256 `3f14bed95ff6267206aa17ff1a4b95a1ad23913e840232cbfc9efe4a9cd30e88`.
+- Specification identity: 36806 bytes; SHA-256 `9eb954d0a29e5ed69e25acaee3d60f63c0b8446ef625842bb4971b45d6764ffb`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
@@ -43,7 +43,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Implementation artifacts
 
 - [Native inputs v1](implementations/native-inputs-v1) — Reviewed source component.
-  Scope: Complete original three-archive native source producer with authenticated successful preparation and independent output audit: 104 animals, 936 target cases and all support traces retained. The three above-range target annotations, physical/acoustic binding, biological support mapping and competent comparison remain unresolved; candidate conditions and primary scoring are not admitted by source preparation.
+  Scope: Complete original three-archive native source producer with authenticated successful preparation and independent output audit: 104 animals, 936 target cases and all support traces retained. The three above-range target annotations, physical/acoustic binding, biological support mapping and competent comparison remain unresolved; candidate conditions and primary scoring are not admitted by source preparation. The current Liberman reader preserves sample-index axes while physical layout remains unresolved; earlier materialized preparation evidence retains its original source identity.
 - [Native delivery v1](implementations/native-delivery-v1) — Reviewed source component.
   Scope: Native-delivery source/manual package and public-asset distribution recipe. Existing 936-case preparation and generated controls do not establish participant-model scoring, physical calibration, clinical equivalence or uploaded public asset availability.
 - [Release annotation agreement v1](implementations/release-annotation-agreement-v1) — Reviewed source component.

@@ -166,12 +166,16 @@ def render_cell(observation, cell_id):
                                f' fill="{color(float(rate), scale)}"/>')
         if matrix is None:
             out.append(f'<rect x="{left}" y="{PANEL_TOP}" width="480" height="864" fill="#eee"/>')
-            out.append(text(left + 240, 540, "UNSUPPORTED: no trials for this prior", anchor="middle", size=14))
         for phase in range(21):
             x = left + phase * CELL_WIDTH
             quarter = phase % 5 == 0
             out.append(f'<line x1="{x}" x2="{x}" y1="{PANEL_TOP}" y2="1016"'
                        f' stroke="{"#555" if quarter else "#ddd"}" stroke-width="{1.5 if quarter else 0.25}"/>')
+        if matrix is None:
+            # Keep the missing-support annotation above the grid and give it an
+            # opaque background so lines cannot cross the text.
+            out.append(f'<rect x="{left + 8}" y="518" width="464" height="32" fill="#eee"/>')
+            out.append(text(left + 240, 540, "UNSUPPORTED: no trials for this prior", anchor="middle", size=14))
         for phase in range(20):
             out.append(text(left + (phase + 0.5) * CELL_WIDTH, 1034, phase + 1, size=10, anchor="middle"))
         for quarter in range(4):

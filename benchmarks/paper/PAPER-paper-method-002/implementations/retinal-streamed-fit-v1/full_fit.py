@@ -8,7 +8,7 @@ import stat
 from pathlib import Path
 import time
 
-from source_loading import require, input_paths, load_frozen_sources, runtime_requirements
+from source_loading import require, input_paths, reauthenticate_inputs, load_frozen_sources, runtime_requirements
 
 
 def publish_json(root, name, document, maximum):
@@ -97,7 +97,7 @@ def run(input_manifest, output, seconds):
         artifacts['rng'] = publish_json(output, 'rng.json', runtime.rng, 128 * 1024)
         # Reauthenticate inputs after the complete operation. No scientific targets
         # are exposed by this source check; actual read-only mount enforcement is external.
-        input_paths(input_manifest)
+        reauthenticate_inputs(input_manifest, root, manifest)
         report = {**common, 'status': 'COMPLETE_FRESH_STREAMED_AUTHOR_REFERENCE', 'complete': True,
                   'optimizer_updates': runtime.updates, 'validation_checks': len(runtime.history),
                   'selected_epoch_zero_based': result['best_epoch_zero_based'],

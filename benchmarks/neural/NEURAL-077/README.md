@@ -34,6 +34,8 @@ Each record keeps the scope of its original report. It is not current runtime qu
 
 - [Neural programme attempt](../../../docs/science/difficulty-pilot-20261117.json): EEG and permitted nuisance-feature programme: two exposed development people and all 400 trials; not direct or viewer interpretation.
 - [Neural programme attempt](../../../docs/science/difficulty-pilot-20261117.json): EEG and permitted nuisance-feature programme: two exposed development people and all 400 trials; not direct or viewer interpretation.
+- [Exploratory direct interpretation](docs/exploratory32-fixed-image-pilot-20261122.json): One shared 32-image cohort, one image per person; errors remain in all denominators.
+- [Exploratory frozen programme](docs/exploratory32-fixed-image-pilot-20261122.json): One shared 32-image cohort, one image per person; errors remain in all denominators.
 - [Native operator control](../../../docs/status/operator-controls-20261116.json): Authenticated operator input inspection/preparation and existing finished-file grading for the previously exposed two-person EEG and sleep development panels. No candidate/model execution, fitting, scientific comparison trial or complete task qualification.
 - [Native operator control](../../../docs/status/operator-controls-rename-20261116.json): Repair validation through the actual public CLI in a fresh checkout of the renamed module: same previously exposed two-person EEG and sleep panels, same existing software-control submissions, target pins and comparator outputs. No candidate/model execution, fitting, scientific comparison trial or complete task qualification.
 - [Authentic input materialization](implementations/complete-direct-condition-v1/EVIDENCE.json): Complete waveform delivery independently compared with pinned raw samples; no model execution or scoring.
@@ -63,6 +65,7 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Full6400 fixed-canary delivery evidence (2026-11-19)](docs/full6400-numerical-delivery-20261119.md)
 - [Full6400 fixed-canary delivery evidence JSON (2026-11-19)](docs/full6400-numerical-delivery-20261119.json)
 - [Exploratory fixed-image pilot aggregates and limits (2026-11-22)](docs/exploratory32-fixed-image-pilot-20261122.md)
+- [Exploratory fixed-image pilot aggregate evidence JSON (2026-11-22)](docs/exploratory32-fixed-image-pilot-20261122.json)
 
 ## Implementation artifacts
 
@@ -86,6 +89,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Exploratory 32-case image-subset scoring with complete first-response admission, explicit failure denominators, a pre-gold gate and paired stratified bootstrap. Sixteen generated controls qualify source behavior only. The official full6400 scorer is unchanged; physiological P3, population, provider isolation, actual participant performance and scientific readiness are not established.
 - [Fixed image dispatch v1](implementations/fixed-image-dispatch-v1) — Reviewed source component.
   Scope: Prepare portable five-image payloads using committed anonymous descriptors and authenticated PNG bytes. Sixteen generated controls establish source behavior only. No actual transport adapter, participant delivery, image inspection, tool isolation, prediction or scientific performance is established.
+- [Four demo image reference v1](implementations/four-demo-image-reference-v1) — Reviewed source component.
+  Scope: Prospective four-demo fixed-image reference using visible-only bins, explicit missingness and common-support distances. Twenty-two generated controls passed. Authentic-demo compatibility and empirical competence are unqualified; the prior frozen programme and its failed pilot outcomes are unchanged. No authentic query prediction, score or new benchmark.
 - [Full32 demonstration baseline v1](implementations/full32-demonstration-baseline-v1) — Reviewed source component.
   Scope: Deterministic four-demonstration reference programme through the accepted frozen-bundle ABI. Four generated source controls passed in the closed source phase; one later original EEG input produced a valid ungraded prediction with known process closure. No established accuracy/calibration, strong-comparator, direct-arm or scientific readiness qualification. Existing6400 paired condition and grader unchanged.
 - [Full32 fixed reference v1](implementations/full32-fixed-reference-v1) — Reviewed source component.

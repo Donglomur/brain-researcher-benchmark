@@ -115,3 +115,56 @@ generation dependencies/weights, frozen candidate outputs, verified extraction
 and protected comparison remain upstream requirements. The prepared subject7
 TEST projection alone cannot reproduce Table1's four-subject average. This
 adapter also does not resolve Table2's calibration/checkpoint requirements.
+
+## Compare candidate and reference on the same Table 1 inputs
+
+`table1_compare.py` computes a paired **descriptive** difference between two
+complete feature manifests accepted by the evaluator above. It requires all four
+subjects and all 982 images per subject in both arms. Within each subject, the
+ordered stimulus identities and the actual float32 target-feature values must
+match exactly across arms. A matching filename or claimed digest alone does not
+establish this equality. Different orders across subjects remain supported, but
+reorder a candidate/reference pair together before freezing its manifests.
+
+Each arm independently supplies its eight selection cosines and chosen index.
+The comparison applies the same first-maximum validation and the original
+predicted-column Pearson calculation in each arm. It averages the four subject
+scores separately, then subtracts the reference mean from the candidate mean.
+`delta_percentage_points` is 100 times that difference. It does not replace the
+original scalar operation with an average of per-image fractions or a pooled
+3,928-image gallery.
+
+    python -I -B table1_compare.py /private/reference/manifest.json \
+      /private/candidate/manifest.json --max-read-bytes 134217728 \
+      --max-working-bytes 268435456
+
+The read limit is shared across both arms' NPY payloads; the output separately
+reports bounded manifest bytes and their hashes. The 160-MiB minimum numerical
+workspace allowance is conservative admission, not an enforced process RSS cap.
+The single-arm evaluator and its source arithmetic remain unchanged.
+
+By default, output contains four subject summaries and the aggregate difference.
+`--include-image-counts` additionally emits each subject's ordered stimulus IDs,
+reference/candidate success counts and integer count differences. These are
+operator-private evaluation outputs; keep authentic per-image results outside
+public source releases. Every count uses that subject's full 981 distractors.
+
+A positive difference is a higher feature score for these supplied panels. It is
+not an automatic paper-improvement or SOTA decision. The subjects share the same
+982 images, and each image's score depends on its distractor gallery: treating
+3,928 subject-image rows as independent repetitions would give misleading
+uncertainty. This component supplies no confidence interval, superiority rule or
+accepted reproduction tolerance. Original membership, native extraction,
+selected-image binding, checkpoint provenance, matched information/compute,
+submission freezes and protected evaluation still need independent qualification.
+Table 1's other metrics and the separate Table 2 full-48 comparison remain outside
+this CLIP component.
+
+Run the added generated checks with an existing NumPy environment:
+
+    OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -I -B test_table1_compare.py
+
+The checks exercise the complete four-subject gallery with analytically counted
+strict-tie cases and unequal subject changes, mismatch refusals, each arm's
+selection, optional private vectors, manifest identity and the shared read limit.
+Generated control scores establish software behavior only.

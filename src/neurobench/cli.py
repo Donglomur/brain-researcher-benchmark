@@ -110,7 +110,7 @@ def public_implementations(catalog, task):
                               'No implementation code, data or verification receipts were opened.'}
 
 
-def public_metadata_command(action, root, *, track=None, task_id=None):
+def public_metadata_command(action, root, *, track=None, task_id=None, compact=False):
     builder = public_catalog_module()
     catalog = builder.generate(root, check=True) if action == 'check' else builder.load(root)
     if action in ('status', 'check'):
@@ -119,6 +119,18 @@ def public_metadata_command(action, root, *, track=None, task_id=None):
             result.update(metadata_check='passed', check_scope='Deterministic public metadata/catalog consistency only')
         return result
     if action == 'list':
+        if compact:
+            # Use the same primary policy selection as the catalog. A retained
+            # secondary policy must not imply that an unavailable primary is ready.
+            return [{**{key: row[key] for key in ('id', 'title', 'track', 'registration_stage',
+                                                 'scientific_readiness', 'submission_readiness')},
+                     'scope_disposition':
+                         {outcome: builder.primary_paper_disposition(row, outcome)
+                          for outcome in ('reproduction', 'improvement')}
+                         if row['track'] == 'paper' else
+                         {'source_delivery': (row.get('neural_understanding') or {}).get(
+                             'disposition', 'not_revised')}}
+                    for row in catalog['tasks'] if track is None or row['track'] == track]
         return [{**{key: row[key] for key in ('id', 'title', 'track', 'source_specification',
                   'registration_stage', 'specification', 'runtime_manifest',
                   'implementation_ids', 'related_implementation_ids',
@@ -745,6 +757,8 @@ def main(argv=None, root=None):
     subs.add_parser('status')
     subs.add_parser('check')
     p = subs.add_parser('list'); p.add_argument('--track', choices=['paper', 'neural'])
+    p.add_argument('--compact', action='store_true',
+                   help='List IDs, titles and declared scope without nested contracts; readiness remains separate')
     p = subs.add_parser('show'); p.add_argument('id')
     p = subs.add_parser('implementations', help='Show current source paths, roles and limits for a task')
     p.add_argument('id')
@@ -786,7 +800,8 @@ def main(argv=None, root=None):
         result = compare_paper(args.id, args.result, root)
     elif args.action in ('status', 'check', 'list', 'show', 'implementations') and public_metadata_mode(root):
         result = public_metadata_command(args.action, root, track=getattr(args, 'track', None),
-                                         task_id=getattr(args, 'id', None))
+                                         task_id=getattr(args, 'id', None),
+                                         compact=getattr(args, 'compact', False))
     else:
         if args.calibration:
             dispatch_options['calibration'] = True

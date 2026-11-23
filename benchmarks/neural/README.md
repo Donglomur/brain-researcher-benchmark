@@ -20,9 +20,9 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-004](NEURAL-004/README.md) | Conditional contrast inference and HMP evidence investigation | 4 | not linked |
 | [NEURAL-005](NEURAL-005/README.md) | ERP contribution to subsequent social choice | 4 | [manifest](NEURAL-005/implementations/registered-runtime/manifest.json) |
 | [NEURAL-006](NEURAL-006/README.md) | Reward versus emotion prediction-error physiology | 4 | not linked |
-| [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 18 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
+| [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 19 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
 | [NEURAL-008](NEURAL-008/README.md) | EOG information beyond EEG and sleep timing | 6 | [manifest](NEURAL-008/implementations/registered-runtime/manifest.json) |
-| [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 6 | not linked |
+| [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 7 | not linked |
 | [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 7 | not linked |
 | [NEURAL-011](NEURAL-011/README.md) | Adult clinical seizure-event detection | 2 | not linked |
 | [NEURAL-012](NEURAL-012/README.md) | Cross-cohort seizure robustness | 3 | [manifest](NEURAL-012/implementations/registered-runtime/manifest.json) |
@@ -90,7 +90,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-074](NEURAL-074/README.md) | Shared cognitive components across tasks | 3 | not linked |
 | [NEURAL-075](NEURAL-075/README.md) | Perception-to-imagery object decoding | 3 | [manifest](NEURAL-075/implementations/registered-runtime/manifest.json) |
 | [NEURAL-076](NEURAL-076/README.md) | Visual-feature hierarchy in mental imagery | 3 | [manifest](NEURAL-076/implementations/registered-runtime/manifest.json) |
-| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 27 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
+| [NEURAL-077](NEURAL-077/README.md) | Visual oddball target detection from EEG | 28 | [manifest](NEURAL-077/implementations/registered-runtime/manifest.json) |
 | [NEURAL-078](NEURAL-078/README.md) | Error-related negativity beyond response timing | 5 | [manifest](NEURAL-078/implementations/registered-runtime/manifest.json) |
 | [NEURAL-079](NEURAL-079/README.md) | Natural-video EEG response encoding | 1 | not linked |
 | [NEURAL-080](NEURAL-080/README.md) | Video dynamics versus eye movements in EEG | 2 | not linked |
@@ -120,7 +120,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | --- | --- | --- | --- |
 | [NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR](NEURAL-CENTRAL-20261114-HYBRID-BEHAVIOR/README.md) | Causal held-session next-action inference from human information-sampling state | 6 | not linked |
 | [NEURAL-DISC-20261114-VESTIBULAR-VO](NEURAL-DISC-20261114-VESTIBULAR-VO/README.md) | Continuous self-motion reconstruction from simultaneous vestibular spike trains | 3 | not linked |
-| [NEURAL-DISC-20261114-VOLTRON-SPIKES](NEURAL-DISC-20261114-VOLTRON-SPIKES/README.md) | Optical voltage trace to independently recorded spike timing across complete cell recordings | 4 | not linked |
+| [NEURAL-DISC-20261114-VOLTRON-SPIKES](NEURAL-DISC-20261114-VOLTRON-SPIKES/README.md) | Optical voltage trace to independently recorded spike timing across complete cell recordings | 5 | not linked |
 | [NEURAL-DISC-20261114-WORM-PROPAGATION](NEURAL-DISC-20261114-WORM-PROPAGATION/README.md) | Conditional downstream calcium-response reconstruction after identified-neuron perturbation | 2 | not linked |
 | [NEURAL-EXP-005](NEURAL-EXP-005/README.md) | Neonatal seizure-report probability from complete causal EEG windows | 6 | not linked |
 | [NEURAL-SCOPE-20261114-AASD-REPORT](NEURAL-SCOPE-20261114-AASD-REPORT/README.md) | Offline reported-attention direction inference with motor and mixture controls | 3 | not linked |

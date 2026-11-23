@@ -162,7 +162,7 @@ def load_sources():
         arrays = compile_source("arrays", "registered-runtime/complete-operator/nlb/arrays.py")
         delivery = compile_source("delivery", "opaque-delivery-v1/delivery.py")
         grader = compile_source("grader", "registered-runtime/engine/investigation/grade.py")
-        metrics = compile_source("metrics", "registered-runtime/engine/metrics.py")
+        metrics = compile_source("metrics", "registered-runtime/complete-operator/nlb/metric_core.py")
         return types.SimpleNamespace(arrays=arrays, delivery=delivery, grader=grader, metrics=metrics,
             assets=decode(bodies["registered-runtime/assets.json"]),
             source_pin=pin(raw), implementation_pin=pin(small(HERE / "file_delivery.py", 65536)))

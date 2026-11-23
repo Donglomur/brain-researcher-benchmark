@@ -32,6 +32,7 @@ PINS = {
 HOLDS = [
  'Marcotti CSV does not encode a physical sample period, voltage unit or acoustic zero; no common 244-point/10-ms view is admitted.',
  'Three target threshold tokens exceed the largest recorded level. Literal 100 must not be silently converted to an exact threshold or a censoring bound.',
+ 'Liberman stored-row continuity is unresolved: preserve sample indices without a physical waveform axis; the CFTS header period alone does not resolve continuous versus concatenated storage.',
  'Liberman ear headers and filenames may conflict; native voltage/offset and biological repeat mappings need independent source evidence.',
  'Manor wave-cursor fields are not an authenticated threshold-label table; complete support identities, labels and group splits remain unqualified.',
  'No source-only trained comparator, matched four-stack calibration, participant isolation or authentic scoring has been qualified.',
@@ -119,7 +120,7 @@ def parse_wave_csv(body, lab):
   yield {'record_index':record_index,'source_line':line,'stimulus':stimulus(row[fi],target=lab=='marcotti'),'level_db':number(row[li],'level'),'axis':axis,'samples':samples,'private_metadata':metadata}
 
 def parse_cfts(body):
- """Parse tab-separated header fields, then one waveform per LEVELS column."""
+ """Parse every stored value per LEVELS column without assuming row continuity."""
  need(len(body)<=MAX_MEMBER,'member size cap')
  text=body.decode('latin1'); fields={}; raw=[]; matrix=[]; started=False
  for line in text.splitlines():
@@ -147,7 +148,9 @@ def parse_cfts(body):
  threshold=field('THRESHOLD')
  for i,level in enumerate(levels):
   yield {'record_index':i,'stimulus':stimulus(freq),'level_db':level,'samples':[row[i] for row in matrix],
-   'axis':{'kind':'uniform','step_ms':step,'first_sample_ms':None,'unit':None,'reason':'native SAMPLE microseconds; amplitude and recording/acoustic offset unresolved'},
+   'axis':{'kind':'sample_index','sample_period_ms':None,'first_sample_ms':None,'unit':None,
+    'header_sample_period_ms':step,'physical_layout':'unresolved_continuous_or_concatenated',
+    'reason':'CFTS SAMPLE header period retained as unqualified metadata; stored-row continuity, amplitude and recording/acoustic offset unresolved'},
    'private_metadata':{'header_lines':raw,'fields':fields,'ear_header':field('SW EAR'),'threshold_raw':threshold}}
 
 def target_id(member):

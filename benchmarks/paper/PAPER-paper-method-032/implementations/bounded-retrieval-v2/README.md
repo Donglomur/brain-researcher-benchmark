@@ -160,3 +160,79 @@ snapshots, strict option typing, unchanged native-width/reference gates and admi
 routing. The last routing control mocks the feature geometry/numerical result; it
 is not a native-width execution.
 These controls use reduced feature width and no authentic arrays or model runs.
+
+## Validate the complete four-subject retrieval result
+
+`cohort.py` combines saved `streaming.py --include-decisions` results for subjects
+**1, 2, 5 and 7**. It uses only the Python standard library. The [paper's Table 1
+caption](https://arxiv.org/html/2403.11207v2) specifies averaging those four
+subjects; Section 3.3 describes the 300-way retrieval calculation and 30 draws.
+The [pinned author correction](https://raw.githubusercontent.com/MedARC-AI/MindEyeV2/76a2609243ba1bacb450e47e3dc78de1f78a9c00/README.md)
+binds **image retrieval** to a brain query choosing an image and **brain
+retrieval** to an image query choosing a brain response. The component preserves
+those corrected directions.
+
+Create an operator-private JSON input with schema
+`mindeye2-retrieval-cohort-input/v1` and a `subjects` list containing exactly four
+objects. Each object has two fields: `reference`, holding the full reference
+manifest used by `streaming.py`, and `result`, holding that subject's complete
+scorer result with query evidence. This input is saved evaluation evidence, not a
+participant submission format. Freeze and independently retain its raw-file SHA256
+before invoking the command.
+
+```sh
+python3 -I -S -B cohort.py \
+  --candidate /operator/candidate-cohort.json \
+  --candidate-sha256 TRUSTED_CANDIDATE_FILE_SHA256 \
+  --max-input-bytes 67108864
+```
+
+For each subject the validator requires the complete 1,000-identity population,
+30 frozen pools of 300 candidates, and all 18,000 decisions across the two
+retrieval directions. It verifies reference/pool/evidence commitments, query
+ordering, each prediction's membership in its pool, and the correctness flag
+against query/predicted identity equality. It recomputes each draw's accuracy and
+checks the supplied mean, population-SEM and normal interval. The mean/SEM checks
+allow only `32 * sys.float_info.epsilon` absolute roundoff between standard-library
+and NumPy reductions. This numerical consistency allowance is not a reproduction
+tolerance or an improvement margin. No new random draws or feature scoring occur.
+
+All four subjects must declare the same shared1,000 stimulus set. Their pool
+schedules may differ; the source contract does not require the union of the
+30 random pools to cover every stimulus. The reported cohort mean equally weights
+the four validated subject means. Source draw intervals remain Monte Carlo
+summaries; the component supplies no pooled cohort confidence interval. Output
+omits individual query and predicted identities while retaining commitments and
+subject/draw summaries. Keep authentic input evidence and its outcomes under the
+operator's protected evaluation custody.
+
+To compare two complete arms, add `--baseline /operator/baseline-cohort.json`
+and `--baseline-sha256 TRUSTED_BASELINE_FILE_SHA256`. The byte allowance is shared
+across both files. Each candidate/baseline subject pair must bind the identical
+complete reference manifest and pool schedule. The result reports candidate
+minus baseline for each subject and for the two cohort means. It does not apply
+an automatic paper-win rule or reinterpret overlapping query rows as independent
+participants.
+
+Internal consistency cannot establish that the recorded winners actually came
+from the cosine calculation: fabricated but self-consistent records remain
+possible unless protected operator execution authenticates their origin. Feature
+production, checkpoint identity, native arithmetic, original population custody
+and one-hour training/adaptation exposure still require independent qualification.
+Consequently the output keeps native parity, scientific qualification and full
+contract completion false and reproduction/improvement unknown. It does not
+compare with a historical one-hour anchor based solely on these manifests. The
+complete reconstruction panel and Figure 5 transfer comparison remain required
+elsewhere for the registered paper task.
+
+Run the generated controls with:
+
+```sh
+python3 -I -S -B test_cohort.py
+```
+
+They exercise complete four-subject decision records and a paired comparison,
+hand-counted asymmetric subject scores, changed targets/references, corrupted
+flags/means, missing support, corrected direction labels, digest checks and the
+shared CLI input bound. They use no authentic feature arrays, images, models or
+scientific scores.

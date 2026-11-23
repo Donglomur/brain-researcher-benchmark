@@ -13,6 +13,12 @@ route. No source arrays, labels, historical predictions or candidate models were
 read; no fitting or candidate execution occurred. The original 40-session roster,
 rat joins and author calibration remain unverified.
 
+The optional author-replay bridge consumes the complete metadata outputs of
+[`source-api-cli-v1`](source-api-cli-v1/README.md). It makes the candidate comparison
+usable after a separately admitted source-API run, without substituting the
+operator's independent BNB equations for that run. It supplies no new fit,
+data acquisition or calibration result.
+
 ## Relationship to the existing programme
 
 This is an additive endpoint checker, not another preparation or execution
@@ -57,6 +63,42 @@ reads metadata only; source array paths inside receipts are never followed. Each
 receipt has an 8 MiB read cap. Complete native receipt size has not been measured;
 an oversized receipt is refused, with no truncation or partial-panel fallback.
 
+### Compare with a source-API replay
+
+After the separate source-API run has completed, append these four arguments to
+the same command. They refer to the exact outputs exported by that CLI:
+
+```sh
+  --author-component /operator/replay/AUTHOR_COMPONENT.json \
+  --author-component-sha256 AUTHOR_COMPONENT_SHA256 \
+  --author-result /operator/replay/COMPONENT_RESULT.json \
+  --author-result-sha256 COMPONENT_RESULT_SHA256
+```
+
+All four arguments are required together. The bridge checks that
+`COMPONENT_RESULT.json` binds both the selected `AUTHOR_COMPONENT.json` bytes and
+the very same preparation receipt used for candidate grading. It also checks
+the pinned author source, adopted runtime metadata, all 40 source-member joins,
+five fits per session, all 200 fits, complete numerical extent descriptors and
+each session's pooled confusion counts. The mean is recomputed with equal session
+weights. Probability-vector paths are never opened, and vector contents are not
+independently verified by this metadata check.
+
+With these inputs, `author_replay` contains the checked source-API mean, and each
+method gains `difference_from_author_api_replay`. The existing
+`operator_bnb_reconstruction`, `difference_from_operator_bnb`, published score and
+paper-relative differences remain separate. Optional rat summaries of the paired
+source-API differences are descriptive only, with the same complete-map
+requirement as the existing summaries. Without the optional inputs, the earlier
+behavior is preserved and `author_replay` remains null.
+
+The source-API report represents the real-label component, with shuffle companions,
+model audit and complete scientific qualification still unresolved. The bridge
+refuses contradictory claims of whole-script execution or readiness. Receipt
+hashes select metadata; they cannot by themselves establish authentic execution,
+source custody, baseline competence or a paper win. An admitted operator must
+independently qualify those facts and protect the score-bearing output.
+
 ## Calibration and interpretation
 
 The frozen rounding interval is **0.7271 ± 0.00005**: half of a hundredth of a
@@ -64,8 +106,10 @@ percentage point. It is defensible only after source equivalence is established;
 it provides no allowance for undocumented package drift, changed rows or revised
 folds. The module reports the numerical interval check separately and never
 equates it with source admission. No authentic author calibration is available in this build; the reconstructed
-operator score is named separately and `author_replay` stays unset. Do not widen
-the interval after seeing a result.
+operator score is named separately and `author_replay` stays unset unless the
+optional source-API metadata inputs are supplied. Do not widen
+the interval after seeing a result. The optional source-API mean gets its own separately
+named rounding check; a match has the same limited interpretation.
 
 The existing `reference_math.py` implements independent BNB equations and
 `operator_program.py` calls those equations. Its native and improvement scores
@@ -117,3 +161,7 @@ invented counts only. They exercise unequal session sizes, bad pooled metrics,
 missing/replaced identities, altered windows/seeds, exposed order, incomplete
 fold/phase coverage, rat-map incompleteness, receipt tampering, and the actual CLI.
 They establish software behavior, not author reproduction or improvement.
+The additional generated controls cover the author-result/component/preparation
+chain, complete source-member and vector rosters, pooled score consistency,
+adopted runtime, preserved qualification limits, distinct comparator differences,
+and the actual optional CLI path with deliberately absent probability files.

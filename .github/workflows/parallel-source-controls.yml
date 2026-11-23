@@ -72,7 +72,7 @@ jobs:
           pins = [
               {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': 'be8cd8c31fe82a671e899cf020861e89464d9bbc00f833c88df27e61679553e3'},
               {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': 'd1fc0abb98e02a8d9afb1f49d01f418f2922369a575a40fa531def0f569e178a'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 594033, 'sha256': 'e45aa857b95f2f5b1584a1440818c82e4ab12c4620d4a0da2e39d1a77c5ae842'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 594487, 'sha256': '1bfcdec2ccc3ce6ebc48b931107ac2365e7226616095aa034913ae4e64d1b43d'},
           ]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
@@ -317,6 +317,27 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-077/implementations/exploratory32-image-scorer-v1/controls/test_score_subset.py
+      - name: Check new stdlib endpoint and image reference interfaces
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-method-002/implementations/retinal-streamed-fit-v1/tests/test_input_commitments.py
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-method-032/implementations/bounded-retrieval-v2/test_cohort.py
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-077/implementations/four-demo-image-reference-v1/test_reference.py --renderer benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/raster.py -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-optical-mad-v1/test_detector.py
+      - name: Check paired ICNet and seizure comparisons
+        if: matrix.group == 'numpy'
+        shell: bash
+        run: |
+          set -euo pipefail
+          export ICNET_CONTROL_FIXTURE_ROOT="${RUNNER_TEMP}/icnet-comparison-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-signal-add-007/implementations/source-equations-v1/test_candidate_comparison.py
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-009/implementations/paired-detector-comparison-v1/test_compare.py
+      - name: Check finite sleep CSV submission builder
+        if: matrix.group == 'erp-core-builder'
+        shell: bash
+        run: timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-007/implementations/submission-builder-v1/test_compose.py -v
       - name: Acquire exact public source fixtures
         shell: bash
         run: |

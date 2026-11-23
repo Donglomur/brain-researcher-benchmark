@@ -11,10 +11,17 @@ reproduction, paper improvement, native neural interpretation and neural tool/mo
 building. The evidence below keeps these outcomes separate. This design change
 does not itself qualify a reproduction, an improvement or either neural outcome.
 
-The [November 18 public progress update](public-progress-2026-11-18.md) links the
-936-case ABR observation release, the Jaxley original-data diagnostic and the
-NEURAL-063 original metadata qualification. It separates available artifacts and
-remaining scientific work across the paper and neural tracks.
+The latest [fixed-image EEG pilot](../../benchmarks/neural/NEURAL-077/docs/exploratory32-fixed-image-pilot-20261122.md)
+reports direct-image and generated-programme results on the same 32 queries.
+The [REVE CPU profile](../../benchmarks/paper/PAPER-paper-method-003/implementations/matched-reference-v1/CPU_PROFILE.md)
+records a training compatibility check that passed numerically but exceeded its
+memory ceiling. Neither establishes a paper reproduction or improvement, SOTA,
+or complete benchmark qualification.
+
+The earlier [November 18 public progress update](public-progress-2026-11-18.md)
+links the 936-case ABR observation release, the Jaxley original-data diagnostic
+and the NEURAL-063 original metadata qualification. These earlier reports retain
+their original scopes.
 
 From the repository root:
 
@@ -34,7 +41,9 @@ python3 -I -S -B scripts/neurobench.py operator routes
 `status` derives inventory and contract counts from the current registry and counts
 records within an explicit set of public reports. `evidence TASK_ID` returns the
 reported condition, scope, metrics, comparators, limitations and source hashes.
-Neither command opens private inputs or reruns an experiment.
+Neither command opens private inputs or reruns an experiment. The CLI exposes
+its explicitly indexed reports; historical counts retain the scope of their
+original report rather than incorporating later experiments automatically.
 
 The [common operator route](../operator-routes.md) verifies current source for
 NEURAL-077's 400 EEG trials and NEURAL-007's 5,450 sleep epochs. With the exact
@@ -50,12 +59,14 @@ evidence.
 | Evidence | Recorded scope | What it establishes |
 | --- | --- | --- |
 | [Difficulty pilot](../science/difficulty-pilot-20261117.md) | Eight scored attempts on four task IDs: four historical paper-calibration attempts and four neural prediction-programme attempts | Outcomes for the exact reported development endpoints and conditions, with baseline comparisons; no whole-task qualification or paper improvement |
+| [NEURAL-077 fixed-image pilot, November 22](../../benchmarks/neural/NEURAL-077/docs/exploratory32-fixed-image-pilot-20261122.md) | 32 fresh direct-image episodes and one frozen generated programme on the same 32 queries from 32 people, with four demonstrations | Direct balanced accuracy 57.1%, programme 26.8%; all failures counted incorrect. Exploratory participant results, with instruction-only tool restrictions, unmatched compute and no full-task qualification |
 | [NEURAL-077 waveform preparation](../../benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json) | All 400 query waveforms and four demonstrations compared with pinned raw samples | Authentic-input materialization; no model execution or scoring |
 | [NEURAL-077 full32 numerical materialization](../../benchmarks/neural/NEURAL-077/docs/full32-materialization-20261119.md) | 32 people, 6,400 queries and the same four demonstrations; 72 saved files independently authenticated | Accepted numerical material and metadata; no AI/model evaluation, provider-isolation qualification or full visual-condition result |
 | [NEURAL-077 viewer rendering](../../benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json) | Full packet authentication and rendering of selected query ordinals | Authentic image-generation behavior; no evaluated viewer-model episode |
 | [NEURAL-077 restricted viewer transport](../../benchmarks/neural/NEURAL-077/implementations/visual-transport-v1/EVIDENCE.json) | All 400 authentic queries delivered to fresh scripted clients, complete unscored response collection and 15 authentic boundary checks | Local image/action transport and collection behavior; no model/provider delivery qualification or neural interpretation result |
 | [Native EEG/sleep operator controls](operator-controls-20261116.json) and [fresh-checkout repair validation](operator-controls-rename-20261116.json) | 16 fixed-output controls across two reports, covering the complete 400-trial EEG and 5,450-epoch sleep development panels | Input preparation, validation, grading, incomplete-submission rejection and target-pin failure, including the repaired public entry point; no new solver attempts, model calls or fits |
 | [REVE source preparation](reve-source-preparation-20261116.json) | All 654 official EDFs, 109 participants and 9,837 prepared epochs; fixed-output software controls on the complete original test-event panel | Released-code input preparation and scorer behavior; no author-model inference, with historical preprocessing, downstream classifier and run-aggregation identity unresolved |
+| [REVE CPU compatibility, November 23](../../benchmarks/paper/PAPER-paper-method-003/implementations/matched-reference-v1/CPU_PROFILE.md) | Batch 32 plus tail 28, two linear-probe steps and one fine-tuning step; 60 distinct training examples and 92 presentations | Numerical updates and checkpoint/logit reload checks passed; 8.51 GiB peak child RSS exceeded the frozen 8 GiB ceiling, so overall qualification failed. No complete fit, held predictions or score |
 | [DeepCaImX source preparation](deepcaimx-source-preparation-20261116.json) | All ten original manual ROI files, 1,563 ROIs and eight donors; target-backed arithmetic controls | Reference conversion and segmentation scorer behavior; no movie-to-mask model, with crop/frame mapping, checkpoint equivalence and native assembly unresolved |
 | [SMC-RNN source preparation](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/source-preparation-evidence.json) | Complete original MC_Maze 20-ms inputs and paired participant materials; 2,869 trials and 182 neurons | Authentic source preparation and matched material export; no participant episode or author-baseline qualification |
 | [SMC-RNN native inference probes](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/native-cost-characterization.json) | Two selected author models exercised on first train/evaluation chunks with the original 192 particles | Native inference cost characterization, separately from generated memory controls; no complete predictions, score, full 32-repeat calibration or candidate attempt |
@@ -65,11 +76,26 @@ evidence.
 | [Historical execution projections](../provenance/execution/historical-evidence-v1/README.md) | Three profiles, including four NEURAL-023 programme controls | Retained historical execution and interface-control evidence; current environments and complete scientific scope remain unqualified |
 
 These reports overlap. Together they reference **nine distinct registered task
-IDs**; historical profiles, source preparation, engineering reports and native controls are not
-additional benchmarks or agent attempts. Within the selected reports, there are
-**no direct-interpretation or viewer-interpretation model attempts**. The neural
-pilot evaluated programmes on exposed development people, so its results do not
-measure unseen-population generalization or direct reading of neural signals.
+IDs**; source preparations, engineering controls and repeated reports do not create
+additional benchmarks. The earlier eight-attempt difficulty pilot evaluated neural
+programmes on exposed development people and has no direct/viewer AI predictions.
+The separate November 22 pilot adds direct-image episodes within NEURAL-077;
+32 applications of one frozen programme are not 32 independently authored methods.
+No interactive-viewer model result is reported here.
+
+The fixed-image pilot had four target and 28 standard events. It retained one
+direct delivery error and six programme runtime errors in both arms' denominators.
+The direct arm's conditional 95% balanced-accuracy interval was 30.4–76.8%, which
+includes the 50% baseline; its point estimate does not establish reliable
+above-baseline performance. The paired direct-minus-programme gap was 30.4
+percentage points, with a conditional interval of 1.8–53.6 points. This comparison
+includes delivery/runtime reliability and uses one generated programme, unmatched
+compute budgets and instruction-only restrictions. Exact model snapshots and full
+tool traces were unavailable. It cannot establish a general native-versus-tools
+advantage, physiological P3 detection, the full 6,400-case condition or SOTA.
+The report links the frozen programme and retains a subsequent diagnostic without
+revising the original predictions or scores. Private per-case inputs and records
+are not included, so the public artifacts alone cannot reproduce those scores.
 
 The two historical SMC-RNN author-model probes are actual bounded inference operations,
 reported separately from the eight historical solver attempts and 16 native
@@ -178,9 +204,15 @@ separation does not create an untouched holdout.
 The [REVE PhysioNet route](../../benchmarks/paper/PAPER-paper-method-003/implementations/original-physionet/README.md)
 authenticated all 654 original EDFs across 109 participants and prepared 9,837
 epochs under the pinned released-code preprocessing profile. Complete-test-event
-constant-output scorer controls passed; no model inference ran. The released
-preprocessing differs from the paper's filtering description, and the original
-downstream classifier checkpoint and run-aggregation identity remain unresolved.
+constant-output scorer controls passed; that preparation report contains no
+model inference. The later [CPU compatibility check](../../benchmarks/paper/PAPER-paper-method-003/implementations/matched-reference-v1/CPU_PROFILE.md)
+exercised authentic training updates and exact checkpoint/logit reload, but its
+8.51 GiB peak child RSS exceeded the selected 8 GiB ceiling. Overall qualification
+failed; no full fit, validation/test predictions or scored paper metric followed.
+Its memory measurement is not a full-fit resource estimate. The released direct
+200-Hz preprocessing differs from the paper's 128-Hz intermediate description,
+and the original downstream classifier checkpoint, PhysioNet training recipe and
+seed/run aggregation remain unresolved.
 The [sanitized preparation report](reve-source-preparation-20261116.json) records
 the source identities, panel accounting and software-control scope separately from
 current source bindings; `evidence PAPER-paper-method-003` exposes that report.

@@ -41,6 +41,94 @@ def npz(arrays):
     return stream.getvalue()
 
 
+class NumericSource(unittest.TestCase):
+    """Use the real captured dependency loader; no packet fixture writes."""
+    @classmethod
+    def setUpClass(cls):
+        cls.sources = a.load_sources()
+
+    def score(self, target, expected=None, mask=None):
+        if expected is None:
+            expected = np.ones(np.asarray(target).shape, dtype=np.float64)
+        return self.sources.metrics.poisson_bits_per_spike(target, expected, mask)
+
+    def test_original_uint64_count_cannot_round_into_domain(self):
+        target = np.array([[[2**53 + 1]]], dtype=np.uint64)
+        self.assertEqual(float(target.item()), float(2**53))
+        with self.assertRaisesRegex(ValueError, "Observed targets"):
+            self.score(target, np.array([[[float(2**53)]]]))
+
+    def test_integer_boundary_is_retained_for_signed_and_unsigned(self):
+        for dtype in (np.int64, np.uint64, np.dtype('>u8')):
+            with self.subTest(dtype=dtype):
+                target = np.array([[[2**53]]], dtype=dtype)
+                result = self.score(target, np.array([[[float(2**53)]]]))
+                self.assertEqual(result['target_spikes'], 2**53)
+                self.assertEqual(result['co_bps'], 0.0)
+
+    def test_masked_invalid_counts_do_not_change_observed_domain(self):
+        target = np.array([[[1], [2**64 - 1]]], dtype=np.uint64)
+        mask = np.array([[[True], [False]]])
+        result = self.score(target, mask=mask)
+        self.assertEqual(result['target_spikes'], 1.0)
+        self.assertEqual(result['valid_cells'], 1)
+        self.assertEqual(result['co_bps'], 0.0)
+        with self.assertRaisesRegex(ValueError, "Observed targets"):
+            self.score(target, mask=np.ones(target.shape, dtype=bool))
+
+    def test_valid_likelihood_matches_independent_scalar_formula(self):
+        target = np.array([[[0], [1], [2]]], dtype=np.uint16)
+        expected = np.array([[[0.5], [1.5], [2.5]]])
+        result = self.score(target, expected)
+        oracle = sum(y * math.log(lam) + 1 - lam
+                     for y, lam in ((0, .5), (1, 1.5), (2, 2.5))) / (3 * math.log(2))
+        self.assertAlmostEqual(result['co_bps'], oracle, places=14)
+        self.assertEqual(result['valid_cells'], 3)
+
+    def operands(self, target):
+        target = np.asarray(target)
+        trials = np.asarray(['trial-a', 'trial-b'][:target.shape[0]])
+        units = np.asarray(['unit-x', 'unit-y'][:target.shape[2]])
+        gold = {'counts_heldout': target, 'trial_ids': trials, 'unit_ids': units,
+                'valid_mask': np.ones(target.shape, dtype=bool), 'panel_fingerprint': 'generated-panel'}
+        candidate = {'expected_counts': np.full(target.shape, 1.5), 'trial_ids': trials,
+            'heldout_unit_ids': units, 'bin_left_edges_ms': np.arange(-250, 450, 5, dtype=float),
+            'prediction_units': 'expected_spikes_per_bin', 'panel_fingerprint': 'generated-panel'}
+        return gold, candidate
+
+    def test_grader_uses_original_count_admission(self):
+        target = np.ones((1, 140, 1), dtype=np.uint64)
+        target[0, 7, 0] = 2**53 + 1
+        gold, candidate = self.operands(target)
+        with self.assertRaisesRegex(ValueError, "Observed targets"):
+            self.sources.grader.evaluate(candidate, gold, candidate, self.sources.metrics)
+
+    def test_grader_aligns_trial_unit_permutations_and_preserves_units(self):
+        target = (np.arange(2 * 140 * 2).reshape(2, 140, 2) % 5).astype(np.uint8)
+        gold, candidate = self.operands(target)
+        candidate['expected_counts'] = .5 + np.arange(560).reshape(2, 140, 2) / 560
+        reference = dict(candidate)
+        reference['expected_counts'] = np.full(target.shape, 2.0)
+        expected = self.sources.grader.evaluate(candidate, gold, reference, self.sources.metrics)
+        reordered = dict(candidate,
+            expected_counts=candidate['expected_counts'][::-1, :, ::-1],
+            trial_ids=candidate['trial_ids'][::-1],
+            heldout_unit_ids=candidate['heldout_unit_ids'][::-1])
+        actual = self.sources.grader.evaluate(reordered, gold, reference, self.sources.metrics)
+        self.assertEqual(actual, expected)
+        with self.assertRaisesRegex(ValueError, "Prediction units"):
+            self.sources.grader.evaluate(dict(candidate, prediction_units='Hz'), gold,
+                                         reference, self.sources.metrics)
+        with self.assertRaisesRegex(ValueError, "Time-bin alignment"):
+            self.sources.grader.evaluate(dict(candidate, bin_left_edges_ms=np.arange(140)), gold,
+                                         reference, self.sources.metrics)
+
+    def test_zero_target_total_retains_undefined_status(self):
+        result = self.score(np.zeros((1, 2, 1), dtype=np.uint8))
+        self.assertEqual(result['status'], 'undefined_zero_target_spikes')
+        self.assertIsNone(result['co_bps'])
+
+
 class FullPanel(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -311,7 +399,7 @@ class FullPanel(unittest.TestCase):
 if __name__ == "__main__":
     import sys
     suite = (unittest.defaultTestLoader.loadTestsFromNames(sys.argv[1:], module=sys.modules[__name__])
-             if len(sys.argv) > 1 else unittest.defaultTestLoader.loadTestsFromTestCase(FullPanel))
+             if len(sys.argv) > 1 else unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__]))
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     print(json.dumps({"generated_fixture_payload_write_bytes": WRITTEN,
         "scope": "Successful explicit fixture and adapter file body writes only; not filesystem metadata or physical I/O.",
