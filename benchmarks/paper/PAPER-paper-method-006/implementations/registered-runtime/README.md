@@ -11,3 +11,25 @@ Both paper-data and paper-data-plus-author-code arms remain, along with author_c
 program_execution and native_execution_activation remain null. source_complete, full_contract_complete, runnable, research_qualified and submission_ready remain false. All S01 inherited-method/S02-S14 and SOFT01-SOFT04 holds remain; documentary S01 closure is not numerical qualification. Family counts are not gate counts.
 
 Current SOURCE_FREEZE binds only shipped bodies and a separate expected external manifest. ACCEPTED_SOURCE_MANIFEST retains all87 roles with explicit dispositions. Historical acceptance hashes, including the canonical source_manifest field, identify historical bytes; current lookup is explicitly labeled. Private operational history, primary captures, data and credentials are not distributed. Independent scientific/central reviews are prior credit, not rerun qualification. No dependency, native, scientific, scoring or reference campaign was executed for this proposal. Publication remains a separate reviewed root action; no upstream rights clearance is asserted.
+
+## Source20 input representation correction
+
+The R2 source emulator now applies the same native-representation boundaries
+already enforced by R1. `dt_samples` must be integer 6; source sample coordinates
+must admit the int64 six-sample addition and cross-unit subtraction, and every
+rational unit depth must exactly represent the declared float32 or float64 value.
+Inputs requiring overflow semantics or silent depth rounding return
+`required-unscorable`, with the unsupported source branch identified. This does
+not change the event matching, score arithmetic, source20 floor or paper40 holds.
+
+These are generated admission controls, not a native sorter run or a recovered
+publication result. The task remains inactive. Run the local regression suite
+with an existing NumPy installation:
+
+```sh
+python -B -m unittest discover -s tests -p 'test_source20_admission.py' -v
+```
+
+The current source manifests identify the revised R2 body. Installed-source
+origin identities remain historical and are not rewritten as if the correction
+had been present in the original accepted bytes.
