@@ -110,6 +110,19 @@ def input_paths(manifest_path):
     return root, manifest
 
 
+
+def reauthenticate_inputs(manifest_path, initial_root, initial_manifest):
+    """Recheck the original input commitments before declaring a complete fit.
+
+    A newly self-consistent manifest is not the manifest that initialized the
+    operation. Compare its parsed commitments as well as authenticating the files.
+    This final check does not replace read-only input custody during execution.
+    """
+    final_root, final_manifest = input_paths(manifest_path)
+    require(final_root == initial_root and final_manifest == initial_manifest,
+            'fit inputs changed from initial file commitments')
+
+
 def runtime_requirements(component):
     authenticate_file(component / 'RUNTIME_REQUIREMENTS.v1.json', {'bytes': 5991, 'sha256': '57c563bebf6b761493b57f372591e150b6620227397f1d3249d6341b86134a61'}, 32768)
     requirements = read_json(component / 'RUNTIME_REQUIREMENTS.v1.json', 32768)
