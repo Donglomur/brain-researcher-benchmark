@@ -2,6 +2,7 @@
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 import types
@@ -59,7 +60,10 @@ def main(argv=None):
             result = base.evaluate(data, base.load_json(args.submission))
         serialized = json.dumps(result, indent=2, allow_nan=False) + "\n"
         # Exclusive creation also rejects a file/link introduced after preflight.
-        with output.open("x", encoding="utf-8") as stream:
+        # Alignment targets and score diagnostics are operator-private. Do not
+        # let a permissive caller umask make these new files group/world readable.
+        fd = os.open(output, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(fd, "w", encoding="utf-8") as stream:
             stream.write(serialized)
     except (ValueError, OSError, json.JSONDecodeError) as error:
         print(f"NEURAL-015 input rejected: {error}", file=sys.stderr)
