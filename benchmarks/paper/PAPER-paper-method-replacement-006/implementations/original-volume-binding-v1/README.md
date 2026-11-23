@@ -113,7 +113,7 @@ row evidence.
 Output records include portable retained-feature identity, subject, count,
 `probability_native_index1`, and `native_high_rms_index`. The original probability
 is preserved exactly. Subtracting tiny probabilities from one can collapse
-distinct scores; a future original-panel scorer must use the explicit class
+distinct scores; the original-panel scorer must use the explicit class
 orientation when computing ROC-AUC, rather than silently treating native index 1
 as high RMS. Output prediction records exclude target labels; the complete
 prepared binding remains operator-only. These predictions are not compatible
@@ -133,8 +133,50 @@ code was imported or executed in that source-method control.
 Still missing: authentic historical TSVs, saved splits and selected channel
 ensembles; transcript/timing/tie handling reconciliation; numerical Figure 3
 references; BrainBERT/PopT weight and feature identities/rights; native output
-instrumentation and validation selection evidence; original-panel scorer and
+instrumentation and validation selection evidence; complete original method/control-panel verification and
 matched comparator runs; separate reproduction tolerances and improvement
 effect/uncertainty rules. Shared movies and temporal dependence still constrain
 uncertainty. Passing this component does not authenticate a historical split,
 establish a reproduction, demonstrate improvement, or establish current SOTA.
+
+
+## Native original-profile scoring
+
+`score_native.py` supplies the previously missing numerical step for one method's
+complete original-profile export. It consumes the same operator binding and
+native JSON as `bind-native`; all 49 subject/count runs must pass the existing
+row, class-map, split and channel checks before any score is emitted.
+
+```sh
+python3 -B score_native.py operator-binding.json native-runs.json operator-scores.json
+python3 -B test_score_native.py
+```
+
+The source metric is [the pinned task's `get_valid_outs`](https://raw.githubusercontent.com/czlwang/PopulationTransformer/d237755bbdea123c60bface0cecbb48bab6f42de/tasks/pt_feature_extract_coords.py):
+ROC-AUC from native labels and probabilities, plus F1 from rounded probabilities.
+The scorer computes ROC-AUC with half credit for exact ties in the native class-1
+orientation. It never subtracts tiny probabilities from one. Native labels are
+checked against the independent binding by `bind_native`; a consistently reversed
+class mapping gives the same AUC. F1 remains explicitly `f1_native_index1`, since
+the positive class can be either high or low RMS. Exactly 0.5 rounds to zero, as in
+the source NumPy call; the diagnostic does not replace ROC-AUC.
+
+Outputs retain 49 per-subject/count records and seven equally weighted subject
+means, with 90 electrodes marked as the Table 1 primary. Unequal word counts do
+not change subject weights. `subject_sem_ddof1_roc_auc` is an explicitly named
+descriptive sample SEM: sqrt(sum((AUC-mean)^2)/(7*6)). The
+[paper's Table 1 and Figure 3 captions](https://arxiv.org/html/2406.03044v4)
+specify subject SEM, but the historical estimator and seed treatment remain
+unverified. The output flags that limitation. This SEM is neither a confidence
+interval nor a reproduction tolerance.
+
+This CLI scores one method at a time. It is not an admission interface for the
+complete paper method/control panel, does not select checkpoints, and does not
+calculate a paired improvement decision. The four BrainBERT methods, other
+required controls, authentic runtime exports, historical identities and scientific
+decision rules still need separate qualification. Scores and class counts remain
+operator-controlled; they are not participant-facing artifacts. Generated tests
+exercise ranks/ties, native orientation, tiny probabilities, unequal subject
+sizes, sample-SEM arithmetic, complete coverage, inherited identity rejection,
+and strict JSON CLI reading. They establish arithmetic and interface behavior,
+not a source-paper result.
