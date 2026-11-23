@@ -14,7 +14,7 @@ import warnings
 import numpy as np
 
 
-SPLITTER_SHA256 = "799aa421eb7c2e8c96ce0741c012ab8357bbd77f1a549a7854fc46b1c455eb7d"
+SPLITTER_SHA256 = "d463e756e1a5f21253f512d74742b9b6de67fb0c801f77a8edc1529f944a6801"
 SOURCE_RECIPE = {
     "max_iter": 1000,
     "random_state": 42,

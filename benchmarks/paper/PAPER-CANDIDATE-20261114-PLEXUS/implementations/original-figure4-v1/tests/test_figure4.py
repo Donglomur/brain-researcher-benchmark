@@ -49,6 +49,13 @@ def predictions(data):
     return {"schema": "plexus-figure4-predictions/v1", "plan_sha256": f.digest(plan), "scores": scores}
 
 
+def reproduction_predictions(data):
+    submission = predictions(data)
+    submission["schema"] = "plexus-figure4-reproduction-predictions/v1"
+    submission["scores"] = [r for r in submission["scores"] if r["method"] != "candidate"]
+    return submission
+
+
 class Controls(unittest.TestCase):
     def test_rank_auc_matches_independent_pairwise_oracle_with_ties(self):
         labels = [0, 1, 0, 1, 0, 1, 1]
@@ -87,6 +94,101 @@ class Controls(unittest.TestCase):
         self.assertEqual(len(report["auroc_vector"]), 3 * 2 * 4 * 2)
         self.assertEqual({r["candidate_minus_author_plexus"] for r in report["paired_descriptive_differences"]}, {0.5})
         self.assertEqual({r["donor"] for r in report["auroc_vector"]}, set(f.DONORS))
+
+    def test_reproduction_scores_both_original_families_without_candidate(self):
+        data = census()
+        submission = reproduction_predictions(data)
+        # Distinct values across families and observation IDs, including ties,
+        # make the oracle sensitive to method mixing or row reordering.
+        for row in submission["scores"]:
+            cell = int(row["observation_id"].split(":")[-1])
+            row["probability"] = ((cell % 3) / 2 if row["method"] == "author_plexus"
+                                  else ((cell + 1) % 5) / 4)
+        report = f.evaluate_reproduction(data, submission, f.digest(data))
+        self.assertEqual(len(report["auroc_vector"]), 2 * 2 * 4 * 2)
+        self.assertEqual({r["method"] for r in report["auroc_vector"]}, set(f.REPRODUCTION_METHODS))
+        plan = f.prepare(data)
+        probabilities = {(r["method"], r["donor"], r["guide_id"], r["fold"], r["observation_id"]): r["probability"]
+                         for r in submission["scores"]}
+        expected = {}
+        for method, family in f.REPRODUCTION_METHODS.items():
+            for panel in plan["panels"]:
+                if panel["family"] != family:
+                    continue
+                for endpoint in panel["endpoints"]:
+                    for fold in endpoint["folds"]:
+                        key = method, panel["donor"], endpoint["guide_id"], fold["fold"]
+                        positives = [probabilities[key + (r["observation_id"],)] for r in fold["test"] if r["label"]]
+                        negatives = [probabilities[key + (r["observation_id"],)] for r in fold["test"] if not r["label"]]
+                        expected[key] = sum((a > b) + 0.5 * (a == b) for a in positives for b in negatives) / (len(positives) * len(negatives))
+        for row in report["auroc_vector"]:
+            key = tuple(row[k] for k in ("method", "donor", "guide_id", "fold"))
+            self.assertAlmostEqual(row["auroc"], expected[key])
+        self.assertIsNone(report["reproduction_decision"])
+        self.assertNotIn("paired_descriptive_differences", report)
+        self.assertEqual(report["source_skips"], [
+            {"family": p["family"], "donor": p["donor"], "guides": p["skipped_guides"]}
+            for p in plan["panels"]])
+
+    def test_reproduction_requires_complete_original_methods_and_rejects_candidate(self):
+        data = census(); original = reproduction_predictions(data)
+        bad = copy.deepcopy(original); bad["scores"].pop()
+        with self.assertRaisesRegex(f.InputError, "coverage"):
+            f.evaluate_reproduction(data, bad, f.digest(data))
+        bad = copy.deepcopy(original)
+        bad["scores"] = [r for r in bad["scores"] if r["method"] == "author_plexus"]
+        with self.assertRaisesRegex(f.InputError, "coverage"):
+            f.evaluate_reproduction(data, bad, f.digest(data))
+        for method in ("candidate", "unrecognized"):
+            bad = copy.deepcopy(original); bad["scores"][0]["method"] = method
+            with self.assertRaisesRegex(f.InputError, "unexpected"):
+                f.evaluate_reproduction(data, bad, f.digest(data))
+
+    def test_reproduction_refuses_duplicated_and_outside_fold_identities(self):
+        data = census(); original = reproduction_predictions(data)
+        bad = copy.deepcopy(original); bad["scores"].append(bad["scores"][0])
+        with self.assertRaisesRegex(f.InputError, "duplicate"):
+            f.evaluate_reproduction(data, bad, f.digest(data))
+        bad = copy.deepcopy(original); bad["scores"][0]["observation_id"] = "outside-original-fold"
+        with self.assertRaisesRegex(f.InputError, "unexpected"):
+            f.evaluate_reproduction(data, bad, f.digest(data))
+
+    def test_reproduction_pins_and_probability_domain_are_not_relaxed(self):
+        data = census(); original = reproduction_predictions(data)
+        with self.assertRaisesRegex(f.InputError, "frozen pin"):
+            f.evaluate_reproduction(data, original, "0" * 64)
+        bad = copy.deepcopy(original); bad["plan_sha256"] = "0" * 64
+        with self.assertRaisesRegex(f.InputError, "plan mismatch"):
+            f.evaluate_reproduction(data, bad, f.digest(data))
+        for value in (True, -1, 2, float("nan"), float("inf")):
+            bad = copy.deepcopy(original); bad["scores"][0]["probability"] = value
+            with self.assertRaises(f.InputError):
+                f.evaluate_reproduction(data, bad, f.digest(data))
+
+    def test_reproduction_and_improvement_schemas_cannot_be_misinterpreted(self):
+        data = census(); original = reproduction_predictions(data)
+        with self.assertRaisesRegex(f.InputError, "schema"):
+            f.evaluate(data, original, f.digest(data))
+        with self.assertRaisesRegex(f.InputError, "schema"):
+            f.evaluate_reproduction(data, predictions(data), f.digest(data))
+        original["schema"] = "plexus-figure4-predictions/v1"
+        with self.assertRaisesRegex(f.InputError, "coverage"):
+            f.evaluate(data, original, f.digest(data))
+
+    def test_reproduction_cli_accepts_original_panel_and_preserves_undefined_decision(self):
+        with tempfile.TemporaryDirectory() as temp:
+            p = Path(temp); data = census()
+            (p / "data.json").write_text(json.dumps(data))
+            (p / "sub.json").write_text(json.dumps(reproduction_predictions(data)))
+            run = subprocess.run([sys.executable, "-B", str(Path(f.__file__).resolve()),
+                                  "score-reproduction", "--census", str(p / "data.json"),
+                                  "--submission", str(p / "sub.json"), "--census-sha256", f.digest(data),
+                                  "--output", str(p / "report.json")], capture_output=True, text=True)
+            self.assertEqual(run.returncode, 0, run.stderr)
+            report = json.loads((p / "report.json").read_text())
+            self.assertEqual(report["schema"], "plexus-figure4-reproduction-report/v1")
+            self.assertEqual(len(report["auroc_vector"]), 32)
+            self.assertIsNone(report["reproduction_decision"])
 
     def test_missing_duplicate_extra_and_training_predictions_rejected(self):
         data = census()
