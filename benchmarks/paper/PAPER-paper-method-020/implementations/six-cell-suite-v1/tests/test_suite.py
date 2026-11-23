@@ -172,6 +172,37 @@ class SixCellSuiteTests(unittest.TestCase):
         self.assertEqual(contrast["left_only_ids"], ["q3"])
         self.assertIsNone(contrast["right_minus_left"])
 
+    def test_same_nonempty_surviving_ids_do_not_define_source_overall(self):
+        manifest, suite, vocabulary = fixture()
+        for cell in suite["cells"]:
+            for row in cell["run"]["posthoc"]:
+                if row["id"] in {"q0", "q3"}:
+                    row.update(outcome="raised", pred_answer=None)
+        result = s.score_suite(manifest, suite, vocabulary)
+        contrast = result["within_access_contrasts"]["paper_data"]["neural_minus_no_neural"]["posthoc"]
+        self.assertTrue(contrast["Overall"]["same_included_queries"])
+        self.assertFalse(contrast["Overall"]["both_scores_available"])
+        self.assertIsNone(contrast["Overall"]["right_minus_left"])
+        self.assertEqual(contrast["Action"]["right_minus_left"], 0)
+        for access in s.ACCESS:
+            for condition in s.CONDITIONS:
+                overall = result["cells"][access][condition]["posthoc"]["Overall"]
+                self.assertIsNone(overall["accuracy"])
+                self.assertEqual(overall["pooled_accuracy_diagnostic"], 2 / 3)
+
+    def test_missing_candidate_vocabulary_withholds_source_comparison(self):
+        manifest, reference, vocabulary = fixture()
+        candidate = deepcopy(reference)
+        for row in candidate["cells"][0]["run"]["posthoc"]:
+            if row["id"] in {"q1", "q2", "q4"}:
+                row.update(outcome="raised", pred_answer=None)
+        result = s.compare_suites(manifest, reference, candidate, vocabulary)
+        contrast = result["candidate_minus_reference_by_cell"]["paper_data"]["neural"]["posthoc"]
+        self.assertFalse(contrast["Overall"]["both_scores_available"])
+        self.assertIsNone(contrast["Overall"]["right_minus_left"])
+        self.assertEqual(contrast["T/F"]["right_minus_left"], 0)
+        self.assertEqual(contrast["Overall"]["left_only_ids"], ["q1", "q2", "q4"])
+
     def test_unknown_claim_fields_and_control_design_are_refused(self):
         for mutation in ("claim", "declaration", "design"):
             manifest, suite, vocabulary = fixture()

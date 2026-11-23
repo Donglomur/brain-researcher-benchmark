@@ -63,6 +63,8 @@ class SourceScoreTests(unittest.TestCase):
         self.assertEqual(report["posthoc"]["unknown"]["queries"], 1)
         self.assertEqual(report["posthoc"]["Vocabulary"]["queries"], 4)
         self.assertFalse(report["table1_parity_authenticated"])
+        self.assertTrue(report["posthoc"]["Overall"]["source_aggregate_defined"])
+        self.assertEqual(report["posthoc"]["Overall"]["missing_source_branches"], [])
         # One image has one question, the other has ten; no image-macro substitution.
         self.assertEqual(report["training_monitor"]["accuracy"], 0.5)
 
@@ -152,6 +154,40 @@ class SourceScoreTests(unittest.TestCase):
         run["manifest_sha256"] = s.digest(manifest)
         with self.assertRaises(s.ContractError):
             s.score(manifest, run, vocabulary)
+
+    def test_empty_source_branches_preserve_counts_without_overall_score(self):
+        for removed, expected_count, expected_correct, pooled in (
+                ({"T/F"}, 4, 3, 0.75), ({"Vocabulary"}, 2, 2, 1.0),
+                ({"T/F", "Vocabulary"}, 0, 0, None)):
+            manifest, run, vocabulary = fixture()
+            answers = {q["id"]: q["answer"] for r in manifest["records"] for q in r["queries"]}
+            for row in run["posthoc"]:
+                branch = "T/F" if answers[row["id"]] in {"yes", "no"} else "Vocabulary"
+                if branch in removed and row["outcome"] == "returned":
+                    row.update(outcome="raised", pred_answer=None)
+            with self.subTest(removed=removed):
+                result = s.score(manifest, run, vocabulary)
+                overall = result["posthoc"]["Overall"]
+                self.assertEqual((overall["queries"], overall["correct"]), (expected_count, expected_correct))
+                self.assertEqual(overall["pooled_accuracy_diagnostic"], pooled)
+                self.assertIsNone(overall["accuracy"])
+                self.assertFalse(overall["source_aggregate_defined"])
+                self.assertEqual(set(overall["missing_source_branches"]), removed)
+                self.assertEqual(len(result["ledger"]), 11)
+                self.assertEqual(result["training_monitor"]["accuracy"], 0.5)
+
+    def test_same_surviving_ids_do_not_restore_undefined_source_aggregate(self):
+        manifest, run, vocabulary = fixture()
+        for row in run["posthoc"]:
+            if row["id"] in {"q0", "q1"}:
+                row.update(outcome="raised", pred_answer=None)
+        result = s.compare(manifest, run, deepcopy(run), vocabulary)
+        overall = result["posthoc_comparison"]["Overall"]
+        self.assertTrue(overall["same_included_queries"])
+        self.assertFalse(overall["both_scores_available"])
+        for name in ("candidate_minus_reference", "reference_minus_published", "candidate_minus_published"):
+            self.assertIsNone(overall[name])
+        self.assertEqual(result["posthoc_comparison"]["Action"]["candidate_minus_reference"], 0)
 
     def test_json_duplicate_keys_refused(self):
         with tempfile.TemporaryDirectory() as tmp:
