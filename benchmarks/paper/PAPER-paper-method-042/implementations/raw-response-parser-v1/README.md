@@ -37,6 +37,8 @@ Run from this directory with Python 3.10+ and the standard library:
 python3 raw_response.py --raw-panel RAW.json --query-roster QUERIES.json --output-directory NEW_DIRECTORY
 ```
 
+Extracted files preserve ascending numeric image order (`0, 1, 2, …`); they are not serialized with lexicographic key sorting. This matches the source inference loop's image traversal but does not authenticate annotation order. Category set traversal and numerical author parity still require independent checks.
+
 The new directory receives sixteen `<role>-<subject>.json` files compatible with the existing scorer's response paths, plus `conversion.json` containing hashes and extraction diagnostics. `--compare-extracted-panel EXISTING.json` optionally compares every supplied arm/subject/query against a separately captured extracted panel, without attesting its producer. Comparison is exact canonical-JSON value identity, including numeric representation. The importer never changes the existing scoring contract automatically.
 
 Each raw response is limited to 65,536 UTF-8 bytes and each input file to 256 MiB. These are explicit engineering refusals, not paper limits or measured runtime envelopes. The input JSON and converted panel are materialized in memory; production memory/compute admission is absent. Existing output directories are refused. Partial files may remain after an I/O failure; consumers must require a valid final manifest, all output hashes and an independently observed successful operator termination. A manifest or raw-text hash alone cannot prove that fMRI generated a response.

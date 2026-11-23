@@ -152,6 +152,23 @@ class FilesAndCLI(unittest.TestCase):
         with mock.patch.object(r, "MAX_INPUT_BYTES", 2), self.assertRaises(r.g.ContractError):
             r.read_bounded(path)
 
+    def test_cli_preserves_numeric_image_order_beyond_single_digit_ids(self):
+        # An identity-aware scorer hides this bug. The author's scorer flattens
+        # image dictionaries independently, so lexical 0,1,10,... order matters.
+        roster = {str(i): ["person"] for i in reversed(range(12))}
+        raw, roster = panel(roster)
+        raw_path = self.root / "raw12.json"; raw_path.write_text(json.dumps(raw))
+        roster_path = self.root / "roster12.json"; roster_path.write_text(json.dumps(roster))
+        output = self.root / "out12"
+        run = subprocess.run([sys.executable, "-I", "-S", "-B", str(SOURCE),
+                              "--raw-panel", str(raw_path), "--query-roster", str(roster_path),
+                              "--output-directory", str(output)], capture_output=True, timeout=20)
+        self.assertEqual(run.returncode, 0, run.stderr.decode())
+        for role in r.g.ROLES:
+            for subject in r.g.SUBJECTS:
+                loaded = json.loads((output / f"{role}-{subject}.json").read_text())
+                self.assertEqual(list(loaded), [str(i) for i in range(12)])
+
     def test_cli_emits_all16_hash_bound_files_and_refuses_overwrite(self):
         raw, roster = panel()
         raw_path = self.root / "raw.json"; raw_path.write_text(json.dumps(raw))

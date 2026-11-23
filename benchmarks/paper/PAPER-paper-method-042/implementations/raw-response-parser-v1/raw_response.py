@@ -192,7 +192,10 @@ def main() -> None:
             file_pins[role] = {}
             for subject in g.SUBJECTS:
                 path = args.output_directory / f"{role}-{subject}.json"
-                body = (json.dumps(result["responses"][role][subject], sort_keys=True,
+                # Keep the numeric image order constructed by convert_panel.
+                # Lexicographic JSON sorting changes the author scorer's
+                # positional image pairing once IDs reach two digits.
+                body = (json.dumps(result["responses"][role][subject],
                                    ensure_ascii=False, allow_nan=False) + "\n").encode("utf-8")
                 with path.open("xb") as stream:
                     stream.write(body)
