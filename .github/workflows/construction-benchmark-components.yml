@@ -968,6 +968,10 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
 
+      - name: Check participant-only SMC prediction preflight
+        shell: bash
+        run: timeout --signal=TERM --kill-after=5s 30s python -I -B benchmarks/paper/PAPER-SMC-RNN-2024/implementations/participant-preflight-v1/test_check_submission.py
+
       - name: Generated NEURAL099 source anatomy and clock controls
         shell: bash
         run: |

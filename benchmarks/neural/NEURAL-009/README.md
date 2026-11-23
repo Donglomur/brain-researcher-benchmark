@@ -51,6 +51,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Operator-side PNG-only delivery adapter for the existing causal seizure view, with visible exact-case channel labels, MAX/MIN microvolt scales and separate native-sample and decision-endpoint clocks. Preserves the typed SVG route, causal state machine and canonical evaluator. Generated controls establish bounded raster source behavior only. Authentic EEG execution, protected-host and image-display qualification, model/provider comparison, clinical timeliness and scientific qualification remain unestablished.
 - [Edf causal window v1](implementations/edf-causal-window-v1) — Reviewed source component.
   Scope: Portable original EDF causal-window reader and presentation composition for the existing full686-record/23-subject scope. Generated controls do not establish authentic data, runtime isolation or scientific performance.
+- [Paired detector comparison v1](implementations/paired-detector-comparison-v1) — Reviewed source component.
+  Scope: Compare complete candidate and reference detector panels on identical 686-record,23-person support with the unchanged event scorer, paired macro-F1 and companion tradeoffs. Eleven generated controls passed. No authentic EEG evaluation, uncertainty rule, improvement decision, empirical qualification or readiness promotion.
 - [Seizure diagnostics v1](implementations/seizure-diagnostics-v1) — Reviewed source component.
   Scope: Seizure-event diagnostic supplement. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
