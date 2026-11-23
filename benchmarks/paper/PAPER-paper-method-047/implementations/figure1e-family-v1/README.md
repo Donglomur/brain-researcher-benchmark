@@ -16,9 +16,19 @@ The source-manifest, alignment and eligibility hashes identify operator declarat
 
 ## Validation and integration
 
-Run `python -I -B test_family.py` with the existing NumPy/SciPy environment and sibling author-rate-metrics component. During construction, invoke through the project's existing two-slot generated-test pool. Thirteen tests cover complete family/order, mapped identity joins, missing/extra/duplicate support, sample permutations, fixed-mask violations, preserved source exclusions/undefineds, distinct method masks, condition substitution, variant omission, dependency drift, input immutability and the raw-fluorescence unit distinction.
+Run `python -I -B test_family.py` with the existing NumPy/SciPy environment and sibling author-rate-metrics component. During construction, use the current coordinator's generated-test slot. Twenty-one generated controls cover complete family/order, mapped identity joins, missing/extra/duplicate support, sample permutations, fixed-mask violations, preserved source exclusions/undefineds, distinct method masks, condition substitution, variant omission, dependency drift, input immutability, the raw-fluorescence unit distinction and the paired comparison described below.
 
-The new test command needs explicit enrollment by the sole integrator in the existing source-component CI mechanism; this private package is **not yet CI-enrolled**. No new dependency installation or shared workflow edit is included.
+The source-component CI catalog owns enrollment, source pins and the expected test count. Changes to this suite require the integrator to refresh those active bindings; historical source manifests remain historical. No new dependency installation is needed.
+
+## Paired candidate comparison
+
+`compare_family(manifest, targets, author_predictions, candidate_predictions, candidate_id=..., candidate_output_units=...)` returns the full original 24-member author family plus six paired method/variant members: one comparison against pooled GC8 CASCADE and one against variant-specific GC8 CASCADE for each variant. Both GC8-trained baselines are required by the improvement contract; a comparison to pre-GCaMP8 defaults alone is insufficient. The original eight-method controls must still be supplied, including raw fluorescence, OASIS and MLSpike.
+
+`candidate_predictions` uses the same neuron-ID-to-vector-packet format as one author method. It supplies exactly one packet for every neuron eligible for either GC8 baseline. The same candidate vector is used against both baselines, and each comparison retains that baseline's own fixed sample mask. The union of their supports checks candidate completeness only; it does not replace the source masks with a union or intersection. Candidate IDs cannot reuse a source method label. Candidate output units are declared separately; only dimensionless Pearson differences are computed.
+
+Each paired row retains the original neuron identity, source eligibility and exclusion reason, both per-neuron metric records, and `candidate_minus_author_pearson`. Excluded rows stay present without a score. Undefined correlations stay present with separate arm reasons and a null difference. Mapping order cannot alter pairing, and a candidate cannot omit an eligible neuron or choose its own support. There is no averaging across neurons or variants, bootstrap, significance threshold, rate-calibration claim, or paper-win decision.
+
+This supplies descriptive paired arithmetic for the Figure 1e portion of `improvement.v1.json`; it does not complete that contract. Figure 1g companions, original aggregation, authentic source/model provenance, biological grouping, training/noise repetition and a justified uncertainty rule remain unresolved. The operator must fix the original eligibility independently of candidate outputs and establish held-out-neuron training exclusions externally. Generated vectors demonstrate software behavior only.
 
 ## Still unresolved
 

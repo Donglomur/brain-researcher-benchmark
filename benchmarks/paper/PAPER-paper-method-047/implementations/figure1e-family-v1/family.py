@@ -20,6 +20,7 @@ METHODS = (
     "gc8-variant-cascade", "default-oasis", "tuned-oasis",
     "default-mlspike", "tuned-mlspike",
 )
+COMPARISON_BASELINES = ("gc8-pooled-cascade", "gc8-variant-cascade")
 METRIC_SHA256 = "222cf71530a1e02c89eeee59db02811cfeba96f31c41d0c09a3a7a506df41e05"
 METRIC_PATH = Path(__file__).resolve().parent.parent / "author-rate-metrics-v1" / "metrics.py"
 
@@ -216,3 +217,80 @@ def assemble_family(manifest, targets, predictions):
             "original_cohort_equivalence_established": False,
             "scientific_qualification_added": False,
             "scope": "Prepared-rate Figure1e arithmetic only; Figure1g and historical preprocessing/model provenance unresolved."}
+
+
+def compare_family(manifest, targets, author_predictions, candidate_predictions, *,
+                   candidate_id, candidate_output_units):
+    """Pair one candidate with both GC8-trained author baselines, neuron by neuron.
+
+    The complete eight-method source family remains in the result. The candidate
+    supplies one vector per neuron eligible for either GC8 baseline, scored on
+    each baseline's existing support; it cannot select a different mask, omit an
+    eligible neuron or substitute a different candidate for each comparator.
+    Differences are descriptive only, without aggregation or an improvement claim.
+    """
+    _text(candidate_id, "candidate identity")
+    _need(candidate_id not in METHODS, "candidate identity must differ from source method labels")
+    _text(candidate_output_units, "candidate output units")
+    neurons, policies = _manifest(manifest)
+    author_family = assemble_family(manifest, targets, author_predictions)
+    expected = {identity for identity in neurons
+                if any(policies[method, identity]["status"] == "evaluate"
+                       for method in COMPARISON_BASELINES)}
+    _need(type(candidate_predictions) is dict and set(candidate_predictions) == expected,
+          "candidate identities must equal the frozen GC8 baseline eligibility union")
+    candidate = {}
+    truth = {}
+    for identity in expected:
+        neuron = neurons[identity]
+        masks = [policies[method, identity]["valid_mask"] for method in COMPARISON_BASELINES
+                 if policies[method, identity]["status"] == "evaluate"]
+        # The union validates completeness only. Each comparison below retains
+        # its own source support rather than scoring on the union/intersection.
+        required = [any(mask[i] for mask in masks) for i in range(len(neuron["sample_ids"]))]
+        candidate[identity] = _packet(candidate_predictions[identity], neuron, required,
+                                      "candidate " + identity)
+        truth[identity] = _packet(targets[identity], neuron, required, "target " + identity)
+    metric = _metrics()
+    comparisons = []
+    for member in author_family["members"]:
+        method = member["method"]
+        if method not in COMPARISON_BASELINES:
+            continue
+        records = []
+        for author_record in member["records"]:
+            identity = author_record["neuron_id"]
+            policy = policies[method, identity]
+            record = {"neuron_id": identity, "eligibility": policy["status"],
+                      "exclusion_reason": policy["reason"],
+                      "eligibility_source_sha256": policy["source_sha256"],
+                      "author": author_record["metrics"], "candidate": None,
+                      "candidate_minus_author_pearson": None,
+                      "difference_reason": "source_excluded"}
+            if policy["status"] == "evaluate":
+                candidate_score = _primary(metric, candidate[identity], truth[identity],
+                                           policy["valid_mask"])
+                record["candidate"] = candidate_score
+                c, a = candidate_score["pearson"], author_record["metrics"]["pearson"]
+                if c is not None and a is not None:
+                    record["candidate_minus_author_pearson"] = c - a
+                    record["difference_reason"] = None
+                elif c is None and a is None:
+                    record["difference_reason"] = "both_pearson_undefined"
+                elif c is None:
+                    record["difference_reason"] = "candidate_pearson_undefined"
+                else:
+                    record["difference_reason"] = "author_pearson_undefined"
+            records.append(record)
+        comparisons.append({"author_manifest_key": member["manifest_key"],
+                            "author_method": method, "variant": member["variant"],
+                            "records": records})
+    return {"schema": "gcamp8-figure1e-paired-family/v1", "task_id": TASK,
+            "candidate": {"id": candidate_id, "output_units": candidate_output_units},
+            "author_family": author_family, "comparisons": comparisons,
+            "difference_definition": "candidate Pearson minus author Pearson on each author baseline's fixed support",
+            "aggregate": None, "uncertainty": None, "paper_win": None,
+            "source_authenticity_established": False,
+            "original_cohort_equivalence_established": False,
+            "scientific_qualification_added": False,
+            "scope": "Descriptive Figure1e paired arithmetic only; Figure1g, original aggregation, biological grouping and historical model provenance unresolved."}

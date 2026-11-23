@@ -1,6 +1,7 @@
 """Generated controls only; toy IDs never represent authentic neurons."""
 import copy
 import importlib.util
+import json
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -152,6 +153,131 @@ class FamilyTests(unittest.TestCase):
         before = copy.deepcopy(args)
         F.assemble_family(*args)
         self.assertEqual(args, before)
+
+    def compare(self, m, t, p, candidate=None):
+        return F.compare_family(m, t, p, copy.deepcopy(t) if candidate is None else candidate,
+                                candidate_id="generated-candidate", candidate_output_units="generated-rate")
+
+    def test_paired_family_retains_all_source_controls_and_both_gc8_baselines(self):
+        m, t, p = fixture()
+        candidate = copy.deepcopy(t)
+        for packet in candidate.values():
+            packet["values"] = [0., -1., -3., None]
+        result = self.compare(m, t, p, candidate)
+        self.assertEqual(result["author_family"], F.assemble_family(m, t, p))
+        self.assertEqual(len(result["comparisons"]), 6)
+        self.assertEqual({r["author_method"] for r in result["comparisons"]}, set(F.COMPARISON_BASELINES))
+        for member in result["comparisons"]:
+            self.assertEqual([r["neuron_id"] for r in member["records"]],
+                             [n["neuron_id"] for n in m["neurons"] if n["variant"] == member["variant"]])
+            for row in member["records"]:
+                self.assertAlmostEqual(row["candidate_minus_author_pearson"], -2.)
+                self.assertEqual(row["candidate"]["support_sha256"], row["author"]["support_sha256"])
+                self.assertIsNone(row["difference_reason"])
+        for field in ("aggregate", "uncertainty", "paper_win"):
+            self.assertIsNone(result[field])
+        self.assertFalse(result["scientific_qualification_added"])
+        json.dumps(result, allow_nan=False)
+
+    def test_paired_candidate_is_one_id_joined_vector_on_each_original_support(self):
+        m, t, p = fixture()
+        identity = next(iter(t))
+        for policy in m["eligibility"]:
+            if policy["neuron_id"] == identity and policy["method"] == F.COMPARISON_BASELINES[0]:
+                policy["valid_mask"] = [True, False, True, False]
+        candidate = copy.deepcopy(t)
+        candidate[identity]["values"] = [0., 5., 3., None]
+        a = self.compare(m, t, p, candidate)
+        b = self.compare(m, t, p, dict(reversed(list(candidate.items()))))
+        self.assertEqual(a, b)
+        pooled = a["comparisons"][0]["records"][0]
+        variant = a["comparisons"][3]["records"][0]
+        self.assertEqual(pooled["candidate"]["samples_scored"], 2)
+        self.assertEqual(variant["candidate"]["samples_scored"], 3)
+        self.assertAlmostEqual(pooled["candidate_minus_author_pearson"], 0.)
+        self.assertLess(variant["candidate_minus_author_pearson"], 0.)
+
+    def test_paired_candidate_cannot_omit_add_or_reorder_support(self):
+        for change in ("missing", "extra", "sample_order", "missing_value"):
+            with self.subTest(change=change):
+                m, t, p = fixture()
+                candidate = copy.deepcopy(t)
+                identity = next(iter(t))
+                if change == "missing":
+                    candidate.pop(identity)
+                elif change == "extra":
+                    candidate["extra"] = copy.deepcopy(t[identity])
+                elif change == "sample_order":
+                    candidate[identity]["sample_ids"].reverse()
+                else:
+                    candidate[identity]["values"][1] = None
+                with self.assertRaises(ValueError):
+                    self.compare(m, t, p, candidate)
+
+    def test_paired_baseline_exclusion_does_not_remove_other_baseline(self):
+        m, t, p = fixture()
+        identity = next(iter(t))
+        for policy in m["eligibility"]:
+            if policy["neuron_id"] == identity and policy["method"] == F.COMPARISON_BASELINES[0]:
+                policy.update(status="source_excluded", reason="Generated source exclusion", valid_mask=None)
+                p[policy["method"]].pop(identity)
+        result = self.compare(m, t, p)
+        excluded = result["comparisons"][0]["records"][0]
+        self.assertEqual(excluded["difference_reason"], "source_excluded")
+        self.assertEqual(excluded["exclusion_reason"], "Generated source exclusion")
+        self.assertIsNone(excluded["candidate"])
+        self.assertIsNone(excluded["candidate_minus_author_pearson"])
+        self.assertIsNotNone(result["comparisons"][3]["records"][0]["candidate"])
+        candidate = copy.deepcopy(t)
+        candidate.pop(identity)
+        with self.assertRaisesRegex(ValueError, "eligibility union"):
+            self.compare(m, t, p, candidate)
+
+    def test_paired_dual_exclusion_retains_rows_without_candidate_packet(self):
+        m, t, p = fixture()
+        identity = next(iter(t))
+        for policy in m["eligibility"]:
+            if policy["neuron_id"] == identity and policy["method"] in F.COMPARISON_BASELINES:
+                policy.update(status="source_excluded", reason="Generated source exclusion", valid_mask=None)
+                p[policy["method"]].pop(identity)
+        candidate = copy.deepcopy(t)
+        candidate.pop(identity)
+        result = self.compare(m, t, p, candidate)
+        for i in (0, 3):
+            self.assertEqual(result["comparisons"][i]["records"][0]["difference_reason"], "source_excluded")
+        self.assertEqual(len(result["author_family"]["members"]), 24)
+
+    def test_paired_undefined_arms_remain_separate_without_zero_filling(self):
+        for mode in ("candidate", "author", "both"):
+            with self.subTest(mode=mode):
+                m, t, p = fixture()
+                candidate = copy.deepcopy(t)
+                identity = next(iter(t))
+                if mode in ("candidate", "both"):
+                    candidate[identity]["values"] = [1., 1., 1., None]
+                if mode in ("author", "both"):
+                    p[F.COMPARISON_BASELINES[0]][identity]["values"] = [2., 2., 2., None]
+                row = self.compare(m, t, p, candidate)["comparisons"][0]["records"][0]
+                self.assertEqual(row["difference_reason"], mode + "_pearson_undefined")
+                self.assertIsNone(row["candidate_minus_author_pearson"])
+                self.assertEqual(row["candidate"]["pearson_reason"] if mode != "author"
+                                 else row["author"]["pearson_reason"], "constant_prediction")
+
+    def test_paired_input_immutability_and_complete_author_family_required(self):
+        args = fixture()
+        candidate = copy.deepcopy(args[1])
+        before = copy.deepcopy((args, candidate))
+        self.compare(*args, candidate)
+        self.assertEqual((args, candidate), before)
+        args[2].pop("raw-fluorescence")
+        with self.assertRaisesRegex(ValueError, "all eight named"):
+            self.compare(*args, candidate)
+
+    def test_paired_candidate_label_cannot_impersonate_source_method(self):
+        m, t, p = fixture()
+        with self.assertRaisesRegex(ValueError, "differ from source"):
+            F.compare_family(m, t, p, t, candidate_id="gc8-pooled-cascade",
+                             candidate_output_units="generated-rate")
 
 
 if __name__ == "__main__":
