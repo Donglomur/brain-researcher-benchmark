@@ -113,12 +113,45 @@ class NativeFormats(unittest.TestCase):
   self.assertEqual([x['level_db'] for x in traces],[70,75,80])
   self.assertEqual([x['samples'] for x in traces],[[1,4,7],[-2,-5,-8],[3,6,9]])
   self.assertEqual(traces[0]['stimulus'],{'kind':'tone','frequency_hz':45200})
-  self.assertEqual(traces[0]['axis']['step_ms'],0.04)
+  self.assertEqual(traces[0]['axis']['kind'],'sample_index')
+  self.assertIsNone(traces[0]['axis']['sample_period_ms'])
+  self.assertNotIn('step_ms',traces[0]['axis'])
+  self.assertEqual(traces[0]['axis']['header_sample_period_ms'],0.04)
+  self.assertEqual(traces[0]['axis']['physical_layout'],'unresolved_continuous_or_concatenated')
   self.assertIsNone(traces[0]['axis']['first_sample_ms'])
   self.assertIsNone(traces[0]['axis']['unit'])
   self.assertEqual(traces[0]['private_metadata']['ear_header'],'R')
   self.assertEqual(traces[0]['private_metadata']['threshold_raw'],'80.0')
   self.assertNotIn('threshold_raw',{k:v for k,v in traces[0].items() if k!='private_metadata'})
+
+ def test_cfts_all426_stored_values_survive_without_physical_remapping(self):
+  header=cfts().split(b':DATA\n',1)[0]+b':DATA\n'
+  # Distinct values on each side of the potential 213+213 boundary expose a
+  # crop, split, interpolation or accidental averaging without authentic data.
+  matrix=[[i,1000+i,-2000-i] for i in range(426)]
+  body=header+''.join(' '.join(map(str,row))+'\n' for row in matrix).encode()
+  traces=list(native.parse_cfts(body))
+  self.assertEqual([trace['samples'] for trace in traces],[[row[j] for row in matrix] for j in range(3)])
+  for trace in traces:
+   self.assertEqual(len(trace['samples']),426)
+   self.assertEqual(trace['axis']['kind'],'sample_index')
+   self.assertIsNone(trace['axis']['sample_period_ms'])
+   self.assertNotIn('step_ms',trace['axis'])
+   self.assertEqual(trace['axis']['header_sample_period_ms'],0.04)
+   self.assertIn('stored-row continuity',trace['axis']['reason'])
+
+ def test_cfts_support_axis_survives_bundle_serialization(self):
+  traces=list(native.parse_cfts(cfts()))
+  with tempfile.TemporaryDirectory(dir=HERE) as d:
+   root=Path(d)/'bundle';bundle=native.Bundle(root,b'g'*32)
+   try:
+    for trace in traces:
+     bundle.json('observations/support/liberman/index.jsonl.gz',{'axis':trace['axis'],'sample_count':len(trace['samples'])})
+   finally:bundle.close()
+   rows=load_jsonl(root/'observations/support/liberman/index.jsonl.gz')
+   self.assertEqual(rows,[{'axis':trace['axis'],'sample_count':3} for trace in traces])
+   self.assertTrue(all(row['axis']['kind']=='sample_index' and row['axis']['sample_period_ms'] is None for row in rows))
+   self.assertTrue(all('step_ms' not in row['axis'] and row['axis']['header_sample_period_ms']==0.04 for row in rows))
 
  def test_cfts_width_duplicate_header_and_period_failures(self):
   with self.assertRaisesRegex(native.SourceError,'width mismatch'):list(native.parse_cfts(cfts(levels='70;75;')))
@@ -189,6 +222,11 @@ class ArchiveAndBundle(unittest.TestCase):
    self.assertEqual(result['target_animals'],104)
    self.assertEqual(result['manifest']['target_trace_count'],937)
    self.assertTrue((root/'bundle/COMPLETE.json').is_file())
+   support=load_jsonl(root/'bundle/observations/support/liberman/index.jsonl.gz')
+   self.assertEqual(len(support),3)
+   self.assertTrue(all(row['axis']['kind']=='sample_index' and row['axis']['sample_period_ms'] is None for row in support))
+   self.assertTrue(all('step_ms' not in row['axis'] and row['axis']['header_sample_period_ms']==0.04 for row in support))
+   self.assertTrue(any('stored-row continuity' in hold for hold in result['manifest']['holds']))
    cases=load_jsonl(root/'bundle/observations/target/cases.jsonl.gz')
    self.assertEqual(len(cases),936)
    repeated=[x for x in cases if x['repeated_levels_preserved']]

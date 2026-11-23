@@ -69,14 +69,20 @@ that an historical execution consumed the deposited values in that exact order.
 A release-applicable acquisition/export specification must reconcile these
 paths before a support baseline or physiological interpretation is admitted.
 
-The complete original values and order remain preserved. The existing loader's
-uniform-axis metadata is an unqualified header projection, not proof of
-continuity across all 426 stored entries. No channel split, cropping, filtering,
+The complete original values and order remain preserved. The loader now emits
+`axis.kind = "sample_index"` and a null `sample_period_ms` for Liberman. The
+40 µs header value is retained separately as `header_sample_period_ms = 0.04`,
+with `physical_layout = "unresolved_continuous_or_concatenated"`; it must not be
+used to assign a physical coordinate to every stored value. There is no
+`step_ms` field for these records. No channel split, cropping, filtering,
 polarity conversion or resampling is applied here. Voltage units and the
 first-sample/acoustic reference remain null. Ear headers and source filenames
 remain private; a filename/header `L`/`R` conflict does not establish an ear or
 biological repeat identity. This correction changes no Marcotti target-only
-annotation-code packet, source count, label or readiness flag.
+annotation-code packet, source count, label or readiness flag. Existing sealed
+preparations retain their historical uniform-axis header projection and must
+still be treated as unqualified. A new preparation emits corrected metadata and
+new hashes; this source revision does not rewrite or requalify a saved bundle.
 
 Source pins for this unresolved layout join: EPL July 2023 reader 12,628 bytes,
 SHA256 `b404bcbd90dd669d3ecf2584260fb8ad8ce69050b21fa2aab80bc0043a6b8531`;
@@ -171,3 +177,16 @@ complete sample counts, repeated levels, source hash rejection, path safety, mis
 annotation projection and duplicate wave1 animal aliases. Authentic data and the
 opaque-ID key remain outside the repository. This evidence closes complete
 native preparation; it does not close the scientific admission holds above.
+
+## Liberman axis metadata correction
+
+The November 23 source correction makes the unresolved layout explicit in the
+parser and generated support indices, instead of relying only on prose. Generated
+controls preserve all 426 distinct stored entries per level and verify that no
+continuous millisecond axis is emitted, including through support-index
+serialization. Eleven generated reader and serialization controls passed for this
+correction. Additional assertions in the full archive-to-bundle control remain
+available for CI; that larger fixture was not rerun locally in this source-only
+check. These controls establish metadata and preservation behavior, not acquisition
+calibration, a new authentic preparation, or neural interpretation performance.
+The historical validation receipt above remains tied to its original source.
