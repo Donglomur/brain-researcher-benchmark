@@ -228,13 +228,19 @@ def source_pair_bootstrap(values, iterations=1000):
 
     This samples accepted nonself source-target pairs, not five independent subjects.
     Each group resets RandomState(42), matching the published figure script.
+    Its sorted Source/Target groupby produces distinct first-occurrence source
+    and target orders; pandas unique() preserves those orders when sampling.
     """
+    pair_order = sorted(itertools.permutations(SUBJECTS, 2))
+    require(set(values) == set(pair_order), "source bootstrap requires all 20 nonself pairs")
+    source_order = tuple(dict.fromkeys(source for source, _ in pair_order))
+    target_order = tuple(dict.fromkeys(target for _, target in pair_order))
     rng = np.random.RandomState(42)
     samples = []
     for _ in range(iterations):
         sample = []
         while len(sample) < 20:
-            source, target = rng.choice(SUBJECTS, 1)[0], rng.choice(SUBJECTS, 1)[0]
+            source, target = rng.choice(source_order, 1)[0], rng.choice(target_order, 1)[0]
             if source != target:
                 sample.append(values[(source, target)])
         samples.append(np.mean(sample))

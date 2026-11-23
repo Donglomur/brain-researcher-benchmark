@@ -107,6 +107,48 @@ class MetricControls(unittest.TestCase):
         with self.assertRaises(ncc.ContractError):
             ncc.apply_ceilings(rows, dict(list(ceilings.items())[:-1]))
 
+    def test_source_bootstrap_matches_author_first_occurrence_orders(self):
+        # Author plot_figure.py first sorts the Source/Target groupby. Within
+        # each ROI/method, unique() sees sub02 first in Target, then sub01 only
+        # in the next Source block. Seed equality alone cannot recover this.
+        values = {pair: i / 20 for i, pair in enumerate(itertools.permutations(ncc.SUBJECTS, 2))}
+        source_order = ["sub01", "sub02", "sub03", "sub04", "sub05"]
+        target_order = ["sub02", "sub03", "sub04", "sub05", "sub01"]
+        rng = np.random.RandomState(42)
+        means = []
+        for _ in range(1000):
+            # Literal accepted-pair sampling from the author loop, independent
+            # of the evaluator's roster construction and accumulation.
+            sources, targets = [], []
+            while len(sources) < 20:
+                source = rng.choice(source_order, 1, replace=True)[0]
+                target = rng.choice(target_order, 1, replace=True)[0]
+                if source != target:
+                    sources.append(source)
+                    targets.append(target)
+            means.append(np.mean([values[pair] for pair in zip(sources, targets)]))
+        actual = ncc.source_pair_bootstrap(values)
+        self.assertEqual(actual["bootstrap_mean"], float(np.mean(means)))
+        self.assertEqual(actual["percentile_2_5"], float(np.percentile(means, 2.5)))
+        self.assertEqual(actual["percentile_97_5"], float(np.percentile(means, 97.5)))
+        self.assertEqual(actual["replicates"], 1000)
+        self.assertEqual(actual["seed"], 42)
+
+    def test_source_bootstrap_ignores_input_mapping_insertion_order(self):
+        values = {pair: i / 20 for i, pair in enumerate(itertools.permutations(ncc.SUBJECTS, 2))}
+        reversed_values = dict(reversed(list(values.items())))
+        self.assertEqual(ncc.source_pair_bootstrap(values, 20),
+                         ncc.source_pair_bootstrap(reversed_values, 20))
+
+    def test_source_bootstrap_rejects_incomplete_or_self_pair_panel(self):
+        values = {pair: i / 20 for i, pair in enumerate(itertools.permutations(ncc.SUBJECTS, 2))}
+        del values[("sub01", "sub02")]
+        with self.assertRaisesRegex(ncc.ContractError, "all 20 nonself"):
+            ncc.source_pair_bootstrap(values)
+        values[("sub01", "sub01")] = .5
+        with self.assertRaisesRegex(ncc.ContractError, "all 20 nonself"):
+            ncc.source_pair_bootstrap(values)
+
     def test_source_bootstrap_deterministic_and_not_subject_claim(self):
         values = {pair: i / 20 for i, pair in enumerate(itertools.permutations(ncc.SUBJECTS, 2))}
         a = ncc.source_pair_bootstrap(values, 20)
