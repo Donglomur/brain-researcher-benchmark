@@ -67,6 +67,8 @@ Collection rejects incomplete animal/arm support, duplicates, response-context s
 
 `collect --mode ...` is also available for inspecting one mode's complete set. Paired-study admission requires `collect-paired`. No new metric or scientific readiness flag is introduced.
 
+For protected scoring of both complete audited conditions, the additive [paired comparison operator](PAIRED_COMPARISON.md) jointly admits the collections before one private-target load and reports the original per-condition grades with equal-worm descriptive differences. Any required-context abstention leaves the whole pair unscored. This source adds no paired superiority threshold or execution qualification.
+
 ## Controls and remaining scope
 
 `test_delivery.py` uses three invented worms, two reversal events each, and all N/B/NB contexts through the existing preparation function. Controls independently recover every text-table value, compare every viewer sample and SVG marker, reject withheld-field/time/identity violations, exercise probability closure and matched-mode collection, verify target-free abstention, and run the actual JSON-line CLI including EOF failure. No authentic recordings, private historical labels, model calls, fitting, or scientific scores are used.
