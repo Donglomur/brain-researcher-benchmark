@@ -34,6 +34,12 @@ def grade(outputs, expected, sealed_targets):
     The actual protected target store and isolated producer are unresolved.
     This arithmetic implementation does not manufacture either authority.
     """
+    # Freeze the admitted public roster before the operator callback can mutate
+    # its caller-owned mapping or lists. Values become exact opaque strings
+    # during admission; use these same immutable tuples for every target join.
+    if type(expected) is not dict:
+        raise ValueError("exact output and expected mappings")
+    expected = {key: tuple(ids) for key, ids in expected.items()}
     predictions = admit_predictions(outputs, expected)
     target_rows = sealed_targets()
     if (type(target_rows) is not dict or any(type(k) is not int for k in target_rows)
