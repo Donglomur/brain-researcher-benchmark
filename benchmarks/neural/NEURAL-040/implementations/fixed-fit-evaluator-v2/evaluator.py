@@ -9,6 +9,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import importlib.util
+import io
+import json
 from pathlib import Path
 
 import numpy as np
@@ -116,15 +118,44 @@ def score_fixed_fit(protocol, features, training_targets, training_metadata,
     return result
 
 
+def _snapshot(path):
+    """Capture each file once; its digest identifies these bytes, not a later path."""
+    with open(path, "rb") as stream:
+        payload = stream.read()
+    return payload, hashlib.sha256(payload).hexdigest()
+
+
+def _read_json_snapshot(path):
+    payload, digest = _snapshot(path)
+
+    def reject_duplicates(pairs):
+        result = {}
+        for key, value in pairs:
+            base.require(key not in result, "duplicate JSON key: " + key)
+            result[key] = value
+        return result
+
+    value = json.loads(payload, object_pairs_hook=reject_duplicates,
+                       parse_constant=lambda _: (_ for _ in ()).throw(
+                           ContractError("nonfinite JSON")))
+    return value, digest
+
+
+def _read_npz_snapshot(path):
+    payload, digest = _snapshot(path)
+    with np.load(io.BytesIO(payload), allow_pickle=False) as archive:
+        base.require(len(archive.files) == len(set(archive.files)), "duplicate NPZ keys")
+        arrays = {key: archive[key] for key in archive.files}
+    return arrays, digest
+
+
 def _read_targets(path, metadata_path, hashes, prefix):
-    metadata = base.load_json(metadata_path)
-    actual = base.sha256(path)
+    metadata, metadata_digest = _read_json_snapshot(metadata_path)
+    targets, actual = _read_npz_snapshot(path)
     base.require(isinstance(metadata, dict) and metadata.get("npz_sha256") == actual,
                  prefix + " target hash mismatch")
-    targets = base.load_npz(path)
-    base.require(base.sha256(path) == actual, prefix + " targets changed during read")
     hashes[prefix + "_targets"] = actual
-    hashes[prefix + "_target_metadata"] = base.sha256(metadata_path)
+    hashes[prefix + "_target_metadata"] = metadata_digest
     return targets, metadata
 
 
@@ -136,24 +167,21 @@ def main(argv=None):
         parser.add_argument("--" + name, required=True)
     args = parser.parse_args(argv)
     # Claim completeness fails before any neural target file is touched.
-    claims = complete_claims(base.load_json(args.claims))
-    protocol = base.load_json(args.protocol)
+    supplied_claims, claims_digest = _read_json_snapshot(args.claims)
+    claims = complete_claims(supplied_claims)
+    protocol, protocol_digest = _read_json_snapshot(args.protocol)
     base.validate_protocol(protocol)
-    hashes = {"protocol_file": base.sha256(args.protocol),
-              "features": base.sha256(args.features),
-              "predictions": base.sha256(args.predictions),
-              "claims": base.sha256(args.claims)}
-    features = base.load_npz(args.features)
+    hashes = {"protocol_file": protocol_digest, "claims": claims_digest}
+    features, hashes["features"] = _read_npz_snapshot(args.features)
     training, training_metadata = _read_targets(
         args.training_targets, args.training_target_metadata, hashes, "training")
-    prediction_metadata = base.load_json(args.prediction_metadata)
+    prediction_metadata, hashes["prediction_metadata"] = _read_json_snapshot(
+        args.prediction_metadata)
+    predictions, hashes["predictions"] = _read_npz_snapshot(args.predictions)
     base.require(isinstance(prediction_metadata, dict) and
-                 prediction_metadata.get("artifact_sha256", {}).get("predictions") == hashes["predictions"],
+                 isinstance(prediction_metadata.get("artifact_sha256"), dict) and
+                 prediction_metadata["artifact_sha256"].get("predictions") == hashes["predictions"],
                  "prediction NPZ hash mismatch")
-    predictions = base.load_npz(args.predictions)
-    base.require(base.sha256(args.features) == hashes["features"] and
-                 base.sha256(args.predictions) == hashes["predictions"],
-                 "features or predictions changed during read")
 
     def evaluation_loader():
         return _read_targets(args.private_targets, args.private_target_metadata, hashes, "private")
@@ -163,7 +191,6 @@ def main(argv=None):
     result["artifact_sha256"] = hashes
     # Scores include private parcel/film effects. Keep the entire output operator-private.
     with open(args.output, "x") as stream:
-        import json
         json.dump(result, stream, indent=2, sort_keys=True, allow_nan=False)
         stream.write("\n")
 

@@ -59,7 +59,17 @@ trusted operator callback that returns `(targets, target_metadata)` after claim 
 prediction verification. It must not execute participant code. This ordering is
 an API property, not a process sandbox. Keep every evaluation target and score
 (including per-parcel effects) operator-private, and provide no scoring feedback
-during protected assessment. The output records input hashes without local paths.
+during protected assessment. The output records input hashes without local paths. Each JSON or NPZ input is
+read once into an immutable byte snapshot; parsing, array loading, and its reported
+SHA256 use that same snapshot. Prediction metadata is included in the recorded
+identities. A file replaced after capture cannot silently relabel the bytes used.
+Duplicate JSON/NPZ keys, nonfinite JSON constants, and pickled arrays remain refused.
+
+This holds one compressed NPZ snapshot in memory while decoding its arrays, so
+operators must budget that additional peak memory for the largest input archive.
+It does not make the collection of files an atomic snapshot or authenticate their
+scientific origin; supplied target/prediction metadata must still match the captured
+archive hashes. Private snapshots are captured only after fixed-fit verification.
 
 The reference input paths must be selected and frozen by the operator. Letting a
 participant replace protocol/features/training targets would defeat their scientific
