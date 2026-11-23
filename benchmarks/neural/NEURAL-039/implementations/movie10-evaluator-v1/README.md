@@ -88,3 +88,32 @@ python prepare_panel.py --output /operator/panel.json prepare --source-root /ope
 Preparation streams all four files to verify their exact annex extents and MD5s before parsing any HDF5 container, observes SHA256s for the emitted panel, and keeps the same descriptors open until metadata checks finish. It inspects local dataset keys, shapes, float32 dtype and storage metadata; it rejects soft and external links, virtual/external storage, missing repeat viewings and the existing evaluator's other panel violations. It never indexes response datasets, casts values, drops parcels, normalizes responses or substitutes a different participant. The output retains the current `neural039_movie10_panel_v1` schema and must be frozen by hash before candidate generation. Existing-file outputs are refused.
 
 `test_prepare_panel.py` tests generated HDF5 metadata, exact pointer reconstruction, all-four identity checks before parsing, schema/repeat rejection and mutation detection. No authentic source HDF5, neural array, model or candidate was used to construct or test it. The numerical source dtype, complete source key inventory, finite responses, sample counts and anonymous payload retrieval therefore remain unverified in practice. A successful future metadata preparation would still not prove train-only fitting, temporal-context isolation, authentic numerical performance, full audiovisual delivery or native understanding.
+
+## Participant-only prediction preflight
+
+Participants can validate the complete 16-case prediction submission using only
+the operator's public `queries.json`, its frozen SHA256, and their own predictions:
+
+```sh
+python submission.py --queries /public/queries.json --queries-sha256 FROZEN_QUERY_SHA256 --submission-dir /participant/predictions --output /participant/preflight.json
+```
+
+This route uses NumPy and the unchanged prediction admission routine in
+`evaluate.py`; it does not import h5py or accept a response root or operator panel.
+It checks all four people and films, every native segment/viewing identity,
+lexicographic concatenation, fixed `[8,N-5)` guards, contiguous offsets and all
+1,000 parcels before reading predictions. Public query JSON is bounded to 1 MiB.
+The existing array and per-case query checks then reject missing, malformed,
+constant or nonfinite predictions. A failed check exits nonzero without writing
+a successful preflight record; existing output files are never overwritten.
+
+Obtain the query hash from the operator before generating predictions. A
+self-supplied hash cannot establish that the roster was selected from the
+original source. Success validates public identities and prediction bytes only:
+no targets are opened, no score is returned, and source authenticity, candidate
+freeze, permitted training inputs and runtime isolation remain unverified.
+Operator-side source validation and scoring remain necessary.
+
+`test_submission.py` covers the full generated 16-case prediction panel and
+refusals for incomplete queries, altered guards/order/viewings, changed hashes
+and malformed prediction arrays. These are software controls, not neural results.
