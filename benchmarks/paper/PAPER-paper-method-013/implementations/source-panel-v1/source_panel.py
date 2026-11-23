@@ -158,8 +158,13 @@ def _load_masks(row: dict[str, Any], manifest_path: Path) -> np.ndarray:
     _require(isinstance(filename, str) and bool(filename), "mask_file missing")
     path = manifest_path.parent / filename
     _require(path.is_file(), "mask_file missing")
-    _require(sha256(path) == row.get("mask_sha256"), "mask SHA256 mismatch")
-    masks = np.load(path, mmap_mode="r", allow_pickle=False)
+    # Identify and decode one captured input, never a later pathname lookup or
+    # mutable mmap. This binds the scored bytes; it is not process isolation.
+    body = path.read_bytes()
+    _require(hashlib.sha256(body).hexdigest() == row.get("mask_sha256"),
+             "mask SHA256 mismatch")
+    _require(body.startswith(b"\x93NUMPY"), "masks must be a standalone NPY array")
+    masks = np.load(io.BytesIO(body), allow_pickle=False)
     _require(isinstance(masks, np.ndarray), "masks must be a standalone NPY array")
     _require(masks.ndim == 3 and masks.shape[1:] == IMAGE_SHAPE,
              "masks must use ROI,row,column axes and the 488x488 field")
@@ -200,13 +205,14 @@ def score_panel(reference_path: str | Path, prediction_path: str | Path,
     calculation, not authentication of the movie, predictions or full model.
     """
     reference_path, prediction_path = Path(reference_path), Path(prediction_path)
-    reference, prediction = read_json(reference_path), read_json(prediction_path)
+    reference, reference_sha256 = LEGACY._json_snapshot(reference_path)
+    prediction, prediction_sha256 = LEGACY._json_snapshot(prediction_path)
     refs = _roster(reference, REFERENCE_SCHEMA)
     preds = _roster(prediction, PREDICTION_SCHEMA)
     _require(reference.get("author_revision") == AUTHOR_REVISION, "wrong author revision")
     _require(reference.get("conversion") == CONVERSION, "wrong manual ROI conversion")
     _require(prediction.get("policy_id") == POLICY_ID, "matching policy acknowledgement required")
-    _require(prediction.get("reference_manifest_sha256") == sha256(reference_path),
+    _require(prediction.get("reference_manifest_sha256") == reference_sha256,
              "prediction targets another reference manifest")
     for key in ("method_id", "implementation_identity"):
         _require(isinstance(prediction.get(key), str) and bool(prediction[key].strip()),
@@ -229,8 +235,8 @@ def score_panel(reference_path: str | Path, prediction_path: str | Path,
             "method_id": prediction["method_id"],
             "implementation_identity": prediction["implementation_identity"],
             "matching_policy": POLICY_ID, "recordings": rows, "summary": summarize(rows),
-            "reference_manifest_sha256": sha256(reference_path),
-            "prediction_manifest_sha256": sha256(prediction_path),
+            "reference_manifest_sha256": reference_sha256,
+            "prediction_manifest_sha256": prediction_sha256,
             "scope": "complete_original_manual_ROI_segmentation_panel_only",
             "published_f1": {"mean": 0.847, "sd": 0.037, "video_count": 10},
             "qualification": "metric_calculation_only",

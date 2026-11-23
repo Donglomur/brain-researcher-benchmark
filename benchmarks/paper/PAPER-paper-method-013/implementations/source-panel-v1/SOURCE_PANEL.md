@@ -40,6 +40,15 @@ the original MAT bytes again and compares their direct conversion to the cached
 masks. Changing the cache and updating its self-declared hash therefore does not
 replace the authenticated reference.
 
+The scorer captures each manifest once, parses that snapshot and reports its
+SHA256. Each mask file is likewise captured once, authenticated and decoded
+from the captured NPY bytes. A pathname replacement after capture, or later
+in-place mutation, cannot change the arrays being scored. These checks bind
+content; they do not establish process isolation, provenance of predictions,
+or historical lack of target exposure. Snapshot decoding retains the NPY bytes
+alongside its decoded array temporarily, so memory admission must include one
+additional complete mask-file payload; masks are no longer memory-mapped.
+
 `prediction.json` describes one method, including an author-baseline-only run.
 No fabricated candidate, trace or runtime field is required. Each `mask_file` is
 a standalone NPY array with shape `[ROI,488,488]`, binary values and one nonempty
@@ -94,7 +103,12 @@ reference refusal:
 
 ```sh
 python -m unittest discover -s tests -p 'test_source_panel.py' -v
+python -m unittest discover -s tests -p 'test_snapshot_binding.py' -v
 ```
 
 The tests patch production source pins with explicitly invented byte identities.
 They are software checks and do not score authentic data or a model.
+
+Snapshot controls use small invented arrays to test file replacement, post-load
+mutation, mismatched hashes and exact manifest identities. They do not read
+authentic manual targets or run a movie-to-mask model.
