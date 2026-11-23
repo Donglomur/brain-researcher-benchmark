@@ -346,8 +346,11 @@ def _verify_svg(data, cell_id, body):
         for _ in units:
             panel_order.extend(["text"] + (["rect"]*20 if matrix is not None else []))
         if matrix is None:
+            panel_order.append("rect")
+        panel_order.extend(["line"]*21)
+        if matrix is None:
             panel_order.extend(("rect", "text"))
-        panel_order.extend(["line"]*21 + ["text"]*25)
+        panel_order.extend(["text"]*25)
         require([node.tag for node in panel] == [ns + tag for tag in panel_order],
                 "SVG direct-child paint order")
         rates = [node for node in panel.iter(ns + "rect") if node.attrib.get("class") == "rate"]
@@ -359,9 +362,10 @@ def _verify_svg(data, cell_id, body):
                                 "x": str(left + 24*b), "y": str(152 + 16*u), "width": "24", "height": "16",
                                 "fill": f"#{shade:02x}{shade:02x}ff"}, "quantized SVG rate")
         plain_rects = [node for node in panel.iter(ns + "rect") if node.attrib.get("class") != "rate"]
-        require(len(plain_rects) == (1 if matrix is None else 0), "missing-prior rectangle inventory")
+        require(len(plain_rects) == (2 if matrix is None else 0), "missing-prior rectangle inventory")
         if matrix is None:
             exact(plain_rects[0].attrib, {"x": str(left), "y": "152", "width": "480", "height": "864", "fill": "#eee"}, "missing-prior panel geometry")
+            exact(plain_rects[1].attrib, {"x": str(left + 8), "y": "518", "width": "464", "height": "32", "fill": "#eee"}, "missing-prior annotation backing")
         lines = list(panel.iter(ns + "line"))
         require(len(lines) == 21, "all SVG phase boundaries required")
         for phase, node in enumerate(lines):
@@ -397,7 +401,7 @@ def _verify_svg(data, cell_id, body):
         rate_count += len(rates)
     require(Counter(texts) == Counter(expected_texts), "exact visible text inventory required")
     counts = Counter(node.tag[len(ns):] for node in nodes)
-    exact(dict(counts), {"svg": 1, "title": 1, "desc": 1, "rect": 2 + rate_count + missing_count,
+    exact(dict(counts), {"svg": 1, "title": 1, "desc": 1, "rect": 2 + rate_count + 2*missing_count,
                         "defs": 1, "linearGradient": 1, "stop": 2, "g": 3,
                         "text": len(expected_texts), "line": 47}, "SVG structural inventory")
     require(root.find(ns + "title").text == "NEURAL-096 prior-specific mean-rate observations", "SVG title")

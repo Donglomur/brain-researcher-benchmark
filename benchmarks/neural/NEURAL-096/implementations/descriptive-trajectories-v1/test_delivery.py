@@ -180,6 +180,39 @@ class DeliveryControls(unittest.TestCase):
         with self.assertRaises(delivery.DeliveryError):
             delivery.verify_svg(self.observation, delivery.IDS[1], ET.tostring(root))
 
+    def test_missing_prior_annotation_backing_cannot_be_removed_or_cover_text(self):
+        ns = "{http://www.w3.org/2000/svg}"
+        original = self.files[delivery.SVG_NAMES[1]]
+        # The real renderer/verifier pair must accept both unsupported panels.
+        self.assertEqual(delivery.verify_svg(self.observation, delivery.IDS[1], original),
+                         {"rate_rectangles": 0, "missing_prior_panels": 2})
+        for change in ("removed", "wrong_position", "wrong_size", "wrong_fill", "after_text", "before_grid"):
+            root = ET.fromstring(original)
+            panel = next(node for node in root.iter(ns + "g") if node.attrib.get("id") == "long-panel")
+            backing = list(panel.iter(ns + "rect"))[1]
+            marker = next(node for node in panel.iter(ns + "text") if node.text.startswith("UNSUPPORTED:"))
+            if change == "removed":
+                panel.remove(backing)
+            elif change == "wrong_position":
+                backing.set("y", "0")
+            elif change == "wrong_size":
+                backing.set("height", "864")
+            elif change == "wrong_fill":
+                backing.set("fill", "none")
+            elif change == "after_text":
+                panel.remove(backing)
+                panel.insert(list(panel).index(marker) + 1, backing)
+            else:
+                # Restoring the old grid-over-annotation order must be refused.
+                panel.remove(backing)
+                panel.remove(marker)
+                first_line = next(panel.iter(ns + "line"))
+                index = list(panel).index(first_line)
+                panel.insert(index, backing)
+                panel.insert(index + 1, marker)
+            with self.subTest(change=change), self.assertRaises(delivery.DeliveryError):
+                delivery.verify_svg(self.observation, delivery.IDS[1], ET.tostring(root))
+
     def test_full_bundle_verification_reads_all_51_files(self):
         with memory_bundle(self.files) as reads:
             result = delivery.verify_bundle(ROOT, self.sha)
