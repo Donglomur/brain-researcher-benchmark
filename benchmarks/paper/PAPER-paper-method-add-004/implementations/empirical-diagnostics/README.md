@@ -2,7 +2,7 @@
 
 This standalone, standard-library Python component supports the existing `PAPER-paper-method-add-004` investigation. It prepares prospective trial windows, reduces complete four-method fit tables, and compares reproduction outputs. It is **not a new benchmark, an improvement leaderboard, a native estimator, or a complete Figure 7 reproduction**.
 
-The production source is unchanged from its reviewed version. It requires **5,775 unique units across 26 mice**, and all **23,100 unit-by-method coordinates**, including explicit fit failures. No authentic roster, spike data, estimator output, protected reference, or answer is distributed.
+The cohort validator requires **5,775 unique units across 26 mice and all eight source areas**, and all **23,100 unit-by-method coordinates**, including explicit fit failures. No authentic roster, spike data, estimator output, protected reference, or answer is distributed.
 
 ## Portable commands
 
@@ -41,7 +41,7 @@ Every named output must be absent. Input files may be at most16 MiB each; output
 
 ## Inputs and scientific interpretation
 
-See [cohort.schema.json](cohort.schema.json), [estimates.schema.json](estimates.schema.json), [TASK_AND_PROVENANCE.json](TASK_AND_PROVENANCE.json), and [COVARIATE_MAPPING.json](COVARIATE_MAPPING.json). The JSON schemas document field-level requirements; the production code also enforces relational cardinality, membership, uniqueness and finite arithmetic. Schema validation alone cannot authenticate original biological identities or QC.
+See [cohort.schema.json](cohort.schema.json), [estimates.schema.json](estimates.schema.json), [TASK_AND_PROVENANCE.json](TASK_AND_PROVENANCE.json), and [COVARIATE_MAPPING.json](COVARIATE_MAPPING.json). The JSON schemas document field-level requirements; the production code also enforces relational cardinality, membership, uniqueness and finite arithmetic. The source area acronyms are `LGd`, `VISp`, `VISl`, `VISrl`, `LP`, `VISal`, `VISpm`, and `VISam`, as declared in the [pinned author notebook](https://raw.githubusercontent.com/iinnpp/isttc/e78cfd2b2ea79b7a7e707db7b79e218212497e43/notebooks/mice/plot_dataset_info.ipynb). The schema restricts each area value; production also requires every area to occur. No per-area counts or row order are imposed. Valid area labels and complete dimensions cannot authenticate original biological identities or QC.
 
 The cohort's `source_sha256` is a required syntactic declaration. This component does not retrieve or authenticate the named original source from that string. The operator must establish the actual5,775-ID/mouse/session/eight-area roster and historical QC. Pinned author source shows the initial amplitude cutoff0.1 followed by an eight-area filter with amplitude_cutoff <0.01, isi_violations <0.5 and presence_ratio >0.9. Paper inclusive boundaries versus source strict predicates, saved presence minimum0.95, historical AllenSDK selection and actual cohort/panel membership remain unresolved; see the [QC source clarification](../../docs/provenance/empirical-qc-source-resolution.v1.json). This is a hosted source-policy observation; the attempted local notebook capture failed. No count is a substitute for source identity evidence. `fr_hz` means `lv_df.pkl.fr_hz_spont_30min`, not a broader Allen session firing-rate field.
 

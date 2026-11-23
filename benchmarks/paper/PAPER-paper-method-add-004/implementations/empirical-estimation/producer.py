@@ -19,7 +19,7 @@ N_TRIALS = 40
 N_UNITS = 5775
 N_MICE = 26
 COMMIT = 'e78cfd2b2ea79b7a7e707db7b79e218212497e43'
-BRIDGE_SHA256 = '802c08a03ef262d810e78b69bba72c0a8b4ef48e196cee0f179f97ae11756516'
+BRIDGE_SHA256 = '63d41e13b7300f6ba1dc845be9c7fb7dba167c4b44c99b2f869930f42522dd40'
 SOURCE_HASHES = {
     'src/isttc/scripts/calculate_acf.py': 'e19fa6241c3ac8a7a9de5c4eb03d1791f0cc57a8bd2e3fd11ec041f864d575c9',
     'src/isttc/scripts/calculate_tau.py': 'cf8f6488f1af1f92815b117603de947939211d4e5a68fa30c9f5b9aa0a7072e0',

@@ -92,7 +92,8 @@ class Controls(unittest.TestCase):
             e.estimate_rows(dict(schema="isttc_empirical_estimates_v1",rows=rows),units)
 
     def test_full_population_gate_without_scientific_data(self):
-        units=[unit(str(i),str(i%26)) for i in range(5775)]
+        units=[{**unit(str(i),str(i%26)), "area": e.AREAS[i % len(e.AREAS)]}
+               for i in range(5775)]
         doc=dict(schema="isttc_empirical_cohort_v1",source_sha256="0"*64,units=units)
         self.assertEqual(len(e.cohort(doc)),5775)
         for malformed in [units[:-1],units[:-1]+units[:1]]:
@@ -100,12 +101,39 @@ class Controls(unittest.TestCase):
         changed=[{**u,"mouse_id":"one_mouse"} for u in units]
         with self.assertRaises(ValueError):e.cohort({**doc,"units":changed})
 
+    def test_full_cohort_requires_source_area_membership_and_coverage(self):
+        units=[{**unit(str(i),str(i%26)), "area": e.AREAS[i % len(e.AREAS)]}
+               for i in range(5775)]
+        doc=dict(schema="isttc_empirical_cohort_v1",source_sha256="0"*64,units=units)
+        # Correct dimensions alone must not admit a substituted area population.
+        unknown=[dict(u) for u in units]
+        unknown[0]["area"]="CA1"
+        with self.assertRaisesRegex(ValueError,"unknown empirical source area"):
+            e.cohort({**doc,"units":unknown})
+        for missing in e.AREAS:
+            replacement=next(area for area in e.AREAS if area != missing)
+            incomplete=[{**u,"area":replacement if u["area"]==missing else u["area"]}
+                        for u in units]
+            with self.subTest(missing=missing):
+                with self.assertRaisesRegex(ValueError,"complete eight-area cohort required"):
+                    e.cohort({**doc,"units":incomplete})
+        single_area=[{**u,"area":"VISp"} for u in units]
+        with self.assertRaisesRegex(ValueError,"complete eight-area cohort required"):
+            e.cohort({**doc,"units":single_area})
+        # Unequal counts and arbitrary input order remain allowed; authentic
+        # per-area counts/identities are an external scientific requirement.
+        self.assertEqual(e.cohort({**doc,"units":list(reversed(units))}),list(reversed(units)))
+        skewed=[{**u,"area":e.AREAS[i] if i < len(e.AREAS) else "VISp"}
+                for i,u in enumerate(units)]
+        self.assertEqual(e.cohort({**doc,"units":skewed}),skewed)
+
     def test_duplicate_json_key_rejected(self):
         with self.assertRaises(ValueError):e.strict_json('{"a":1,"a":2}')
         with self.assertRaises(ValueError):e.strict_json('{"a":NaN}')
 
     def test_full_estimator_submission_keeps_missingness_differences(self):
-        units=[unit(str(i),str(i%26)) for i in range(5775)]
+        units=[{**unit(str(i),str(i%26)), "area": e.AREAS[i % len(e.AREAS)]}
+               for i in range(5775)]
         c=dict(schema="isttc_empirical_cohort_v1",source_sha256="0"*64,units=units)
         ref=list(estimates(units).values());candidate=[dict(row) for row in ref]
         candidate[0].update(tau_bins=None,failure_reason="candidate failed")

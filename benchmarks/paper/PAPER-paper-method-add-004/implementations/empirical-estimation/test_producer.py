@@ -21,7 +21,7 @@ SPEC.loader.exec_module(p)
 
 def fixtures():
     units = [{"unit_id": f"invented-unit-{i}", "mouse_id": f"invented-mouse-{i % p.N_MICE}",
-              "session_id": f"invented-session-{i % p.N_MICE}", "area": "invented-area",
+              "session_id": f"invented-session-{i % p.N_MICE}", "area": ("LGd", "VISp", "VISl", "VISrl", "LP", "VISal", "VISpm", "VISam")[i % 8],
               "fr_hz": 0.0, "lv": None} for i in range(p.N_UNITS)]
     cohort = {"schema": "isttc_empirical_cohort_v1", "source_sha256": "a" * 64,
               "units": units}

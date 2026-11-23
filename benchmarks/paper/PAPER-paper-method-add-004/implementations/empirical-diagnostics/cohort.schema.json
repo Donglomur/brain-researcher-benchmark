@@ -1,5 +1,5 @@
 {
-  "$comment": "Field-level contract only. Production additionally requires unique unit IDs and exactly26 distinct mouse IDs. It does not authenticate cohort authority from counts or source_sha256. Strict JSON rejects duplicate keys and nonfinite literals.",
+  "$comment": "Field-level contract only. Production additionally requires unique unit IDs, exactly26 distinct mouse IDs and all eight source areas. No per-area count is inferred. It does not authenticate cohort authority from counts, area names or source_sha256. Strict JSON rejects duplicate keys and nonfinite literals.",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "additionalProperties": false,
   "properties": {
@@ -15,9 +15,17 @@
         "additionalProperties": false,
         "properties": {
           "area": {
-            "maxLength": 128,
-            "minLength": 1,
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LGd",
+              "VISp",
+              "VISl",
+              "VISrl",
+              "LP",
+              "VISal",
+              "VISpm",
+              "VISam"
+            ]
           },
           "fr_hz": {
             "minimum": 0,
