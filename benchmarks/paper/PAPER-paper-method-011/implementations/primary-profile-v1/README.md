@@ -15,3 +15,70 @@ The output is an author-reference profile. It does not label the `candidate` fie
 `python3 -I -S -B test_panel.py` from this installed component runs14 focused controls. For a private checkout, add `--source-task /absolute/path/to/PAPER-paper-method-011`. Controls use retained source metadata and generated assessment values, never neural arrays. They cover unequal group dimensions, all10 initializations, missing/undefined runs, source eligibility, sample-mask substitution, case/output aliases, forged group scores, invalid R2, ties, input immutability and missing/stale assessment commitments.
 
 The original12 controls passed. Independent review then identified a missing assessment-to-case commitment join. The fixture was corrected to the real scorer interface and the affected14-control suite passed in a second pool invocation; the first result and costs are retained. CI enrollment is not included in this private proposal: the integrator must add the command to the task component's integrity enrollment. No shared registry or source-binding is changed by this package. `SOURCE.json` pins retained source authority and identifies the four limited web observations. No raw source or data acquisition was performed.
+
+## Candidate comparison on the original panel
+
+`compare_candidate_profile(reference_cases, reference_assessments,
+reference_support, candidate_cases, candidate_assessments, candidate_support,
+candidate_program_sha256=..., reference_metric_recipes=...,
+candidate_metric_recipes=...)` adds the previously missing numeric comparison
+against the complete original panel. It calls `build_reference_profile` on the
+93 raw reference case/assessment inputs; it never trusts a caller-supplied
+strongest-method score. Supply exactly four candidate cases, one per original
+dataset, with `purpose: improve`. The existing runtime's `MINT:0` output slots
+identify the paired original reference; the candidate values come from each
+assessment's `candidate` field. Those source-slot method tags do not identify
+the candidate algorithm.
+
+All four cases must retain the original causal mode, full dimensions, ordered
+sample/trial/5-ms-mask commitment, source-support identity, input index,
+source recipe and original MINT reference source. Provide the four original
+MINT metric recipes and four candidate metric recipes keyed by their case IDs.
+Each complete recipe must match its own case digest and uncertainty list.
+The remaining recipe contents must match exactly across the pair; only
+`uncertainty_requirements` may differ. This permits a historical trial-bootstrap
+policy for reproduction and the runtime-required prospective paired-gain policy
+for a candidate without changing scoring semantics. Both policies and full
+recipe commitments are retained; the comparator does not evaluate uncertainty. The configuration hash
+may differ and is retained. A successful candidate assessment must carry the
+current scorer commitments and a complete numeric reference companion; if the
+panel's MINT assessment is numeric, its per-dimension values must match that
+companion exactly. This detects contradictory saved assessments; it does not
+establish native equivalence or recover a missing historical result.
+
+Every original group reports candidate-minus-MINT, candidate-minus-each-eligible
+method and candidate-minus-strongest-original. Comparator network scores still
+average all ten initializations, and a missing comparator keeps the strongest
+comparison unavailable. Missing or failed candidate assessments keep all groups
+and reasons in the report. Four candidate dataset summaries average groups
+equally. No cross-method dataset winner is selected because Kalman eligibility
+differs. All original and candidate per-dimension values remain available.
+
+This interface describes one operator-declared candidate realization. It does
+not invent a candidate seed-aggregation policy, significance test, meaningful
+effect, full-vector success rule or global scalar. The program SHA256 is an
+operator declaration, not proof that all four executions used those bytes.
+Execution provenance, authentic sample manifests, original phase units and
+aggregation, matched input conditions/budgets, chronology and protected paired
+uncertainty remain external requirements. Numerical completeness never changes
+`scientific_qualification: false`, `improvement: unknown` or `paper_win: null`.
+
+The source basis remains the selected Figure 5
+[endpoint](../../primary-endpoint-v1/selection.v1.json) and its
+[improvement contract](../../primary-endpoint-v1/improvement.v1.json), the
+[paper](https://pmc.ncbi.nlm.nih.gov/articles/PMC11790250/), and the existing
+`catalog.primary_slots`, `bindings.validate_identity` and `scoring.assess_case`
+interfaces pinned in `SOURCE.json`. The official
+[MATLAB evaluator](https://github.com/seanmperkins/mint/blob/347206a402ac71ea528752365eebea17e3c770da/run/utils/evaluate_and_save.m)
+confirms 5-ms evaluation and per-dimension R2; it does not resolve native Cycle
+phase semantics. Historical source manifests retain their original hashes.
+
+Run `python3 -I -S -B test_comparison.py` from this component, optionally adding
+`--source-task /absolute/path/to/PAPER-paper-method-011` for a staged candidate.
+It runs the existing 14 reference-profile controls and 15 new generated
+comparison controls. These check the full group roster, equal group weighting,
+all comparator initializations, eligibility, failures, conflicting MINT
+companions, stale commitments, support/metric substitutions and separately
+bound historical/prospective uncertainty policies. No scientific
+run is performed. The integration owner must enroll this command and update
+current source bindings; shared CI/registry files are outside this component.
