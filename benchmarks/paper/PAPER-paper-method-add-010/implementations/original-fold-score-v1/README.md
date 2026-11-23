@@ -40,14 +40,20 @@ exactly 0.5 predicts the first class, matching the source logistic classifier's
 binary decision at zero. Both orders of a stimulus pair identify the same
 comparison and use this fixed probability orientation.
 
-The scorer requires every published participant identifier, every fold, exact
-prediction support, unique observation IDs and one held-out fold per participant.
+The scorer requires every published participant identifier, both stimulus classes
+for each participant, every fold, exact prediction support, unique observation IDs
+and one held-out fold per participant. This preserves the paired participant
+support of the selected Figure 3c/3a result declared in
+[reproduction.v2.json](../../reproduction.v2.json). Keeping all 94 participants
+while omitting a category, even for just one participant, is incomplete support
+and is refused before any score is returned.
 It reads the existing pinned public 94-ID roster from the sibling implementation
 and checks its SHA-256 before use. It never reads private source targets. The
 supplied observation ledger must independently preserve the authentic row support,
-order and labels: these checks cannot detect a fabricated or truncated operator
-ledger that still contains all participants. Multiple observations per participant
-are supported without silently changing their weight.
+order and labels: these checks cannot detect fabricated values or missing repeated
+observations when both classes still remain for each participant. Multiple
+observations per participant/class are supported without silently changing their
+weight; the scorer neither deduplicates them nor assumes exactly 188 rows.
 
 For each fold, accuracy is correct predictions divided by observations. The
 primary accuracy is the unweighted arithmetic mean of the ten accuracies; SD is
@@ -96,7 +102,8 @@ python3 -I -B test_score.py -v
 
 The tests use artificial values attached to the public roster identifiers, with
 no authentic samples or predictions. They exercise unequal fold sizes, population
-versus sample SD, class orientation and ties, identity support, all 144 endpoint
+versus sample SD, class orientation and ties, participant-by-class completeness,
+retained repeated-observation weighting, identity support, all 144 endpoint
 combinations, explicit QC exclusions, strict author CSV import and complete
 matrix comparison. They do not execute source models or access private targets.
 

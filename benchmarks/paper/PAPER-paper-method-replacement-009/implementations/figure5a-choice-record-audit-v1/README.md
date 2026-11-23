@@ -76,6 +76,59 @@ selection, win count, confidence interval or significance threshold. Auditing
 author and candidate outputs separately does not establish a paired scientific
 comparison without the unresolved source/competence/inference gates.
 
+## Building a submission from continuous model outputs
+
+`build_choice_predictions(support_bytes, logit_bytes,
+expected_support_sha256=...)` returns captured `figure5a-choice-predictions/v1`
+JSON bytes accepted directly by `audit_choice_profile`. It needs no labels and
+does not call the protected-label loader. The supplied support is checked using
+the same contract as the audit, including explicit original case incidence.
+
+The source [author evaluator](https://github.com/yzhang511/neural_decoding/blob/1508b1ac5a95af2f8627f0c304ee0a750cb36e77/src/utils/eval_utils.py#L47-L79)
+applies softmax and then argmax for classification in reduced-rank, MLP and LSTM
+paths. Its returned hard labels cannot recover the continuous score ordering
+needed by AUC. Capture the two output logits **before** that conversion and carry
+each original trial ID alongside its output. Do not infer IDs from returned row
+positions: the current source-loader coverage remains unqualified. This helper
+accepts those captured outputs; it does not run or patch the author evaluator,
+change model training, or provide a linear/state-space decoder adapter.
+
+The input document is:
+
+```json
+{
+  "schema": "figure5a-choice-logits/v1",
+  "support_sha256": "<the exact supplied support SHA256>",
+  "cases": [
+    {
+      "case_id": "<a declared case>",
+      "class_order": ["<negative class identity>", "<support positive_class>"],
+      "batches": [
+        {"trial_ids": [0, "0"], "logits": [[0.0, -2.0], [0.0, -1.0]]},
+        {"trial_ids": [2], "logits": [[0.0, 0.5]]}
+      ]
+    }
+  ]
+}
+```
+
+The abbreviated example shows one case; a real document must supply every case
+and trial in the support. Every row must contain exactly two finite numeric
+logits. Each case explicitly names its two distinct output classes, including
+the support's positive class. Reversed class-column order is supported; an
+unstated, unknown or unqualified historical mapping must not be guessed. The
+helper checks the declared mapping's structure, not its biological authenticity.
+
+Cases, batches and rows may arrive in any order. The returned document restores
+support case/trial order using typed identities. Duplicate, missing, foreign or
+misaligned rows fail, including a dropped final partial batch. A stable softmax
+converts logits into positive probabilities without exponent overflow; binary64
+rounding can still tie very extreme scores at 0 or 1. Hard-label vectors are
+rejected by shape, but a caller could misrepresent a two-column hard-label array
+as logits; producer qualification remains necessary. There is no imputation,
+threshold selection, aggregation or paper-win decision. The helper shares the
+audit's 64 MiB input/output document bound and materializes records in memory.
+
 ## Validation
 
 `test_choice_records.py` uses generated heterogeneous ten-session support with
@@ -84,6 +137,11 @@ code and rejection paths, including a failure in the last case before labels
 are read, shuffled typed identifiers, repeated labels, changed commitments,
 orientation conflicts, dropped panel axes, duplicate JSON keys, and altered metric
 pins. This is an engineering control, not an authentic 13-case source census.
+The same module tests the logit builder through the actual AUC audit: continuous
+scores retain a generated AUC of 0.75 where argmax would produce 0.5, shuffled
+typed IDs and reversed class columns give the same submission, partial batches
+remain complete, and malformed/incomplete outputs fail. These numbers describe
+generated controls only, not decoder performance on original observations.
 
 Run the focused test module through the existing shared generated-test pool.
 The intended public test command is `python3 -B test_choice_records.py` from this

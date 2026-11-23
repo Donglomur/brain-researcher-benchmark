@@ -187,6 +187,16 @@ def score(manifest, run, vocabulary):
         training["accuracy"] = None
     plotting = {"Overall": _metric(plot_values), **{k: _metric(v) for k, v in buckets.items()}}
     plotting["Action"] = plotting["Movement"].copy()
+    # plot_utils.py creates each branch's metric only for a nonempty retained
+    # population, then dereferences both in the combined source calculation.
+    # A zero weight does not make a missing source metric evaluable.
+    overall = plotting["Overall"]
+    missing_branches = [name for name in ("T/F", "Vocabulary") if not plotting[name]["queries"]]
+    overall["pooled_accuracy_diagnostic"] = overall["accuracy"]
+    overall["source_aggregate_defined"] = not missing_branches
+    overall["missing_source_branches"] = missing_branches
+    if missing_branches:
+        overall["accuracy"] = None
     return {"schema": "neurona-source-score/v2", "manifest_sha256": digest(manifest),
             "engineering_fixture": manifest["engineering_fixture"],
             "source_code_revision": legacy.CODE_REVISION, "data_revision": legacy.DATA_REVISION,
@@ -213,15 +223,18 @@ def compare(manifest, reference_run, candidate_run, vocabulary):
     comparisons = {}
     for metric, anchor in PAPER_ANCHORS.items():
         left, right = reference["posthoc"][metric], candidate["posthoc"][metric]
-        comparable = bool(left["queries"]) and left["included_ids"] == right["included_ids"]
+        same_queries = bool(left["queries"]) and left["included_ids"] == right["included_ids"]
+        scores_available = left["accuracy"] is not None and right["accuracy"] is not None
+        comparable = same_queries and scores_available
         comparisons[metric] = {
             "reference_queries": left["queries"], "candidate_queries": right["queries"],
-            "same_included_queries": comparable,
+            "same_included_queries": same_queries,
+            "both_scores_available": scores_available,
             "reference_only_ids": sorted(set(left["included_ids"]) - set(right["included_ids"])),
             "candidate_only_ids": sorted(set(right["included_ids"]) - set(left["included_ids"])),
             "candidate_minus_reference": right["accuracy"] - left["accuracy"] if comparable else None,
-            "reference_minus_published": left["accuracy"] - anchor if left["queries"] else None,
-            "candidate_minus_published": right["accuracy"] - anchor if right["queries"] else None,
+            "reference_minus_published": left["accuracy"] - anchor if left["accuracy"] is not None else None,
+            "candidate_minus_published": right["accuracy"] - anchor if right["accuracy"] is not None else None,
         }
     return {"reference": reference, "candidate": candidate, "posthoc_comparison": comparisons,
             "reproduction_established": False, "improvement_established": False,

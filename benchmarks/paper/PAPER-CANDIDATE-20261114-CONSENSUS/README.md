@@ -52,6 +52,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Trial occurrences](implementations/trial-occurrences) — Calibration only.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Likelihood terms v1](implementations/likelihood-terms-v1) — Reviewed source component.
+  Scope: Independent source-defined per-bin and per-occurrence likelihood terms from supplied observations, model expected counts and PSTH expected counts on explicit 5ms support. This emits no final Figure2b neuron vector or paper score. Authentic coverage, native runtime parity, PSTH construction, final reduction and scientific qualification remain unresolved.
 - [Native trial indices](implementations/native-trial-indices) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Heldout row alignment](implementations/heldout-row-alignment) — Reviewed source component.

@@ -71,6 +71,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Temporal-data bridge source preserves17 sessions,69 blocks,10153 observations and all9 prepared panels, including genuine EI-inductive refusal. The root-selected ordinary transductive panel retains all1500 eligible IDs and full representation population. Generated NumPy controls and external constructor/loader doubles do not establish real temporaldata/brainsets/Torch or HDF5 roundtrips. Literal raw-only dropout behavior and prior failures are retained; candidate masking, training recipe/runtime/checkpoints, restricted participant delivery and scientific outcomes remain unqualified.
 - [Window plan v1](implementations/window-plan-v1) — Reviewed source component.
   Scope: One exact accepted public window-plan code prerequisite for the existing NuCLR endpoint. No window/data generation, native comparison or scientific performance is executed or inferred by enrollment.
+- [Seed summary v1](implementations/seed-summary-v1) — Reviewed source component.
+  Scope: Five-seed NuCLR summary retaining each complete original outer-test pool and averaging the five source classification scores across explicitly supplied seeds. Seed SD conventions remain separately labeled descriptive diagnostics. Native training, seed identities, independence, source statistical parity and scientific qualification remain unverified.
 - [Source splits v2](implementations/source-splits-v2) — Reviewed source component.
   Scope: Original Bugeon split recovery. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

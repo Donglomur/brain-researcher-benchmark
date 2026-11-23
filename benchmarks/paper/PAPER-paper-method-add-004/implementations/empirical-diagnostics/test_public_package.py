@@ -11,6 +11,7 @@ import unittest
 
 HERE = Path(__file__).resolve().parent
 METHODS = ("acf_full", "isttc_full", "pearsonr_trial_avg", "sttc_trial_concat")
+AREAS = ("LGd", "VISp", "VISl", "VISrl", "LP", "VISal", "VISpm", "VISam")
 
 
 def write_cohort(path, count=5775):
@@ -19,7 +20,7 @@ def write_cohort(path, count=5775):
         for i in range(count):
             if i: out.write(",")
             json.dump(dict(unit_id="generated-unit-"+str(i), mouse_id="generated-mouse-"+str(i%26),
-                           session_id="generated-session", area="GENERATED_AREA",
+                           session_id="generated-session", area=AREAS[i % len(AREAS)],
                            fr_hz=3.0, lv=0.8), out)
         out.write("]}")
 
@@ -68,7 +69,7 @@ class Packaging(unittest.TestCase):
                               "authoring/"+"delivery-", "X-Amz-"+"Signature="):
                 self.assertNotIn(forbidden, text, name)
         self.assertEqual(hashlib.sha256((self.package/"empirical_bridge.py").read_bytes()).hexdigest(),
-                         "802c08a03ef262d810e78b69bba72c0a8b4ef48e196cee0f179f97ae11756516")
+                         "63d41e13b7300f6ba1dc845be9c7fb7dba167c4b44c99b2f869930f42522dd40")
 
     def test_relocated_help(self):
         result = self.call("--help")
@@ -143,6 +144,7 @@ class Packaging(unittest.TestCase):
         self.assertEqual(estimates["properties"]["rows"]["maxItems"],23100)
         self.assertEqual(estimates["properties"]["rows"]["items"]["properties"]["method"]["enum"],
                          list(METHODS))
+        self.assertEqual(cohort["properties"]["units"]["items"]["properties"]["area"]["enum"], list(AREAS))
         self.assertIn("26",cohort["$comment"])
         self.assertIn("uniqueness",estimates["$comment"])
 

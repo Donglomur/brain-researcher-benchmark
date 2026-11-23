@@ -77,7 +77,9 @@ def load_raw_unit(source_path, member, *, external_quality_policy):
         layer = _text(g[layer_field][()])
     if not np.isfinite(fs) or fs <= 0 or spikes.ndim != 1:
         raise SupportError('invalid source clock')
-    if spikes.dtype.kind not in 'iu' or np.any(spikes < 0) or np.any(np.diff(spikes) < 0):
+    # Subtraction wraps for unsigned HDF5 indices; compare without changing
+    # their dtype or reordering the spike-aligned QC masks.
+    if spikes.dtype.kind not in 'iu' or np.any(spikes < 0) or np.any(spikes[1:] < spikes[:-1]):
         raise SupportError('source spike indices must be ordered nonnegative integers')
     if sane.dtype.kind != 'b' or quality.dtype.kind != 'b' or sane.shape != spikes.shape or quality.shape != spikes.shape:
         raise SupportError('source spike/QC masks are not exactly aligned')

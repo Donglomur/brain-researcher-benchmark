@@ -145,6 +145,7 @@ def validate_roster(roster):
     require({k[0] for k in keys} == set(ENDPOINTS), "all five original endpoints required")
     mice = {}
     unit_owners = {}
+    probe_sessions = {}
     regions = {}
     for c in cells:
         require(all(isinstance(c[x], str) and c[x] for x in ("eid", "region", "subject")), "invalid cell identity")
@@ -153,6 +154,10 @@ def validate_roster(roster):
         unique_strings(c["trial_ids"], "trial IDs")
         unique_strings(c["unit_ids"], "unit IDs")
         unique_strings(c["pids"], "probe IDs")
+        for pid in c["pids"]:
+            require(pid not in probe_sessions or probe_sessions[pid] == c["eid"],
+                    "probe insertion assigned to different sessions")
+            probe_sessions[pid] = c["eid"]
         require(len(c["unit_ids"]) >= 5, "source figure requires >=5 merged population units")
         for u in c["unit_ids"]:
             owner = (c["eid"], c["region"])

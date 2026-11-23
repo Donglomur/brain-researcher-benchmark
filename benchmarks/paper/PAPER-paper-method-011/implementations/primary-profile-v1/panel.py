@@ -68,9 +68,11 @@ def roster():
     return answer
 
 
-def _case_map(cases):
-    require(type(cases) is list and len(cases) == 93, 'complete 93 original cases')
-    expected = {row['slot']: row for row in roster()}
+def _case_map(cases, *, candidate=False):
+    slots = [row for row in roster() if not candidate or row['method'] == 'MINT']
+    require(type(cases) is list and len(cases) == len(slots),
+            'complete 4 candidate cases' if candidate else 'complete 93 original cases')
+    expected = {row['slot']: row for row in slots}
     by_slot, ids = {}, set()
     for case in cases:
         require(type(case) is dict, 'case object')
@@ -80,7 +82,8 @@ def _case_map(cases):
         ids.add(ident)
         require(case.get('module') == 'primary_behavior' and
                 case.get('mode') == 'behavior_causal' and
-                case.get('purpose') == 'reproduce', 'original causal reproduction cases')
+                case.get('purpose') == ('improve' if candidate else 'reproduce'),
+                'original causal candidate cases' if candidate else 'original causal reproduction cases')
         outputs = case.get('outputs')
         require(type(outputs) is list and len(outputs) == 1 and
                 type(outputs[0]) is str and outputs[0] in expected and
@@ -118,7 +121,7 @@ def _assessments(rows, case_ids):
     return answer
 
 
-def _run_value(case, slot, assessment, sample_support):
+def _run_value(case, slot, assessment, sample_support, *, value_role='reference'):
     result = {key: deepcopy(slot[key]) for key in ('slot', 'dataset', 'method', 'repeat', 'dimensions')}
     result.update(case_id=case['id'], sample_support_sha256=sample_support,
                   source_support_sha256=case['output_identities'][0]['source_support_sha256'],
@@ -153,9 +156,9 @@ def _run_value(case, slot, assessment, sample_support):
         sha(commitments[recorded])
         require(commitments[recorded] == case[expected],
                 'numeric assessment commitment must match current case: ' + recorded)
-    recorded = out.get('reference')
+    recorded = out.get(value_role)
     require(type(recorded) is dict and set(recorded) == {'per_dimension_r2', 'groups'},
-            'original reference assessment shape')
+            'original ' + value_role + ' assessment shape')
     values = recorded['per_dimension_r2']
     require(type(values) is list and len(values) == len(slot['dimensions']) and
             all(type(value) in (int, float) and math.isfinite(value) and value <= 1 for value in values),
@@ -235,3 +238,135 @@ def build_reference_profile(cases, assessments, support_by_case):
             'reference_role': 'operator_supplied_author_reference_assessments_not_authenticated_here',
             'reproduction': 'unknown', 'improvement': 'unknown', 'paper_win': None,
             'global_scalar': None, 'current_sota': 'not_assessed', 'scientific_qualification': False}
+
+
+def compare_candidate_profile(reference_cases, reference_assessments, reference_support,
+                              candidate_cases, candidate_assessments, candidate_support,
+                              *, candidate_program_sha256, reference_metric_recipes,
+                              candidate_metric_recipes):
+    """Pair one declared candidate's four assessments with all 93 author runs.
+
+    The four candidate cases use the runtime's existing MINT reference slots and
+    purpose='improve'. Their candidate fields supply the proposed decoder values;
+    their method tags identify the reference schedule, not the candidate model.
+    All inputs are operator-side. A declared program pin and equal support hashes
+    are consistency checks, not execution provenance or source authentication.
+    """
+    sha(candidate_program_sha256)
+    reference = build_reference_profile(reference_cases, reference_assessments,
+                                        reference_support)
+    cases = _case_map(candidate_cases, candidate=True)
+    case_ids = {case['id'] for case in cases.values()}
+    require(type(candidate_support) is dict and set(candidate_support) == case_ids,
+            'frozen sample support for all 4 candidate cases')
+    assessments = _assessments(candidate_assessments, case_ids)
+    reference_runs = {run['slot']: run for run in reference['runs']}
+    original_cases = {case['outputs'][0]: case for case in reference_cases}
+    mint_ids = {case['id'] for case in reference_cases if case['method'] == 'MINT'}
+    require(type(reference_metric_recipes) is dict and set(reference_metric_recipes) == mint_ids,
+            'four original MINT metric recipes')
+    require(type(candidate_metric_recipes) is dict and set(candidate_metric_recipes) == case_ids,
+            'four candidate metric recipes')
+    candidate_runs = []
+    for slot in (row for row in roster() if row['method'] == 'MINT'):
+        case = cases[slot['slot']]
+        anchor = reference_runs[slot['slot']]
+        support = sha(candidate_support[case['id']])
+        require(support == anchor['sample_support_sha256'],
+                'candidate and reference must share ordered sample/mask support')
+        require(case['output_identities'][0]['source_support_sha256'] ==
+                anchor['source_support_sha256'], 'candidate and reference source support')
+        # Case-specific decoder configurations may differ, but observed inputs,
+        # targets, scoring semantics and original reference cannot be switched.
+        for key in ('input_index_sha256', 'source_recipe_sha256', 'reference_source_sha256'):
+            require(case[key] == anchor['commitments'][key],
+                    'candidate and reference pairing commitment: ' + key)
+        original_case = original_cases[slot['slot']]
+        original_recipe = reference_metric_recipes[original_case['id']]
+        candidate_recipe = candidate_metric_recipes[case['id']]
+        scoring_semantics = []
+        for bound_case, recipe in ((original_case, original_recipe), (case, candidate_recipe)):
+            require(type(recipe) is dict and set(recipe) == {'module', 'outputs',
+                    'policy_evidence_sha256', 'experiment_sha256', 'uncertainty_requirements'},
+                    'existing complete metric recipe')
+            require(digest(recipe) == bound_case['metric_recipe_sha256'],
+                    'metric recipe must match its own frozen case')
+            require(type(bound_case.get('factors')) is dict and
+                    recipe['module'] == bound_case['module'] and
+                    recipe['experiment_sha256'] == digest({key: bound_case[key] for key in
+                        ('module', 'dataset', 'method', 'repeat', 'factors', 'output_dimensions')}),
+                    'metric recipe must match the actual experiment')
+            requirements = bound_case.get('uncertainty_requirements')
+            require(type(requirements) is list and
+                    recipe['uncertainty_requirements'] == requirements,
+                    'uncertainty requirements must match their own case')
+            for requirement in requirements:
+                require(type(requirement) is dict and set(requirement) ==
+                        {'id', 'target', 'kind', 'policy_sha256'} and
+                        type(requirement['id']) is str and requirement['id'] and
+                        requirement['target'] in bound_case['outputs'] and
+                        requirement['kind'] in ('historical_absolute_trial_bootstrap',
+                                                 'prospective_paired_gain'),
+                        'existing uncertainty requirement identity')
+                sha(requirement['policy_sha256'])
+            scoring_semantics.append({key: value for key, value in recipe.items()
+                                      if key != 'uncertainty_requirements'})
+        require(any(item['kind'] == 'prospective_paired_gain' and
+                    item['target'] == slot['slot'] for item in case['uncertainty_requirements']),
+                'candidate requires its prospective paired uncertainty policy')
+        require(digest(scoring_semantics[0]) == digest(scoring_semantics[1]),
+                'candidate and reference must have identical scoring semantics')
+        run = _run_value(case, slot, assessments.get(case['id']), support,
+                         value_role='candidate')
+        paired = _run_value(case, slot, assessments.get(case['id']), support)
+        if run['status'] == 'numerically_assessed' and anchor['status'] == 'numerically_assessed':
+            require(paired['per_dimension_r2'] == anchor['per_dimension_r2'],
+                    'paired MINT values must match the original reference panel')
+        run['paired_reference'] = {'status': paired['status'],
+            'per_dimension_r2': paired['per_dimension_r2'], 'groups': paired['groups']}
+        run['uncertainty_requirements'] = deepcopy(case['uncertainty_requirements'])
+        run['reference_uncertainty_requirements'] = deepcopy(original_case['uncertainty_requirements'])
+        run['scoring_semantics_sha256'] = digest(scoring_semantics[0])
+        run['method_role'] = 'original_reference_slot_not_candidate_method'
+        candidate_runs.append(run)
+    by_dataset = {run['dataset']: run for run in candidate_runs}
+    groups, datasets = [], []
+    for original in reference['groups']:
+        run = by_dataset[original['dataset']]
+        name = original['group']
+        value = run['groups'][name] if run['groups'] is not None else None
+        mint = original['method_r2']['MINT']
+        strongest = original['strongest_original_reference_r2']
+        groups.append(dict(deepcopy(original), candidate_r2=value,
+            candidate_status=run['status'],
+            candidate_minus_MINT=(value - mint if value is not None and mint is not None else None),
+            candidate_minus_strongest_original=(value - strongest
+                if value is not None and strongest is not None else None),
+            candidate_minus_method={method: (value - score
+                if value is not None and score is not None else None)
+                for method, score in original['method_r2'].items()}))
+    for dataset, definitions in GROUPS.items():
+        run = by_dataset[dataset]
+        names = [name for name, _ in definitions]
+        datasets.append({'dataset': dataset, 'groups': names,
+            'sample_manifest_sha256': run['sample_support_sha256'],
+            'candidate_r2': (mean([run['groups'][name] for name in names])
+                             if run['groups'] is not None else None),
+            'cross_method_winner': None})
+    return {'schema': 'motormint-primary-candidate-comparison/v1',
+        'task_id': 'PAPER-paper-method-011',
+        'candidate_program_sha256': candidate_program_sha256,
+        'candidate_identity_role': 'operator_declared_not_authenticated_here',
+        'input_commitments': {'reference_profile_sha256': digest(reference),
+            'candidate_cases_sha256': digest(candidate_cases),
+            'candidate_assessments_sha256': digest(candidate_assessments),
+            'candidate_support_sha256': digest(candidate_support),
+            'reference_metric_recipes_sha256': digest(reference_metric_recipes),
+            'candidate_metric_recipes_sha256': digest(candidate_metric_recipes)},
+        'reference_profile': reference, 'candidate_runs': candidate_runs,
+        'groups': groups, 'datasets': datasets,
+        'numerical_comparison_complete': reference['numerical_profile_complete'] and
+            all(run['status'] == 'numerically_assessed' for run in candidate_runs),
+        'reproduction': 'unknown', 'improvement': 'unknown', 'paper_win': None,
+        'global_scalar': None, 'current_sota': 'not_assessed',
+        'scientific_qualification': False}

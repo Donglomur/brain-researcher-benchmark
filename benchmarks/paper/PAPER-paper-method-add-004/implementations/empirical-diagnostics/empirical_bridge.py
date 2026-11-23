@@ -19,6 +19,8 @@ TRIAL_TICKS = FS
 N_TRIALS = 40
 N_UNITS = 5775
 N_MICE = 26
+# Pinned author plot_dataset_info.ipynb brain_areas (e78cfd2).
+AREAS = ("LGd", "VISp", "VISl", "VISrl", "LP", "VISal", "VISpm", "VISam")
 THRESHOLDS = (100, 75, 50, 25)
 
 def strict_json(data):
@@ -62,7 +64,7 @@ def cohort(document):
     rows = document["units"]
     if type(rows) is not list or len(rows) != N_UNITS:
         raise ValueError("complete 5775-unit cohort required")
-    ids, mice = set(), set()
+    ids, mice, areas = set(), set(), set()
     for row in rows:
         if type(row) is not dict or set(row) != {"unit_id", "mouse_id", "session_id", "area", "fr_hz", "lv"}:
             raise ValueError("cohort row keys")
@@ -72,13 +74,18 @@ def cohort(document):
         ids.add(uid)
         mice.add(identifier(row["mouse_id"]))
         identifier(row["session_id"])
-        identifier(row["area"])
+        area = identifier(row["area"])
+        if area not in AREAS:
+            raise ValueError("unknown empirical source area")
+        areas.add(area)
         for field in ("fr_hz", "lv"):
             value = finite(row[field], nullable=True)
             if value is not None and value < 0:
                 raise ValueError("negative cohort covariate")
     if len(mice) != N_MICE:
         raise ValueError("complete 26-mouse cohort required")
+    if areas != set(AREAS):
+        raise ValueError("complete eight-area cohort required")
     return rows
 
 def draw_windows(rng, signal_ticks=SIGNAL_TICKS, trial_ticks=TRIAL_TICKS, n_trials=N_TRIALS):

@@ -29,6 +29,21 @@ python3 metrics.py /operator/path/manifest.json --output /operator/path/metrics.
 
 Files are consumed one draw at a time, and their exact bytes are hashed while being scored. Output contains session/regional metrics and identity receipts, without target or prediction arrays. SHA-256 for structured objects uses compact UTF-8 JSON with sorted keys and `allow_nan=False`; ordered draw/run receipts are lists, avoiding numeric JSON-key ordering ambiguity. Duplicate JSON keys, nonfinite values, missing cells and file digest changes are rejected. Inputs and output belong in external operator evidence, never in the public repository.
 
+Each cell result retains its validated `input_manifest_sha256` and
+`target_generator_sha256` declarations. `draw_targets_sha256` and
+`draw_folds_sha256` separately commit to target and ten-run partition identities
+for the real draw followed by null draws `1..1000`. They are independent of model
+predictions, so changes in predictions alone leave these two receipts unchanged;
+changing a null target or partition changes the corresponding receipt. The
+existing `draw_receipts_sha256` still includes predictions and scores. Ordered
+trial identity remains in `trial_ids_sha256`.
+
+These receipts allow a later comparison to check declared input provenance and
+all real/null target and partition identities without exposing arrays. Equality
+does not establish authentic preparation, honest fitting, original publication
+folds or matched budgets, and it does not supply the still-unresolved paired
+uncertainty or paper-win decision. They are not source authentication receipts.
+
 ## Scientific limits and validation
 
 ### Trusted native prediction export

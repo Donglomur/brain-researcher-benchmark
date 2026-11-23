@@ -1,6 +1,8 @@
 """Generated arithmetic and identity controls, never authentic data/model runs."""
 
 from pathlib import Path
+from decimal import Decimal, localcontext
+import math
 import sys
 import unittest
 
@@ -18,6 +20,57 @@ def logits(labels, width=2):
 
 
 class EndpointTests(unittest.TestCase):
+    def test_mse_preserves_representable_subnormal_mean(self):
+        support = tuple(f"frame-{i}" for i in range(100))
+        truth = [(key, (0,) * 14) for key in support]
+        pred = [(key, (1e-161,) * 14) for key in support]
+        with localcontext() as context:
+            context.prec = 100
+            expected = float(Decimal.from_float(1e-161) ** 2)
+        result = wfci1_behavior_mse(support, truth, pred, channel_ids=CHANNELS)
+        self.assertGreater(expected, 0.0)
+        self.assertEqual(result.values, (expected,) * 14)
+
+    def test_mse_scale_changes_match_decimal_reference(self):
+        # Includes scale increases, tiny values, signs and an exact zero.
+        errors = (0.0, 1e-161, -2e-161, 3e-161, -4e-161)
+        support = tuple(f"frame-{i}" for i in range(len(errors)))
+        truth = [(key, (0,) * 14) for key in support]
+        pred = [(key, (error,) * 14) for key, error in zip(support, errors)]
+        with localcontext() as context:
+            context.prec = 100
+            expected = float(sum(Decimal.from_float(e) ** 2 for e in errors) / len(errors))
+        result = wfci1_behavior_mse(support, truth, pred, channel_ids=CHANNELS)
+        for value in result.values:
+            self.assertLessEqual(abs(value - expected), math.ulp(expected))
+        reverse_support = support[::-1]
+        reverse = wfci1_behavior_mse(reverse_support, truth, pred, channel_ids=CHANNELS)
+        for value in reverse.values:
+            self.assertLessEqual(abs(value - expected), math.ulp(expected))
+
+    def test_large_residual_can_have_representable_mean_and_true_overflow_fails(self):
+        support = tuple(f"frame-{i}" for i in range(4))
+        truth = [(key, (0,) * 14) for key in support]
+        pred = [(key, ((2e154 if i == 0 else 0),) * 14)
+                for i, key in enumerate(support)]
+        result = wfci1_behavior_mse(support, truth, pred, channel_ids=CHANNELS)
+        for value in result.values:
+            self.assertTrue(math.isfinite(value))
+            self.assertTrue(math.isclose(value, 1e308, rel_tol=1e-15))
+        with self.assertRaises(MetricError):
+            wfci1_behavior_mse(("one",), [("one", (0,) * 14)],
+                              [("one", (2e154,) * 14)], channel_ids=CHANNELS)
+
+    def test_neural_mse_uses_same_subnormal_safe_accumulation(self):
+        support = tuple(f"frame-{i}" for i in range(100))
+        field = (0.0,) * 16384
+        prediction = list(field)
+        prediction[7] = 1e-161
+        result = neural_mse(support, [(key, field) for key in support],
+                            [(key, prediction) for key in support],
+                            brain_pixel_indices=(7, 0))
+        self.assertEqual(result.values, (1e-161 * 1e-161, 0.0))
+
     def test_continuous_mse_uses_every_frame_and_keeps_all_fourteen_outputs(self):
         # Errors for channel j are j and j+2, giving j*j+2*j+2.
         truth = [("first", (0,) * 14), ("last", (0,) * 14)]

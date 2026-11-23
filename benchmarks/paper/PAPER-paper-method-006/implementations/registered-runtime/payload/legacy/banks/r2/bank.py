@@ -502,7 +502,7 @@ def source20(request, meter):
     mandatory = {"numpy_version", "argsort_kind", "depth_dtype", "sample_frequency", "sample_origin", "source_clock_admitted", "dt_samples"}
     if not isinstance(profile, dict) or not mandatory <= set(profile):
         raise SourceGate("R-source-runtime", "Need pinned NumPy version/default quicksort/depth dtype and exact source sample-origin profile")
-    if profile["source_clock_admitted"] is not True or profile["argsort_kind"] != "quicksort" or profile["dt_samples"] != 6:
+    if profile["source_clock_admitted"] is not True or profile["argsort_kind"] != "quicksort" or type(profile["dt_samples"]) is not int or profile["dt_samples"] != 6:
         raise SourceGate("R-source-runtime", "Captured compare_recordings uses default NumPy quicksort and dt=6; exact source clock must be admitted")
     if profile["depth_dtype"] not in {"float32", "float64"}:
         raise SourceGate("R-source-dtype", "Only explicitly pinned float32/float64 depth profiles are implemented")
@@ -510,14 +510,24 @@ def source20(request, meter):
     origin = rational(profile["sample_origin"], "sample_origin")
     if fs <= 0:
         raise InputError("sample_frequency must be positive")
+    sample_low = sample_high = None
     for row in truth + detected:
         raw = row["raw"].get("source_samples")
         if not isinstance(raw, list) or len(raw) != len(row["events"]):
             raise InputError("source_samples required, with one integral sample per event")
         row["samples"] = [integer(x, "source sample") for x in raw]
+        for sample in row["samples"]:
+            # Native nmatch adds six samples and subtracts int64 coordinates.
+            # Python's unbounded arithmetic cannot certify overflow branches.
+            if not -(2**63) <= sample <= 2**63 - 7:
+                raise SourceGate("R-source-int64-domain", "Safe int64 source samples required; native overflow outcome is unresolved")
+            sample_low = sample if sample_low is None else min(sample_low, sample)
+            sample_high = sample if sample_high is None else max(sample_high, sample)
         if any((Fraction(s) - origin) / fs != t for s, t in zip(row["samples"], row["events"])):
             raise InputError("source sample/time join fails; no implicit waveform offset allowed")
         row["depth"] = rational(row["raw"].get("depth"), "source depth")
+    if sample_low is not None and sample_high - sample_low > 2**63 - 1:
+        raise SourceGate("R-source-int64-difference", "Cross-unit source sample differences can overflow int64; native outcome is unresolved")
     try:
         import numpy as np
     except ImportError:
@@ -528,6 +538,8 @@ def source20(request, meter):
     depths = np.asarray([float(x["depth"]) for x in detected], dtype=dtype)
     if not np.isfinite(depths).all():
         raise InputError("depth conversion produced a nonfinite source value")
+    if any(Fraction(float(depth)) != row["depth"] for depth, row in zip(depths, detected)):
+        raise SourceGate("R-source-depth-representation", "Detected depth is not exactly representable in its declared native dtype; no silent rounding")
     completed = []
     for target in truth:
         if not detected:
@@ -535,6 +547,8 @@ def source20(request, meter):
         target_depth = np.asarray(float(target["depth"]), dtype=dtype)
         if not np.isfinite(target_depth):
             raise InputError("nonfinite truth depth after source dtype conversion")
+        if Fraction(float(target_depth)) != target["depth"]:
+            raise SourceGate("R-source-depth-representation", "Truth depth is not exactly representable in its declared native dtype; no silent rounding")
         meter.tick(len(detected) * max(1, len(detected).bit_length()), "source_numpy_argsort_bound")
         order = np.argsort(np.abs(target_depth - depths), kind="quicksort").tolist()
         best, maximum, miss, false_positive = order[0], 0.0, 0.0, 0.0

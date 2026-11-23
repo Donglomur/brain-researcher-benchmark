@@ -44,8 +44,8 @@ The native sequence determines the reconstructed order. Missing native/configura
 From the repository root:
 
 ```sh
-python -I -S -B components/consensus-occurrences/occurrence_adapter.py < supplied-records.json > occurrence-audit.json
-python -I -S -B components/consensus-occurrences/run_invented_controls.py
+python -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-CONSENSUS/implementations/trial-occurrences/occurrence_adapter.py < supplied-records.json > occurrence-audit.json
+python -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-CONSENSUS/implementations/trial-occurrences/run_invented_controls.py
 ```
 
 The first command accepts at most 8 MiB of JSON (reading one extra sentinel byte to reject larger input) and checks a 64 MiB serialized-output limit. It reports each occurrence's unique within-fold index, loader position, original source-trial index, selection group and partition. It also reports multiplicity, omissions, source-ID overlap and complete three-fold coverage. Authentic output contains supplied trial identities.

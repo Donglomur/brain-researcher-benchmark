@@ -99,9 +99,19 @@ def _trace(value, count, label):
 
 
 def _prepared_trace(values):
-    """Scale before centering so finite large-magnitude operands do not overflow."""
-    scale = max(abs(x) for x in values)
-    scaled = tuple(x / scale for x in values) if scale else values
+    """Remove a finite offset before scaling to preserve small trace dynamics.
+
+    Pearson is invariant to an additive offset. Scaling the original values
+    first can round away their small differences or make the subsequent mean
+    unrepresentable near a large DC baseline. A midrange offset keeps every
+    subtraction finite, including traces spanning both float64 extremes. The
+    half-sum avoids overflowing the endpoint sum; the remaining scale prevents
+    overflow/underflow when squaring the centered residuals.
+    """
+    offset = min(values) / 2.0 + max(values) / 2.0
+    shifted = tuple(x - offset for x in values)
+    scale = max(abs(x) for x in shifted)
+    scaled = tuple(x / scale for x in shifted) if scale else shifted
     mean = math.fsum(scaled) / len(scaled)
     centered = tuple(x - mean for x in scaled)
     energy = math.fsum(x * x for x in centered)

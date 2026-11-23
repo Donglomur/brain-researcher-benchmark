@@ -1,5 +1,6 @@
 """Generated arithmetic/support controls; no paper recordings or targets."""
 import copy
+from decimal import Decimal, localcontext
 import importlib.util
 import math
 from pathlib import Path
@@ -43,6 +44,21 @@ def fixture():
     reference = packet(frozen, ramp, reference=True)
     methods = {name: packet(frozen, ramp) for name in M.SYNTHETIC_METHODS}
     return frozen, reference, methods
+
+
+def decimal_pearson(left, right):
+    """Independent high-precision formula on exactly the supplied floats."""
+    with localcontext() as context:
+        context.prec = 100
+        left = [Decimal.from_float(value) for value in left]
+        right = [Decimal.from_float(value) for value in right]
+        left_mean = sum(left) / len(left)
+        right_mean = sum(right) / len(right)
+        left = [value - left_mean for value in left]
+        right = [value - right_mean for value in right]
+        numerator = sum(a * b for a, b in zip(left, right))
+        energy = sum(a * a for a in left) * sum(b * b for b in right)
+        return float(numerator / energy.sqrt())
 
 
 class CorrelationPanelTests(unittest.TestCase):
@@ -108,6 +124,43 @@ class CorrelationPanelTests(unittest.TestCase):
         reference = packet(frozen, lambda n: [-1e308, -5e307, 5e307, 1e308], reference=True)
         result = M.evaluate_panel(frozen, reference, methods, candidate)
         self.assertAlmostEqual(result["strata"][0]["units"][0]["methods"]["candidate"]["pearson_r"], 1)
+
+    def test_small_dynamics_on_nonzero_baseline_preserve_pearson(self):
+        for baseline in (1.0, -1.0, 1e16, -1e16, 1e308, -1e308):
+            values = [baseline + i * math.ulp(baseline) for i in range(4)]
+            frozen, reference, methods = fixture()
+            candidate = packet(frozen, lambda n: values)
+            result = M.evaluate_panel(frozen, reference, methods, candidate)
+            unit = result["strata"][0]["units"][0]
+            with self.subTest(baseline=baseline):
+                self.assertEqual(unit["methods"]["candidate"]["status"], "defined")
+                self.assertAlmostEqual(unit["methods"]["candidate"]["pearson_r"], 1.0, places=14)
+                self.assertAlmostEqual(unit["candidate_minus_FAST_r"], 0.0, places=14)
+
+    def test_offset_trace_matches_independent_nontrivial_correlation(self):
+        values = [1e16 + i * math.ulp(1e16) for i in range(4)]
+        target = [-2.0, 3.0, 1.0, 4.0]
+        expected = decimal_pearson(values, target)
+        frozen, _, methods = fixture()
+        reference = packet(frozen, lambda n: target, reference=True)
+        candidate = packet(frozen, lambda n: values)
+        result = M.evaluate_panel(frozen, reference, methods, candidate)
+        actual = result["strata"][0]["units"][0]["methods"]["candidate"]["pearson_r"]
+        self.assertAlmostEqual(actual, expected, places=14)
+
+    def test_extreme_and_subnormal_dynamics_match_independent_formula(self):
+        extreme = float.fromhex("0x1.fffffffffffffp+1023")
+        tiny = math.ulp(0.0)
+        target = [-2.0, 3.0, 1.0, 4.0]
+        for values in ([-extreme, -extreme/2, extreme/2, extreme],
+                       [tiny, 2*tiny, 3*tiny, 4*tiny]):
+            frozen, _, methods = fixture()
+            reference = packet(frozen, lambda n: target, reference=True)
+            candidate = packet(frozen, lambda n: values)
+            result = M.evaluate_panel(frozen, reference, methods, candidate)
+            actual = result["strata"][0]["units"][0]["methods"]["candidate"]["pearson_r"]
+            with self.subTest(values=values):
+                self.assertAlmostEqual(actual, decimal_pearson(values, target), places=14)
 
     def test_missing_original_method_cannot_be_replaced_by_candidate(self):
         frozen, reference, methods = fixture()

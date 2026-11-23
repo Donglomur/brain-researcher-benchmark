@@ -120,7 +120,14 @@ class MappedBundle:
 
 
 def _unit_block(bundle, key, rows):
-    return core._unit_rows(bundle.read(key, rows))
+    return np.ascontiguousarray(core._unit_rows(np.ascontiguousarray(bundle.read(key, rows))))
+
+
+def _row_correlations(real_units, predicted_unit):
+    # Keep one contiguous feature-axis reduction for every dot product. BLAS
+    # matrix/vector kernels may otherwise round equal rows differently when
+    # the final distractor block is shorter, changing strict tie decisions.
+    return np.clip(np.sum(real_units * predicted_unit, axis=1), -1, 1)
 
 
 def identification(real, pred, key, indices):
@@ -136,12 +143,15 @@ def identification(real, pred, key, indices):
         stop = min(start + FEATURE_BLOCK, n)
         selected = indices[start:stop]
         p = _unit_block(pred, key, selected)
-        # Use the same matrix kernel as distractors for congruents and ties.
-        congruent = np.diag(np.clip(_unit_block(real, key, selected) @ p.T, -1, 1))
+        matching = _unit_block(real, key, selected)
+        congruent = np.array([_row_correlations(matching[j:j + 1], row)[0]
+                             for j, row in enumerate(p)])
+        del matching
         successes = np.zeros(stop - start, dtype=np.int64)
         for other in range(0, n, FEATURE_BLOCK):
             end = min(other + FEATURE_BLOCK, n)
-            cross = np.clip(_unit_block(real, key, indices[other:end]) @ p.T, -1, 1)
+            distractors = _unit_block(real, key, indices[other:end])
+            cross = np.column_stack([_row_correlations(distractors, row) for row in p])
             better = cross < congruent[None, :]
             # The matching image never becomes its own distractor.
             shared_start, shared_end = max(start, other), min(stop, end)

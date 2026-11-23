@@ -15,7 +15,7 @@ import sys
 _IMPLEMENTATIONS = Path(__file__).resolve().parents[1]
 _PINS = {
     "initial-evaluator-v1/evaluator.py": "9d7ddf27151465693feb9346f906e3ad583194b022135a5c0cbfbfa1782b21a6",
-    "source-scoring-v2/source_score.py": "c4d1d07bb20e58e4bdf6b2b36f01a87c419b5b96a9077803a15bba50dfe643ca",
+    "source-scoring-v2/source_score.py": "dc56371804d6e011e16ea2b7fe9382f9cf6992d29ef1581e235f5bea247ed0a6",
 }
 for _relative, _expected in _PINS.items():
     if hashlib.sha256((_IMPLEMENTATIONS / _relative).read_bytes()).hexdigest() != _expected:
@@ -97,11 +97,13 @@ def _cell_index(suite):
 def _difference(left, right, *, completed=True):
     """Right minus left, only for identical nonempty included query identities."""
     same = bool(left["queries"]) and left["included_ids"] == right["included_ids"]
-    comparable = same and completed
+    scores_available = left["accuracy"] is not None and right["accuracy"] is not None
+    comparable = same and completed and scores_available
     return {
         "left_correct": left["correct"], "right_correct": right["correct"],
         "left_queries": left["queries"], "right_queries": right["queries"],
         "same_included_queries": same, "both_passes_completed": completed,
+        "both_scores_available": scores_available,
         "left_only_ids": sorted(set(left["included_ids"]) - set(right["included_ids"])),
         "right_only_ids": sorted(set(right["included_ids"]) - set(left["included_ids"])),
         "right_minus_left": right["accuracy"] - left["accuracy"] if comparable else None,

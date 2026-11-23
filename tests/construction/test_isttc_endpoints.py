@@ -247,7 +247,7 @@ def complete_cohort():
         mouse = ('m' + str({'a': 0, 'b': 1, 'c': 2, 'd': 3}[mice[i]])) if i < 8 else f'm{i%26}'
         fr, lv = x[i].tolist() if i < 8 else (10., 2.)
         units.append({'unit_id': f'u{i}', 'mouse_id': mouse, 'session_id': 's-' + mouse,
-                      'area': f'area{i%8}', 'fr_hz': fr, 'lv': lv})
+                      'area': ("LGd", "VISp", "VISl", "VISrl", "LP", "VISal", "VISpm", "VISam")[i % 8], 'fr_hz': fr, 'lv': lv})
     return {'schema': 'isttc_empirical_cohort_v1', 'source_sha256': 'a'*64, 'units': units}
 
 

@@ -67,8 +67,31 @@ class OriginalScoreTests(unittest.TestCase):
         rows, _ = fixture()
         result = score.score_cell(rows, {row["id"]: 0.5 for row in rows}, ("object", "face"))
         self.assertEqual(result["accuracy"], 0.5)
-        face_rows = [row for row in rows if row["label"] == "face"]
-        self.assertEqual(score.score_cell(face_rows, {row["id"]: 0.5 for row in face_rows}, ("object", "face"))["accuracy"], 1)
+        # At the tie every face row is correct and every object row is wrong.
+        self.assertEqual(result["fold_correct"], [n // 2 for n in result["fold_observations"]])
+
+    def test_rejects_missing_class_even_when_all_participants_and_folds_remain(self):
+        rows, probabilities = fixture()
+        damaged = (
+            [row for row in rows if row["label"] == "face"],
+            rows[1:],  # Only one participant loses one class; both remain globally.
+        )
+        for truncated in damaged:
+            with self.subTest(observations=len(truncated)), self.assertRaisesRegex(
+                    score.ScoreError, "both stimulus classes required for every participant"):
+                score.score_cell(truncated, {r["id"]: probabilities[r["id"]] for r in truncated},
+                                 ("face", "object"))
+
+    def test_repeated_rows_keep_source_observation_weighting(self):
+        rows, probabilities = fixture()
+        repeat = {**rows[0], "id": "generated-repeat"}
+        rows.append(repeat)
+        probabilities[repeat["id"]] = float(repeat["label"] == "object")
+        result = score.score_cell(rows, probabilities, ("face", "object"))
+        self.assertEqual(result["observations"], 189)
+        self.assertEqual(result["fold_observations"], [21] + [20] * 3 + [18] * 6)
+        self.assertEqual(result["fold_correct"][0], 1)
+        self.assertAlmostEqual(result["accuracy"], (9 + 1 / 21) / 10)
 
     def test_source_fold_identities_are_supplied_not_regenerated(self):
         rows, probabilities = fixture()

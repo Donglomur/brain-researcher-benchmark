@@ -1,0 +1,41 @@
+{
+  "task_id": "PAPER-paper-method-050",
+  "implementation_version": "figure5-joint-sort-v1",
+  "component": "Figure 5H/I pairwise joint-sort precision and recall",
+  "source": {
+    "doi": "10.1016/j.patter.2026.101590",
+    "article_url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13494646/",
+    "primary_xml_url": "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC13494646/fullTextXML",
+    "primary_xml_sha256": "91ef8fda659cb90426140a64b015fb73d03f832c5df53c1ff2e14a71f46c6d80",
+    "locators": [
+      {
+        "location": "Methods 4.17, JATS p0495, Equations 17 and 18",
+        "supports": "Strictly greater than 50% individual-unit spike overlap at inclusive 1 ms coincidence; compare included units through their joint-sort cluster identities; TP/FP/FN are match-pair counts; precision=TP/(TP+FP), recall=TP/(TP+FN). Full-session tracking precedes pairwise comparison."
+      },
+      {
+        "location": "Figure 5 H/I caption and Results 2.5",
+        "supports": "Ten consecutive-day recording pairs from five rats; pairwise precision/recall distributions and reported mean/SD, with source Friedman/Nemenyi comparisons."
+      },
+      {
+        "location": "Methods 4.19, JATS p0535, Equation 19",
+        "supports": "Separate Figure5D endpoint uses TrackedLength~MethodNames+(1+MethodNames|DatasetID)+(1|UnitID). Exact UnitID construction/unmatched handling remains unresolved and is not implemented here."
+      }
+    ]
+  },
+  "engineering_policies_not_source_qualification": {
+    "mapping": "One operator-resolved joint cluster per included individual unit; multiple units may share a joint cluster and all cross-session same-cluster pairs are retained. Source ambiguous/tied mapping policy remains unverified.",
+    "undefined_ratios": "null with affected pair IDs; no silent deletion, zero filling or panel mean/SD if any ratio is undefined.",
+    "spread": "Sample SD with n-1 denominator, explicitly labelled; source ddof parity unverified.",
+    "source_kind_and_assertions": "Declarations alone do not authenticate population, original validation pairs, spike-time overlap, clock alignment, reference independence or full-session execution."
+  },
+  "preserved_components": ["initial-evaluator-v1", "figure5-peth-v2"],
+  "remaining": [
+    "Authenticate original full units, dataset-to-rat mapping and ten selected session pairs",
+    "Recover source joint sorting, overlap mappings and ambiguous-cluster handling",
+    "Execute and verify original full-session DANT, UnitMatch and EMD outputs",
+    "Recover source numerical and statistical parity including SD and Friedman/Nemenyi",
+    "Implement original Figure5D mixed-model endpoint without guessing row construction",
+    "Complete other source fidelity safeguards and freeze scientifically justified reproduction/improvement decisions"
+  ],
+  "qualification": "source-grounded software component; generated controls only; no scientific execution, reproduction or improvement established"
+}

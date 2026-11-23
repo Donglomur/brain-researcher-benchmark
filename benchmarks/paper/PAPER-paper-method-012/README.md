@@ -71,6 +71,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Complete prepared-session fixed-bin CA1 neuron-pair mutual information, finite-sample quadratic extrapolation, IID-shuffle and temporal-shift diagnostics, animal-balanced descriptives and an explicit MAT preparation path. Authentic supplement bytes/schema and identities, spatial-bin conflict, native MINT/source-wrapper repair parity, complete empirical population, frozen reference/tolerances, protected assessment and scientific qualification remain held. PID, population decoding, other datasets and whole-paper reproduction are outside this component. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Decoder information v1](implementations/decoder-information-v1) — Reviewed source component.
+  Scope: Source-bound CA1 decoder fold-information replay from held-out predictions and protected support, retaining plugin information and all 30 explicit independent null permutations. Two- versus five-fold source declarations remain explicit, with no aggregate. Native preprocessing, partitions, draw provenance, numerical parity, reproduction and improvement remain unqualified.
 - [Poisson truth v1](implementations/poisson-truth-v1) — Reviewed source component.
   Scope: MINT original Poisson-process information reference. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

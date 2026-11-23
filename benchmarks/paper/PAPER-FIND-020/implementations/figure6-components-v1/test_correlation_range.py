@@ -13,6 +13,26 @@ spec.loader.exec_module(m)
 
 
 class CorrelationRangeControls(unittest.TestCase):
+    def test_weight_strict_boundary_does_not_round_above_into_equality(self):
+        boundary = Fraction.from_float(0.01)
+        epsilon = Fraction(1, 10 ** 100)
+        for value, expected in ((boundary - epsilon, False),
+                                (boundary, False), (boundary + epsilon, True)):
+            with self.subTest(value=value):
+                self.assertEqual(float(value), 0.01)
+                self.assertEqual(value > 0.01, expected)
+                self.assertEqual(m.like_to_like_eligible(value, 1), expected)
+
+    def test_correlation_strict_boundary_does_not_round_above_into_equality(self):
+        boundary = Fraction.from_float(0.2)
+        epsilon = Fraction(1, 10 ** 100)
+        for value, expected in ((boundary - epsilon, False),
+                                (boundary, False), (boundary + epsilon, True)):
+            with self.subTest(value=value):
+                self.assertEqual(float(value), 0.2)
+                self.assertEqual(value > 0.2, expected)
+                self.assertEqual(m.like_to_like_eligible(1, value), expected)
+
     def test_out_of_range_real_cannot_round_to_valid_endpoint(self):
         epsilon = Fraction(1, 10 ** 100)
         for correlation in (Fraction(1) + epsilon, -Fraction(1) - epsilon):

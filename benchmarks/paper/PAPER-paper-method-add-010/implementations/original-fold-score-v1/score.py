@@ -123,7 +123,9 @@ def _validate_cells(cells):
 def score_cell(observations, probabilities, pair):
     """Score one complete cell on supplied original out-of-fold observations.
 
-    observations: sequence of {id, participant, label, fold}, with folds 0..9.
+    observations: sequence of {id, participant, label, fold}, with folds 0..9
+    and both stimulus classes for every published participant. Distinct repeated
+    observations retain their source weight; no exact multiplicity is inferred.
     probabilities: mapping id -> P(lexically second class). Exactly .5 selects
     the first class, as in the binary sklearn logistic decision at zero.
     The participant ledger is operator-owned; targets must not be delivered to
@@ -133,7 +135,7 @@ def score_cell(observations, probabilities, pair):
     _require(isinstance(observations, (list, tuple)) and observations, "observations must be nonempty")
     _require(isinstance(probabilities, dict), "probabilities must be keyed by observation ID")
     roster = set(published_participants())
-    observed, participant_folds = set(), {}
+    observed, participant_folds, participant_classes = set(), {}, {}
     counts, correct = [0] * 10, [0] * 10
     participant_counts, participant_correct = {}, {}
     for row in observations:
@@ -147,6 +149,7 @@ def score_cell(observations, probabilities, pair):
         _require(label in pair, "target is not in the cell class pair")
         _require(participant_folds.get(participant, fold) == fold, "participant crosses held-out folds")
         participant_folds[participant] = fold
+        participant_classes.setdefault(participant, set()).add(label)
         _require(identifier in probabilities, "missing prediction")
         probability = _number(probabilities[identifier], "probability")
         hit = int(pair[int(probability > 0.5)] == label)
@@ -156,6 +159,8 @@ def score_cell(observations, probabilities, pair):
         participant_correct[participant] = participant_correct.get(participant, 0) + hit
     _require(observed == set(probabilities), "unexpected prediction")
     _require(set(participant_folds) == roster, "all 94 published participants required")
+    _require(all(labels == set(pair) for labels in participant_classes.values()),
+             "both stimulus classes required for every participant")
     _require(all(counts), "all ten original folds must have held-out observations")
     scores = [hits / total for hits, total in zip(correct, counts)]
     return {

@@ -27,8 +27,21 @@ encoded class order `[0, 1]`, complete binary probability rows, and no NaN,
 infinity or Boolean scores. The recorded final return must also agree exactly
 with the saved source-score artifact.
 
-The five observed training-CV AUC values are checked against their arithmetic
-mean. This does **not** independently reconstruct each fold's AUC: the current
+The five observed training-CV AUC values must agree with the five recorded
+`_fit_and_score` returns before their arithmetic mean is checked. The original
+[author runner](https://github.com/czlwang/brain_treebank_code_release/blob/c54ba38eab7814538bc03b1b6d29a3f50f034e12/regression_runner.py)
+returns that mean, used for contact selection in the selected endpoint. This join rejects a score vector that
+contradicts the recorded fold returns, even when its mean is unchanged.
+
+The supported return format is a dictionary whose `test_scores` contains exactly
+`{"score": finite_auc}`; a present `fit_error` must be null. This follows
+[`cross_val_score` and `_fit_and_score` in scikit-learn 1.0.2](https://github.com/scikit-learn/scikit-learn/blob/1.0.2/sklearn/model_selection/_validation.py)
+and 0.24.2. Other return formats fail explicitly and need source qualification;
+these inspected versions do not establish the historical runtime version. The
+comparison retains multiplicities but does not infer fold order from event
+completion order, because the selected endpoint uses the mean.
+
+This does **not** independently reconstruct each fold's AUC: the current
 producer does not record its out-of-fold probability vectors. The verifier does
 not pool predictions across folds or replace mean-fold AUC with pooled AUC.
 
@@ -85,7 +98,7 @@ callers own parsing and resource limits.
 
 ## Construction verification
 
-`test_verify.py` contains 16 generated-only methods: an independent pairwise-AUC
+`test_verify.py` contains 20 generated-only methods: an independent pairwise-AUC
 definition with ties; polarity and class-order attacks; changed saved scores;
 fold and train/test leakage; omitted, duplicate and foreign support; lifecycle
 and budget failures; strict compressed JSONL; and a test consuming the maintained
@@ -98,9 +111,16 @@ was rerun, and it passed. Independent review then found a framing-boundary
 compatibility defect: the producer permits 1 MiB of JSON before adding a newline.
 After correcting the line budget, one added boundary test passed using the real
 1 MiB limit in memory; it accepts the final newline, rejects one extra JSON byte,
-and confirms the total decompressed budget still applies. All 16 methods have passing evidence for the
-final code; a second full-suite pass is not claimed. No authentic recordings,
+and confirms the total decompressed budget still applies. All 16 methods had passing evidence for that
+predecessor version; no second full-suite pass was claimed at that stage. No authentic recordings,
 scientific packages, trained models or author numerical functions were run.
+
+The four additional fold-return controls cover contradictory returns, different
+score multisets with the same mean, changed completion order, and missing,
+ambiguous, failed or nonfinite returns. The new contradiction regression failed against the incumbent as expected
+(`VerificationError` was not raised). All 20 candidate methods then passed in
+one generated-only suite. These controls qualify only the observation join,
+not scientific execution or historical runtime compatibility.
 
 Run necessary generated checks through the project's existing shared test pool;
 the public test command is `python -I -S -B test_verify.py`. The test references

@@ -53,6 +53,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Converts pinned spikeInfo HDF5 references into numeric arrays and computes paired full-population tracking-yield/PETH diagnostics with complete declared unit and animal accounting. Native schema/time units, real animal grouping, UnitMatch half-waveforms, PETH exclusion from every matching path, Figure 5 day/rate/three-method comparisons, true identity labels, protected lineage and scientific qualification remain open. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Figure5 joint sort v1](implementations/figure5-joint-sort-v1) — Reviewed source component.
+  Scope: Figure 5H/I joint-sort fidelity computation over complete full-session tracking assignments, preserving source-included unit pairs and separate precision and recall. Joint-sort agreement is an indirect reference; authentic population identity, original executions, ambiguous mapping, statistical parity, reproduction and improvement remain unresolved.
 - [Figure5 peth v2](implementations/figure5-peth-v2) — Reviewed source component.
   Scope: Figure 5E PETH fidelity component. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

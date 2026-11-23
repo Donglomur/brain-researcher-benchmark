@@ -596,8 +596,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-008/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1725,
-                  "sha256": "1683766fa1cf034abe2239acbad9ccf8ce844efdbfda4cb4684a2ad184b1812e"
+                  "bytes": 4741,
+                  "sha256": "dcae1d05afcc22cf07dee3b1b45a0c57a96db1537b7562e2648fca5e53158b85"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-008/implementations/initial-evaluator-v1/evaluator.py",
@@ -688,6 +688,16 @@ jobs:
                   "path": "benchmarks/paper/PAPER-paper-signal-add-013/historical/task.pre-improvement.v1.json",
                   "bytes": 16711,
                   "sha256": "dc4aa310b2265d05b3cfa88b7f8093ebc82cbac96ca6d67628c9c83b899dcd64"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-008/implementations/initial-evaluator-v1/prepare_exports.py",
+                  "bytes": 5208,
+                  "sha256": "54d52a858c0b9d87f233d9add920917ec351091c3e99a693b63e8b9af1618b9b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-008/implementations/initial-evaluator-v1/tests/test_prepare_exports.py",
+                  "bytes": 7156,
+                  "sha256": "8dadd3cab04fa2a2038ce52894379b63675fc2cfb7c17572b02e6161a4eb4fd2"
               }
           ]
           packages = [
@@ -700,8 +710,8 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-replacement-012/implementations/initial-evaluator-v1",
               "benchmarks/paper/PAPER-paper-signal-add-013/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 53 > 0
-          assert sum(row['bytes'] for row in rows) == 3032626 <= 33554432
+          assert len(rows) == 55 > 0
+          assert sum(row['bytes'] for row in rows) == 3048006 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -744,7 +754,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 3032626,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 3048006,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

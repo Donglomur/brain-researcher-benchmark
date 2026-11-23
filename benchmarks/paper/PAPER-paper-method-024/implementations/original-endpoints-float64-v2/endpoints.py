@@ -111,14 +111,66 @@ def score(dataset, targets, outputs):
             "numerical_warnings": [str(w.message) for w in caught]}
 
 
-def main():
+def _position_ids(value, shape, name):
+    """Validate one identity per target position without changing its order."""
+    require(type(value) is list and len(value) == shape[0],
+            name + " must match the target position layout")
+    if len(shape) == 2:
+        require(all(type(block) is list and len(block) == shape[1] for block in value),
+                name + " must preserve ISRUC block and 20-position axes")
+        ids = [key for block in value for key in block]
+    else:
+        ids = value
+    require(all(type(key) is str and key.strip() for key in ids),
+            name + " must contain nonempty string identities")
+    require(len(set(ids)) == len(ids), name + " contains duplicate position identities")
+    return ids
+
+
+def score_aligned(dataset, targets, outputs, *, target_row_ids, output_row_ids):
+    """Score only if both declared position layouts match exactly.
+
+    IDs must be JSON-style lists matching the targets: [N] for ordinary datasets
+    or [blocks,20] for ISRUC. Every position ID must be unique. No sorting,
+    intersection, padding or weighting occurs. The caller still authenticates
+    the source support and the association of each ID with its numeric value.
+    """
+    require(dataset in DATASETS, "unknown original primary dataset")
+    shape = np.asarray(targets).shape
+    if dataset == "ISRUC":
+        require(len(shape) == 2 and shape[1] == 20 and shape[0] > 0,
+                "ISRUC targets require nonempty 20-epoch blocks")
+    else:
+        require(len(shape) == 1 and shape[0] > 0, "targets require one nonempty ordered vector")
+    target_ids = _position_ids(target_row_ids, shape, "target row IDs")
+    output_ids = _position_ids(output_row_ids, shape, "output row IDs")
+    require(target_ids == output_ids, "target/output position identities or order differ")
+    result = score(dataset, targets, outputs)
+    result["row_alignment"] = "exact declared position order"
+    return result
+
+
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("dataset", choices=DATASETS)
     parser.add_argument("targets", type=Path, help="operator-owned numeric NPY in original row order")
     parser.add_argument("outputs", type=Path, help="numeric NPY in the identical original row order")
-    args = parser.parse_args()
-    result = score(args.dataset, np.load(args.targets, allow_pickle=False),
-                   np.load(args.outputs, allow_pickle=False))
+    parser.add_argument("--target-row-ids", type=Path,
+                        help="JSON position IDs associated with the target values")
+    parser.add_argument("--output-row-ids", type=Path,
+                        help="JSON position IDs associated with the output values")
+    args = parser.parse_args(argv)
+    if (args.target_row_ids is None) != (args.output_row_ids is None):
+        parser.error("--target-row-ids and --output-row-ids must be supplied together")
+    targets = np.load(args.targets, allow_pickle=False)
+    outputs = np.load(args.outputs, allow_pickle=False)
+    if args.target_row_ids is None:
+        result = score(args.dataset, targets, outputs)
+    else:
+        result = score_aligned(
+            args.dataset, targets, outputs,
+            target_row_ids=json.loads(args.target_row_ids.read_text(encoding="utf-8")),
+            output_row_ids=json.loads(args.output_row_ids.read_text(encoding="utf-8")))
     print(json.dumps(result, allow_nan=False, sort_keys=True))
 
 

@@ -86,6 +86,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Prepared-artifact evaluator for the complete ten-session history-versus-interaction comparison, with source neural and latent loss components, matched identities/batches and prospective session-level gains. Target-conditioned latent reconstruction is not blind forecasting. Native Allen preprocessing and eligibility, author interface/layout discrepancies, missing anatomical/condition subpanels, authentic figure references, code/data rights, grouped improvement and protected qualification remain unresolved. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Likelihood components v1](implementations/likelihood-components-v1) — Reviewed source component.
+  Scope: Original ten-session, five-variant Allen Poisson likelihood component collection from declared native batches, with separate expected-count, factorial and combined sums. This does not select historical total-NLL, KL, penalty, stage, split or repetition conventions. Paper score and scientific qualification remain unset; no authentic inference or model execution is established.
 - [Ablation source audit v1](implementations/ablation-source-audit-v1) — Reviewed source component.
   Scope: Recover the ablation notebook's actual score provenance. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

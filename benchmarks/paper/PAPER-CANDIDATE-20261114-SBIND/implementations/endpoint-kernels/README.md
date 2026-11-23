@@ -57,12 +57,16 @@ requires explicit numeric types instead of inferring task semantics from NumPy
 dtypes. Continuous values and scores must be finite Python ints/floats; binary
 labels may also be booleans. Array owners need trusted adapters.
 
-MSE uses binary64 compensated summation of squared residuals divided by sample
-count. It holds one validated pair of rows at a time plus output accumulators;
+MSE uses binary64 compensated summation of squares relative to each output's
+largest residual, averages these normalized squares, then restores the scale.
+This avoids prematurely rounding each divided square to zero when the final
+MSE is representable, while also avoiding overflow in individual squared errors.
+It holds one validated pair of rows at a time plus output accumulators;
 the supplied operands remain caller-owned sequences, and the identity index
 cost is linear in sample count. It is not NumPy bitwise parity or a measured
-native-performance implementation. Unrepresentable arithmetic fails explicitly;
-very small binary64 terms can underflow. No floating-point success tolerance
+native-performance implementation. Unrepresentable subtraction or final MSE
+fails explicitly; a final value below binary64 range can still underflow.
+No floating-point success tolerance
 has been declared from these controls.
 
 Exact acquisition/session identities, paper folds, preprocessing, original
@@ -77,8 +81,13 @@ an admitted candidate comparison and current SOTA remain separate qualifications
 ## Generated validation
 
 Python 3.11 standard library only. Run `test_endpoint_kernels.py` through the
-approved shared test pool. The eight methods use hand-counted arithmetic,
+approved shared test pool. The twelve methods use hand-counted arithmetic,
 complete generated 128×128 fields, reorder/missing/duplicate row controls,
-channel/class-size failures, final-state checks and malformed operands.
+channel/class-size failures, final-state checks and malformed operands. Decimal
+reference controls cover representable subnormal means, changes in residual
+scale and finite means whose individual squared residuals would overflow.
 No authentic array, checkpoint, author implementation or model is executed.
-The frozen handoff records the actual run and limitations. New task count: zero.
+Earlier `SOURCE.json`, `VALIDATION.json` and `HANDOFF.md` retain the original
+eight-check release and its source hashes. Current consumers use the updated
+dependency binding; the numerical correction does not revise that history.
+New task count: zero.

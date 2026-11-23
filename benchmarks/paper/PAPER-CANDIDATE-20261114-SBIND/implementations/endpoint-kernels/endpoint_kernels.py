@@ -90,26 +90,40 @@ def _vector(values, width, *, binary=False):
 def _mse(support, targets, predictions, output_ids, selected):
     support, digest, truth, pred = _join(support, targets, predictions)
     n = len(support)
-    scale = math.sqrt(n)
+    scales = [0.0] * len(selected)
     totals, corrections = [0.0] * len(selected), [0.0] * len(selected)
     for raw_t, raw_p in zip(truth, pred):
         # Validate all original pixels, but materialize only one pair of rows.
         t, p = _vector(raw_t, len(output_ids)), _vector(raw_p, len(output_ids))
         for i, column in enumerate(selected):
-            # Divide before squaring to avoid a sum overflow when the mean is
-            # representable. Nonrepresentable subtraction is refused explicitly.
-            residual = t[column] - p[column]
-            scaled = residual / scale
-            term = scaled * scaled
-            if not math.isfinite(term):
-                raise MetricError("squared error exceeds binary64")
+            # Accumulate squares relative to the largest residual seen so far.
+            # Dividing each residual by sqrt(n) before squaring can erase every
+            # term even when their mean is a representable subnormal value.
+            residual = abs(t[column] - p[column])
+            if not math.isfinite(residual):
+                raise MetricError("residual exceeds binary64")
+            if residual == 0:
+                continue
+            if residual > scales[i]:
+                ratio = scales[i] / residual
+                factor = ratio * ratio
+                totals[i] *= factor
+                corrections[i] *= factor
+                scales[i] = residual
+                term = 1.0
+            else:
+                ratio = residual / scales[i]
+                term = ratio * ratio
             total = totals[i] + term
             if not math.isfinite(total):
                 raise MetricError("mean squared error exceeds binary64")
             corrections[i] += ((totals[i] - total) + term if totals[i] >= term
                                else (term - total) + totals[i])
             totals[i] = total
-    results = tuple(total + correction for total, correction in zip(totals, corrections))
+    # Scale only after averaging. This also avoids overflowing residual**2 when
+    # its contribution to the final mean is representable.
+    results = tuple(scale * (scale * ((total + correction) / n))
+                    for scale, total, correction in zip(scales, totals, corrections))
     if any(not math.isfinite(value) for value in results):
         raise MetricError("mean squared error exceeds binary64")
     return MetricResult("MSE", n, digest, tuple(output_ids[i] for i in selected),

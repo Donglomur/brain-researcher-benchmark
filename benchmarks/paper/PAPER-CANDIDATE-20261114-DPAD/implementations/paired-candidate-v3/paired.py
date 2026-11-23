@@ -219,6 +219,60 @@ def select_candidate(training):
             "qualification": "training_metadata_selection_only"}
 
 
+def candidate_inputs(plan, predictions, plan_sha256):
+    """Validate all candidate identities and arrays without protected targets."""
+    e.require(e.digest(plan) == sha(plan_sha256, "frozen candidate plan"), "candidate selection plan changed")
+    e.require(plan["schema"] == "dpad-candidate-plan-v3"
+              and plan["numerical_policy"] == NUMERICAL_POLICY, "unknown candidate plan")
+    p = original_protocol(plan["protocol"])
+    layout = layout_check(plan["channel_layout"])
+    identifier(plan["candidate_id"], "candidate id")
+    e.require(plan["candidate_id"] not in e.METHODS, "candidate id collides with author")
+    sha(plan["code_sha256"], "candidate code")
+    e.require(predictions["selection_plan_sha256"] == plan_sha256
+              and predictions["candidate_id"] == plan["candidate_id"]
+              and predictions["code_sha256"] == plan["code_sha256"], "candidate binding changed")
+    plan_rows = {}
+    for row in plan["cases"]:
+        key = case_key(row)
+        e.require(key not in plan_rows, "duplicate candidate plan fold")
+        e.require(set(row["dimensions"]) == set(map(str, e.DIMENSIONS)), "candidate dimension grid incomplete")
+        for values in row["dimensions"].values():
+            sha(values["configuration_sha256"], "candidate configuration")
+        chosen = e.choose_dimension({int(d): v for d, v in row["dimensions"].items()})
+        e.require(type(row["selected_dimension"]) is int and chosen == row["selected_dimension"], "candidate dimension changed")
+        plan_rows[key] = row
+    e.require(set(plan_rows) == FOLDS, "candidate plan folds incomplete")
+    complete_grid(predictions, "candidate", dimensions=True)
+    aligned_rows(predictions, p, layout, "candidate")
+    for row in predictions["cases"]:
+        key = case_key(row)
+        e.require(sha(row["configuration_sha256"], "prediction configuration")
+                  == plan_rows[key]["dimensions"][str(row["dimension"])]["configuration_sha256"], "candidate configuration changed")
+    return p, layout, plan_rows
+
+
+def preflight(plan, predictions, plan_sha256):
+    """Check a complete candidate submission without a target or reference file.
+
+    Acceptance establishes structure and plan consistency only. Constant arrays
+    are valid here; their correlations cannot be assessed without protected data.
+    A supplied hash binds plan content, not the provenance of that plan or hash.
+    """
+    _, _, plan_rows = candidate_inputs(plan, predictions, plan_sha256)
+    return {"schema": "dpad-candidate-preflight-v1", "task_id": e.TASK_ID,
+            "numerical_policy": NUMERICAL_POLICY, "candidate_id": plan["candidate_id"],
+            "plan_sha256": plan_sha256, "predictions_sha256": e.digest(predictions),
+            "session_count": len(e.SESSIONS), "session_fold_count": len(plan_rows),
+            "dimension_count": len(e.DIMENSIONS), "prediction_case_count": len(predictions["cases"]),
+            "status": "structurally_valid_candidate_submission", "protected_targets_read": False,
+            "scientific_reproduction": "not_assessed", "scientific_improvement": "not_assessed",
+            "limitations": [
+                "Structural acceptance is not a score or a guarantee that target-dependent correlations are defined.",
+                "Plan identity does not certify freezing chronology, author reference qualification or permitted observation access.",
+                "The original seven-session, equal-block and 77–99-neural-channel component profile remains unchanged."]}
+
+
 def compare(targets, reference, plan, predictions, reference_sha256, plan_sha256):
     """Evaluate all candidate dimensions and pair against all seven author arms.
 
@@ -226,49 +280,28 @@ def compare(targets, reference, plan, predictions, reference_sha256, plan_sha256
     not from the submitting participant. Hashes bind content, not chronology.
     """
     e.require(e.digest(reference) == sha(reference_sha256, "frozen author reference"), "author reference changed")
-    e.require(e.digest(plan) == sha(plan_sha256, "frozen candidate plan"), "candidate selection plan changed")
+    p, layout, plan_rows = candidate_inputs(plan, predictions, plan_sha256)
+    # Equality alone admits type-confusable values such as True == 1. Retain
+    # independent protected-side validation before matching both protocols.
+    original_protocol(targets["protocol"])
+    layout_check(targets["channel_layout"])
     e.require(reference["schema"] == "dpad-author-reference-v3"
               and reference["predecessor_sha256"] == LEGACY_SHA256
               and reference["paired_predecessor_sha256"] == PAIRED_PREDECESSOR_SHA256
               and reference["numerical_policy"] == NUMERICAL_POLICY, "unknown author reference lineage")
-    e.require(plan["schema"] == "dpad-candidate-plan-v3"
-              and plan["numerical_policy"] == NUMERICAL_POLICY, "unknown candidate plan")
-    p = original_protocol(targets["protocol"])
-    layout = layout_check(targets["channel_layout"])
-    e.require(reference["protocol"] == p and plan["protocol"] == p
-              and reference["channel_layout"] == layout and plan["channel_layout"] == layout,
+    e.require(reference["protocol"] == p and targets["protocol"] == p
+              and reference["channel_layout"] == layout and targets["channel_layout"] == layout,
               "paired protocol/channel layout changed")
     e.require(reference["targets_sha256"] == e.digest(targets), "paired targets changed")
-    e.require(predictions["selection_plan_sha256"] == plan_sha256
-              and predictions["candidate_id"] == plan["candidate_id"]
-              and predictions["code_sha256"] == plan["code_sha256"], "candidate binding changed")
-    identifier(plan["candidate_id"], "candidate id")
-    e.require(plan["candidate_id"] not in e.METHODS, "candidate id collides with author")
-    sha(plan["code_sha256"], "candidate code")
     complete_grid(targets, "target")
-    complete_grid(predictions, "candidate", dimensions=True)
     aligned_rows(targets, p, layout, "targets")
-    aligned_rows(predictions, p, layout, "candidate")
-    target_rows, plan_rows = {}, {}
-    for row in targets["cases"]:
-        key = case_key(row)
-        e.require(key not in target_rows, "duplicate target fold")
-        target_rows[key] = row
-    for row in plan["cases"]:
-        key = case_key(row)
-        e.require(key not in plan_rows, "duplicate candidate plan fold")
-        chosen = e.choose_dimension({int(d): v for d, v in row["dimensions"].items()})
-        e.require(type(row["selected_dimension"]) is int and chosen == row["selected_dimension"], "candidate dimension changed")
-        plan_rows[key] = row
-    e.require(set(target_rows) == FOLDS and set(plan_rows) == FOLDS, "paired folds incomplete")
+    target_rows = {case_key(row): row for row in targets["cases"]}
     grid = {}
     for row in predictions["cases"]:
         key, dimension = case_key(row), row["dimension"]
         e.require(type(dimension) is int and dimension in e.DIMENSIONS, "unknown candidate dimension")
         full_key = (*key, dimension)
         e.require(full_key not in grid, "duplicate candidate dimension/fold")
-        e.require(sha(row["configuration_sha256"], "prediction configuration")
-                  == plan_rows[key]["dimensions"][str(dimension)]["configuration_sha256"], "candidate configuration changed")
         scores = {kind: e.channel_cc(target_rows[key][kind], row[kind]) for kind in ("neural", "behavior")}
         e.require(all(score["mean_cc"] is not None for score in scores.values()), "undefined candidate channel cannot be omitted")
         grid[full_key] = {"session_id": key[0], "fold": key[1], "dimension": dimension, **scores}
@@ -326,7 +359,10 @@ def main():
     score = sub.add_parser("compare")
     for name in ("targets", "reference", "plan", "predictions", "reference-sha256", "plan-sha256"):
         score.add_argument("--" + name, required=True)
-    for command in (freeze, select, score):
+    check = sub.add_parser("preflight", help="validate candidate predictions without targets or author reference")
+    for name in ("plan", "predictions", "plan-sha256"):
+        check.add_argument("--" + name, required=True)
+    for command in (freeze, select, score, check):
         command.add_argument("--output", required=True)
     args = parser.parse_args()
     try:
@@ -334,6 +370,8 @@ def main():
             result = freeze_reference(e.read_json(args.training), e.read_json(args.targets), e.read_json(args.predictions))
         elif args.command == "select-candidate":
             result = select_candidate(e.read_json(args.training))
+        elif args.command == "preflight":
+            result = preflight(e.read_json(args.plan), e.read_json(args.predictions), args.plan_sha256)
         else:
             result = compare(e.read_json(args.targets), e.read_json(args.reference), e.read_json(args.plan),
                              e.read_json(args.predictions), args.reference_sha256, args.plan_sha256)

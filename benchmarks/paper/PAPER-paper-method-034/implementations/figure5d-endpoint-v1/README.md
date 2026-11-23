@@ -96,3 +96,40 @@ Four additional generated controls exercise actual CLI read ordering, tampered
 support, malformed/label-bearing public inputs, decoder failure and the complete
 2,000-row result. The source and original-preprocessing consumer pins were advanced
 together; prior `TESTING.json` receipts describe their historical source version.
+
+## Complete three-method numerical panel
+
+`panel.py` evaluates MARBLE, CEBRA-time and CEBRA-behaviour together. Its `methods`
+JSON object must have exactly `marble`, `cebra-time` and `cebra-behaviour` keys.
+Each value contains `training` and `query` objects in the formats above. All
+methods must use the same frozen support, ordered row identities and training
+positions. Different embeddings remain permitted. All three decoders finish
+before the CLI opens the single protected-target file, and each decoder runs once.
+
+```sh
+python panel.py --support SUPPORT.json --support-sha256 DIGEST \
+  --methods METHODS.json --targets TARGETS.json
+```
+
+The report retains each method's mean error and both explicitly named SDs over
+all 2,000 observations. It also reports the mean paired error differences for
+MARBLE minus each CEBRA comparator; negative values indicate lower MARBLE error
+on the supplied support. It does not pool methods, average animals, omit the last
+row or treat time bins as independent replicates. Input file digests and runtime
+versions are retained; target positions, predictions, row errors and paths are
+omitted from the report. The method input JSON has a 96 MiB byte limit.
+
+The three methods and two descriptive contrasts follow cells 13 and 15 of the
+[pinned official decoding notebook](https://github.com/Dynamics-of-Neural-Systems-Lab/MARBLE/blob/09491ec077bf153b7dece8518cc65ddaa20eb26d/examples/rat_hippocampus/decoding.ipynb).
+Its plotting cell drops the final CEBRA row to match the released 1,999-row MARBLE
+output; that plot cannot supply this component's required original 2,000-row
+support. No Wilcoxon result, confidence interval, effect threshold or historical
+contrast qualification is inferred from that cell. Complete Figure 5 reproduction
+also needs the traces, representations, animal-pair consistency and robustness
+companions specified in `reproduction.v1.json`. This numerical method panel does
+not qualify those outputs or resolve the original-support and checkpoint gaps.
+
+Run `python -B test_panel.py` in the existing numerical environment through the
+shared test pool. The generated controls cover the full three-method panel,
+independently calculated errors including the final row, shared training labels,
+method completeness, row order, and target access only after all decoders finish.

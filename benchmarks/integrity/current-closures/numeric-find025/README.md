@@ -7,6 +7,14 @@ The package README and CONTRACT statements about byte-identical primitives and
 50 tests describe their original construction; this current descriptor records
 the subsequent arithmetic repair and the expanded 57-test suite.
 
+The package README now points its test command to the current task directory
+and links the maintained artifact evaluator and separate covariance-variance
+component. Its current bytes belong to `current_files`; its pre-correction
+identity is retained under `historical_binding`. Actual comparison contracts,
+schemas, fixtures and historical task definitions remain in
+`unchanged_contract_files`. This documentation correction changes no metric or
+scientific qualification.
+
 The original squared Pearson primitive returned `1.0000000000000004` for two
 identical integer vectors from 0 through 16. Both comparison modes correctly
 rejected this value because evaluator correlation scores must lie in `[0, 1]`.

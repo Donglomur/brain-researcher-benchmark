@@ -18,6 +18,7 @@ DATA_RECORD = "10.5281/zenodo.15809433"
 DONORS = ("WTC11", "Patient Line")
 FAMILIES = ("manual_features", "plexus")
 METHODS = {"author_manual_features": "manual_features", "author_plexus": "plexus", "candidate": "plexus"}
+REPRODUCTION_METHODS = {"author_manual_features": "manual_features", "author_plexus": "plexus"}
 
 
 class InputError(ValueError):
@@ -178,15 +179,33 @@ def auroc(labels, probabilities):
 
 def evaluate(census, submission, expected_census_sha256):
     """Score the full three-method vector on reconstructed original observation sets."""
+    return _evaluate(census, submission, expected_census_sha256, METHODS,
+                     "plexus-figure4-predictions/v1", "plexus-figure4-report/v1")
+
+
+def evaluate_reproduction(census, submission, expected_census_sha256):
+    """Recompute both original method panels without requiring a candidate arm.
+
+    This is supplied-prediction scoring, not a numerical equivalence decision:
+    authentic publication references and a justified tolerance remain external.
+    """
+    report = _evaluate(census, submission, expected_census_sha256, REPRODUCTION_METHODS,
+                       "plexus-figure4-reproduction-predictions/v1",
+                       "plexus-figure4-reproduction-report/v1")
+    report["reproduction_decision"] = None
+    return report
+
+
+def _evaluate(census, submission, expected_census_sha256, methods, submission_schema, report_schema):
     pin(expected_census_sha256, "independently frozen census pin")
     require(digest(census) == expected_census_sha256, "census differs from independently frozen pin")
     plan = prepare(census)
-    require(isinstance(submission, dict) and submission.get("schema") == "plexus-figure4-predictions/v1", "prediction schema mismatch")
+    require(isinstance(submission, dict) and submission.get("schema") == submission_schema, "prediction schema mismatch")
     require(submission.get("plan_sha256") == digest(plan), "prediction plan mismatch")
     scores = submission.get("scores")
     require(isinstance(scores, list), "scores must be a list")
     expected, groups = {}, []
-    for method, family in METHODS.items():
+    for method, family in methods.items():
         for panel in plan["panels"]:
             if panel["family"] != family:
                 continue
@@ -219,13 +238,16 @@ def evaluate(census, submission, expected_census_sha256):
     differences = [{"donor": donor, "guide_id": guide, "fold": fold,
                     "candidate_minus_author_plexus": value - lookup[("author_plexus", donor, guide, fold)]}
                    for (method, donor, guide, fold), value in lookup.items() if method == "candidate"]
-    return {"schema": "plexus-figure4-report/v1", "census_sha256": digest(census),
+    report = {"schema": report_schema, "census_sha256": digest(census),
             "plan_sha256": digest(plan), "submission_sha256": digest(submission),
             "metric": "source-analysis-observation AUROC; two folds retained separately",
             "auroc_vector": output, "paired_descriptive_differences": differences,
             "source_skips": [{"family": p["family"], "donor": p["donor"], "guides": p["skipped_guides"]} for p in plan["panels"]],
             "qualification": "software score only; authentic cohort, baseline provenance, preprocessing exposure and final-paper equivalence unresolved",
             "inference": "No pooled scalar, interval, superiority test, or paper-win decision. Reciprocal folds and shared controls are dependent."}
+    if "candidate" not in methods:
+        del report["paired_descriptive_differences"]
+    return report
 
 
 def read_json(path):
@@ -242,7 +264,7 @@ def read_json(path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("prepare", "score"))
+    parser.add_argument("action", choices=("prepare", "score", "score-reproduction"))
     parser.add_argument("--census", required=True)
     parser.add_argument("--census-sha256")
     parser.add_argument("--submission")
@@ -253,8 +275,9 @@ def main():
         if args.action == "prepare":
             result = prepare(census)
         else:
-            require(args.census_sha256 and args.submission, "score requires --census-sha256 and --submission")
-            result = evaluate(census, read_json(args.submission), args.census_sha256)
+            require(args.census_sha256 and args.submission, "scoring requires --census-sha256 and --submission")
+            scorer = evaluate_reproduction if args.action == "score-reproduction" else evaluate
+            result = scorer(census, read_json(args.submission), args.census_sha256)
         Path(args.output).write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
     except (InputError, OSError, json.JSONDecodeError) as exc:
         parser.exit(2, f"figure4: {exc}\n")

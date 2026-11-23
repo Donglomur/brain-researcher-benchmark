@@ -254,6 +254,8 @@ def score_cell(metadata, draws):
     null_median = statistics.median(null)
     return {
         **{f: metadata[f] for f in ("modality", "subject", "eid", "region", "predictor")},
+        "input_manifest_sha256": metadata["input_manifest_sha256"],
+        "target_generator_sha256": metadata["target_generator_sha256"],
         "n_features": count, "n_trials": len(ids), "r2": real,
         "median_null_r2": null_median, "corrected_r2": real - null_median,
         "n_runs": 10, "n_pseudosessions": 1000,
@@ -261,6 +263,14 @@ def score_cell(metadata, draws):
         "actual_target_sha256": scored[-1]["target_sha256"],
         "actual_folds_sha256": scored[-1]["folds_sha256"],
         "actual_predictions_sha256": scored[-1]["predictions_sha256"],
+        # Keep target/partition identity separate from model-dependent scores
+        # and predictions. This covers the null draws as well as the real draw.
+        "draw_targets_sha256": digest([{"pseudo_id": i,
+                                         "target_sha256": scored[i]["target_sha256"]}
+                                        for i in [-1, *range(1, 1001)]]),
+        "draw_folds_sha256": digest([{"pseudo_id": i,
+                                       "folds_sha256": scored[i]["folds_sha256"]}
+                                      for i in [-1, *range(1, 1001)]]),
         "draw_receipts_sha256": digest([{"pseudo_id": i, **scored[i]}
                                        for i in [-1, *range(1, 1001)]]),
     }

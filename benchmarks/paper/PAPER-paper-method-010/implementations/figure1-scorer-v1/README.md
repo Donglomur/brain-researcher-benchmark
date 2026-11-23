@@ -80,7 +80,18 @@ and `neuron_id`. Every `neuron_id` must be the integer shuffled activity row
 index, exactly `0..5999` in that order; an algorithm's sorted permutation is
 not an embedding vector. `xi_all` and embedding may be vectors or N-by-1
 matrices. All must be finite and complete. Original module counts are
-1,000/1,000/1,000/1,000/2,000. The scorer rejects smaller fixtures in this route.
+1,000/1,000/1,000/1,000/2,000. These are generator-group counts, not
+necessarily the metric's `floor(xi_all)` counts: the pinned sustained generator
+can return `xi=1`, which becomes coordinate 2 after its module offset. The
+source metric assigns those rows to sequence 1. Admission permits nominal
+count shifts only at exact shared boundaries 2, 3 and 4, without moving a
+coordinate or changing source metric membership. For each boundary, its nominal
+cumulative count must lie between the counts strictly below and at-or-below
+that boundary. There must still be 1,000 tuning rows below 1 and no coordinate
+exactly 1. The latter cannot be produced by the source tuning/sustained formulas.
+This is a population-layout check, not a source-generation verifier. The scorer
+rejects smaller fixtures in this route and retains the existing `[0,5)` domain;
+source-degenerate endpoints at 5 are not admitted.
 Packets are limited to 1 MiB compressed and expanded; pickle loading is off.
 The fixed 6,000-neuron shape and module-coordinate range `[0,5)` are checked
 before module-count allocation, so malformed finite coordinates are rejected
@@ -104,8 +115,8 @@ published panel or an exact author replay. The direct `source_benchmarks` API
 can replay the full original embedding list once its initial state is recovered.
 
 The report retains all per-realization, per-method, per-module percentages,
-means, SEMs, accepted-pair counts, random controls, artifact hashes, and metric
-seeds. Candidate minus author differences are oriented so positive is favorable
+means, SEMs, accepted-pair counts, actual per-realization metric-module counts,
+random controls, artifact hashes, and metric seeds. Candidate minus author differences are oriented so positive is favorable
 for each endpoint (author minus candidate for contamination). These are
 descriptive paired differences, with no superiority test or binary reward.
 The report contains no input filesystem paths, ground-truth values, or raw
@@ -119,16 +130,19 @@ launch numerical test processes outside it. The commands inside the pool are:
 
 ```sh
 python3 -I -B tests/test_scorer.py
+python3 -I -B tests/test_population_admission.py
 python3 -I -B tests/source_parity.py /absolute/cache/paper__metrics.py
 ```
 
-The first file checks source interval and rejection rules, reversed and
+`test_scorer.py` checks source interval and rejection rules, reversed and
 interleaved orders, whole-panel aggregation, malformed and mismatched packets,
 complete roster preflight, and paired report directions. The generated transport
-test uses a stub metric and is labeled accordingly. The second file requires
+test uses a stub metric and is labeled accordingly. `test_population_admission.py`
+checks bounded population admission, exact shared endpoints and reporting of the
+actual metric-module counts. `source_parity.py` requires
 the exact source hash, extracts only four pure metric functions via AST, and
-compares actual scores plus final RNG state on shuffled, tied and untied
-generated fixtures across three RNG seeds. It imports none of the source's
+compares actual scores plus final RNG state on shuffled, tied, untied and
+exact-boundary generated fixtures across three RNG seeds. It imports none of the source's
 training or embedding dependencies. These are software controls, not scientific
 simulation generation, author inference, or a candidate trial.
 

@@ -67,7 +67,11 @@ never reduced because a fit is poor or an R² is undefined.
 
 Authentic preparation requires a separately coordinated native protocol; it has
 **not** been run in this build. It uses the existing NumPy/SciPy environment and
-installs nothing. The source SHA checks precede numerical imports and MAT reads.
+installs nothing. The source SHA checks precede numerical imports and MAT parsing. Both original
+MAT files are captured once with their pinned byte lengths, and `loadmat` parses
+those authenticated bytes through a file-like stream. This retains about
+5.55 MB of source byte bodies, in addition to parsed arrays; it does not reopen
+mutable paths after checking their identity.
 
 ```sh
 python3 observations.py prepare --ca1 /EXTERNAL/CA1_COM_withPFs.mat \
@@ -88,7 +92,9 @@ python3 observations.py score --observations /EXTERNAL/fresh-observations.json \
 The operator must supply the frozen digest independently of a participant; this
 local utility is not an isolated participant runner. Source authenticity comes
 from the pinned input files and the separately frozen preparation receipt, not
-from a self-declared digest inside a candidate file. Outputs must be fresh files.
+from a self-declared digest inside a candidate file. Outputs must be fresh files. The scorer authenticates and decodes the same
+immutable observation bytes, so replacing the pathname between authentication
+and parsing cannot change the scored observations.
 
 ## Qualification
 
@@ -108,3 +114,10 @@ author calibration including fitting defaults/stopping; and a frozen comparable
 capacity/search policy, panel aggregation, meaningful effect and animal-aware
 uncertainty. No current-SOTA claim is made. Source pins and exact inspected line
 ranges are in `source_evidence.json`.
+
+The byte-snapshot correction is covered by generated path-replacement controls
+for JSON scoring and both MAT inputs, plus refusal before numerical imports for
+an incorrect second input. The MAT checks use runtime doubles, not scientific
+arrays, and do not qualify native MAT parsing. SciPy's documented
+[`loadmat` file-like input](https://docs.scipy.org/doc/scipy/reference/generated/scipy.io.loadmat.html)
+is used without changing its existing parsing options.

@@ -63,6 +63,11 @@ region family for each endpoint (`q < 0.01`). Significant-session fractions use
 `p < 0.05`. These are information-presence statistics, not candidate-superiority
 tests. The two-session and five-unit minimums apply to the accepted source
 region/session roster. Probe populations are merged within a session and region.
+Each probe-insertion ID must belong to exactly one session. Reuse of that ID
+across regions or endpoints within its session is permitted; a coherent export
+that assigns it to another session is rejected before scoring. This consistency
+check follows [ONE's insertion-to-session mapping](https://int-brain-lab.github.io/ONE/_modules/one/api.html);
+it does not authenticate the supplied mapping against Alyx.
 
 ## Input and execution
 

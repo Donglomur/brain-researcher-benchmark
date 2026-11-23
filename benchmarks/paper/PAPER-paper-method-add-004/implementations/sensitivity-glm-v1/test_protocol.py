@@ -20,7 +20,7 @@ spec.loader.exec_module(e)
 def cohort():
     return {'schema': 'isttc_empirical_cohort_v1', 'source_sha256': 'a' * 64,
             'units': [{'unit_id': 'u' + str(i), 'mouse_id': 'm' + str(i % 26),
-                       'session_id': 's' + str(i % 26), 'area': 'a' + str(i % 8),
+                       'session_id': 's' + str(i % 26), 'area': ("LGd", "VISp", "VISl", "VISrl", "LP", "VISal", "VISpm", "VISam")[i % 8],
                        'fr_hz': 10 + i % 5, 'lv': 1 + (i % 7) / 10} for i in range(5775)]}
 
 

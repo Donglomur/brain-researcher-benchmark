@@ -18,12 +18,30 @@ The preparation output lists ordered training/test observation identities and la
 
 AUROC uses tie-aware ranks, mathematically equivalent to `sklearn.metrics.roc_curve` followed by `auc`. The output retains the full method/donor/guide/fold vector and descriptive candidate-minus-author-Plexus differences. No complete-screen scalar, interval, improvement threshold, or paper-win decision is invented. Reciprocal folds and common negative controls are dependent. The 0.8 display line is not a baseline.
 
+`evaluate_reproduction` and the `score-reproduction` command score only the two
+original representation families across the same complete four family/donor
+panels. Use schema `plexus-figure4-reproduction-predictions/v1` with the same
+`plan_sha256` and score-row format. Every eligible prediction for
+`author_manual_features` and `author_plexus` remains required; candidate rows are
+rejected. These method labels identify the source families being reconstructed;
+they do not establish who produced the predictions or authenticate author output.
+The existing `score` command still requires all three methods.
+
+The reproduction report uses schema `plexus-figure4-reproduction-report/v1` and
+retains the full AUROC vector and source skips without an improvement contrast.
+`reproduction_decision` remains null: scoring submitted predictions does not
+recover an authentic publication reference, establish equivalent results, or
+justify a reproduction tolerance. The complete source identities, computation
+audit and independent comparison required by the task contract remain necessary.
+
 Python 3.10+ and NumPy are required; the generated controls were designed for the existing NumPy 2.4.6 environment. NumPy's version is included in the plan identity. Author-code parity additionally uses existing pandas and scikit-learn for a minimal observation shim and the author's ROC arithmetic, with the classifier and scaler replaced by non-fitting recording/identity objects.
 
 ```sh
 python3 figure4.py prepare --census /absolute/census.json --output /absolute/plan.json
 python3 figure4.py score --census /absolute/census.json --census-sha256 FROZEN_CANONICAL_PIN \
   --submission /absolute/predictions.json --output /absolute/report.json
+python3 figure4.py score-reproduction --census /absolute/census.json --census-sha256 FROZEN_CANONICAL_PIN \
+  --submission /absolute/original-method-predictions.json --output /absolute/reproduction-report.json
 python3 -B tests/test_figure4.py
 python3 -B tests/author_parity.py /absolute/pinned-author-figure_4.py
 ```
