@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 import hashlib
+from io import BytesIO
 import json
 import math
 from pathlib import Path
@@ -18,6 +19,7 @@ SOURCE_SHA256 = {
     "CA1": "c565dcef738683fb398880a63e30031fda3170870b4a4e254c9bc5dac028c5b9",
     "CA3": "ec8a31ae5d2c73dbed089d6d4c3c0aa56599336342e6918470216d49416da9fc",
 }
+SOURCE_BYTES = {"CA1": 4429731, "CA3": 1121031}
 ANIMALS = {
     "CA1": ["1-3"] * 4 + ["cdc", "cfc", "cfc", "wt1", "wt1"],
     "CA3": (["4-2"] * 6 + ["4-1"] * 6 + ["5-3"] * 3 + ["5-1"] * 3
@@ -91,27 +93,34 @@ def _scalar_struct(value, name):
     return value[0, 0]
 
 
-def _sha256(path):
-    digest = hashlib.sha256()
+def _snapshot(path, expected_sha256, mismatch_message, *, expected_bytes=None):
+    """Authenticate the immutable bytes consumed downstream, never a later read."""
     with Path(path).open("rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+        raw = stream.read() if expected_bytes is None else stream.read(expected_bytes + 1)
+    if ((expected_bytes is not None and len(raw) != expected_bytes)
+            or hashlib.sha256(raw).hexdigest() != expected_sha256):
+        raise ValueError(mismatch_message)
+    return raw
 
 
 def prepare(ca1_path, ca3_path):
     """Prepare the exact source cohort; this performs no regression or fitting."""
     paths = {"CA1": Path(ca1_path), "CA3": Path(ca3_path)}
-    for region, path in paths.items():
-        if _sha256(path) != SOURCE_SHA256[region]:
-            raise ValueError(f"{region}: original source hash mismatch")
+    # Capture and authenticate both originals before numerical imports. The
+    # fixed original byte lengths also bound capture of an incorrect large file.
+    sources = {
+        region: _snapshot(path, SOURCE_SHA256[region],
+                          f"{region}: original source hash mismatch",
+                          expected_bytes=SOURCE_BYTES[region])
+        for region, path in paths.items()
+    }
     # Imported only after identity admission; not needed by generated kernels.
     import numpy as np
     from scipy.io import loadmat
 
     fields, planes = [], []
-    for region, path in paths.items():
-        data = _scalar_struct(loadmat(path, variable_names=["data"])["data"], region)
+    for region, raw in sources.items():
+        data = _scalar_struct(loadmat(BytesIO(raw), variable_names=["data"])["data"], region)
         if list(data.dtype.names) != ["f", "n"]:
             raise ValueError(f"{region}: source condition order changed")
         for condition in ("f", "n"):
@@ -288,10 +297,14 @@ def _object(pairs):
     return result
 
 
-def _read(path):
+def _decode(raw):
     def invalid(value):
         raise ValueError(f"nonfinite JSON constant: {value}")
-    return json.loads(Path(path).read_text(), object_pairs_hook=_object, parse_constant=invalid)
+    return json.loads(raw.decode("utf-8"), object_pairs_hook=_object, parse_constant=invalid)
+
+
+def _read(path):
+    return _decode(Path(path).read_bytes())
 
 
 def main():
@@ -312,9 +325,9 @@ def main():
     if args.command == "prepare":
         result = prepare(args.ca1, args.ca3)
     else:
-        if _sha256(args.observations) != args.expected_observations_sha256:
-            raise ValueError("operator observation digest mismatch")
-        result = score(_read(args.observations), _read(args.predictions))
+        raw = _snapshot(args.observations, args.expected_observations_sha256,
+                        "operator observation digest mismatch")
+        result = score(_decode(raw), _read(args.predictions))
     with Path(args.output).open("x", encoding="utf-8") as stream:
         json.dump(result, stream, allow_nan=False, separators=(",", ":"))
         stream.write("\n")
