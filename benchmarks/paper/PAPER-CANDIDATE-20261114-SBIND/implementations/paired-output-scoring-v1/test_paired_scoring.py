@@ -11,7 +11,7 @@ HERE = Path(__file__).resolve().parent
 PINS = {
     'whole-trial-preparation/trial_preparation.py': 'c11d1afeb8a32a8d0984c656ffb5e98b092dc4a3bf60a7c0b9af566bb9f02a5e',
     'whole-trial-inference-v1/trial_inference.py': '83e84c35c6c1fb8d2bbb8f87ef04f692417c36da8d3ce76e0faf7823aaad931d',
-    'endpoint-kernels/endpoint_kernels.py': 'aa827fbb110bdee9cde70e19706ca7bf9fcbca440851dd6643437b9cb2897fc7',
+    'endpoint-kernels/endpoint_kernels.py': '16a34face33109997d20a2e26fc8d23e4a868546e6570d8d0f4662d5b406f255',
 }
 for relative, expected in PINS.items():
     dependency = HERE.parent / relative
