@@ -159,15 +159,20 @@ def moments_add(state, y):
 
 
 @np.errstate(over='raise', under='raise', invalid='raise', divide='raise')
-def evaluate(folder, design, trusted_private_loader):
+def evaluate(folder, design, trusted_private_loader, *, expected_admission=None):
     """Grade complete measured predictions, using an operator-only private loader.
 
     The loader returns (target, reference) for each fixed case; reference must
     contain independently committed nuisance/neural/shifted arrays. This Python
     API assumes a trusted caller. Use the CLI to enforce exact external bindings.
+    A paired operator may supply the tuple returned by admit_submission as
+    expected_admission, fixing the complete candidate before any protected read.
     """
     api = backend()
     schema, keys, admitted = admit_submission(folder, design, api)
+    if expected_admission is not None:
+        need((schema, keys, admitted) == expected_admission,
+             "Candidate unchanged since paired complete admission")
     cells = {}
     for case in design['cases']:
         cid = case['case_id']
@@ -202,6 +207,7 @@ def evaluate(folder, design, trusted_private_loader):
             effects[mouse, area] = effect
             detail.append(dict(mouse=mouse, area=area, complete_folds=5, query_samples=n,
                 joint_incremental_ev=effect.tolist(), candidate_joint_mse=(c_sse/n).tolist(),
+                candidate_joint_sse=c_sse.tolist(), pooled_target_joint_sst=sst.tolist(),
                 fixed_nuisance_joint_mse=(r_sse['nuisance']/n).tolist(),
                 fixed_neural_joint_mse=(r_sse['neural']/n).tolist(),
                 fixed_shifted_joint_mse=(r_sse['shifted']/n).tolist(),
