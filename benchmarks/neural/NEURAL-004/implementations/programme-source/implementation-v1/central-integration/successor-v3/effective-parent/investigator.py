@@ -110,7 +110,9 @@ class Investigator:
                     # Analysis can include admitted local figures without remote URLs.
                     if name=='execute' and answer.get('status')=='analysis' and type(answer.get('evidence')) is dict and 'images' in answer['evidence']:
                         image_rows=answer['evidence']['images'];need(type(image_rows) is list,'bounded actual analysis images')
-                        parts=[{'type':'text','text':encode({k:v for k,v in answer.items() if k!='evidence'},limits['output_bytes']).decode()}]
+                        textual_answer=dict(answer)
+                        textual_answer['evidence']={k:v for k,v in answer['evidence'].items() if k!='images'}
+                        parts=[{'type':'text','text':encode(textual_answer,limits['output_bytes']).decode()}]
                         for item in image_rows:
                             fields(item,('mime','base64'));need(len(item['base64'])<=4*((wire_limits['max_image_bytes']+2)//3),'image encoded extent')
                             raw=base64.b64decode(item['base64'],validate=True);source=body_pin(raw)
