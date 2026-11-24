@@ -29,3 +29,15 @@ Both selected actual entrypoints authenticate the literal source-binding helper 
 The authenticated `--candidate-only` check mode exercises generated candidate admission, signed80-fold reuse, distinct completion/parity contracts, source tampering/partial results, and host-read accounting. It performs no model fits, scientific import, native container run or authentic evaluation. Existing modes and the old reference parity controls remain available.
 
 The candidate-arm `new_fits=0` field means zero new trusted evaluator/reference-model fits: all 80 original trained artifacts are reused. Arbitrary candidate-internal computation is not inspected or certified as training-free. No private TRAIN data or fitting interface is added.
+
+The candidate arm now applies the reviewed complete score arithmetic from
+`hybrid-candidate-score-reconciliation-v2` inside its authenticated
+`result_contract.py` position. The existing outer reconciliation call therefore
+checks both complete candidate and reference scores, true-action support,
+exactly one terminal action per trial, confusion-derived accuracy/recalls, loss
+and Brier bounds, and original participant/session weighting before accepting
+the unchanged paired bootstrap. Better, worse and null contrasts remain valid.
+The 43-position closure, reference replay parity functions and all historical
+scientific asset pins remain unchanged. The earlier candidate result contract
+is retained under the reconciliation component's `historical/` directory for
+its demonstrated rejected counterexamples; it is not an execution source.
