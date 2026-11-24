@@ -30,10 +30,15 @@ UMBRAE_RESCORE = 'benchmarks/paper/PAPER-paper-method-042/docs/released-author-r
 UMBRAE_RESCORE_NARRATIVE = 'benchmarks/paper/PAPER-paper-method-042/docs/released-author-reference-rescore-20261124.md'
 ANNOTATION_PROVENANCE = 'benchmarks/paper/PAPER-paper-method-013/docs/provenance/annotation-comparison-20261124/PROVENANCE_RESULT.json'
 ANNOTATION_NARRATIVE = ANNOTATION_PROVENANCE.removesuffix('.json') + '.md'
-PUBLIC_JSON_ATTACHMENTS = (LANGUAGE_REFERENCE_PROVENANCE,)
+LANGUAGE_NESTED_HOME = 'benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/trusted-figure3b-nested-ridge-20261124/'
+LANGUAGE_NESTED = LANGUAGE_NESTED_HOME + 'RESULT.json'
+LANGUAGE_NESTED_PROVENANCE = LANGUAGE_NESTED_HOME + 'PROVENANCE.json'
+LANGUAGE_NESTED_NARRATIVE = LANGUAGE_NESTED_HOME + 'README.md'
+PUBLIC_JSON_ATTACHMENTS = (LANGUAGE_REFERENCE_PROVENANCE, LANGUAGE_NESTED_PROVENANCE)
 PUBLIC_ATTACHMENTS = (ERP_NARRATIVE, ERP_REFERENCE_NARRATIVE, ERP_UNCERTAINTY_NARRATIVE,
                       LANGUAGE_REFERENCE_PROVENANCE, LANGUAGE_REFERENCE_NARRATIVE,
-                      UMBRAE_RESCORE_NARRATIVE, ANNOTATION_NARRATIVE)
+                      UMBRAE_RESCORE_NARRATIVE, ANNOTATION_NARRATIVE,
+                      LANGUAGE_NESTED_PROVENANCE, LANGUAGE_NESTED_NARRATIVE)
 HISTORY = 'docs/provenance/execution/historical-evidence-v1/profiles.json'
 DIRECT = 'benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json'
 VIEWER = 'benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json'
@@ -55,7 +60,7 @@ SMC_PUBLIC_PANEL = '209a15e2189499a9e68264df5c9f81057dd919564d98a46fb64d75b3f39a
 PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR, REVE_PREPARATION, DEEP_PREPARATION,
                   SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION, SMC_CALIBRATION, SMC_RESCORE, SMC_MATERIALS,
                   ERP_PILOT, ERP_REFERENCE_FAILURE, ERP_UNCERTAINTY_CALIBRATION,
-                  LANGUAGE_REFERENCE, UMBRAE_RESCORE, ANNOTATION_PROVENANCE)
+                  LANGUAGE_REFERENCE, UMBRAE_RESCORE, ANNOTATION_PROVENANCE, LANGUAGE_NESTED)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -1922,6 +1927,156 @@ def annotation_provenance_records(doc, source, narrative):
     return [row]
 
 
+def language_nested_candidate_records(doc, source, provenance, narrative, reference):
+    require(doc.get('schema') == 'language-fixed-nested-ridge-public-result/v1'
+            and doc.get('task_id') == 'PAPER-ROOT-ADD-001' and doc.get('measured_date') == '2026-11-24'
+            and doc.get('status') == 'complete_non_improving_classical_candidate',
+            'unsupported fixed nested-Ridge candidate result')
+    narrative = bound_public_narrative(narrative, LANGUAGE_NESTED_NARRATIVE, 4366,
+        '032d084d9cdc7c380b94f63c0251e65911ee5bb6f4f1a1106393fb906f6c4f25')
+    require(provenance is not None, 'nested-Ridge provenance is missing')
+    prior, prior_source = provenance
+    require(prior_source['path'] == LANGUAGE_NESTED_PROVENANCE
+            and prior.get('schema') == 'language-fixed-nested-ridge-public-provenance/v1'
+            and prior.get('task_id') == doc['task_id'] and prior.get('measured_date') == doc['measured_date'],
+            'nested-Ridge provenance association differs')
+    require(reference is not None, 'nested-Ridge comparison requires the captured fresh A3 reference')
+    baseline, baseline_source = reference
+    require(baseline_source == {'path': LANGUAGE_REFERENCE, 'bytes': 3344,
+                'sha256': 'a84be9cffd5c907ccd18ab40bf38b3159e0b3c0a15cda929eb34b0bfa55db36c'}
+            and baseline.get('attempt') == '003'
+            and baseline.get('status') == 'complete_trusted_selected_reference',
+            'nested-Ridge fresh-reference comparison requires the exact completed A3 report')
+    fresh = bounded_public_metric(doc['fresh_reference_equal_session_mean'], -1, 1)
+    candidate = bounded_public_metric(doc['candidate_equal_session_mean'], -1, 1)
+    delta = bounded_public_metric(doc['paired_equal_session_mean_delta'], -2, 2)
+    require(fresh == number(baseline['fresh_reference_equal_session_mean'])
+            and candidate < fresh and delta < 0
+            and abs((candidate - fresh) - delta) <= 1e-15,
+            'nested-Ridge negative result or fresh-reference comparison contradicts its aggregate')
+    # This bound reconciles serialized reductions, not an improvement margin.
+    # Preserve the separately reduced paired delta instead of recomputing it.
+    scope = obj(doc['scope'])
+    coverage = exact_counts(scope, {'cells': 42, 'sessions': 14, 'people': 8,
+        'outer_requests': 5685, 'fresh_estimator_fits': 90960, 'inner_fits': 85275,
+        'outer_refits': 5685, 'layer_zero_based': 5}, 'nested-Ridge complete scope')
+    require(scope.get('family') == 'context' and scope.get('field') == 'population'
+            and scope.get('lag_indices') == [17, 18, 19]
+            and coverage['fresh_estimator_fits'] == coverage['inner_fits'] + coverage['outer_refits'],
+            'nested-Ridge original endpoint or fit units differ')
+    exact_counts(doc['fit_observation'], {'completed_requests': 5685, 'expected_fits': 90960,
+        'fit_calls': 90960, 'fit_returns': 90960}, 'nested-Ridge completed fit observations')
+    require(doc.get('original_primary_endpoint') == 'Pooled Pearson per original held-qid cell, mean3lags/session, equal meanall14sessions; candidate minus freshfixed-alphaA3reference.'
+            and all(obj(doc['pairing_verification']).get(key) is True for key in (
+                'all42fresh_reference_target_support_qid_time_row_and_fold_identities_match',
+                'all42predictions_and_receipts_authenticated', 'fresh_reference_read_after_all_candidate_fits',
+                'no_original_rows_folds_cells_sessions_dropped')),
+            'nested-Ridge pairing, population or original aggregation differs')
+    claims = obj(doc['claims'])
+    require(claims.get('complete_selected_operator_comparison') is True
+            and all(claims.get(key) is False for key in ('AI_generated_method', 'AI_improvement', 'SOTA',
+                'full224_or_whole_paper_reproduction', 'improved_original_primary', 'novelty',
+                'participant_NativeProvider_qualification', 'post_result_tuning', 'unexposed_holdout')),
+            'negative operator result cannot promote improvement, participant or AI qualification')
+    author = obj(prior['fresh_reference'])
+    exact_counts(author, {'cells': 42, 'sessions': 14, 'people': 8, 'fresh_fixed_alpha_fits': 5685},
+                 'reused A3 reference scope')
+    require(number(author['fixed_alpha']) == .01 and all(author.get(key) is True for key in (
+                'no_duplicate_reference_execution', 'only_read_after_candidate_completion', 'original_input_support_matches_candidate'))
+            and author.get('public_aggregate') == LANGUAGE_REFERENCE.removeprefix('benchmarks/paper/PAPER-ROOT-ADD-001/')
+            and author.get('public_provenance') == LANGUAGE_REFERENCE_PROVENANCE.removeprefix('benchmarks/paper/PAPER-ROOT-ADD-001/'),
+            'nested-Ridge reference must remain the reused post-fit A3 comparator')
+    method = obj(prior['method'])
+    require(type(method.get('alphas')) is list
+            and [number(value) for value in method['alphas']] == [.001, .01, .1, 1, 10]
+            and integer(method['inner_training_sentence_folds']) == 3
+            and integer(method['all_original_outer_training_groups_at_least']) == 25
+            and number(method['tie_atol']) == 1e-12
+            and method.get('group_rule') == 'Sortunique outertraining qids; grouprank modulo3.'
+            and method.get('selection_metric') == 'OnepooledPearson overstitched inner-validation rows, not meanfoldscore.'
+            and method.get('tie_rule') == 'Prefer0.01 iftied; otherwiselowestalpha.'
+            and method.get('fallback') == 'Use0.01 iffewerthan3traininggroups orallinnercorrelationsundefined; fittingerrorspropagate.'
+            and all(method.get(key) is True for key in ('all90960fits_observed',
+                'original_outerTRAIN_exclusions_unchanged', 'train_only_does_not_undo_original_preprocessing_exposure')),
+            'nested-Ridge fixed training-only method or exposure scope differs')
+    unchanged = obj(prior['candidate_unchanged'])
+    require(unchanged.get('path') == 'implementations/original-nested-ridge-v1/candidate.py'
+            and integer(unchanged['bytes']) == 4716
+            and unchanged.get('sha256') == '924966936aac94eab38bbf92e617e6aaa4380fe8d9b3413b0d589d4a88857798'
+            and prior.get('no_task_readiness_or_participant_admission_promotion') is True,
+            'nested-Ridge frozen source or qualification boundary differs')
+    attempt = obj(prior['single_actual_attempt'])
+    require(attempt.get('allprocess_and_container_scopes_closed') is True and attempt.get('no_retry') is True
+            and attempt.get('outcome') == 'complete_non_improving' and integer(attempt['worker_exit_code']) == 0,
+            'nested-Ridge operation must remain one closed non-improving attempt')
+    closure = obj(doc['closure'])
+    require(closure.get('native_controller') == 'succeeded' and closure.get('outer') == closure.get('owner') == 'complete'
+            and integer(closure['owned_CLI_scopes_closed']) == 8
+            and all(closure.get(key) is True for key in ('all_bounded_capture_streams_closed',
+                'container_removed_and_absence_verified', 'outer_controller_reaped_and_group_absent',
+                'worker_natural_exit_zero_noOOM')), 'nested-Ridge complete owned closure differs')
+    runtime = obj(doc['runtime']); prior_runtime = obj(prior['runtime'])
+    versions = {'numpy': '1.24.3', 'scipy': '1.10.1', 'sklearn': '1.2.2'}
+    require(runtime.get('python') == prior_runtime.get('python') == '3.11.3'
+            and runtime.get('versions') == prior_runtime.get('versions') == versions
+            and type(runtime.get('numerical_thread_counts')) is list
+            and [integer(value) for value in runtime['numerical_thread_counts']] == [1, 1, 1]
+            and type(prior_runtime.get('loaded_pools')) is list
+            and [integer(obj(pool)['threads']) for pool in prior_runtime['loaded_pools']] == [1, 1, 1],
+            'nested-Ridge historical numerical runtime differs')
+    direction_counts = {}
+    for key, positive, negative in (('cells', 16, 26), ('sessions', 4, 10),
+            ('people_mean_diagnostic', 3, 5), ('leave_one_person_out', 1, 7)):
+        value = obj(obj(doc['direction_counts'])[key])
+        direction_counts[key] = exact_counts(value, {'positive': positive, 'negative': negative,
+                                                     'zero': 0, 'undefined': 0}, 'nested-Ridge direction counts')
+    people = doc['person_directions']; sessions = doc['session_directions']
+    require(type(people) is list and len(people) == 8 and type(sessions) is list and len(sessions) == 14,
+            'all original person/session directions required')
+    expected_people = [(f'p{i}', count) for i, count in enumerate((2, 2, 2, 1, 2, 1, 2, 2), 1)]
+    expected_sessions = [f'{person}_{i}' for person, count in expected_people for i in range(1, count + 1)]
+    require([obj(item).get('person') for item in people] == [person for person, _ in expected_people]
+            and [obj(item).get('session') for item in sessions] == expected_sessions,
+            'nested-Ridge person/session rosters cannot be dropped or duplicated')
+    for item, (person, count) in zip(people, expected_people):
+        require(integer(item['session_count']) == count
+                and item.get('mean_delta_direction') == ('positive' if person in ('p1', 'p6', 'p7') else 'negative')
+                and item.get('leave_one_person_out_primary_delta_direction') == ('positive' if person == 'p2' else 'negative'),
+                'nested-Ridge person diagnostics contradict complete negative result')
+    for item in sessions:
+        require(item.get('person') == item['session'].split('_')[0]
+                and item.get('direction') == ('positive' if item['session'] in ('p1_1', 'p6_1', 'p7_1', 'p7_2') else 'negative'),
+                'nested-Ridge session directions contradict complete primary result')
+    worker, outer = number(doc['worker_seconds']), number(doc['outer_seconds'])
+    require(0 <= worker <= number(doc['owner_seconds']) <= outer, 'nested-Ridge worker/owner/outer clocks differ')
+    row = record('language-fixed-nested-ridge-negative-20261124', 'PAPER-ROOT-ADD-001',
+        'trusted_operator_candidate_comparison', source, '/',
+        'Complete fixed nested-Ridge operator comparison is non-improving on all 42 original Figure 3b cells, '
+        '14 sessions and eight people. The completed fresh A3 reference is reused, without a second reference fit.',
+        'trusted_operator_fixed_training_sentence_nested_ridge', [
+            'Eight people are clusters; 5,685 requests and 90,960 fits are computational counts, not independent biological samples.',
+            'Primary weighting remains equal over all14 sessions; person and leave-one-person-out directions are descriptive diagnostics.',
+            'Only leaving out p2 makes the diagnostic positive; p2 and every original cell/session/person remain included.',
+            'The separately reduced paired delta is preserved, not replaced by subtraction of serialized means.',
+            'Original retrospective PCA, centered smoothing, public exposure and trusted-operator restrictions remain.',
+            'No changed grid, retry, favorable subset, AI result, superiority criterion, meaningful-effect margin, participant or readiness promotion.'])
+    row.update(status='complete_non_improving_classical_candidate',
+        coverage=dict(coverage, operator_candidate_executions=1, complete_comparisons=1,
+                      non_improving_comparisons=1, new_reference_fits=0),
+        metrics=[metric('equal_session_mean_Pearson', candidate, 'higher', {'fresh_A3_reference': fresh})],
+        comparison={'paired_equal_session_mean_delta': delta, 'reference': baseline_source,
+                    'reference_reused_without_execution': True, 'reference_read_after_all_candidate_fits': True,
+                    'inferential_superiority_or_meaningful_effect_criterion_selected': False},
+        direction_counts=direction_counts,
+        session_directions=[{key: item[key] for key in ('session', 'person', 'direction')} for item in sessions],
+        person_directions=[{key: item[key] for key in ('person', 'session_count', 'mean_delta_direction',
+                            'leave_one_person_out_primary_delta_direction')} for item in people],
+        timing={'worker_seconds': worker, 'outer_seconds': outer},
+        attachments=[prior_source, narrative], narrative=narrative, solver_attempts_recorded=0,
+        AI_attempts_recorded=0, full_task_completed=False, participant_provider_qualified=False)
+    return [row]
+
+
 def load(root, task_ids=None):
     """Read optional known reports; reject malformed present reports.
 
@@ -1959,7 +2114,10 @@ def load(root, task_ids=None):
                               (UMBRAE_RESCORE, lambda doc, source: umbrae_reference_records(doc, source,
                                   read_bytes(root, UMBRAE_RESCORE_NARRATIVE))),
                               (ANNOTATION_PROVENANCE, lambda doc, source: annotation_provenance_records(doc, source,
-                                  read_bytes(root, ANNOTATION_NARRATIVE)))):
+                                  read_bytes(root, ANNOTATION_NARRATIVE))),
+                              (LANGUAGE_NESTED, lambda doc, source: language_nested_candidate_records(doc, source,
+                                  read_json_attachment(root, LANGUAGE_NESTED_PROVENANCE),
+                                  read_bytes(root, LANGUAGE_NESTED_NARRATIVE), captured_reports.get(LANGUAGE_REFERENCE)))):
         try:
             captured = read(root, relative)
             if captured is None:
@@ -2013,6 +2171,13 @@ def load(root, task_ids=None):
            for key, field in (('execution_attempts', 'engineering_execution_attempts'), ('preworker_failures', 'preworker_failures'),
                               ('estimator_fits', 'fresh_Ridge_fits'), ('complete_endpoints', 'complete_reference_endpoints'),
                               ('cells', 'cells'), ('sessions', 'sessions'), ('people', 'people'))},
+        'trusted_operator_candidate_reports': categories['trusted_operator_candidate_comparison'],
+        **{'trusted_operator_candidate_' + key: sum(row['coverage'][field] for items in records.values() for row in items
+                                                    if row['category'] == 'trusted_operator_candidate_comparison')
+           for key, field in (('executions', 'operator_candidate_executions'), ('estimator_fits', 'fresh_estimator_fits'),
+                              ('inner_fits', 'inner_fits'), ('outer_refits', 'outer_refits'), ('requests', 'outer_requests'),
+                              ('complete_comparisons', 'complete_comparisons'), ('non_improving_comparisons', 'non_improving_comparisons'),
+                              ('new_reference_fits', 'new_reference_fits'))},
         'released_output_rescore_reports': categories['released_output_scoring_reference'],
         **{'released_output_rescore_' + key: sum(row['coverage'][field] for items in records.values() for row in items
                                                 if row['category'] == 'released_output_scoring_reference')
@@ -2071,6 +2236,10 @@ def load(root, task_ids=None):
                 'trusted_operator_reference_execution_attempts': 'Engineering attempts for the fixed trusted reference, including zero-fit pre-worker failures; not participant or AI attempts.',
                 'trusted_operator_reference_estimator_fits': 'Fresh Ridge estimator fits across 42 cells; eight people are the clusters, not 5685 independent people.',
                 'trusted_operator_reference_complete_endpoints': 'Complete selected trusted reference endpoints; not whole-paper or participant qualification.',
+                'trusted_operator_candidate_executions': 'Closed classical operator-candidate comparisons, not AI attempts or new benchmarks.',
+                'trusted_operator_candidate_estimator_fits': 'Inner selection fits plus outer refits; not independent people or a repeated fresh-reference run.',
+                'trusted_operator_candidate_new_reference_fits': 'Only reference fits newly executed by the candidate operation; the completed A3 baseline is reused and contributes zero here.',
+                'trusted_operator_candidate_non_improving_comparisons': 'Complete frozen candidates with negative original paired endpoint; no subsetting, retuning, superiority or readiness claim.',
                 'released_output_rescore_subject_query_evaluations': 'Four subject outputs for 2419 shared query identities; not 9676 unique stimuli and not a sum of overlapping groups.',
                 'released_output_rescore_source_passes': 'Prespecified hash-seed scoring passes over frozen author outputs; no model inference or fits.',
                 'annotation_provenance_ROIs_per_source': 'ROIs across four selected recordings in each of two annotation families; not model predictions or F1 scores.',

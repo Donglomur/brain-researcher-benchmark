@@ -92,3 +92,7 @@ Including alpha 0.01 in the search does not guarantee equal or better outer
 held-sentence performance: inner selection can worsen generalization. Grouping
 training sentences also does not undo supplied whole-session PCA or centered
 response smoothing. Original preprocessing and timing limitations remain.
+
+## Measured original-task follow-up
+
+The unchanged candidate completed the [24 November trusted full Figure 3b comparison](../../docs/provenance/trusted-figure3b-nested-ridge-20261124/README.md): 42 cells, 14 sessions, eight people, 5,685 requests and 90,960 fresh fits on the historical numerical stack. It was non-improving: equal-session mean correlation 0.0449898090 versus fresh fixed-alpha reference 0.0451207116 (paired delta -0.0001309025). All outcome directions and negative results are retained. This is one operator candidate arm, not an AI information-condition comparison, participant-provider qualification or SOTA. The earlier generated-control history above is unchanged.

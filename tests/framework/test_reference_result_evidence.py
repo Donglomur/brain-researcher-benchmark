@@ -229,8 +229,8 @@ class ReferenceResultTests(unittest.TestCase):
             self.assertIn(relative, status)
         with self.assertRaisesRegex(ValueError, 'unregistered task'):
             evidence.load(self.root, TASKS - {'PAPER-paper-method-013'})
-        self.assertEqual(len(evidence.PUBLIC_REPORTS), 21)
-        self.assertEqual(len(evidence.PUBLIC_ATTACHMENTS), 7)
+        self.assertEqual(len(evidence.PUBLIC_REPORTS), 22)
+        self.assertEqual(len(evidence.PUBLIC_ATTACHMENTS), 9)
         self.assertNotIn(evidence.LANGUAGE_REFERENCE_PROVENANCE, evidence.PUBLIC_REPORTS)
 
     def test_json_provenance_attachment_uses_strict_decoder_and_allowlist(self):
@@ -244,6 +244,157 @@ class ReferenceResultTests(unittest.TestCase):
             evidence.read_json_attachment(self.root, evidence.LANGUAGE_REFERENCE)
         with self.assertRaisesRegex(ValueError, 'not allowlisted'):
             evidence.read(self.root, evidence.LANGUAGE_REFERENCE_PROVENANCE)
+
+
+    def install_nested(self):
+        for name in (evidence.LANGUAGE_NESTED, evidence.LANGUAGE_NESTED_PROVENANCE, evidence.LANGUAGE_NESTED_NARRATIVE):
+            path = self.root / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes((ROOT / name).read_bytes())
+
+    def test_nested_negative_result_preserves_delta_units_and_reuses_A3(self):
+        self.install_nested()
+        result = evidence.load(self.root, TASKS)
+        row = self.rows()['trusted_operator_candidate_comparison']
+        self.assertEqual(result['counts']['public_reports'], 4)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 3)
+        self.assertEqual(result['counts']['trusted_operator_reference_estimator_fits'], 5685)
+        self.assertEqual(result['counts']['trusted_operator_reference_execution_attempts'], 3)
+        self.assertEqual(result['counts']['trusted_operator_candidate_executions'], 1)
+        self.assertEqual(result['counts']['trusted_operator_candidate_estimator_fits'], 90960)
+        self.assertEqual(result['counts']['trusted_operator_candidate_inner_fits'], 85275)
+        self.assertEqual(result['counts']['trusted_operator_candidate_outer_refits'], 5685)
+        self.assertEqual(result['counts']['trusted_operator_candidate_new_reference_fits'], 0)
+        self.assertEqual(result['counts']['trusted_operator_candidate_non_improving_comparisons'], 1)
+        metric = row['metrics'][0]
+        delta = row['comparison']['paired_equal_session_mean_delta']
+        self.assertEqual(metric['value'], .04498980902383724)
+        self.assertEqual(metric['comparators']['fresh_A3_reference'], .04512071156679768)
+        self.assertEqual(delta, -.00013090254296041978)
+        self.assertNotEqual(delta, metric['value'] - metric['comparators']['fresh_A3_reference'])
+        self.assertEqual(row['comparison']['reference']['path'], evidence.LANGUAGE_REFERENCE)
+        self.assertFalse(row['comparison']['inferential_superiority_or_meaningful_effect_criterion_selected'])
+        self.assertEqual(row['AI_attempts_recorded'], 0)
+        self.assertFalse(row['participant_provider_qualified'])
+        self.assertEqual(row['qualification_effect'], 'none')
+
+    def test_nested_incomplete_fits_units_and_positive_claims_refuse(self):
+        self.install_nested()
+        self.refuses(evidence.LANGUAGE_NESTED, {
+            'incomplete-fits': lambda d: d['scope'].update(fresh_estimator_fits=85275),
+            'requests-as-fits': lambda d: d['fit_observation'].update(fit_returns=5685),
+            'missing-person': lambda d: d['scope'].update(people=7),
+            'positive-delta': lambda d: d.update(paired_equal_session_mean_delta=.00013090254296041978),
+            'contradictory-negative': lambda d: d.update(paired_equal_session_mean_delta=-.1),
+            'percent-as-Pearson': lambda d: d.update(candidate_equal_session_mean=4.4989809),
+            'AI-improvement': lambda d: d['claims'].update(AI_improvement=True),
+            'participant-promotion': lambda d: d['claims'].update(participant_NativeProvider_qualification=True),
+            'retuning': lambda d: d['claims'].update(post_result_tuning=True),
+            'changed-weighting': lambda d: d.update(original_primary_endpoint='equal mean eight people'),
+            'incomplete-closure': lambda d: d['closure'].update(container_removed_and_absence_verified=False),
+        })
+
+    def test_nested_requires_actual_A3_dependency_and_complete_pairing(self):
+        self.install_nested()
+        self.refuses(evidence.LANGUAGE_NESTED, {
+            'wrong-reference-mean': lambda d: d.update(fresh_reference_equal_session_mean=.05),
+            'missing-target-join': lambda d: d['pairing_verification'].update(all42fresh_reference_target_support_qid_time_row_and_fold_identities_match=False),
+            'early-reference-read': lambda d: d['pairing_verification'].update(fresh_reference_read_after_all_candidate_fits=False),
+            'dropped-support': lambda d: d['pairing_verification'].update(no_original_rows_folds_cells_sessions_dropped=False),
+        })
+        baseline = self.document(evidence.LANGUAGE_REFERENCE)
+        baseline.update(fresh_reference_equal_session_mean=.06, provided_author_equal_session_mean=.06)
+        self.install(evidence.LANGUAGE_REFERENCE, baseline)
+        with self.assertRaisesRegex(ValueError, 'fresh-reference comparison'):
+            evidence.load(self.root)
+        (self.root / evidence.LANGUAGE_REFERENCE).unlink()
+        with self.assertRaisesRegex(ValueError, 'captured fresh A3 reference'):
+            evidence.load(self.root)
+
+    def test_nested_provenance_binds_frozen_method_no_retry_and_no_second_baseline(self):
+        self.install_nested()
+        self.refuses(evidence.LANGUAGE_NESTED_PROVENANCE, {
+            'changed-grid': lambda d: d['method'].update(alphas=[.01, .1, 1, 10, 100]),
+            'boolean-grid': lambda d: d['method'].update(alphas=[.001, .01, .1, True, 10]),
+            'changed-inner-folds': lambda d: d['method'].update(inner_training_sentence_folds=2),
+            'changed-selection': lambda d: d['method'].update(selection_metric='mean of fold correlations'),
+            'retuned-source': lambda d: d['candidate_unchanged'].update(sha256='a' * 64),
+            'recomputed-baseline': lambda d: d['fresh_reference'].update(no_duplicate_reference_execution=False),
+            'early-baseline-load': lambda d: d['fresh_reference'].update(only_read_after_candidate_completion=False),
+            'unbound-reference': lambda d: d['fresh_reference'].update(public_aggregate='another/RESULT.json'),
+            'retry': lambda d: d['single_actual_attempt'].update(no_retry=False),
+            'unclosed-attempt': lambda d: d['single_actual_attempt'].update(allprocess_and_container_scopes_closed=False),
+            'new-runtime': lambda d: d['runtime'].update(python='3.12.12'),
+        })
+
+    def test_nested_all_direction_rosters_retained_without_p2_subsetting(self):
+        self.install_nested()
+        row = self.rows()['trusted_operator_candidate_comparison']
+        self.assertEqual(row['direction_counts']['cells']['negative'], 26)
+        self.assertEqual(row['direction_counts']['sessions']['negative'], 10)
+        self.assertEqual(row['direction_counts']['people_mean_diagnostic']['negative'], 5)
+        self.assertEqual(row['direction_counts']['leave_one_person_out']['negative'], 7)
+        self.assertEqual(len(row['session_directions']), 14)
+        self.assertEqual(len(row['person_directions']), 8)
+        positive = [item['person'] for item in row['person_directions']
+                    if item['leave_one_person_out_primary_delta_direction'] == 'positive']
+        self.assertEqual(positive, ['p2'])
+        self.refuses(evidence.LANGUAGE_NESTED, {
+            'drop-p2': lambda d: d['person_directions'].pop(1),
+            'drop-session': lambda d: d['session_directions'].pop(2),
+            'duplicate-person': lambda d: d['person_directions'].__setitem__(1, copy.deepcopy(d['person_directions'][0])),
+            'changed-person-weight': lambda d: d['person_directions'][3].update(session_count=2),
+            'hide-sensitivity': lambda d: d['person_directions'][1].update(leave_one_person_out_primary_delta_direction='negative'),
+            'changed-session-direction': lambda d: d['session_directions'][2].update(direction='positive'),
+            'contradictory-counts': lambda d: d['direction_counts']['cells'].update(negative=25),
+        })
+
+    def test_nested_public_bindings_render_negative_result_without_private_reads(self):
+        self.install_nested()
+        doc = self.document(evidence.LANGUAGE_NESTED_PROVENANCE)
+        doc['evidence_identities']['private_complete_result']['path'] = '/private-sentinel/RESULT.json'
+        self.install(evidence.LANGUAGE_NESTED_PROVENANCE, doc)
+        result_doc = self.document(evidence.LANGUAGE_NESTED)
+        result_doc['person_directions'][0]['unselected_payload'] = '/private-sentinel/person-data'
+        result_doc['session_directions'][0]['unselected_payload'] = '/private-sentinel/session-data'
+        self.install(evidence.LANGUAGE_NESTED, result_doc)
+        allowed = set(PUBLIC) | {evidence.LANGUAGE_NESTED, evidence.LANGUAGE_NESTED_PROVENANCE, evidence.LANGUAGE_NESTED_NARRATIVE}
+        original = Path.open
+        observed = []
+        def guarded(path, *args, **kwargs):
+            relative = path.relative_to(self.root).as_posix()
+            self.assertIn(relative, allowed)
+            observed.append(relative)
+            return original(path, *args, **kwargs)
+        with patch.object(Path, 'open', guarded):
+            result = evidence.load(self.root)
+        self.assertEqual(set(observed), allowed)
+        self.assertNotIn('private-sentinel', json.dumps(result))
+        rendered = module('catalog').evidence_text({'recorded_evidence': result})
+        for phrase in ('90960 fits', '−0.00013090254296041978', 'reused without new reference fits', 'without retuning or dropping p2'):
+            self.assertIn(phrase, rendered)
+        # The catalog must render the accepted projection, not a second metric literal.
+        alternate = self.document(evidence.LANGUAGE_NESTED)
+        alternate['candidate_equal_session_mean'] = alternate['fresh_reference_equal_session_mean'] - .001
+        alternate['paired_equal_session_mean_delta'] = -.001
+        self.install(evidence.LANGUAGE_NESTED, alternate)
+        changed = module('catalog').evidence_text({'recorded_evidence': evidence.load(self.root)})
+        self.assertIn('negative paired equal-session delta of −0.001 ', changed)
+        self.assertNotIn('−0.00013090254296041978', changed)
+        self.install(evidence.LANGUAGE_NESTED, result_doc)
+        self.assertIn(evidence.LANGUAGE_NESTED_NARRATIVE, (ROOT / 'docs/status/README.md').read_text())
+        path = self.root / evidence.LANGUAGE_NESTED_NARRATIVE
+        path.write_text('Unbound replacement narrative.\n')
+        with self.assertRaisesRegex(ValueError, 'narrative pin mismatch'):
+            evidence.load(self.root)
+        path.write_bytes((ROOT / evidence.LANGUAGE_NESTED_NARRATIVE).read_bytes())
+        path = self.root / evidence.LANGUAGE_NESTED_PROVENANCE
+        path.write_text('{"same":1,"same":2}')
+        with self.assertRaisesRegex(ValueError, 'duplicate JSON key'):
+            evidence.load(self.root)
+        path.unlink()
+        with self.assertRaisesRegex(ValueError, 'nested-Ridge provenance is missing'):
+            evidence.load(self.root)
 
 
 if __name__ == '__main__':
