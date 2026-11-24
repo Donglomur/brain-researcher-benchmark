@@ -1142,6 +1142,87 @@ jobs:
           trap 'rm -rf -- "$scratch"' EXIT
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 60s python -I -B observer_tests.py
+      - name: "Check complete adaptive-gain ERP observation source"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/erp-adaptive-observation.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          mkdir "$scratch/fixtures"
+          status=0
+          timeout --signal=TERM --kill-after=5s 60s python -I -S -B benchmarks/neural/NEURAL-077/implementations/adaptive-gain-observation-v1/test_observation.py --repository-root "$GITHUB_WORKSPACE" --scratch-root "$scratch/fixtures" >"$scratch/stdout.log" 2>"$scratch/stderr.log" || status=$?
+          cat "$scratch/stdout.log"
+          cat "$scratch/stderr.log" >&2
+          test "$status" -eq 0
+          python -I -S -B - "$scratch/stdout.log" <<'PY'
+          import json, pathlib, sys
+          out = pathlib.Path(sys.argv[1]).read_text().splitlines()
+          report = json.loads(next(line for line in reversed(out) if line.strip()))
+          assert report["generated_only"] is True
+          assert report["tests"] == 16 and report["failures"] == report["errors"] == report["skipped"] == 0, report
+          assert report["authentic_inputs"] == report["predictions"] == report["private_targets"] == 0, report
+          assert report["platform"] == "linux", "CI expects Linux getrusage units"
+          peak = report["peak_rss_platform_units"]
+          assert type(peak) is int and peak > 0, "positive integer peak RSS required"
+          rss_bytes = peak * 1024
+          assert rss_bytes <= 384 * 1024**2, {"peak_rss_bytes": rss_bytes, "prospective_ci_ceiling_bytes": 384 * 1024**2}
+          print(json.dumps({"adaptive_observation_ci": "passed", "tests": 16, "peak_rss_bytes": rss_bytes, "prospective_ci_ceiling_bytes": 384 * 1024**2, "qualifies_original_256MiB_plan": False, "scientific_qualification": False}, sort_keys=True))
+          PY
+      - name: "Check fixed-view ERP uncertainty reference source"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/erp-uncertainty-reference.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          mkdir "$scratch/fixtures"
+          export TMPDIR="$scratch/fixtures"
+          status=0
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-077/implementations/four-demo-image-uncertainty-v1/test_reference.py --repository-root "$GITHUB_WORKSPACE" >"$scratch/stdout.log" 2>"$scratch/stderr.log" || status=$?
+          cat "$scratch/stdout.log"
+          cat "$scratch/stderr.log" >&2
+          test "$status" -eq 0
+          python -I -S -B - "$scratch/stdout.log" "$scratch/stderr.log" <<'PY'
+          import json, pathlib, sys
+          assert sys.platform == "linux", "CI specifies Linux portable expectations"
+          out = pathlib.Path(sys.argv[1]).read_text().splitlines()
+          report = json.loads(next(line for line in reversed(out) if line.strip()))
+          assert report["tests"] == 14 and report["failures"] == report["errors"] == 0 and report["skipped"] == 0, report
+          assert report["authentic_inputs_opened"] == 0, report
+          print(json.dumps({"fixed_view_uncertainty_reference_ci": "passed", "tests": 14, "skipped": 0, "scientific_qualification": False}, sort_keys=True))
+          PY
+      - name: "Check full32 ERP uncertainty adapter portable source"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/erp-uncertainty-adapter.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          mkdir "$scratch/fixtures"
+          export TMPDIR="$scratch/fixtures"
+          status=0
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-077/implementations/full32-image-uncertainty-v1/test_adapter.py --repository-root "$GITHUB_WORKSPACE" >"$scratch/stdout.log" 2>"$scratch/stderr.log" || status=$?
+          cat "$scratch/stdout.log"
+          cat "$scratch/stderr.log" >&2
+          test "$status" -eq 0
+          python -I -S -B - "$scratch/stdout.log" "$scratch/stderr.log" <<'PY'
+          import json, pathlib, sys
+          assert sys.platform == "linux", "CI specifies Linux portable expectations"
+          out = pathlib.Path(sys.argv[1]).read_text().splitlines()
+          report = json.loads(next(line for line in reversed(out) if line.strip()))
+          assert report["tests"] == 18 and report["failures"] == report["errors"] == 0 and report["skipped"] == 2, report
+          assert report["generated_only"] is True
+          assert report["authentic_packets_opened"] == report["authentic_predictions"] == report["private_targets_opened"] == 0, report
+          skipped = [line for line in pathlib.Path(sys.argv[2]).read_text().splitlines() if "... skipped " in line]
+          expected = {"test_generated_pixels_use_real_sandbox_capture_and_successor_cli", "test_zero_support_real_capture_retains_30feature_audit"}
+          assert len(skipped) == 2 and {line.split()[0] for line in skipped} == expected, skipped
+          assert all("CapturedChildControls" in line and "macOS sandbox only" in line for line in skipped), skipped
+          print(json.dumps({"fixed_view_uncertainty_adapter_ci": "passed", "tests": 18, "passed": 16, "allowed_platform_skips": 2, "sandbox_qualified": False, "scientific_qualification": False}, sort_keys=True))
+          PY
       - name: Acquire exact public source fixtures
         shell: bash
         run: |
