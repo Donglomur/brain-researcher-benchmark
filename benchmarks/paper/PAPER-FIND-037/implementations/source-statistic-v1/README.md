@@ -40,6 +40,22 @@ python3 -B source_statistic.py --input /operator/panel.csv --output /operator/so
 
 The result includes the source penalties, likelihood sums, all three source statistics, signed cohort contrasts, and the SHA-256 of the actual CSV. Results must remain in operator evidence outside Git. The command creates a new output file and refuses to overwrite one. It never launches submitted code or reads source optimizer histories.
 
+## Complete-cohort supplied-panel comparison
+
+To compare two supplied fits of the **same three source models**, add a reference CSV:
+
+```sh
+python3 -B source_statistic.py --reference /operator/reference.csv --input /operator/candidate.csv --output /operator/paired-source-statistic.json
+```
+
+Both files must independently contain all 75 participant/model pairs. The comparison joins by participant and model identity, preserves all 25 participants in every model, and rejects incomplete or duplicated panels. It reports each participant's candidate-minus-reference log-likelihood change and the corresponding cohort change in the literal source statistic. All model penalties remain unchanged and cancel within each paired model; there is no participant-level BIC or substituted penalty. The reference and candidate reductions and both actual file hashes remain in the result. Single-panel usage and its output schema are unchanged.
+
+Differences are computed within participants before summation. This preserves small representable likelihood changes that can disappear when subtracting already-rounded large cohort statistics. Consequently, the reported paired change can differ slightly from subtracting the two separately rounded reduction outputs. A negative statistic change means only a lower supplied source statistic. No threshold, uncertainty interval, significance test, or paper-win decision is inferred.
+
+This interface supports source arithmetic for later separately assessed paper+data and paper+data+author-code runs; it does not identify those information conditions from a CSV or compare unequal model families. The operator must independently establish that both panels use the same original choices, likelihood masks, model definitions and parameter counts. A novel model with different complexity requires a separately justified comparison and is outside this interface. The names `reference` and `candidate` do not authenticate either fit or turn supplied values into a reproduced author baseline.
+
+The task's original primary family also includes neural findings. This behavioral component cannot establish joint primary reproduction or improvement. Four added generated controls exercise complete identity pairing, missing/duplicated cohorts on either side, small paired changes and the two-file CLI. No authentic data or model fitting is used.
+
 ## Qualification and unresolved work
 
 Qualification is **a source-grounded arithmetic component with generated software controls**, not a qualified benchmark or a reproduced publication result. Seven generated tests passed through the shared test pool: exact source penalty, complete-cohort rejection, ordering, CSV transport, invalid values, arithmetic overflow, and CLI output preservation. The test receipt and exact file freeze are supplied separately to the coordinator. No authentic likelihoods entered these checks.

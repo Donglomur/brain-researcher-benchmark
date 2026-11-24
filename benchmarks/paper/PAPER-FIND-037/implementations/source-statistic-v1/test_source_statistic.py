@@ -1,6 +1,7 @@
 """Generated software controls only; contains no authentic participant values."""
 
 import importlib.util
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -104,6 +105,70 @@ class SourceStatisticTests(unittest.TestCase):
             self.assertEqual(target.read_bytes(), original)
             target.unlink()
             source.write_bytes(csv_body(panel()[:-1]))
+            with self.assertRaises(ValueError):
+                statistic.main(args)
+            self.assertFalse(target.exists())
+
+    def test_complete_paired_differences_follow_identity_not_row_order(self):
+        reference, candidate = panel(), panel()
+        # Improve one participant and worsen another; retain both changes.
+        candidate[0]["log_likelihood"] += 0.5
+        candidate[24]["log_likelihood"] -= 2
+        candidate[25]["log_likelihood"] += 1
+        result = statistic.compare_panels(list(reversed(reference)), candidate[17:] + candidate[:17])
+        self.assertEqual(result["paired_fit_count"], 75)
+        self.assertEqual(result["scope"], "paired_source_arithmetic_only")
+        for model, expected in (("active_inference", 3), ("model_free_rl", -2), ("model_based_rl", 0)):
+            values = result["models"][model]
+            self.assertEqual(values["candidate_minus_reference_literal_source_statistic"], expected)
+            self.assertEqual(values["candidate_minus_reference_source_penalty"], 0)
+            self.assertEqual([r["participant_id"] for r in values["participant_differences"]], list(range(1, 26)))
+        changes = result["models"]["active_inference"]["participant_differences"]
+        self.assertEqual(changes[0]["candidate_minus_reference_log_likelihood_nats"], 0.5)
+        self.assertEqual(changes[-1]["candidate_minus_reference_log_likelihood_nats"], -2)
+        for flag in ("same_source_models_and_likelihood_masks_authenticated", "scientific_reproduction_verified",
+                     "scientific_improvement_verified", "readiness_promoted"):
+            self.assertFalse(result[flag])
+
+    def test_pairing_rejects_incomplete_or_duplicated_panel_on_either_side(self):
+        malformed = [panel()[:-1], panel()[:-1] + panel()[:1],
+                     [row for row in panel() if row["participant_id"] not in (2, 3)]]
+        for rows in malformed:
+            for left, right in ((rows, panel()), (panel(), rows)):
+                with self.subTest(left=len(left), right=len(right)), self.assertRaises(ValueError):
+                    statistic.compare_panels(left, right)
+
+    def test_paired_changes_are_summed_before_rounding_cohort_totals(self):
+        reference, candidate = panel(), panel()
+        for rows in (reference, candidate):
+            for row in rows:
+                row["log_likelihood"] = -1e15
+        candidate[0]["log_likelihood"] += 1
+        result = statistic.compare_panels(reference, candidate)
+        model = "active_inference"
+        self.assertEqual(result["reference"]["models"][model]["literal_source_statistic"],
+                         result["candidate"]["models"][model]["literal_source_statistic"])
+        self.assertEqual(result["models"][model]["candidate_minus_reference_literal_source_statistic"], -2)
+
+    def test_paired_cli_binds_both_inputs_and_never_publishes_partial_pair(self):
+        with tempfile.TemporaryDirectory() as directory:
+            reference = Path(directory) / "reference.csv"
+            candidate = Path(directory) / "candidate.csv"
+            target = Path(directory) / "result.json"
+            reference.write_bytes(csv_body(panel()))
+            candidate.write_bytes(csv_body(list(reversed(panel()))))
+            args = ["--input", str(candidate), "--reference", str(reference), "--output", str(target)]
+            statistic.main(args)
+            original = target.read_bytes()
+            result = json.loads(original)
+            self.assertEqual(result["reference_input_sha256"], hashlib.sha256(reference.read_bytes()).hexdigest())
+            self.assertEqual(result["candidate_input_sha256"], hashlib.sha256(candidate.read_bytes()).hexdigest())
+            self.assertEqual(result["input_sha256"], result["candidate_input_sha256"])
+            with self.assertRaises(FileExistsError):
+                statistic.main(args)
+            self.assertEqual(target.read_bytes(), original)
+            target.unlink()
+            reference.write_bytes(csv_body(panel()[:-1]))
             with self.assertRaises(ValueError):
                 statistic.main(args)
             self.assertFalse(target.exists())
