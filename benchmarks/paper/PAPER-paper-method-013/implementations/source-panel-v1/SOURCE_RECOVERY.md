@@ -40,3 +40,14 @@ The paper states that the source frames were cropped to 488×488 and that 5,000 
 | Summary | Ten-video macro F1, SD 0.037 | Scorer reports macro mean and both SD conventions explicitly; no convention is silently inferred |
 
 The next scientific prerequisite is exact original movie-to-reference mapping and paper-equivalent full checkpoint/assembly evidence. A newly trained replacement, a mini-model run, an arbitrary frame/crop choice or a synthetic-video demo cannot resolve it. The implementation permits primary segmentation calculation without fabricated trace targets, runtimes or candidate methods, while keeping the paper's trace/runtime endpoints and full baseline qualification outstanding.
+
+## Historical source crosswalk, November 24
+
+The [recovered historical source](../streaming-input-v1/HISTORICAL_SOURCES.md)
+contains an earlier N=15/nine-stage prototype, with 1,000-frame interfaces and
+unqualified historical weights. It narrows the source-lineage question without
+establishing equivalence to the 400-frame published experiment or replacing the
+current N=8 checkpoint. Historical STNeuroNet annotation attribution was also
+checked: its source crop/temporal conventions and MAT blob identities do not
+authenticate the DeepCaImX 488×488 frame mapping. All native and scientific holds
+above remain; no movie, target array or model was executed for this inquiry.
