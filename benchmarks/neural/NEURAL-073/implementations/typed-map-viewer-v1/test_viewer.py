@@ -269,18 +269,80 @@ class ViewerChecks(unittest.TestCase):
             s.dispatch({"action":"slice", "case_id":KEYS[0], "axis":0,
                         "index":0, "low":-1, "high":1})
 
+    def test_status_recovers_failed_maps_without_exposing_loader_metadata(self):
+        secret = "PRIVATE_TASK_FILENAME_AND_LABEL"
+        for malformed_map in (False, True):
+            with self.subTest(malformed_map=malformed_map):
+                calls = []
+                def loader(key):
+                    calls.append(key)
+                    if key == KEYS[0]:
+                        if malformed_map:
+                            return dataclasses.replace(image(), sha256="f" * 64)
+                        raise RuntimeError(secret)
+                    return image()
+                s = session(loader=loader)
+                with self.assertRaises(v.ViewerError):
+                    s.dispatch({"action": "describe"})
+                before = len(calls)
+                status = s.dispatch({"action": "status"})
+                self.assertEqual(len(calls), before)
+                self.assertEqual(set(status), {"state", "case_id", "ordinal", "total",
+                    "frames_remaining", "answer_classes", "class_labels", "ontology_sha256"})
+                self.assertEqual(status["case_id"], KEYS[0])
+                self.assertEqual(status["ordinal"], 0)
+                self.assertNotIn(secret, json.dumps(status))
+                self.assertEqual(status["class_labels"], list(LABELS))
+                status["class_labels"].reverse()
+                self.assertEqual(s.dispatch({"action": "status"})["class_labels"], list(LABELS))
+                s.dispatch({"action": "answer", "case_id": status["case_id"], "probabilities": None})
+                next_status = s.dispatch({"action": "status"})
+                self.assertEqual(next_status["case_id"], KEYS[1])
+                self.assertEqual(next_status["ordinal"], 1)
+                self.assertEqual(len(calls), before)
+                s.dispatch({"action": "answer", "case_id": next_status["case_id"],
+                            "probabilities": [1.] + [0.] * 24})
+                self.assertEqual(s.dispatch({"action": "status"}),
+                                 {"state": "all_responses_collected", "responses": 2})
+                result = s.finish()
+                self.assertEqual(result["records"], [
+                    {"case_id": KEYS[0], "probabilities": None},
+                    {"case_id": KEYS[1], "probabilities": [1.] + [0.] * 24}])
+                self.assertEqual(result["frames_by_case"], [0, 0])
+                self.assertEqual(result["actions"], 7)
+                with self.assertRaisesRegex(v.ViewerError, "closed"):
+                    s.dispatch({"action": "status"})
+
+    def test_status_obeys_closed_schema_action_budget_and_deadline(self):
+        def no_map(key):
+            raise AssertionError("status must not load maps")
+        s = session(loader=no_map, selected=limits(max_actions=2))
+        with self.assertRaisesRegex(v.ViewerError, "unexpected status fields"):
+            s.dispatch({"action": "status", "case_id": KEYS[0]})
+        self.assertEqual(s.dispatch({"action": "status"})["case_id"], KEYS[0])
+        with self.assertRaisesRegex(v.ViewerError, "action budget"):
+            s.dispatch({"action": "status"})
+        now = [0.]
+        s = session(loader=no_map, clock=lambda: now[0])
+        now[0] = 60.
+        with self.assertRaisesRegex(v.ViewerError, "deadline"):
+            s.dispatch({"action": "status"})
+
     def test_full_9532_key_collection_is_complete_and_no_gold_or_maps_read(self):
         keys = tuple(format(i, "032x") for i in range(9532))
         def no_map(key):
             raise AssertionError("abstention collection must not read maps")
         s = session(keys=keys, loader=no_map)
         for key in keys:
-            s.dispatch({"action":"answer", "case_id":key, "probabilities":None})
+            # Use only the participant response to discover each next key.
+            status = s.dispatch({"action": "status"})
+            self.assertEqual(status["case_id"], key)
+            s.dispatch({"action":"answer", "case_id":status["case_id"], "probabilities":None})
         result = s.finish()
         self.assertEqual(len(result["records"]), 9532)
         self.assertEqual([r["case_id"] for r in result["records"]], list(keys))
         self.assertEqual(sum(result["frames_by_case"]), 0)
-        self.assertEqual(result["actions"], 9532)
+        self.assertEqual(result["actions"], 19064)
         self.assertFalse(result["full_catalogue_qualified"])
         self.assertFalse(result["isolated_transport_qualified"])
 
