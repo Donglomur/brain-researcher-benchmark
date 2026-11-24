@@ -28,6 +28,15 @@ ALGORITHM = {'bytes': 16220, 'sha256': 'c4024cbc5cd2283f1246ff2c99008a212a70689d
 DEMONSTRATIONS = {'bytes': 129921, 'sha256': '19e4018216376af334fd5ead21e2c33d5761d9d56ce5c76d3a89411483906ed2'}
 MANIFEST = {'bytes': 5428, 'sha256': '241870678fed37fca67cc9c64e2e3a0830e0a97f9815332e27fa3018ed6c9f3f'}
 PNG_CAP = 65536
+REFERENCE_RESOURCE_PROFILE = 'erp-full32-image-uncertainty-reference-6000s-v1'
+REFERENCE_WORK_SECONDS = 6000
+REFERENCE_LIMITS = {
+    'freeze': {'read_bytes': 64 * 1024**2, 'write_bytes': 2 * 1024**2,
+        'work_seconds': 90, 'closure_seconds': 30, 'episode_work_seconds': 60, 'episode_cleanup_seconds': 30},
+    'run': {'read_bytes': 13 * 1024**3, 'write_bytes': 1008 * 1024**2,
+        'work_seconds': 4200, 'closure_seconds': 540, 'episode_work_seconds': 60, 'episode_cleanup_seconds': 30},
+    'evaluate': {'read_bytes': 3008 * 1024**2, 'write_bytes': 14 * 1024**2,
+        'work_seconds': 1710, 'closure_seconds': 30, 'episode_work_seconds': 60, 'episode_cleanup_seconds': 30}}
 RUNTIME_ROOTS = tuple(Path(p) for p in ('/System', '/usr', '/Library/Frameworks'))
 POLICY = {'scope': 'complete_predefined_32_person_complement', 'queries': COUNT, 'people': PEOPLE,
     'trials_per_person': 200, 'demonstrations': 4, 'demo_labels': [0, 1, 0, 1],
@@ -168,20 +177,22 @@ def disjoint_output(path, *roots):
     return output
 
 
-def limits(value):
+def limits(value, resource_profile=None):
+    need(resource_profile in (None, REFERENCE_RESOURCE_PROFILE), 'Known reference resource identity')
+    work_ceiling = 3600 if resource_profile is None else REFERENCE_WORK_SECONDS
     need(type(value) is dict and set(value) == {'read_bytes', 'write_bytes', 'work_seconds', 'closure_seconds',
          'episode_work_seconds', 'episode_cleanup_seconds'}, 'Exact stage limits')
     for key in value:
         need(type(value[key]) is int and value[key] > 0, 'Positive integer limits')
     need(value['read_bytes'] <= 16 * 1024**3 and value['write_bytes'] <= 1024**3 and
-         value['work_seconds'] <= 3600 and value['closure_seconds'] <= 600 and
+         value['work_seconds'] <= work_ceiling and value['closure_seconds'] <= 600 and
          value['episode_work_seconds'] <= 60 and value['episode_cleanup_seconds'] <= 30,
          'Bounded selected stage limits')
     return value
 
 
-def new_budget(value, modules):
-    limits(value)
+def new_budget(value, modules, resource_profile=None):
+    limits(value, resource_profile)
     budget = modules['pair'].Budget(value['read_bytes'], value['write_bytes'],
                                     time.monotonic() + value['work_seconds'] + value['closure_seconds'])
     budget.input(modules['source_read_reserve'])
@@ -206,9 +217,12 @@ def public_metadata(public, manifest_pin, budget):
 
 
 def validate_contract(value):
-    need(type(value) is dict and set(value) == {'schema', 'policy', 'metrics', 'repository_root', 'source_bindings',
+    need(type(value) is dict and set(value) - {'resource_profile'} == {'schema', 'policy', 'metrics', 'repository_root', 'source_bindings',
          'public_root', 'public_manifest', 'roster', 'demos', 'model', 'algorithm', 'client', 'interpreter', 'sandbox',
          'limits', 'freeze_stage', 'demo_export_provenance'}, 'Exact single-reference contract')
+    resource_profile = value.get('resource_profile')
+    need('resource_profile' not in value or resource_profile == REFERENCE_RESOURCE_PROFILE,
+         'Known reference resource identity')
     need(value['schema'] == 'erp-full32-image-uncertainty-contract-v1' and value['policy'] == POLICY and
          value['metrics'] == METRICS and value['algorithm']['file'] == ALGORITHM and
          value['freeze_stage'] == {'fit_calls': 1, 'query_images_processed': 0, 'private_targets_opened': False},
@@ -227,10 +241,13 @@ def validate_contract(value):
     need(set(value['demo_export_provenance']) == {'bytes', 'sha256'}, 'Frozen accepted export provenance descriptor')
     descriptor(value['demo_export_provenance'], 65536)
     need(set(value['limits']) == {'freeze', 'run', 'evaluate'}, 'Separate cumulative stage allocations')
-    for limit in value['limits'].values(): limits(limit)
+    for limit in value['limits'].values(): limits(limit, resource_profile)
+    if resource_profile is not None:
+        need(value['limits'] == REFERENCE_LIMITS, 'Exact measured reference resource allocation')
     need(sum(x['write_bytes'] for x in value['limits'].values()) <= 1024**3 and
          sum(x['read_bytes'] for x in value['limits'].values()) <= 16 * 1024**3 and
-         sum(x['work_seconds'] for x in value['limits'].values()) <= 3600 and
+         sum(x['work_seconds'] for x in value['limits'].values()) <=
+         (3600 if resource_profile is None else REFERENCE_WORK_SECONDS) and
          sum(x['closure_seconds'] for x in value['limits'].values()) <= 600, 'Cumulative complete-operation ceiling')
     return value
 
@@ -252,11 +269,11 @@ def verify_frozen(contract, modules, budget):
 
 
 def freeze(spec, output):
-    need(type(spec) is dict and set(spec) == {'schema', 'repository_root', 'source_bindings', 'public_root',
+    need(type(spec) is dict and set(spec) - {'resource_profile'} == {'schema', 'repository_root', 'source_bindings', 'public_root',
          'public_manifest', 'demos', 'demo_export_provenance', 'interpreter', 'sandbox', 'limits'} and
          spec['schema'] == 'erp-full32-image-uncertainty-freeze-spec-v1', 'Exact freeze specification')
     modules = dependencies(spec['repository_root'], spec['source_bindings'])
-    budget = new_budget(spec['limits']['freeze'], modules)
+    budget = new_budget(spec['limits']['freeze'], modules, spec.get('resource_profile'))
     output = disjoint_output(output, HERE, modules['root'], Path(spec['public_root']).parent,
                              *(Path(r['path']).parent for r in spec['demos']))
     contract = {'schema': 'erp-full32-image-uncertainty-contract-v1', 'policy': POLICY, 'metrics': METRICS,
@@ -266,6 +283,7 @@ def freeze(spec, output):
         'algorithm': {'path': str(modules['algorithm_path']), 'file': ALGORITHM},
         'client': {'path': str(output / 'CLIENT.py'), 'file': pin(modules['own']['client.py'])},
         'model': {'path': str(output / 'MODEL.json'), 'file': {'bytes': 1, 'sha256': '0' * 64}},
+        **({'resource_profile': spec['resource_profile']} if 'resource_profile' in spec else {}),
         'freeze_stage': {'fit_calls': 1, 'query_images_processed': 0, 'private_targets_opened': False}}
     validate_contract(contract); check_runtime(contract, budget)
     roster, _ = public_metadata(contract['public_root'], contract['public_manifest'], budget)
@@ -434,7 +452,7 @@ def episode_files(root, context, contract, modules, budget):
 def run(contract, contract_pin, output):
     validate_contract(contract); need(pin(encode(contract)) == contract_pin, 'Frozen contract identity')
     modules = dependencies(contract['repository_root'], contract['source_bindings'])
-    budget = new_budget(contract['limits']['run'], modules)
+    budget = new_budget(contract['limits']['run'], modules, contract.get('resource_profile'))
     ids = verify_frozen(contract, modules, budget); check_runtime(contract, budget)
     output = disjoint_output(output, HERE, modules['root'], Path(contract['public_root']).parent,
         Path(contract['model']['path']).parent, *(Path(r['path']).parent for r in contract['demos']))
@@ -526,7 +544,7 @@ def ordered_metrics(admit, private_loader, core):
 def evaluate(contract, contract_pin, arm_root, arm_pin, private_loader, output):
     validate_contract(contract); need(pin(encode(contract)) == contract_pin, 'Exact frozen contract')
     modules = dependencies(contract['repository_root'], contract['source_bindings'])
-    budget = new_budget(contract['limits']['evaluate'], modules)
+    budget = new_budget(contract['limits']['evaluate'], modules, contract.get('resource_profile'))
     ids = verify_frozen(contract, modules, budget); check_runtime(contract, budget)
     arm_root = ordinary(arm_root)
     need(not (arm_root / 'FAILED.json').exists(), 'Failed arm cannot enter evaluation')

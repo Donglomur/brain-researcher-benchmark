@@ -58,6 +58,84 @@ def write(path, body):
     path.write_bytes(body); WRITE_BYTES += len(body)
 
 
+class ReferenceResourceControls(unittest.TestCase):
+    def contract(self, root):
+        descriptor = a.pin(b'generated metadata only')
+        frozen = root / 'frozen'
+        return {'schema': 'erp-full32-image-uncertainty-contract-v1', 'policy': a.POLICY,
+            'metrics': a.METRICS, 'repository_root': str(MODULES['root']), 'source_bindings': MODULES['binding'],
+            'public_root': str(root/'protected/public'), 'public_manifest': a.MANIFEST, 'roster': descriptor,
+            'demos': [{'path': str(root/'demos'/str(i)), 'file': descriptor, 'record': f'demo{i+1}',
+                       'label': (0, 1, 0, 1)[i]} for i in range(4)],
+            'model': {'path': str(frozen/'MODEL.json'), 'file': descriptor},
+            'algorithm': {'path': str(MODULES['algorithm_path']), 'file': a.ALGORITHM},
+            'client': {'path': str(frozen/'CLIENT.py'), 'file': descriptor},
+            'interpreter': {'path': sys.executable, **descriptor},
+            'sandbox': {'path': '/usr/bin/sandbox-exec', **descriptor},
+            'limits': copy.deepcopy(a.REFERENCE_LIMITS), 'resource_profile': a.REFERENCE_RESOURCE_PROFILE,
+            'freeze_stage': {'fit_calls': 1, 'query_images_processed': 0, 'private_targets_opened': False},
+            'demo_export_provenance': descriptor}
+
+    def test_explicit_reference_profile_and_legacy_limits(self):
+        with tempfile.TemporaryDirectory(dir=SCRATCH_ROOT) as temp:
+            contract = self.contract(Path(temp)); self.assertIs(a.validate_contract(contract), contract)
+            profile = json.loads((HERE/'PROFILE.json').read_bytes())
+            self.assertEqual(profile['resource_profile'], a.REFERENCE_RESOURCE_PROFILE)
+            self.assertEqual(profile['source_bindings'], MODULES['binding'])
+            self.assertEqual(profile['limits'], a.REFERENCE_LIMITS)
+            self.assertEqual(profile['whole_work_seconds'], 6000)
+            self.assertEqual(sum(v['work_seconds'] for v in profile['limits'].values()), 6000)
+            self.assertEqual(sum(v['closure_seconds'] for v in profile['limits'].values()), 600)
+            self.assertEqual(sum(v['write_bytes'] for v in profile['limits'].values()), 1024**3)
+            self.assertEqual(sum(v['read_bytes'] for v in profile['limits'].values()), 16*1024**3)
+            legacy = copy.deepcopy(contract); legacy.pop('resource_profile')
+            with self.assertRaises(ValueError): a.validate_contract(legacy)
+            legacy['limits']['run']['work_seconds'] = 2400
+            legacy['limits']['evaluate']['work_seconds'] = 1110
+            self.assertIs(a.validate_contract(legacy), legacy)
+            legacy['limits']['evaluate']['work_seconds'] += 1
+            with self.assertRaisesRegex(ValueError, 'Cumulative'): a.validate_contract(legacy)
+            with self.assertRaises(ValueError): a.new_budget(a.REFERENCE_LIMITS['run'], MODULES)
+            budget = a.new_budget(a.REFERENCE_LIMITS['run'], MODULES, a.REFERENCE_RESOURCE_PROFILE)
+            self.assertEqual(budget.read, MODULES['source_read_reserve'])
+
+    def test_reference_identity_and_resource_mutations_refuse(self):
+        with tempfile.TemporaryDirectory(dir=SCRATCH_ROOT) as temp:
+            contract = self.contract(Path(temp))
+            for identity in (None, '', 'unknown-reference', True):
+                changed = copy.deepcopy(contract); changed['resource_profile'] = identity
+                with self.subTest(identity=identity), self.assertRaises(ValueError): a.validate_contract(changed)
+            for stage in ('freeze', 'run', 'evaluate'):
+                for key in a.REFERENCE_LIMITS[stage]:
+                    for delta in (-1, 1):
+                        changed = copy.deepcopy(contract); changed['limits'][stage][key] += delta
+                        with self.subTest(stage=stage, key=key, delta=delta), self.assertRaises(ValueError):
+                            a.validate_contract(changed)
+            for key in ('work_seconds', 'episode_work_seconds', 'episode_cleanup_seconds'):
+                changed = copy.deepcopy(contract); changed['limits']['run'][key] = True
+                with self.subTest(key=key), self.assertRaises(ValueError): a.validate_contract(changed)
+
+    def test_freeze_binds_resource_identity_before_runtime_or_body_access(self):
+        class StopAtRuntime(Exception): pass
+        with tempfile.TemporaryDirectory(dir=SCRATCH_ROOT) as temp:
+            root = Path(temp); contract = self.contract(root)
+            keys = ('repository_root', 'source_bindings', 'public_root', 'public_manifest', 'demos',
+                    'demo_export_provenance', 'interpreter', 'sandbox', 'limits', 'resource_profile')
+            spec = {key: contract[key] for key in keys}; spec['schema'] = 'erp-full32-image-uncertainty-freeze-spec-v1'
+            admitted = []
+            def stop(value, budget):
+                admitted.append(value)
+                self.assertEqual(value['resource_profile'], a.REFERENCE_RESOURCE_PROFILE)
+                self.assertEqual(value['limits'], a.REFERENCE_LIMITS)
+                a.validate_contract(value)
+                raise StopAtRuntime
+            with patch.object(a, 'dependencies', return_value=MODULES), patch.object(a, 'check_runtime', side_effect=stop), \
+                 patch.object(a, 'public_metadata') as public, patch.object(MODULES['reference'], 'fit_features') as fit:
+                with self.assertRaises(StopAtRuntime): a.freeze(spec, root/'result')
+                self.assertEqual(len(admitted), 1); public.assert_not_called(); fit.assert_not_called()
+                self.assertFalse((root/'result').exists())
+
+
 class AdmissionControls(unittest.TestCase):
     def test_complete6400_unique_inventory_and_no_subset(self):
         value = arm(ids()); a.validate_arm(value, value['contract'], ids())
