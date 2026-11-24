@@ -632,6 +632,11 @@ jobs:
           python-version: '3.11'
       - name: Check THINGS complete source and owned materialization
         run: python3 -I -S -B benchmarks/neural/NEURAL-055/implementations/registered-runtime/test_portability.py
+      - name: "Check THINGS frozen I prediction admission"
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python3 -I -S -B benchmarks/neural/NEURAL-055/implementations/registered-runtime/test_i_prediction_policy.py
       - name: Materialize and inspect the current THINGS source
         run: >-
           python3 -I -S -B benchmarks/neural/NEURAL-055/implementations/registered-runtime/postscore_source_entry.py
@@ -3403,7 +3408,7 @@ jobs:
               raise RuntimeError("assertions must remain enabled")
           root = pathlib.Path("benchmarks/neural/NEURAL-SCOPE-20261114-LASER-EEG-REPORT/implementations/full-assay-scorer")
           body = (root / "SOURCE.json").read_bytes()
-          if len(body) != 1590 or hashlib.sha256(body).hexdigest() != "d6e5110e21dc6375c714af0e9c05f6a813100818e200e53340c660ca57f50195":
+          if len(body) != 1590 or hashlib.sha256(body).hexdigest() != "2f543ac18528a423b4a3ad5a6c727c2d70184cac046e392caf9538809b6d8783":
               raise RuntimeError("component manifest identity changed")
           source = json.loads(body)
           expected = {member["path"] for member in source["files"]} | {"SOURCE.json"}
@@ -3417,10 +3422,10 @@ jobs:
               if len(data) != member["bytes"] or hashlib.sha256(data).hexdigest() != member["sha256"]:
                   raise RuntimeError("component member changed before test import: " + member["path"])
           suite = unittest.defaultTestLoader.discover(str(root), pattern="test_*.py")
-          if suite.countTestCases() != 18:
+          if suite.countTestCases() != 20:
               raise RuntimeError("complete component test discovery required")
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          if not (result.testsRun == 18 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
+          if not (result.testsRun == 20 and result.wasSuccessful() and not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses):
               raise SystemExit(1)
           COMPONENT_SOURCE
 
@@ -4869,7 +4874,7 @@ jobs:
                       raise ValueError('public member digest shape differs')
                   seen.add(name)
                   total += row['bytes']
-              if seen != NAMES or total != 460697 or total > 2097152:
+              if seen != NAMES or total != 467546 or total > 2097152:
                   raise ValueError('complete bounded source selection required')
               allowed_dirs = {str(parent) for name in NAMES for parent in PurePosixPath(name).parents
                               if str(parent) != '.'}
@@ -4905,7 +4910,7 @@ jobs:
               path = root / 'run_checks.py'
               previous = sys.argv
               sys.argv = [str(path), '--manifest-sha256',
-                          '600584659a526fb3f4c91e46afa0c1242b185f8a99fdf33fe17bad1e4278acd4',
+                          'eba0cb9a04fbd1658529ca584af20715501684f36c5da643aeb26ae6c905e198',
                           '--candidate-only']
               try:
                   namespace = {'__name__': '__main__', '__file__': str(path)}
@@ -4918,7 +4923,7 @@ jobs:
               if not __debug__:
                   raise ValueError('optimized execution is not selected')
               root = Path.cwd() if root is None else Path(root).absolute()
-              bodies = verify_public(root, 7674, '600584659a526fb3f4c91e46afa0c1242b185f8a99fdf33fe17bad1e4278acd4')
+              bodies = verify_public(root, 7675, 'eba0cb9a04fbd1658529ca584af20715501684f36c5da643aeb26ae6c905e198')
               run_candidate(bodies, root)
 
 
@@ -5602,6 +5607,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-026/implementations/understanding-metrics-v1/test_score.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-026/implementations/understanding-metrics-v1/review_test.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-078/implementations/understanding-metrics-v1/test_score.py -v
+          timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-078/implementations/understanding-metrics-v1/test_paired.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B tests/benchmarks/test_reve_original_metrics.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B tests/benchmarks/test_reve_original_panel.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-003/implementations/matched-reference-v1/metadata_tests.py "${RUNNER_TEMP}/reve-metadata-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"

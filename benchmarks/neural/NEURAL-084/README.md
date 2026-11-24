@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Full panel viewer bridge v1](implementations/full-panel-viewer-bridge-v1) — Reviewed source component.
   Scope: Complete original-panel viewer and raster delivery source; retained Canvas producer ownership is unchanged. Authentic data, calibration, runtime isolation and native understanding remain unqualified.
+- [Paired access scoring v1](implementations/paired-access-scoring-v1) — Reviewed source component.
+  Scope: Paired admission and assessment of restricted-observation and frozen-program candidates on the declared full 54-case OpenBMI support before label access. Original input/gold provenance, reference and protected participant execution remain unqualified.
 - [Raster delivery v1](implementations/raster-delivery-v1) — Reviewed source component.
   Scope: Complete original-panel viewer and raster delivery source; retained Canvas producer ownership is unchanged. Authentic data, calibration, runtime isolation and native understanding remain unqualified.
 - [Typed waveform v1](implementations/typed-waveform-v1) — Reviewed source component.

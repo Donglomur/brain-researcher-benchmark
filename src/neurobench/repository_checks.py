@@ -36,7 +36,7 @@ MAX_TREE_ENTRIES = 30000
 MAX_DEPTH = 32
 SOURCE_SUFFIXES = {"", ".py", ".json", ".md", ".txt", ".m", ".r", ".yaml", ".yml",
                    ".sh", ".lock", ".toml", ".in", ".author", ".list", ".template",
-                   ".rst", ".c", ".dockerignore", ".patch"}
+                   ".rst", ".c", ".dockerignore", ".patch", ".cjs"}
 # Explicit reviewed resource identities; no general binary suffix is admitted.
 PINNED_SOURCE_RESOURCES = {
     "benchmarks/neural/NEURAL-019/implementations/png-transport-dejavu-v1/assets/DejaVuSansMono.ttf": {

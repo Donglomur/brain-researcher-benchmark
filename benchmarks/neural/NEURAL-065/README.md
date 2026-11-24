@@ -43,6 +43,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Task implementation.
   Scope: V1 typed-button transcript evaluation with alias/session/template checks, sentence CER averaged within people and then across people, required neural-only and language-only arms, and paired person uncertainty. Typed-button targets differ from the paper intended-key endpoint. Authentic DTW/session mapping, cross-modality identity, decoder/checkpoint parity and protected execution remain held; V2 is excluded and scientific qualification is unknown.
+- [Observation viewer v1](implementations/observation-viewer-v1) — Reviewed source component.
+  Scope: Complete public-query HTML presentation of supplied prepared EEG observations. Original cohort/session/template/alignment and CER contracts remain; roster equality does not authenticate original source coverage or qualify participant conditions.
 - [Brainvision observations v1](implementations/brainvision-observations-v1) — Reviewed source component.
   Scope: BrainVision EEG observation preparation. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -38,6 +38,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
+- [Participant delivery v1](implementations/participant-delivery-v1) — Reviewed source component.
+  Scope: In-memory opaque probability requests and strict response collection connect supplied bilateral STN waveform projection to protected participant-macro scoring. It is not a network runner, sandbox, source-authentication mechanism or evidence of matched participant access.
 - [Signal packets v1](implementations/signal-packets-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Recording lag controls](implementations/recording-lag-controls) — Recording lag controls.

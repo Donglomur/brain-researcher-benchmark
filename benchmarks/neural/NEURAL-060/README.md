@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Delivery](contracts/delivery) — Task contract.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Workflow comparison v1](implementations/workflow-comparison-v1) — Reviewed source component.
+  Scope: Complete declared cohort comparison of frozen-program and adaptive-tool workflows, retaining equal-mouse MSE and paired animal/session/lab diagnostics across three authoring replications. Direct-viewer delivery, authentic execution and scientific performance are not established.
 - [Current layout runtime v1](implementations/current-layout-runtime-v1) — Reviewed source component.
   Scope: Current-layout full runtime source. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

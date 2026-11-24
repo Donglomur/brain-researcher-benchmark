@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Coordinate roster v1](implementations/coordinate-roster-v1) — Reviewed source component.
+  Scope: Coordinate-roster validation prevents duplicate source columns introduced by coordinate aliases while preserving the equal-coordinate raw R2 endpoint. Authentic preparation, delivery boundaries and scientific-condition performance remain unresolved.
 - [Uncertainty arithmetic v2](implementations/uncertainty-arithmetic-v2) — Reviewed source component.
   Scope: Finite crossed-bootstrap arithmetic. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

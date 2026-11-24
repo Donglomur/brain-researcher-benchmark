@@ -14,17 +14,17 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 The left/right reported state occupying more than half of a non-overlapping one-second target interval, derived from initial state and timed key events. Undefined initial state and duration ties are explicit exclusions.
 
-**Source delivery:** partial\_delivery. An independent evaluator implements report-label construction, complete nominal trial accounting, protected-split planning and probability scoring. No authentic MAT-to-inventory adapter, candidate input transport or fitted comparator has been delivered; published attention accuracy is not a threshold for this revised context.
+**Source delivery:** partial\_delivery. Independent source components implement report-label construction, complete nominal trial accounting, protected-split planning, probability scoring, sanitized matched numerical observations and a current-case response broker. Authentic MAT preparation, fitted comparators and protected participant execution remain undelivered; published attention accuracy is not a threshold for this revised context.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
 
 | Condition | Source availability | Representation and boundary | Missing |
 | --- | --- | --- | --- |
-| Direct observation | not\_delivered | Potential no-tools numerical or waveform interpretation of the common 2-second EEG plus admitted audio representation. Represent every sufficient channel/sample without label-derived selection; evaluator rows must never be shown. | No candidate packet, validated compact representation or direct-model transport. |
+| Direct observation | not\_delivered | Potential no-tools numerical or waveform interpretation of the common 2-second EEG plus admitted audio representation. Represent every sufficient channel/sample without label-derived selection; evaluator rows must never be shown. | No validated direct-compatible representation or direct-model transport; the existing normalized numerical packets are not a delivered direct-input condition. |
 | Typed viewer | not\_delivered | Potential typed EEG/audio inspection constrained to the same offline context. Typed actions return permitted renderings only; no report markers, target labels or neighboring trials. | No typed viewer implementation or rendering information-equivalence validation. |
-| Tool assisted | not\_delivered | Per-case investigation using fixed numerical/decoder tools on matched EEG/audio observations. No evaluator feedback; train-only fitted artifacts and equal tool/context budgets. | Evaluator-only prepare/split/score CLI does not provide participant investigation transport or admitted model tools. |
-| Frozen program | not\_delivered | Frozen classifier/TRF/decoder with grouped training and immutable preprocessing recipe. Hold person and mixture families, fit normalization/calibration only on training, retain every required case. | No authentic loader, trained baseline or frozen-program participant runner. |
+| Tool assisted | not\_delivered | Operator-side normalized EEG/full-audio packet export and current-case broker source exist for the numerical tool-assisted condition. A participant investigation service with admitted numerical/decoder tools is not delivered. No evaluator feedback; train-only fitted artifacts and equal tool/context budgets. | Admitted model/numerical tools and protected participant execution, including label isolation, fresh case state, cell-specific training provenance and matched budgets; the current-case broker supplies protocol source only. |
+| Frozen program | not\_delivered | Matched normalized numerical packet export, opaque response join and current-case broker source support a future frozen classifier/TRF/decoder. Grouped train-only fitting and immutable program execution remain external and undelivered. Hold person and mixture families, fit normalization/calibration only on training, retain every required case. | Authentic loader, trained baseline, cell-specific frozen-decoder execution and protected participant runner; available numerical delivery and journal replay do not establish those capabilities. |
 
 Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
 
@@ -33,7 +33,7 @@ Source availability does not establish a qualified runtime. A programme score ca
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 25746 bytes; SHA-256 `c256fdce4ae91fb059d86afe025a6eba8629f872ae27c4c8cabcbfdcdb6978b7`.
+- Specification identity: 26438 bytes; SHA-256 `828625b2c939e93fa181bc72c1e076fd79c074c73c1df66bbdf08e72b5c04fb0`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

@@ -43,6 +43,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Paired grading](implementations/paired-grading) — Paired grading.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Numeric observation v1](implementations/numeric-observation-v1) — Reviewed source component.
+  Scope: Complete lossless numeric observations over the same 60 supplied prepared contexts and observer-specific complete response collection, with full-condition capacity refusal before exposure. This numeric mode is not visual-only or evidence of no-tools enforcement. Observer collection remains incompatible with the existing private programme grader; authentic preparation, provider/context capability, actual delivery and scientific outcomes remain unqualified.
 - [Numerical controls v1](implementations/numerical-controls-v1) — Source metadata and findings.
   Scope: NEURAL-075 complete paired numerical controls. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

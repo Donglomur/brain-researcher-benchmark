@@ -47,6 +47,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Observation viewer v1](implementations/observation-viewer-v1) — Reviewed source component.
+  Scope: Typed pages for complete permitted evaluation observations and complete two-head response collection. No target grading, authentic participant delivery, native parity or neural-understanding qualification is established.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

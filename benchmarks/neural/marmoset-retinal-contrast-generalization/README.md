@@ -14,7 +14,7 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Protected per-cell spike counts at each 85 Hzprojector update and repeat-averaged responses, with physical event/grid alignment authenticated.
 
-**Source delivery:** partial\_delivery. Condition-permitted 170-cell training-count loading is implemented, closing the unsafe test-response-open branch. Stimulus preparation, RF fitting, complete protected scoring and matched interpretation packets remain missing.
+**Source delivery:** partial\_delivery. Condition-permitted training-count loading, complete declared-support protected numerical scoring and a constant-rate diagnostic are implemented. Authentic stimulus preparation, RF/reference fitting, protected participant lifecycle and matched interpretation packets remain unavailable or unqualified.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
@@ -23,15 +23,15 @@ Protected per-cell spike counts at each 85 Hzprojector update and repeat-average
 | --- | --- | --- | --- |
 | Direct observation | not\_suitable | Pure protected encoding cases contain stimuli rather than observed query neural activity; visible calibration traces would support a separately specified matched interpretation diagnostic. Exposing protected spikes to make a neural picture would disclose the scored target; current programme scores cannot establish direct understanding. | Define a nonleaking calibration-based or masked-observation interpretation estimand before enabling this mode. |
 | Typed viewer | not\_suitable | No target-preserving viewer interpretation task is currently defined for stimulus-to-protected-response encoding. A calibration-only viewer could be a future matched condition, but protected target rasters/means must never be rendered. | Separate observation/target mask and complete view policy, not a renamed programme score. |
-| Tool assisted | not\_delivered | Proposed train-only numerical/model investigation using prepared stimuli and permitted calibration counts. Source-only versusWN-assisted domains enforced at access; calibration\_only labels alone do not enforce downstream fitting. | Complete stimuli/case packets, constrained fit tools and protected scorer. |
-| Frozen program | not\_delivered | Proposed frozen response predictor over every protected stimulus update. Freeze cell roster, fit/normalization/smoothing and calibration route before queries; current loader is only one preparation component. | Complete prediction/scoring lifecycle and competent reference qualification. |
+| Tool assisted | not\_delivered | Partial source components exist for condition-permitted training-count preparation, a constant-rate diagnostic and owner-only protected scoring; the complete tool-assisted task still lacks qualified matching stimuli and constrained fitting/execution. Source-only versus WN-assisted domains remain distinct. Calibration-only labels do not enforce downstream fitting. The owner scorer is a numerical API, not target custody or a sandbox, and the constant diagnostic is not the competent spatial-contrast reference. | Authentic complete stimuli/case packets, constrained condition-permitted fitting, competent references and protected participant/scorer integration. |
+| Frozen program | not\_delivered | A complete declared-support constant predictor and owner-side protected scorer exist as source components; an arbitrary participant programme fit/freeze/predict lifecycle over qualified stimuli is not delivered. Freeze the full cell roster, permitted calibration route, fitting/normalization/smoothing and programme before protected queries. The pure source APIs cannot establish freeze chronology or deny target-file access; the constant diagnostic remains unqualified and is not the spatial-contrast reference. | Qualified stimulus preparation, protected participant fit/freeze/predict/score lifecycle and competent reference qualification. |
 
 Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
 
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 32822 bytes; SHA-256 `53b6f5835cd0fa89d6e0e221cb9fbc6d1b900030f467cf4fa2a2f11ac1500064`.
+- Specification identity: 34321 bytes; SHA-256 `96cf1409dff625ced047a8393e3ca909a170c7945b0d9730aa5bff84742f1206`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
