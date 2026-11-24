@@ -59,9 +59,9 @@ def load_mapping(path=None):
     return module
 
 
-def new_context(candidate_sha256, access_condition, preparation_sha256):
+def new_context(candidate_sha256, access_condition, preparation_sha256, *, outcome="improvement"):
     """Freeze once and retain privately; restart uses this exact same context."""
-    return {"schema": CONTEXT_SCHEMA, "outcome": "improvement",
+    return {"schema": CONTEXT_SCHEMA, "outcome": outcome,
             "candidate_sha256": candidate_sha256, "access_condition": access_condition,
             "preparation_sha256": preparation_sha256, "input_sha256": SOURCE_INPUT_SHA256,
             "run_nonce": secrets.token_hex(32)}
@@ -70,8 +70,9 @@ def new_context(candidate_sha256, access_condition, preparation_sha256):
 def validate_context(context):
     exact(context, ("schema", "outcome", "candidate_sha256", "access_condition",
                     "preparation_sha256", "input_sha256", "run_nonce"))
-    require(context["schema"] == CONTEXT_SCHEMA and context["outcome"] == "improvement",
-            "Original time improvement context required")
+    require(context["schema"] == CONTEXT_SCHEMA and
+            context["outcome"] in ("reproduction", "improvement"),
+            "Original time reproduction or improvement context required")
     require(context["access_condition"] in ("paper_data", "paper_data_author_code"), "Unknown access condition")
     require(context["input_sha256"] == SOURCE_INPUT_SHA256, "Original smoothed/floored input required")
     require(all(hex_digest(context[k]) for k in ("candidate_sha256", "preparation_sha256", "run_nonce")),
