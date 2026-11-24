@@ -97,6 +97,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 
 Each record keeps the scope of its original report. It is not current runtime qualification.
 
+- [Trusted operator candidate comparison](docs/provenance/trusted-figure3b-nested-ridge-20261124/RESULT.json): Complete fixed nested-Ridge operator comparison is non-improving on all 42 original Figure 3b cells, 14 sessions and eight people. The completed fresh A3 reference is reused, without a second reference fit.
 - [Trusted operator reference](docs/provenance/trusted-figure3b-reference-20261124/RESULT.json): Complete selected Figure 3b trusted reference: 42 cells, 14 sessions, eight people and 5,685 fresh Ridge fits; two earlier zero-fit failures remain. Numerical reference agreement is not participant or whole-paper qualification.
 
 Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence PAPER-ROOT-ADD-001`. Programme evidence does not establish direct interpretation.
@@ -139,6 +140,9 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Complete selected Figure 3b trusted reference replay](docs/provenance/trusted-figure3b-reference-20261124/README.md)
 - [Selected Figure 3b trusted reference aggregate result](docs/provenance/trusted-figure3b-reference-20261124/RESULT.json)
 - [Selected Figure 3b trusted reference source and runtime provenance](docs/provenance/trusted-figure3b-reference-20261124/PROVENANCE.json)
+- [Complete non-improving nested-Ridge comparison](docs/provenance/trusted-figure3b-nested-ridge-20261124/README.md)
+- [Nested-Ridge negative-result aggregate evidence](docs/provenance/trusted-figure3b-nested-ridge-20261124/RESULT.json)
+- [Nested-Ridge comparison source and runtime provenance](docs/provenance/trusted-figure3b-nested-ridge-20261124/PROVENANCE.json)
 
 ## Implementation artifacts
 
@@ -192,6 +196,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Reviewed finite original-task source. Fixed time-only controls and preparation receipts are scoped engineering observations; general participant execution, assisted-arm results, AI reproduction/improvement, SOTA and protected-runtime qualification are not established. Namespace reset, hidden-label boundaries, author parity, unit/PCA exposure and clustered uncertainty remain separately scoped. The current task definition selects original Figure3b improvement under improvement.figure3b.v1.json; full 224-array reproduction remains separate. This scope adoption does not establish qualified execution or scientific success.
 - [Runtime tree adapter v1](implementations/runtime-tree-adapter-v1) — Reviewed source component.
   Scope: Source-only preparation of the ordinary immutable runtime tree required by the existing LANGUAGE exec-reset provider. Generated controls cover projection mechanics; authentic runtime construction, protected provider execution, containment and scientific qualification remain separately required. The existing provider, task endpoint and readiness are unchanged.
+- [Trusted figure3b nested ridge v1](implementations/trusted-figure3b-nested-ridge-v1) — Reviewed source component.
+  Scope: Fixed trusted operator route for the unchanged training-only sentence-group nested-Ridge candidate on the selected original Figure 3b endpoint. The complete 42-cell, 14-session, eight-person comparison used 90,960 estimator fits and the previously completed fresh fixed-alpha reference. The candidate's equal-session paired difference was negative, so the result closes this frozen classical candidate without retuning, subsetting or a follow-on. Original exposure and retrospective transformations remain; no AI authorship or improvement, participant NativeProvider qualification, independent generalization, full 224-array or whole-paper reproduction, SOTA or benchmark-readiness claim follows.
 - [Trusted figure3b reference v1](implementations/trusted-figure3b-reference-v1) — Reviewed source component.
   Scope: Fixed trusted operator route for the selected original contextual population Figure 3b endpoint: 42 cells across 14 sessions and eight people, with 5,685 fresh source Ridge fits. The measured replay agrees with the provided author reference to floating-point precision. This is not an arbitrary participant executor, full 224-array or whole-paper reconstruction, AI result, improvement, information-condition comparison or SOTA. The original transformations, public exposure, failed preparation attempts and separate participant isolation requirements remain explicit.
 - [Original figure3 v1](implementations/original-figure3-v1) — Reviewed source component.
