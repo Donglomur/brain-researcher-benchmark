@@ -1,6 +1,6 @@
 # Paired Purkinje final-program execution
 
-Experimental source component for `PAPER-FIND-REP-013`. It connects two committed programs and the current [A16/B18 packets](../purkinje-paired-access/README.md) to the existing protected producer, then to the unchanged paired numerical grader. It adds no benchmark ID, numerical method or scientific result.
+Experimental source component for `PAPER-FIND-REP-013`. It connects two committed programs and the current [A16/B18 packets](../paired-access/README.md) to the existing protected producer, then to the unchanged paired numerical grader. It adds no benchmark ID, numerical method or scientific result.
 
 The full declared endpoint remains ten trees, 13 components, 21,116 branches, 12,603 author sections, five numerical products, 31 table fields and 58 summary errors. The primary metric remains equal-cell branch-length RMSE in micrometres.
 
@@ -8,7 +8,7 @@ The full declared endpoint remains ten trees, 13 components, 21,116 branches, 12
 
 Both exact program bodies are committed before either packet payload or candidate execution. Each current packet is copied through its pinned manifest into a separate read-only input tree. A has 16 files; B has 18, adding only the official Rmd and marked source excerpt. The 622,639-byte article is admitted through its exact current descriptor; the legacy 15-file/600,000-byte route is unchanged.
 
-The unchanged [program producer](../../benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/) renders the exact committed code with its trusted bridge. The bridge runs `program.py --input /input --out /work/output`, collects its five numerical outputs and returns a bounded wire envelope. The protected owner validates effective mounts, natural completion and exact owned closure.
+The unchanged [program producer](../registered-runtime/program-v1/) renders the exact committed code with its trusted bridge. The bridge runs `program.py --input /input --out /work/output`, collects its five numerical outputs and returns a bounded wire envelope. The protected owner validates effective mounts, natural completion and exact owned closure.
 
 This API accepts outputs only from that owner's in-process closed-run token. It has no caller-supplied numerical-output directory. Failure in B preserves A's evidence but issues no pair token. There is no private-reference argument in the execution call.
 
@@ -16,23 +16,23 @@ Only after both programs close can `grade_closed_pair` call the existing paired 
 
 ## Portable use inside a selected owner
 
-Python 3.11 source roots are explicit arguments. The production bootstrap reads source and small descriptors only; it does not open original data or private numerical references. The repository already contains all 22 source/metadata dependencies listed in [SOURCE.json](SOURCE.json); none are duplicated here.
+Python 3.11 source roots are explicit arguments. The production bootstrap reads source and small descriptors only; it does not open original data or private numerical references. The repository contains all 22 source/metadata dependencies needed by the constructor; none are duplicated here. [SOURCE.json](SOURCE.json) records inherited release provenance. Current source loading uses the maintained pins in `paired_execution.py` and the paired component.
 
 ```python
 from importlib.util import spec_from_file_location, module_from_spec
 from pathlib import Path
 
 repo = Path("/path/to/checkout")
-component = repo / "components/purkinje-paired-execution"
+component = repo / "benchmarks/paper/PAPER-FIND-REP-013/implementations/paired-execution"
 spec = spec_from_file_location("paired_execution", component / "paired_execution.py")
 module = module_from_spec(spec)
 spec.loader.exec_module(module)
 
-# Source-only construction: use the exact reviewed pin from SOURCE.json.
+# Source-only construction: supply an independently reviewed current adapter pin.
 executor = module.PairExecutor(
     repo=repo,
-    paired_root=repo / "components/purkinje-paired-access",
-    producer_root=repo / "benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1",
+    paired_root=repo / "benchmarks/paper/PAPER-FIND-REP-013/implementations/paired-access",
+    producer_root=repo / "benchmarks/paper/PAPER-FIND-REP-013/implementations/registered-runtime/program-v1",
     expected_source=accepted_adapter_pin,
 )
 ```
@@ -62,7 +62,7 @@ result = executor.grade_closed_pair(
 )
 ```
 
-These are inert examples with unresolved operator variables. Every arm mapping requires exactly A and B. Locators have exactly `path`, integer `bytes` and lowercase `sha256`; paths are absolute ordinary files. Run-request and paired-authority pins use the paired module's indented canonical encoding; owner authorization uses the producer common module's compact encoding.
+These are inert examples with unresolved operator variables. `accepted_adapter_pin` must identify the independently reviewed current `paired_execution.py` bytes; [SOURCE.json](SOURCE.json) preserves historical release identities and is not a current source-selection receipt. Every arm mapping requires exactly A and B. Locators have exactly `path`, integer `bytes` and lowercase `sha256`; paths are absolute ordinary files. Run-request and paired-authority pins use the paired module's indented canonical encoding; owner authorization uses the producer common module's compact encoding.
 
 The [authorization template](OWNER_AUTHORIZATION.template.json) is disabled. It must not be enabled merely because these tests pass. The external owner must select current capacity/storage, prior-cost and once-only history, both complete 60-second candidate opportunities, capture/closure/cleanup reserves and hard aggregate host/descendant limits. The original runtime image is:
 
@@ -81,7 +81,7 @@ A program captured by a chosen-agent owner may be supplied as an exact committed
 From the repository root:
 
 ```sh
-python -I -S -B components/purkinje-paired-execution/test_paired_execution.py --relocation-only
+python -I -S -B benchmarks/paper/PAPER-FIND-REP-013/implementations/paired-execution/test_paired_execution.py --relocation-only
 ```
 
 Three focused relocation methods passed with two explicitly invented host Python programs through the unchanged bridge and collector. Docker/daemon transport was simulated. These checks cover relocated source/dependency pins, global import isolation, the current A/B packet shapes, exact program-to-output capture and both-closed-before-reference ordering.

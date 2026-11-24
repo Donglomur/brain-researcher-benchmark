@@ -1,6 +1,6 @@
 # Purkinje morphology: direct numerical artifacts
 
-This component adds `inputs`, `freeze` and `score` commands for the existing **PAPER-FIND-REP-013** finite task. It uses the already published scorer, schema, task and hash inventories in [program-v1](../../benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/README.md). The production scorer is shared with that directory; its current source revision is described below.
+This component adds `inputs`, `freeze` and `score` commands for the existing **PAPER-FIND-REP-013** finite task. It uses the already published scorer, schema, task and hash inventories in [program-v1](../registered-runtime/program-v1/README.md). The production scorer is shared with that directory; its current source revision is described below.
 
 The complete endpoint covers ten released trees, thirteen components, 21,116 branches and 12,603 retained author sections. The primary metric is equal-cell branch-length RMSE in micrometres; all other field and summary errors remain separate. Zero primary error alone does not certify caliber, counts or summary reconstruction. Exact topology and missingness joins prevent a partial submission receiving a matched-subset score.
 
@@ -21,8 +21,8 @@ The input packet exposes source excerpts and author totals and does not include 
 From the repository root, set:
 
 ```sh
-adapter=components/purkinje-artifacts/artifact.py
-profile=benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1
+adapter=benchmarks/paper/PAPER-FIND-REP-013/implementations/artifacts/artifact.py
+profile=benchmarks/paper/PAPER-FIND-REP-013/implementations/registered-runtime/program-v1
 ```
 
 Authenticate and copy the exact provider input packet into a new participant directory:
@@ -60,7 +60,7 @@ The original complete finite scientific evidence is reused; this export does not
 For the complete source test suite, use a fresh output directory whose parent exists:
 
 ```sh
-python3.11 -I -S -B components/purkinje-artifacts/test_artifact.py --profile-root benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1 --output-root /absolute/fresh/source-controls
+python3.11 -I -S -B benchmarks/paper/PAPER-FIND-REP-013/implementations/artifacts/test_artifact.py --profile-root benchmarks/paper/PAPER-FIND-REP-013/implementations/registered-runtime/program-v1 --output-root /absolute/fresh/source-controls
 ```
 
 These checks use invented files and public source only; they do not read released neural data, private answers, Docker or network resources. The unchanged full input copy and new authentic grading invocation remain unrun.
@@ -78,7 +78,7 @@ Submission receipts bind the scorer hash. An old receipt is refused by this revi
 Run the eight relocated numerical regression methods plus the scorer-receipt boundary check, using invented values only, from the repository root:
 
 ```sh
-python3.11 -I -S -B components/purkinje-artifacts/test_numeric_score.py
+python3.11 -I -S -B benchmarks/paper/PAPER-FIND-REP-013/implementations/artifacts/test_numeric_score.py
 ```
 
 The old scorer in `regression_fixtures/old_numeric_score.py` is a pinned regression fixture only. Production loads the single current scorer from `program-v1`; fixtures contain no authentic reconstructions or reference answers.
