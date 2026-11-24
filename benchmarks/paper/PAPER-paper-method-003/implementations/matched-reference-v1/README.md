@@ -255,3 +255,17 @@ Sources: [pinned official repository](https://github.com/elouayas/reve_eeg/tree/
 and [final paper](https://proceedings.neurips.cc/paper_files/paper/2025/file/20a917f77773ac0fa8bea2bdd6606b66-Paper-Conference.pdf).
 All source work here used the existing authenticated cache; no network refresh
 was performed.
+
+## Observe execution costs without changing the recipe
+
+The optional [phase observer](OBSERVATION.md) wraps the maintained fit or
+compatibility entrypoint and writes a separate bounded cost trace. It leaves
+model calls and RNG behavior unchanged and does not rewrite scientific results.
+Timing metadata can include observer overhead. Its generated fit-parity controls
+do not qualify authentic tensor parity or replace the retained 8 GiB failure.
+No new scientific workload is selected by the observer.
+
+The [preprocessing clarification](PREPROCESSING.md) separates candidate method
+choices from fixed cases, observations and evaluation rules. A different
+resampling method alone does not make improvement a different task; historical
+Table 12 reproduction and a qualified released-method comparison remain distinct.
