@@ -1205,7 +1205,7 @@ jobs:
           mkdir "$scratch/fixtures"
           export TMPDIR="$scratch/fixtures"
           status=0
-          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-077/implementations/full32-image-uncertainty-v1/test_adapter.py --repository-root "$GITHUB_WORKSPACE" >"$scratch/stdout.log" 2>"$scratch/stderr.log" || status=$?
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-077/implementations/full32-image-uncertainty-v1/test_adapter.py --repository-root "$GITHUB_WORKSPACE" --scratch-root "$scratch/fixtures" >"$scratch/stdout.log" 2>"$scratch/stderr.log" || status=$?
           cat "$scratch/stdout.log"
           cat "$scratch/stderr.log" >&2
           test "$status" -eq 0

@@ -20,6 +20,7 @@ HERE = Path(__file__).resolve().parent
 spec = importlib.util.spec_from_file_location('erp_image_adapter_test_subject', HERE / 'adapter.py')
 a = importlib.util.module_from_spec(spec); spec.loader.exec_module(a)
 MODULES = None
+SCRATCH_ROOT = None
 WRITE_BYTES = 0
 
 
@@ -185,7 +186,8 @@ class EvaluationControls(unittest.TestCase):
         identifiers = ids(); quality = {'coverage': [0.] * 30, 'baseline_coverage': [1., 1.],
             'shared_weights': [0.] * 30, 'shared_support_fraction': 0., 'no_shared_support': True}
         events = []; projection = {'generated': True}; png = b'generated-rendered-png'
-        with tempfile.TemporaryDirectory(dir=HERE.parent) as temp:
+        # Evaluation output must be outside the protected source checkout.
+        with tempfile.TemporaryDirectory(dir=SCRATCH_ROOT) as temp:
             root = Path(temp); frozen = root/'frozen'; public = root/'private/public'; arm_root = root/'arm'
             descriptor = a.pin(b'generated')
             limit = {'read_bytes': 64*1024**2, 'write_bytes': 1024**2, 'work_seconds': 60,
@@ -359,9 +361,15 @@ class CapturedChildControls(unittest.TestCase):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(); parser.add_argument('--repository-root', required=True)
+    parser.add_argument('--scratch-root', type=Path, required=True)
     parser.add_argument('--case', action='append')
     args = parser.parse_args()
     MODULES = a.dependencies(args.repository_root)
+    a.need(args.scratch_root.is_absolute(), 'Absolute scratch directory required')
+    SCRATCH_ROOT = a.ordinary(args.scratch_root.resolve(strict=True))
+    a.need(SCRATCH_ROOT.is_dir() and all(
+        not SCRATCH_ROOT.is_relative_to(root) and not root.is_relative_to(SCRATCH_ROOT)
+        for root in (HERE, MODULES['root'])), 'Scratch directory must be disjoint from source roots')
     suite = (unittest.TestSuite(unittest.defaultTestLoader.loadTestsFromName(name, sys.modules[__name__])
              for name in args.case) if args.case else unittest.defaultTestLoader.loadTestsFromModule(sys.modules[__name__]))
     result = unittest.TextTestRunner(verbosity=2).run(suite)
