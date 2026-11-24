@@ -22,7 +22,18 @@ ERP_REFERENCE_FAILURE = 'benchmarks/neural/NEURAL-077/docs/full32-image-referenc
 ERP_REFERENCE_NARRATIVE = ERP_REFERENCE_FAILURE.removesuffix('.json') + '.md'
 ERP_UNCERTAINTY_CALIBRATION = 'benchmarks/neural/NEURAL-077/docs/full32-image-uncertainty-calibration-20261124.json'
 ERP_UNCERTAINTY_NARRATIVE = ERP_UNCERTAINTY_CALIBRATION.removesuffix('.json') + '.md'
-PUBLIC_ATTACHMENTS = (ERP_NARRATIVE, ERP_REFERENCE_NARRATIVE, ERP_UNCERTAINTY_NARRATIVE)
+LANGUAGE_REFERENCE_HOME = 'benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/trusted-figure3b-reference-20261124/'
+LANGUAGE_REFERENCE = LANGUAGE_REFERENCE_HOME + 'RESULT.json'
+LANGUAGE_REFERENCE_PROVENANCE = LANGUAGE_REFERENCE_HOME + 'PROVENANCE.json'
+LANGUAGE_REFERENCE_NARRATIVE = LANGUAGE_REFERENCE_HOME + 'README.md'
+UMBRAE_RESCORE = 'benchmarks/paper/PAPER-paper-method-042/docs/released-author-reference-rescore-20261124.v1.json'
+UMBRAE_RESCORE_NARRATIVE = 'benchmarks/paper/PAPER-paper-method-042/docs/released-author-reference-rescore-20261124.md'
+ANNOTATION_PROVENANCE = 'benchmarks/paper/PAPER-paper-method-013/docs/provenance/annotation-comparison-20261124/PROVENANCE_RESULT.json'
+ANNOTATION_NARRATIVE = ANNOTATION_PROVENANCE.removesuffix('.json') + '.md'
+PUBLIC_JSON_ATTACHMENTS = (LANGUAGE_REFERENCE_PROVENANCE,)
+PUBLIC_ATTACHMENTS = (ERP_NARRATIVE, ERP_REFERENCE_NARRATIVE, ERP_UNCERTAINTY_NARRATIVE,
+                      LANGUAGE_REFERENCE_PROVENANCE, LANGUAGE_REFERENCE_NARRATIVE,
+                      UMBRAE_RESCORE_NARRATIVE, ANNOTATION_NARRATIVE)
 HISTORY = 'docs/provenance/execution/historical-evidence-v1/profiles.json'
 DIRECT = 'benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json'
 VIEWER = 'benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json'
@@ -43,7 +54,8 @@ SMC_ACTUAL_PANEL = '3b160dfb4aef8c68cbae8d4a02d5933576a77e4bc47a7c3a5b484369caf9
 SMC_PUBLIC_PANEL = '209a15e2189499a9e68264df5c9f81057dd919564d98a46fb64d75b3f39af2f3'
 PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR, REVE_PREPARATION, DEEP_PREPARATION,
                   SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION, SMC_CALIBRATION, SMC_RESCORE, SMC_MATERIALS,
-                  ERP_PILOT, ERP_REFERENCE_FAILURE, ERP_UNCERTAINTY_CALIBRATION)
+                  ERP_PILOT, ERP_REFERENCE_FAILURE, ERP_UNCERTAINTY_CALIBRATION,
+                  LANGUAGE_REFERENCE, UMBRAE_RESCORE, ANNOTATION_PROVENANCE)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -127,7 +139,16 @@ def read_bytes(root, relative):
 def read(root, relative):
     """Read a JSON report from the fixed projection allowlist."""
     require(relative in PUBLIC_REPORTS, 'JSON report is not allowlisted')
-    captured = read_bytes(root, relative)
+    return decode_public_document(read_bytes(root, relative))
+
+
+def read_json_attachment(root, relative):
+    """Parse only explicitly named JSON support; never an embedded locator."""
+    require(relative in PUBLIC_JSON_ATTACHMENTS, 'JSON attachment is not allowlisted')
+    return decode_public_document(read_bytes(root, relative))
+
+
+def decode_public_document(captured):
     if captured is None:
         return None
     raw, source = captured
@@ -1576,6 +1597,331 @@ def erp_uncertainty_records(doc, source, narrative):
     return rows
 
 
+def bound_public_narrative(captured, relative, size, sha256):
+    require(captured is not None, 'reference/provenance narrative is missing')
+    require(captured[1] == {'path': relative, 'bytes': size, 'sha256': sha256},
+            'reference/provenance narrative pin mismatch')
+    return captured[1]
+
+
+def bounded_public_metric(value, lower=0, upper=1):
+    value = number(value)
+    require(lower <= value <= upper, 'reference/provenance metric outside its units')
+    return value
+
+
+def language_reference_records(doc, source, provenance, narrative):
+    require(doc.get('schema') == 'language-trusted-figure3b-public-aggregate/v1'
+            and doc.get('task_id') == 'PAPER-ROOT-ADD-001' and doc.get('attempt') == '003'
+            and doc.get('status') == 'complete_trusted_selected_reference'
+            and doc.get('scientific_role') == 'trusted_operator_author_reference'
+            and doc.get('measured_date') == '2026-11-24', 'unsupported trusted language reference')
+    narrative = bound_public_narrative(narrative, LANGUAGE_REFERENCE_NARRATIVE, 4122,
+        '1de2ee174e50fe50d1e94088ca80bfaf580cfc81596192af66c5652cc28b889c')
+    require(provenance is not None, 'trusted language lifecycle provenance is missing')
+    prior, prior_source = provenance
+    require(prior_source['path'] == LANGUAGE_REFERENCE_PROVENANCE
+            and prior.get('schema') == 'language-trusted-figure3b-public-provenance/v1'
+            and prior.get('task_id') == doc['task_id'] and prior.get('measured_date') == doc['measured_date'],
+            'trusted language provenance association differs')
+    scope = obj(doc['scope'])
+    coverage = exact_counts(scope, {'cells': 42, 'sessions': 14, 'people': 8,
+        'fresh_Ridge_fits': 5685, 'feature_columns': 30, 'layer_zero_based': 5}, 'trusted language scope')
+    require(scope.get('original_figure') == '3b' and scope.get('family') == 'context'
+            and scope.get('field') == 'population' and number(scope['Ridge_alpha']) == .01
+            and scope.get('lag_indices') == [17, 18, 19] and scope.get('lag_bins') == [-3, -2, -1],
+            'trusted language original endpoint differs')
+    exact_counts(doc, {'defined_cell_pairs': 42, 'cell_receipts_verified': 42,
+                      'fresh_prediction_files_verified': 42, 'defined_session_pairs': 14}, 'trusted language completion')
+    require(doc.get('aggregation') == 'Pooled Pearson across original held-qid prediction rows per cell; mean three fixed lags per session; equal mean of all14sessions.'
+            and all(doc.get(key) is True for key in ('all_contexts_and_fit_totals_verified',
+                'prediction_and_receipt_sha256_verification', 'source_reference_read_after_all_fits')),
+            'trusted language original aggregation or fit admission differs')
+    claims = obj(doc['claims'])
+    require(claims.get('complete_selected_trusted_Figure3b_reference') is True
+            and all(claims.get(key) is False for key in ('AI_improvement', 'AI_result', 'SOTA',
+                'arbitrary_participant_isolation_exercised', 'full224_array_or_whole_paper_reproduction',
+                'matched_AI_information_arms_compared', 'participant_NativeProvider_qualified')),
+            'trusted operator result cannot promote participant or whole-paper qualification')
+    attempts = prior['attempt_history']
+    require(type(attempts) is list and len(attempts) == 3, 'all three language execution attempts required')
+    projected = []
+    for index, (attempt, fits) in enumerate(zip(attempts, (0, 0, 5685)), 1):
+        attempt = obj(attempt)
+        require(attempt.get('attempt') == f'{index:03d}' and integer(attempt['fits']) == fits
+                and attempt.get('all_spawned_process_scopes_closed') is True,
+                'trusted language attempt identity, fit or closure differs')
+        if index < 3:
+            require(integer(attempt['authentic_scientific_input_body_reads']) == 0,
+                    'pre-worker language failures cannot acquire scientific reads')
+        if index == 1:
+            require(attempt.get('container_created') is False, 'first language failure was before container creation')
+        if index == 2:
+            require(attempt.get('container_created') is True and attempt.get('container_started') is False
+                    and attempt.get('owned_container_removed_absent') is True,
+                    'second language failure must remain a closed prestart refusal')
+        if index == 3:
+            require(attempt.get('scientific_source_retuned') is False
+                    and attempt.get('owned_container_removed_absent') is True,
+                    'completed language replay cannot retune scientific source')
+        projected.append({'attempt': f'{index:03d}', 'estimator_fits': fits,
+            'status': ('failed_before_container', 'failed_before_worker', 'complete_trusted_reference')[index - 1]})
+    author = obj(prior['provided_author_reference'])
+    require(author.get('read_into_predictor') is False and author.get('read_only_after_all5685fits') is True
+            and author.get('sha256') == 'd822f284c2d781f920841705a63fec38d3267ee5c62e5dd5635272cf087e49c9',
+            'trusted language reference must remain outside predictor inputs')
+    completion = obj(doc['completion'])
+    require(completion.get('inner_owner') == completion.get('outer_owner') == 'complete'
+            and completion.get('native_controller') == 'succeeded'
+            and completion.get('oom_killed') is False
+            and all(completion.get(key) is True for key in ('all_bounded_stdout_stderr_streams_closed',
+                'controller_reaped_and_process_group_absent', 'owned_container_removed_and_absent')),
+            'trusted language owned closure differs')
+    exact_counts(completion, {'scientific_worker_exit_code': 0, 'owned_Docker_CLI_scopes_closed': 8},
+                 'trusted language owned closure')
+    fresh = bounded_public_metric(doc['fresh_reference_equal_session_mean'], -1, 1)
+    provided = bounded_public_metric(doc['provided_author_equal_session_mean'], -1, 1)
+    paired = bounded_public_metric(doc['equal_session_paired_mean_delta'], -2, 2)
+    maximum = bounded_public_metric(doc['max_absolute_cell_difference'], 0, 2)
+    require(abs(fresh - provided) <= maximum + 1e-15 and abs(paired) <= maximum,
+            'trusted language paired/grand mean discrepancies contradict cell bounds')
+    worker, outer = number(doc['worker_elapsed_seconds']), number(doc['outer_elapsed_seconds'])
+    require(0 <= worker <= outer, 'trusted language worker/outer clocks differ')
+    runtime = obj(prior['numerical_runtime'])
+    require(runtime.get('python') == '3.11.3'
+            and runtime.get('versions') == {'numpy': '1.24.3', 'scipy': '1.10.1', 'sklearn': '1.2.2'}
+            and type(runtime.get('loaded_pools')) is list and len(runtime['loaded_pools']) == 3
+            and all(integer(pool['num_threads']) == 1 for pool in runtime['loaded_pools']),
+            'trusted language historical runtime differs')
+    row = record('language-trusted-figure3b-reference-20261124', 'PAPER-ROOT-ADD-001',
+        'trusted_operator_reference', source, '/',
+        'Complete selected Figure 3b trusted reference: 42 cells, 14 sessions, eight people and 5,685 fresh Ridge fits; '
+        'two earlier zero-fit failures remain. Numerical reference agreement is not participant or whole-paper qualification.',
+        'trusted_operator_original_contextual_population_figure3b', [
+            'Eight people are the clusters; cells, sessions and fits are distinct units.',
+            'Original retrospective preprocessing, public exposure and the 579-versus-567 unit issue remain.',
+            'The paired mean difference has its own reduction; it is not subtraction of serialized grand means.',
+            'No participant NativeProvider, fresh-exec isolation, full224-array reconstruction, AI improvement or readiness claim.'])
+    row.update(coverage=dict(coverage, engineering_execution_attempts=3, preworker_failures=2,
+                            complete_reference_endpoints=1), attempts=projected,
+        metrics=[metric('equal_session_mean_Pearson', fresh, 'higher', {'provided_author_reference': provided})],
+        comparison={'equal_session_paired_mean_delta': paired, 'max_absolute_cell_difference': maximum,
+                    'new_acceptance_tolerance_or_improvement_margin': False},
+        timing={'worker_seconds': worker, 'outer_seconds': outer},
+        reference_read_after_all_fits=True, attachments=[prior_source, narrative], narrative=narrative,
+        solver_attempts_recorded=0, full_task_completed=False, participant_provider_qualified=False)
+    return [row]
+
+
+def umbrae_reference_records(doc, source, narrative):
+    require(doc.get('schema') == 'umbrae-released-author-reference-rescore-evidence/v1'
+            and doc.get('task_id') == 'PAPER-paper-method-042'
+            and doc.get('experiment_id') == 'umbrae-author-reference-rescore-20261124-001'
+            and doc.get('status') == 'complete_released_author_output_rescore',
+            'unsupported UMBRAE released-output reference')
+    narrative = bound_public_narrative(narrative, UMBRAE_RESCORE_NARRATIVE, 3028,
+        '36264bc9267ee88b04c1d2253170569e8579b961798ad96f52620f1098ed69ba')
+    subjects = ['S1', 'S2', 'S5', 'S7']
+    groups = {'All': 2419, 'Salient': 1343, 'Salient Creatures': 700, 'Salient Objects': 643, 'Inconspicuous': 1076}
+    missing = {'S1': 8, 'S2': 1, 'S5': 2, 'S7': 1}
+    thresholds = ('0.3', '0.5', '0.7')
+    require(doc.get('subject_order') == subjects and doc.get('source_seeds') == [0, 1]
+            and all(type(seed) is int for seed in doc['source_seeds'])
+            and integer(doc['canonical_keyed_seed']) == 0 and doc.get('thresholds') == [.3, .5, .7]
+            and doc.get('threshold_comparison') == 'strict greater-than'
+            and doc.get('box_selection') == 'First reference box and first extracted prediction; original within-category order unchanged.',
+            'UMBRAE source/keyed selection differs')
+    population = obj(doc['population'])
+    exact_counts(population, {'images': 982, 'boxes': 5829, 'queries': 2419}, 'UMBRAE population')
+    exact_counts(population['group_counts'], groups, 'UMBRAE overlapping groups')
+    require(set(population['group_counts']) == set(groups)
+            and population.get('native_index_join_only') is True
+            and population.get('NSD_COCO_stimulus_join_authenticated') is False
+            and doc.get('source_commit_dates_not_proof_of_public_release_or_table_production') is True,
+            'UMBRAE released-output result cannot resolve historical/stimulus lineage')
+    require(integer(doc['source_metric_cells_per_seed']) == 80 and doc.get('round_to_published_two_decimal_percent') is True,
+            'complete UMBRAE source panels required')
+    panels, keyed, diagnostics = obj(doc['source_panels']), obj(doc['canonical_keyed_float64_panel']), obj(doc['canonical_keyed_float32_diagnostics'])
+    require(set(panels) == {'0', '1'} and set(keyed) == set(diagnostics) == set(subjects),
+            'complete source seeds and keyed subject panels required')
+    primary, reported = obj(doc['recovered_primary_percent_by_seed']), obj(doc['published_v2_primary_percent'])
+    require(set(primary) == {'0', '1'} and set(reported) == set(subjects), 'UMBRAE primary vector differs')
+    for panel in (*panels.values(), keyed, diagnostics):
+        require(set(obj(panel)) == set(subjects), 'complete UMBRAE subject panel required')
+        require(all(set(obj(panel[subject])) == set(groups) for subject in subjects), 'complete overlapping group panel required')
+    seed_differences, keyed64_differences, precision_differences = [], [], []
+    for subject in subjects:
+        for group, count in groups.items():
+            left, right, canonical, diag = (obj(value) for value in (panels['0'][subject][group],
+                panels['1'][subject][group], keyed[subject][group], diagnostics[subject][group]))
+            accuracy = []
+            for cell in (left, right, canonical):
+                require(integer(cell['query_count']) == count, 'UMBRAE failed outputs must stay in full denominators')
+                bounded_public_metric(cell['mean_iou'])
+                values = obj(cell['accuracy']); require(set(values) == set(thresholds), 'all UMBRAE thresholds required')
+                accuracy.append({key: bounded_public_metric(values[key]) for key in thresholds})
+                require(accuracy[-1]['0.3'] >= accuracy[-1]['0.5'] >= accuracy[-1]['0.7'],
+                        'UMBRAE threshold accuracy is not monotone')
+            for cell in (left, right):
+                require(cell.get('status') == 'scored' and integer(cell['target_failed']) == 0
+                        and integer(cell['failed']) <= count, 'UMBRAE source panel status or failure denominator differs')
+            invalid = integer(canonical['missing_or_invalid'])
+            require(invalid == integer(left['failed']) == integer(right['failed']) <= count,
+                    'UMBRAE missing/empty outputs differ across scoring views')
+            require(diag.get('source_positional_pairing_compatible') is True, 'UMBRAE pair alignment differs')
+            bounds = obj(diag['threshold_decision_disagreements_float32_vs_float64'])
+            exact_counts(bounds, {key: 0 for key in thresholds}, 'UMBRAE precision decisions')
+            require(set(bounds) == set(thresholds), 'complete UMBRAE precision thresholds required')
+            keyed32 = {key: bounded_public_metric(obj(diag['keyed_float32_accuracy'])[key]) for key in thresholds}
+            require(set(diag['keyed_float32_accuracy']) == set(thresholds)
+                    and accuracy[0] == accuracy[1] == accuracy[2] == keyed32,
+                    'reported UMBRAE accuracy agreement contradicts panels')
+            bounded_public_metric(diag['keyed_float32_mean_iou'])
+            statuses = obj(diag['keyed_prediction_status_counts'])
+            require(set(statuses) <= {'valid', 'empty_extraction'} and 'valid' in statuses
+                    and integer(statuses['valid']) + integer(statuses.get('empty_extraction', 0)) == count
+                    and integer(statuses.get('empty_extraction', 0)) == invalid,
+                    'UMBRAE empty answers cannot disappear from keyed counts')
+            if group == 'All':
+                require(invalid == missing[subject], 'UMBRAE full-denominator empty-answer count differs')
+            seed_differences.append(abs(left['mean_iou'] - right['mean_iou']))
+            keyed64_differences.append(abs(left['mean_iou'] - canonical['mean_iou']))
+            precision_differences.append(bounded_public_metric(diag['max_abs_iou_float32_minus_float64']))
+        for seed in ('0', '1'):
+            require(set(obj(primary[seed])) == set(subjects), 'complete UMBRAE primary subject vector required')
+            percent = bounded_public_metric(primary[seed][subject], 0, 100)
+            require(abs(percent - 100 * panels[seed][subject]['All']['accuracy']['0.5']) <= 1e-12
+                    and round(percent, 2) == bounded_public_metric(reported[subject], 0, 100),
+                    'UMBRAE fraction/percent primary result mismatch')
+    comparison = obj(doc['ordering_and_precision_comparison'])
+    comparison_counts = exact_counts(comparison, {'source_accuracy_cells_compared': 60,
+        'source_seed_accuracy_cell_differences': 0, 'source_seed0_vs_keyed_float32_accuracy_cell_differences': 0,
+        'float32_vs_float64_threshold_decision_differences_across_overlapping_groups': 0,
+        'subject_group_traversals_changed_between_seeds': 20}, 'UMBRAE ordering/precision comparison')
+    exact_counts(comparison['all_subject_missing_or_invalid_counts'], missing, 'UMBRAE missing outputs')
+    require(comparison.get('all_query_pairs_aligned_both_seeds') is True
+            and number(comparison['maximum_source_seed_mean_iou_difference']) == max(seed_differences) > 0
+            and number(comparison['maximum_source_seed0_vs_keyed64_mean_iou_difference']) == max(keyed64_differences)
+            and number(comparison['maximum_individual_iou_float32_vs_float64_difference']) == max(precision_differences),
+            'UMBRAE mean/precision summary contradicts complete panels')
+    runtime = obj(doc['runtime'])
+    require(runtime.get('all_owned_scopes_closed') is True and integer(runtime['retries']) == 0
+            and runtime.get('historical_runtime_authenticated') is False
+            and runtime.get('RAM_is_cooperative_plan_not_measured_peak_or_OS_limit') is True,
+            'UMBRAE runtime scope cannot become historical or hard-quota qualification')
+    wall = number(runtime['elapsed_complete_operation_seconds']); require(wall >= 0, 'invalid UMBRAE wall time')
+    row = record('umbrae-released-output-rescore-20261124', 'PAPER-paper-method-042',
+        'released_output_scoring_reference', source, '/recovered_primary_percent_by_seed',
+        'Complete released-output scoring for four subjects and 2,419 query identities per subject: two source-seed '
+        '80-cell panels plus one keyed float64 panel. Rounding agreement is not new fMRI inference or universal scorer equivalence.',
+        'trusted_released_author_outputs_category_conditioned_grounding', [
+            'The five category groups overlap; source seeds and panels are repeated diagnostics, not independent biological replicates.',
+            'All empty outputs remain in denominators. No model inference, fitting, candidate/AI result or readiness increment.',
+            'All 60 accuracy cells agree, while mean-IoU reduction differences remain; not all 80 cells are bit-identical.',
+            'Agreement is specific to these released outputs and does not prove interchangeable scoring for future candidates.',
+            'Historical table-producing identity, native stimulus joins and participant isolation remain unresolved.'])
+    row.update(coverage={'rescore_operations': 1, 'subjects': 4, 'query_identities_per_subject': 2419,
+        'subject_query_evaluations': 9676, 'source_seed_passes': 2, 'source_metric_cells_per_pass': 80,
+        'source_metric_cells_across_passes': 160, 'keyed_float64_panels': 1, 'keyed_metric_cells': 80},
+        metrics=[metric(subject + '_All_IoU_gt_0.5_percent', primary['0'][subject], 'higher',
+                        {'paper_rounded_percent': reported[subject]}) for subject in subjects],
+        diagnostics=dict(comparison_counts, maximum_source_seed_mean_iou_difference=max(seed_differences),
+            maximum_source_vs_keyed64_mean_iou_difference=max(keyed64_differences), empty_answers_by_subject=missing,
+            all_80_cells_bit_identical=False, universal_scorer_equivalence=False),
+        narrative=narrative, native_wall_seconds=wall, solver_attempts_recorded=0,
+        reference_fits=0, new_model_inference_runs=0, full_task_completed=False)
+    return [row]
+
+
+def annotation_provenance_records(doc, source, narrative):
+    require(doc.get('schema') == 'deepcaimx-four-pair-annotation-provenance-result/v1'
+            and doc.get('task') == 'PAPER-paper-method-013' and doc.get('date') == '2026-11-24'
+            and doc.get('result') == 'complete_exact_binary_annotation_relation',
+            'unsupported annotation provenance result')
+    narrative = bound_public_narrative(narrative, ANNOTATION_NARRATIVE, 2666,
+        'e7f45da139ac7e0e1cb212823ebbd996e250cb337b7e9c6ccb84eb5c7e6e108a')
+    population = obj(doc['population'])
+    exact_counts(population, {'recording_count': 4, 'original_paper_recording_count': 10,
+                             'ROIs_per_source_population': 1050}, 'annotation population')
+    require(population.get('full_original_paper_cohort_qualified') is False
+            and doc.get('reproduction_or_improvement_success') is False
+            and integer(doc['benchmark_ready_increment']) == 0,
+            'annotation relation cannot promote model or whole-paper qualification')
+    recordings = {'501271265': 237, '501704220': 176, '524691284': 355, '531006860': 282}
+    declared = population['recordings']
+    require(type(declared) is list and len(declared) == 4
+            and {text(item['recording_id']): integer(item['ROIs_per_source']) for item in declared} == recordings,
+            'complete selected annotation recording counts required')
+    conditions = [(orientation, x, y) for orientation in ('as_stored', 'spatial_axes_swapped')
+                  for x, y in ((0, 0), (0, 1), (1, 0), (1, 1))]
+    def condition_key(row):
+        offset = row['zero_padding_offset']
+        require(type(offset) is list and len(offset) == 2 and all(type(x) is int for x in offset),
+                'annotation offsets must be exact integer pairs')
+        key = (row['orientation'], *offset)
+        require(key in conditions, 'annotation condition outside prespecified set')
+        return key
+    cohort = doc['prespecified_conditions']
+    require(type(cohort) is list and len(cohort) == 8 and [condition_key(x) for x in cohort] == conditions,
+            'all eight unique annotation conditions required')
+    pairs = doc['complete_per_recording_conditions']
+    require(type(pairs) is list and len(pairs) == 4
+            and [item['recording_id'] for item in pairs] == list(recordings), 'all four unique annotation pairs required')
+    totals = {key: [0, 0] for key in conditions}
+    for pair in pairs:
+        count = recordings[pair['recording_id']]
+        require(integer(pair['ROIs_per_source']) == count, 'annotation pair denominator differs')
+        rows = pair['conditions']
+        require(type(rows) is list and len(rows) == 8 and [condition_key(x) for x in rows] == conditions,
+                'all 32 unique annotation pair-conditions required')
+        for cell, key in zip(rows, conditions):
+            expected = count if key == ('spatial_axes_swapped', 0, 0) else 0
+            exact_counts(cell, {'roi_count_per_source': count, 'ordered_matching_roi_count': expected,
+                'multiset_matching_roi_count_per_source': expected, 'ordered_nonmatching_roi_count': count - expected,
+                'deep_nonmatching_roi_count': count - expected, 'st_nonmatching_roi_count': count - expected},
+                'annotation exact relation')
+            require(cell.get('ordered_whole_mask_equal') is (expected == count)
+                    and cell.get('multiplicity_preserving_multiset_equal') is (expected == count),
+                    'annotation equality flags contradict exact counts')
+            for family in ('deep_duplicates', 'st_duplicates'):
+                exact_counts(cell[family], {'unique_mask_count': count, 'duplicate_excess_count': 0,
+                    'duplicate_mask_class_count': 0, 'rois_in_duplicate_classes_count': 0}, 'annotation multiplicity')
+            totals[key][0] += cell['ordered_matching_roi_count']
+            totals[key][1] += cell['multiset_matching_roi_count_per_source']
+    projected = []
+    for item, key in zip(cohort, conditions):
+        ordered, multiset = totals[key]
+        exact_counts(item, {'ordered_exact_matches': ordered, 'multiset_exact_matches_per_source': multiset},
+                     'annotation cohort relation')
+        require(item.get('whole_cohort_ordered_equal') is (ordered == 1050)
+                and item.get('whole_cohort_multiset_equal') is (multiset == 1050),
+                'annotation cohort equality contradicts complete pair sums')
+        projected.append({'orientation': key[0], 'zero_padding_offset': list(key[1:]),
+            'ordered_exact_matches': ordered, 'multiset_exact_matches_per_source': multiset})
+    validity = obj(doc['validity'])
+    require(all(validity.get(key) is True for key in ('all8sources_complete_finite_exact_binary',
+        'equality_is_complete_bytes_not_IoU_or_digest_only', 'every_prespecified_condition_retained',
+        'no_normalization_or_threshold', 'no_posthoc_condition_selection')),
+        'annotation exact binary/multiplicity/condition scope differs')
+    exact_counts(validity, {'duplicate_excess_per_source_pair': 0, 'nonfinite_or_nonbinary_values': 0}, 'annotation validity')
+    verification = obj(doc['verification'])
+    require(verification.get('native_complete') is True and integer(verification['native_attempts']) == 1,
+            'annotation operation must be complete and separate from model execution')
+    row = record('deepcaimx-annotation-representation-20261124', 'PAPER-paper-method-013',
+        'annotation_representation_provenance', source, '/prespecified_conditions',
+        'Four annotation pairs and all 1,050 ROIs per source match in order and multiplicity under axes swap plus '
+        'zero padding at (0,0); all eight declared conditions remain. This is annotation correspondence, not model performance.',
+        'operator_only_exact_annotation_representation_comparison', [
+            'The transform describes stored annotations, not raw movie coordinates or causal lineage.',
+            'The six other recordings, full ten-video endpoint, original frames/crop and N15/P9 checkpoint assembly remain open.',
+            'No segmentation F1, model fit, prediction, paper reproduction/improvement or readiness increment.'])
+    row.update(coverage={'native_comparisons': 1, 'recording_pairs': 4, 'source_arrays': 8,
+        'ROIs_per_source': 1050, 'cohort_conditions': 8, 'pair_conditions': 32},
+        conditions=projected, metrics=[], narrative=narrative, solver_attempts_recorded=0,
+        model_performance_assessed=False, causal_lineage_established=False, full_task_completed=False)
+    return [row]
+
+
 def load(root, task_ids=None):
     """Read optional known reports; reject malformed present reports.
 
@@ -1606,7 +1952,14 @@ def load(root, task_ids=None):
                               (ERP_REFERENCE_FAILURE, lambda doc, source: erp_reference_failure_records(
                                   doc, source, read_bytes(root, ERP_REFERENCE_NARRATIVE))),
                               (ERP_UNCERTAINTY_CALIBRATION, lambda doc, source: erp_uncertainty_records(
-                                  doc, source, read_bytes(root, ERP_UNCERTAINTY_NARRATIVE)))):
+                                  doc, source, read_bytes(root, ERP_UNCERTAINTY_NARRATIVE))),
+                              (LANGUAGE_REFERENCE, lambda doc, source: language_reference_records(doc, source,
+                                  read_json_attachment(root, LANGUAGE_REFERENCE_PROVENANCE),
+                                  read_bytes(root, LANGUAGE_REFERENCE_NARRATIVE))),
+                              (UMBRAE_RESCORE, lambda doc, source: umbrae_reference_records(doc, source,
+                                  read_bytes(root, UMBRAE_RESCORE_NARRATIVE))),
+                              (ANNOTATION_PROVENANCE, lambda doc, source: annotation_provenance_records(doc, source,
+                                  read_bytes(root, ANNOTATION_NARRATIVE)))):
         try:
             captured = read(root, relative)
             if captured is None:
@@ -1654,6 +2007,22 @@ def load(root, task_ids=None):
            for key in ('engineering_executions', 'reference_fits', 'query_capture_attempts',
                        'complete_query_captures', 'interrupted_query_captures', 'failed_query_captures',
                        'unattempted_queries', 'score_operations', 'scored_queries', 'complete_reference_calibrations')},
+        'trusted_operator_reference_reports': categories['trusted_operator_reference'],
+        **{'trusted_operator_reference_' + key: sum(row['coverage'][field] for items in records.values() for row in items
+                                                   if row['category'] == 'trusted_operator_reference')
+           for key, field in (('execution_attempts', 'engineering_execution_attempts'), ('preworker_failures', 'preworker_failures'),
+                              ('estimator_fits', 'fresh_Ridge_fits'), ('complete_endpoints', 'complete_reference_endpoints'),
+                              ('cells', 'cells'), ('sessions', 'sessions'), ('people', 'people'))},
+        'released_output_rescore_reports': categories['released_output_scoring_reference'],
+        **{'released_output_rescore_' + key: sum(row['coverage'][field] for items in records.values() for row in items
+                                                if row['category'] == 'released_output_scoring_reference')
+           for key, field in (('operations', 'rescore_operations'), ('subjects', 'subjects'),
+                              ('source_passes', 'source_seed_passes'), ('keyed_panels', 'keyed_float64_panels'),
+                              ('subject_query_evaluations', 'subject_query_evaluations'))},
+        'annotation_provenance_reports': categories['annotation_representation_provenance'],
+        **{'annotation_provenance_' + key: sum(row['coverage'][key] for items in records.values() for row in items
+                                              if row['category'] == 'annotation_representation_provenance')
+           for key in ('recording_pairs', 'ROIs_per_source', 'cohort_conditions', 'pair_conditions')},
         'authentic_engineering_reports': categories['authentic_input_materialization'] + categories['authentic_viewer_rendering'] + categories['authentic_viewer_transport'],
         'authentic_viewer_transport_reports': categories['authentic_viewer_transport'],
         'paper_source_preparation_reports': categories['paper_source_preparation'],
@@ -1699,5 +2068,12 @@ def load(root, task_ids=None):
                 'uncertainty_reference_query_capture_attempts': 'Capture attempts summed across operations, including interrupted/failed captures; not unique cases.',
                 'uncertainty_reference_scored_queries': 'Queries in complete scored reference calibrations only; unscored captures remain separate.',
                 'uncertainty_reference_complete_reference_calibrations': 'Complete exposed-development reference calibrations; not completed benchmarks or competence qualifications.',
+                'trusted_operator_reference_execution_attempts': 'Engineering attempts for the fixed trusted reference, including zero-fit pre-worker failures; not participant or AI attempts.',
+                'trusted_operator_reference_estimator_fits': 'Fresh Ridge estimator fits across 42 cells; eight people are the clusters, not 5685 independent people.',
+                'trusted_operator_reference_complete_endpoints': 'Complete selected trusted reference endpoints; not whole-paper or participant qualification.',
+                'released_output_rescore_subject_query_evaluations': 'Four subject outputs for 2419 shared query identities; not 9676 unique stimuli and not a sum of overlapping groups.',
+                'released_output_rescore_source_passes': 'Prespecified hash-seed scoring passes over frozen author outputs; no model inference or fits.',
+                'annotation_provenance_ROIs_per_source': 'ROIs across four selected recordings in each of two annotation families; not model predictions or F1 scores.',
+                'annotation_provenance_pair_conditions': 'All four pairs under eight prespecified representation conditions; repeated comparisons, not 32 recordings.',
                 'exploratory_programme_authoring_attempts': 'Generated programmes authored; query applications are counted separately.',
                 'exploratory_programme_query_applications': 'First applications of the frozen programme, including runtime failures.'}}

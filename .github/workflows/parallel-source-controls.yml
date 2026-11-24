@@ -317,6 +317,32 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-077/implementations/exploratory32-image-scorer-v1/controls/test_score_subset.py
+      - name: "Check UMBRAE released-reference rescoring with generated records"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import json, sys, unittest
+          expected_ids = ['test_reference_rescore.CompleteReferenceRouteControls.test_annotation_first_box_and_index_only_scope', 'test_reference_rescore.CompleteReferenceRouteControls.test_original_source_order_diagnostic_not_repaired', 'test_reference_rescore.CompleteReferenceRouteControls.test_pinned_input_mutation_and_duplicate_keys_refused', 'test_reference_rescore.CompleteReferenceRouteControls.test_review_missing_answers_fixed_denominator_and_source_behavior', 'test_reference_rescore.CompleteReferenceRouteControls.test_source_empty_extraction_and_no_null_repair', 'test_reference_rescore.CompleteReferenceRouteControls.test_symlink_input_refused']
+          suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-method-042/implementations/released-reference-rescore-v1/tests', pattern='test_reference_rescore.py')
+          def flatten(items):
+              for item in items:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual_ids = sorted(case.id() for case in flatten(suite))
+          assert actual_ids == expected_ids, (actual_ids, expected_ids)
+          assert suite.countTestCases() == 6, suite.countTestCases()
+          result = unittest.TextTestRunner(verbosity=2).run(suite)
+          assert result.testsRun == 6, result.testsRun
+          assert not result.skipped, result.skipped
+          assert not result.expectedFailures, result.expectedFailures
+          assert not result.unexpectedSuccesses, result.unexpectedSuccesses
+          print(json.dumps({'task': 'PAPER-paper-method-042', 'suite': 'released-reference-rescore-v1', 'tests_run': result.testsRun, 'skipped': len(result.skipped), 'generated_controls_only': True, 'scientific_qualification': False}, sort_keys=True))
+          sys.exit(0 if result.wasSuccessful() else 1)
+          PY
       - name: Check new stdlib endpoint and image reference interfaces
         if: matrix.group == 'stdlib-a'
         shell: bash

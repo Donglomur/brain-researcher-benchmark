@@ -42,7 +42,7 @@ class EvidenceTests(unittest.TestCase):
 
     def test_current_public_evidence_is_scoped_and_overlapping(self):
         result = evidence.load(ROOT)
-        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 11)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
         self.assertEqual(result['counts']['paper_calibration_attempts'], 4)
         self.assertEqual(result['counts']['neural_programme_attempts'], 4)
@@ -302,8 +302,8 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result['counts']['native_operator_control_reports'], 2)
         self.assertEqual(result['counts']['native_control_tasks'], 2)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
-        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
-        self.assertEqual(result['counts']['public_reports'], 18)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 11)
+        self.assertEqual(result['counts']['public_reports'], 21)
         rows = [row for items in result['records'].values() for row in items
                 if row['category'] == 'native_operator_control']
         self.assertEqual(len({row['id'] for row in rows}), 4)
@@ -364,15 +364,16 @@ class EvidenceTests(unittest.TestCase):
         for name in evidence.PUBLIC_REPORTS + evidence.PUBLIC_ATTACHMENTS:
             self.install(name)
         result = evidence.load(self.root)
-        self.assertEqual(result['counts']['public_reports'], 18)
-        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
+        self.assertEqual(result['counts']['public_reports'], 21)
+        self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 11)
         self.assertEqual(result['counts']['paper_source_preparation_reports'], 3)
         self.assertEqual(result['counts']['paper_source_preparation_tasks'], 3)
         self.assertEqual(result['counts']['authentic_engineering_reports'], 3)
         self.assertEqual(result['counts']['native_operator_controls'], 16)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
         reve = result['records']['PAPER-paper-method-003'][0]
-        deep = result['records']['PAPER-paper-method-013'][0]
+        deep = next(row for row in result['records']['PAPER-paper-method-013']
+                    if row['category'] == 'paper_source_preparation')
         self.assertEqual(reve['coverage']['edf_files'], 654)
         self.assertEqual(reve['coverage']['participants'], 109)
         self.assertEqual(reve['coverage']['epochs'], sum(reve['coverage']['split_epochs'].values()))

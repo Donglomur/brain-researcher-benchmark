@@ -25,6 +25,14 @@ calibrations have separate counts; none is an AI attempt or an additional benchm
 The report also separates root machine-search exposure from isolated target-last
 worker custody.
 
+The [trusted language reference](../../benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/trusted-figure3b-reference-20261124/README.md)
+now records the complete selected Figure 3b endpoint with fresh Ridge fits. The
+[UMBRAE released-output rescore](../../benchmarks/paper/PAPER-paper-method-042/docs/released-author-reference-rescore-20261124.md)
+records scoring of existing author outputs, and the
+[DeepCaImX annotation comparison](../../benchmarks/paper/PAPER-paper-method-013/docs/provenance/annotation-comparison-20261124/PROVENANCE_RESULT.md)
+records exact representation correspondence for four annotation pairs. These
+three results add no AI attempts, paper-improvement claims or readiness increments.
+
 The earlier [November 18 public progress update](public-progress-2026-11-18.md)
 links the 936-case ABR observation release, the Jaxley original-data diagnostic
 and the NEURAL-063 original metadata qualification. These earlier reports retain
@@ -82,10 +90,13 @@ evidence.
 | [SMC-RNN author calibration](../science/smc-author-calibration-20261117.md) | Both complete selected author predictions at 192 particles × 32 repeats and four original metrics per arm | Accepted reference outputs; noncausal supervisor remains failed. No candidate/AI study, paper-reproduction threshold, uncertainty estimate or SOTA claim |
 | [SMC-RNN frozen-reference rescoring, November 20](../science/smc-historical-rescore-20261120.md) | One shared bounded operation scored both complete existing predictions, with all four original metrics per model | Successful recorded evaluator and owned-process closure; six values match the earlier calibration exactly and velocity R² differs by ±1.11×10⁻¹⁶. No new author-model inference or AI attempt; the earlier failed supervisor remains failed |
 | [SMC-RNN version2 materials](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/official-assets-materials-v2-20261117.json) | Independently verified external 71-file pair, 31,393,479 bytes, with ten released assets only in the assisted condition | Material preparation and access separation; no participant episode, model/scoring run or scientific outcome |
+| [Trusted language Figure 3b reference, November 24](../../benchmarks/paper/PAPER-ROOT-ADD-001/docs/provenance/trusted-figure3b-reference-20261124/README.md) | Three engineering attempts, including two zero-fit failures; successful replay covers 42 cells, 14 sessions, eight people and 5,685 fresh Ridge fits | Equal-session mean Pearson 0.04512071156679768 matches the provided author mean, with cell differences at floating-point scale. Selected trusted reference completion; no participant NativeProvider, full 224-array or whole-paper reconstruction, AI result or improvement |
+| [UMBRAE released-author-output rescore, November 24](../../benchmarks/paper/PAPER-paper-method-042/docs/released-author-reference-rescore-20261124.md) | Four subjects, 2,419 query identities per subject; two prespecified 80-cell source panels and one keyed float64 panel; empty outputs retained | Primary percentages round to the reported vector. All 60 accuracy cells agree; mean-IoU differences remain. Released-output scoring support, without new fMRI inference, universal candidate-scorer equivalence, exact historical run identity or readiness |
+| [DeepCaImX annotation representation correspondence, November 24](../../benchmarks/paper/PAPER-paper-method-013/docs/provenance/annotation-comparison-20261124/PROVENANCE_RESULT.md) | Four pairs, 1,050 ROIs per source and all 32 pair-condition comparisons under eight declared conditions | Exact ordered and multiplicity-preserving equality occurs only with spatial axes swapped and zero padding at (0,0). Annotation provenance only; no causal lineage, movie coordinate/frame recipe, segmentation F1 or full ten-video qualification |
 | [NEURAL-096 Set–Go preparation](../../benchmarks/neural/NEURAL-096/implementations/full-set-go-v1/AUTHENTIC_PREPARATION.json) | All 204 declared nominal-800-ms training/validation trials, 54 released units and 81,311 spikes; saved-packet consistency audit | Complete declared observation preparation, with no fitted trajectory, prior contrast, uncertainty estimate, participant episode or model trial |
 | [Historical execution projections](../provenance/execution/historical-evidence-v1/README.md) | Three profiles, including four NEURAL-023 programme controls | Retained historical execution and interface-control evidence; current environments and complete scientific scope remain unqualified |
 
-These reports overlap. Together they reference **nine distinct registered task
+These reports overlap. Together they reference **eleven distinct registered task
 IDs**; source preparations, engineering controls and repeated reports do not create
 additional benchmarks. The earlier eight-attempt difficulty pilot evaluated neural
 programmes on exposed development people and has no direct/viewer AI predictions.

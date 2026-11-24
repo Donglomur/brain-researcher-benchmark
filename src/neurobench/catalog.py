@@ -1337,6 +1337,24 @@ def evidence_text(catalog, base=OUTPUT):
             f"**{counts['uncertainty_reference_complete_reference_calibrations']} complete exposed-development reference calibrations**. "
             'Capture totals repeat the same cohort across operations; no AI attempts or benchmarks are added. '
             'Root machine-search exposure remains distinct from isolated target-last worker custody. ')
+    reference_result_text = ''
+    if counts.get('trusted_operator_reference_reports', 0):
+        reference_result_text += (
+            f"The trusted language reference records **{counts['trusted_operator_reference_estimator_fits']} fresh Ridge fits** "
+            f"across {counts['trusted_operator_reference_cells']} cells, {counts['trusted_operator_reference_sessions']} sessions "
+            f"and {counts['trusted_operator_reference_people']} people, preserving "
+            f"{counts['trusted_operator_reference_preworker_failures']} earlier zero-fit failures. "
+            'This completes the selected trusted Figure 3b endpoint without participant or AI qualification. ')
+    if counts.get('released_output_rescore_reports', 0):
+        reference_result_text += (
+            f"The UMBRAE released-output rescore covers **{counts['released_output_rescore_subjects']} subjects**, "
+            f"{counts['released_output_rescore_source_passes']} source-seed panels and one keyed float64 panel. "
+            'Its 60 accuracy cells agree while mean-IoU differences remain; no new inference or universal future-scorer equivalence follows. ')
+    if counts.get('annotation_provenance_reports', 0):
+        reference_result_text += (
+            f"DeepCaImX annotation provenance covers **{counts['annotation_provenance_recording_pairs']} pairs and "
+            f"{counts['annotation_provenance_ROIs_per_source']} ROIs per source** under all eight declared conditions. "
+            'The exact stored-annotation correspondence is separate from raw-movie lineage, segmentation performance and readiness. ')
     return (f"Recorded public evidence covers **{counts['tasks_with_recorded_evidence']} distinct task IDs**. "
             f"The pilot reports **{counts['paper_calibration_attempts']} historical paper-calibration attempts** and "
             f"**{counts['neural_programme_attempts']} neural-programme attempts**; "
@@ -1344,7 +1362,7 @@ def evidence_text(catalog, base=OUTPUT):
             f"{counts.get('paper_source_preparation_reports', 0)} paper and "
             f"{counts.get('neural_source_preparation_reports', 0)} neural source-preparation reports, and "
             f"{counts['native_operator_controls']} native software controls are separate from model attempts. "
-            + probe_text + later_text + exploratory_text + reference_failure_text + uncertainty_reference_text
+            + probe_text + later_text + exploratory_text + reference_failure_text + uncertainty_reference_text + reference_result_text
             + markdown_link('Read the published evidence', 'docs/status/README.md', base)
             + ', or run `python3 scripts/neurobench.py evidence [TASK_ID]`. '
             'These records do not establish current runtime qualification or paper improvement.\n\n')

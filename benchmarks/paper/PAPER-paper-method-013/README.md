@@ -42,6 +42,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 
 Each record keeps the scope of its original report. It is not current runtime qualification.
 
+- [Annotation representation provenance](docs/provenance/annotation-comparison-20261124/PROVENANCE_RESULT.json): Four annotation pairs and all 1,050 ROIs per source match in order and multiplicity under axes swap plus zero padding at (0,0); all eight declared conditions remain. This is annotation correspondence, not model performance.
 - [Paper source preparation](../../../docs/status/deepcaimx-source-preparation-20261116.json): Authenticated conversion of all ten original manual ROI files and complete-panel identity/empty segmentation arithmetic controls, plus bounded movie-header and inert checkpoint configuration inspection. No movie-to-mask model or author baseline was executed.
 
 Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence PAPER-paper-method-013`. Programme evidence does not establish direct interpretation.
@@ -56,6 +57,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+- [Four-pair annotation comparison provenance result](docs/provenance/annotation-comparison-20261124/PROVENANCE_RESULT.md)
+- [Four-pair annotation comparison machine-readable evidence](docs/provenance/annotation-comparison-20261124/PROVENANCE_RESULT.json)
 
 ## Implementation artifacts
 

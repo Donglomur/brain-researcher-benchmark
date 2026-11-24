@@ -57,7 +57,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-FIND-REP-013](PAPER-FIND-REP-013/README.md) | Non-allometric expansion and enhanced compartmentalization of Purkinje cell dendrites in the human cerebellum | source_unresolved | ineligible | 6 | [manifest](PAPER-FIND-REP-013/implementations/registered-runtime/manifest.json) |
 | [PAPER-FIND-REP-014](PAPER-FIND-REP-014/README.md) | Predictive and instructive cerebellar encoding of dopamine reward drives motivated behavior | unavailable | unavailable | 1 | not linked |
 | [PAPER-FIND-REP-015](PAPER-FIND-REP-015/README.md) | Cerebellar neural populations orchestrate dopamine reward signaling with single-trial precision | unavailable | unavailable | 3 | not linked |
-| [PAPER-ROOT-ADD-001](PAPER-ROOT-ADD-001/README.md) | Mapping the neuronal building blocks of human language with language models | source_unresolved | design_ready | 26 | not linked |
+| [PAPER-ROOT-ADD-001](PAPER-ROOT-ADD-001/README.md) | Mapping the neuronal building blocks of human language with language models | source_unresolved | design_ready | 27 | not linked |
 | [PAPER-ROOT-ADD-002](PAPER-ROOT-ADD-002/README.md) | Non-invasive decoding of typed sentences from human brain activity | source_unresolved | source_unresolved | 2 | not linked |
 | [PAPER-ROOT-ADD-003](PAPER-ROOT-ADD-003/README.md) | Driving and suppressing the human language network using large language models | source_unresolved | source_unresolved | 4 | [manifest](PAPER-ROOT-ADD-003/implementations/registered-runtime/manifest.json) |
 | [PAPER-ROOT-ADD-004](PAPER-ROOT-ADD-004/README.md) | Respiration shapes the neural dynamics of successful remembering in humans | source_unresolved | source_unresolved | 2 | not linked |
@@ -94,7 +94,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [PAPER-paper-method-032](PAPER-paper-method-032/README.md) | MindEye2: Shared-Subject Models Enable fMRI-To-Image With 1 Hour of Data | source_unresolved | design_ready | 2 | not linked |
 | [PAPER-paper-method-033](PAPER-paper-method-033/README.md) | MindBridge: A Cross-Subject Brain Decoding Framework | design_ready | design_ready | 8 | not linked |
 | [PAPER-paper-method-034](PAPER-paper-method-034/README.md) | MARBLE: interpretable representations of neural population dynamics using geometric deep learning | source_unresolved | source_unresolved | 5 | [manifest](PAPER-paper-method-034/implementations/registered-runtime/manifest.json) |
-| [PAPER-paper-method-042](PAPER-paper-method-042/README.md) | UMBRAE: Unified Multimodal Brain Decoding | source_unresolved | design_ready | 3 | not linked |
+| [PAPER-paper-method-042](PAPER-paper-method-042/README.md) | UMBRAE: Unified Multimodal Brain Decoding | source_unresolved | design_ready | 4 | not linked |
 | [PAPER-paper-method-043](PAPER-paper-method-043/README.md) | NeuroPictor: Refining fMRI-to-Image Reconstruction via Multi-individual Pretraining and Multi-level Modulation | source_unresolved | source_unresolved | 3 | not linked |
 | [PAPER-paper-method-047](PAPER-paper-method-047/README.md) | Spike inference from calcium imaging data acquired with GCaMP8 indicators | source_unresolved | source_unresolved | 3 | [manifest](PAPER-paper-method-047/implementations/registered-runtime/manifest.json) |
 | [PAPER-paper-method-050](PAPER-paper-method-050/README.md) | Density-based longitudinal neuron tracking in high-density electrophysiological recordings | source_unresolved | design_ready | 3 | not linked |

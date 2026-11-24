@@ -6,6 +6,8 @@ eight people**, were authenticated and reduced using the frozen original
 Figure 3b–e procedures. This supplies a measured comparator for future attempts.
 It is not a new model run, independent AI reproduction, or improvement result.
 
+**24 November follow-up:** A [fresh trusted reference replay](../trusted-figure3b-reference-20261124/README.md) completed all 42 selected contextual population Figure 3b cells and 5,685 original Ridge fits on the historical numerical stack. Its mean and all cells agree with this provided reference to floating-point precision. This qualifies that selected operator replay; full 224-array training reproduction, participant NativeProvider qualification and AI improvement remain separate. The 17 November measurements and their historical scope below are unchanged.
+
 [REFERENCE.json](REFERENCE.json) is the complete saved report, unchanged from the
 single execution. [RECEIPT.json](RECEIPT.json) records source identities, costs,
 scope, evidence hashes and remaining limitations. Original source:
