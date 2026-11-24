@@ -41,3 +41,7 @@ The original 6,691-pair, 21-presynaptic historical query panel has not been reau
 The additional contract diagnostics—count-stratified residuals, zero/nonzero calibration, overdispersion, training-only negative-binomial sensitivity, matched functional shuffle and prespecified endpoint/spatial uncertainty—remain unimplemented and unqualified. Mean absolute count error is reported on the submitted means; the positive floor applies only to deviance.
 
 A processed correlation feature does not establish raw-neural understanding. Direct observation, typed viewer, case-adaptive investigation and frozen-program interpretation remain separate undelivered conditions. One mouse does not establish animal-population replication; observed zero counts are not certified biological nonconnections, and anatomical synapse counts are not physiological efficacy. No authentic-data preparation, model trial, training or scientific qualification occurred here.
+
+## Complete paired direct/program assessment
+
+[PAIRED_ACCESS.md](PAIRED_ACCESS.md) documents the operator-only `paired_access.py` comparison. It validates both candidate access modes against the same complete declared 6,691-pair/21-presynaptic roster before opening targets once, retains the unchanged count endpoint and fixed references, and reports signed direct-minus-program contrasts. Matching operator information bindings are declared equality, not evidence of actual delivery or access enforcement. No authentic cohort, participant runner or direct/program competence is qualified.
