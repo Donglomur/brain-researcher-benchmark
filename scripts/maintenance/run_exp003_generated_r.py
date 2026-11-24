@@ -261,7 +261,7 @@ def acquire_jsonlite(spec, output):
 
 
 def authenticate_sources(document, root):
-    names = (('namespace', 9), ('companion_namespace', 8))
+    names = (('namespace', 9), ('companion_namespace', 11))
     members = set()
     need(document['namespace'] != document['companion_namespace'], 'distinct source namespaces required')
     for key, count in names:
@@ -271,7 +271,7 @@ def authenticate_sources(document, root):
         exact_namespace(local(root, document[key]), expected)
         members.update(prefix + name for name in expected)
     need(set(document['source_files']) == members | {document['field_schema']}
-         and len(document['source_files']) == 18, 'only seventeen source files and field schema are admitted')
+         and len(document['source_files']) == 21, 'only twenty source files and field schema are admitted')
     for name, pin in document['source_files'].items():
         pinned(local(root, name), pin['bytes'], pin['sha256'])
 
@@ -284,7 +284,7 @@ def main():
     signal.signal(signal.SIGINT, cancel)
     root = Path(sys.argv[4]).resolve()
     output = Path(sys.argv[5]).absolute()
-    need(document['schema'] == 'exp003-generated-r-environment/v2', 'descriptor schema mismatch')
+    need(document['schema'] == 'exp003-generated-r-environment/v3', 'descriptor schema mismatch')
     need(not output.exists() and not output.is_symlink() and not output.resolve().is_relative_to(root), 'fresh external output required')
     for parent in output.parents:
         need(not parent.is_symlink(), 'output symlink refused')
@@ -321,7 +321,7 @@ def main():
     controls = container(['Rscript','--vanilla','tests/collector_controls.R',inside],'generated-controls.log')
     artifacts = container(['Rscript','--vanilla','tests/artifact_controls.R',companion_inside],'generated-artifact-controls.log',workdir=companion_inside)
     strict_result(parsed, controls, artifacts)
-    (output/'result.json').write_text(json.dumps({'scope':'generated_R_source_controls_only','source_commit':document['source_commit'],'parsed_files':7,'suites':{'collector':{'checks':219,'skips':0},'native_artifacts':{'checks':237,'skips':0}},'scientific_qualification':False,'authentic_data_reads':0,'author_expression_evaluation':False}, indent=2)+'\n')
+    (output/'result.json').write_text(json.dumps({'scope':'generated_R_source_controls_only','source_commit':document['source_commit'],'namespace_revision':document['namespace_revision'],'parsed_files':7,'suites':{'collector':{'checks':219,'skips':0},'native_artifacts':{'checks':237,'skips':0}},'scientific_qualification':False,'authentic_data_reads':0,'author_expression_evaluation':False}, indent=2)+'\n')
 
 
 if __name__ == '__main__':
