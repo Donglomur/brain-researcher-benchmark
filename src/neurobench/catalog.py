@@ -1547,6 +1547,41 @@ def render_shared(catalog):
     return {base + '/README.md': text.encode()}
 
 
+def render_recorded_evidence(records, task):
+    """Keep distinct records visible when their rendered category/link/scope collide."""
+    keys = [markdown_link(markdown_text(readable_label(record['category'])),
+                          record['source']['path'], task)
+            + ': ' + markdown_text(record['scope']) for record in records]
+    conditions = [record.get('condition') or '' for record in records]
+    counts = Counter(keys)
+    condition_counts = Counter((key, markdown_text(condition))
+                               for key, condition in zip(keys, conditions))
+    lines = []
+    for record, key, condition in zip(records, keys, conditions):
+        if counts[key] == 1:
+            lines.append('- ' + key + '\n')
+            continue
+        details = [condition] if condition else []
+        if not condition or condition_counts[(key, markdown_text(condition))] > 1:
+            details.append('record ' + record['id'])
+        label = readable_label(record['category']) + ' — ' + '; '.join(details)
+        lines.append('- ' + markdown_link(markdown_text(label), record['source']['path'], task)
+                     + ': ' + markdown_text(record['scope']) + '\n')
+    # A literal condition can itself resemble the fallback text above. Use
+    # source record identity first when the complete displayed lines still match.
+    display_counts = Counter(lines)
+    identity_keys = {key for key, line in zip(keys, lines) if display_counts[line] > 1}
+    for index, (record, key, condition) in enumerate(zip(records, keys, conditions)):
+        if key in identity_keys:
+            label = (readable_label(record['category']) + ' — record '
+                     + json.dumps(record['id'], ensure_ascii=False))
+            if condition:
+                label += '; condition: ' + condition
+            lines[index] = ('- ' + markdown_link(markdown_text(label), record['source']['path'], task)
+                            + ': ' + markdown_text(record['scope']) + '\n')
+    return ''.join(lines)
+
+
 def render_tracks(catalog):
     """Render browse entries without copying or relocating scientific sources."""
     files = {}
@@ -1900,10 +1935,7 @@ def render_tracks(catalog):
             if row.get('recorded_evidence'):
                 text += ('## Recorded public evidence\n\n'
                          'Each record keeps the scope of its original report. It is not current runtime qualification.\n\n')
-                for record in row['recorded_evidence']:
-                    text += ('- ' + markdown_link(markdown_text(readable_label(record['category'])),
-                                                  record['source']['path'], task)
-                             + ': ' + markdown_text(record['scope']) + '\n')
+                text += render_recorded_evidence(row['recorded_evidence'], task)
                 text += ('\nInspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence '
                          + row['id'] + '`. Programme evidence does not establish direct interpretation.\n\n')
             if row['specification_alias']:
