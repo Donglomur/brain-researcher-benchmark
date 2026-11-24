@@ -72,6 +72,42 @@ class MetricsTests(unittest.TestCase):
             self.assertAlmostEqual(result["roc_auc"], expected, places=14)
             self.assertEqual(result["balanced_accuracy"], .5)
 
+    def test_roc_curve_exact_threshold_groups(self):
+        result = scorer.binary_metrics([0, 0, 1, 1], [0, 1, 1, 1], [.1, .5, .5, .9])
+        self.assertEqual(result["roc_curve"], [
+            {"threshold": None, "false_positive_rate": 0., "true_positive_rate": 0.},
+            {"threshold": .9, "false_positive_rate": 0., "true_positive_rate": .5},
+            {"threshold": .5, "false_positive_rate": .5, "true_positive_rate": 1.},
+            {"threshold": .1, "false_positive_rate": 1., "true_positive_rate": 1.}])
+        tied = scorer.binary_metrics([0, 1], [0, 1], [0, 0])["roc_curve"]
+        self.assertEqual(len(tied), 2)
+        self.assertEqual(tied[-1], {"threshold": 0, "false_positive_rate": 1., "true_positive_rate": 1.})
+        # The sentinel must stay strict-JSON-safe even when the largest score
+        # cannot be increased to another finite floating-point value.
+        extreme = scorer.binary_metrics([0, 1], [0, 1], [-sys.float_info.max, sys.float_info.max])
+        json.dumps(extreme, allow_nan=False)
+        self.assertIsNone(extreme["roc_curve"][0]["threshold"])
+
+    def test_roc_curve_matches_threshold_oracle_and_auc(self):
+        rng = random.Random(968)
+        for _ in range(100):
+            labels = [0, 1] + [rng.randrange(2) for _ in range(rng.randrange(20))]
+            scores = [rng.randrange(-5, 6) for _ in labels]
+            result = scorer.binary_metrics(labels, [0] * len(labels), scores)
+            curve = result["roc_curve"]
+            self.assertEqual([point["threshold"] for point in curve[1:]],
+                             sorted(set(scores), reverse=True))
+            for point in curve[1:]:
+                selected = [score >= point["threshold"] for score in scores]
+                self.assertEqual(point["true_positive_rate"],
+                                 sum(hit and label == 1 for hit, label in zip(selected, labels)) / sum(labels))
+                self.assertEqual(point["false_positive_rate"],
+                                 sum(hit and label == 0 for hit, label in zip(selected, labels)) / labels.count(0))
+            area = sum((right["false_positive_rate"] - left["false_positive_rate"]) *
+                       (right["true_positive_rate"] + left["true_positive_rate"]) / 2
+                       for left, right in zip(curve, curve[1:]))
+            self.assertAlmostEqual(area, result["roc_auc"], places=14)
+
     def test_scores_and_hard_decisions_remain_separate(self):
         result = scorer.binary_metrics([0, 1], [1, 1], [-1000, 1000])
         self.assertEqual((result["balanced_accuracy"], result["roc_auc"]), (.5, 1))
@@ -175,6 +211,12 @@ class MetricsTests(unittest.TestCase):
             self.assertEqual(report["arms"]["author"]["summary"]["balanced_accuracy"]["mean"], 1)
             self.assertNotIn("paper_win", report)
             self.assertEqual(report["declared_access_conditions"]["candidate"], "paper_data_author_code")
+            for arm in ("author", "candidate"):
+                records = report["arms"][arm]["participants"]
+                self.assertEqual(len(records), 19)
+                self.assertTrue(all(len(record["roc_curve"]) == 3 for record in records))
+                self.assertTrue(all(record["roc_curve"][0]["threshold"] is None for record in records))
+            self.assertNotIn("source_roc_summary", report)
             self.assertAlmostEqual(report["reproduction_offsets_from_rounded_source"]["candidate"]["balanced_accuracy"], .07)
             command[-1] = str(paths[0])
             result = subprocess.run(command, capture_output=True, text=True, timeout=20)
