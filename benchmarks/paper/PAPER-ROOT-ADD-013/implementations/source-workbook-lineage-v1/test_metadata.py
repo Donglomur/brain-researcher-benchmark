@@ -56,6 +56,48 @@ class MetadataTests(unittest.TestCase):
         self.assertNotIn('rows',r)
         self.assertNotIn('private/path',str(r))
 
+
+    def test_original_row_session_condition_associations_are_retained(self):
+        # Same animal/day and marginal totals, different original row pairing.
+        raw=fixture()
+        source=io.BytesIO(raw)
+        changed=io.BytesIO()
+        with zipfile.ZipFile(source) as old, zipfile.ZipFile(changed,'w',zipfile.ZIP_DEFLATED) as new:
+            for member in old.infolist():
+                body=old.read(member)
+                if member.filename=='xl/worksheets/second.xml':
+                    body=body.replace(b'<c r="D2"><v>0</v></c>',b'<c r="D2"><v>0.5</v></c>')
+                    body=body.replace(b'<c r="D3"><v>0.5</v></c>',b'<c r="D3"><v>0</v></c>')
+                new.writestr(member.filename,body)
+        a,b=inspect(raw),inspect(changed.getvalue())
+        self.assertEqual(a['summary'],b['summary'])
+        self.assertEqual(a['groups'][0]['condition_counts'],b['groups'][0]['condition_counts'])
+        self.assertEqual(a['groups'][0]['session_counts'],b['groups'][0]['session_counts'])
+        self.assertNotEqual(a['groups'][0]['records'],b['groups'][0]['records'])
+        projected=json.loads(m.serialize_report(a))
+        self.assertEqual(projected['schema'],'food-ripples-workbook-lineage/v3')
+        self.assertEqual(projected['groups'][0]['records'],[
+            {'row':2,'session':{'kind':'text','value':'presleep'},'condition':{'kind':'n','value':'0'}},
+            {'row':3,'session':{'kind':'text','value':'postsleep'},'condition':{'kind':'n','value':'0.5'}}])
+        self.assertNotIn('private/path',str(projected))
+        self.assertNotIn('recording_path_sha256',str(projected))
+
+    def test_row_associations_preserve_blank_and_typed_values(self):
+        report=inspect(fixture(mixed_type=True))
+        records=report['groups'][0]['records']
+        self.assertEqual([r['condition']['kind'] for r in records],['n','text'])
+        self.assertEqual([r['condition']['value'] for r in records],['0','0'])
+        raw=fixture()
+        stream=io.BytesIO()
+        with zipfile.ZipFile(io.BytesIO(raw)) as old, zipfile.ZipFile(stream,'w',zipfile.ZIP_DEFLATED) as new:
+            for member in old.infolist():
+                body=old.read(member)
+                if member.filename=='xl/worksheets/second.xml':
+                    body=body.replace(b'<c r="D3"><v>0.5</v></c>',b'')
+                new.writestr(member.filename,body)
+        missing=inspect(stream.getvalue())['groups'][0]['records'][1]['condition']
+        self.assertEqual(missing,{'kind':'blank','value':''})
+
     def test_source_identity_checked_before_zip(self):
         with self.assertRaisesRegex(m.MetadataError,'identity'):
             m.inspect_workbook(fixture())
@@ -134,9 +176,16 @@ class MetadataTests(unittest.TestCase):
         self.assertEqual(report['groups'][0]['animal']['value'],long_text)
         body=m.serialize_report(report)
         projected=json.loads(body)
-        self.assertLessEqual(len(body),403656)
+        self.assertLessEqual(len(body),521592)
         self.assertLessEqual(len(m.run_receipt(report,body))+1,2048)
         self.assertEqual(len(projected['groups']),273)
+        self.assertEqual(sum(len(g['records']) for g in projected['groups']),273)
+        for group in projected['groups']:
+            self.assertEqual([r['row'] for r in group['records']],group['rows'])
+            self.assertEqual(group['records'][0]['condition']['value_identity'],
+                             group['condition_counts'][0]['value_identity'])
+            self.assertEqual(group['records'][0]['session']['value_identity'],
+                             group['session_counts'][0]['value_identity'])
         self.assertEqual(projected['groups'][0]['animal']['value_identity'],m.value_identity(long_text))
         self.assertEqual(len({g['condition_counts'][0]['value_identity']['sha256'] for g in projected['groups']}),273)
         self.assertIsInstance(projected['first_sheet_name'],dict)
