@@ -216,6 +216,51 @@ class InterfaceControls(unittest.TestCase):
         self.assertEqual(out['candidate_mae'], 10)
         self.assertEqual(order[:2], ['classified', 'trusted'])
 
+    def test_candidate_byte_boundary_never_salvages_a_valid_prefix(self):
+        with tempfile.TemporaryDirectory() as temp, patch.object(s, 'MAX_DOCUMENT_BYTES', 16):
+            path = Path(temp) / 'submission.json'
+            path.write_bytes(b'{}' + b' ' * 14)
+            self.assertEqual(s.read_bytes(path, public_submission=True), path.read_bytes())
+            self.assertEqual(s.read_bytes(path), path.read_bytes())
+            path.write_bytes(b'{}' + b' ' * 15)
+            raw_overflow = s.read_bytes(path, public_submission=True)
+            self.assertEqual(len(raw_overflow), 17)
+            index, admission = s.parse_submission(raw_overflow, PROTOCOL, REPRESENTATION)
+            self.assertEqual(index, {})
+            self.assertEqual(admission['envelope_error'], 'bounded UTF-8 document')
+            with self.assertRaises(s.ContractError): s.read_bytes(path)
+            with self.assertRaises(s.ContractError):
+                s.read_bytes(path, 'a' * 64, public_submission=True)
+
+    def test_cli_oversized_output_keeps_full_assay_and_no_prefix_hash(self):
+        prediction, targets, reference = fixture()
+        docs = {'submission': raw(prediction), 'targets': raw(targets), 'comparator': raw(reference)}
+        limit = max(map(len, docs.values())) + 64
+        # A completely valid envelope followed by whitespace must not be salvaged.
+        docs['submission'] += b' ' * (limit + 1 - len(docs['submission']))
+        with tempfile.TemporaryDirectory() as temp, patch.object(s, 'MAX_DOCUMENT_BYTES', limit):
+            root = Path(temp)
+            for name, body in docs.items(): (root / name).write_bytes(body)
+            output = root / 'report.json'
+            argv = ['--submission', str(root / 'submission'), '--protocol-sha256', PROTOCOL,
+                    '--representation-sha256', REPRESENTATION, '--targets', str(root / 'targets'),
+                    '--targets-sha256', hashlib.sha256(docs['targets']).hexdigest(),
+                    '--comparator', str(root / 'comparator'),
+                    '--comparator-sha256', hashlib.sha256(docs['comparator']).hexdigest(),
+                    '--output', str(output)]
+            s.main(argv)
+            report = json.loads(output.read_bytes())
+            self.assertEqual(report['candidate_mae'], 10)
+            self.assertEqual(report['penalty_counts']['missing'], 1356)
+            self.assertEqual(report['population']['nominal_people'], 678)
+            self.assertEqual(report['population']['scored_trial_denominator'], 1356)
+            self.assertEqual(len(report['experiments']), 9)
+            self.assertFalse(report['output_contract_passed'])
+            self.assertIsNone(report['document_sha256']['submission'])
+            self.assertEqual(report['document_sha256']['targets'], hashlib.sha256(docs['targets']).hexdigest())
+            self.assertEqual(report['submission_read'], {'byte_limit': limit, 'bytes_read': limit + 1,
+                                                        'complete_body': False, 'limit_exceeded': True})
+
     def test_cli_identity_before_input_open_and_complete_dispatch(self):
         with patch.object(s, 'read_bytes', side_effect=AssertionError('unexpected open')):
             with self.assertRaises(s.ContractError):
@@ -224,7 +269,7 @@ class InterfaceControls(unittest.TestCase):
                         '--targets-sha256','a'*64,'--comparator','R','--comparator-sha256','bad',
                         '--output','OUT'])
         p, t, r = fixture(); docs = {'P':raw(p),'T':raw(t),'R':raw(r)}; calls=[]
-        def read(path, expected=None): calls.append((path,expected)); return docs[path]
+        def read(path, expected=None, **kwargs): calls.append((path,expected)); return docs[path]
         with tempfile.TemporaryDirectory() as d:
             output=Path(d)/'result.json'
             argv=['--submission','P','--protocol-sha256',PROTOCOL,

@@ -314,5 +314,103 @@ class BehaviorPlaneIdentityTests(unittest.TestCase):
         self.assertEqual(len(table["joint_support"]), 2)
 
 
+class PopulationMembershipTests(unittest.TestCase):
+    """Full declared-count generated metadata; never source admission or signals."""
+
+    @staticmethod
+    def programme_module(leaf):
+        path = HERE.parent / "neural-064" / "programme"
+        name = "neural064_population_membership"
+        if name not in sys.modules:
+            spec = importlib.util.spec_from_file_location(
+                name, path / "__init__.py", submodule_search_locations=[str(path)])
+            package = importlib.util.module_from_spec(spec)
+            sys.modules[name] = package
+            spec.loader.exec_module(package)
+        return importlib.import_module(name + "." + leaf)
+
+    @staticmethod
+    def populations():
+        # 204 containers, 80 mice, 475 selected planes; roles are 55/11/14.
+        # Within a container, every plane belongs to the same generated mouse.
+        secondary_rows = []
+        assignments = {str(m): "fit" if m < 55 else "validation" if m < 66 else "query"
+                       for m in range(80)}
+        for i in range(475):
+            container, visit = i % 204, i // 204
+            mouse = container % 80
+            secondary_rows.append({
+                "ophys_experiment_id": i, "mouse_id": mouse,
+                "ophys_session_id": "selected-session-" + str(mouse) + "-" + str(visit),
+                "ophys_container_id": "selected-container-" + str(container),
+                "experience_level": "Novel 1" if visit == 0 else "Novel >1",
+                "split": assignments[str(mouse)]})
+        # The selected rows use 227 sessions. Another 476 gives all 703 catalogue
+        # sessions, and another 27 mice gives all 107 catalogue mice.
+        catalogue_rows = [{k: v for k, v in r.items() if k != "split"}
+                          for r in secondary_rows]
+        for i in range(1936 - 475):
+            session = i % 476
+            catalogue_rows.append({
+                "ophys_experiment_id": i + 475, "mouse_id": 80 + session % 27,
+                "ophys_session_id": "catalogue-session-" + str(session),
+                "ophys_container_id": "catalogue-container-" + str(i),
+                "experience_level": "Familiar"})
+        return ({"records": catalogue_rows, "source_membership_binding": "generated-catalogue"},
+                {"records": secondary_rows, "source_membership_binding": "generated-secondary",
+                 "mouse_assignments": assignments})
+
+    def test_complete_generated_memberships_and_order_independence(self):
+        catalogue, secondary = self.populations()
+        before = copy.deepcopy((catalogue, secondary))
+        contract = self.programme_module("membership_contract")
+        self.assertTrue(contract.require_population_shape(catalogue, secondary))
+        self.assertEqual((catalogue, secondary), before)
+        catalogue["records"].reverse()
+        secondary["records"].reverse()
+        self.assertTrue(contract.require_population_shape(catalogue, secondary))
+
+    def test_count_preserving_biological_and_condition_reassignments_fail(self):
+        for field, indices in (("mouse_id", (0, 1)), ("ophys_session_id", (0, 1)),
+                               ("ophys_container_id", (0, 1)), ("experience_level", (0, 204))):
+            with self.subTest(field=field):
+                catalogue, secondary = self.populations()
+                rows = secondary["records"]
+                a, b = indices
+                rows[a][field], rows[b][field] = rows[b][field], rows[a][field]
+                with self.assertRaisesRegex(ValueError, "catalogue/secondary experiment identity"):
+                    self.programme_module("membership_contract").require_population_shape(catalogue, secondary)
+
+    def test_source_identifier_string_normalization_is_preserved(self):
+        catalogue, secondary = self.populations()
+        for row in secondary["records"]:
+            for field in ("ophys_experiment_id", "mouse_id"):
+                row[field] = str(row[field])
+        self.assertTrue(self.programme_module("membership_contract").require_population_shape(catalogue, secondary))
+
+    def test_missing_selected_experiment_and_role_drift_remain_invalid(self):
+        for mutation in ("outside_catalogue", "role_drift"):
+            catalogue, secondary = self.populations()
+            if mutation == "outside_catalogue":
+                secondary["records"][0]["ophys_experiment_id"] = "not-in-catalogue"
+            else:
+                secondary["records"][0]["split"] = "query"
+            with self.assertRaises(ValueError):
+                self.programme_module("membership_contract").require_population_shape(catalogue, secondary)
+
+    def test_preparation_rejects_join_before_source_access(self):
+        catalogue, secondary = self.populations()
+        rows = secondary["records"]
+        rows[0]["ophys_container_id"], rows[1]["ophys_container_id"] = (
+            rows[1]["ophys_container_id"], rows[0]["ophys_container_id"])
+        # Empty source mapping would fail with KeyError if preparation reached
+        # source projection. The membership join must fail before that access.
+        with self.assertRaisesRegex(ValueError, "catalogue/secondary experiment identity"):
+            self.programme_module("native_pipeline")._prepare_admitted(
+                catalogue, secondary, {}, None, None)
+        with self.assertRaises(RuntimeError):
+            self.programme_module("native_pipeline").main()
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

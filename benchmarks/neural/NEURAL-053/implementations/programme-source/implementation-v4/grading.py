@@ -167,6 +167,20 @@ def grade_admitted_arrays(records, query_descriptors, approved_method_digests,
                 contrasts.append({"mode": mode, "replication": rep, "contrast": label,
                                   "person_differences": differences, "mean": sum(differences) / 4,
                                   "interval": paired_person_interval(differences), "causal": False})
+            # Both unfitted priors have equal class mass after complete training
+            # support. The admitted protected labels contain exactly two queries
+            # per class in every person, so the lower-ID tie rule gives 1/C Top-1
+            # for each prior on these same cases. Keep each registered comparator
+            # explicit even though their paired differences are numerically equal.
+            for prior in ("uniform", "training_prior"):
+                differences = [score - 1 / profile.classes for score in person]
+                contrasts.append({"mode": mode, "replication": rep,
+                                  "contrast": f"neural_minus_{prior}",
+                                  "person_differences": differences,
+                                  "mean": sum(differences) / 4,
+                                  "interval": paired_person_interval(differences),
+                                  "metric": "class_balanced_top1",
+                                  "comparator_top1_per_person": [1 / profile.classes] * 4})
             differences = [metrics[mode, rep, f, "neural"]["top1"] -
                            metrics["independent_reference", selected_references[f, "neural"], f, "neural"]["top1"]
                            for f in range(4)]

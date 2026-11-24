@@ -14,24 +14,24 @@ The `task.json` in this folder is the authoritative registered definition. Imple
 
 Measured angular head velocity at every valid native target sample of a complete held stimulus repeat. Reconstructing this measured trajectory is a neural decoding target; reproducing the paper’s encoding/correlation figures is not the answer.
 
-**Source delivery:** partial\_delivery. The animal-by-condition velocity scorer is implemented for complete normalized prediction artifacts. No authentic MATLAB loader, neural packet, trained comparator producer or participant execution route is delivered; first reconcile actual pair/repeat clocks and the training-only phase prior.
+**Source delivery:** partial\_delivery. The distinct-pair animal-by-condition evaluator, complete MAT structural reader, prepared-repeat public/protected projection and supplied-prior reference bridge exist as source. The accepted original census establishes structural traversal only. Authentic biological/physical role mapping, prepared neural observations, competent comparator production and participant execution remain unresolved; source availability does not establish task readiness.
 
 - [Current target, controls and access conditions](understanding.v1.json)
 - [Preserved historical task definition](historical/task.pre-understanding.v1.json)
 
 | Condition | Source availability | Representation and boundary | Missing |
 | --- | --- | --- | --- |
-| Direct observation | not\_delivered | Proposed fixed numeric spike-raster/count observations over complete repeat cores, with timebase and declared history. No numerical/model tools; preserve all samples via fixed tiling and score each core once. Derived rate displays would be separately identified substrates. | Complete authentic direct packet and response transport; feasibility of full-duration numeric output not established. |
+| Direct observation | not\_delivered | Source APIs project complete spike events, relative exact ticks/timebase and permitted training calibration, with a separately labelled one-core tiled condition; authentic prepared observations are not yet available. No numerical/model tools in a future direct condition. Full-repeat and bounded-core information conditions remain distinct; tile projection alone does not isolate contexts or collect responses, and every native core must be scored once. | Authenticated original-to-prepared mapping and authentic direct observation/response transport; isolated fresh-context tile delivery and full-duration numeric output feasibility remain unestablished. |
 | Typed viewer | not\_delivered | Potential typed raster/time-axis display of the same spike observations. Restricted render/zoom/pan actions may reveal only declared input support, never velocity, waveform identity or hidden phase. | No typed viewer, image transport or full-coverage response collector exists for this task. |
-| Tool assisted | not\_delivered | Numerical per-case decoder investigation on identical spike packets and calibration. Equal input/checkpoint/tool/compute budget, no target feedback; reset case state as declared. The scorer accepts a case\_investigation artifact label only. | No authenticated input or case-adaptive participant runner; label does not prove execution. |
-| Frozen program | not\_delivered | Precommitted spike-to-velocity programme and train-only fit/adaptation recipe. Freeze code, preprocessing, lags and calibration before held-repeat access; scorer accepts completed arrays but never runs the producer. | Complete programme training/inference harness, budgets and authentic comparator production. |
+| Tool assisted | not\_delivered | A source full-repeat public spike-event projection and permitted calibration can support future numerical per-case investigation on identical prepared observations; no participant runner is delivered. Equal input/checkpoint/tool/compute budget and no target feedback remain requirements. Prepared/protected projection is an in-memory operator API, not process isolation or case-state reset; an artifact label does not certify execution. | Authenticated native preparation/export, isolated case-adaptive participant runner and independently competent matched comparator production. |
+| Frozen program | not\_delivered | Prospective precommitted spike-to-velocity programme and train-only fit recipe using the existing prepared full-repeat public projection and supplied-prior reference interface. Freeze code, preprocessing, lags and calibration before held-repeat access. Projection/reference source neither trains a programme nor runs a producer; prior training declarations and artifact mode labels are not execution evidence. | Authentic prepared observations, complete programme training/inference harness, matched budgets and qualified comparator production. |
 
 Source availability does not establish a qualified runtime. A programme score cannot be reported as direct or viewer interpretation, and unsupported conditions cannot be inferred from a nearby implementation.
 
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 25982 bytes; SHA-256 `ec245b059cf6dd8187360bca2d9a20fa2493bfdd5b94514fa9431ca103d1f094`.
+- Specification identity: 27597 bytes; SHA-256 `17751ebd4087ed0c046f5a0208656a7eefa5c9ab3400bef629c2b577c4f8324c`.
 - [Registration and provenance](../../../docs/provenance/registrations/expansion-20261114-v11/registry.json)
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.

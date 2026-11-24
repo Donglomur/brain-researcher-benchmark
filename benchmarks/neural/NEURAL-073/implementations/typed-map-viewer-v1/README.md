@@ -66,10 +66,21 @@ not evidence that a model viewed rasterized brain images.
 Accepted actions use closed schemas:
 
 ```json
+{"action":"status"}
 {"action":"describe"}
 {"action":"slice","case_id":"00000000000000000000000000000001","axis":2,"index":0,"low":-3.0,"high":3.0}
 {"action":"answer","case_id":"00000000000000000000000000000001","probabilities":null}
 ```
+
+`status` supplies the current blinded key, ordinal, remaining frame budget and
+public class order without loading or validating a map. Use it to discover each
+case before requesting observations, or after a refused `describe`/`slice`, so an
+unavailable map can still receive an explicit `null` abstention. It exposes no
+source identity, held-person label, geometry or array data. Status requests use
+the same action budget and deadline as other actions; they use no frame budget.
+Reserve at least two actions per case for status plus answer, in addition to the
+planned observation and failure allowance. Status does not extend a deadline or
+recover an exhausted action budget.
 
 `describe` supplies the current blinded key, ordinal, geometry, remaining frame
 budget and public class order. A slice returns exactly one SVG frame. An answer
@@ -129,3 +140,11 @@ provider isolation, original-source completeness or a ready benchmark.
 Integration must enroll `test_viewer.py` in the repository's source-integrity
 workflow/component command inventory. This private package has not changed any
 shared CI, task, registry, catalogue, deployment or admission file.
+
+A metadata-only status route now makes the complete response roster reachable
+through participant-visible keys even when a map loader or map validation fails.
+Generated controls cover those failures, closed schemas, action/deadline bounds,
+no array access, and all 9,532 generated blinded keys. This is recovery behavior
+only: it does not qualify original-map availability, transport or neuroscience
+performance, and a null response remains an ungraded abstention for the existing
+evaluator's fixed-denominator failure policy.

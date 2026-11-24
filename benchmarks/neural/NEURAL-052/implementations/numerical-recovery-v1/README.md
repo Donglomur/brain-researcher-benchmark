@@ -96,3 +96,34 @@ the available NumPy 2.4.6 environment; compatibility checks do not qualify a
 change to the authentic numerical environment. Runtime/memory qualification,
 independent authentic recomputation, external-packet reauthentication and
 central catalog/contract integration remain separate work.
+
+## Participant public-package preflight
+
+`participant_check.py` supplies the schema and complete report-structure check
+using only the delivered public `input/` directory. Participants do not need
+operator-private DESIGN or PACKET_BINDING files. Obtain the INPUTS.json SHA-256
+from the operator's delivery record; a digest derived from an untrusted local
+replacement does not establish packet authenticity.
+
+```sh
+python -B participant_check.py schema --input-dir /input/input --manifest-sha256 "$INPUTS_SHA256" --output /work/submission.schema.json
+python -B participant_check.py check --input-dir /input/input --manifest-sha256 "$INPUTS_SHA256" --submission /work/result.json --methods /work/METHODS.md --output /work/preflight.json
+```
+
+Run these participant preparation commands from this source directory with
+Python 3.9 or newer; they require only the standard library. The route captures
+the pinned manifest and features JSON, derives only concept/feature/participant
+identity, and reuses the unchanged complete report contract. No response matrix,
+private file, reference fit, candidate programme or network route is opened.
+The result must include all three people, both ROIs, all endpoints and support
+dispositions, and bind the same public manifest; METHODS must be nonempty UTF-8.
+An exit code of 0 and `valid_structure` mean only that those public structural
+checks passed. A numerically wrong report can pass. Complete packet integrity,
+numerical reconstruction and interpretation quality remain separate. Failures
+return `preflight_rejected` and exit code 2; output files must be fresh.
+
+This optional preparation utility does not alter the frozen programme's
+14-file exposure, runtime dependencies, allowed in-trial actions, or resource
+limits. It is not automatically mounted into a participant container. Enrolling
+it in a future matched-condition delivery requires the operator to freeze that
+delivery and any preparation budget equally across compared participants.

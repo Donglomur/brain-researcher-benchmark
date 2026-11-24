@@ -316,7 +316,11 @@ are scored with the declared penalty; a defective trusted input refuses instead.
                        'Bootstrap, training-normalized loss, model competence, protected execution and causal/neural-specific inference are not established.']}
 
 
-def read_bytes(path, expected=None):
+def read_bytes(path, expected=None, *, public_submission=False):
+    # Public output gets one extra byte solely to classify an over-bound whole
+    # envelope. Trusted bodies remain strict, including their complete hashes.
+    require(not public_submission or expected is None,
+            'trusted hashes cannot apply to a bounded submission prefix')
     if expected is not None:
         pin(expected)
     fd = None
@@ -331,7 +335,7 @@ def read_bytes(path, expected=None):
     finally:
         if fd is not None:
             os.close(fd)
-    require(len(raw) <= MAX_DOCUMENT_BYTES, 'input byte bound')
+    require(public_submission or len(raw) <= MAX_DOCUMENT_BYTES, 'input byte bound')
     if expected is not None:
         require(hashlib.sha256(raw).hexdigest() == expected, 'trusted input hash mismatch')
     return raw
@@ -346,8 +350,11 @@ def main(argv=None):
     for value in (args.protocol_sha256, args.representation_sha256,
                   args.targets_sha256, args.comparator_sha256):
         pin(value)  # All external identities are required before any input open.
-    raw = read_bytes(args.submission)
-    hashes = {'submission': hashlib.sha256(raw).hexdigest()}
+    raw = read_bytes(args.submission, public_submission=True)
+    oversized = len(raw) > MAX_DOCUMENT_BYTES
+    # An over-bound prefix is never decoded or represented as a complete body.
+    # grade() classifies it as an invalid envelope and keeps every required case.
+    hashes = {'submission': None if oversized else hashlib.sha256(raw).hexdigest()}
     def load():
         target_raw = read_bytes(args.targets, args.targets_sha256)
         reference_raw = read_bytes(args.comparator, args.comparator_sha256)
@@ -357,6 +364,8 @@ def main(argv=None):
     report = grade(raw, load, protocol_sha256=args.protocol_sha256,
                    representation_sha256=args.representation_sha256)
     report['document_sha256'] = hashes
+    report['submission_read'] = {'byte_limit': MAX_DOCUMENT_BYTES, 'bytes_read': len(raw),
+                                 'complete_body': not oversized, 'limit_exceeded': oversized}
     with Path(args.output).open('x', encoding='utf-8') as f:
         json.dump(report, f, separators=(',', ':'), sort_keys=True, allow_nan=False)
         f.write('\n')

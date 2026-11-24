@@ -151,7 +151,11 @@ def validate_spec(spec):
     need(type(spec['malformed_repair_slots']) is int and spec['malformed_repair_slots'] >= 0, 'explicit parser repair slots')
     need(type(spec['dependencies']) is list, 'declared dependencies')
     tolerance = spec['row_sum_abs_tolerance']
-    need(type(tolerance) in (int, float) and math.isfinite(tolerance) and 0 <= tolerance < 1, 'explicit normalization tolerance')
+    # The mounted public policy, collector and protected scorer all freeze 1e-6.
+    # A participant-specific tolerance could finalize a rejected prediction or
+    # reject one that the evaluator admits before target access.
+    need(type(tolerance) in (int, float) and tolerance == 1e-6,
+         'row-sum tolerance must match the frozen public policy: 1e-6')
     names = ('context_bytes', 'decision_bytes', 'analysis_source_bytes', 'analysis_seconds',
              'closure_seconds', 'stream_bytes', 'workspace_bytes', 'workspace_files',
              'artifact_bytes', 'seal_bytes', 'seal_header_bytes', 'state_count', 'sealed_action_count')

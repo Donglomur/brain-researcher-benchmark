@@ -69,7 +69,7 @@ def run(prepare, root, manifest_sha, *, captured):
             def score(self, nll):
                 # A mathematically realizable invented aggregate, not observed cases.
                 # Correct-class probability exp(-NLL) is maximal for tested NLL<=1.
-                nll = float(nll); counts = [40784, 40784, 40784, 40783]
+                nll = float(nll); counts = [79125, 79126, 2442, 2442]
                 matrix = [[counts[i] if i == j else 0 for j in range(4)] for i in range(4)]
                 return {"schema": "hybrid-protected-main-score-v1",
                     "primary_subject_session_mean_nll": nll,
@@ -199,6 +199,24 @@ def run(prepare, root, manifest_sha, *, captured):
                     self.assertEqual(got, paired)
                     with self.assertRaises(Exception): bank.contract.reconcile_score(score, historical)
                     with self.assertRaises(Exception): bank.contract.validate(self.outcome(candidate, score), bank.lock_sha)
+
+            def test_actual_candidate_reconciler_rejects_impossible_score_arithmetic(self):
+                history = self.score(.5); scoring = bank.sources.modules["scoring"]
+                malformed = []
+                for key, value in (("accuracy", 1.1), ("stop_brier", -0.25),
+                                   ("trial_balanced_nll", -1.0), ("decision_weighted_nll", -1.0),
+                                   ("macro_action_recall", 0.9), ("per_action_recall", [0.5] * 4)):
+                    bad = deepcopy(history); bad[key] = value; malformed.append(bad)
+                bad = deepcopy(history); bad["confusion"][0][0] += 1; malformed.append(bad)
+                bad = deepcopy(history); bad["confusion"][0][0] -= 1; bad["confusion"][2][2] += 1
+                malformed.append(bad)
+                bad = deepcopy(history); bad["confusion"][0][0] -= 1; bad["confusion"][1][1] += 1
+                malformed.append(bad)
+                for bad in malformed:
+                    with self.subTest(score=bad):
+                        paired = scoring.paired_comparison(bad, history)
+                        with self.assertRaises(ValueError):
+                            bank.contract.reconcile_candidate(bad, history, paired, scoring)
 
             def test_partial_or_forged_candidate_outcomes_rejected(self):
                 candidate = self.candidate(); score = self.score(.25); outcome = self.outcome(candidate, score)

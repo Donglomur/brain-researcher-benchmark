@@ -861,19 +861,25 @@ class RepositoryChecksTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Non-source member type"):
             self.build()
 
-    def test_owned_source_patch_is_hashed_without_application(self):
-        relative = self.registry["implementations"][0]["path"] + "/source.patch"
-        raw = b"--- a/source.py\n+++ b/source.py\n@@ -1 +1 @@\n-old\n+new\n"
-        (self.root / relative).write_bytes(raw)
-        self.build()
-        inventory = json.loads((self.root / checks.INVENTORY).read_text())
-        record = next(item for item in inventory["files"] if item["path"] == relative)
-        self.assertEqual(record["sha256"], hashlib.sha256(raw).hexdigest())
-        self.assertEqual(record["bytes"], len(raw))
-        self.assertEqual(self.check()["source_check"], "passed")
-        (self.root / relative).write_bytes(raw.replace(b"+new", b"+changed"))
-        with self.assertRaisesRegex(ValueError, "Source content or mode drift"):
-            self.check()
+    def test_owned_source_patch_and_commonjs_are_hashed_without_application(self):
+        sources = (
+            ("source.patch", b"--- a/source.py\n+++ b/source.py\n@@ -1 +1 @@\n-old\n+new\n"),
+            ("control.cjs", b"throw new Error('This source must never execute');\n"),
+        )
+        for name, raw in sources:
+            with self.subTest(source=name):
+                relative = self.registry["implementations"][0]["path"] + "/" + name
+                (self.root / relative).write_bytes(raw)
+                self.build()
+                inventory = json.loads((self.root / checks.INVENTORY).read_text())
+                record = next(item for item in inventory["files"] if item["path"] == relative)
+                self.assertEqual(record["sha256"], hashlib.sha256(raw).hexdigest())
+                self.assertEqual(record["bytes"], len(raw))
+                self.assertEqual(self.check()["source_check"], "passed")
+                (self.root / relative).write_bytes(raw + b"changed\n")
+                with self.assertRaisesRegex(ValueError, "Source content or mode drift"):
+                    self.check()
+                (self.root / relative).write_bytes(raw)
 
 
 if __name__ == "__main__":

@@ -38,7 +38,7 @@ TRANSPORT_MANIFEST = [
     "bytes": 30217,
     "path": "postscore_system_v2/SOURCE_DISCOVERY_MANIFEST.json",
     "runtime_mode": "0o644",
-    "sha256": "d3ec37aeadf0cbcfd3fe74558558b8202aca8a34d22b0095df6b054b3aaba988",
+    "sha256": "9da1c7996e33a0044540f31259216655d4781bec91d3caed22b2b951fa8fc951",
     "transport_mode": "0o644"
   },
   {
@@ -808,7 +808,7 @@ TRANSPORT_MANIFEST = [
     "bytes": 8343,
     "path": "postscore_system_v2/inspect_source.py",
     "runtime_mode": "0o644",
-    "sha256": "7dfce72658a4105e7683d7f4343f055bce7e47519507a1f04025a6dadba762d3",
+    "sha256": "0020c5c53ea806ef6bb5d0fd99fe213eb7b3b52c7bd9d15e4fd8d614a761a515",
     "transport_mode": "0o644"
   },
   {
@@ -829,21 +829,21 @@ TRANSPORT_MANIFEST = [
     "bytes": 5535,
     "path": "postscore_system_v2/model_system/fi_entry.py",
     "runtime_mode": "0o644",
-    "sha256": "e8f2949e043883708c2d5c69bb4cc61b081f5f86e112d5718c358a32f0e35cd2",
+    "sha256": "e8e9987768b040c2dd3e4a8bbacfd5aa96431984fd66be102c36bb4821d6389f",
     "transport_mode": "0o644"
   },
   {
-    "bytes": 6557,
+    "bytes": 6825,
     "path": "postscore_system_v2/model_system/i-interpreter/README.md",
     "runtime_mode": "0o644",
-    "sha256": "a077a16e607c4b1373c03f762707bbea72e1cc1c516937f8e12a7adf5e099b9a",
+    "sha256": "9bfbf7c2426209a2419df464d67bab6fa1769739dfcdfdf2bded4cb773ac9956",
     "transport_mode": "0o644"
   },
   {
-    "bytes": 45281,
+    "bytes": 45512,
     "path": "postscore_system_v2/model_system/i-interpreter/participant_template.py",
     "runtime_mode": "0o644",
-    "sha256": "3de58f28fef84cc183501349c30d4b36f220f2ff681af4ac451c07242f6f0a3d",
+    "sha256": "39ad5c8fefdc1c722619b59e6fe1b7fe89e118f574255d559b1b12b5960b2680",
     "transport_mode": "0o644"
   },
   {

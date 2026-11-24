@@ -11,8 +11,8 @@ import time
 if sys.version_info < (3, 11):
     raise RuntimeError('Source inspection requires Python 3.11 or newer')
 
-MANIFEST = {'bytes': 30217, 'sha256': 'd3ec37aeadf0cbcfd3fe74558558b8202aca8a34d22b0095df6b054b3aaba988'}
-READ_LIMIT = 1111596
+MANIFEST = {'bytes': 30217, 'sha256': '9da1c7996e33a0044540f31259216655d4781bec91d3caed22b2b951fa8fc951'}
+READ_LIMIT = 1112095
 OUTPUT_LIMIT = 65536
 SECONDS = 30
 ENTRY_LIMIT = 256

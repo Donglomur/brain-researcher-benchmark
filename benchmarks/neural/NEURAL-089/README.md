@@ -41,6 +41,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
 - [Delivery source](implementations/delivery-source) — Task implementation.
   Scope: Keep mixed current/source-predecessor/context members together; this map does not select a new operative version or qualify execution.
+- [Same panel comparison v1](implementations/same-panel-comparison-v1) — Reviewed source component.
+  Scope: Descriptive comparison of restricted-observation and frozen-program submissions on identical declared phoneme query support, preserving fixed 39-class macro-F1. Declaration hashes do not establish actual exposure, delivery, compute equivalence or scientific outcomes.
 - [Scoring role separation v2](implementations/scoring-role-separation-v2) — Reviewed source component.
   Scope: Reject protected-target aliases before panel and submission reads while preserving original numerical kernels. Trusted-operator path consistency with stable filesystem paths only; no candidate isolation, original-data execution or benchmark readiness claim.
 - [Preparation v2](implementations/preparation-v2) — Reviewed source component.

@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Phase access v1](implementations/phase-access-v1) — Reviewed source component.
+  Scope: Public FIT/INFER phase access joins declared training rows to opaque mice, streams full observations and preflights complete target-free predictions. It provides no fitted decoder, direct-viewer condition, authentic preparation or scientific qualification.
 - [Presentation timeline v2](implementations/presentation-timeline-v2) — Reviewed source component.
   Scope: NEURAL-062 cross-table presentation boundary. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

@@ -43,6 +43,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
 - [Regional comparison](implementations/regional-comparison) — Regional comparison.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Reference preflight v1](implementations/reference-preflight-v1) — Reviewed source component.
+  Scope: Protected final-choice reference preflight checks all 39 declared sessions before choice mappings are opened. No authentic reference/native execution, direct-viewer delivery or scientific performance is established.
 - [Stable loss runtime v1](implementations/stable-loss-runtime-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Stable loss v2](implementations/stable-loss-v2) — Reviewed source component.

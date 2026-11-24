@@ -26,7 +26,7 @@ def load(name, path, expected=None):
 metrics = load("candidate_metrics", ROOT / "candidate_metrics.py")
 load("source_binding", OLD / "source_binding.py",
      "1079a68cb275a35543f02dff2ad973ef2ae2e89b85c72fab9263d00eee89c3ce")
-legacy = load("legacy_result_contract", OLD / "result_contract.py",
+legacy = load("legacy_result_contract", ROOT / "historical/result_contract.pre-integration.py",
               "f23846ae3825f05caff9e8ec7d268db9690b4cb67fcfa9ae66380f4b9b5129ed")
 consumer = load("consumer", OLD / "runner/consumer.py",
                 "c5876452457f05c3f9fe69015f7e6cff565dcfa43b6a7b9e8921b096cdd1d00b")

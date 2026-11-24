@@ -45,14 +45,16 @@ values, predictions, model artifacts or private historical answers are read.
 
 ## Integration and limits
 
-This is a source-delivered replacement reconciliation function. The existing
-hash-locked runner, predecessor files and canonical task/understanding contract
-are preserved. The function is **not yet enrolled in the protected runner**.
-Integration must authenticate and bind this function at the existing outer
-candidate reconciliation call and regenerate the selected source lock and
-manifest before claiming the protected path uses it. Existing containment,
-complete episode closure, candidate/source identity, result pinning, and
-historical-reference replay parity checks must remain in place.
+The same reviewed arithmetic is now integrated into the existing
+`hybrid-frozen-model-candidate/result_contract.py` source position and its
+current source lock/manifest. The protected outer candidate reconciliation call
+uses these checks after the existing containment, complete episode closure,
+candidate/source identity, result pinning and historical-reference checks.
+The historical pre-integration result contract is preserved at
+`historical/result_contract.pre-integration.py` for the negative controls;
+its exact bytes retain their old identity and are not selected for execution.
+This is source activation only: no protected replay or runtime qualification
+has been performed.
 
 Summary checks cannot recover missing per-decision provenance or verify Brier
 and trial-weighted losses from hidden predictions. Consistent confusion

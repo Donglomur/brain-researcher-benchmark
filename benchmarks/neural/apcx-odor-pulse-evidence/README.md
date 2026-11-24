@@ -38,6 +38,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 ## Implementation artifacts
 
+- [Typed count stdio v1](implementations/typed-count-stdio-v1) — Reviewed source component.
+  Scope: Local typed-count request/response transport preserves complete supplied APCx session observations and answer ABI. Host image display, transcript custody, fresh state and tool boundaries remain external; no OS isolation or participant competence is claimed.
 - [Typed count viewer v1](implementations/typed-count-viewer-v1) — Reviewed source component.
   Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Deposited label](implementations/deposited-label) — Conditional deposited label prediction and complete source conversion.

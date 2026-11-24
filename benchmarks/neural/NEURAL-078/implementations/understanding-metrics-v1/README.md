@@ -37,3 +37,22 @@ python3 -m unittest discover \
 ```
 
 Tests cover the independently specified cancellation/unequal-pair-count example, complete support and identity, unsupported outcomes, units, signs, numerical range and public-before-reference CLI ordering. They establish software behavior only.
+
+## Paired comparison of frozen reports
+
+`paired.py` compares two complete frozen reports against one independently admitted reference. Before any reference bytes are opened, the CLI validates both full reports and requires identical participant counts, strata, pair digests and support statuses. It reads the selected reference once, verifies its SHA256, and applies the existing `score.py` error metric to both reports. Each report must also match the reference support commitments. This equality does not authenticate the underlying packets or prove that the two programmes received the same inputs; packet custody and condition assignment remain external requirements.
+
+```sh
+python3 benchmarks/neural/NEURAL-078/implementations/understanding-metrics-v1/paired.py \
+  --first /operator/frozen-first-report.json \
+  --second /operator/frozen-second-report.json \
+  --gold /operator/admitted-reference.json \
+  --gold-sha256 "$OPERATOR_REFERENCE_SHA256" \
+  --output /operator/new-paired-fcz-errors.json
+```
+
+The output retains each complete existing error score and adds the equal-person mean of `abs(first - reference) - abs(second - reference)` for matched FCz. Negative values favor the first report and positive values favor the second. The eight people retain equal weight regardless of pair count, and any unsupported person makes the complete paired primary null. Supported-subset differences remain diagnostics. Differences are computed from the original numbers before rounding the condition-level MAEs, so subtracting the displayed rounded MAEs can lose a small paired difference.
+
+The comparison describes these eight fixed people. It supplies no population confidence interval, no causal claim and no new access condition. In particular, this exact numerical task remains unsuitable for direct waveform judgment; a future restricted interpretation task needs its own contract. Both reports must be frozen before protected scoring, and all output is operator-only target-derived information, never iterative participant feedback. Reference admission, matched packet custody, computation-budget matching and authentic execution remain unestablished. The existing source/reference hold and historical grade are unchanged.
+
+The generated `test_paired.py` controls cover complete equal-person pairing, row permutation, swap symmetry, preserved single-report scores, pre-rounding differences, unsupported participants, support disagreement, both-reports-before-reference ordering, one reference read, byte identities and fresh-output refusal. Run it alongside `test_score.py` with the unittest command above.

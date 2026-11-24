@@ -193,12 +193,12 @@
       "Held velocity values, original waveform identity or absolute repeat phase when not in the declared information condition.",
       "Tuning/filter/normalization fitted on held repeats; LIF simulations substituted for biological spikes."
     ],
-    "case_identity": "The scorer requires case id, group_id, condition, repeat_id and exact integer sample_ticks; groups retain animal_id, session_id, recording_id, neuron_ids and pair_id. Authentic values and opaque participant mappings are not supplied. A structurally valid asserted pair does not prove simultaneity.",
-    "split": "Current component validates a supplied held-repeat reference and training_only prior declaration; it does not construct or authenticate splits. Freeze whole-repeat train/held groups and temporal buffers covering all model lags before producing artifacts. Secondary animal transfer requires a separate calibrated protocol.",
+    "case_identity": "The v2 scorer requires case id, group_id, condition, repeat_id and exact integer sample_ticks; groups retain animal_id, session_id, recording_id, neuron_ids and pair_id. The prepared-inventory projection supplies operator-keyed opaque participant case/group/channel IDs and a separate protected crosswalk. Authentic source values remain unresolved; structural declarations or admission hashes do not prove biological identity or simultaneity.",
+    "split": "The prepared-inventory projection validates declared whole-presentation train/query separation and requires training repeats for every held group-condition. The reference bridge accepts a separately pinned prior with unique declared training-only source records. Neither authenticates the original split or proves actual prior training. Freeze source-derived whole-repeat partitions and temporal buffers covering all model lags before authentic preparation; secondary animal transfer requires a separate calibrated protocol.",
     "coverage": "Census shape is 3 animals, 49 neurons, 35 pair relationships and nine required conditions. Every animal-condition-stratum cell is represented, including unavailable cells with reasons. Groups are actual recordings, not necessarily 35 groups; single neurons are separate diagnostics. The authentic full repeat roster remains unresolved."
   },
   "split": {
-    "policy": "Current component validates a supplied held-repeat reference and training_only prior declaration; it does not construct or authenticate splits. Freeze whole-repeat train/held groups and temporal buffers covering all model lags before producing artifacts. Secondary animal transfer requires a separate calibrated protocol.",
+    "policy": "The prepared-inventory projection validates declared whole-presentation train/query separation and requires training repeats for every held group-condition. The reference bridge accepts a separately pinned prior with unique declared training-only source records. Neither authenticates the original split or proves actual prior training. Freeze source-derived whole-repeat partitions and temporal buffers covering all model lags before authentic preparation; secondary animal transfer requires a separate calibrated protocol.",
     "coverage": "Census shape is 3 animals, 49 neurons, 35 pair relationships and nine required conditions. Every animal-condition-stratum cell is represented, including unavailable cells with reasons. Groups are actual recordings, not necessarily 35 groups; single neurons are separate diagnostics. The authentic full repeat roster remains unresolved."
   },
   "controls": [
@@ -209,13 +209,15 @@
   "access_conditions": {
     "direct_observation": {
       "status": "not_delivered",
-      "representation": "Proposed fixed numeric spike-raster/count observations over complete repeat cores, with timebase and declared history.",
-      "boundary": "No numerical/model tools; preserve all samples via fixed tiling and score each core once. Derived rate displays would be separately identified substrates.",
+      "representation": "Source APIs project complete spike events, relative exact ticks/timebase and permitted training calibration, with a separately labelled one-core tiled condition; authentic prepared observations are not yet available.",
+      "boundary": "No numerical/model tools in a future direct condition. Full-repeat and bounded-core information conditions remain distinct; tile projection alone does not isolate contexts or collect responses, and every native core must be scored once.",
       "evidence_ids": [
-        "evaluator"
+        "evaluator-v2",
+        "prepared-projection",
+        "packet-interface"
       ],
       "missing": [
-        "Complete authentic direct packet and response transport; feasibility of full-duration numeric output not established."
+        "Authenticated original-to-prepared mapping and authentic direct observation/response transport; isolated fresh-context tile delivery and full-duration numeric output feasibility remain unestablished."
       ]
     },
     "typed_viewer": {
@@ -223,7 +225,9 @@
       "representation": "Potential typed raster/time-axis display of the same spike observations.",
       "boundary": "Restricted render/zoom/pan actions may reveal only declared input support, never velocity, waveform identity or hidden phase.",
       "evidence_ids": [
-        "evaluator"
+        "evaluator-v2",
+        "prepared-projection",
+        "packet-interface"
       ],
       "missing": [
         "No typed viewer, image transport or full-coverage response collector exists for this task."
@@ -231,24 +235,30 @@
     },
     "tool_assisted": {
       "status": "not_delivered",
-      "representation": "Numerical per-case decoder investigation on identical spike packets and calibration.",
-      "boundary": "Equal input/checkpoint/tool/compute budget, no target feedback; reset case state as declared. The scorer accepts a case_investigation artifact label only.",
+      "representation": "A source full-repeat public spike-event projection and permitted calibration can support future numerical per-case investigation on identical prepared observations; no participant runner is delivered.",
+      "boundary": "Equal input/checkpoint/tool/compute budget and no target feedback remain requirements. Prepared/protected projection is an in-memory operator API, not process isolation or case-state reset; an artifact label does not certify execution.",
       "evidence_ids": [
-        "evaluator"
+        "evaluator-v2",
+        "prepared-projection",
+        "supplied-prior-reference",
+        "packet-interface"
       ],
       "missing": [
-        "No authenticated input or case-adaptive participant runner; label does not prove execution."
+        "Authenticated native preparation/export, isolated case-adaptive participant runner and independently competent matched comparator production."
       ]
     },
     "frozen_program": {
       "status": "not_delivered",
-      "representation": "Precommitted spike-to-velocity programme and train-only fit/adaptation recipe.",
-      "boundary": "Freeze code, preprocessing, lags and calibration before held-repeat access; scorer accepts completed arrays but never runs the producer.",
+      "representation": "Prospective precommitted spike-to-velocity programme and train-only fit recipe using the existing prepared full-repeat public projection and supplied-prior reference interface.",
+      "boundary": "Freeze code, preprocessing, lags and calibration before held-repeat access. Projection/reference source neither trains a programme nor runs a producer; prior training declarations and artifact mode labels are not execution evidence.",
       "evidence_ids": [
-        "evaluator"
+        "evaluator-v2",
+        "prepared-projection",
+        "supplied-prior-reference",
+        "packet-interface"
       ],
       "missing": [
-        "Complete programme training/inference harness, budgets and authentic comparator production."
+        "Authentic prepared observations, complete programme training/inference harness, matched budgets and qualified comparator production."
       ]
     }
   },
@@ -292,7 +302,7 @@
       "schema_version": "neural-understanding/v1",
       "objective": "infer_neural_or_behavioral_targets_from_permitted_observations",
       "contract_path": "understanding.v1.json",
-      "contract_sha256": "76c397352370e0c3f9202c0633479027727cb4f803808e11f93c53003bf09cb0",
+      "contract_sha256": "3c4e91c80ab51ac669f768ffb2172467ef3c5dbc55e5c8c12c775f86dcaf2137",
       "original_definition_path": "historical/task.pre-understanding.v1.json",
       "original_definition_sha256": "beb13f4cff4fea48f88e5fbd0cf92e877ef3ae9df810311b0c26de0d5b72a682"
     }

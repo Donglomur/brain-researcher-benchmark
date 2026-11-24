@@ -52,6 +52,34 @@
       "path": "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/README.md",
       "sha256": "c8f36f0390b1f6d95db5c1d0577fc0447c7e34fe86dc82a3331718e7445ae8ae",
       "supports": "Inspected source-scope documentation distinguishing delivered software from authentic task execution."
+    },
+    {
+      "id": "retina-protected-scorer",
+      "kind": "local_source",
+      "path": "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/protected-scoring-v1/scorer.py",
+      "sha256": "2c61c9c04657ab4a63dc5fabe0540b671c73ec413b499a0f11b33c3ae4f3c51b",
+      "supports": "Owner-only complete declared170-cell/two-preparation repeat-average Pearson, individual-repeat Poisson and condition-matched paired scoring; undefined cells remain in all-cell coverage."
+    },
+    {
+      "id": "retina-protected-scoring-scope",
+      "kind": "local_source",
+      "path": "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/protected-scoring-v1/README.md",
+      "sha256": "c72d303891c244c11db9f59e4d0d2330fc9820ca3921422928846b66a9e22df8",
+      "supports": "Exact owner-side operands, fixed all_cells_or_null policy, source-census and timing qualification requirements, and absence of a protected participant lifecycle."
+    },
+    {
+      "id": "retina-constant-diagnostic",
+      "kind": "local_source",
+      "path": "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/constant-rate-v1/constant.py",
+      "sha256": "82923037b28a2f0a9c25c483614bfc360d05dad852e0d5ca6f85227343993006",
+      "supports": "Condition-permitted training-count constant diagnostic over every declared target update; WN calibration-only counts excluded from means and all six conditions retained."
+    },
+    {
+      "id": "retina-constant-scope",
+      "kind": "local_source",
+      "path": "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/constant-rate-v1/README.md",
+      "sha256": "5e3939f7edbab5f81ebd46b02f673951bbb59dd37cc1bcbc28d1d9dbeae279e7",
+      "supports": "Constant diagnostic has undefined Pearson and is not the competent spatial-contrast improvement reference; authentic baseline and workflow qualification remain absent."
     }
   ],
   "empirical_claims": {
@@ -67,7 +95,7 @@
     ]
   },
   "disposition": "partial_delivery",
-  "disposition_reason": "Condition-permitted 170-cell training-count loading is implemented, closing the unsafe test-response-open branch. Stimulus preparation, RF fitting, complete protected scoring and matched interpretation packets remain missing.",
+  "disposition_reason": "Condition-permitted training-count loading, complete declared-support protected numerical scoring and a constant-rate diagnostic are implemented. Authentic stimulus preparation, RF/reference fitting, protected participant lifecycle and matched interpretation packets remain unavailable or unqualified.",
   "scientific_target": {
     "question": "Can a condition-matched model predict held-out retinal ganglion-cell spike counts from white-noise/natural-movie stimuli, and does spatial contrast improve predictions over mean-intensity encoding?",
     "target_kind": "neural_response_prediction",
@@ -111,7 +139,7 @@
       {
         "name": "Constant rate",
         "inputs": "Condition-permitted source training counts",
-        "procedure": "Proposed per-cell mean count baseline."
+        "procedure": "Implemented constant-rate-v1/predict returns per-cell mean expected counts from condition-permitted source training counts on every declared protected update. Calibration-only counts are excluded. Constant predictions have undefined Pearson; individual-repeat Poisson loss is a diagnostic, not the competent spatial-contrast improvement reference."
       },
       {
         "name": "Regularized LN",
@@ -131,23 +159,27 @@
       "Choose predictive smoothing on permitted development only; historical test-selected optimum remains retrospective."
     ],
     "uncertainty": "Report each preparation and within-preparation distributions. Repeat-noise summaries condition on fixed preparations/models; do not bootstrap 170 cells as independent animals or claim two independent biological clusters before animal mapping.",
-    "failure_policy": "Training loader requires all declared permitted streams/cells/trials/frames and rejects missing or malformed counts without returning earlier partial success. Future complete scorer must refuse missing predictions and retain undefined-correlation coverage rather than silently remove cells."
+    "failure_policy": "Training loading requires all declared permitted cells/streams/trials/frames. The implemented owner scorer refuses missing or misordered predictions, invalid count units, unequal condition/calibration declarations and incomplete protected support. It retains every undefined-correlation cell and makes a preparation summary null when any required cell is undefined under all_cells_or_null; authentic enrollment must accept that coverage policy before primary decision use."
   },
   "implementation": {
     "reviewed_paths": [
       "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/train_only.py",
       "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/README.md",
-      "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/SPECIFICATION.md"
+      "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/training-response/SPECIFICATION.md",
+      "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/protected-scoring-v1/scorer.py",
+      "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/protected-scoring-v1/README.md",
+      "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/constant-rate-v1/constant.py",
+      "benchmarks/neural/marmoset-retinal-contrast-generalization/implementations/constant-rate-v1/README.md"
     ],
-    "scorer_target": "No scorer delivered. prepare_training authenticates only permitted training NPY leaves and projects typed count buffers; it never loads test responses or originalSTA, fits a model or supplies stimuli.",
-    "target_fidelity": "no_target_evaluator",
-    "delivered_scope": "Exact count-preserving response adapter for full declared 170 cell scope and six calibration conditions. Original source census, stimulus pipeline, complete protected packet and metric remain unqualified.",
+    "scorer_target": "protected-scoring-v1/scorer.py implements owner-only per-cell Pearson against aligned repeat-averaged protected counts, individual-repeat Poisson negative log likelihood, paired candidate-minus-condition-matched-reference correlations and descriptive equal-preparation summaries on complete declared support. Inputs must already have qualified source census, alignment and frozen identities; it supplies no stimulus reconstruction, fitting or protected participant process.",
+    "target_fidelity": "scoped_target",
+    "delivered_scope": "Complete declared170-cell/two-preparation/six-condition training-count projection, owner-side protected numerical endpoint and condition-permitted constant-rate diagnostic. The scorer covers every declared eligible update/repeat and keeps undefined cells; native census, stimuli, physical timing/crop, competent reference and protected workflow are not qualified by these source components.",
     "missing": [
-      "Authentic 170/180 cell original census, seed/trial/frame clocks, source-to-cell mapping and animal relationship.",
-      "Target-independent stimulus reconstruction and validatedNM-only RF/STA estimation.",
-      "Competent condition-matched baselines, undefined-coverage scoring, protected prediction lifecycle and interpretation study."
+      "Authentic170/180-cell original census, seed/trial/frame clocks, source-to-cell mapping and animal relationship.",
+      "Target-independent stimulus reconstruction and validated NM-only RF/STA estimation.",
+      "Competent condition-matched LN/SC/CNN references, scientific acceptance of the implemented undefined-coverage policy, protected prediction lifecycle and a nonleaking matched interpretation study."
     ],
-    "execution_evidence": "Generated count/layout/dtype/protected-open controls establish software behavior only. No original neural arrays or new native fitting/scoring operation were executed in this revision."
+    "execution_evidence": "Generated count/layout/dtype/protected-open, complete-support scoring and constant-diagnostic controls establish software behavior only. The current source audit ran10 existing constant integration controls successfully; no original neural arrays, new model trials, authentic native fitting/scoring or participant execution were performed."
   },
   "access_modes": {
     "direct_observation": {
@@ -175,34 +207,42 @@
     },
     "tool_assisted": {
       "status": "not_delivered",
-      "representation": "Proposed train-only numerical/model investigation using prepared stimuli and permitted calibration counts.",
-      "boundary": "Source-only versusWN-assisted domains enforced at access; calibration_only labels alone do not enforce downstream fitting.",
+      "representation": "Partial source components exist for condition-permitted training-count preparation, a constant-rate diagnostic and owner-only protected scoring; the complete tool-assisted task still lacks qualified matching stimuli and constrained fitting/execution.",
+      "boundary": "Source-only versus WN-assisted domains remain distinct. Calibration-only labels do not enforce downstream fitting. The owner scorer is a numerical API, not target custody or a sandbox, and the constant diagnostic is not the competent spatial-contrast reference.",
       "evidence_ids": [
-        "retina-adapter"
+        "retina-adapter",
+        "retina-protected-scorer",
+        "retina-protected-scoring-scope",
+        "retina-constant-diagnostic",
+        "retina-constant-scope"
       ],
       "missing": [
-        "Complete stimuli/case packets, constrained fit tools and protected scorer."
+        "Authentic complete stimuli/case packets, constrained condition-permitted fitting, competent references and protected participant/scorer integration."
       ]
     },
     "frozen_program": {
       "status": "not_delivered",
-      "representation": "Proposed frozen response predictor over every protected stimulus update.",
-      "boundary": "Freeze cell roster, fit/normalization/smoothing and calibration route before queries; current loader is only one preparation component.",
+      "representation": "A complete declared-support constant predictor and owner-side protected scorer exist as source components; an arbitrary participant programme fit/freeze/predict lifecycle over qualified stimuli is not delivered.",
+      "boundary": "Freeze the full cell roster, permitted calibration route, fitting/normalization/smoothing and programme before protected queries. The pure source APIs cannot establish freeze chronology or deny target-file access; the constant diagnostic remains unqualified and is not the spatial-contrast reference.",
       "evidence_ids": [
-        "retina-adapter"
+        "retina-adapter",
+        "retina-protected-scorer",
+        "retina-protected-scoring-scope",
+        "retina-constant-diagnostic",
+        "retina-constant-scope"
       ],
       "missing": [
-        "Complete prediction/scoring lifecycle and competent reference qualification."
+        "Qualified stimulus preparation, protected participant fit/freeze/predict/score lifecycle and competent reference qualification."
       ]
     }
   },
   "revision": {
-    "date": "2026-11-16",
+    "date": "2026-11-24",
     "summary": [
-      "Separate stimulus-to-response encoding from direct interpretation instead of forcing a viewer onto protected target arrays.",
-      "Recognize implemented safe training-response loading while retaining absent stimulus/scoring andNM-onlycalibration gates.",
-      "Preserve original two-preparation 170 selected-cell estimand and historical target-based selection beside every transfer condition."
+      "Resolve stale current source-availability claims: protected numerical scoring and a condition-permitted constant diagnostic are implemented alongside the training adapter.",
+      "Preserve complete original declared scope, metrics, historical test-selected estimand and all authentic-input, reference, participant-lifecycle and scientific-admission holds.",
+      "Keep direct/viewer modes unsuitable and full tool/program modes undelivered; component availability does not provide a nonleaking interpretation estimand or a protected runtime."
     ],
-    "source_review": "Reviewed preserved scientific registration and named implementation code/documentation; reused cited primary source evidence already verified in these records. No scientific arrays or evaluator labels were opened in this revision."
+    "source_review": "Reviewed and hash-pinned existing training, protected-scoring and constant-diagnostic source/documentation. Current task is deterministically projected with the maintained neural_understanding engine; historical definition and implementation bytes remain unchanged. No authentic data or participant/model execution occurred."
   }
 }

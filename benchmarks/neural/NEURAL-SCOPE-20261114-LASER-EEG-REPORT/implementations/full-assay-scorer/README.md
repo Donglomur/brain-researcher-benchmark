@@ -124,8 +124,14 @@ python3 -B scorer.py \
 All four required expected identities are checked before any file open. They
 must not come from the submitter. On Unix the input helper uses a nonblocking,
 no-follow open and verifies a regular file on the same descriptor, reusing the
-reviewed Hypothalamic admission pattern. All input documents are bounded to
-32 MiB each; no truncated input is scored. Output creation is exclusive. This
+reviewed Hypothalamic admission pattern. Trusted input documents are bounded to
+32 MiB each and still refuse on overflow. For public submissions only, the reader
+may retain 32 MiB plus one byte to detect overflow. That entire submission is
+classified as an invalid envelope and every required prediction receives loss10;
+no prefix is parsed or salvaged. The report sets `document_sha256.submission` to
+null and records the bound, bytes read and incomplete-body disposition under
+`submission_read`, so a prefix hash cannot masquerade as a complete-body identity.
+Unreadable, nonregular and symlink inputs still refuse as intake errors. Output creation is exclusive. This
 is not a filesystem sandbox, arbitrary-filesystem deadline or process owner,
 and no authentic full-assay resource qualification is claimed. The complete
 report remains evaluator-private; it includes case/support identifiers and
@@ -201,6 +207,7 @@ Use Python 3.11 on Unix; all production and test dependencies are standard libra
 and included source. The CLI above works from this directory with owner-provided
 inputs. `SOURCE.json` lists the flat distribution; its expected hash must come from
 the reviewed release. `test_delivery.py` checks an independently relocated actual
-CLI with a complete invented population. The accepted 16-method source suite remains
-available and enrolled in CI; the public packaging phase does not rerun it locally.
+CLI with a complete invented population. The 18-method scorer suite and two delivery checks remain available for CI.
+The bounded-submission controls exercise exact-bound admission, valid-prefix
+overflow refusal, strict trusted input reads and full-denominator CLI penalties.
 No original EEG, paper/code bodies, targets or competent reference is distributed.

@@ -21,7 +21,10 @@ or retry scientific analysis.
 - `model_provider`, `tool_provider` (explicit null for no tool), `fit_prompt`,
   `infer_prompt`, `max_new_tokens`, `phase_steps` with positive FIT/INFER counts,
   `malformed_repair_slots` (per phase), `dependencies`, and
-  `row_sum_abs_tolerance`.
+  `row_sum_abs_tolerance`, which must be exactly `1e-6`, matching the mounted
+  public policy, collector and protected scorer. A different tolerance is
+  rejected before rendering or starting the investigator loop; there is no
+  participant-specific relaxation or stricter admission convention.
 - `limits` contains `context_bytes`, `decision_bytes`, `analysis_source_bytes`,
   `analysis_seconds`, `closure_seconds`, `stream_bytes`, `workspace_bytes`,
   `workspace_files`, `artifact_bytes`, `seal_bytes`, `seal_header_bytes`,

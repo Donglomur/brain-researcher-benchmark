@@ -87,3 +87,32 @@ prediction-program scoring; it does not demonstrate direct neural interpretation
 or reproduce the paper's random-half endpoint.
 
 Source pins and the construction outcome are recorded in `COMPONENT.json`.
+
+
+## Complete paired role comparisons
+
+`grade` also returns `paired_role_comparisons` from the same admitted120 blocks.
+It reports all six role pairs with fixed directions: I minus F, F and I each
+minus the fixed and tuned references, and tuned minus fixed reference. Each
+contrast retains ten named person differences for every arm and their equal-person
+mean. `control_effect_differences` compares each role's representation-minus-control
+effect within the same person before averaging. No coordinate or repeat is treated
+as another person, and an undefined person propagates to the whole contrast mean.
+The existing role scores, primary metric, within-role effects and descriptive
+reliability remain unchanged. No extra target reads or participant products are
+required. Comparisons occur only after complete artifact admission and scoring.
+
+These are descriptive comparisons conditional on the ten exposed people and200
+shared images. They neither provide population confidence intervals nor assert
+equal actual spending, adequate reference performance, runtime isolation, or
+scientific/native-neural understanding. F/I match at the original frozen-policy
+and information/budget-ceiling level; actual costs must still accompany any later
+qualified run. This component still requires explicit selection into a qualified
+runner, with consistent development and final numerical versions.
+
+`tests/test_role_comparison.py` exercises the real120-product admission path with
+heterogeneous generated role/person/arm predictions, hand-computable signed paired
+contrasts, incomplete/corrupt final-product refusal before target access, and
+constant-target propagation without deleting a person. It is a software control,
+not a scientific or model run. Set `NEURAL056_REPO` to the repository root when
+running a staged candidate outside the repository.

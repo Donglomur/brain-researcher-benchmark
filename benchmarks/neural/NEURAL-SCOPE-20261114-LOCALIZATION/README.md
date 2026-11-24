@@ -40,6 +40,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Centroid scorer](implementations/centroid-scorer) — Centroid scorer.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Frozen participant](implementations/frozen-participant) — Reviewed source component.
+  Scope: Participant callback source consumes complete allowed waveform/template, contact-geometry and support observations and collects requested coordinates under the retained scorer ABI. Native provenance, original joins, competent estimators and protected/scientific execution remain unqualified.
 - [Participant packet](implementations/participant-packet) — Reviewed source component.
   Scope: Complete physical localization participant packet. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

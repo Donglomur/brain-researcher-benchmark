@@ -72,3 +72,55 @@ before target access. These are software controls, not scientific outcomes.
 Run this file only through the coordinated lightweight test pool during the
 parallel construction wave. Existing source-selector/CI enrollment and any
 canonical contract update belong to integration.
+
+
+## Matched comparison of two fixed programme results
+
+`compare_primary.compare_primary` adds an evaluator-only comparison of two
+independently committed fixed three-arm results. It preserves the single-result
+primary above. Both results must match the same independently selected protocol,
+population, taxonomy, eligibility and spatial support. Both reference arms must
+have identical prediction bytes, dispositions and selected configurations; this
+entry therefore compares shared-components predictions against a common baseline.
+It does not compare methods that change the reference or select a new rank.
+
+The entry validates both complete 1,989-prediction rosters and decodes every
+successful prediction before any protected target request. It captures the
+independent support receipt once. A bounded cache reads each needed target once,
+authenticates its source, support, extent and contents, then replays that same
+immutable value to the unchanged `evaluate_primary` entry. A target-read failure
+is retained and replayed, never retried for the second condition. Only its
+original exception-class name is cached; an ephemeral surrogate preserves that
+same attribution in the existing evaluator without retaining rejected buffers
+through an original traceback. The required
+`maximum_target_panel_bytes` must cover every declared present target at the
+selected map length. This bounds retained raw target bytes, not process memory,
+filesystem I/O or a native runtime.
+
+The return is `(first_case_rows, second_case_rows, report)`. The report preserves
+both original scores and all 663 dispositions per condition. Its paired primary
+is the first-minus-second difference in the existing signed correlation gains,
+with equal endpoints within family, equal families within person, then equal
+people. All six companion gain differences retain the same weights and signs.
+An unpaired or undefined member leaves the corresponding complete-panel contrast
+absent; the entry never substitutes a favorable paired subset. Target content
+identities and failures are reported, but target values are not serialized.
+
+Authenticate the new source along with the existing primary/scientific closure
+before calling it with the same operands as `evaluate_primary`, plus the second
+result/commitment and explicit target-panel retention allowance. Its version is
+`neural074-paired-primary-gain-v1`. Matching labels and bytes do not establish
+independent commitment timing, source-method identity, equal execution resources,
+authentic training-map access, target custody or native qualification. Those
+remain operator responsibilities. The interface runs no programme and creates no
+new direct-observation condition: showing this task's protected target map would
+still change the question. Population inference and scientific qualification
+remain unset.
+
+`test_compare_primary.py` exercises the complete declared panel using four
+invented map values, including unequal family sizes, negative paired gains,
+nonfinite and missing late predictions before target access, changed references,
+shared target failures, incomplete prediction support and undefined correlations.
+For a private staged layout only, `N074_IMPLEMENTATIONS` may identify the existing
+read-only sibling implementations directory. These controls are not scientific
+performance measurements.

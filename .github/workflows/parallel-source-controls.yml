@@ -72,7 +72,7 @@ jobs:
           pins = [
               {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': 'be8cd8c31fe82a671e899cf020861e89464d9bbc00f833c88df27e61679553e3'},
               {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': 'd1fc0abb98e02a8d9afb1f49d01f418f2922369a575a40fa531def0f569e178a'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 595910, 'sha256': 'cd76d944fedbbb7f5e1bed42d53fc276dc61dfae2acb63bade4e7748ea017af8'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 596024, 'sha256': 'a77fc935405ffd68258967f1a497aa09fd6083b9e468c835849b8893eb5fb816'},
           ]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
@@ -718,6 +718,398 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/paper/PAPER-paper-signal-add-019/implementations/paired-panel-v1/tests -p 'test_pair.py' -v
+      - name: "Check NEURAL-053 generated source controls"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural053.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-053/implementations/programme-source/implementation-v4/test_prior_comparisons_v1.py
+      - name: "Check NEURAL-054 generated source controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural054.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-054/implementations/frozen-capture-v1/tests/test_model_actor_transport.py --scratch "$scratch"
+      - name: "Check NEURAL-056 generated source controls"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural056.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          export NEURAL056_REPO="$GITHUB_WORKSPACE"
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-056/implementations/precision-v1/tests/test_role_comparison.py
+      - name: "Check NEURAL-057 generated source controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural057.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-057/implementations/query-observation-v1/tests -p test_observation.py -v
+      - name: "Check NEURAL-058 typed viewer"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural058-typed viewer.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-058/implementations/observation-viewer-v1/controls/test_viewer.py
+      - name: "Check NEURAL-058 generated corpus adapter"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural058-generated corpus adapter.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-058/implementations/observation-viewer-v1/controls/check_corpus_adapter.py --programme-root "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program" --scratch-parent "$scratch"
+      - name: "Check NEURAL-059 generated source controls"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural059.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-059/implementations/direct-grading-v1/test_grade.py
+      - name: "Check NEURAL-060 generated source controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural060.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-060/implementations/workflow-comparison-v1/test_compare.py --repository "$GITHUB_WORKSPACE" --scratch "$scratch"
+      - name: "Check NEURAL-062 generated source controls"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural062.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          export NEURAL062_TEST_TMP="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-062/implementations/phase-access-v1 -p test_phase_input.py -v
+      - name: "Check NEURAL-063 generated source controls"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural063.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-063/implementations/restricted-viewer-v1 -p test_viewer.py -v
+      - name: "Check NEURAL-065 observation Python controls"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural065-observation Python controls.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-065/implementations/observation-viewer-v1/tests -p test_view.py -v
+      - name: "Check NEURAL-065 observation JavaScript controls"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural065-observation JavaScript controls.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          command -v node
+          node --version
+          timeout --signal=TERM --kill-after=5s 120s node --max-old-space-size=256 benchmarks/neural/NEURAL-065/implementations/observation-viewer-v1/tests/test_navigation.cjs
+      - name: "Check NEURAL-066 generated source controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural066.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-066/implementations/observation-pages-v1/test_observation.py
+      - name: "Check NEURAL-067 generated source controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/neural067.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-067/implementations/participant-client-v1 -p test_client.py -v
+      - name: "Check NEURAL-068 reviewed source capability"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_TMP="$(mktemp -d "${RUNNER_TEMP}/neural-068-nov24.XXXXXX")"
+          trap 'rm -rf -- "$CONTROL_TMP"' EXIT
+          export TMPDIR="$CONTROL_TMP"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-068/implementations/paired-session-v1/test_compare_access.py -v
+      - name: "Check NEURAL-069 reviewed source capability"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_TMP="$(mktemp -d "${RUNNER_TEMP}/neural-069-nov24.XXXXXX")"
+          trap 'rm -rf -- "$CONTROL_TMP"' EXIT
+          export TMPDIR="$CONTROL_TMP"
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-069/implementations/response-scorer-v1/test_comparison.py -v
+      - name: "Check NEURAL-070 reviewed source capability"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_TMP="$(mktemp -d "${RUNNER_TEMP}/neural-070-nov24.XXXXXX")"
+          trap 'rm -rf -- "$CONTROL_TMP"' EXIT
+          export TMPDIR="$CONTROL_TMP"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B tests/test_neural070_coordinate_roster.py -v
+      - name: "Check NEURAL-072 reviewed source capability"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_TMP="$(mktemp -d "${RUNNER_TEMP}/neural-072-nov24.XXXXXX")"
+          trap 'rm -rf -- "$CONTROL_TMP"' EXIT
+          export TMPDIR="$CONTROL_TMP"
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-072/implementations/paired-comparison-v1/tests/test_compare.py -v
+      - name: "Check NEURAL-074 reviewed source capability"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_TMP="$(mktemp -d "${RUNNER_TEMP}/neural-074-nov24.XXXXXX")"
+          trap 'rm -rf -- "$CONTROL_TMP"' EXIT
+          export TMPDIR="$CONTROL_TMP"
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-074/implementations/primary-score-v1/test_compare_primary.py -v
+      - name: "Check NEURAL-076 reviewed source capability"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_TMP="$(mktemp -d "${RUNNER_TEMP}/neural-076-nov24.XXXXXX")"
+          trap 'rm -rf -- "$CONTROL_TMP"' EXIT
+          export TMPDIR="$CONTROL_TMP"
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-076/implementations/hierarchy-scorer-v2/test_compare.py -v
+      - name: "Check NEURAL-081 reviewed source capability"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_TMP="$(mktemp -d "${RUNNER_TEMP}/neural-081-nov24.XXXXXX")"
+          trap 'rm -rf -- "$CONTROL_TMP"' EXIT
+          export TMPDIR="$CONTROL_TMP"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-081/implementations/waveform-observation-v1/test_session.py -v
+      - name: "Check NEURAL-084 generated paired or observation controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          N84_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural84-generated.XXXXXX")"
+          trap 'rm -rf -- "$N84_SCRATCH"' EXIT
+          export NEURAL084_TEST_TMP="$N84_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-084/implementations/paired-access-scoring-v1/test_score.py -v
+      - name: "Check NEURAL-088 generated paired or observation controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          N88_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural88-generated.XXXXXX")"
+          trap 'rm -rf -- "$N88_SCRATCH"' EXIT
+          export NEURAL088_TEST_TMP="$N88_SCRATCH/fixtures"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-088/implementations/count-endpoint-v2/test_paired_access.py -v
+      - name: "Check NEURAL-089 generated paired or observation controls"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          N89_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural89-generated.XXXXXX")"
+          trap 'rm -rf -- "$N89_SCRATCH"' EXIT
+          export TMPDIR="$N89_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-089/implementations/same-panel-comparison-v1 -p test_compare.py -v
+      - name: "Check NEURAL-090 generated paired or observation controls"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          N90_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural90-generated.XXXXXX")"
+          trap 'rm -rf -- "$N90_SCRATCH"' EXIT
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-090/implementations/neural-090/mode-comparison-v1/test_comparison.py --scratch-root "$N90_SCRATCH" -v
+      - name: "Check NEURAL-091 generated paired or observation controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          N91_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural91-generated.XXXXXX")"
+          trap 'rm -rf -- "$N91_SCRATCH"' EXIT
+          export NEURAL091_TEST_TMPDIR="$N91_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-091/implementations/paired-condition-evaluator-v1 -p test_paired_conditions.py -v
+      - name: "Check NEURAL-092 generated paired or observation controls"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-092/implementations/observed-text-delivery-v1/test_observed_text.py -v
+      - name: "Check NEURAL-093 generated paired or observation controls"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-093/implementations/four-arm-scoring-v1/test_paired_programs.py -v
+      - name: "Check NEURAL-094 generated paired or observation controls"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-094/implementations/reference-preflight-v1/test_reference_preflight.py -v
+      - name: "Check NEURAL-097 generated paired or observation controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          N97_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural97-generated.XXXXXX")"
+          trap 'rm -rf -- "$N97_SCRATCH"' EXIT
+          export N097_TEST_TMPDIR="$N97_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-097/implementations/restricted-observation-v1/tests/test_observation.py -v
+      - name: "Check NEURAL-EXP-005 generated participant controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_SCRATCH=$(mktemp -d "${RUNNER_TEMP}/nov24-neural-exp-005-XXXXXX")
+          trap 'rm -rf -- "$CONTROL_SCRATCH"' EXIT
+          export TMPDIR="$CONTROL_SCRATCH"
+          export HELSINKI_NUMERIC_SCRATCH_ROOT="$CONTROL_SCRATCH"
+          export HELSINKI_NUMERIC_PROOF_PATH="$CONTROL_SCRATCH/proof.json"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-EXP-005/implementations/numeric-program-v1/test_run.py
+      - name: "Check NEURAL-SCOPE-20261114-LOCALIZATION generated participant controls"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_SCRATCH=$(mktemp -d "${RUNNER_TEMP}/nov24-neural-scope-20261114-localization-XXXXXX")
+          trap 'rm -rf -- "$CONTROL_SCRATCH"' EXIT
+          export TMPDIR="$CONTROL_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-SCOPE-20261114-LOCALIZATION/implementations/frozen-participant/test_participant.py
+      - name: "Check apcx-odor-pulse-evidence generated participant controls"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_SCRATCH=$(mktemp -d "${RUNNER_TEMP}/nov24-apcx-odor-pulse-evidence-XXXXXX")
+          trap 'rm -rf -- "$CONTROL_SCRATCH"' EXIT
+          export TMPDIR="$CONTROL_SCRATCH"
+          unset APCX_IMPLEMENTATIONS_ROOT
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/apcx-odor-pulse-evidence/implementations/typed-count-stdio-v1/test_bridge.py
+      - name: "Check clinical-ccep-stimulation-attribution generated participant controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_SCRATCH=$(mktemp -d "${RUNNER_TEMP}/nov24-clinical-ccep-stimulation-attribution-XXXXXX")
+          trap 'rm -rf -- "$CONTROL_SCRATCH"' EXIT
+          export TMPDIR="$CONTROL_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/complete-observation-v1/test_observation.py
+      - name: "Check clinical-sensefog-stn-state generated participant controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          CONTROL_SCRATCH=$(mktemp -d "${RUNNER_TEMP}/nov24-clinical-sensefog-stn-state-XXXXXX")
+          trap 'rm -rf -- "$CONTROL_SCRATCH"' EXIT
+          export TMPDIR="$CONTROL_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/clinical-sensefog-stn-state/implementations/participant-delivery-v1/test_delivery.py
+      - name: "Check complete NEURAL-075 numeric observations"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        env:
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          NUMEXPR_NUM_THREADS: "1"
+          VECLIB_MAXIMUM_THREADS: "1"
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 130s python -I -B benchmarks/neural/NEURAL-075/implementations/numeric-observation-v1/test_numeric_observation.py
+      - name: "Check NEURAL-085 complete numeric observation controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          unset NEUROBENCH_TEST_SOURCE_ROOT
+          timeout --signal=TERM --kill-after=5s 420s python -I -S -B benchmarks/neural/NEURAL-085/implementations/released-summary-response-v1/test_response.py --control-timeout-seconds 360
+      - name: "Check full32 ERP image-reference portable controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/erp-full32-image-reference.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          status=0
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-077/implementations/full32-image-reference-v1/test_adapter.py --repository-root "$GITHUB_WORKSPACE" >"$scratch/stdout.log" 2>"$scratch/stderr.log" || status=$?
+          cat "$scratch/stdout.log"
+          cat "$scratch/stderr.log" >&2
+          test "$status" -eq 0
+          python -I -S -B - "$scratch/stdout.log" "$scratch/stderr.log" <<'PY'
+          import json, pathlib, sys
+          assert sys.platform.startswith("linux"), "This direct step specifies Linux portable-control expectations"
+          out = pathlib.Path(sys.argv[1]).read_text().splitlines()
+          report = json.loads(next(line for line in reversed(out) if line.strip()))
+          assert report["generated_only"] is True
+          assert report["tests"] == 14 and report["failures"] == 0 and report["errors"] == 0 and report["skipped"] == 1, report
+          assert report["authentic_packets_opened"] == report["authentic_predictions"] == report["private_targets_opened"] == 0, report
+          skipped = [line for line in pathlib.Path(sys.argv[2]).read_text().splitlines() if "... skipped " in line]
+          assert len(skipped) == 1 and "test_generated_pixels_use_real_sandbox_capture_and_unchanged_cli" in skipped[0] and "macOS sandbox only" in skipped[0], skipped
+          print(json.dumps({"erp_adapter_portable_ci": "passed", "tests": 14, "passed": 13, "allowed_platform_skips": 1, "sandbox_qualified": False}, sort_keys=True))
+          PY
       - name: Acquire exact public source fixtures
         shell: bash
         run: |

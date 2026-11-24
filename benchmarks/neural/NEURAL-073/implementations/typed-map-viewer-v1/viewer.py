@@ -275,6 +275,17 @@ class ViewerSession:
         need(type(request) is dict and type(request.get("action")) is str,
              "typed request object required")
         action = request["action"]
+        if action == "status":
+            need(set(request) == {"action"}, "unexpected status fields")
+            if self._cursor == len(self._ids):
+                return {"state": "all_responses_collected", "responses": len(self._answers)}
+            # The participant must be able to abstain even when loading or
+            # validating this map fails. This route exposes no map or target.
+            return {"state": "awaiting_response", "case_id": self._ids[self._cursor],
+                    "ordinal": self._cursor, "total": len(self._ids),
+                    "frames_remaining": self._limits.max_frames_per_case - self._frames[self._cursor],
+                    "answer_classes": 25, "class_labels": list(self._labels),
+                    "ontology_sha256": self._ontology_digest}
         if action == "describe":
             need(set(request) == {"action"}, "unexpected describe fields")
             if self._cursor == len(self._ids):

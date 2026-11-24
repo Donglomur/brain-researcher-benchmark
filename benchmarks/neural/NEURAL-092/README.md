@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Observed text delivery v1](implementations/observed-text-delivery-v1) — Reviewed source component.
+  Scope: Complete post-prediction neural observation text and 32-response collection preserve the original observed reconstruction endpoint for declared restricted/program-from-text arms. This is separate from protected primary prediction and does not qualify actual participant delivery or scientific understanding.
 - [Public ci adapter v1](implementations/public-ci-adapter-v1) — Reviewed source component.
   Scope: Source-only public CI adapter preserving six genuine public controls from the registered inactive runtime; no runtime selection or scientific qualification.
 - [Registered runtime stable deviance v1](implementations/registered-runtime-stable-deviance-v1) — Reviewed source component.

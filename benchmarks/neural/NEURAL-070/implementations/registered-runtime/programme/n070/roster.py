@@ -27,12 +27,19 @@ def validate_trials(rows):
             "measurement":MEASUREMENT_LABEL}
 def validate_coordinates(rows):
     need(type(rows)is list and rows,"Original coordinate roster")
-    keys=set();cells=set()
+    keys=set();cells=set();source_keys=set()
     for row in rows:
         exact(row,("participant","roi","coordinate","source_index","space","independent_mask_member"))
         need(row["participant"]in PARTICIPANTS and row["roi"]in ROIS and row["space"]=="fsLR32k","Fixed person/ROI/space")
         key=(row["participant"],row["roi"],row["coordinate"]);need(key not in keys,"Unique coordinate within ROI");keys.add(key)
         need(type(row["source_index"])is int and 0<=row["source_index"]<91282 and row["independent_mask_member"],"Authentic surface/volume index mapping")
+        # A distinct label cannot create a second copy of one measured column
+        # within the same person/ROI. Conversion selects source_index directly,
+        # so aliases would silently change equal-coordinate score weighting.
+        # Overlap across ROIs and reuse across participants remain permitted.
+        source_key=(row["participant"],row["roi"],row["source_index"])
+        need(source_key not in source_keys,"Unique source coordinate within person/ROI")
+        source_keys.add(source_key)
         cells.add(key[:2])
     # Missing cells are retained by caller as dispositions. They cannot satisfy qualification.
     missing=sorted(set((p,r)for p in PARTICIPANTS for r in ROIS)-cells)

@@ -39,6 +39,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Neural 066](implementations/neural-066) — Task implementation source.
   Scope: Existing published source retained with its scientific scope. Source ownership does not establish equivalence to the complete task contract or current execution qualification.
+- [Observation pages v1](implementations/observation-pages-v1) — Reviewed source component.
+  Scope: Permitted-observation pages for event-assisted observed-key inference retain six-arm information, complete same-case support and existing calibration/programme/scorer boundaries. No direct-viewer condition or neural-understanding result is activated.
 - [Paired score v2](implementations/paired-score-v2) — Reviewed source component.
   Scope: Complete sentence pairing for NEURAL-066 scoring. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

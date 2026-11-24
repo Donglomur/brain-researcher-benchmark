@@ -42,6 +42,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Complete normalized 79-infant probability endpoint, exact causal EEG packets and equal-infant Brier comparisons. Generated controls and source review do not verify authentic EDF/annotation alignment, input quality flags, reference competence, protected execution or scientific qualification.
 - [Source admission v1](implementations/source-admission-v1) — Reviewed source component.
   Scope: Original 79-recording, three-rater source bridge with calibrated lazy native windows, complete quality census and the current evaluator projection on the authenticated exported record grid. Full source custody, authentic preparation, competent train-only references and protected participant transport remain open; clinical continuity and source quality flags are not inferred acquisition-pause truth.
+- [Numeric program v1](implementations/numeric-program-v1) — Reviewed source component.
+  Scope: Local frozen-program source consumes complete supplied causal 30-second, 18-channel EEG packets and predicts expert vote fractions with equal infant weighting. Generated controls do not authenticate source inputs, qualify a reference or establish neural understanding across the original 79 infants.
 - [Raster collection v1](implementations/raster-collection-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. Package source contracts define exact interfaces and limits; source enrollment does not establish authentic-data execution, native/runtime isolation, competent reference performance or scientific qualification.
 - [Raster process transport v1](implementations/raster-process-transport-v1) — Reviewed source component.

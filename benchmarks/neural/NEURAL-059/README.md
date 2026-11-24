@@ -41,6 +41,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 
 - [Registered runtime](implementations/registered-runtime) — Catalog registered source package.
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification.
+- [Direct grading v1](implementations/direct-grading-v1) — Reviewed source component.
+  Scope: Direct-capture grading preserves original declared held trial/session/animal/condition support and unchanged probability metrics, separately from F/I/R methods. Full authentic extraction, recording identity and scientific performance remain unqualified.
 - [Direct probability v1](implementations/direct-probability-v1) — Reviewed source component.
   Scope: Selected inactive source component for the existing task. The package documentation and source contracts define its retained scope; runtime admission and scientific qualification remain separate.
 - [Prepared support v2](implementations/prepared-support-v2) — Reviewed source component.

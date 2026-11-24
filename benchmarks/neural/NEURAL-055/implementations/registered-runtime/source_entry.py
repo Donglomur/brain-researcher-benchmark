@@ -21,7 +21,7 @@ TRANSPORT_MANIFEST = [
     "bytes": 3142,
     "path": "SOURCE_COMPONENTS.json",
     "runtime_mode": "0o644",
-    "sha256": "ac518de0c3e979c673df2b9a63396d2b3f47f5556f233c2cdeed5da9ed37346c",
+    "sha256": "48fdceb7001c13368fc92027e1fdb6425b8af2d8fe9bcb7d0eba03063a4929e9",
     "transport_mode": "0o644"
   },
   {

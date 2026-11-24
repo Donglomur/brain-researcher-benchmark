@@ -33,3 +33,20 @@ Raw mean squared error is reported separately in squared prepared-response units
 The recovered preparation source selects Version B MNI152 response means. That differs from the Version A main-paper analysis. Its upstream joint GLMsingle and availability masks include released query trials; author PCA features standardize query covariates separately. The existing panel therefore remains public-development, fixed-derivative encoding, with transductive feature preprocessing. Source pins record this historical choice; array values, actual trial-coordinate joins and a newly prepared packet were not inspected in this revision. The external binding hash authenticates bytes supplied later by the operator, not scientific correctness by itself.
 
 No authentic arrays or historical private targets were read, no data were downloaded, and no model was run for this component. The generated tests check numerical weighting, full-panel identity and malformed-output boundaries only. This does not deliver direct observation, typed viewer, tool-assisted investigation or frozen-program execution; those access-mode distinctions and their missing delivery remain unchanged.
+
+## Paired complete-panel comparison
+
+`compare.py` compares two sealed submissions against the same externally authenticated packet. Both complete 80-array submissions must pass the existing inert-file, roster, coordinate-shape and finite-value checks before any target array is opened. Targets are loaded once and the unchanged current scorer evaluates both captured panels. The report includes both full analyses, all 80 first-minus-second cell differences, ten equal-ROI participant differences, and their equal-participant mean. Undefined support on either side blocks the complete paired endpoint; invalid output is not removed or silently treated as an available case. The historical family-weighted companion remains separately named.
+
+```sh
+python3 -I -B compare.py \
+  --packet /operator/immutable-prepared-packet \
+  --binding-sha256 OPERATOR_VERIFIED_SHA256 \
+  --first /sealed-method/submission.json \
+  --second /sealed-comparator/submission.json \
+  --output /fresh-output/comparison.json
+```
+
+Positive difference means the first submission has higher current-primary response correlation. This is an artifact comparison, not evidence that the inputs, compute entitlement, access conditions or method selection were matched. The operator must establish those separately before interpreting it as a direct-observation versus tool/program comparison or a dynamic versus static/motion contrast. The shared roster authenticates declared output identities, not semantic row use or absence of source exposure. It supplies no new uncertainty interval: eight ROIs remain repeated measures within each person, and shared video-family resampling remains unresolved. The public-development and Version B/transductive derivative limits above continue to apply.
+
+Run the affected generated controls with `python3 -I -B test_comparison.py`. They cover a complete paired panel, independent current-versus-historical weighting, reversed direction, refusal of malformed second submissions before target access, both-side failure reporting, final-cell undefined support, operator target failures, and the CLI's exclusive report output. These generated checks do not run a model, read authentic arrays, enforce an access-mode runtime or establish empirical neural understanding.
