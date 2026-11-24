@@ -15,13 +15,15 @@ python3.11 -I -S -B benchmarks/paper/PAPER-paper-signal-add-021/implementations/
 
 The first command creates a new reference file and refuses to overwrite it. Its fixed defaults are seed `20261114`, 2,000 bootstrap draws, and no optional global-shuffle diagnostic. The second prints JSON. **Read its `accepted` field:** numerical mismatch is reported in JSON and does not make the process exit nonzero. Malformed JSON, duplicate keys and nonfinite JSON constants raise errors.
 
-`reference.json` is trusted evaluator input. A candidate file must use the same schema, metric names, complete ordered cohort and participant-condition cells as the reference. The scorer compares the four components described below; it does not independently authenticate a candidate's data access, provenance or execution. Keep authentic references and candidate outputs outside the source repository.
+`reference.json` is trusted evaluator input. A candidate file must use the same schema, metric names, complete ordered cohort and participant-condition cells as the reference. The scorer compares the five components described below for current v2 outputs; it does not independently authenticate a candidate's data access, provenance or execution. Keep authentic references and candidate outputs outside the source repository.
 
 ## Complete behavioral specification
 
 The reader requires `subjID`, `day`, `TMS_condition`, `ierr`, `isacc_rt` and `isacc_peakvel`. It requires all 15 published release codes in `ROSTER`; these codes do not identify physical people. It rejects unexpected subjects, days, condition labels, ragged rows and duplicate or missing required columns. Missing outcome values are counted. Each participant must still have at least one valid value in every condition for each outcome; people or conditions cannot be dropped to obtain a score.
 
 The seven figure conditions are `No TMS`, `mid inPF`, `mid outPF`, `early inPF`, `early outPF`, `midrep inPF` and `midrep outPF`. Days 1–3 define the first experiment, day 4 the early-stimulation condition and day 5 the middle-stimulation replication. No-TMS rows on days 4–5 are explicitly excluded by the seven figure predicates. No further trial filtering is applied. The intake record reports columns, row counts and observed `ispro` labels; participant cells report valid and missing counts; their scientific interpretation must be checked against the released derivative before relying on an authentic reference.
+
+Current output schema `tms-full-behavior-component-v2` additionally retains **21 plotted condition summaries**: all seven conditions for each of three outcomes. Each summary has the condition label, `n=15`, equal-participant mean, sample SD and SEM (`sample_sd / sqrt(15)`) of the absolute-trial participant means. The source figure bar plot uses these participant means with `errorbar="se"`; its separate per-participant column named `se` is a trial SD and is not this plotted SEM. Repeating one participant's trials cannot give that participant extra weight in the group bar.
 
 There are **315 participant-condition-outcome cells**: 15 participants × 7 conditions × 3 outcomes. There are **18 directional contrasts**: six for each outcome. All 15 leave-one-participant-out summaries are retained for every contrast. Rows are identified by CSV ordinal, not by an independently verified physical-trial map.
 
@@ -30,9 +32,12 @@ There are **315 participant-condition-outcome cells**: 15 participants × 7 cond
 | Component | Definition |
 |---|---|
 | `deterministic_figure_reproduction` | Absolute trial-value means, valid counts and missing counts for every participant-condition cell. |
+| `deterministic_figure_summary_reproduction` | All 21 condition labels, complete participant counts, group means, sample SDs and SEMs (v2 only). |
 | `deterministic_helper_formula_reproduction` | Signed cell means on the same figure predicates. |
 | `paired_statistics` | Equal-participant differences, mean, sample SD, standard error, paired t and Cohen's dz for absolute and signed means. Zero-variance t and dz are explicitly null. |
 | `corrected_scientific_inference` | All 2^15 participant sign patterns, paired-participant bootstrap, Holm adjustment across six contrasts within each outcome, and all leave-one-participant-out summaries. |
+
+The scorer retains historical `tms-full-behavior-component-v1` references and candidates with their original four components; it does not add invented historical group outputs. Reference and candidate schema versions must match. A v2 candidate must supply every ordered summary and cannot fall back to v1 to omit the figure bars. This version change adds an explicit figure-output surface, not new scientific tolerances or a broader qualification claim.
 
 Float comparisons use relative tolerance `1e-7` and absolute tolerance `1e-9`; integer, label and structural comparisons are exact. `accepted: true` means these component outputs match the trusted reference. The result always includes `whole_task_qualified: false`.
 
@@ -42,7 +47,7 @@ Sign-flip inference assumes joint sign exchangeability of paired differences. Bo
 
 ## Validation and benchmark use
 
-The seven included tests passed during independent source review. They use explicitly invented arithmetic and schema fixtures, including missing-cohort refusals, signed-versus-absolute means, participant weighting, scale-sensitive sign-flip ties, zero-variance statistics and scorer mismatches. They are not observations from neuroscience data. To run them from the repository root:
+The nine included tests use generated controls. They use explicitly invented arithmetic and schema fixtures, including missing-cohort refusals, signed-versus-absolute means, participant weighting, scale-sensitive sign-flip ties, zero-variance statistics, all 21 figure summaries, unequal-trial participant weighting, summary omissions and SD-versus-SEM errors, historical v1 compatibility, and scorer mismatches. They are not observations from neuroscience data. To run them from the repository root:
 
 ```sh
 python3.11 -I -S -B benchmarks/paper/PAPER-paper-signal-add-021/implementations/behavioral-reference/test_behavior_reference.py

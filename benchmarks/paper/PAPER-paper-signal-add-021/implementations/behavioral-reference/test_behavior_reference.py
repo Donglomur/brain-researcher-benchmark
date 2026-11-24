@@ -91,6 +91,51 @@ class BehaviorControls(unittest.TestCase):
         self.assertEqual((interval["lower"], interval["upper"]), (2, 2))
         self.assertEqual(b.holm({"a": 0.01, "b": 0.04, "c": 0.03}), {"a": 0.03, "c": 0.06, "b": 0.06})
 
+    def test_figure_condition_summaries_preserve_equal_person_weighting(self):
+        self.assertEqual(self.reference["schema"], "tms-full-behavior-component-v2")
+        summaries = self.reference["metrics"]["ierr"]["figure_condition_summaries"]
+        self.assertEqual([row["condition"] for row in summaries], list(b.CONDITIONS))
+        for j, row in enumerate(summaries):
+            self.assertEqual(row["n"], 15)
+            self.assertEqual(row["mean"], 8 * (j + 1))
+            self.assertAlmostEqual(row["sample_sd"], math.sqrt(20) * (j + 1))
+            self.assertAlmostEqual(row["standard_error"], math.sqrt(20 / 15) * (j + 1))
+        # Oversampling one participant cannot change the source figure's person-weighted bars.
+        rows = self.rows + [copy.deepcopy(r) for r in self.rows if r["person"] == b.ROSTER[0]] * 9
+        other = b.build_reference(rows, bootstrap_draws=32)
+        for metric in b.METRICS:
+            self.assertEqual(other["metrics"][metric]["figure_condition_summaries"],
+                             self.reference["metrics"][metric]["figure_condition_summaries"])
+        self.assertEqual(sum(len(self.reference["metrics"][metric]["figure_condition_summaries"])
+                             for metric in b.METRICS), 21)
+
+    def test_figure_summary_grading_and_historical_v1(self):
+        component = "deterministic_figure_summary_reproduction"
+        for mutation in ("mean", "sem", "missing_condition", "missing_summary", "n", "order"):
+            candidate = copy.deepcopy(self.reference)
+            metric = candidate["metrics"]["ierr"]
+            rows = metric["figure_condition_summaries"]
+            if mutation == "mean": rows[0]["mean"] += 1
+            elif mutation == "sem": rows[0]["standard_error"] = rows[0]["sample_sd"]
+            elif mutation == "missing_condition": rows.pop()
+            elif mutation == "missing_summary": del metric["figure_condition_summaries"]
+            elif mutation == "n": rows[0]["n"] = True
+            else: rows.reverse()
+            with self.subTest(mutation=mutation):
+                result = s.score(self.reference, candidate)
+                self.assertFalse(result["accepted"])
+                self.assertFalse(result["components"][component]["passed"])
+                self.assertTrue(result["components"]["paired_statistics"]["passed"])
+                self.assertFalse(result["whole_task_qualified"])
+        historical = copy.deepcopy(self.reference)
+        historical["schema"] = "tms-full-behavior-component-v1"
+        for metric in historical["metrics"].values():
+            del metric["figure_condition_summaries"]
+        result = s.score(historical, copy.deepcopy(historical))
+        self.assertTrue(result["accepted"])
+        self.assertNotIn(component, result["components"])
+        self.assertFalse(s.score(self.reference, historical)["accepted"])
+
     def test_global_trial_shuffle_can_destroy_pairs(self):
         class ForcedGlobalShuffle:
             def __init__(self, seed): pass
