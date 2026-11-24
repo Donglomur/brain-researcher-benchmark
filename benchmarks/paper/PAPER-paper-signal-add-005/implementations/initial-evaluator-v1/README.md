@@ -2,6 +2,8 @@
 
 `beta_evaluator.py` evaluates trial-resolved 13–30 Hz Hilbert amplitudes at the native index and pinky source peaks. It includes full-cohort accounting, primary code and paper-equation normalization profiles, age/covariate models, participant uncertainty, matched-trial analysis and local shift diagnostics.
 
+Inputs must be real integer or floating-point amplitude arrays. Complex analytic signals, including complex arrays with zero imaginary parts, are rejected before conversion; the caller must perform and document the qualified Hilbert-magnitude extraction. Strings, booleans and object arrays are not amplitude inputs.
+
 Read [the complete boundary, interface, scientific semantics and holds](../../docs/initial-evaluator-v1.md) before using this package. This is downstream construction source; native reproduction and scientific qualification remain unresolved.
 
 Dependencies: Python 3.11+, NumPy and SciPy; use existing installations. Run the generated controls from the repository root:

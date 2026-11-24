@@ -89,6 +89,24 @@ class EnvelopeTests(unittest.TestCase):
         with self.assertRaises(b.ContractError):
             b.summarize_envelopes(a, 1200)
 
+    def test_complex_analytic_signal_cannot_silently_change_endpoint(self):
+        analytic = np.ones((2, 4200), dtype=complex)
+        analytic[:, 1199:1800] += np.sqrt(3) * 1j
+        # |1 + sqrt(3)i| = 2 during rebound, versus magnitude 1 at rest.
+        # Dropping imaginary values would instead report zero modulation.
+        self.assertAlmostEqual(b.summarize_envelopes(np.abs(analytic), 1200)["modulation_fraction"], 1)
+        with self.assertRaisesRegex(b.ContractError, "real numeric"):
+            b.summarize_envelopes(analytic, 1200)
+        with self.assertRaises(b.ContractError):
+            b.summarize_envelopes(np.ones((2, 4200), dtype=complex), 1200)
+
+    def test_nonnumeric_and_boolean_arrays_are_not_amplitudes(self):
+        for values in (np.full((2, 4200), "1"), np.ones((2, 4200), dtype=bool),
+                       np.ones((2, 4200), dtype=object)):
+            with self.subTest(dtype=str(values.dtype)):
+                with self.assertRaisesRegex(b.ContractError, "real numeric"):
+                    b.validate_envelopes(values, 1200)
+
     def test_matching_is_condition_independent_and_amplitude_blind(self):
         a = np.tile(np.arange(10)[:, None], (1, 4200))
         first = b.matched_trials(a, a + 100, 4, 5, "sub-001")
