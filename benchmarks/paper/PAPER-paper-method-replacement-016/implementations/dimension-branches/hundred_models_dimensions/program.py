@@ -89,7 +89,9 @@ def _run_contract(branch, protocol, layers, producer_layers, raw):
                  and all(type(x) is str and 0<len(x)<=256 for x in ids) and len(set(ids))==n,'complete explicit split order/support')
     catalog.descriptor(split['order_admission'])
     if branch=='figure16':catalog.need(ids==protocol['stimuli'],'exact published test102 IDs')
-    # Train IDs are admitted input, never inferred from 1000-row shape.
+    else:catalog.need(not set(ids).intersection(protocol['stimuli']),
+                      'training stimuli must exclude original test102 IDs')
+    # Disjoint train IDs still need admission; they are never inferred from shape.
     order=catalog.pin(catalog.encoded(ids))
     brain=run['brain']
     catalog.need(type(brain) is dict and set(brain)=={'subjects','rois','n_stimuli','repetitions','average_external',

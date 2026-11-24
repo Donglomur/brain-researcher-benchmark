@@ -317,11 +317,13 @@ def validate_stimulus_support(split, support, budget):
         raise ContractError("duplicate_stimulus_identity")
     if split == TEST_SPLIT and support.ordered_ids != TEST_STIMULI:
         raise ContractError("test_order_not_held_protocol102")
+    if split == TRAIN_SPLIT and set(support.ordered_ids).intersection(TEST_STIMULI):
+        raise ContractError("train_stimuli_overlap_test102")
     _sha(support.order_sha256, "stimulus_order")
     _sha(support.admission_record_sha256, "separate_stimulus_admission")
     if canonical_digest(support.ordered_ids, budget) != support.order_sha256:
         raise ContractError("stimulus_order_digest_mismatch")
-    # Train IDs are supplied and separately admitted, never inferred from shape.
+    # Disjointness is necessary, not authentication of the separately admitted train IDs.
     return support
 
 

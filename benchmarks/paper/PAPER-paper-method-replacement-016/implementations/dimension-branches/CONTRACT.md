@@ -31,7 +31,15 @@ stimulus/coordinate metadata. It emits repetition mean on axis 1, `raw2rdm`
 without standardization (one minus Pearson correlation), and subject stacking;
 there is no external-subject averaging. Training stimulus identities are supplied
 and separately admitted. They are never inferred as vid0001…vid1000 from shape.
-Test identities must match the held protocol's exact 102 strings.
+Test identities must match the held protocol's exact 102 strings. Both the
+operation compiler and branch run-binding reject any known test identity in a
+1,000-video training declaration, even when all counts and digests match. This
+preserves the split described in Section 3.3 and Appendix A of the
+[primary paper](https://proceedings.iclr.cc/paper_files/paper/2025/file/6ceb6c2150bbf46fd75528a6cd6be793-Paper-Conference.pdf).
+Disjointness does not authenticate the training identities or their arrays.
+`test_split_separation.py` covers this constraint on generated metadata through
+both model/brain operation entrypoints and the complete branch run-binding;
+valid test102 and train1000 declarations keep their existing operation settings.
 
 `operations.compile_model_contract` takes one complete declared separate-NPZ
 feature set at a time. It validates all 102 or 1,000 files and every emitted layer
