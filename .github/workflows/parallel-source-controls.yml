@@ -1214,14 +1214,14 @@ jobs:
           assert sys.platform == "linux", "CI specifies Linux portable expectations"
           out = pathlib.Path(sys.argv[1]).read_text().splitlines()
           report = json.loads(next(line for line in reversed(out) if line.strip()))
-          assert report["tests"] == 18 and report["failures"] == report["errors"] == 0 and report["skipped"] == 2, report
+          assert report["tests"] == 21 and report["failures"] == report["errors"] == 0 and report["skipped"] == 2, report
           assert report["generated_only"] is True
           assert report["authentic_packets_opened"] == report["authentic_predictions"] == report["private_targets_opened"] == 0, report
           skipped = [line for line in pathlib.Path(sys.argv[2]).read_text().splitlines() if "... skipped " in line]
           expected = {"test_generated_pixels_use_real_sandbox_capture_and_successor_cli", "test_zero_support_real_capture_retains_30feature_audit"}
           assert len(skipped) == 2 and {line.split()[0] for line in skipped} == expected, skipped
           assert all("CapturedChildControls" in line and "macOS sandbox only" in line for line in skipped), skipped
-          print(json.dumps({"fixed_view_uncertainty_adapter_ci": "passed", "tests": 18, "passed": 16, "allowed_platform_skips": 2, "sandbox_qualified": False, "scientific_qualification": False}, sort_keys=True))
+          print(json.dumps({"fixed_view_uncertainty_adapter_ci": "passed", "tests": 21, "passed": 19, "allowed_platform_skips": 2, "sandbox_qualified": False, "scientific_qualification": False}, sort_keys=True))
           PY
       - name: Acquire exact public source fixtures
         shell: bash

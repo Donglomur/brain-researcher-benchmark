@@ -66,6 +66,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 ## Task documentation
 
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
+- [Released decision-times targets and behavioral lineage requirements](docs/released-target-lineage-20261124.md)
+- [Decision-times released-target lineage evidence](docs/released-target-lineage-20261124.json)
 
 ## Implementation artifacts
 

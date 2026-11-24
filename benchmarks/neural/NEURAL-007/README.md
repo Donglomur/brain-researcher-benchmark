@@ -32,8 +32,8 @@ Source availability does not establish a qualified runtime. A programme score ca
 
 Each record keeps the scope of its original report. It is not current runtime qualification.
 
-- [Neural programme attempt](../../../docs/science/difficulty-pilot-20261117.json): Feature programme with shared pretrained YASA outputs: two exposed development people and all 5,450 epochs; not direct signal interpretation.
-- [Neural programme attempt](../../../docs/science/difficulty-pilot-20261117.json): Feature programme with shared pretrained YASA outputs: two exposed development people and all 5,450 epochs; not direct signal interpretation.
+- [Neural programme attempt — features\_and\_shared\_pretrained\_YASA; record difficulty-pilot-20261117:neural007-1](../../../docs/science/difficulty-pilot-20261117.json): Feature programme with shared pretrained YASA outputs: two exposed development people and all 5,450 epochs; not direct signal interpretation.
+- [Neural programme attempt — features\_and\_shared\_pretrained\_YASA; record difficulty-pilot-20261117:neural007-2](../../../docs/science/difficulty-pilot-20261117.json): Feature programme with shared pretrained YASA outputs: two exposed development people and all 5,450 epochs; not direct signal interpretation.
 - [Native operator control](../../../docs/status/operator-controls-20261116.json): Authenticated operator input inspection/preparation and existing finished-file grading for the previously exposed two-person EEG and sleep development panels. No candidate/model execution, fitting, scientific comparison trial or complete task qualification.
 - [Native operator control](../../../docs/status/operator-controls-rename-20261116.json): Repair validation through the actual public CLI in a fresh checkout of the renamed module: same previously exposed two-person EEG and sleep panels, same existing software-control submissions, target pins and comparator outputs. No candidate/model execution, fitting, scientific comparison trial or complete task qualification.
 

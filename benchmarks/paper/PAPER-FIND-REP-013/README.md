@@ -42,8 +42,8 @@ Within the existing improvement contract, historical graders and pilot scores re
 
 Each record keeps the scope of its original report. It is not current runtime qualification.
 
-- [Paper calibration attempt](../../../docs/science/difficulty-pilot-20261117.json): Source-assisted reconstruction of ten released trees and 13 components; not whole-paper reproduction or source-paper improvement.
-- [Paper calibration attempt](../../../docs/science/difficulty-pilot-20261117.json): Source-assisted reconstruction of ten released trees and 13 components; not whole-paper reproduction or source-paper improvement.
+- [Paper calibration attempt — paper\_data\_shared\_method](../../../docs/science/difficulty-pilot-20261117.json): Source-assisted reconstruction of ten released trees and 13 components; not whole-paper reproduction or source-paper improvement.
+- [Paper calibration attempt — paper\_data\_shared\_method\_official\_code](../../../docs/science/difficulty-pilot-20261117.json): Source-assisted reconstruction of ten released trees and 13 components; not whole-paper reproduction or source-paper improvement.
 - [Historical paper calibration](../../../docs/provenance/execution/historical-evidence-v1/profiles.json): 10 released trees, 13 components, 21,116 branches and 12,603 author sections; 31 numeric table fields and 58 summary scalar diagnostics.
 
 Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence PAPER-FIND-REP-013`. Programme evidence does not establish direct interpretation.
