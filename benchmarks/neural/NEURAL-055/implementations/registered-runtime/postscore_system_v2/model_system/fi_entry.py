@@ -33,7 +33,7 @@ from authoring import build_submission, keys
 
 MODEL_HOST_PIN = {'bytes': 32226, 'sha256': '295e96a5fc77da341d5a10dada304c0fb26e22e22d68e20a2bb66d3227f434f4'}
 RENDERER_PIN = {'bytes': 3259, 'sha256': '2564400f4396bc1d46eee0daf1899e8672f02f590c01d18401764ced5259053f'}
-TEMPLATE_PIN = {'bytes': 45281, 'sha256': '3de58f28fef84cc183501349c30d4b36f220f2ff681af4ac451c07242f6f0a3d'}
+TEMPLATE_PIN = {'bytes': 45512, 'sha256': '39ad5c8fefdc1c722619b59e6fe1b7fe89e118f574255d559b1b12b5960b2680'}
 
 
 def validate_request(request):
