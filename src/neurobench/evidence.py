@@ -31,13 +31,14 @@ SMC_HOME = 'benchmarks/paper/PAPER-SMC-RNN-2024/'
 SMC_PREPARATION = SMC_HOME + 'docs/source-preparation-evidence.json'
 SMC_PROBES = SMC_HOME + 'docs/native-cost-characterization.json'
 SMC_CALIBRATION = 'docs/science/smc-author-calibration-20261117.json'
+SMC_RESCORE = 'docs/science/smc-historical-rescore-20261120.json'
 SMC_MATERIALS = SMC_HOME + 'docs/official-assets-materials-v2-20261117.json'
 NEURAL096_HOME = 'benchmarks/neural/NEURAL-096/implementations/full-set-go-v1/'
 NEURAL096_PREPARATION = NEURAL096_HOME + 'AUTHENTIC_PREPARATION.json'
 SMC_ACTUAL_PANEL = '3b160dfb4aef8c68cbae8d4a02d5933576a77e4bc47a7c3a5b484369caf95be5'
 SMC_PUBLIC_PANEL = '209a15e2189499a9e68264df5c9f81057dd919564d98a46fb64d75b3f39af2f3'
 PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR, REVE_PREPARATION, DEEP_PREPARATION,
-                  SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION, SMC_CALIBRATION, SMC_MATERIALS, ERP_PILOT)
+                  SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION, SMC_CALIBRATION, SMC_RESCORE, SMC_MATERIALS, ERP_PILOT)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -1078,6 +1079,107 @@ def smc_calibration_records(doc, source):
     return rows
 
 
+def smc_rescore_records(doc, source, calibration):
+    """Project the accepted later score-only run without replacing prior failures."""
+    require(calibration is not None, 'SMC rescore requires the historical calibration report')
+    prior, prior_source = calibration
+    # Validate the predecessor's failed noncausal supervision as well as its values.
+    smc_calibration_records(prior, prior_source)
+    require(doc.get('schema') == 'smc_frozen_reference_rescore_public_result_v1'
+            and doc.get('result_kind') == 'successful_bounded_historical_reference_scoring'
+            and doc.get('task_id') == 'PAPER-SMC-RNN-2024'
+            and doc.get('date_utc') == '2026-11-20'
+            and doc.get('original_task') == 'MC_Maze, 20 ms bins; complete original prepared test panel'
+            and doc.get('models') == ['causal', 'noncausal'], 'unsupported SMC rescore report')
+    interpretation = obj(doc['interpretation'])
+    require(all(interpretation[key] is False for key in ('AI_or_candidate_trial',
+        'new_author_model_inference_or_training', 'exact_checkpoint_to_Table2_mapping_established',
+        'exact_original_DANDI_revision_established', 'exact_paper_reproduction_claim',
+        'improvement_or_SOTA_claim', 'matched_paper_only_vs_code_assisted_experiment'))
+        and interpretation['no_arbitrary_0_01_or_rounding_tolerance'] is True,
+        'SMC rescoring cannot become inference, a participant attempt or paper success')
+    old = obj(doc['historical_noncausal_supervision'])
+    require(integer(old['child_exit_code']) == 0 and integer(old['supervisor_exit_code']) == 1
+            and old['supervisor_success'] is False and old['preserved_as_failed'] is True
+            and old['current_success_does_not_rewrite_history'] is True
+            and old['failure'] == 'ValueError: Scorer identity changed',
+            'SMC rescore must preserve the earlier noncausal supervisor failure')
+    closure = obj(doc['closure'])
+    exact_counts(closure, {'Docker_CLI_calls': 12, 'Docker_CLI_calls_closed': 12,
+        'explicitly_owned_groups_observed_absent': 14, 'known_host_PIDs_observed_absent': 15,
+        'native_exit_code': 0}, 'SMC rescore owned closure')
+    require(all(closure[key] is True for key in ('grader_container_removed_and_absence_observed',
+        'native_lease_released', 'outer_full_EOF')) and closure['escaped_descendant_containment_claim'] is False,
+        'SMC rescore cannot omit known closure or assert escaped-descendant containment')
+    limits = obj(doc['whole_two_score_limits'])
+    # These byte/CPU extents exceed the generic small population-count bound.
+    expected_limits = {'child_CPU_hard_seconds': 605, 'child_CPU_soft_seconds': 600,
+        'child_memory_bytes': 2147483648, 'child_numerical_CPU_quota': 1,
+        'cleanup_seconds': 60, 'host_declared_memory_bytes': 536870912, 'work_seconds': 720}
+    require(all(type(limits[key]) is int and limits[key] == value for key, value in expected_limits.items())
+            and limits['host_hard_memory_guarantee'] is False and limits['one_budget_no_per_model_reset'] is True,
+            'SMC rescore shared two-score resource limits differ')
+    resources = obj(doc['observed_resources'])
+    require(integer(resources['child_exit_code']) == 0 and resources['child_OOMKilled'] is False
+            and resources['current_child_CPU_seconds'] is None
+            and resources['current_child_peak_RSS_bytes'] is None,
+            'SMC rescore unmeasured CPU/RSS cannot become observations')
+    walls = {key: number(resources[key]) for key in ('host_wall_seconds', 'native_wall_seconds', 'outer_wall_seconds')}
+    require(all(value > 0 for value in walls.values()), 'SMC rescore wall times must be positive')
+    versions = {'h5py': '3.10.0', 'numpy': '1.26.3', 'scikit-learn': '1.5.0', 'scipy': '1.12.0'}
+    require(doc['numerical_versions'] == versions
+            and doc['historical_numerical_versions'] == {**versions, 'h5py': '3.11.0'}
+            and doc['intentional_runtime_variant'] == {'historical': '3.11.0', 'package': 'h5py', 'selected': '3.10.0'},
+            'SMC rescore must preserve its declared h5py runtime variant')
+    identities = pin_map(doc['software_identities'],
+        {'original_nlb_tools_0_0_3_evaluator', 'original_score_predictions_source'})
+    names = ('co-bps', 'vel R2', 'psth R2', 'fp-bps')
+    vectors = obj(doc['metrics'])
+    require(set(vectors) == {'causal', 'noncausal'}, 'SMC rescore requires both complete metric vectors')
+    claim_limits = [text(interpretation[key]) for key in ('canonical_evaluator_fit', 'target_exposure',
+        'trajectory_sets', 'paper_comparison', 'prior_failed_attempt')]
+    claim_limits += ['This is the recorded November 20 score-only operation, not a fresh runtime verification.',
+                     'Historical/current-release checkpoint scoring does not prove exact Table 2 checkpoint or data-revision linkage.']
+    rows = []
+    for arm in ('causal', 'noncausal'):
+        groups = obj(vectors[arm])
+        require(set(groups) == {'current', 'historical', 'paper_printed',
+            'current_minus_historical', 'current_minus_paper_printed'}, 'SMC rescore metric groups differ')
+        require(all(set(obj(group)) == set(names) for group in groups.values()),
+                'SMC rescore requires all four original metrics for each model')
+        metrics = []
+        for name in names:
+            current, historical, printed, delta_old, delta_paper = (number(groups[key][name]) for key in
+                ('current', 'historical', 'paper_printed', 'current_minus_historical', 'current_minus_paper_printed'))
+            require(historical == number(prior['arms'][arm]['observed_metrics'][name])
+                    and printed == number(prior['arms'][arm]['published_metrics'][name]),
+                    'SMC rescore historical/printed values disagree with preserved calibration')
+            require(delta_old == current - historical and delta_paper == current - printed,
+                    'SMC rescore signed metric differences disagree')
+            metrics.append({**metric(name, current, 'higher', {'historical_same_prediction': historical,
+                                                             'paper_printed_same_method': printed}),
+                'signed_delta_current_minus_historical': delta_old,
+                'signed_delta_current_minus_paper_printed': delta_paper})
+        row = record('smc-historical-reference-rescore:' + arm, 'PAPER-SMC-RNN-2024',
+            'historical_reference_rescore', source, '/metrics/' + arm,
+            'Successful bounded rescoring of a complete previously frozen author prediction; no new author-model inference or AI candidate.',
+            arm + ' frozen historical/current-release author prediction, original MC_Maze 20 ms scoring', claim_limits)
+        row.update(metrics=metrics, execution_date_utc=doc['date_utc'],
+            status='reported_successful_bounded_historical_reference_scoring',
+            historical_calibration_source=prior_source, whole_two_score_limits={**expected_limits,
+                'host_hard_memory_guarantee': False, 'one_budget_no_per_model_reset': True},
+            observed_resources={**walls, 'child_exit_code': 0, 'child_OOMKilled': False,
+                'current_child_CPU_seconds': None, 'current_child_peak_RSS_bytes': None},
+            historical_noncausal_supervisor_success=False, historical_failure_preserved=True,
+            reported_known_owned_closure=True, canonical_train_decoder_fitting=True,
+            software_identities=identities, numerical_versions=versions,
+            new_author_model_inference_or_training=False, solver_attempts_recorded=0,
+            candidate_attempts_recorded=0, model_attempts_recorded=0,
+            exact_paper_reproduction_claim=False, improvement_or_SOTA_claim=False)
+        rows.append(row)
+    return rows
+
+
 def smc_material_records(doc, source):
     require(doc.get('schema') == 'smc_official_assets_material_validation_receipt_v2'
         and doc.get('task_id') == 'PAPER-SMC-RNN-2024'
@@ -1192,6 +1294,7 @@ def load(root, task_ids=None):
                               (SMC_PROBES, lambda doc, source: smc_probe_records(doc, source, captured_reports.get(SMC_PREPARATION))),
                               (NEURAL096_PREPARATION, neural096_preparation_records),
                               (SMC_CALIBRATION, smc_calibration_records),
+                              (SMC_RESCORE, lambda doc, source: smc_rescore_records(doc, source, captured_reports.get(SMC_CALIBRATION))),
                               (SMC_MATERIALS, smc_material_records),
                               (ERP_PILOT, lambda doc, source: exploratory_erp_records(
                                   doc, source, read_bytes(root, ERP_NARRATIVE)))):
@@ -1233,6 +1336,9 @@ def load(root, task_ids=None):
         'author_reference_calibration_arms': categories['author_reference_calibration'],
         'author_reference_calibration_reports': len({row['source']['path'] for items in records.values() for row in items
                                                    if row['category'] == 'author_reference_calibration'}),
+        'historical_reference_rescore_models': categories['historical_reference_rescore'],
+        'historical_reference_rescore_operations': len({row['source']['path'] for items in records.values() for row in items
+                                                       if row['category'] == 'historical_reference_rescore'}),
         'participant_material_preparation_reports': categories['participant_material_preparation'],
         'author_model_inference_probe_reports': len({row['source']['path'] for items in records.values() for row in items
                                                    if row['category'] == 'author_model_inference_probe'}),
@@ -1257,5 +1363,7 @@ def load(root, task_ids=None):
                 'pilot_attempts': 'Attempts in the historical November 17 difficulty pilot only.',
                 'neural_programme_attempts': 'Programme attempts in the historical November 17 difficulty pilot only.',
                 'direct_interpretation_attempts': 'Fresh direct-image episode attempts, including delivery failures.',
+                'historical_reference_rescore_models': 'Previously frozen author predictions scored again; not new model or AI attempts.',
+                'historical_reference_rescore_operations': 'Shared score-only operations; each may score multiple frozen models.',
                 'exploratory_programme_authoring_attempts': 'Generated programmes authored; query applications are counted separately.',
                 'exploratory_programme_query_applications': 'First applications of the frozen programme, including runtime failures.'}}

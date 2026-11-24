@@ -1300,6 +1300,11 @@ def evidence_text(catalog, base=OUTPUT):
     if calibration:
         later_text += (f"The separate SMC report records **{calibration} complete author-reference calibration arms**; "
                        'the accepted recovered noncausal aggregate retains its failed supervisor. ')
+    rescored = counts.get('historical_reference_rescore_models', 0)
+    if rescored:
+        later_text += (f"The November 20 score-only report records **{rescored} frozen references successfully rescored** "
+                       'in one shared bounded operation, preserving the earlier failure; '
+                       'this adds no author-model inference or AI attempts. ')
     if material:
         later_text += ('The separate SMC material report records a **71-file participant-material pair**, '
                        'with no participant execution. ')

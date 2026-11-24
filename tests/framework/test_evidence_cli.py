@@ -37,7 +37,7 @@ class EvidenceCommandTests(unittest.TestCase):
         self.assertEqual(result['counts']['direct_interpretation_attempts'], 32)
         self.assertEqual(result['counts']['viewer_interpretation_attempts'], 0)
         self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
-        self.assertEqual(result['counts']['public_reports'], 15)
+        self.assertEqual(result['counts']['public_reports'], 16)
         self.assertEqual(result['counts']['paper_source_preparation_reports'], 3)
         self.assertEqual(result['counts']['neural_source_preparation_reports'], 1)
         self.assertEqual(result['counts']['author_model_inference_probes'], 2)
