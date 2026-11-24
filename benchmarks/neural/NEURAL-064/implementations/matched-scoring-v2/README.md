@@ -75,3 +75,12 @@ support, familiar controls, frozen reference selection, candidate nuisance
 manipulation, and preserved-consumer compatibility. Run it with `python3 -I -B`
 through the coordinator's shared test pool. These controls do not demonstrate
 neural prediction performance or qualify a direct/viewer/programme condition.
+
+The generated controls also exercise the shared preparation membership contract.
+Every secondary experiment must retain the catalogue row's mouse, imaging
+session, container and exposure condition before any source access. This catches
+identity reassignments that preserve all 1,936/475 experiment, 107/80 mouse,
+703-session, 204-container and 55/11/14 role totals. Numeric/string source IDs
+retain the existing string normalization. The join permits secondary-only
+selection fields, changes no original assignment, and is a consistency check;
+it does not authenticate either membership or supply missing native owners.

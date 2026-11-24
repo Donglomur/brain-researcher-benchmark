@@ -12,8 +12,17 @@ def require_population_shape(catalogue,secondary):
         if 'declared_sessions' in declared and len({str(r['ophys_session_id']) for r in records})!=declared['declared_sessions']:raise ValueError('declared source-session count differs')
         if 'declared_containers' in declared and len({str(r['ophys_container_id']) for r in records})!=declared['declared_containers']:raise ValueError('declared selected-container count differs')
         if not population.get('source_membership_binding'):raise ValueError('missing source binding consumer input')
-    all_ids={str(r['ophys_experiment_id']) for r in catalogue['records']}
-    if not {str(r['ophys_experiment_id']) for r in secondary['records']}<=all_ids:raise ValueError('secondary outside original catalogue')
+    catalogue_by_id={str(r['ophys_experiment_id']):r for r in catalogue['records']}
+    if not {str(r['ophys_experiment_id']) for r in secondary['records']}<=set(catalogue_by_id):raise ValueError('secondary outside original catalogue')
+    # An experiment is the same biological observation in both populations.
+    # Count-preserving swaps must not reassign its mouse, session, container or
+    # exposure phase before source opening, matching, or whole-mouse splitting.
+    identity_fields=('mouse_id','ophys_session_id','ophys_container_id')
+    for row in secondary['records']:
+        original=catalogue_by_id[str(row['ophys_experiment_id'])]
+        if (any(str(row[field])!=str(original[field]) for field in identity_fields)
+                or row['experience_level']!=original['experience_level']):
+            raise ValueError('catalogue/secondary experiment identity disagreement')
     assignments=secondary['mouse_assignments']
     if set(assignments)!={str(r['mouse_id']) for r in secondary['records']}:raise ValueError('source assignments incomplete')
     if {role:sum(v==role for v in assignments.values()) for role in ROLE_NAMES}!=SECONDARY['roles']:raise ValueError('original whole-mouse role counts differ')
