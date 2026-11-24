@@ -84,3 +84,51 @@ preserve the preprint/final-version distinction. No trace
 analysis, model fit, WAIC rerun, candidate trial or biological performance
 measurement was performed. Canonical task and improvement contracts, old
 scorers and historical evidence remain unchanged.
+
+## November 24 final-source recovery
+
+[Machine-readable source observations](final-source-observations.v1.json) now
+resolve a specific preparation gap: the original seven-panel comparison has
+28 explicit slots, with 12 final-paper caption values recovered and 16 sex-
+stratified values still explicitly unrecovered. These are published source
+observations, never score targets, author replay outputs or tolerances. The
+manifest gives URLs, response hashes, original panel locators and the inspected
+code revision so future preparation can reuse the recovered source identities.
+The earlier account above remains intact as the record of that earlier pass.
+Its older proposed HAB obligation is historical: the current seven-panel,
+28-row primary contract takes precedence, with HAB required only for claims
+that depend on the learning-emergence comparison.
+
+The final [Figure 2](https://www.nature.com/articles/s41593-026-02448-0/figures/2)
+and [Figure 4](https://www.nature.com/articles/s41593-026-02448-0/figures/4)
+captions identify the same four-family pooled WAIC comparisons. The reported
+density populations are conditioning 14 mice/2,707 astrocytes, recall A
+11/1,371 and recall B 10/924. These caption counts do not authenticate original
+row membership. In particular, recall B's separate odd/even correlation uses
+seven animals after its event restriction; applying that restriction to density
+inputs would change the paper's population.
+
+The final article's public Extended Data Figure 8 maps the preprint's Figure
+17 sex-stratified evidence, and its Figure 10 maps the preprint's Figure 20 HAB
+companion. The final HAB caption prints uniform WAIC 1192.9. This identifies
+the final caption value without rewriting the prior preprint discrepancy or
+adding HAB to the authorized primary. The final source also distinguishes
+peak-distribution counts from peak-variability counts. The accessible main
+article is a subscription preview; its Methods body was not recovered.
+
+All three previously identified notebooks were recovered over certificate-
+verified HTTPS, and each matched its previously recorded Git blob SHA-1 and
+byte count. They provide histogram/sex plotting, toy Poisson-null simulation,
+and a peak-width companion respectively. None of these three contains the
+four-family density fit or WAIC computation. This is a finding about the
+inspected notebooks, not proof of absence elsewhere. The peak-width notebook
+excludes F8, adds certain HAB animals and trims a display tail; these operations
+belong to that companion and do not establish primary density preprocessing.
+
+Final-caption correspondence is therefore partially recovered; executable
+density semantics, complete native input/output support, the 16 sex-table
+values and uncertainty remain unresolved. Printed agreement cannot establish
+reproduction or improvement. Neither matched information condition gains a
+qualified author density implementation from these plotting notebooks. All
+canonical contracts, historical source evidence and readiness states remain
+unchanged. No notebook, authentic dataset, model or scorer was executed.
