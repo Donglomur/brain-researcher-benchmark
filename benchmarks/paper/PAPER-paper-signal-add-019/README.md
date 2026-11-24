@@ -59,7 +59,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 23203 bytes; SHA-256 `93dc962cfde6930efa6361b2a4490e2ebbac52f8c82ee85b4fa00e7ed6599030`.
+- Specification identity: 23737 bytes; SHA-256 `de489921a894ff5ee873a0a408e16bd68fe9aa85d1e06f1a98fb1c355290dd13`.
 
 No legacy runtime declaration is linked to this registered ID. The current implementation artifacts are listed separately below.
 
@@ -68,6 +68,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Initial evaluator and source requirements](docs/initial-evaluator-v1.md)
 - [Released decision-times targets and behavioral lineage requirements](docs/released-target-lineage-20261124.md)
 - [Decision-times released-target lineage evidence](docs/released-target-lineage-20261124.json)
+- [Protected fit-only access and paired-arm isolation requirements](docs/protected-access-20261124.md)
 
 ## Implementation artifacts
 
