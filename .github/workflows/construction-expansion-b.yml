@@ -604,13 +604,13 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1591,
-                  "sha256": "c79294529098784ec66ca0545d8c1946fd167e088961bcad14dbc478920b3e95"
+                  "bytes": 1909,
+                  "sha256": "77c314eeac842062fa13022ed897464331ad42bfee9b0d9774dd67485fec7fcd"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/beta_evaluator.py",
-                  "bytes": 21579,
-                  "sha256": "7baf4c56b895b75927dc59d0f7a0f0f2d91425617c5b3e7e64b918a159db3955"
+                  "bytes": 21908,
+                  "sha256": "2745dad3c496efa628d889d5e6f624b8d167f35576b8f4cf9df94294e8699051"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/provenance.json",
@@ -619,8 +619,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/tests/test_beta_evaluator.py",
-                  "bytes": 9503,
-                  "sha256": "3d0e5e4c9734adf6a50a58ce92cad03cc29a0e1e70169abc0e0c6d1bcc5a5e3a"
+                  "bytes": 10575,
+                  "sha256": "854beb7bb85d1070c9678aeb7d875d84abdc9a01c0a0237fdc561b9af95f48f5"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-signal-add-005/historical/task.pre-improvement.v1.json",
@@ -674,7 +674,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-signal-add-019/implementations/initial-evaluator-v1"
           ]
           assert len(rows) == 52 > 0
-          assert sum(row['bytes'] for row in rows) == 930864 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 932583 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -717,7 +717,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 930864,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 932583,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -1547,7 +1547,7 @@ jobs:
           import json
           import sys
           import unittest
-          expected_ids = ['test_beta_evaluator.EnvelopeTests.test_amplitude_scale_invariance', 'test_beta_evaluator.EnvelopeTests.test_bad_amplitude_or_single_zero_baseline_rejected', 'test_beta_evaluator.EnvelopeTests.test_independently_derived_reference_fixture', 'test_beta_evaluator.EnvelopeTests.test_matching_is_condition_independent_and_amplitude_blind', 'test_beta_evaluator.EnvelopeTests.test_matlab_index_endpoints_not_plot_times', 'test_beta_evaluator.EnvelopeTests.test_normalization_discrepancy_is_observable', 'test_beta_evaluator.EnvelopeTests.test_shift_null_constant_signal_and_reproducibility', 'test_beta_evaluator.StatisticalTests.test_cli_full53_pins_and_digest_rejection', 'test_beta_evaluator.StatisticalTests.test_folds_ignore_outcomes_and_keep_subject_once', 'test_beta_evaluator.StatisticalTests.test_missing_subject_covariate_wrong_quantity_and_count_rejected', 'test_beta_evaluator.StatisticalTests.test_ols_known_slope_and_rank_failure', 'test_beta_evaluator.StatisticalTests.test_subject_level_models_and_constant_count_matched_design']
+          expected_ids = ['test_beta_evaluator.EnvelopeTests.test_amplitude_scale_invariance', 'test_beta_evaluator.EnvelopeTests.test_bad_amplitude_or_single_zero_baseline_rejected', 'test_beta_evaluator.EnvelopeTests.test_complex_analytic_signal_cannot_silently_change_endpoint', 'test_beta_evaluator.EnvelopeTests.test_independently_derived_reference_fixture', 'test_beta_evaluator.EnvelopeTests.test_matching_is_condition_independent_and_amplitude_blind', 'test_beta_evaluator.EnvelopeTests.test_matlab_index_endpoints_not_plot_times', 'test_beta_evaluator.EnvelopeTests.test_nonnumeric_and_boolean_arrays_are_not_amplitudes', 'test_beta_evaluator.EnvelopeTests.test_normalization_discrepancy_is_observable', 'test_beta_evaluator.EnvelopeTests.test_shift_null_constant_signal_and_reproducibility', 'test_beta_evaluator.StatisticalTests.test_cli_full53_pins_and_digest_rejection', 'test_beta_evaluator.StatisticalTests.test_folds_ignore_outcomes_and_keep_subject_once', 'test_beta_evaluator.StatisticalTests.test_missing_subject_covariate_wrong_quantity_and_count_rejected', 'test_beta_evaluator.StatisticalTests.test_ols_known_slope_and_rank_failure', 'test_beta_evaluator.StatisticalTests.test_subject_level_models_and_constant_count_matched_design']
           suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-paper-signal-add-005/implementations/initial-evaluator-v1/tests', pattern='test_beta_evaluator.py')
           def flatten(suite):
               for item in suite:
@@ -1557,9 +1557,9 @@ jobs:
                       yield item
           actual_ids = sorted(case.id() for case in flatten(suite))
           assert actual_ids == expected_ids, (actual_ids, expected_ids)
-          assert suite.countTestCases() == 12 > 0
+          assert suite.countTestCases() == 14 > 0
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 12, result.testsRun
+          assert result.testsRun == 14, result.testsRun
           assert not result.skipped, result.skipped
           assert not result.expectedFailures, result.expectedFailures
           assert not result.unexpectedSuccesses, result.unexpectedSuccesses

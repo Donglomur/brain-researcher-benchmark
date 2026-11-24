@@ -69,6 +69,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Cross time prediction audit v1](implementations/cross-time-prediction-audit-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
+- [Within time prediction audit v1](implementations/within-time-prediction-audit-v1) — Reviewed source component.
+  Scope: Source-only audit of supplied original Figure 2h within-time predictions over five mice, both states, five repeats and 191 windows, retaining separate source partitions and equal fold reduction. Authentic observations, fitting, reference and access-condition qualification remain unresolved.
 - [Source decoding metrics v1](implementations/source-decoding-metrics-v1) — Reviewed source component.
   Scope: Source decoding metric reduction. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 - [Frozen decoder](implementations/frozen-decoder) — Calibration only.

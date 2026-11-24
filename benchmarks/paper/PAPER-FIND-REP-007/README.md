@@ -61,6 +61,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Complete supplied-session all-cell stimulus selectivity, pinned-code sequence similarity, reward-predictive activity, reward-zone licking and longitudinal animal summaries. Authentic experiment-info-derived population/transforms, native preprocessing and parity, matched source controls, protected targets, rights/exposure and scientific qualification remain held; the sequence paper/code disagreement is explicit. Coding-direction and density-map endpoints remain outside this component, and shared source families with NEURAL-027/028 are not independent cohorts. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Coding direction v1](implementations/coding-direction-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
+- [Figure3h similarity v1](implementations/figure3h-similarity-v1) — Reviewed source component.
+  Scope: Source-specific Figure 3h leaf2 similarity and complete declared four-condition summaries, preserving trial/session identities, mean/SEM weighting and undefined results. Original cohort authenticity, figure-specific paper/code correspondence, native parity and scientific outcomes remain unresolved.
 
 Package-local task IDs do not override this registered definition; ownership links alone do not establish equivalent scientific scope.
 

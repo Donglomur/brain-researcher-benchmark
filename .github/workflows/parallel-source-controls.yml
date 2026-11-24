@@ -72,7 +72,7 @@ jobs:
           pins = [
               {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': 'be8cd8c31fe82a671e899cf020861e89464d9bbc00f833c88df27e61679553e3'},
               {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': 'd1fc0abb98e02a8d9afb1f49d01f418f2922369a575a40fa531def0f569e178a'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 595484, 'sha256': '5ff13c05528c695e823ed603126a23a70e345431c4844321277b1e8742359c28'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 595910, 'sha256': 'cd76d944fedbbb7f5e1bed42d53fc276dc61dfae2acb63bade4e7748ea017af8'},
           ]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
@@ -584,6 +584,140 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-006/implementations/registered-runtime/tests -p 'test_source20_admission.py' -v
+      - name: Check PAPER-EXP-20261113-002 generated paper controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/paper/PAPER-EXP-20261113-002/implementations/within-time-prediction-audit-v1/test_within_time_audit.py
+      - name: Check PAPER-EXP-20261113-003 generated paper controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          paper1_nider_scratch="$(mktemp -d "${RUNNER_TEMP}/paper1-nider-comparison.XXXXXX")"
+          trap 'rm -rf -- "$paper1_nider_scratch"' EXIT
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/tests/comparison_controls.py --implementations "${GITHUB_WORKSPACE}/benchmarks/paper/PAPER-EXP-20261113-003/implementations" --scratch "$paper1_nider_scratch"
+      - name: Check PAPER-FIND-039 generated paper controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -B -m unittest discover -s benchmarks/paper/PAPER-FIND-039/implementations/figure5i-paired-v1/tests -p 'test_*.py' -v
+      - name: Check PAPER-FIND-044 generated paper controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -B -m unittest discover -s benchmarks/paper/PAPER-FIND-044/implementations/public-submission-v1 -p test_submission.py -v
+      - name: Check PAPER-FIND-ADD-006 generated paper controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/paper/PAPER-FIND-ADD-006/implementations/figure4d-condition-comparison-v1/test_compare.py
+      - name: Check PAPER-FIND-ADD-009 generated paper controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -B -m unittest discover -s benchmarks/paper/PAPER-FIND-ADD-009/implementations/biosignal-panel-v1/tests -v
+      - name: Check PAPER-FIND-ADD-015 fig5-group-summary-v1 generated controls
+        if: matrix.group == 'scientific'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -B benchmarks/paper/PAPER-FIND-ADD-015/implementations/fig5-group-summary-v1/test_group_summary.py
+      - name: Check PAPER-FIND-REP-007 figure3h-similarity-v1 generated controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B benchmarks/paper/PAPER-FIND-REP-007/implementations/figure3h-similarity-v1/tests/test_similarity.py
+      - name: Check PAPER-FIND-REP-011 coactivity-curves generated controls
+        if: matrix.group == 'stdlib-b'
+        shell: bash
+        working-directory: "benchmarks/paper/PAPER-FIND-REP-011/implementations/source-row-audit-v1"
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 180s python -B test_coactivity_curves.py -v
+      - name: Check PAPER-ROOT-ADD-003 generated preparation and comparison controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/paper/PAPER-ROOT-ADD-003/implementations/original-fig3-v1/test_prepare_inputs.py
+      - name: Check PAPER-ROOT-ADD-004 generated preparation and comparison controls
+        if: matrix.group == 'stdlib-b'
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/paper/PAPER-ROOT-ADD-004/implementations/native-trial-admission-v1/tests/test_native_cohort.py
+      - name: Check PAPER-ROOT-ADD-010 generated preparation and comparison controls
+        if: matrix.group == 'numpy226'
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -B -m unittest discover -s benchmarks/paper/PAPER-ROOT-ADD-010/implementations/paired-oddball-v1/tests -p 'test_*.py' -v
+      - name: Check PAPER-ROOT-ADD-016 generated preparation and comparison controls
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/paper/PAPER-ROOT-ADD-016/implementations/paired-decoding-comparison-v1/test_compare.py -v
+      - name: Check PAPER-ROOT-ADD-019 generated preparation and comparison controls
+        if: matrix.group == 'stdlib-b'
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/paper/PAPER-ROOT-ADD-019/implementations/figure6h-fold-input-v1/test_prepare.py
+      - name: Check PAPER-ROOT-ADD-026 generated preparation and comparison controls
+        if: matrix.group == 'numpy'
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+          TEMPORAL_INTERFACE_DIR: "${{ github.workspace }}/benchmarks/paper/PAPER-ROOT-ADD-026/implementations/prediction-interface-v1"
+        run: |
+          set -euo pipefail
+          umask 077
+          ROOT026_GENERATED_DIR="$(mktemp -d "${RUNNER_TEMP}/root026-paired.XXXXXX")"
+          trap 'rm -rf -- "$ROOT026_GENERATED_DIR"' EXIT
+          export TEMPORAL_GENERATED_ROOT="$ROOT026_GENERATED_DIR"
+          timeout --signal=TERM --kill-after=5s 120s python -B benchmarks/paper/PAPER-ROOT-ADD-026/implementations/paired-comparison-v1/test_compare.py
+      - name: Check dimension branches reject split overlap
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-method-replacement-016/implementations/dimension-branches/test_split_separation.py -v
+      - name: Check primary CTF preparation CLI
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-signal-add-004/implementations/latent-state-programme/tests/test_primary_ctf_cli.py -v
+      - name: Check matched contrast access panels
+        if: matrix.group == 'stdlib-a'
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/paper/PAPER-paper-signal-add-019/implementations/paired-panel-v1/tests -p 'test_pair.py' -v
       - name: Acquire exact public source fixtures
         shell: bash
         run: |

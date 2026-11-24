@@ -71,6 +71,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Source-derived Figure 2 spatial-stability and context-specificity kernels over prepared spike-count/occupancy tables and frozen classifications, with full declared roster checks and prospective mouse-level age contrasts. Native classification and ingestion, authoritative population membership, locomotion/quality adjustment, the paper-versus-notebook smoothing discrepancy, mixed-effects and broader remapping endpoints, authentic reference tolerances, rights and protected grading remain open. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Figure5i paired v1](implementations/figure5i-paired-v1) — Reviewed source component.
+  Scope: Descriptive Figure 5i paired comparison on the declared complete 61-session panel, retaining young/aged strata and tenfold session reduction. It does not authenticate historical support, source exposure, author execution, scientific tolerances or a superiority decision.
 - [Figure5i support v1](implementations/figure5i-support-v1) — Reviewed source component.
   Scope: Reviewed additive source component for the existing task. The package documentation and source contracts define its scope; source enrollment does not establish authentic-data execution or scientific qualification.
 - [Figure5i score v1](implementations/figure5i-score-v1) — Reviewed source component.
