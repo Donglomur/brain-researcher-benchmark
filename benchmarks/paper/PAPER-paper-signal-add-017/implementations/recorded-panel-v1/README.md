@@ -66,3 +66,48 @@ scientific run. Source-only integration must enroll this exact test command in
 the existing component discovery manifest; it is not currently CI-enrolled. Tests for the first MI-only implementation are
 preserved in private construction history; the final component adds explicit
 source-qualified ME routing and a complete paired-condition wrapper.
+
+
+## Participant submission boundary
+
+The legacy `evaluate_panel` and `compare_complete_panels` APIs are operator-only:
+they require recorded `S2-F` predictions as well as the three replay arms. Those
+recorded online outputs and assessment targets must not be supplied to a
+participant to satisfy that interface.
+
+`observation_manifest(assessment, expected_assessment_sha256=pin,
+expected_condition="MI")` now exports every declared source member, trial extent
+and window identity while omitting target labels, recorded predictions and the
+recorded-control receipt. Pass `expected_condition="ME"` for the separate S7A
+manifest. The manifest is **not an EEG packet**: the source member path and hash
+identify operator source bytes, not authorization to expose a whole MAT file.
+A qualified exporter must separately deliver the permitted EEG arrays aligned to
+these identities, without online predictions/probabilities or test labels.
+The exporter, original source identity and scientific window eligibility remain
+unqualified. Both paper+data and paper+data+author-code conditions must receive
+the same permitted observation support; their author-code access remains a
+separate delivery policy, which this module does not enforce.
+
+A participant supplies the `finger017-recorded-replay-submission/v1` schema with
+exactly `schema`, `assessment_sha256` and `models`. The `models` object contains
+only `S1-B`, `S1-F` and `S2-B`, each with the existing `role="replayed_decoder"`,
+`model_artifact_sha256` and `window_predictions` fields. In particular, it cannot
+include or replace `S2-F`. On the private evaluator side:
+
+```python
+result = evaluate_replay_submission(assessment, submission,
+                                    expected_assessment_sha256=pin)
+paired = compare_replay_submissions(assessment, author_submission, submission,
+                                    expected_assessment_sha256=pin)
+```
+
+The evaluator joins the recorded control from the externally pinned assessment.
+It preserves all 168 participant/model/class cells, eight medians and 126 paired
+replay-cell differences, including the existing fractional output units and
+canonical percent conversion boundary. `compare_mi_me_submissions` accepts the
+same separate MI/ME mappings and external pins as `compare_mi_me`, using
+replay-only submissions for each method. No targets or recorded predictions are
+returned in the observation manifest; evaluator reports retain aggregate
+recorded-control accuracy and must remain private until the protected assessment
+policy permits reporting. These APIs neither execute a decoder nor promote
+scientific readiness or define a victory threshold.
