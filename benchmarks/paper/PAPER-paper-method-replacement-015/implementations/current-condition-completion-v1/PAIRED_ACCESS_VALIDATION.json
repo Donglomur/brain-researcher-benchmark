@@ -1,0 +1,34 @@
+{
+  "schema": "spinal_paired_access_summary_validation_v1",
+  "source": {
+    "bytes": 4249,
+    "sha256": "35de3e259d83eda0263c99f2c8831cf2cca4f7dcda1157b9cde904f91fd2453c"
+  },
+  "scope": "generated complete-neuron paired reporting on unchanged current-source metrics; no authentic execution",
+  "checks": [
+    {
+      "command": "python3.11 -B -m unittest test_grade test_completion.ProfileAndSource.test_source_loader_ignores_ambient_local_modules -v",
+      "tests": 20,
+      "exit_code": 0,
+      "wall_seconds": 2.0,
+      "peak_rss_bytes": 61898752
+    },
+    {
+      "command": "python3.11 -B -m unittest test_grade.PairedAccessSummaryTests.test_unchanged_metric_kernel_outputs_preserve_calibration_change_at_equal_correlation -v",
+      "tests": 1,
+      "exit_code": 0,
+      "wall_seconds": 0.13,
+      "peak_rss_bytes": 40992768
+    }
+  ],
+  "check_semantics": "20 affected controls passed before addition of one independent unchanged-kernel output control; the new control then passed separately. No unnecessary unchanged full-suite rerun.",
+  "historical_validation_unchanged": true,
+  "source_era_paper_equivalence_established": false,
+  "authentic_model_calls": 0,
+  "authentic_scientific_scores": 0,
+  "limits": [
+    "This is the adopted current noise-7/30-Hz/50-ms bank, not the historical Figure 4 panel.",
+    "Existing single-pass L1 and signed-bias diagnostics are not qualified historical paper bias/error measures.",
+    "No fitted references, historical alignment, full original condition/cortex panel, protected authentic campaign or scientific success threshold supplied."
+  ]
+}
