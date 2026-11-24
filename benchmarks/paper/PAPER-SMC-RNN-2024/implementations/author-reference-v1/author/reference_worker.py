@@ -8,7 +8,7 @@ import runpy
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from reference_core import ACCESS, ARMS, OUTCOME, PHASES, PROFILE, ROUTE, need
+from reference_core import ACCESS, ARMS, OUTCOME, PHASES, ROUTE, need, validate_profile
 
 RETAINED = Path('/runner/retained_worker.py')
 RETAINED_SHA = '2fc10bb2b608e7f1e4a803588cff1123add5aa7c6fbb92eb6b22cea028a9b473'
@@ -28,18 +28,19 @@ def authenticated(old):
     _, job = old.metadata(old.JOB)
     request_raw, request = old.metadata(old.REQUEST)
     need(request_raw == old.compact(request), 'Exact retained wire encoding')
-    need(job['schema'] == 'smc_author_reference_execution_job_v1' and job['route'] == ROUTE
+    need(job['schema'] == 'smc_author_reference_execution_job_v2' and job['route'] == ROUTE
          and job['outcome'] == OUTCOME and job['access_condition'] == ACCESS
          and job['condition'] == job['phase_id'] in PHASES
          and request['phase_id'] == job['phase_id'] and request['role'] == 'B'
          and request['schema'] == 'smc_aggregate_phase_request_v1'
          and request['source'] == job['source'], 'Reference model arm with genuine assisted B exposure')
-    need(job['resource_profile'] == PROFILE
-         and all(type(value) is int for value in job['resource_profile'].values())
+    profile = validate_profile(job['resource_profile'])
+    need(all(type(request['resources'][key]) is int for key in
+             ('cpu_seconds', 'producer_seconds', 'memory_bytes', 'cpu_nanos', 'pids'))
          and job['submission_keys'] == ['offline']
-         and request['resources']['cpu_seconds'] == PROFILE['cpu_seconds']
-         and request['resources']['producer_seconds'] == PROFILE['wall_seconds']
-         and request['resources']['memory_bytes'] == PROFILE['memory_bytes']
+         and request['resources']['cpu_seconds'] == profile['cpu_seconds']
+         and request['resources']['producer_seconds'] == profile['wall_seconds']
+         and request['resources']['memory_bytes'] == profile['memory_bytes']
          and request['resources']['cpu_nanos'] == 6000000000
          and type(request['resources']['pids']) is int and request['resources']['pids'] > 0,
          'Unchanged reference producer resources and complete output')
@@ -53,7 +54,8 @@ def main():
     job, raw, request = authenticated(old)
     if sys.argv[1:] == ['--release']:
         return old.release(job, raw, request)
-    resource.setrlimit(resource.RLIMIT_CPU, (PROFILE['cpu_seconds'], PROFILE['cpu_seconds']))
+    profile = validate_profile(job['resource_profile'])
+    resource.setrlimit(resource.RLIMIT_CPU, (profile['cpu_seconds'], profile['cpu_seconds']))
     resource.setrlimit(resource.RLIMIT_CORE, (0, 0))
     for key in ('OPENBLAS_NUM_THREADS', 'OMP_NUM_THREADS', 'OMP_THREAD_LIMIT',
                 'MKL_NUM_THREADS', 'NUMBA_NUM_THREADS', 'NUMEXPR_NUM_THREADS', 'VECLIB_MAXIMUM_THREADS'):
@@ -79,14 +81,16 @@ def main():
     files = {name: old.pin_file(root / name, 1024**2 if name == 'actual_declaration.json'
              else job['max_file_bytes']) for name in ('offline.h5', 'actual_declaration.json')}
     _, actual = old.metadata(root / 'actual_declaration.json')
-    need(actual['schema'] == 'smc_author_reference_actual_v1' and actual['route'] == ROUTE
+    need(actual['schema'] == 'smc_author_reference_actual_v2' and actual['route'] == ROUTE
          and actual['phase_id'] == job['phase_id'] and actual['access_condition'] == ACCESS
+         and validate_profile(actual['resource_profile']) == profile
          and actual['role'] == 'author_calibration'
          and actual['program_sha256'] == job['program_sha256']
          and actual['method_freeze_sha256'] == job['method_freeze_sha256'],
          'Reference output joins actually selected method')
-    result = {'schema': 'smc_author_reference_program_result_v1', 'route': ROUTE,
+    result = {'schema': 'smc_author_reference_program_result_v2', 'route': ROUTE,
               'phase_id': job['phase_id'], 'access_condition': ACCESS, 'outcome': OUTCOME,
+              'resource_profile': profile,
               'program_sha256': job['program_sha256'], 'declaration_sha256': job['declaration_sha256'],
               'method_freeze_sha256': job['method_freeze_sha256'], 'submission_keys': ['offline']}
     result_raw = old.encode(result)

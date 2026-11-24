@@ -30,6 +30,7 @@ HELPERS = ('author_predict.py', 'prepare.py', 'memory_reduction.py',
            'particle_reduction.patch', 'scorer.py', 'source_manifest.json',
            'reference_panel.json')
 FAKE_OUTPUT = b'GENERATED NON-SCIENTIFIC OUTPUT; NOT HDF5\n'
+TEST_PROFILE = core.reference_profile(36000)
 SOURCE_PIN = core.pin(b'GENERATED REFERENCE OWNER SOURCE\n')
 FIXTURE_PARENT = None
 FIXTURE_CAP = 512 * 1024
@@ -101,14 +102,14 @@ class AdapterFixture:
                 self.helpers / name, ('# GENERATED HELPER IDENTITY: ' + name + '\n').encode())
         self.bindings = root / 'BINDINGS.json'
         self.bindings_pin = write(self.bindings, core.encode(bindings))
-        self.plan = core.method_plan(phase, self.program_pin, self.bindings_pin)
+        self.plan = core.method_plan(phase, self.program_pin, self.bindings_pin, TEST_PROFILE)
         self.plan_path = root / 'declaration.json'
         self.plan_pin = write(self.plan_path, core.encode(self.plan))
         self.job = {
-            'schema': 'smc_author_reference_execution_job_v1', 'route': core.ROUTE,
+            'schema': 'smc_author_reference_execution_job_v2', 'route': core.ROUTE,
             'outcome': 'author_reference', 'condition': phase, 'phase_id': phase,
             'access_condition': 'paper_data_author_code_and_weights',
-            'source': SOURCE_PIN, 'resource_profile': deepcopy(core.PROFILE),
+            'source': SOURCE_PIN, 'resource_profile': deepcopy(TEST_PROFILE),
             'submission_keys': ['offline'], 'program_sha256': self.program_pin['sha256'],
             'declaration_sha256': self.plan_pin['sha256'],
             'method_freeze_sha256': 'b' * 64, 'bindings': self.bindings_pin,
@@ -124,7 +125,9 @@ class AdapterFixture:
         return adapter.run(self.plan_path, self.job_path, self.source,
                            self.bindings, self.helpers, self.inputs, self.output)
 
-    def stub_author(self, helper_root, selected, input_root, output, scratch):
+    def stub_author(self, helper_root, selected, input_root, output, scratch, *, cpu_seconds):
+        if cpu_seconds != TEST_PROFILE['cpu_seconds']:
+            raise AssertionError('Selected reference CPU allowance was not forwarded')
         if helper_root != self.helpers or input_root != self.inputs or output != self.output:
             raise AssertionError('Adapter substituted a material/helper/output root')
         if not scratch.is_dir() or scratch == output:
@@ -235,8 +238,8 @@ class GeneratedReferenceControls(unittest.TestCase):
             with self.subTest(case=label):
                 fixture = self.fixture()
 
-                def bad_report(*args):
-                    report = fixture.stub_author(*args)
+                def bad_report(*args, **kwargs):
+                    report = fixture.stub_author(*args, **kwargs)
                     report.update(replacement)
                     return report
 
@@ -252,7 +255,7 @@ class GeneratedReferenceControls(unittest.TestCase):
             with self.subTest(kind=kind):
                 fixture = self.fixture()
 
-                def bad_output(helper_root, selected, input_root, output, scratch):
+                def bad_output(helper_root, selected, input_root, output, scratch, *, cpu_seconds):
                     if kind == 'extra-file':
                         write(output / 'offline.h5', FAKE_OUTPUT)
                         write(output / 'unexpected.txt', b'GENERATED EXTRA OUTPUT\n')
@@ -281,7 +284,7 @@ class GeneratedReferenceControls(unittest.TestCase):
         job = deepcopy(fixture.job)
         request = {'schema': 'smc_aggregate_phase_request_v1', 'phase_id': phase,
                    'role': 'B', 'source': SOURCE_PIN,
-                   'resources': {'cpu_seconds': 7200, 'producer_seconds': 10800,
+                   'resources': {'cpu_seconds': 36000, 'producer_seconds': 10800,
                                  'memory_bytes': 8589934592, 'cpu_nanos': 6000000000,
                                  'pids': 32}}
         old = SimpleNamespace(JOB='generated-job', REQUEST='generated-request',
@@ -720,7 +723,7 @@ class SerialReferenceOwnerControls(unittest.TestCase):
             job_for=lambda selected_protocol, phase: {'fixture_phase': phase},
             mounts_for=lambda *args: {'generated_assisted_mount': {'purpose': 'historical_author_source'}},
             mount_identity=lambda mounts: mounts,
-            resources=lambda *_: deepcopy(core.PROFILE),
+            resources=lambda *_: deepcopy(TEST_PROFILE),
             aggregate_plan=lambda *args: {'fixture_phase': args[2]},
             request_bytes=core.encode, provider_class=lambda: Provider,
             observe_closed=observe_closed,
@@ -786,6 +789,221 @@ class SerialReferenceOwnerControls(unittest.TestCase):
         altered['owned_episode.py'] += b'# GENERATED SOURCE DRIFT\n'
         with self.assertRaises(ValueError):
             overlay.derive_owner_sources(altered, self.owner_manifest, self.legacy_raw)
+
+
+class ReferenceCPUControls(unittest.TestCase):
+    """Real metadata/owner/worker/helper paths; scientific and OS calls are doubles."""
+    setUp = GeneratedReferenceControls.setUp
+    tearDown = GeneratedReferenceControls.tearDown
+    fixture = GeneratedReferenceControls.fixture
+    worker_inputs = GeneratedReferenceControls.worker_inputs
+
+    def protocol_fixture(self, cpu_seconds=36000):
+        fixture = self.fixture()
+        facade = episode.ReferenceEpisode.__new__(episode.ReferenceEpisode)
+        facade.HERE = fixture.root / 'component'
+        facade.HERE.mkdir()
+        write(facade.HERE / 'reference_adapter.py', b'# GENERATED FROZEN PROGRAM\n')
+        write(facade.HERE / 'BINDINGS.json', core.encode({'generated': 'bindings'}))
+        materials = fixture.root / 'pair'
+        materials.mkdir()
+        pair = materials / 'pair.json'
+        task = materials / 'task.json'
+        write(pair, core.encode({'generated': 'pair'}))
+        write(task, core.encode({'generated': 'task'}))
+        facade.bindings = {'sources': {'pair': {'sha256': 'a' * 64}}}
+        facade.TASK_SHA = 'b' * 64
+        facade._protocol = facade._protocol_path = None
+        facade._captured_actual = {}
+        facade.PROFILES = {}
+        facade.public_context = mock.Mock(return_value=({}, {}))
+        facade.source_identity = lambda: SOURCE_PIN
+        deployment = {'binding_pin': core.pin(b'GENERATED DEPLOYMENT'), 'pid_limit': 32}
+        facade.deployment_binding = lambda: deepcopy(deployment)
+        facade.need = core.need
+        facade.runtime_config = lambda value: {**value, 'deployment': deepcopy(deployment)}
+        runtime = {'source_read_bytes': 1048576, 'host_write_bytes': 1048576}
+        runtime_file = fixture.root / 'runtime.json'
+        runtime_pin = write(runtime_file, core.encode(runtime))
+        output = fixture.root / 'protocol'
+        protocol = facade.instantiate(pair, task, runtime_file, runtime_pin['sha256'],
+                                      output, cpu_seconds=cpu_seconds)
+        protocol_file = output / 'PROTOCOL.json'
+        return fixture, facade, protocol, protocol_file
+
+    def test_explicit_cpu_profile_has_no_default_and_rejects_invalid_fixed_fields(self):
+        with self.assertRaises(TypeError):
+            core.reference_profile()
+        for cpu in (1, 36000, 64800):
+            self.assertEqual(core.validate_profile(core.reference_profile(cpu)),
+                             {'cpu_seconds': cpu, 'wall_seconds': 10800,
+                              'memory_bytes': 8589934592, 'threads': 6})
+        for value in (None, True, False, 0, -1, 64801, 36000.0, '36000'):
+            with self.subTest(cpu=value), self.assertRaises(ValueError):
+                core.reference_profile(value)
+        for key, value in [('cpu_seconds', True), ('cpu_seconds', 64801),
+                           ('wall_seconds', 86400), ('wall_seconds', 10800.0),
+                           ('memory_bytes', 17179869184), ('threads', 8), ('threads', 6.0)]:
+            bad = core.reference_profile(36000)
+            bad[key] = value
+            with self.subTest(field=key, value=value), self.assertRaises(ValueError):
+                core.validate_profile(bad)
+        for bad in ({}, {'cpu_seconds': 36000}, {**TEST_PROFILE, 'extra': 1}, None):
+            with self.assertRaises(ValueError):
+                core.validate_profile(bad)
+
+    def test_freeze_protocol_jobs_and_real_owner_resources_share_selected_cpu(self):
+        for cpu in (1, 36000, 64800):
+            with self.subTest(cpu=cpu):
+                fixture, facade, protocol, protocol_file = self.protocol_fixture(cpu)
+                expected = core.reference_profile(cpu)
+                self.assertEqual(protocol['schema'], 'smc_author_reference_protocol_v2')
+                self.assertEqual(protocol['resource_profile'], expected)
+                self.assertEqual(facade.PROFILES, {})
+                admitted, runtime = facade.admit_protocol(protocol_file,
+                    core.pin(protocol_file.read_bytes())['sha256'])
+                self.assertEqual(facade.PROFILES, {'author_reference': expected})
+                resources = facade.resources('author_reference', runtime)
+                self.assertEqual(resources['cpu_seconds'], cpu)
+                self.assertEqual(resources['producer_seconds'], 10800)
+                self.assertEqual(resources['memory_bytes'], 8589934592)
+                self.assertEqual(resources['cpu_nanos'], 6000000000)
+                for phase in core.PHASES:
+                    declaration = core.read(protocol_file.parent / phase / 'declaration.json')
+                    freeze = core.read(protocol_file.parent / phase / 'METHOD.json')
+                    self.assertEqual(declaration['resource_profile'], expected)
+                    self.assertEqual(freeze['plan'], declaration)
+                    self.assertEqual(freeze['schema'], 'smc_author_reference_method_freeze_v2')
+                    job = facade.job_for(admitted, phase)
+                    self.assertEqual(job['resource_profile'], expected)
+                    self.assertEqual(core.validate_job(declaration, job,
+                        protocol['programs'][phase]['program'], job['bindings']), core.recipe(phase))
+
+    def test_profile_tamper_or_legacy_protocol_clears_prior_admission(self):
+        fixture, facade, protocol, protocol_file = self.protocol_fixture()
+        facade.admit_protocol(protocol_file, core.pin(protocol_file.read_bytes())['sha256'])
+        self.assertTrue(facade.PROFILES)
+        with self.assertRaises(ValueError):
+            facade.admit_protocol(Path('relative-protocol.json'), '0' * 64)
+        self.assertEqual(facade.PROFILES, {})
+        self.assertIsNone(facade._protocol)
+        self.assertIsNone(facade._protocol_path)
+        facade.admit_protocol(protocol_file, core.pin(protocol_file.read_bytes())['sha256'])
+        # A changed protocol CPU cannot rewrite already-frozen method declarations.
+        protocol['resource_profile']['cpu_seconds'] = 36001
+        protocol_file.chmod(0o600)  # generated adversarial mutation only
+        write(protocol_file, core.encode(protocol))
+        with self.assertRaises(ValueError):
+            facade.admit_protocol(protocol_file, core.pin(protocol_file.read_bytes())['sha256'])
+        self.assertEqual(facade.PROFILES, {})
+        self.assertIsNone(facade._protocol)
+        protocol['resource_profile']['cpu_seconds'] = 36000
+        protocol['schema'] = 'smc_author_reference_protocol_v1'
+        write(protocol_file, core.encode(protocol))
+        with self.assertRaises(ValueError):
+            facade.admit_protocol(protocol_file, core.pin(protocol_file.read_bytes())['sha256'])
+        self.assertEqual(facade.PROFILES, {})
+        # Required API argument refuses omission before creating any protocol leaf.
+        with self.assertRaises(TypeError):
+            facade.instantiate(None, None, None, None, self.root / 'not-created')
+        self.assertFalse((self.root / 'not-created').exists())
+
+    def test_plan_job_mismatch_and_boolean_wire_cpu_refuse_before_release(self):
+        fixture = self.fixture()
+        fixture.job['resource_profile']['cpu_seconds'] = 36001
+        fixture.save()
+        with mock.patch.object(adapter, 'invoke_author') as invoke:
+            with self.assertRaises(ValueError):
+                fixture.run()
+            invoke.assert_not_called()
+        fixture.job['resource_profile']['cpu_seconds'] = 36000
+        fixture.job['schema'] = 'smc_author_reference_execution_job_v1'
+        fixture.save()
+        with self.assertRaises(ValueError):
+            fixture.run()
+        for value in (True, 1.0, 36001):
+            job, request, old = self.worker_inputs()
+            if value is True or type(value) is float:
+                job['resource_profile']['cpu_seconds'] = 1
+            request['resources']['cpu_seconds'] = value
+            with self.subTest(wire_cpu=value), self.assertRaises(ValueError):
+                worker.authenticated(old)
+            old.before_deadline.assert_not_called()
+
+
+    def test_captured_result_requires_strict_integer_cpu_profile(self):
+        fixture, facade, protocol, protocol_file = self.protocol_fixture(1)
+        facade.admit_protocol(protocol_file, core.pin(protocol_file.read_bytes())['sha256'])
+        phase = core.PHASES[0]
+        programme = protocol['programs'][phase]
+        root = self.root / 'generated-capture'
+        root.mkdir()
+        profile = core.reference_profile(1)
+        result = {'schema': 'smc_author_reference_program_result_v2', 'route': core.ROUTE,
+                  'phase_id': phase, 'access_condition': core.ACCESS, 'outcome': core.OUTCOME,
+                  'resource_profile': profile,
+                  'program_sha256': programme['program']['sha256'],
+                  'declaration_sha256': programme['declaration']['sha256'],
+                  'method_freeze_sha256': programme['method']['sha256'],
+                  'submission_keys': ['offline']}
+        actual = {'schema': 'smc_author_reference_actual_v2', 'route': core.ROUTE,
+                  'phase_id': phase, 'access_condition': core.ACCESS,
+                  'resource_profile': profile, 'recipe': core.recipe(phase),
+                  'role': 'author_calibration', 'AI_attempt': False,
+                  'scientific_improvement': False,
+                  'method_freeze_sha256': programme['method']['sha256'],
+                  'program_sha256': programme['program']['sha256']}
+        files = {'offline.h5': write(root / 'offline.h5', FAKE_OUTPUT),
+                 'actual_declaration.json': write(root / 'actual_declaration.json', core.encode(actual)),
+                 'RESULT.json': write(root / 'RESULT.json', core.encode(result)),
+                 'OUTPUTS.json': core.pin(b'GENERATED OUTER-ADMITTED MANIFEST')}
+        receipt = {'output_inventory': {'complete': True, 'files': files},
+                   'quarantine_root': str(root)}
+        self.assertEqual(facade.captured_predictions(receipt, phase, core.OUTCOME, programme),
+                         {'offline': root / 'offline.h5'})
+        for invalid in (True, 1.0):
+            result['resource_profile']['cpu_seconds'] = invalid
+            files['RESULT.json'] = write(root / 'RESULT.json', core.encode(result))
+            with self.subTest(cpu=invalid), self.assertRaises(ValueError):
+                facade.captured_predictions(receipt, phase, core.OUTCOME, programme)
+
+    def test_runtime_qualification_rejects_equal_boolean_or_float_cpu(self):
+        fixture, facade, protocol, protocol_file = self.protocol_fixture(1)
+        facade.admit_protocol(protocol_file, core.pin(protocol_file.read_bytes())['sha256'])
+        record = {'profiles': {'author_reference': core.reference_profile(1)}}
+        # Retained native identity checks are explicit doubles; strict profile
+        # admission after that boundary is the real new reference method.
+        with mock.patch.object(episode._base.FullPanelEpisode, 'qualify', return_value=record):
+            self.assertEqual(facade.qualify({}, SOURCE_PIN), record)
+            for invalid in (True, 1.0):
+                record['profiles']['author_reference']['cpu_seconds'] = invalid
+                with self.subTest(cpu=invalid), self.assertRaises(ValueError):
+                    facade.qualify({}, SOURCE_PIN)
+
+    def test_selected_cpu_reaches_real_worker_limit_and_original_helper_argument(self):
+        job, request, old = self.worker_inputs()
+        old.READY, old.RELEASE = self.root / 'READY', self.root / 'RELEASE'
+        old.marker = lambda *args: {'generated': True}
+        old.publish_marker = mock.Mock(side_effect=RuntimeError('CONTROL STOP BEFORE RELEASE'))
+        with mock.patch.object(worker, 'retained', return_value=old), \
+             mock.patch.object(worker.resource, 'setrlimit') as limits, \
+             mock.patch.object(worker.sys, 'argv', ['reference_worker.py']), \
+             mock.patch.dict(os.environ, {}, clear=False):
+            with self.assertRaisesRegex(RuntimeError, 'CONTROL STOP BEFORE RELEASE'):
+                worker.main()
+        self.assertIn(mock.call(worker.resource.RLIMIT_CPU, (36000, 36000)), limits.call_args_list)
+        fixture = self.fixture()
+        captured = []
+        def fake_run(filename, run_name):
+            captured.append(list(adapter.sys.argv))
+            write(fixture.output / 'offline.h5', FAKE_OUTPUT)
+        with mock.patch.object(adapter.runpy, 'run_path', side_effect=fake_run), \
+             mock.patch.object(adapter, 'read', return_value=original_report(core.recipe(fixture.phase))):
+            actual = fixture.run()
+        self.assertEqual(len(captured), 1)
+        self.assertEqual(captured[0][-2:], ['--cpu-seconds-remaining', '36000'])
+        self.assertEqual(actual['resource_profile'], TEST_PROFILE)
+        self.assertEqual(actual['schema'], 'smc_author_reference_actual_v2')
 
 
 def main():

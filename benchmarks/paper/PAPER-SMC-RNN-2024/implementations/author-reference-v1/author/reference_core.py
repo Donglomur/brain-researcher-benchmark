@@ -13,8 +13,8 @@ ACCESS = 'paper_data_author_code_and_weights'
 PHASES = ('reference_causal', 'reference_noncausal')
 ARMS = dict(zip(PHASES, ('causal', 'noncausal')))
 SEEDS = {'causal': 20261117, 'noncausal': 20261118}
-PROFILE = {'cpu_seconds': 7200, 'wall_seconds': 10800,
-           'memory_bytes': 8589934592, 'threads': 6}
+FIXED_PROFILE = {'wall_seconds': 10800, 'memory_bytes': 8589934592, 'threads': 6}
+MAX_CPU_SECONDS = 64800
 METRICS = ('co-bps', 'vel R2', 'psth R2', 'fp-bps')
 META_CAP = 1024 ** 2
 FILE_CAP = 512 * 1024 ** 2
@@ -23,6 +23,22 @@ FILE_CAP = 512 * 1024 ** 2
 def need(ok, reason):
     if not ok:
         raise ValueError(reason)
+
+
+def reference_profile(cpu_seconds):
+    """Explicit prospective reference allowance, never a participant default."""
+    need(type(cpu_seconds) is int and 1 <= cpu_seconds <= MAX_CPU_SECONDS,
+         'Explicit integer reference CPU seconds in 1..64800')
+    return {'cpu_seconds': cpu_seconds, **FIXED_PROFILE}
+
+
+def validate_profile(value):
+    need(type(value) is dict and set(value) == {'cpu_seconds', *FIXED_PROFILE}
+         and all(type(v) is int for v in value.values()),
+         'Exact integer reference resource profile')
+    expected = reference_profile(value['cpu_seconds'])
+    need(value == expected, 'Fixed reference wall, memory and thread limits')
+    return expected
 
 
 def pin(raw):
@@ -122,23 +138,25 @@ def recipe(phase):
             'checkpoint_search': False, 'access_condition': ACCESS}
 
 
-def method_plan(phase, program_pin, bindings_pin):
-    return {'schema': 'smc_author_reference_method_v1', 'route': ROUTE,
+def method_plan(phase, program_pin, bindings_pin, resource_profile):
+    return {'schema': 'smc_author_reference_method_v2', 'route': ROUTE,
             'role': 'author_calibration', 'phase_id': phase, 'outcome': OUTCOME,
             'access_condition': ACCESS, 'recipe': recipe(phase), 'program': program_pin,
-            'bindings': bindings_pin, 'AI_attempt': False, 'scientific_improvement': False}
+            'bindings': bindings_pin, 'resource_profile': validate_profile(resource_profile),
+            'AI_attempt': False, 'scientific_improvement': False}
 
 
 def validate_job(plan, job, program_pin, bindings_pin):
-    need(plan == method_plan(plan.get('phase_id'), program_pin, bindings_pin),
+    profile = validate_profile(plan.get('resource_profile'))
+    need(plan == method_plan(plan.get('phase_id'), program_pin, bindings_pin, profile),
          'Exact frozen author model recipe and assisted access')
     expected = {'schema', 'route', 'outcome', 'condition', 'phase_id', 'access_condition',
                 'source', 'resource_profile', 'submission_keys', 'program_sha256',
                 'declaration_sha256', 'method_freeze_sha256', 'bindings', 'max_file_bytes'}
     need(type(job) is dict and set(job) == expected, 'Exact reference execution job fields')
-    need(job['schema'] == 'smc_author_reference_execution_job_v1' and job['route'] == ROUTE
+    need(job['schema'] == 'smc_author_reference_execution_job_v2' and job['route'] == ROUTE
          and job['outcome'] == OUTCOME and job['condition'] == job['phase_id'] == plan['phase_id']
-         and job['access_condition'] == ACCESS and job['resource_profile'] == PROFILE
+         and job['access_condition'] == ACCESS and validate_profile(job['resource_profile']) == profile
          and all(type(v) is int for v in job['resource_profile'].values())
          and job['submission_keys'] == ['offline'] and job['program_sha256'] == program_pin['sha256']
          and job['bindings'] == bindings_pin and job['max_file_bytes'] == FILE_CAP,
