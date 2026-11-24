@@ -18,7 +18,9 @@ import stat
 PILOT = 'docs/science/difficulty-pilot-20261117.json'
 ERP_PILOT = 'benchmarks/neural/NEURAL-077/docs/exploratory32-fixed-image-pilot-20261122.json'
 ERP_NARRATIVE = ERP_PILOT.removesuffix('.json') + '.md'
-PUBLIC_ATTACHMENTS = (ERP_NARRATIVE,)
+ERP_REFERENCE_FAILURE = 'benchmarks/neural/NEURAL-077/docs/full32-image-reference-calibration-20261124.json'
+ERP_REFERENCE_NARRATIVE = ERP_REFERENCE_FAILURE.removesuffix('.json') + '.md'
+PUBLIC_ATTACHMENTS = (ERP_NARRATIVE, ERP_REFERENCE_NARRATIVE)
 HISTORY = 'docs/provenance/execution/historical-evidence-v1/profiles.json'
 DIRECT = 'benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json'
 VIEWER = 'benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json'
@@ -38,7 +40,8 @@ NEURAL096_PREPARATION = NEURAL096_HOME + 'AUTHENTIC_PREPARATION.json'
 SMC_ACTUAL_PANEL = '3b160dfb4aef8c68cbae8d4a02d5933576a77e4bc47a7c3a5b484369caf95be5'
 SMC_PUBLIC_PANEL = '209a15e2189499a9e68264df5c9f81057dd919564d98a46fb64d75b3f39af2f3'
 PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR, REVE_PREPARATION, DEEP_PREPARATION,
-                  SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION, SMC_CALIBRATION, SMC_RESCORE, SMC_MATERIALS, ERP_PILOT)
+                  SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION, SMC_CALIBRATION, SMC_RESCORE, SMC_MATERIALS,
+                  ERP_PILOT, ERP_REFERENCE_FAILURE)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -1271,6 +1274,94 @@ def neural096_preparation_records(doc, source):
     return [row]
 
 
+def erp_reference_failure_records(doc, source, narrative):
+    """Keep failed fixed-reference execution separate from scored/AI evidence."""
+    require(doc.get('schema') == 'neural077-image-reference-calibration-report/v1'
+            and doc.get('date') == '2026-11-24' and doc.get('task_id') == 'NEURAL-077'
+            and doc.get('evidence_role') == 'public_aggregate_transcription'
+            and doc.get('status') == 'incomplete_no_performance_result'
+            and doc.get('condition') == 'fixed_initial_image_four_demo_reference',
+            'unsupported image-reference failure report')
+    require(narrative is not None, 'image-reference narrative is missing')
+    require(obj(doc['narrative']) == narrative[1] and narrative[1]['path'] == ERP_REFERENCE_NARRATIVE,
+            'image-reference narrative pin mismatch')
+    cohort = exact_counts(doc['cohort'], {'people': 32, 'queries_per_person': 200,
+        'selected_queries': 6400, 'training_demonstrations': 4}, 'image-reference cohort')
+    require(doc['cohort'].get('scope') == 'predefined_full32_complement'
+            and doc['cohort'].get('original_registered_development_condition_is_different') is True,
+            'image-reference cohort interpretation differs')
+    method = obj(doc['method'])
+    require(method.get('sha256') == '08286eaab4be66d2dc66f646f475a851ab861ac0337279a5696faefbd9c8bfd6'
+            and method.get('unchanged_between_attempts') is True,
+            'historical image reference changed')
+    display = obj(method['display'])
+    require(display.get('channels') == ['Cz', 'Pz'] and display.get('filter') == 'none'
+            and type(display.get('start_sample')) is int and display['start_sample'] == -256
+            and display.get('amplitude_units') == 'native_stored_units_physical_calibration_unresolved',
+            'historical fixed observation differs')
+    exact_counts(display, {'stop_sample_exclusive': 768, 'sampling_hz': 1024,
+                          'units_per_division': 20}, 'image-reference display')
+    attempts = doc['attempts']
+    require(type(attempts) is list and len(attempts) == 2, 'both image-reference failures required')
+    expected = ({'attempt': 1, 'fitted_models': 0, 'attempted_queries': 0,
+                 'complete_query_captures': 0, 'target_body_reads': 0, 'scored_queries': 0},
+                {'attempt': 2, 'fitted_models': 1, 'attempted_queries': 62,
+                 'complete_query_captures': 61, 'failed_query_attempts': 1,
+                 'unattempted_queries': 6338, 'target_body_reads': 0, 'scored_queries': 0,
+                 'owned_capture_children_reaped': 62, 'capture_streams_closed': 62})
+    projected = []
+    for index, (attempt, counts) in enumerate(zip(attempts, expected)):
+        checked = exact_counts(attempt, counts, 'image-reference attempt')
+        status = ('failed_runtime_preflight', 'failed_no_partial_qualification')[index]
+        require(attempt.get('status') == status, 'image-reference failure cannot become success')
+        wall = number(attempt['native_wall_seconds'])
+        require(wall == (0.099, 15.806)[index], 'frozen image-reference wall time differs')
+        projected.append(dict(checked, status=status, native_wall_seconds=wall))
+    require(attempts[1].get('full_arm_admitted') is False
+            and attempts[1].get('automatic_retry') is False,
+            'image-reference partial arm or retry cannot be admitted')
+    diagnostic = obj(doc['label_free_diagnostic'])
+    visible = exact_counts(diagnostic, {'images': 5, 'query_images': 1, 'fixed_demo_images': 4,
+        'unchanged_extractor_calls': 5, 'fit_calls': 0, 'prediction_calls': 0, 'score_calls': 0,
+        'private_target_reads': 0, 'postmarker_columns_per_channel': 840,
+        'query_defined_features': 0, 'query_missing_features': 30,
+        'demo_defined_features_total': 120, 'demo_missing_features_total': 0}, 'visibility diagnostic')
+    visible['query_postmarker_visible_columns'] = exact_counts(
+        diagnostic['query_postmarker_visible_columns'], {'Cz': 0, 'Pz': 0}, 'visible post-marker columns')
+    require(all(diagnostic.get(key) is True for key in ('visible_query_baselines_present',
+        'exact_renderer_color_and_extractor_column_masks_agree',
+        'decoded_query_scanlines_match_original_projection_identity')),
+        'recorded visibility diagnosis differs')
+    limits = obj(doc['scientific_limits'])
+    require(limits.get('performance_metrics') is None
+            and integer(limits['completed_benchmarks_added']) == 0
+            and all(limits.get(key) is False for key in ('full_population_run_completed',
+                'independent_generalization', 'native_ai_understanding_assessed', 'paper_improvement_assessed'))
+            and limits.get('no_inference_of_raw_amplitude_or_query_label') is True,
+            'failed reference report cannot promote scientific qualification')
+    followup = obj(doc['followup_status'])
+    require(followup.get('historical_failures_preserved') is True
+            and followup.get('existing_algorithm_and_condition_unchanged') is True
+            and followup.get('new_authentic_run_selected_by_this_report') is False,
+            'historical failure or execution boundary changed')
+    row = record('full32-image-reference-failure-20261124', 'NEURAL-077',
+        'image_reference_engineering_failure', source, '/attempts',
+        'Two failed engineering executions for the full32 fixed-image reference: one preflight-only; '
+        'one four-demo fit and 62 query attempts with 61 complete captures. Zero scoring; no complete calibration.',
+        'fixed_initial_image_four_demo_reference', [
+            'Exposed-development evidence, not independent generalization or AI/native understanding.',
+            'The diagnostic covers one failed image and four fixed demos, not the full population.',
+            'Both failures and all cases remain; no partial score or scientific-readiness promotion.',
+            'Known owned cleanup closed; escaped-descendant containment and full-arm admission are not claimed.'])
+    row.update(status='incomplete_no_performance_result', cohort=cohort, attempts=projected,
+        coverage={'engineering_execution_attempts': 2, 'preflight_only_failures': 1,
+                  'reference_fits': 1, 'query_capture_attempts': 62, 'complete_query_captures': 61,
+                  'failed_query_attempts': 1, 'unattempted_queries': 6338, 'scored_queries': 0},
+        diagnostic=visible, metrics=[], narrative=narrative[1], full_task_completed=False,
+        solver_attempts_recorded=0, evidence_role='public_aggregate_transcription')
+    return [row]
+
+
 def load(root, task_ids=None):
     """Read optional known reports; reject malformed present reports.
 
@@ -1297,7 +1388,9 @@ def load(root, task_ids=None):
                               (SMC_RESCORE, lambda doc, source: smc_rescore_records(doc, source, captured_reports.get(SMC_CALIBRATION))),
                               (SMC_MATERIALS, smc_material_records),
                               (ERP_PILOT, lambda doc, source: exploratory_erp_records(
-                                  doc, source, read_bytes(root, ERP_NARRATIVE)))):
+                                  doc, source, read_bytes(root, ERP_NARRATIVE))),
+                              (ERP_REFERENCE_FAILURE, lambda doc, source: erp_reference_failure_records(
+                                  doc, source, read_bytes(root, ERP_REFERENCE_NARRATIVE)))):
         try:
             captured = read(root, relative)
             if captured is None:
@@ -1328,6 +1421,13 @@ def load(root, task_ids=None):
                                                        for row in items if row['category'] == 'exploratory_frozen_programme'),
         'exploratory_fixed_image_pilot_reports': categories['exploratory_direct_interpretation'],
         'viewer_interpretation_attempts': 0,
+        'image_reference_failed_calibration_reports': categories['image_reference_engineering_failure'],
+        **{'image_reference_' + suffix: sum(row['coverage'][key] for items in records.values() for row in items
+                                           if row['category'] == 'image_reference_engineering_failure')
+           for suffix, key in (('engineering_execution_attempts', 'engineering_execution_attempts'),
+                               ('preflight_only_failures', 'preflight_only_failures'), ('fits', 'reference_fits'),
+                               ('query_capture_attempts', 'query_capture_attempts'),
+                               ('complete_query_captures', 'complete_query_captures'), ('scored_queries', 'scored_queries'))},
         'authentic_engineering_reports': categories['authentic_input_materialization'] + categories['authentic_viewer_rendering'] + categories['authentic_viewer_transport'],
         'authentic_viewer_transport_reports': categories['authentic_viewer_transport'],
         'paper_source_preparation_reports': categories['paper_source_preparation'],
@@ -1365,5 +1465,8 @@ def load(root, task_ids=None):
                 'direct_interpretation_attempts': 'Fresh direct-image episode attempts, including delivery failures.',
                 'historical_reference_rescore_models': 'Previously frozen author predictions scored again; not new model or AI attempts.',
                 'historical_reference_rescore_operations': 'Shared score-only operations; each may score multiple frozen models.',
+                'image_reference_engineering_execution_attempts': 'Failed reference executions, including preflight-only failure; not AI attempts or successful calibration arms.',
+                'image_reference_fits': 'Authentic four-demo reference fits; separate from query applications and scored results.',
+                'image_reference_query_capture_attempts': 'First query capture attempts, including refused output; not completed scientific benchmarks.',
                 'exploratory_programme_authoring_attempts': 'Generated programmes authored; query applications are counted separately.',
                 'exploratory_programme_query_applications': 'First applications of the frozen programme, including runtime failures.'}}

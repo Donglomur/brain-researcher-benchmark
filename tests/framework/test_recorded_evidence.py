@@ -295,16 +295,15 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result['records']['NEURAL-077'][0]['reported_implementation_sha256']['transport.py'], 'd' * 64)
 
     def test_native_repair_adds_distinct_controls_without_new_tasks_or_solver_trials(self):
-        for name in evidence.PUBLIC_REPORTS:
+        for name in evidence.PUBLIC_REPORTS + evidence.PUBLIC_ATTACHMENTS:
             self.install(name)
-        self.install(evidence.ERP_NARRATIVE)
         result = evidence.load(self.root)
         self.assertEqual(result['counts']['native_operator_controls'], 16)
         self.assertEqual(result['counts']['native_operator_control_reports'], 2)
         self.assertEqual(result['counts']['native_control_tasks'], 2)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
         self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
-        self.assertEqual(result['counts']['public_reports'], 16)
+        self.assertEqual(result['counts']['public_reports'], 17)
         rows = [row for items in result['records'].values() for row in items
                 if row['category'] == 'native_operator_control']
         self.assertEqual(len({row['id'] for row in rows}), 4)
@@ -362,11 +361,10 @@ class EvidenceTests(unittest.TestCase):
                     evidence.load(self.root)
 
     def test_preparation_reports_add_source_facts_without_model_or_native_trial_counts(self):
-        for name in evidence.PUBLIC_REPORTS:
+        for name in evidence.PUBLIC_REPORTS + evidence.PUBLIC_ATTACHMENTS:
             self.install(name)
-        self.install(evidence.ERP_NARRATIVE)
         result = evidence.load(self.root)
-        self.assertEqual(result['counts']['public_reports'], 16)
+        self.assertEqual(result['counts']['public_reports'], 17)
         self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
         self.assertEqual(result['counts']['paper_source_preparation_reports'], 3)
         self.assertEqual(result['counts']['paper_source_preparation_tasks'], 3)
