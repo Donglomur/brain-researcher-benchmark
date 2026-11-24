@@ -60,3 +60,61 @@ positive/negative clipping, EEG/ZERO geometry, direct/viewer image identity,
 primitive NPY rejection, and the response allowlist. They demonstrate software
 behavior only. Run them through the shared lightweight test pool as required by
 the parallel builder policy; no authentic data or model calls are used.
+
+
+## Complete matched demonstration projection
+
+`session.prepare_session(query_npy, context_alias=..., view=...,
+training_rows=..., expected_training_aliases=..., load_training_window=...)`
+adds a host-side session over the existing renderer. The host supplies all
+permitted training rows in the same order as the matched program condition's
+admitted `train_rows.json`; the independent `expected_training_aliases` list
+must match exactly. Each training row has only `row_alias`, `group_alias`,
+`label`, and `npy_sha256`. The label is the permitted training instruction class;
+there is no query-label argument. The session requires unique row aliases,
+excludes the current query alias, and requires all twelve canonical classes in
+each of exactly nine opaque training groups. It neither samples demonstrations
+nor selects apparently informative trials. Metadata is detached at admission so
+later caller mutation cannot relabel a demonstration.
+
+The private loader receives only an admitted training alias. Its returned bytes
+must match the row's SHA256 before strict waveform decoding and rendering. In a
+ZERO session, every loaded training window must independently contain positive
+float32 zeros; a matching hash does not bypass that rule. Missing, changed or
+invalid input raises an error rather than skipping a demonstration. The host
+must bind these pins and labels to the actual complete prepared training role,
+exclude the held participant, and charge all preparation, repeated rendering,
+reads and delivery. Supplied aliases and coverage checks do not authenticate
+source provenance: two consistently incomplete host inputs cannot prove full
+source coverage.
+
+`session.metadata()` supplies the complete permitted labeled roster without
+opening training waveforms. `session.direct_packets()` streams every labeled
+four-page training observation in that order, then one unlabeled four-page
+query. The host must exhaust and deliver the entire stream before accepting a
+direct prediction. An interrupted prefix is not a complete observation; a
+qualified transport must fail closed rather than silently truncating it. The
+session does not predeclare that complete support will fit a provider context.
+No smaller demonstration subset or larger resource allocation is authorized by
+this interface.
+
+`session.page({"action":"view_page", "row_alias":..., "page":0})` exposes
+only a page of one permitted demonstration or the current query. A training
+reply carries its allowed group and label; a query reply carries neither. The
+image response is the existing fixed projection, byte-identical to the matching
+direct packet. Unsupported actions, scales, pages and other-query aliases fail
+before any training loader call. The private pins and loader do not appear in
+serialized responses. Only those responses may be exposed to participants.
+Loader failures become a generic unavailable-observation error; original loader
+diagnostics and exception context remain private host material. A host must
+never send traceback or exception-object details as a participant response.
+
+These are source interfaces for a separately declared observation condition.
+They do not change F/I permissions, add fitted-reference outputs to a direct
+condition, establish identical information to the full-precision program input,
+or qualify model transport or isolation. Direct/viewer conditions remain not
+delivered pending authentic complete input and independent runtime qualification.
+The endpoint and existing full-study scorer are unchanged. Generated session
+controls test complete roster joins, actual direct/viewer image correspondence,
+missing/changed support, label separation, ZERO enforcement and rejection before
+reads; they are not neural understanding or performance evidence.
