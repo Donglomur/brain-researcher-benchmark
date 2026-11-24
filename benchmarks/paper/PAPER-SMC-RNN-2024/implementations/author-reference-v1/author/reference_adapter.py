@@ -4,11 +4,11 @@ from pathlib import Path
 import runpy
 import sys
 import tempfile
-from reference_core import (ACCESS, PROFILE, body, decode, encode, method_plan, need,
+from reference_core import (ACCESS, body, decode, encode, method_plan, need,
                             path, pin, read, validate_job, write_new)
 
 
-def invoke_author(helper_root, selected, input_root, output, scratch):
+def invoke_author(helper_root, selected, input_root, output, scratch, *, cpu_seconds):
     """Only scientific boundary. No caller-supplied program or callable is accepted."""
     old_argv, old_path = sys.argv, list(sys.path)
     try:
@@ -18,7 +18,7 @@ def invoke_author(helper_root, selected, input_root, output, scratch):
                     '--inputs', str(input_root / 'inputs'), '--arm', selected['arm'],
                     '--mode', 'predict', '--report', str(scratch / 'author_report.json'),
                     '--output', str(output / 'offline.h5'),
-                    '--cpu-seconds-remaining', str(PROFILE['cpu_seconds'])]
+                    '--cpu-seconds-remaining', str(cpu_seconds)]
         runpy.run_path(str(helper_root / 'author_predict.py'), run_name='__main__')
     finally:
         sys.argv, sys.path[:] = old_argv, old_path
@@ -54,7 +54,8 @@ def run(plan_path, execution_path, source_path, bindings_path, helper_root, inpu
     need(not (input_root / 'inputs/mc_maze/test/eval_target_20ms.h5').exists(),
          'Original TEST target is evaluator-only')
     with tempfile.TemporaryDirectory(prefix='smc-author-reference-') as temporary:
-        report = invoke_author(helper_root, selected, input_root, output, path(Path(temporary).resolve()))
+        report = invoke_author(helper_root, selected, input_root, output, path(Path(temporary).resolve()),
+                               cpu_seconds=job['resource_profile']['cpu_seconds'])
         validate_author_report(report, selected)
     need({p.name for p in output.iterdir()} == {'offline.h5'}, 'Only original author prediction output')
     prediction = output / 'offline.h5'
@@ -63,9 +64,10 @@ def run(plan_path, execution_path, source_path, bindings_path, helper_root, inpu
     st = prediction.lstat()
     need(prediction.is_file() and not prediction.is_symlink() and st.st_nlink == 1
          and 0 < st.st_size <= job['max_file_bytes'], 'Bounded original prediction file')
-    actual = {'schema': 'smc_author_reference_actual_v1', 'route': plan['route'],
+    actual = {'schema': 'smc_author_reference_actual_v2', 'route': plan['route'],
               'role': 'author_calibration', 'phase_id': plan['phase_id'],
               'access_condition': ACCESS, 'recipe': selected,
+              'resource_profile': dict(job['resource_profile']),
               'program_sha256': program_pin['sha256'], 'bindings': binding_pin,
               'method_freeze_sha256': job['method_freeze_sha256'],
               'author_report': report, 'training': False, 'adaptation': False,

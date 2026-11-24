@@ -71,6 +71,7 @@ evidence.
 | [SMC-RNN source preparation](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/source-preparation-evidence.json) | Complete original MC_Maze 20-ms inputs and paired participant materials; 2,869 trials and 182 neurons | Authentic source preparation and matched material export; no participant episode or author-baseline qualification |
 | [SMC-RNN native inference probes](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/native-cost-characterization.json) | Two selected author models exercised on first train/evaluation chunks with the original 192 particles | Native inference cost characterization, separately from generated memory controls; no complete predictions, score, full 32-repeat calibration or candidate attempt |
 | [SMC-RNN author calibration](../science/smc-author-calibration-20261117.md) | Both complete selected author predictions at 192 particles × 32 repeats and four original metrics per arm | Accepted reference outputs; noncausal supervisor remains failed. No candidate/AI study, paper-reproduction threshold, uncertainty estimate or SOTA claim |
+| [SMC-RNN frozen-reference rescoring, November 20](../science/smc-historical-rescore-20261120.md) | One shared bounded operation scored both complete existing predictions, with all four original metrics per model | Successful recorded evaluator and owned-process closure; six values match the earlier calibration exactly and velocity R² differs by ±1.11×10⁻¹⁶. No new author-model inference or AI attempt; the earlier failed supervisor remains failed |
 | [SMC-RNN version2 materials](../../benchmarks/paper/PAPER-SMC-RNN-2024/docs/official-assets-materials-v2-20261117.json) | Independently verified external 71-file pair, 31,393,479 bytes, with ten released assets only in the assisted condition | Material preparation and access separation; no participant episode, model/scoring run or scientific outcome |
 | [NEURAL-096 Set–Go preparation](../../benchmarks/neural/NEURAL-096/implementations/full-set-go-v1/AUTHENTIC_PREPARATION.json) | All 204 declared nominal-800-ms training/validation trials, 54 released units and 81,311 spikes; saved-packet consistency audit | Complete declared observation preparation, with no fitted trajectory, prior contrast, uncertainty estimate, participant episode or model trial |
 | [Historical execution projections](../provenance/execution/historical-evidence-v1/README.md) | Three profiles, including four NEURAL-023 programme controls | Retained historical execution and interface-control evidence; current environments and complete scientific scope remain unqualified |
@@ -107,6 +108,15 @@ noncausal aggregate was accepted as recovered reference output with its failed
 supervisor preserved. The calibration report retains its original draft and
 publication-pending assembly flags; neither these flags nor the accepted scalar
 outputs establish an AI reproduction or improvement result.
+
+The later [November 20 rescoring report](../science/smc-historical-rescore-20261120.md)
+records a successful shared scoring operation for both frozen predictions. It took
+22.07 seconds; the grader container and recorded host processes closed. The
+unchanged velocity evaluator includes its original training-split decoder fitting,
+but no author model was trained or rerun. Its two scored models count as one
+rescoring operation and add no task or AI attempt. This accepted result preserves
+both earlier failures and does not establish exact paper reproduction, improvement,
+or fresh runtime qualification of every current implementation.
 
 The native controls retained failures as well as accepted fixed-output scores.
 Incomplete submissions were refused before private-stage dispatch, with zero
@@ -196,7 +206,9 @@ payloads, not files published in the receipt, and no participant episode ran.
 Both complete author predictions and four-metric aggregates are now recorded in
 the [author calibration report](../science/smc-author-calibration-20261117.md).
 The noncausal aggregate was accepted as recovered reference output while its
-supervisor remains failed. Exact paper linkage, participant runtime enforcement,
+supervisor remains failed. The separate
+[later bounded rescore](../science/smc-historical-rescore-20261120.md) succeeded for
+both frozen predictions without repeating author-model inference. Exact paper linkage, participant runtime enforcement,
 matched budgets and scientific reproduction/improvement qualification remain
 separate requirements. The original test targets are publicly exposed; local
 separation does not create an untouched holdout.

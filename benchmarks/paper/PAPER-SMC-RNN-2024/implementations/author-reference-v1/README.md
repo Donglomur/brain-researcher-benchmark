@@ -48,15 +48,33 @@ copier retains no-follow, ordinary single-link, exact-size, bounded-copy and
 stable-content checks. A failed second model cannot promote the first model into
 a complete paired result.
 
-The producer profile remains 7,200 CPU-seconds, 10,800 wall-seconds, six threads
-and 8 GiB per model. Its adequacy for the full original inference and the private
-grader remains unmeasured. Later execution requires the existing owner gate and
-fresh runtime/resource qualification; no cap or recipe reduction is implied.
+Each new reference protocol requires an explicit CPU allowance: a strict integer
+from 1 to 64,800 seconds per model. There is no default. The upper bound is the
+fixed six threads multiplied by the unchanged 10,800-second wall envelope;
+8 GiB memory and six numerical threads remain fixed. The selected allowance must
+match both frozen method declarations, the protocol, execution jobs, qualified
+owner profile, worker CPU limit and original helper argument. An allowance is a
+ceiling, not evidence that the model will finish within it.
+
+The earlier fixed 7,200-second reference allowance was not supported by authentic
+cost evidence: the complete retained causal and noncausal runs used
+29,816.929737 and 29,393.194995 CPU-seconds. These measurements concern the historical
+CPU environment and do not predict exact cost on a new host. Participant access
+profiles, including the 7,200-second improvement profile, are unchanged.
+
+Call `ReferenceEpisode.instantiate(..., cpu_seconds=SELECTED_CPU_SECONDS)` or supply
+`--cpu-seconds SELECTED_CPU_SECONDS` to the operator CLI. New method, method-freeze,
+protocol, execution-job, actual-declaration and program-result records use their
+`v2` schemas. Old frozen `v1` protocols and receipts retain their historical
+meaning and are not silently reinterpreted by this source. A fresh source-bound
+runtime qualification must include the exact selected reference profile.
+No model inference, scientific grading or runtime qualification is performed by
+constructing these records.
 
 ## Generated source controls
 
-`controls/test_reference_route.py` contains all 22 previously accepted generated
-source controls. Its model, Provider and scientific scorer boundaries are stubs.
+`controls/test_reference_route.py` contains the retained 22 generated source controls and
+additional CPU-profile regression controls. Its model, Provider and scientific scorer boundaries are stubs.
 The portability change only selects the public facade and locates the controls
 and retained owner from the repository. To run all controls, set `ARTIFACT_DIR` to a fresh canonical absolute leaf
 outside the repository, beneath an existing ordinary output directory:

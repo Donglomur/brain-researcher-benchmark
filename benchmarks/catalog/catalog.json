@@ -3,8 +3,8 @@
   "kind": "public_neuroscience_source_catalog",
   "registry": {
     "path": "benchmarks/registry.json",
-    "bytes": 3191865,
-    "sha256": "849c1e8bad554f31a1f9d0396d3c6263a6cc2bb073bb47048e7b595367f17dab"
+    "bytes": 3192811,
+    "sha256": "aa378eb99858e0b56a996e5f85e6d9831fc733781a6792eecb287137ce4e9c7f"
   },
   "source_commit": "8a07b93da68e8b9cf193cdba7d09faa17bf56a43",
   "source_counts": {
@@ -2056,6 +2056,250 @@
           }
         },
         {
+          "id": "smc-historical-reference-rescore:causal",
+          "task_id": "PAPER-SMC-RNN-2024",
+          "category": "historical_reference_rescore",
+          "source": {
+            "path": "docs/science/smc-historical-rescore-20261120.json",
+            "bytes": 6171,
+            "sha256": "fbe76563c496ed2b2ea5917e5de9b65e37697660718e54a22a97c67debd592f7"
+          },
+          "source_pointer": "/metrics/causal",
+          "scope": "Successful bounded rescoring of a complete previously frozen author prediction; no new author-model inference or AI candidate.",
+          "condition": "causal frozen historical/current-release author prediction, original MC_Maze 20 ms scoring",
+          "limits": [
+            "The unchanged velocity R2 evaluator includes its original TRAIN-split decoder fitting; this score-only operation is not free of fitted computation.",
+            "Original test targets were publicly released in January 2026; this is not an untouched hidden holdout.",
+            "32 trajectory sets average inference; they are not independent training or biological replications.",
+            "Signed differences from printed values are reported without declaring reproduction or superiority.",
+            "The earlier image-admission refusal remains a failed attempt; this successful run used a separately selected strict metadata-policy repair.",
+            "This is the recorded November 20 score-only operation, not a fresh runtime verification.",
+            "Historical/current-release checkpoint scoring does not prove exact Table 2 checkpoint or data-revision linkage."
+          ],
+          "qualification_effect": "none",
+          "metrics": [
+            {
+              "name": "co-bps",
+              "value": 0.3221297803678063,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.3221297803678063,
+                "paper_printed_same_method": 0.3225
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": -0.00037021963219369125
+            },
+            {
+              "name": "vel R2",
+              "value": 0.8459605026793973,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.8459605026793974,
+                "paper_printed_same_method": 0.8479
+              },
+              "signed_delta_current_minus_historical": -1.1102230246251565e-16,
+              "signed_delta_current_minus_paper_printed": -0.0019394973206027233
+            },
+            {
+              "name": "psth R2",
+              "value": 0.5931377256416359,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.5931377256416359,
+                "paper_printed_same_method": 0.5927
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": 0.000437725641635911
+            },
+            {
+              "name": "fp-bps",
+              "value": 0.21924211546771746,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.21924211546771746,
+                "paper_printed_same_method": 0.2184
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": 0.0008421154677174525
+            }
+          ],
+          "execution_date_utc": "2026-11-20",
+          "status": "reported_successful_bounded_historical_reference_scoring",
+          "historical_calibration_source": {
+            "path": "docs/science/smc-author-calibration-20261117.json",
+            "bytes": 41406,
+            "sha256": "e2b33c75d5aa834de6d16403ed9e63c397e6dac95eebe3b482b0dbb9eb925cd1"
+          },
+          "whole_two_score_limits": {
+            "child_CPU_hard_seconds": 605,
+            "child_CPU_soft_seconds": 600,
+            "child_memory_bytes": 2147483648,
+            "child_numerical_CPU_quota": 1,
+            "cleanup_seconds": 60,
+            "host_declared_memory_bytes": 536870912,
+            "work_seconds": 720,
+            "host_hard_memory_guarantee": false,
+            "one_budget_no_per_model_reset": true
+          },
+          "observed_resources": {
+            "host_wall_seconds": 22.065646125000058,
+            "native_wall_seconds": 22.109,
+            "outer_wall_seconds": 22.2775994170006,
+            "child_exit_code": 0,
+            "child_OOMKilled": false,
+            "current_child_CPU_seconds": null,
+            "current_child_peak_RSS_bytes": null
+          },
+          "historical_noncausal_supervisor_success": false,
+          "historical_failure_preserved": true,
+          "reported_known_owned_closure": true,
+          "canonical_train_decoder_fitting": true,
+          "software_identities": {
+            "original_nlb_tools_0_0_3_evaluator": {
+              "bytes": 18292,
+              "sha256": "05f49d3cdf7720ae68e0fb76113a9e450e9df3813c6c6837689f23a9be278476"
+            },
+            "original_score_predictions_source": {
+              "bytes": 15050,
+              "sha256": "48638a595755138b32ff9c228804fd8c19c9ff874cd254f135fc5245ee9a25f8"
+            }
+          },
+          "numerical_versions": {
+            "h5py": "3.10.0",
+            "numpy": "1.26.3",
+            "scikit-learn": "1.5.0",
+            "scipy": "1.12.0"
+          },
+          "new_author_model_inference_or_training": false,
+          "solver_attempts_recorded": 0,
+          "candidate_attempts_recorded": 0,
+          "model_attempts_recorded": 0,
+          "exact_paper_reproduction_claim": false,
+          "improvement_or_SOTA_claim": false
+        },
+        {
+          "id": "smc-historical-reference-rescore:noncausal",
+          "task_id": "PAPER-SMC-RNN-2024",
+          "category": "historical_reference_rescore",
+          "source": {
+            "path": "docs/science/smc-historical-rescore-20261120.json",
+            "bytes": 6171,
+            "sha256": "fbe76563c496ed2b2ea5917e5de9b65e37697660718e54a22a97c67debd592f7"
+          },
+          "source_pointer": "/metrics/noncausal",
+          "scope": "Successful bounded rescoring of a complete previously frozen author prediction; no new author-model inference or AI candidate.",
+          "condition": "noncausal frozen historical/current-release author prediction, original MC_Maze 20 ms scoring",
+          "limits": [
+            "The unchanged velocity R2 evaluator includes its original TRAIN-split decoder fitting; this score-only operation is not free of fitted computation.",
+            "Original test targets were publicly released in January 2026; this is not an untouched hidden holdout.",
+            "32 trajectory sets average inference; they are not independent training or biological replications.",
+            "Signed differences from printed values are reported without declaring reproduction or superiority.",
+            "The earlier image-admission refusal remains a failed attempt; this successful run used a separately selected strict metadata-policy repair.",
+            "This is the recorded November 20 score-only operation, not a fresh runtime verification.",
+            "Historical/current-release checkpoint scoring does not prove exact Table 2 checkpoint or data-revision linkage."
+          ],
+          "qualification_effect": "none",
+          "metrics": [
+            {
+              "name": "co-bps",
+              "value": 0.3410160879591172,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.3410160879591172,
+                "paper_printed_same_method": 0.3407
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": 0.000316087959117195
+            },
+            {
+              "name": "vel R2",
+              "value": 0.889860745943277,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.8898607459432769,
+                "paper_printed_same_method": 0.8902
+              },
+              "signed_delta_current_minus_historical": 1.1102230246251565e-16,
+              "signed_delta_current_minus_paper_printed": -0.0003392540567229707
+            },
+            {
+              "name": "psth R2",
+              "value": 0.5958331235016836,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.5958331235016836,
+                "paper_printed_same_method": 0.5963
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": -0.0004668764983164486
+            },
+            {
+              "name": "fp-bps",
+              "value": 0.2418654447016941,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.2418654447016941,
+                "paper_printed_same_method": 0.2417
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": 0.0001654447016941063
+            }
+          ],
+          "execution_date_utc": "2026-11-20",
+          "status": "reported_successful_bounded_historical_reference_scoring",
+          "historical_calibration_source": {
+            "path": "docs/science/smc-author-calibration-20261117.json",
+            "bytes": 41406,
+            "sha256": "e2b33c75d5aa834de6d16403ed9e63c397e6dac95eebe3b482b0dbb9eb925cd1"
+          },
+          "whole_two_score_limits": {
+            "child_CPU_hard_seconds": 605,
+            "child_CPU_soft_seconds": 600,
+            "child_memory_bytes": 2147483648,
+            "child_numerical_CPU_quota": 1,
+            "cleanup_seconds": 60,
+            "host_declared_memory_bytes": 536870912,
+            "work_seconds": 720,
+            "host_hard_memory_guarantee": false,
+            "one_budget_no_per_model_reset": true
+          },
+          "observed_resources": {
+            "host_wall_seconds": 22.065646125000058,
+            "native_wall_seconds": 22.109,
+            "outer_wall_seconds": 22.2775994170006,
+            "child_exit_code": 0,
+            "child_OOMKilled": false,
+            "current_child_CPU_seconds": null,
+            "current_child_peak_RSS_bytes": null
+          },
+          "historical_noncausal_supervisor_success": false,
+          "historical_failure_preserved": true,
+          "reported_known_owned_closure": true,
+          "canonical_train_decoder_fitting": true,
+          "software_identities": {
+            "original_nlb_tools_0_0_3_evaluator": {
+              "bytes": 18292,
+              "sha256": "05f49d3cdf7720ae68e0fb76113a9e450e9df3813c6c6837689f23a9be278476"
+            },
+            "original_score_predictions_source": {
+              "bytes": 15050,
+              "sha256": "48638a595755138b32ff9c228804fd8c19c9ff874cd254f135fc5245ee9a25f8"
+            }
+          },
+          "numerical_versions": {
+            "h5py": "3.10.0",
+            "numpy": "1.26.3",
+            "scikit-learn": "1.5.0",
+            "scipy": "1.12.0"
+          },
+          "new_author_model_inference_or_training": false,
+          "solver_attempts_recorded": 0,
+          "candidate_attempts_recorded": 0,
+          "model_attempts_recorded": 0,
+          "exact_paper_reproduction_claim": false,
+          "improvement_or_SOTA_claim": false
+        },
+        {
           "id": "smc-official-assets-materials-v2",
           "task_id": "PAPER-SMC-RNN-2024",
           "category": "participant_material_preparation",
@@ -2895,6 +3139,11 @@
         "sha256": "e2b33c75d5aa834de6d16403ed9e63c397e6dac95eebe3b482b0dbb9eb925cd1"
       },
       {
+        "path": "docs/science/smc-historical-rescore-20261120.json",
+        "bytes": 6171,
+        "sha256": "fbe76563c496ed2b2ea5917e5de9b65e37697660718e54a22a97c67debd592f7"
+      },
+      {
         "path": "benchmarks/paper/PAPER-SMC-RNN-2024/docs/official-assets-materials-v2-20261117.json",
         "bytes": 6468,
         "sha256": "556c45f961a54d27a24af0e26a93948098533c92ddba1d0d0b9197950d46a2d5"
@@ -2907,7 +3156,7 @@
     ],
     "counts": {
       "tasks_with_recorded_evidence": 9,
-      "public_reports": 15,
+      "public_reports": 16,
       "pilot_attempts": 8,
       "paper_calibration_attempts": 4,
       "neural_programme_attempts": 4,
@@ -2923,6 +3172,8 @@
       "author_model_inference_probes": 2,
       "author_reference_calibration_arms": 2,
       "author_reference_calibration_reports": 1,
+      "historical_reference_rescore_models": 2,
+      "historical_reference_rescore_operations": 1,
       "participant_material_preparation_reports": 1,
       "author_model_inference_probe_reports": 1,
       "paper_source_preparation_tasks": 3,
@@ -2939,6 +3190,8 @@
       "pilot_attempts": "Attempts in the historical November 17 difficulty pilot only.",
       "neural_programme_attempts": "Programme attempts in the historical November 17 difficulty pilot only.",
       "direct_interpretation_attempts": "Fresh direct-image episode attempts, including delivery failures.",
+      "historical_reference_rescore_models": "Previously frozen author predictions scored again; not new model or AI attempts.",
+      "historical_reference_rescore_operations": "Shared score-only operations; each may score multiple frozen models.",
       "exploratory_programme_authoring_attempts": "Generated programmes authored; query applications are counted separately.",
       "exploratory_programme_query_applications": "First applications of the frozen programme, including runtime failures."
     }
@@ -35027,6 +35280,250 @@
           }
         },
         {
+          "id": "smc-historical-reference-rescore:causal",
+          "task_id": "PAPER-SMC-RNN-2024",
+          "category": "historical_reference_rescore",
+          "source": {
+            "path": "docs/science/smc-historical-rescore-20261120.json",
+            "bytes": 6171,
+            "sha256": "fbe76563c496ed2b2ea5917e5de9b65e37697660718e54a22a97c67debd592f7"
+          },
+          "source_pointer": "/metrics/causal",
+          "scope": "Successful bounded rescoring of a complete previously frozen author prediction; no new author-model inference or AI candidate.",
+          "condition": "causal frozen historical/current-release author prediction, original MC_Maze 20 ms scoring",
+          "limits": [
+            "The unchanged velocity R2 evaluator includes its original TRAIN-split decoder fitting; this score-only operation is not free of fitted computation.",
+            "Original test targets were publicly released in January 2026; this is not an untouched hidden holdout.",
+            "32 trajectory sets average inference; they are not independent training or biological replications.",
+            "Signed differences from printed values are reported without declaring reproduction or superiority.",
+            "The earlier image-admission refusal remains a failed attempt; this successful run used a separately selected strict metadata-policy repair.",
+            "This is the recorded November 20 score-only operation, not a fresh runtime verification.",
+            "Historical/current-release checkpoint scoring does not prove exact Table 2 checkpoint or data-revision linkage."
+          ],
+          "qualification_effect": "none",
+          "metrics": [
+            {
+              "name": "co-bps",
+              "value": 0.3221297803678063,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.3221297803678063,
+                "paper_printed_same_method": 0.3225
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": -0.00037021963219369125
+            },
+            {
+              "name": "vel R2",
+              "value": 0.8459605026793973,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.8459605026793974,
+                "paper_printed_same_method": 0.8479
+              },
+              "signed_delta_current_minus_historical": -1.1102230246251565e-16,
+              "signed_delta_current_minus_paper_printed": -0.0019394973206027233
+            },
+            {
+              "name": "psth R2",
+              "value": 0.5931377256416359,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.5931377256416359,
+                "paper_printed_same_method": 0.5927
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": 0.000437725641635911
+            },
+            {
+              "name": "fp-bps",
+              "value": 0.21924211546771746,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.21924211546771746,
+                "paper_printed_same_method": 0.2184
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": 0.0008421154677174525
+            }
+          ],
+          "execution_date_utc": "2026-11-20",
+          "status": "reported_successful_bounded_historical_reference_scoring",
+          "historical_calibration_source": {
+            "path": "docs/science/smc-author-calibration-20261117.json",
+            "bytes": 41406,
+            "sha256": "e2b33c75d5aa834de6d16403ed9e63c397e6dac95eebe3b482b0dbb9eb925cd1"
+          },
+          "whole_two_score_limits": {
+            "child_CPU_hard_seconds": 605,
+            "child_CPU_soft_seconds": 600,
+            "child_memory_bytes": 2147483648,
+            "child_numerical_CPU_quota": 1,
+            "cleanup_seconds": 60,
+            "host_declared_memory_bytes": 536870912,
+            "work_seconds": 720,
+            "host_hard_memory_guarantee": false,
+            "one_budget_no_per_model_reset": true
+          },
+          "observed_resources": {
+            "host_wall_seconds": 22.065646125000058,
+            "native_wall_seconds": 22.109,
+            "outer_wall_seconds": 22.2775994170006,
+            "child_exit_code": 0,
+            "child_OOMKilled": false,
+            "current_child_CPU_seconds": null,
+            "current_child_peak_RSS_bytes": null
+          },
+          "historical_noncausal_supervisor_success": false,
+          "historical_failure_preserved": true,
+          "reported_known_owned_closure": true,
+          "canonical_train_decoder_fitting": true,
+          "software_identities": {
+            "original_nlb_tools_0_0_3_evaluator": {
+              "bytes": 18292,
+              "sha256": "05f49d3cdf7720ae68e0fb76113a9e450e9df3813c6c6837689f23a9be278476"
+            },
+            "original_score_predictions_source": {
+              "bytes": 15050,
+              "sha256": "48638a595755138b32ff9c228804fd8c19c9ff874cd254f135fc5245ee9a25f8"
+            }
+          },
+          "numerical_versions": {
+            "h5py": "3.10.0",
+            "numpy": "1.26.3",
+            "scikit-learn": "1.5.0",
+            "scipy": "1.12.0"
+          },
+          "new_author_model_inference_or_training": false,
+          "solver_attempts_recorded": 0,
+          "candidate_attempts_recorded": 0,
+          "model_attempts_recorded": 0,
+          "exact_paper_reproduction_claim": false,
+          "improvement_or_SOTA_claim": false
+        },
+        {
+          "id": "smc-historical-reference-rescore:noncausal",
+          "task_id": "PAPER-SMC-RNN-2024",
+          "category": "historical_reference_rescore",
+          "source": {
+            "path": "docs/science/smc-historical-rescore-20261120.json",
+            "bytes": 6171,
+            "sha256": "fbe76563c496ed2b2ea5917e5de9b65e37697660718e54a22a97c67debd592f7"
+          },
+          "source_pointer": "/metrics/noncausal",
+          "scope": "Successful bounded rescoring of a complete previously frozen author prediction; no new author-model inference or AI candidate.",
+          "condition": "noncausal frozen historical/current-release author prediction, original MC_Maze 20 ms scoring",
+          "limits": [
+            "The unchanged velocity R2 evaluator includes its original TRAIN-split decoder fitting; this score-only operation is not free of fitted computation.",
+            "Original test targets were publicly released in January 2026; this is not an untouched hidden holdout.",
+            "32 trajectory sets average inference; they are not independent training or biological replications.",
+            "Signed differences from printed values are reported without declaring reproduction or superiority.",
+            "The earlier image-admission refusal remains a failed attempt; this successful run used a separately selected strict metadata-policy repair.",
+            "This is the recorded November 20 score-only operation, not a fresh runtime verification.",
+            "Historical/current-release checkpoint scoring does not prove exact Table 2 checkpoint or data-revision linkage."
+          ],
+          "qualification_effect": "none",
+          "metrics": [
+            {
+              "name": "co-bps",
+              "value": 0.3410160879591172,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.3410160879591172,
+                "paper_printed_same_method": 0.3407
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": 0.000316087959117195
+            },
+            {
+              "name": "vel R2",
+              "value": 0.889860745943277,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.8898607459432769,
+                "paper_printed_same_method": 0.8902
+              },
+              "signed_delta_current_minus_historical": 1.1102230246251565e-16,
+              "signed_delta_current_minus_paper_printed": -0.0003392540567229707
+            },
+            {
+              "name": "psth R2",
+              "value": 0.5958331235016836,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.5958331235016836,
+                "paper_printed_same_method": 0.5963
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": -0.0004668764983164486
+            },
+            {
+              "name": "fp-bps",
+              "value": 0.2418654447016941,
+              "direction": "higher",
+              "comparators": {
+                "historical_same_prediction": 0.2418654447016941,
+                "paper_printed_same_method": 0.2417
+              },
+              "signed_delta_current_minus_historical": 0.0,
+              "signed_delta_current_minus_paper_printed": 0.0001654447016941063
+            }
+          ],
+          "execution_date_utc": "2026-11-20",
+          "status": "reported_successful_bounded_historical_reference_scoring",
+          "historical_calibration_source": {
+            "path": "docs/science/smc-author-calibration-20261117.json",
+            "bytes": 41406,
+            "sha256": "e2b33c75d5aa834de6d16403ed9e63c397e6dac95eebe3b482b0dbb9eb925cd1"
+          },
+          "whole_two_score_limits": {
+            "child_CPU_hard_seconds": 605,
+            "child_CPU_soft_seconds": 600,
+            "child_memory_bytes": 2147483648,
+            "child_numerical_CPU_quota": 1,
+            "cleanup_seconds": 60,
+            "host_declared_memory_bytes": 536870912,
+            "work_seconds": 720,
+            "host_hard_memory_guarantee": false,
+            "one_budget_no_per_model_reset": true
+          },
+          "observed_resources": {
+            "host_wall_seconds": 22.065646125000058,
+            "native_wall_seconds": 22.109,
+            "outer_wall_seconds": 22.2775994170006,
+            "child_exit_code": 0,
+            "child_OOMKilled": false,
+            "current_child_CPU_seconds": null,
+            "current_child_peak_RSS_bytes": null
+          },
+          "historical_noncausal_supervisor_success": false,
+          "historical_failure_preserved": true,
+          "reported_known_owned_closure": true,
+          "canonical_train_decoder_fitting": true,
+          "software_identities": {
+            "original_nlb_tools_0_0_3_evaluator": {
+              "bytes": 18292,
+              "sha256": "05f49d3cdf7720ae68e0fb76113a9e450e9df3813c6c6837689f23a9be278476"
+            },
+            "original_score_predictions_source": {
+              "bytes": 15050,
+              "sha256": "48638a595755138b32ff9c228804fd8c19c9ff874cd254f135fc5245ee9a25f8"
+            }
+          },
+          "numerical_versions": {
+            "h5py": "3.10.0",
+            "numpy": "1.26.3",
+            "scikit-learn": "1.5.0",
+            "scipy": "1.12.0"
+          },
+          "new_author_model_inference_or_training": false,
+          "solver_attempts_recorded": 0,
+          "candidate_attempts_recorded": 0,
+          "model_attempts_recorded": 0,
+          "exact_paper_reproduction_claim": false,
+          "improvement_or_SOTA_claim": false
+        },
+        {
           "id": "smc-official-assets-materials-v2",
           "task_id": "PAPER-SMC-RNN-2024",
           "category": "participant_material_preparation",
@@ -50450,6 +50947,20 @@
           "sha256": "1622c36b326b4a25848b95d510e4d0547a540f30ce0fb5f005febf957f026e62",
           "commit": "2a0a5e72b6573256b4379bafd8ae7756069567c8",
           "claim": "Exact five-source operator CLI dependency identities; preserve the historical calibration role and unresolved authentic-source qualification."
+        },
+        {
+          "path": "benchmarks/paper/PAPER-FIND-036/implementations/foraging-programme/full-hw-reference-v1/README.md",
+          "bytes": 8129,
+          "sha256": "74d3ee027526332040b6f0afd42c2d8b9653aca4e073f2503a204102091fdcb7",
+          "commit": "1dfd05a1496eb43e71cb7edd48496ed330dc38d1",
+          "claim": "Reviewed complete reference source scope, generated controls and explicit unresolved scientific/runtime qualification."
+        },
+        {
+          "path": "benchmarks/paper/PAPER-FIND-036/implementations/foraging-programme/full-hw-reference-v1/DEPENDENCIES.json",
+          "bytes": 1559,
+          "sha256": "0b41eef2649456fe9aa5737e4ef3aaaa361ec0037737cfc8e4f856209697c48d",
+          "commit": "1dfd05a1496eb43e71cb7edd48496ed330dc38d1",
+          "claim": "Exact current source dependencies for the additive reference package; historical predecessor identities and scientific holds remain unchanged."
         }
       ],
       "declared_candidate_id": null,
@@ -62733,16 +63244,16 @@
       "evidence": [
         {
           "path": "benchmarks/paper/PAPER-paper-method-013/implementations/streaming-input-v1/README.md",
-          "bytes": 6238,
-          "sha256": "0b18c97d8009f1e2e744d9ab1f0d3b00a29cf427575a5ff916b2827c70223a4b",
-          "commit": "9a9f987c1a6fea6208c394663933294b3798a83d",
+          "bytes": 6549,
+          "sha256": "adbd53c3e092946778c42e0c068a7d657ee8d171f7c29ec943311c791de66534",
+          "commit": "e01822041a056ccc217a99013b1941736d83d9e0",
           "claim": "Accepted source scope, exact dependencies and remaining scientific limits"
         },
         {
           "path": "benchmarks/paper/PAPER-paper-method-013/implementations/streaming-input-v1/PROVENANCE.json",
-          "bytes": 2467,
-          "sha256": "e5760e489e6d871a410db81cd4dd1bc77ff7688bb1e9df6204eb50f08361fbf5",
-          "commit": "9a9f987c1a6fea6208c394663933294b3798a83d",
+          "bytes": 4769,
+          "sha256": "5e95c258a64d49108e804033b7efebe7bc0c7daa244eaebc4248bc83a2820cb5",
+          "commit": "e01822041a056ccc217a99013b1941736d83d9e0",
           "claim": "Accepted source scope, exact dependencies and remaining scientific limits"
         }
       ]
@@ -71127,9 +71638,9 @@
       "evidence": [
         {
           "path": "benchmarks/paper/PAPER-paper-method-003/implementations/matched-reference-v1/README.md",
-          "bytes": 16762,
-          "sha256": "8b0974f56bd702940d871d2e426f4703c85c1c7280d67d49d8b2bcb833fe99e6",
-          "commit": "73c86253776a03edb7da2d83863d0de290041364",
+          "bytes": 17579,
+          "sha256": "50d74c5f1c48d9997ff9f0487f04323aadae3eb8692e18eabc2d8994108aabe3",
+          "commit": "d12773777e432bc4c017183c2ba775e57cd8d3a5",
           "claim": "Current operator/source scope, profile boundaries and failed-memory-qualification limitation; no paper result or full-fit qualification."
         },
         {
@@ -73920,9 +74431,9 @@
       "evidence": [
         {
           "path": "benchmarks/paper/PAPER-SMC-RNN-2024/implementations/author-reference-v1/README.md",
-          "bytes": 4638,
-          "sha256": "2afd27139a1c2a5efdb3a1e8fd34691da40c53b72763ae938822a8ee8804ca2f",
-          "commit": "96bf985c24b0f26faed4298151bbcc19a3abf977",
+          "bytes": 5871,
+          "sha256": "220ee6baec0d5559bb3bd16dead14d30b6d91f08b110a2417975bebd6262880c",
+          "commit": "05eed1e5e9a96b95ce0e40b80bf1a097f3a3864a",
           "claim": "Public protected author-reference source interfaces, serial B/B scope, generated controls and remaining scientific/runtime limits."
         }
       ]

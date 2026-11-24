@@ -304,7 +304,7 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result['counts']['native_control_tasks'], 2)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
         self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
-        self.assertEqual(result['counts']['public_reports'], 15)
+        self.assertEqual(result['counts']['public_reports'], 16)
         rows = [row for items in result['records'].values() for row in items
                 if row['category'] == 'native_operator_control']
         self.assertEqual(len({row['id'] for row in rows}), 4)
@@ -366,7 +366,7 @@ class EvidenceTests(unittest.TestCase):
             self.install(name)
         self.install(evidence.ERP_NARRATIVE)
         result = evidence.load(self.root)
-        self.assertEqual(result['counts']['public_reports'], 15)
+        self.assertEqual(result['counts']['public_reports'], 16)
         self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
         self.assertEqual(result['counts']['paper_source_preparation_reports'], 3)
         self.assertEqual(result['counts']['paper_source_preparation_tasks'], 3)

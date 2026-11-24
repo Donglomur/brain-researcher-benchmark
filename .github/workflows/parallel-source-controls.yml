@@ -72,7 +72,7 @@ jobs:
           pins = [
               {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': 'be8cd8c31fe82a671e899cf020861e89464d9bbc00f833c88df27e61679553e3'},
               {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': 'd1fc0abb98e02a8d9afb1f49d01f418f2922369a575a40fa531def0f569e178a'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 596024, 'sha256': 'a77fc935405ffd68258967f1a497aa09fd6083b9e468c835849b8893eb5fb816'},
+              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 596024, 'sha256': '018a3dbd62c6c6fb5b4e1f33acfe28a5fc1c59da9a63977ab68d0e9ded8e2024'},
           ]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
@@ -1110,6 +1110,38 @@ jobs:
           assert len(skipped) == 1 and "test_generated_pixels_use_real_sandbox_capture_and_unchanged_cli" in skipped[0] and "macOS sandbox only" in skipped[0], skipped
           print(json.dumps({"erp_adapter_portable_ci": "passed", "tests": 14, "passed": 13, "allowed_platform_skips": 1, "sandbox_qualified": False}, sort_keys=True))
           PY
+      - name: "Check authenticated DeepCaImX notebook source controls"
+        if: "matrix.group == 'stdlib-a'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/later-paper-controls.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-013/implementations/streaming-input-v1/tests -p test_notebook_sources.py -v
+      - name: "Check complete Foraging HW reference source controls"
+        if: "matrix.group == 'numpy'"
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/later-paper-controls.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          unset FORAGING_EXISTING_SOURCE_ROOT
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/paper/PAPER-FIND-036/implementations/foraging-programme/full-hw-reference-v1/test_reference.py -v
+      - name: "Check REVE phase observer source controls"
+        if: "matrix.group == 'stdlib-b'"
+        shell: bash
+        working-directory: benchmarks/paper/PAPER-paper-method-003/implementations/matched-reference-v1
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch="$(mktemp -d "${RUNNER_TEMP}/reve-phase-observer.XXXXXX")"
+          trap 'rm -rf -- "$scratch"' EXIT
+          export TMPDIR="$scratch"
+          timeout --signal=TERM --kill-after=5s 60s python -I -B observer_tests.py
       - name: Acquire exact public source fixtures
         shell: bash
         run: |

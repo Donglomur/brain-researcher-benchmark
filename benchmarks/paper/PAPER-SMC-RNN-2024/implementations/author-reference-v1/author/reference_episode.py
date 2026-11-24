@@ -13,8 +13,8 @@ import tempfile
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from reference_core import (ACCESS, ARMS, FILE_CAP, META_CAP, METRICS, OUTCOME, PHASES,
-    PROFILE, ROUTE, body, decode, encode, load_module, method_plan, need, path, pin,
-    read, recipe, source_identity, validate_job, write_new)
+    ROUTE, body, decode, encode, load_module, method_plan, need, path, pin,
+    read, recipe, reference_profile, source_identity, validate_job, validate_profile, write_new)
 
 HERE = Path(__file__).resolve().parent
 FACADE = HERE.parents[1] / 'full-panel-improvement-v1' / 'full_panel_episode.py'
@@ -91,7 +91,7 @@ def copy_snapshot(source, destination, expected, cap):
 
 class ReferenceEpisode(_base.FullPanelEpisode):
     ROUTE, CONDITIONS = ROUTE, PHASES
-    PROFILES = {OUTCOME: PROFILE}
+    PROFILES = {}  # populated only by admission of an explicit v2 protocol
     KEYS = {OUTCOME: ['offline']}
     CLOSED_SCHEMA = 'smc_author_reference_closed_pair_v1'
 
@@ -112,6 +112,7 @@ class ReferenceEpisode(_base.FullPanelEpisode):
         self.TRANSPORT_SHA = self.retained.TRANSPORT_SHA
         self.TASK_SHA = pin(body(self.HERE / 'REFERENCE_TASK.json'))['sha256']
         self._protocol = self._protocol_path = None
+        self.PROFILES = {}
         self._captured_actual = {}
         self._compatibility = ReferenceBenchmark(self)
 
@@ -150,7 +151,8 @@ class ReferenceEpisode(_base.FullPanelEpisode):
         need(delivery['condition'] == ACCESS, 'Both references select authentic assisted materials')
         return decode(pair_raw), {ACCESS: delivery}
 
-    def instantiate(self, pair_path, task_path, runtime_path, runtime_sha, output):
+    def instantiate(self, pair_path, task_path, runtime_path, runtime_sha, output, *, cpu_seconds):
+        profile = reference_profile(cpu_seconds)
         self.public_context(pair_path, task_path)
         runtime_raw = body(runtime_path)
         need(pin(runtime_raw)['sha256'] == runtime_sha, 'Exact selected runtime configuration')
@@ -161,7 +163,7 @@ class ReferenceEpisode(_base.FullPanelEpisode):
              and not root.is_relative_to(self.HERE), 'Fresh external reference protocol')
         program = body(self.HERE / 'reference_adapter.py')
         binding_pin = pin(body(self.HERE / 'BINDINGS.json'))
-        plans = {phase: method_plan(phase, pin(program), binding_pin) for phase in PHASES}
+        plans = {phase: method_plan(phase, pin(program), binding_pin, profile) for phase in PHASES}
         root.mkdir(mode=0o700)
         records = {}
         # Both exact model selections and programmes are frozen before either execution.
@@ -170,18 +172,18 @@ class ReferenceEpisode(_base.FullPanelEpisode):
             folder.mkdir(mode=0o700)
             program_pin = write_new(folder / 'program.py', program, 0o444)
             declaration_pin = write_new(folder / 'declaration.json', encode(plans[phase]), 0o444)
-            freeze = {'schema': 'smc_author_reference_method_freeze_v1', 'route': ROUTE,
+            freeze = {'schema': 'smc_author_reference_method_freeze_v2', 'route': ROUTE,
                 'phase_id': phase, 'access_condition': ACCESS, 'plan': plans[phase],
                 'program': program_pin, 'declaration': declaration_pin,
                 'original_pair_sha256': self.PAIR_SHA, 'test_inputs_released': False}
             frozen_pin = write_new(folder / 'METHOD.json', encode(freeze))
             records[phase] = {'program': program_pin, 'declaration': declaration_pin,
                 'method': {'path': str(folder / 'METHOD.json'), **frozen_pin}}
-        protocol = {'schema': 'smc_author_reference_protocol_v1', 'route': ROUTE,
+        protocol = {'schema': 'smc_author_reference_protocol_v2', 'route': ROUTE,
             'task_id': self.TASK_ID, 'outcome': OUTCOME, 'access_condition': ACCESS,
             'pair_path': str(path(pair_path)), 'pair_sha256': self.PAIR_SHA,
             'task_path': str(path(task_path)), 'task_sha256': self.TASK_SHA,
-            'source': self.source_identity(), 'resource_profile': PROFILE, 'programs': records,
+            'source': self.source_identity(), 'resource_profile': profile, 'programs': records,
             'runtime': write_new(root / 'runtime.json', runtime_raw),
             'deployment_binding_pin': runtime['deployment']['binding_pin'],
             'all_programmes_and_declarations_frozen_before_first_phase': True,
@@ -191,14 +193,23 @@ class ReferenceEpisode(_base.FullPanelEpisode):
         return protocol
 
     def admit_protocol(self, protocol_path, expected):
-        self._captured_actual.clear() if self._protocol_path != path(protocol_path) else None
+        previous_path = self._protocol_path
         self._protocol = self._protocol_path = None
-        raw = body(protocol_path)
+        self.PROFILES = {}
+        try:
+            selected_path = path(protocol_path)
+        except BaseException:
+            self._captured_actual.clear()
+            raise
+        if previous_path != selected_path:
+            self._captured_actual.clear()
+        raw = body(selected_path)
         need(pin(raw)['sha256'] == expected, 'Selected reference protocol')
         protocol = decode(raw)
-        need(protocol['schema'] == 'smc_author_reference_protocol_v1' and protocol['route'] == ROUTE
+        profile = validate_profile(protocol.get('resource_profile'))
+        need(protocol['schema'] == 'smc_author_reference_protocol_v2' and protocol['route'] == ROUTE
              and protocol['outcome'] == OUTCOME and protocol['access_condition'] == ACCESS
-             and protocol['source'] == self.source_identity() and protocol['resource_profile'] == PROFILE
+             and protocol['source'] == self.source_identity()
              and protocol['pair_sha256'] == self.PAIR_SHA and protocol['task_sha256'] == self.TASK_SHA
              and set(protocol['programs']) == set(PHASES)
              and protocol['all_programmes_and_declarations_frozen_before_first_phase'] is True
@@ -212,11 +223,11 @@ class ReferenceEpisode(_base.FullPanelEpisode):
             program = body(root / phase / 'program.py', row['program'])
             need(program == body(self.HERE / 'reference_adapter.py'), 'Exact selected adapter')
             declared = decode(body(root / phase / 'declaration.json', row['declaration']))
-            need(declared == method_plan(phase, row['program'], bindings_pin), 'Original arm recipe frozen')
+            need(declared == method_plan(phase, row['program'], bindings_pin, profile), 'Original arm recipe frozen')
             method_path = root / phase / 'METHOD.json'
             need(row['method']['path'] == str(method_path), 'Protocol-owned method freeze')
             frozen = decode(body(method_path, {k: row['method'][k] for k in ('bytes', 'sha256')}))
-            need(frozen == {'schema': 'smc_author_reference_method_freeze_v1', 'route': ROUTE,
+            need(frozen == {'schema': 'smc_author_reference_method_freeze_v2', 'route': ROUTE,
                 'phase_id': phase, 'access_condition': ACCESS, 'plan': declared,
                 'program': row['program'], 'declaration': row['declaration'],
                 'original_pair_sha256': self.PAIR_SHA, 'test_inputs_released': False},
@@ -225,7 +236,18 @@ class ReferenceEpisode(_base.FullPanelEpisode):
         need(protocol['deployment_binding_pin'] == runtime['deployment']['binding_pin'],
              'Exact selected deployment retained')
         self._protocol, self._protocol_path = protocol, path(protocol_path)
+        self.PROFILES = {OUTCOME: dict(profile)}
         return protocol, runtime
+
+    def qualify(self, runtime, source):
+        need(self._protocol is not None and set(self.PROFILES) == {OUTCOME},
+             'Admitted explicit reference profile before runtime qualification')
+        record = super().qualify(runtime, source)
+        profiles = record['profiles']
+        need(type(profiles) is dict and set(profiles) == {OUTCOME}
+             and validate_profile(profiles[OUTCOME]) == self.PROFILES[OUTCOME],
+             'Qualification carries the exact strict-integer reference profile')
+        return record
 
     def mounts_for(self, protocol_path, protocol, phase, job_path, job_pin, manifests):
         need(protocol == self._protocol and phase in PHASES, 'Admitted reference job before exposure')
@@ -261,9 +283,9 @@ class ReferenceEpisode(_base.FullPanelEpisode):
     def job_for(self, protocol, phase):
         need(phase in PHASES, 'Distinct original model phase')
         row = protocol['programs'][phase]
-        return {'schema': 'smc_author_reference_execution_job_v1', 'route': ROUTE,
+        return {'schema': 'smc_author_reference_execution_job_v2', 'route': ROUTE,
             'outcome': OUTCOME, 'condition': phase, 'phase_id': phase, 'access_condition': ACCESS,
-            'source': protocol['source'], 'resource_profile': PROFILE, 'submission_keys': ['offline'],
+            'source': protocol['source'], 'resource_profile': validate_profile(protocol['resource_profile']), 'submission_keys': ['offline'],
             'program_sha256': row['program']['sha256'], 'declaration_sha256': row['declaration']['sha256'],
             'method_freeze_sha256': row['method']['sha256'], 'bindings': pin(body(self.HERE / 'BINDINGS.json')),
             'max_file_bytes': FILE_CAP}
@@ -277,15 +299,18 @@ class ReferenceEpisode(_base.FullPanelEpisode):
              'Complete reference output inventory')
         root = path(receipt['quarantine_root'])
         result = decode(body(root / 'RESULT.json', files['RESULT.json']))
-        need(result == {'schema': 'smc_author_reference_program_result_v1', 'route': ROUTE,
+        validate_profile(result.get('resource_profile'))
+        need(result == {'schema': 'smc_author_reference_program_result_v2', 'route': ROUTE,
             'phase_id': phase, 'access_condition': ACCESS, 'outcome': OUTCOME,
+            'resource_profile': validate_profile(self._protocol['resource_profile']),
             'program_sha256': programme['program']['sha256'],
             'declaration_sha256': programme['declaration']['sha256'],
             'method_freeze_sha256': programme['method']['sha256'], 'submission_keys': ['offline']},
             'Actual captured model output joins original frozen programme')
         actual = decode(body(root / 'actual_declaration.json', files['actual_declaration.json']))
-        need(actual['schema'] == 'smc_author_reference_actual_v1' and actual['route'] == ROUTE
+        need(actual['schema'] == 'smc_author_reference_actual_v2' and actual['route'] == ROUTE
              and actual['phase_id'] == phase and actual['access_condition'] == ACCESS
+             and validate_profile(actual['resource_profile']) == self._protocol['resource_profile']
              and actual['recipe'] == recipe(phase) and actual['role'] == 'author_calibration'
              and actual['method_freeze_sha256'] == programme['method']['sha256']
              and actual['program_sha256'] == programme['program']['sha256']
@@ -421,11 +446,13 @@ def main(argv=None):
     parser.add_argument('--runtime', required=True)
     parser.add_argument('--runtime-sha256', required=True)
     parser.add_argument('--output', required=True)
+    parser.add_argument('--cpu-seconds', type=int, required=True,
+                        help='Prospectively selected reference allowance, integer 1..64800')
     args = parser.parse_args(argv)
     source_identity(HERE, args.source_sha256)
     episode = ReferenceEpisode(args.repository, HERE)
     return episode.instantiate(args.pair, HERE / 'REFERENCE_TASK.json',
-                               args.runtime, args.runtime_sha256, args.output)
+                               args.runtime, args.runtime_sha256, args.output, cpu_seconds=args.cpu_seconds)
 
 
 if __name__ == '__main__':

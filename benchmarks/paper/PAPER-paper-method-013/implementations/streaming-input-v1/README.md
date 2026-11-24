@@ -105,10 +105,14 @@ assembly limitation, not valid complete-movie trace coverage.
 
 ## Evidence and remaining work
 
-[PROVENANCE.json](PROVENANCE.json) records the inspected source identities and
-the limits of current notebook-body authentication. The numeric controls use
-generated data and lightweight mock readers/models. They establish code behavior,
-not native TensorFlow execution or paper results.
+[PROVENANCE.json](PROVENANCE.json) records the inspected source identities.
+The three original notebook bodies are now authenticated; their literal,
+output-free code exports and static syntax findings are described in
+[notebook source authentication](NOTEBOOK_SOURCES.md). This closes the earlier
+notebook-body provenance gap while preserving its failed retrieval history.
+No notebook cell, model or training recipe was executed or repaired.
+The numeric controls use generated data and lightweight mock readers/models.
+They establish code behavior, not native TensorFlow execution or paper results.
 
 Original raw frame/crop mapping, paper-equivalent N=15/P=9 weights, historical
 cross-tile matching/merge details, binarization and full trace/runtime companions
