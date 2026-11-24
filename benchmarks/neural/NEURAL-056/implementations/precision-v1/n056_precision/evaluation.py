@@ -53,6 +53,57 @@ def _target_arrays(target):
     return result
 
 
+# Every unordered role pair has one predeclared direction. These descriptive
+# contrasts do not select a winner or create additional independent cases.
+ROLE_PAIRS = (
+    ("I", "F"),
+    ("F", "reference_fixed"),
+    ("F", "reference_tuned"),
+    ("I", "reference_fixed"),
+    ("I", "reference_tuned"),
+    ("reference_tuned", "reference_fixed"),
+)
+
+
+def _paired_roles(scores):
+    """Compare complete operator-computed person scores, never actor scores."""
+    def subtract(left, right):
+        return None if left is None or right is None else left - right
+
+    def summarize(by_person):
+        # macro deliberately propagates any undefined person; no complete-case
+        # deletion or coordinate-level pseudo-replication is permitted.
+        return {"by_person": by_person, "mean": macro([by_person[p] for p in PEOPLE])}
+
+    comparisons = {}
+    for left, right in ROLE_PAIRS:
+        arm_differences = {
+            arm: {
+                person: subtract(scores[left][arm][person]["mean"],
+                                 scores[right][arm][person]["mean"])
+                for person in PEOPLE
+            }
+            for arm in ARMS
+        }
+        control_differences = {}
+        for control in ("low_level", "response_permuted"):
+            # (left representation - left control) minus
+            # (right representation - right control), paired within person.
+            control_differences[control] = summarize({
+                person: subtract(arm_differences["representation"][person],
+                                 arm_differences[control][person])
+                for person in PEOPLE
+            })
+        comparisons[left + "_minus_" + right] = {
+            "left_role": left,
+            "right_role": right,
+            "direction": "left_minus_right",
+            "arms": {arm: summarize(arm_differences[arm]) for arm in ARMS},
+            "control_effect_differences": control_differences,
+        }
+    return comparisons
+
+
 def grade(panel, records, protocol, budget):
     """Admit every original output first; retain the complete original endpoint."""
     admitted = collect(records, protocol, budget)
@@ -88,6 +139,7 @@ def grade(panel, records, protocol, budget):
         "schema": "neural056_complete_grade_v1",
         "protocol_id": digest(protocol),
         "roles": result,
+        "paired_role_comparisons": _paired_roles(scores),
         "split_half_reliability": reliability,
         "correction_applied": False,
         "all_final_blocks": 120,
