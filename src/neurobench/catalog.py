@@ -1314,6 +1314,16 @@ def evidence_text(catalog, base=OUTPUT):
                             f"and **{counts['exploratory_programme_authoring_attempts']} generated programme**, applied to "
                             f"{counts['exploratory_programme_query_applications']} shared query images. "
                             'Delivery/runtime failures are retained; tool restrictions were instruction-only and compute budgets unmatched. ')
+    reference_failure_text = ''
+    if counts.get('image_reference_failed_calibration_reports', 0):
+        reference_failure_text = (
+            f"The separate full32 image-reference report retains **{counts['image_reference_engineering_execution_attempts']} failed engineering executions** "
+            f"({counts['image_reference_preflight_only_failures']} preflight-only), "
+            f"**{counts['image_reference_fits']} reference fit**, and "
+            f"{counts['image_reference_query_capture_attempts']} query capture attempts "
+            f"({counts['image_reference_complete_query_captures']} complete); "
+            'zero scoring and no AI attempt or successful calibration are added. '
+            'A label-free diagnostic identified clipping in the fixed observation. ')
     return (f"Recorded public evidence covers **{counts['tasks_with_recorded_evidence']} distinct task IDs**. "
             f"The pilot reports **{counts['paper_calibration_attempts']} historical paper-calibration attempts** and "
             f"**{counts['neural_programme_attempts']} neural-programme attempts**; "
@@ -1321,7 +1331,7 @@ def evidence_text(catalog, base=OUTPUT):
             f"{counts.get('paper_source_preparation_reports', 0)} paper and "
             f"{counts.get('neural_source_preparation_reports', 0)} neural source-preparation reports, and "
             f"{counts['native_operator_controls']} native software controls are separate from model attempts. "
-            + probe_text + later_text + exploratory_text
+            + probe_text + later_text + exploratory_text + reference_failure_text
             + markdown_link('Read the published evidence', 'docs/status/README.md', base)
             + ', or run `python3 scripts/neurobench.py evidence [TASK_ID]`. '
             'These records do not establish current runtime qualification or paper improvement.\n\n')
