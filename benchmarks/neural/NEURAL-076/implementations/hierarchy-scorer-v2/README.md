@@ -98,3 +98,46 @@ prove availability or correctness of their data payloads. Category identificatio
 ranks and decoder training are outside this component. It establishes software
 scoring behavior, not direct/viewer interpretation, original-paper replication,
 cue-free imagery, temporal/causal hierarchy or scientific qualification.
+
+## Paired complete-collection comparison
+
+`compare.py` admits two frozen program/analysis collections against the same
+authenticated public manifest and one operator target packet. Each condition
+retains all 650 contexts, 1,300 phase cells, matched unit identities and five
+participants. Both full public validation passes finish before the single target
+load; scoring rechecks every captured prediction hash. A missing, malformed or
+changed block in either collection yields no partial comparison.
+
+```sh
+python compare.py --public /operator/public_manifest.json \
+  --operator /operator/operator_manifest.json \
+  --first /frozen/first/submission.json --second /frozen/second/submission.json \
+  --out /new/paired-report.json
+```
+
+The report preserves each condition's current primary, legacy secondary and
+complete diagnostics. It adds first-minus-second values for every participant,
+phase/ROI/family cell, signed contrast and absolute-imagery companion, with the
+equal-five-person mean. An undefined value in either condition propagates to the
+corresponding paired difference and dependent mean; participants are never
+removed. No confidence interval, p-value, multiplicity correction or superiority
+decision is introduced. A larger signed hierarchy interaction is not better
+accuracy. Direct and viewer conditions remain unsuitable for this registered
+endpoint; condition names here do not establish an access mode or train-only
+provenance. Candidate execution and target custody must be enforced separately.
+
+The same existing frozen formats and target loader are used, without modifying
+the single-collection scorer or historical controller bindings. The comparison
+requires twice the single scorer's prediction-read allowance: two passes over
+each complete collection, capped at 65,431,142,400 prediction bytes in total,
+plus operator/source/report I/O. This is a prospective bound, not a measured
+authentic workload or an execution authorization. Runtime, resource, input and
+scientific qualification remain outstanding.
+
+Run the focused generated controls with `python -I -B test_compare.py`. They
+exercise both complete panels, target-load ordering, source/row/unit bindings,
+late malformed or changed second submissions, strict undefined propagation,
+negative effects and exclusive report creation. The full-panel orchestration
+uses invented broadcast blocks and a scripted cell scorer; separate real
+category-correlation controls use generated arrays. These are software checks,
+not 1,300 authentic predictions or evidence of neural understanding.
