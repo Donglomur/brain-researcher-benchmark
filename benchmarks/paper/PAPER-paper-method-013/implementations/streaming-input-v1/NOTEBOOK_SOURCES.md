@@ -51,8 +51,8 @@ These tokens are deliberately unchanged. The manifest reports the first syntax
 error encountered in that cell, not an exhaustive compiler diagnostic. This is a
 static source finding and no new full-training execution was attempted.
 
-The source remains a released N8 demonstration. Byte authentication does not
-establish equivalence to the paper's N15/P9 model or its original trained weights.
+The source remains a released N=8 demonstration. Byte authentication does not
+establish equivalence to the paper's N=15/P9 model or its original trained weights.
 The preprocessing notebook starts from an already prepared experimental MAT;
 it does not determine the raw Allen frame-index base or512-to488 crop origin.
 Testing/demo display code does not supply the original full-panel assembler,
@@ -70,3 +70,12 @@ complete-input admission and refusal to overwrite an existing output directory:
 ```sh
 python -I -B -m unittest discover -s tests -p 'test_notebook_sources.py' -v
 ```
+
+## Historical source generations
+
+[The historical source crosswalk](HISTORICAL_SOURCES.md) preserves an earlier
+N15/nine-stage prototype and distinguishes its 1,000-frame interfaces from the
+paper's 400-frame experimental condition and the later N=8 demo above. It also
+records why historical STNeuroNet annotation attribution does not authenticate
+the original DeepCaImX crop or frame mapping. The three current notebook exports
+and their static syntax findings remain unchanged.

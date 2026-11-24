@@ -106,6 +106,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
 - [Current reference qualification and historical replay scope](docs/reference-qualification-scope.v1.md)
 - [Original-data preprocessing diagnostic](docs/jaxley-original-data-diagnostic.v1.md)
 - [Original-data preprocessing diagnostic evidence](docs/jaxley-original-data-diagnostic.v1.json)
+- [Archived Jaxley retinal runs and unresolved final-paper lineage](docs/jaxley-archive-lineage-20261124.md)
+- [Jaxley archive lineage source pins and comparison](docs/jaxley-archive-lineage-20261124.json)
 
 ## Implementation artifacts
 

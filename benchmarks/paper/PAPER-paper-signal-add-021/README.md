@@ -42,8 +42,8 @@ Within the existing improvement contract, historical graders and pilot scores re
 
 Each record keeps the scope of its original report. It is not current runtime qualification.
 
-- [Paper calibration attempt](../../../docs/science/difficulty-pilot-20261117.json): Complete accepted fixed-region derivative: 12 regions, 36 effects and 540 leave-one-out summaries; not the original primary cluster analysis.
-- [Paper calibration attempt](../../../docs/science/difficulty-pilot-20261117.json): Complete accepted fixed-region derivative: 12 regions, 36 effects and 540 leave-one-out summaries; not the original primary cluster analysis.
+- [Paper calibration attempt — paper\_data\_shared\_method](../../../docs/science/difficulty-pilot-20261117.json): Complete accepted fixed-region derivative: 12 regions, 36 effects and 540 leave-one-out summaries; not the original primary cluster analysis.
+- [Paper calibration attempt — paper\_data\_shared\_method\_official\_code](../../../docs/science/difficulty-pilot-20261117.json): Complete accepted fixed-region derivative: 12 regions, 36 effects and 540 leave-one-out summaries; not the original primary cluster analysis.
 - [Historical paper calibration](../../../docs/provenance/execution/historical-evidence-v1/profiles.json): 15 participants in 14,061 processed rows; 135 participant-condition means/counts, nine summaries, five spatial and six timing/provenance comparisons.
 
 Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence PAPER-paper-signal-add-021`. Programme evidence does not establish direct interpretation.
