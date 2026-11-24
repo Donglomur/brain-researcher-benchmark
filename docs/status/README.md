@@ -18,6 +18,13 @@ records a training compatibility check that passed numerically but exceeded its
 memory ceiling. Neither establishes a paper reproduction or improvement, SOTA,
 or complete benchmark qualification.
 
+The [full32 uncertainty-reference report](../../benchmarks/neural/NEURAL-077/docs/full32-image-uncertainty-calibration-20261124.md)
+keeps the root timing-based early stop separate from the later measured-budget
+operation. Reference fits, captured responses, scoring and completed reference
+calibrations have separate counts; none is an AI attempt or an additional benchmark.
+The report also separates root machine-search exposure from isolated target-last
+worker custody.
+
 The earlier [November 18 public progress update](public-progress-2026-11-18.md)
 links the 936-case ABR observation release, the Jaxley original-data diagnostic
 and the NEURAL-063 original metadata qualification. These earlier reports retain
@@ -61,6 +68,7 @@ evidence.
 | [Difficulty pilot](../science/difficulty-pilot-20261117.md) | Eight scored attempts on four task IDs: four historical paper-calibration attempts and four neural prediction-programme attempts | Outcomes for the exact reported development endpoints and conditions, with baseline comparisons; no whole-task qualification or paper improvement |
 | [NEURAL-077 fixed-image pilot, November 22](../../benchmarks/neural/NEURAL-077/docs/exploratory32-fixed-image-pilot-20261122.md) | 32 fresh direct-image episodes and one frozen generated programme on the same 32 queries from 32 people, with four demonstrations | Direct balanced accuracy 57.1%, programme 26.8%; all failures counted incorrect. Exploratory participant results, with instruction-only tool restrictions, unmatched compute and no full-task qualification |
 | [NEURAL-077 full32 image-reference failures, November 24](../../benchmarks/neural/NEURAL-077/docs/full32-image-reference-calibration-20261124.md) | Two failed engineering executions, one preflight-only; one reference fit and 62 query capture attempts with 61 complete captures, out of 6,400 selected queries | No scoring, AI attempt or successful calibration. A label-free diagnostic found fixed-view clipping removed post-marker support; both failures and all unattempted cases remain |
+| [NEURAL-077 fixed-view uncertainty reference, November 24](../../benchmarks/neural/NEURAL-077/docs/full32-image-uncertainty-calibration-20261124.md) | Root timing-based early stop: one fit, 2,122 complete captured responses, one interrupted and 4,277 unattempted; no score. Fresh measured-budget operation: one fit and all 6,400 captures/scored queries, one complete reference calibration | Macro balanced accuracy 58.3203125%, log loss 0.6361099286: better loss than constant 0.5, worse than analytic prior 0.2. All 13 zero-support cases remain scored at p=0.5. Diagnostic exposed-development reference; no AI attempt, competency baseline or full-task qualification. Root operator exposure remains explicit |
 | [NEURAL-077 waveform preparation](../../benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json) | All 400 query waveforms and four demonstrations compared with pinned raw samples | Authentic-input materialization; no model execution or scoring |
 | [NEURAL-077 full32 numerical materialization](../../benchmarks/neural/NEURAL-077/docs/full32-materialization-20261119.md) | 32 people, 6,400 queries and the same four demonstrations; 72 saved files independently authenticated | Accepted numerical material and metadata; no AI/model evaluation, provider-isolation qualification or full visual-condition result |
 | [NEURAL-077 viewer rendering](../../benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json) | Full packet authentication and rendering of selected query ordinals | Authentic image-generation behavior; no evaluated viewer-model episode |

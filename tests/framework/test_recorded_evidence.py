@@ -303,7 +303,7 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result['counts']['native_control_tasks'], 2)
         self.assertEqual(result['counts']['pilot_attempts'], 8)
         self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
-        self.assertEqual(result['counts']['public_reports'], 17)
+        self.assertEqual(result['counts']['public_reports'], 18)
         rows = [row for items in result['records'].values() for row in items
                 if row['category'] == 'native_operator_control']
         self.assertEqual(len({row['id'] for row in rows}), 4)
@@ -364,7 +364,7 @@ class EvidenceTests(unittest.TestCase):
         for name in evidence.PUBLIC_REPORTS + evidence.PUBLIC_ATTACHMENTS:
             self.install(name)
         result = evidence.load(self.root)
-        self.assertEqual(result['counts']['public_reports'], 17)
+        self.assertEqual(result['counts']['public_reports'], 18)
         self.assertEqual(result['counts']['tasks_with_recorded_evidence'], 9)
         self.assertEqual(result['counts']['paper_source_preparation_reports'], 3)
         self.assertEqual(result['counts']['paper_source_preparation_tasks'], 3)

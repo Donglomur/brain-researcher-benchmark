@@ -20,7 +20,9 @@ ERP_PILOT = 'benchmarks/neural/NEURAL-077/docs/exploratory32-fixed-image-pilot-2
 ERP_NARRATIVE = ERP_PILOT.removesuffix('.json') + '.md'
 ERP_REFERENCE_FAILURE = 'benchmarks/neural/NEURAL-077/docs/full32-image-reference-calibration-20261124.json'
 ERP_REFERENCE_NARRATIVE = ERP_REFERENCE_FAILURE.removesuffix('.json') + '.md'
-PUBLIC_ATTACHMENTS = (ERP_NARRATIVE, ERP_REFERENCE_NARRATIVE)
+ERP_UNCERTAINTY_CALIBRATION = 'benchmarks/neural/NEURAL-077/docs/full32-image-uncertainty-calibration-20261124.json'
+ERP_UNCERTAINTY_NARRATIVE = ERP_UNCERTAINTY_CALIBRATION.removesuffix('.json') + '.md'
+PUBLIC_ATTACHMENTS = (ERP_NARRATIVE, ERP_REFERENCE_NARRATIVE, ERP_UNCERTAINTY_NARRATIVE)
 HISTORY = 'docs/provenance/execution/historical-evidence-v1/profiles.json'
 DIRECT = 'benchmarks/neural/NEURAL-077/implementations/complete-direct-condition-v1/EVIDENCE.json'
 VIEWER = 'benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/EVIDENCE.json'
@@ -41,7 +43,7 @@ SMC_ACTUAL_PANEL = '3b160dfb4aef8c68cbae8d4a02d5933576a77e4bc47a7c3a5b484369caf9
 SMC_PUBLIC_PANEL = '209a15e2189499a9e68264df5c9f81057dd919564d98a46fb64d75b3f39af2f3'
 PUBLIC_REPORTS = (PILOT, HISTORY, DIRECT, VIEWER, NATIVE, TRANSPORT, NATIVE_REPAIR, REVE_PREPARATION, DEEP_PREPARATION,
                   SMC_PREPARATION, SMC_PROBES, NEURAL096_PREPARATION, SMC_CALIBRATION, SMC_RESCORE, SMC_MATERIALS,
-                  ERP_PILOT, ERP_REFERENCE_FAILURE)
+                  ERP_PILOT, ERP_REFERENCE_FAILURE, ERP_UNCERTAINTY_CALIBRATION)
 MEMBER_LIMIT = 1024 * 1024
 SCOPE = ('Recorded within the selected public reports only. Reports are not current '
          'runtime verification, protected evaluation or complete scientific qualification.')
@@ -1362,6 +1364,218 @@ def erp_reference_failure_records(doc, source, narrative):
     return [row]
 
 
+def erp_uncertainty_coverage(value):
+    """Validate full-denominator aggregate diagnostics, never per-case payloads."""
+    value = obj(value)
+    counts = exact_counts(value, {'queries': 6400, 'features_per_query': 30}, 'uncertainty coverage')
+    for key in ('no_shared_support_queries', 'positive_shared_support_queries'):
+        counts[key] = integer(value[key])
+    require(counts['no_shared_support_queries'] + counts['positive_shared_support_queries'] == 6400,
+            'uncertainty support denominator differs')
+    expected = {'feature_defined_queries': 30, 'feature_mean_coverage': 30,
+                'feature_mean_shared_weight': 30, 'baseline_mean_coverage': 2}
+    for key, length in expected.items():
+        values = value[key]
+        require(type(values) is list and len(values) == length, 'uncertainty diagnostic length differs')
+        counts[key] = [integer(item) if key == 'feature_defined_queries' else number(item) for item in values]
+        ceiling = 6400 if key == 'feature_defined_queries' else 1
+        require(all(0 <= item <= ceiling for item in counts[key]), 'uncertainty diagnostic range differs')
+    require(all((n > 0) == (mean > 0) and mean <= n / 6400 + 1e-12
+                for n, mean in zip(counts['feature_defined_queries'], counts['feature_mean_coverage'])),
+            'uncertainty defined-count and mean-coverage contradiction')
+    positive_fraction = counts['positive_shared_support_queries'] / 6400
+    require(all(weight <= min(coverage, counts['baseline_mean_coverage'][index // 15], positive_fraction) + 1e-12
+                for index, (weight, coverage) in enumerate(zip(
+                    counts['feature_mean_shared_weight'], counts['feature_mean_coverage']))),
+            'uncertainty shared weight exceeds observed support')
+    fraction = number(value['mean_shared_support_fraction'])
+    require(0 <= fraction <= positive_fraction + 1e-12
+            and abs(fraction - sum(counts['feature_mean_shared_weight']) / 30) <= 1e-12,
+            'uncertainty shared-weight units differ')
+    require((counts['positive_shared_support_queries'] > 0) == (fraction > 0),
+            'uncertainty support-count and mean contradiction')
+    counts['mean_shared_support_fraction'] = fraction
+    counts['feature_order'] = 'Cz fifteen postmarker50ms bins, then Pz fifteen postmarker50ms bins'
+    require(value.get('feature_order') == counts['feature_order'], 'uncertainty feature order differs')
+    return counts
+
+
+def erp_uncertainty_records(doc, source, narrative):
+    """Index closed reference operations without pooling their qualification units."""
+    require(doc.get('schema') == 'neural077-image-uncertainty-calibration-report/v1'
+            and doc.get('date') == '2026-11-24' and doc.get('task_id') == 'NEURAL-077'
+            and doc.get('status') == 'closed'
+            and doc.get('evidence_role') == 'public_aggregate_transcription'
+            and doc.get('condition') == 'fixed_initial_image_four_demo_uncertainty_reference',
+            'unsupported uncertainty-reference report')
+    require(narrative is not None, 'uncertainty-reference narrative is missing')
+    require(obj(doc['narrative']) == narrative[1] and narrative[1]['path'] == ERP_UNCERTAINTY_NARRATIVE,
+            'uncertainty-reference narrative pin mismatch')
+    cohort = exact_counts(doc['cohort'], {'people': 32, 'queries_per_person': 200,
+        'selected_queries': 6400, 'training_demonstrations': 4}, 'uncertainty-reference cohort')
+    require(doc['cohort'].get('scope') == 'predefined_full32_complement'
+            and doc['cohort'].get('exposed_development') is True,
+            'uncertainty-reference cohort interpretation differs')
+    method = obj(doc['method'])
+    require(method.get('algorithm_sha256') == 'c4024cbc5cd2283f1246ff2c99008a212a70689de9e3d410d7ff7f4a49e5cf64'
+            and number(method['zero_shared_support_probability']) == .5
+            and method.get('positive_support_arithmetic_unchanged') is True,
+            'uncertainty-reference method differs')
+    policy = obj(doc['metric_policy'])
+    require(policy.get('aggregation') == 'equal_person_macro' and policy.get('log_base') == 'natural'
+            and number(policy['positive_threshold_inclusive']) == .5
+            and number(policy['log_loss_clip']) == 1e-15,
+            'uncertainty-reference original metric policy differs')
+    display = obj(method['display'])
+    require(display.get('channels') == ['Cz', 'Pz'] and display.get('filter') == 'none'
+            and type(display.get('start_sample')) is int and display['start_sample'] == -256
+            and display.get('amplitude_units') == 'native_stored_units_physical_calibration_unresolved',
+            'uncertainty-reference fixed observation differs')
+    exact_counts(display, {'stop_sample_exclusive': 768, 'sampling_hz': 1024,
+                          'units_per_division': 20}, 'uncertainty-reference display')
+    disclosure = obj(doc['root_operator_disclosure'])
+    search = exact_counts(disclosure['metadata_hash_search'],
+        {'protected_json_files_machine_read': 33, 'protected_json_bytes_machine_read': 756023},
+        'root metadata-search disclosure')
+    require(disclosure.get('prior_full_population_exposure') is True
+            and disclosure.get('global_targets_unopened') is False
+            and disclosure.get('isolated_target_last_is_global_custody') is False
+            and disclosure['metadata_hash_search'].get('scope') == 'old_materialization'
+            and disclosure['metadata_hash_search'].get('matches_or_values_emitted') is False,
+            'global disclosure cannot be replaced by isolated worker custody')
+    search.update(scope='old_materialization', matches_or_values_emitted=False,
+                  read_accounting_basis='conservative_file_extent_accounting', kernel_file_read_census=False)
+    limits = obj(doc['scientific_limits'])
+    require(all(limits.get(key) is False for key in ('independent_generalization',
+        'native_ai_understanding_assessed', 'trained_competency_baseline_established',
+        'human_competency_baseline_established', 'paper_improvement_assessed'))
+        and integer(limits['completed_benchmarks_added']) == 0
+        and integer(limits['solver_attempts_added']) == 0
+        and limits.get('historical_failures_preserved') is True,
+        'uncertainty-reference report cannot promote scientific qualification')
+    operations = doc['operations']
+    require(type(operations) is list and len(operations) == 2, 'both closed uncertainty operations required')
+    identifiers = ('erp-uncertainty-calibration-20261124-v1',
+                   'erp-measured-uncertainty-calibration-20261124-v1')
+    rows = []
+    for index, (operation, identifier) in enumerate(zip(operations, identifiers)):
+        obj(operation)
+        require(operation.get('id') == identifier and operation.get('closed') is True,
+                'uncertainty operation identity or closure differs')
+        counts = obj(operation['counts'])
+        keys = ('engineering_executions', 'reference_fits', 'query_capture_attempts',
+                'complete_query_captures', 'interrupted_query_captures', 'failed_query_captures',
+                'unattempted_queries', 'score_operations', 'scored_queries', 'complete_reference_calibrations')
+        counts = {key: integer(counts[key]) for key in keys}
+        require(counts['engineering_executions'] == 1 and counts['reference_fits'] <= 1
+                and counts['query_capture_attempts'] == counts['complete_query_captures']
+                    + counts['interrupted_query_captures'] + counts['failed_query_captures']
+                and counts['query_capture_attempts'] + counts['unattempted_queries'] == 6400
+                and (counts['query_capture_attempts'] == 0 or counts['reference_fits'] == 1),
+                'uncertainty execution, fit and capture units contradict')
+        authority = obj(operation['reported_authority'])
+        # Publication review is pinned by the handoff; embedding its digest here
+        # would make the review and the report depend on each other's hashes.
+        authority = {'root_owner_closure_sha256': digest(authority['root_owner_closure_sha256']),
+                     'aggregate_or_owner_result_sha256': digest(authority['aggregate_or_owner_result_sha256'])}
+        closure = obj(operation['closure'])
+        require(all(closure.get(key) is True for key in ('root_owner_closed',
+            'all_known_owned_processes_absent', 'all_attempted_capture_streams_closed'))
+            and closure.get('escaped_descendant_containment_claim') is False,
+            'uncertainty known-owned closure required without stronger containment claim')
+        custody = obj(operation['worker_custody'])
+        require(custody.get('prediction_worker_query_target_access') == 'not_permitted_by_isolated_protocol'
+                and custody.get('basis') == 'root_owner_attestation_and_unchanged_isolated_protocol'
+                and custody.get('isolated_target_last') is True
+                and custody.get('global_target_unopened_claim') is False,
+                'uncertainty worker custody cannot erase global disclosure')
+        wall = number(operation['native_wall_seconds'])
+        require(wall >= 0, 'uncertainty native wall time must be nonnegative')
+        status = operation['status']
+        metrics, coverage = [], None
+        if index == 0:
+            require(status == 'root_early_stopped_unscored', 'U must retain its root early-stop outcome')
+            exact_counts(counts, {'engineering_executions': 1, 'reference_fits': 1,
+                'query_capture_attempts': 2123, 'complete_query_captures': 2122,
+                'interrupted_query_captures': 1, 'failed_query_captures': 0,
+                'unattempted_queries': 4277, 'score_operations': 0, 'scored_queries': 0,
+                'complete_reference_calibrations': 0}, 'U early-stop')
+            require(wall == 904.478, 'frozen U native wall time differs')
+            stop = obj(operation['stop'])
+            require(stop.get('reason') == 'root_projected_collection_exceeds_frozen_run_allowance'
+                    and stop.get('actual_deadline_failure') is False
+                    and stop.get('classifier_failure') is False
+                    and stop.get('native_ledger_status') == 'failed'
+                    and stop.get('empty_response_error_followed_interruption') is True
+                    and number(stop['projected_collection_seconds']) == 2813.35991702751
+                    and number(stop['frozen_run_work_seconds']) == 2400
+                    and number(stop['measured_captures_per_second']) == 2.2832334517236963,
+                    'U projected timing stop is not an observed deadline or classifier failure')
+        else:
+            require(status in ('complete_scored', 'failed_unscored'), 'K requires an actual closed result')
+            require(operation.get('fresh_collection_no_reuse_or_resume') is True,
+                    'K cannot reuse U partial captures')
+        complete = status == 'complete_scored'
+        if complete:
+            exact_counts(counts, {'reference_fits': 1, 'query_capture_attempts': 6400,
+                'complete_query_captures': 6400, 'interrupted_query_captures': 0,
+                'failed_query_captures': 0, 'unattempted_queries': 0, 'score_operations': 1,
+                'scored_queries': 6400, 'complete_reference_calibrations': 1}, 'complete uncertainty calibration')
+            require(custody.get('scorer_gate') == 'all_6400_first_captures_admitted_before_private_access',
+                    'complete uncertainty score requires target-last admission')
+            scores = obj(operation['aggregate_metrics'])
+            ba, loss = number(scores['participant_macro_balanced_accuracy']), number(scores['participant_macro_natural_log_loss'])
+            require(0 <= ba <= 1 and loss >= 0, 'invalid uncertainty-reference aggregate metric')
+            comparators = obj(operation['analytic_comparators'])
+            half, prior = obj(comparators['constant_half']), obj(comparators['constant_source_prior'])
+            require(number(half['probability']) == .5 and number(half['balanced_accuracy']) == .5
+                    and abs(number(half['natural_log_loss']) - math.log(2)) <= 1e-12
+                    and number(prior['probability']) == .2 and number(prior['balanced_accuracy']) == .5
+                    and abs(number(prior['natural_log_loss']) - .5004024235381879) <= 1e-12
+                    and prior.get('used_by_classifier') is False,
+                    'analytic comparators cannot be fitted or substituted into classifier')
+            metrics = [metric('participant_macro_balanced_accuracy', ba, 'higher',
+                        {'constant_half_analytic': .5, 'constant_source_prior_analytic': .5}),
+                       metric('participant_macro_natural_log_loss', loss, 'lower',
+                        {'constant_half_analytic': half['natural_log_loss'],
+                         'constant_source_prior_analytic': prior['natural_log_loss']})]
+            coverage = erp_uncertainty_coverage(operation['support_diagnostics'])
+        else:
+            require(all(counts[key] == 0 for key in ('score_operations', 'scored_queries',
+                                                    'complete_reference_calibrations'))
+                    and operation.get('aggregate_metrics') is None
+                    and operation.get('analytic_comparators') is None
+                    and operation.get('support_diagnostics') is None
+                    and custody.get('scorer_gate') == 'not_reached',
+                    'unscored uncertainty operation cannot acquire a partial metric or calibration')
+        scope = ('Root timing-based early stop: 2,122 complete captured responses, one interrupted and 4,277 unattempted; '
+                 'no score, observed deadline failure or classifier failure.' if index == 0 else
+                 ('Complete measured-budget fixed-view reference calibration on all 6,400 queries; '
+                  'exposed-development aggregate result, not an AI attempt or competence qualification.' if complete else
+                  'Closed measured-budget reference execution without a complete score; no partial calibration.'))
+        row = record(identifier, 'NEURAL-077', 'image_uncertainty_reference_operation', source,
+            '/operations/' + str(index), scope, doc['condition'], [
+                'Both operations use the same previously exposed 32-person population; capture totals across operations are not unique cases.',
+                'The four-demo image reference is not a trained or human competency baseline and is not an AI solver.',
+                'Root machine-search exposure is disclosed separately from isolated target-last prediction/scorer custody.',
+                'No independent generalization, physiological P3-presence endpoint, new benchmark or readiness promotion.'])
+        row.update(status=status, cohort=cohort, coverage=counts, metrics=metrics, reported_authority=authority,
+            support_diagnostics=coverage, native_wall_seconds=wall, narrative=narrative[1],
+            reference_calibration_complete=complete, full_task_completed=False, solver_attempts_recorded=0,
+            worker_custody={'prediction_worker_query_target_access': 'not_permitted_by_isolated_protocol',
+                            'basis': 'root_owner_attestation_and_unchanged_isolated_protocol', 'isolated_target_last': True,
+                            'global_target_unopened_claim': False, 'scorer_gate': custody['scorer_gate']},
+            root_operator_disclosure={'prior_full_population_exposure': True, 'global_targets_unopened': False,
+                'isolated_target_last_is_global_custody': False, 'metadata_hash_search': search})
+        if index == 0:
+            row['stop'] = {key: operation['stop'][key] for key in (
+                'reason', 'actual_deadline_failure', 'classifier_failure', 'native_ledger_status',
+                'empty_response_error_followed_interruption', 'projected_collection_seconds',
+                'frozen_run_work_seconds', 'measured_captures_per_second')}
+        rows.append(row)
+    return rows
+
+
 def load(root, task_ids=None):
     """Read optional known reports; reject malformed present reports.
 
@@ -1390,7 +1604,9 @@ def load(root, task_ids=None):
                               (ERP_PILOT, lambda doc, source: exploratory_erp_records(
                                   doc, source, read_bytes(root, ERP_NARRATIVE))),
                               (ERP_REFERENCE_FAILURE, lambda doc, source: erp_reference_failure_records(
-                                  doc, source, read_bytes(root, ERP_REFERENCE_NARRATIVE)))):
+                                  doc, source, read_bytes(root, ERP_REFERENCE_NARRATIVE))),
+                              (ERP_UNCERTAINTY_CALIBRATION, lambda doc, source: erp_uncertainty_records(
+                                  doc, source, read_bytes(root, ERP_UNCERTAINTY_NARRATIVE)))):
         try:
             captured = read(root, relative)
             if captured is None:
@@ -1428,6 +1644,16 @@ def load(root, task_ids=None):
                                ('preflight_only_failures', 'preflight_only_failures'), ('fits', 'reference_fits'),
                                ('query_capture_attempts', 'query_capture_attempts'),
                                ('complete_query_captures', 'complete_query_captures'), ('scored_queries', 'scored_queries'))},
+        'uncertainty_reference_reports': len({row['source']['path'] for items in records.values() for row in items
+                                              if row['category'] == 'image_uncertainty_reference_operation'}),
+        'uncertainty_reference_operations': categories['image_uncertainty_reference_operation'],
+        'uncertainty_reference_root_early_stops': sum(row['status'] == 'root_early_stopped_unscored'
+            for items in records.values() for row in items if row['category'] == 'image_uncertainty_reference_operation'),
+        **{'uncertainty_reference_' + key: sum(row['coverage'][key] for items in records.values() for row in items
+                                              if row['category'] == 'image_uncertainty_reference_operation')
+           for key in ('engineering_executions', 'reference_fits', 'query_capture_attempts',
+                       'complete_query_captures', 'interrupted_query_captures', 'failed_query_captures',
+                       'unattempted_queries', 'score_operations', 'scored_queries', 'complete_reference_calibrations')},
         'authentic_engineering_reports': categories['authentic_input_materialization'] + categories['authentic_viewer_rendering'] + categories['authentic_viewer_transport'],
         'authentic_viewer_transport_reports': categories['authentic_viewer_transport'],
         'paper_source_preparation_reports': categories['paper_source_preparation'],
@@ -1468,5 +1694,10 @@ def load(root, task_ids=None):
                 'image_reference_engineering_execution_attempts': 'Failed reference executions, including preflight-only failure; not AI attempts or successful calibration arms.',
                 'image_reference_fits': 'Authentic four-demo reference fits; separate from query applications and scored results.',
                 'image_reference_query_capture_attempts': 'First query capture attempts, including refused output; not completed scientific benchmarks.',
+                'uncertainty_reference_operations': 'Closed fixed-view reference executions; repeated exposed-development cohort, not AI attempts.',
+                'uncertainty_reference_reference_fits': 'Four-demo fits across the closed uncertainty-reference operations; not independently authored methods.',
+                'uncertainty_reference_query_capture_attempts': 'Capture attempts summed across operations, including interrupted/failed captures; not unique cases.',
+                'uncertainty_reference_scored_queries': 'Queries in complete scored reference calibrations only; unscored captures remain separate.',
+                'uncertainty_reference_complete_reference_calibrations': 'Complete exposed-development reference calibrations; not completed benchmarks or competence qualifications.',
                 'exploratory_programme_authoring_attempts': 'Generated programmes authored; query applications are counted separately.',
                 'exploratory_programme_query_applications': 'First applications of the frozen programme, including runtime failures.'}}

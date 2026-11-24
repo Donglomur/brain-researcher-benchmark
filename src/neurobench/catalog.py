@@ -1324,6 +1324,19 @@ def evidence_text(catalog, base=OUTPUT):
             f"({counts['image_reference_complete_query_captures']} complete); "
             'zero scoring and no AI attempt or successful calibration are added. '
             'A label-free diagnostic identified clipping in the fixed observation. ')
+    uncertainty_reference_text = ''
+    if counts.get('uncertainty_reference_reports', 0):
+        uncertainty_reference_text = (
+            'The separate uncertainty-reference report retains the **root timing-based early stop** '
+            '(2,122 complete captured responses, one interrupted, 4,277 unattempted; zero scores) '
+            'and the closed measured-budget operation. '
+            f"Together these executions contain **{counts['uncertainty_reference_reference_fits']} four-demo fits**, "
+            f"{counts['uncertainty_reference_query_capture_attempts']} capture attempts "
+            f"({counts['uncertainty_reference_complete_query_captures']} complete), "
+            f"{counts['uncertainty_reference_scored_queries']} scored queries and "
+            f"**{counts['uncertainty_reference_complete_reference_calibrations']} complete exposed-development reference calibrations**. "
+            'Capture totals repeat the same cohort across operations; no AI attempts or benchmarks are added. '
+            'Root machine-search exposure remains distinct from isolated target-last worker custody. ')
     return (f"Recorded public evidence covers **{counts['tasks_with_recorded_evidence']} distinct task IDs**. "
             f"The pilot reports **{counts['paper_calibration_attempts']} historical paper-calibration attempts** and "
             f"**{counts['neural_programme_attempts']} neural-programme attempts**; "
@@ -1331,7 +1344,7 @@ def evidence_text(catalog, base=OUTPUT):
             f"{counts.get('paper_source_preparation_reports', 0)} paper and "
             f"{counts.get('neural_source_preparation_reports', 0)} neural source-preparation reports, and "
             f"{counts['native_operator_controls']} native software controls are separate from model attempts. "
-            + probe_text + later_text + exploratory_text + reference_failure_text
+            + probe_text + later_text + exploratory_text + reference_failure_text + uncertainty_reference_text
             + markdown_link('Read the published evidence', 'docs/status/README.md', base)
             + ', or run `python3 scripts/neurobench.py evidence [TASK_ID]`. '
             'These records do not establish current runtime qualification or paper improvement.\n\n')
