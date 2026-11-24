@@ -14,6 +14,18 @@ The command authenticates the unchanged neighboring helper and public input cont
 
 Each model emits original source strings and behavioral identities, a fixed-effect matrix, and a within-participant random-coefficient block. The latter is not a fully expanded sparse random-effects matrix: `sub` supplies the group key. Choice recentering affects the design columns while leaving the saved original rows unchanged. Source order and output hashes are recorded in a receipt. No trial sorting, pooling, imputation, scaling, invented P3b model, cohort subset or predictive split is introduced.
 
+The receipt also records `participant_support` for every model and every original
+participant, including a participant with zero retained rows. Each entry gives
+the source-row count and three disjoint lists of original one-based source rows:
+excluded by the first valence-missingness filter, excluded by that model's
+complete-case rule after the first filter, and retained. Together they cover the
+complete source panel. These lists expose participant-dependent exclusions that
+aggregate retained counts and retained-only CSVs cannot show directly. They do
+not change a model's mask, force a participant with no usable rows into a fit, or
+establish independent ERP-to-behavior trial linkage. The existing `participants`
+field continues to count participants with at least one retained row; it is not
+the length of the complete `participant_support` audit.
+
 The official source was inspected through the browser at its immutable revision; this package does not claim a newly authenticated raw author-code body. Actual R model-frame/design parity, source package defaults, convergence and fitted outputs still need independent verification. Positional ERP-to-behavior linkage remains an assumption; this does not reconstruct continuous EEG or establish complete paper reproduction. Conditional models and both contrast inference conventions remain separate. Larger coefficients, smaller p-values and better reconstruction error are not same-task performance improvements.
 
-`test_prepare.py` exercises generated support/missingness cases, asymmetric random-effect designs, recentering invariance, invalid identities/coding, derived overflow and complete output identity. Run it through the existing project test pool. No authentic source table or model was run during construction.
+`test_prepare.py` exercises generated support/missingness cases, complete per-participant source-row partitions including zero-retained participants, asymmetric random-effect designs, recentering invariance, invalid identities/coding, derived overflow and complete output identity. Run it through the existing project test pool. No authentic source table or model was run during construction.

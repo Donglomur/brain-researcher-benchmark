@@ -68,6 +68,40 @@ class CompanionDesignTests(unittest.TestCase):
         with self.assertRaises(m.PreparationError):
             m.build_designs(rows)
 
+    def test_participant_support_partitions_every_source_row_in_each_model(self):
+        rows = fixture()
+        # A remains in the audit after all its rows fail the first source filter.
+        for row in rows[:3]: row["epe_valence_s"] = "NA"
+        rows[3]["P2_base_offer_s"] = "NA"  # FRN-specific complete-case exclusion.
+        rows[4]["choice_num"] = "NA"  # Choice-specific complete-case exclusion.
+        models = m.build_designs(rows)
+        for name, model in models.items():
+            with self.subTest(model=name):
+                support = model["participant_support"]
+                self.assertEqual([p["sub"] for p in support], ["A", "B"])
+                self.assertEqual(model["participants"], 1)
+                self.assertEqual(support[0], {
+                    "sub": "A", "source_rows": 3,
+                    "excluded_missing_valence_pe_source_rows": [1, 2, 3],
+                    "excluded_model_complete_cases_source_rows": [],
+                    "retained_source_rows": [],
+                })
+                stages = ["excluded_missing_valence_pe_source_rows",
+                          "excluded_model_complete_cases_source_rows", "retained_source_rows"]
+                for participant in support:
+                    partition = [row_id for stage in stages for row_id in participant[stage]]
+                    self.assertEqual(len(partition), participant["source_rows"])
+                    self.assertEqual(len(partition), len(set(partition)))
+                self.assertEqual(sorted(row_id for p in support for stage in stages for row_id in p[stage]),
+                                 list(range(1, 7)))
+                self.assertEqual(sum(len(p[stages[0]]) for p in support), model["excluded_missing_valence_pe"])
+                self.assertEqual(sum(len(p[stages[1]]) for p in support), model["excluded_model_complete_cases"])
+                self.assertEqual([row_id for p in support for row_id in p[stages[2]]],
+                                 [int(r["source"]["source_row"]) for r in model["rows"]])
+        self.assertEqual(models["FRN_unconditional_1"]["participant_support"][1]["retained_source_rows"], [5, 6])
+        self.assertEqual(models["choice_original"]["participant_support"][1]["retained_source_rows"], [4, 6])
+        self.assertEqual(models["P3b_unconditional_1"]["participant_support"][1]["retained_source_rows"], [4, 5, 6])
+
     def test_round_centering_preserves_linear_predictor_and_source_values(self):
         models = m.build_designs(fixture())
         original = models["choice_original"]
@@ -114,6 +148,9 @@ class CompanionDesignTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             output = Path(temp).resolve() / "fresh"
             report = m.export_designs(models, output, {"sources": []})
+            saved = json.loads((output / "receipt.json").read_text())
+            for name, model in models.items():
+                self.assertEqual(saved["models"][name]["participant_support"], model["participant_support"])
             self.assertEqual(len(list(output.iterdir())), 34)
             self.assertEqual(report["qualification"], "input_designs_only_no_fit_or_score")
             for name, model in report["models"].items():
