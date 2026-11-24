@@ -226,6 +226,43 @@ def replay(document, candidate=None):
             "paper_reproduction_established": False, "paper_improvement_established": False}
 
 
+def compare_conditions(document, paper_data, paper_data_author_code):
+    """Pair both candidate arms on every fitted model in one supplied export.
+
+    Condition names are operator assignments, not verified exposure provenance.
+    Accuracy differences retain model/time axes; no population scalar is defined.
+    """
+    require(paper_data is not None and paper_data_author_code is not None,
+            "both information-condition predictions are required")
+    data_report = replay(document, paper_data)
+    code_report = replay(document, paper_data_author_code)
+    reports = []
+    for data, code in zip(data_report["models"], code_report["models"]):
+        # Both replays enumerate the same source export, independent of submission order.
+        model = {name: value for name, value in data.items()
+                 if name not in ("candidate_accuracy", "candidate_minus_retained_first_experiment")}
+        model["condition_scores"] = {
+            "paper_data": {
+                "accuracy": data["candidate_accuracy"],
+                "minus_retained_first_experiment": data["candidate_minus_retained_first_experiment"],
+            },
+            "paper_data_author_code": {
+                "accuracy": code["candidate_accuracy"],
+                "minus_retained_first_experiment": code["candidate_minus_retained_first_experiment"],
+            },
+        }
+        model["paper_data_author_code_minus_paper_data"] = [
+            code_score - data_score for data_score, code_score in
+            zip(data["candidate_accuracy"], code["candidate_accuracy"])]
+        reports.append(model)
+    return {**data_report, "schema": "dentate-decoder-paired-conditions-report-v1",
+            "models": reports,
+            "information_conditions": ["paper_data", "paper_data_author_code"],
+            "comparison_scope": "complete_supplied_decoder_support_per_model_per_time",
+            "information_condition_assignment_verified": False,
+            "condition_resource_exposure_comparability_verified": False}
+
+
 def read_json(path):
     def pairs(items):
         result = {}
@@ -241,15 +278,31 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--author-export", required=True)
     parser.add_argument("--candidate")
+    parser.add_argument("--paper-data", help="Predictions assigned to the paper+data condition")
+    parser.add_argument("--paper-data-author-code", help="Predictions assigned to the paper+data+code condition")
     parser.add_argument("--output", required=True)
     args = parser.parse_args()
-    sources = [Path(p).resolve() for p in (args.author_export, args.candidate) if p]
+    paired = args.paper_data is not None or args.paper_data_author_code is not None
+    if paired and (args.paper_data is None or args.paper_data_author_code is None):
+        parser.error("--paper-data and --paper-data-author-code must be supplied together")
+    if paired and args.candidate is not None:
+        parser.error("--candidate cannot be combined with paired information-condition inputs")
+    sources = {"author_export": Path(args.author_export).resolve()}
+    if paired:
+        sources.update(paper_data=Path(args.paper_data).resolve(),
+                       paper_data_author_code=Path(args.paper_data_author_code).resolve())
+    elif args.candidate is not None:
+        sources["candidate"] = Path(args.candidate).resolve()
     output = Path(args.output).resolve()
-    require(output not in sources, "output cannot overwrite an input")
-    result = replay(read_json(sources[0]), read_json(sources[1]) if len(sources) == 2 else None)
-    result["author_export_sha256"] = hashlib.sha256(sources[0].read_bytes()).hexdigest()
-    if len(sources) == 2:
-        result["candidate_sha256"] = hashlib.sha256(sources[1].read_bytes()).hexdigest()
+    require(output not in sources.values(), "output cannot overwrite an input")
+    document = read_json(sources["author_export"])
+    if paired:
+        result = compare_conditions(document, read_json(sources["paper_data"]),
+                                    read_json(sources["paper_data_author_code"]))
+    else:
+        result = replay(document, read_json(sources["candidate"]) if "candidate" in sources else None)
+    for name, path in sources.items():
+        result[name + "_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
     with output.open("x") as handle:
         json.dump(result, handle, indent=2, allow_nan=False)
         handle.write("\n")
