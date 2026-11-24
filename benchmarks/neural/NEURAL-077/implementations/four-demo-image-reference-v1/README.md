@@ -3,9 +3,9 @@
 This is a prospective conventional reference candidate for NEURAL-077. It predicts
 the released target-event label using the same four labeled demonstration images
 and one fixed query image intended for a direct-interpretation arm. It uses only
-Python's standard library. There is no authentic-image execution, performance
-measurement, empirical baseline qualification, or improvement claim in this
-source contribution.
+Python's standard library. A subsequent seven-image check establishes restricted
+extraction compatibility, described below. Predictive performance, empirical
+baseline competence and improvement remain unmeasured.
 
 The earlier [exploratory programme](../exploratory32-image-programme-v1/README.md)
 and its measured failures remain unchanged. This candidate is a new method for a
@@ -111,6 +111,26 @@ Hash checks establish byte identity under the supplied expected digest. They do
 not attest fit provenance, elapsed ordering, authorized inputs or filesystem
 isolation. The trusted study operator must enforce those boundaries. This CLI
 does not sandbox itself or provide an image-delivery adapter.
+
+## Recorded extraction compatibility — 24 November 2026
+
+The unchanged extractor completed all **seven** preselected authentic images:
+the six images that triggered the earlier programme's trace-coverage guard and
+its preserved successful control. Of210 channel/time-bin features, **181 were
+defined and finite** and **29 remained explicitly missing**. Among the defined
+features,150 bins had full visible-column support and31 had partial support.
+All14 channel baselines had visible support. The check verified that missing
+values and zero support agree; hidden waveform values were not reconstructed.
+See the [aggregate compatibility record](COMPATIBILITY.json).
+
+This was one label-free extraction pass, with no demo fitting, probability or
+prediction calls, labels, raw signals, rescoring, retries or source edits. It is
+retrospective engineering evidence on exposed development images: the method
+was authored after the earlier coverage failures were known. It does not establish
+classification competence, unbiased feature recovery, authentic-demo fitting,
+new-case generalization, or the full6400-case task. The original programme's
+failures and the frozen pilot scores remain unchanged. Private images and
+per-case diagnostics are not included in this public aggregate record.
 
 ## Source checks and remaining evaluation
 
