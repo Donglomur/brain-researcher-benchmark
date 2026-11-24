@@ -35,3 +35,32 @@ The recovered historical scorer, including its exact-constant successor, instead
 The generated controls exercise full 84-context admission, independent closed-form paired gains, session pooling of individually constant runs, unequal session lengths, mask exclusion, channel weighting, exact constants, target joins, clock/prefix boundaries, numerical failures and the real CLI. They are software checks, not authentic performance evidence. No new native preparation, baseline execution, candidate trial or empirical recalibration benefit is claimed.
 
 Still unresolved: authentic NWB ingestion/alignment and full packet verification; dataset terms versus redistribution restrictions; precommitted unchanged/source-reference and shuffle controls; causal participant execution and budget enforcement; cross-task 067/068 exposure; complete direct/viewer/tool/programme delivery; independent scientific qualification. This component alone does not make NEURAL-068 submission-ready.
+
+## Matched direct/program assessment
+
+`compare_access.py` compares complete `direct_observation` and `frozen_program`
+submissions on the identical frozen layout. It validates both 84-context
+submissions before opening evaluator targets and captures each of the fourteen
+target runs once for reuse by both conditions. Each condition retains the
+unchanged scorer's full output and original recalibration primary endpoint.
+The additional outputs are program-minus-direct differences in absolute R²,
+recalibration gain, and neural-minus-clock recalibration gain, at every fixed
+budget. Contrasts are paired within the same seven sessions, then equally
+averaged across sessions; no best budget or subset is selected.
+
+```sh
+python3 -I -B compare_access.py --layout /operator/layout.json \
+  --direct /frozen-output/direct.json --program /frozen-output/program.json \
+  --targets /operator/targets.json --output /operator/access-comparison.json
+```
+
+Both submissions use the existing `neural068-paired-session-v1` format. An
+all-constant target session leaves the comparison undefined while preserving
+both conditions' full session diagnostics. The target panel and comparison
+CLI remain operator-only. The condition names are assertions supplied by the
+operator: this component does not verify no-tools compliance, matched permitted
+observations, compute entitlements, unchanged-decoder provenance or recipe
+freezing. Establish those independently before interpreting the contrast as an
+access-condition effect. These are descriptive paired sessions from one person,
+with no human-population confidence interval. Generated comparison controls do
+not deliver authentic observations or establish neural understanding.
