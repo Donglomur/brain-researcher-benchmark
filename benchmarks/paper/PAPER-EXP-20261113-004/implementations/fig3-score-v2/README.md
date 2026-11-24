@@ -32,6 +32,14 @@ python3 -B fig3_score.py compare --candidate /owner/candidate-panel.json --autho
 
 Outputs are created exclusively, so frozen results cannot be overwritten. Duplicate JSON keys, malformed dimensions, missing companion conditions, repeated observations, mismatched targets, nonfinite predictions and invalid cosine scores reject before output. The comparison returns all session gains and seven-session means for each mouse and condition. It supplies no confidence interval, significance test, pooled headline score or superiority decision; these need the original-score distribution and an admitted meaningful-effect/multiplicity rule.
 
+## Source table and comparison roles
+
+`score` also returns `figure3b_source_table`: all 924 real/shuffle records for the 462 published train-before conditions, using the source columns `mouse`, `switch`, `day`, `ct`, `model`, `score_type`, `score`, and `sess_id`. Switch numbers follow the seven declared days; session IDs are `mouse_day`. Source notebook lines 843–877 define these keys and the two-model filter. Export order is canonical day/mouse/class/score-type/model order; the historical `include_ans` order has not been authenticated. The original 1,155 condition records remain present and mandatory, including all 693 controls.
+
+This table covers the scorer's existing **finite input domain only**. Source `nanmean` behavior is not implemented here; missing or nonfinite source inputs still reject. Table construction does not qualify historical references, missingness handling, or source fitting.
+
+Scored and paired session/mouse records now carry `figure3b` and `score_role`. Only true-label `train0_test0` and `train0_test1` scores are directional performance targets. Gains for the other three native model conditions remain descriptive control differences. Shuffle scores and the separately required Figure 3c profiles are fidelity/protection companions, even if their values increase. No target/control values are dropped, and no new scalar, uncertainty rule or win criterion is introduced. All seven sessions remain together within each mouse summary. This reporting applies equally to either assistance condition and cannot establish an outcome for either arm.
+
 The CLI JSON route holds the supplied arrays in memory. No authentic corpus memory/runtime estimate has been established. Streaming native preparation and safe serialization custody remain separate unresolved work.
 
 ## Source and qualification

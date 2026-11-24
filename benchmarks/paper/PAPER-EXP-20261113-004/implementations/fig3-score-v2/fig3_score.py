@@ -127,16 +127,43 @@ def _validate(panel):
     return rows
 
 
+def _score_role(model):
+    return "directional_performance_target" if model in MODELS[:2] else "native_condition_control"
+
+
+def _source_table(rows):
+    """Source df_src fields on the accepted finite domain, in canonical order.
+
+    The original notebook keeps both real and shuffle rows for the two
+    train-before models. Its historical animal row order is not authenticated.
+    """
+    output = []
+    for day in DAYS:
+        for animal in ANIMALS:
+            for cell_type in CELL_TYPES:
+                for score_type, field in (("real", "mean_cosine"),
+                                          ("shuffle", "shuffle_mean_cosine")):
+                    for model in MODELS[:2]:
+                        output.append({"mouse": animal, "switch": DAYS.index(day) + 1,
+                                       "day": day, "ct": cell_type, "model": model,
+                                       "score_type": score_type,
+                                       "score": rows[animal, day, cell_type, model][field],
+                                       "sess_id": animal + "_" + str(day)})
+    return output
+
+
 def score_panel(panel):
     """Return session vectors; folds are equal-weighted, never pooled by samples."""
     rows = _validate(panel)
     output = []
     for (animal, day, cell_type, model), scores in sorted(rows.items()):
         output.append(dict(animal=animal, day=day, cell_type=cell_type, model=model,
-                           figure3b=model in MODELS[:2], **scores))
+                           figure3b=model in MODELS[:2], score_role=_score_role(model), **scores))
     return {"schema": "reward-relative-fig3-scores-v2", "task_id": TASK,
             "panel_sha256": digest(panel), "rows": output,
             "figure3b_session_conditions": 462, "companion_session_conditions": 693,
+            "figure3b_source_table": _source_table(rows),
+            "source_table_scope": "924 real/shuffle records; finite input domain only; canonical row order",
             "qualification": "arithmetic_only; source protocol and author baseline not admitted"}
 
 
@@ -151,6 +178,7 @@ def compare(candidate, author):
                 "candidate/author sample identity, order, fold or target mismatch")
         a, d, c, m = key
         results.append({"animal": a, "day": d, "cell_type": c, "model": m,
+                        "figure3b": m in MODELS[:2], "score_role": _score_role(m),
                         "candidate_mean_cosine": left[key]["mean_cosine"],
                         "author_mean_cosine": right[key]["mean_cosine"],
                         "paired_gain": left[key]["mean_cosine"] - right[key]["mean_cosine"],
@@ -162,10 +190,16 @@ def compare(candidate, author):
                 gains = [r["paired_gain"] for r in results
                          if (r["animal"], r["cell_type"], r["model"]) == (a, c, m)]
                 mice.append({"animal": a, "cell_type": c, "model": m,
+                             "figure3b": m in MODELS[:2], "score_role": _score_role(m),
                              "mean_paired_gain": statistics.fmean(gains), "sessions": 7})
     return {"schema": "reward-relative-fig3-comparison-v2", "task_id": TASK,
             "candidate_sha256": digest(candidate), "author_sha256": digest(author),
             "session_conditions": results, "mouse_conditions": mice,
+            "endpoint_roles": {
+                "true_label_train_before_scores": "directional_performance_target",
+                "other_native_conditions": "fidelity_and_protection_only",
+                "shuffle_scores": "fidelity_and_protection_only",
+                "figure3c_profiles": "mandatory_separate_fidelity_and_protection_companion"},
             "qualification": "descriptive comparison only; no meaningful-effect or uncertainty rule admitted",
             "paper_win": None}
 
