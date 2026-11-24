@@ -8,7 +8,7 @@ format. It preserves the retrospective source-to-receiver calcium target,
 training-only references and equal-worm endpoint.
 
 `participant_transport.py` uses the original evaluator at SHA-256
-`01bf6d01c9bd6a36fda0e39b990e3c82a472246c57b6e603f5cbc923fb9a7cfb`.
+`4fde8b08dc090d6b0b3d79d8fb8e10b0e0145e78620c184c6880d83f9f6e0485`.
 It refuses a changed predecessor until explicitly reviewed and repinned.
 Canonical definitions and predecessor code remain unchanged.
 
@@ -20,7 +20,7 @@ paths must be new; none is overwritten. With existing Python 3:
 
 ```sh
 python3 participant_transport.py export /operator/custody-data.json /operator/key.bin /delivery/public /operator/transport-custody.json
-python3 participant_transport.py collect /delivery/public/packet.json /operator/transport-custody.json /incoming/answer.json /operator/custody-data.json /operator/predictions.json /operator/receipt.json --mode direct_observation
+python3 participant_transport.py collect /delivery/public/packet.json /operator/transport-custody.json /incoming/answer.json /operator/custody-data.json /operator/predictions.json /operator/receipt.json --mode direct_observation --key-file /operator/key.bin
 python3 ../initial-evaluator-v1/worm_evaluator.py score /operator/custody-data.json /operator/predictions.json /operator/score.json
 ```
 
@@ -41,6 +41,13 @@ nonfinite values and duplicate JSON keys. Response order may change; coverage ma
 not. The private mapping recovers original evaluator case IDs without exposing
 target values. The collector authenticates the unchanged custody dataset before
 creating scorer inputs; it never calculates a metric or returns score feedback.
+Collection also requires the original export key and checks each public case
+alias against its private original case ID. This rejects a swapped or changed
+private case mapping even when the cases share timestamps and the source dataset
+is unchanged. A dataset checksum alone cannot establish this correspondence.
+Keep the key outside participant access; it is never copied into packets or
+receipts. API callers pass it as `collect_response(..., key=key_bytes)`; the CLI
+requires `--key-file` and refuses mismatches before creating scorer outputs.
 
 Aliases use namespace-separated HMAC-SHA256 over typed identity tuples. Shared
 worms/acquisitions/trials stay grouped, and locally repeated trial labels in

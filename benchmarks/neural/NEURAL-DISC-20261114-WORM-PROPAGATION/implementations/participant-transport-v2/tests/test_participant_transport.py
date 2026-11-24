@@ -61,7 +61,7 @@ class TransportTests(unittest.TestCase):
         expected = original.evaluate(self.data, direct_predictions, draws=100)
         for mode in t.MODES:
             predictions, receipt = t.collect_response(self.bundle, self.custody,
-                                                       answer(self.bundle, mode), expected_mode=mode)
+                                                       answer(self.bundle, mode), expected_mode=mode, key=KEY)
             self.assertEqual(original.evaluate(self.data, predictions, draws=100), expected)
             # (1 + 9 + 25 + 49)/4, and the train mean is exactly the target.
             self.assertEqual(expected["complete_roster_primary_mean_difference"], 21.)
@@ -109,8 +109,8 @@ class TransportTests(unittest.TestCase):
         submission = answer(bundle)
         submission["cases"][-1]["values"][0] = None
         with self.assertRaisesRegex(ValueError, "finite prediction"):
-            t.collect_response(bundle, custody, submission, expected_mode="direct_observation")
-        predictions, _ = t.collect_response(bundle, custody, answer(bundle), expected_mode="direct_observation")
+            t.collect_response(bundle, custody, submission, expected_mode="direct_observation", key=KEY)
+        predictions, _ = t.collect_response(bundle, custody, answer(bundle), expected_mode="direct_observation", key=KEY)
         self.assertEqual(len(predictions["cases"]), 4)
 
     def test_roster_grid_units_mode_and_submission_content_attacks(self):
@@ -129,20 +129,39 @@ class TransportTests(unittest.TestCase):
             submission = answer(self.bundle)
             mutation(submission)
             with self.subTest(mutation=mutation), self.assertRaises(ValueError):
-                t.collect_response(self.bundle, self.custody, submission, expected_mode="direct_observation")
+                t.collect_response(self.bundle, self.custody, submission, expected_mode="direct_observation", key=KEY)
 
     def test_changed_bundle_custody_mapping_or_source_dataset_rejected(self):
         changed = copy.deepcopy(self.bundle)
         changed["roles"]["held"]["cases"][0]["source"]["values"][0] = 999.
         with self.assertRaisesRegex(ValueError, "frozen custody"):
-            t.collect_response(changed, self.custody, answer(changed), expected_mode="direct_observation")
+            t.collect_response(changed, self.custody, answer(changed), expected_mode="direct_observation", key=KEY)
         custody = copy.deepcopy(self.custody)
         custody["held_mapping"][0]["times_s"][0] = .001
         with self.assertRaisesRegex(ValueError, "custody roster"):
-            t.collect_response(self.bundle, custody, answer(self.bundle), expected_mode="direct_observation")
+            t.collect_response(self.bundle, custody, answer(self.bundle), expected_mode="direct_observation", key=KEY)
         self.data["cases"][-1]["target"]["values"][0] = 999.
         with self.assertRaisesRegex(ValueError, "dataset changed"):
             t.validate_custody_dataset(self.data, self.custody)
+
+    def test_same_grid_custody_case_swaps_and_wrong_export_key_rejected(self):
+        # Dataset hash and public bundle are unchanged; only the private ID join
+        # is corrupted. Both receiver cases intentionally use the same grid.
+        custody = copy.deepcopy(self.custody)
+        first, second = custody["held_mapping"][:2]
+        self.assertEqual(first["times_s"], second["times_s"])
+        first["original_case_id"], second["original_case_id"] = (
+            second["original_case_id"], first["original_case_id"])
+        t.validate_custody_dataset(self.data, custody)
+        with self.assertRaisesRegex(ValueError, "custody case mapping"):
+            t.collect_response(self.bundle, custody, answer(self.bundle),
+                               expected_mode="direct_observation", key=KEY)
+        with self.assertRaisesRegex(ValueError, "custody case mapping"):
+            t.collect_response(self.bundle, self.custody, answer(self.bundle),
+                               expected_mode="direct_observation", key=b"another-operator-secret-key" * 2)
+        with self.assertRaisesRegex(ValueError, "original operator key"):
+            t.collect_response(self.bundle, self.custody, answer(self.bundle),
+                               expected_mode="direct_observation", key=b"short")
 
     def test_duplicate_json_keys_and_nonfinite_constants_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -168,10 +187,24 @@ class TransportTests(unittest.TestCase):
             submission.write_text(json.dumps(answer(bundle)))
             subprocess.run(command + ["collect", str(base / "public/packet.json"), str(base / "custody.json"),
                                       str(submission), str(data), str(base / "predictions.json"),
-                                      str(base / "receipt.json"), "--mode", "direct_observation"],
+                                      str(base / "receipt.json"), "--mode", "direct_observation", "--key-file", str(key)],
                            check=True, capture_output=True)
             self.assertEqual(len(t.read_json(base / "predictions.json")["cases"]), 4)
             self.assertEqual((base / "predictions.json").stat().st_mode & 0o777, 0o600)
+            # Refuse a corrupted original-case join before either output exists.
+            custody = t.read_json(base / "custody.json")
+            first, second = custody["held_mapping"][:2]
+            first["original_case_id"], second["original_case_id"] = (
+                second["original_case_id"], first["original_case_id"])
+            (base / "corrupt-custody.json").write_text(json.dumps(custody))
+            rejected = subprocess.run(command + ["collect", str(base / "public/packet.json"),
+                                      str(base / "corrupt-custody.json"), str(submission), str(data),
+                                      str(base / "rejected-predictions.json"), str(base / "rejected-receipt.json"),
+                                      "--mode", "direct_observation", "--key-file", str(key)], capture_output=True)
+            self.assertNotEqual(rejected.returncode, 0)
+            self.assertIn(b"custody case mapping", rejected.stderr)
+            self.assertFalse((base / "rejected-predictions.json").exists())
+            self.assertFalse((base / "rejected-receipt.json").exists())
             forbidden = subprocess.run(command + ["export", str(data), str(key), str(base / "bad-public"),
                                                   str(base / "bad-public/custody.json")], capture_output=True)
             self.assertNotEqual(forbidden.returncode, 0)

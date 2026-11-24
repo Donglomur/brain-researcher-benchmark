@@ -111,13 +111,17 @@ def response_template(bundle, mode):
                        "values": [None] * len(case["response_times_s"])} for case in packet["cases"]]}
 
 
-def collect_response(bundle, custody, submission, *, expected_mode):
+def collect_response(bundle, custody, submission, *, expected_mode, key):
     """Collect the complete exact-grid answer without reading any target value.
 
     expected_mode comes from the operator's assigned condition, not the answer.
-    This verifies identity and information parity, not compliance of a runtime.
+    The original export key authenticates each alias-to-original-case mapping;
+    a dataset digest alone cannot detect a swapped private mapping. The key is
+    never returned or written to participant artifacts. This verifies identity
+    and information parity, not compliance of a runtime.
     """
     require(expected_mode in MODES, "unknown assigned access mode")
+    require(isinstance(key, bytes) and len(key) >= 32, "original operator key must contain at least 32 secret bytes")
     require(bundle.get("schema_version") == SCHEMA and custody.get("schema_version") == SCHEMA,
             "transport schema mismatch")
     require(custody.get("bundle_sha256") == digest(bundle), "public bundle differs from frozen custody")
@@ -132,6 +136,12 @@ def collect_response(bundle, custody, submission, *, expected_mode):
     require(submission["units"] == packet["units"], "prediction units mismatch")
     mapping = {row["case_id"]: row for row in custody["held_mapping"]}
     require(len(mapping) == len(custody["held_mapping"]), "duplicate custody alias")
+    for alias, row in mapping.items():
+        require(isinstance(row["original_case_id"], str), "custody original case ID must be text")
+        expected_alias = "case_" + hmac.new(
+            key, canonical_bytes(["case", row["original_case_id"]]), hashlib.sha256).hexdigest()
+        require(hmac.compare_digest(alias, expected_alias),
+                "custody case mapping does not match original operator key")
     require(len({row["original_case_id"] for row in mapping.values()}) == len(mapping),
             "custody maps multiple aliases onto one original case")
     public = {row["case_id"]: row["response_times_s"] for row in packet["cases"]}
@@ -195,6 +205,8 @@ def main():
     for name in ("bundle", "custody", "submission", "dataset", "predictions", "receipt"):
         collect.add_argument(name, type=Path)
     collect.add_argument("--mode", choices=MODES, required=True)
+    collect.add_argument("--key-file", type=Path, required=True,
+                         help="original secret export key, kept outside participant access")
     args = parser.parse_args()
     if args.command == "export":
         public = args.public_directory.resolve()
@@ -217,7 +229,8 @@ def main():
             require(not output.exists(), "collected output paths must be new")
         bundle, custody = read_json(args.bundle), read_json(args.custody)
         validate_custody_dataset(read_json(args.dataset), custody)
-        predictions, receipt = collect_response(bundle, custody, read_json(args.submission), expected_mode=args.mode)
+        predictions, receipt = collect_response(bundle, custody, read_json(args.submission),
+                                                expected_mode=args.mode, key=args.key_file.read_bytes())
         write_new(args.predictions, predictions, private=True)
         write_new(args.receipt, receipt, private=True)
 
