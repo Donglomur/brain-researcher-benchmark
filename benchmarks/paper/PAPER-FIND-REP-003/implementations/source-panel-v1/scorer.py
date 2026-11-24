@@ -238,14 +238,17 @@ def main(argv=None):
     parser.add_argument("--reference", type=Path, required=True)
     parser.add_argument("--reference-sha256", required=True, help="independently frozen operator reference hash")
     parser.add_argument("--candidate", type=Path, required=True)
+    parser.add_argument("--candidate-sha256", required=True, help="independently frozen candidate prediction hash")
     parser.add_argument("--output", type=Path, required=True, help="private, previously nonexistent report")
     args = parser.parse_args(argv)
     reference_bytes, candidate_bytes = args.reference.read_bytes(), args.candidate.read_bytes()
     reference_sha = hashlib.sha256(reference_bytes).hexdigest()
     require(reference_sha == args.reference_sha256, "operator reference hash mismatch")
+    candidate_sha = hashlib.sha256(candidate_bytes).hexdigest()
+    require(candidate_sha == args.candidate_sha256, "frozen candidate hash mismatch")
     report = evaluate(read_json_bytes(reference_bytes), read_json_bytes(candidate_bytes))
     report["reference_sha256"] = reference_sha
-    report["candidate_sha256"] = hashlib.sha256(candidate_bytes).hexdigest()
+    report["candidate_sha256"] = candidate_sha
     with args.output.open("x") as output:
         json.dump(report, output, indent=2, allow_nan=False)
         output.write("\n")

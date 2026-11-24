@@ -1,7 +1,13 @@
 """Generated controls only; no paper data, target cache or scientific model."""
+import contextlib
+import hashlib
 import importlib.util
+import io
+import json
 from pathlib import Path
+import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location("source_panel", ROOT / "scorer.py")
@@ -119,6 +125,56 @@ class SourcePanelTests(unittest.TestCase):
     def test_preserve_negative_ve(self):
         actual = [[float(k)]*24 for k in range(5)]
         self.assertEqual(s.source_ve(actual, [[-float(k)]*24 for k in range(5)]), [-3.0]*24)
+
+
+class CandidateCommitmentTests(unittest.TestCase):
+    """CLI boundary controls; source numerical tests above remain independent."""
+
+    def test_changed_candidate_rejected_before_parsing_or_evaluation(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            reference, candidate, output = root / "r.json", root / "c.json", root / "out.json"
+            reference.write_bytes(b"{}")
+            committed = b'{"candidate":"committed"}'
+            # A changed malformed body must be rejected by commitment, before
+            # the parser or numerical evaluator sees the replacement.
+            candidate.write_bytes(b"changed after commitment: not JSON")
+            args = ["--reference", str(reference), "--reference-sha256", hashlib.sha256(b"{}").hexdigest(),
+                    "--candidate", str(candidate), "--candidate-sha256", hashlib.sha256(committed).hexdigest(),
+                    "--output", str(output)]
+            with mock.patch.object(s, "read_json_bytes") as parser, mock.patch.object(s, "evaluate") as evaluator:
+                with self.assertRaisesRegex(s.PanelError, "frozen candidate hash mismatch"):
+                    s.main(args)
+                parser.assert_not_called()
+                evaluator.assert_not_called()
+            self.assertFalse(output.exists())
+
+    def test_matched_commitment_is_carried_into_report(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            reference, candidate, output = root / "r.json", root / "c.json", root / "out.json"
+            reference.write_bytes(b'{"reference":"generated"}')
+            candidate.write_bytes(b'{"candidate":"generated"}')
+            ref_sha = hashlib.sha256(reference.read_bytes()).hexdigest()
+            candidate_sha = hashlib.sha256(candidate.read_bytes()).hexdigest()
+            args = ["--reference", str(reference), "--reference-sha256", ref_sha,
+                    "--candidate", str(candidate), "--candidate-sha256", candidate_sha,
+                    "--output", str(output)]
+            with mock.patch.object(s, "evaluate", return_value={"scientifically_qualified": False}) as evaluator:
+                self.assertEqual(s.main(args), 0)
+                evaluator.assert_called_once_with({"reference": "generated"}, {"candidate": "generated"})
+            report = json.loads(output.read_text())
+            self.assertEqual(report["reference_sha256"], ref_sha)
+            self.assertEqual(report["candidate_sha256"], candidate_sha)
+            self.assertFalse(report["scientifically_qualified"])
+
+    def test_candidate_commitment_argument_is_required(self):
+        # A caller cannot silently continue through the former unbound API.
+        with contextlib.redirect_stderr(io.StringIO()):
+            with self.assertRaises(SystemExit) as exit_status:
+                s.main(["--reference", "r.json", "--reference-sha256", "0" * 64,
+                        "--candidate", "c.json", "--output", "out.json"])
+        self.assertEqual(exit_status.exception.code, 2)
 
 
 if __name__ == "__main__":
