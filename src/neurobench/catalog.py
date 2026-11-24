@@ -1346,12 +1346,15 @@ def evidence_text(catalog, base=OUTPUT):
             f"{counts['trusted_operator_reference_preworker_failures']} earlier zero-fit failures. "
             'This completes the selected trusted Figure 3b endpoint without participant or AI qualification. ')
     if counts.get('trusted_operator_candidate_reports', 0):
-        nested = next(row for rows in evidence['records'].values() for row in rows
-                      if row['category'] == 'trusted_operator_candidate_comparison')
-        nested_delta = str(nested['comparison']['paired_equal_session_mean_delta']).replace('-', '−', 1)
+        nested_delta_text = ''
+        if 'records' in evidence:
+            nested = next(row for rows in evidence['records'].values() for row in rows
+                          if row['category'] == 'trusted_operator_candidate_comparison')
+            nested_delta = str(nested['comparison']['paired_equal_session_mean_delta']).replace('-', '−', 1)
+            nested_delta_text = f'and a negative paired equal-session delta of {nested_delta} '
         reference_result_text += (
             f"The fixed nested-Ridge operator candidate records **{counts['trusted_operator_candidate_estimator_fits']} fits** "
-            f'and a negative paired equal-session delta of {nested_delta} over all 42 cells, 14 sessions and eight people. '
+            f'{nested_delta_text}over all 42 cells, 14 sessions and eight people. '
             'Its completed A3 baseline is reused without new reference fits. The non-improving candidate is retained without '
             'retuning or dropping p2; descriptive direction diagnostics add no AI, participant or readiness qualification. ')
     if counts.get('released_output_rescore_reports', 0):
