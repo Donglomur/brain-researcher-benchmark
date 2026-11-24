@@ -93,6 +93,14 @@ This original contract preserves the predecessor scientific instructions and sou
 
 Within the existing improvement contract, historical graders and pilot scores retain their calibration role. They are not automatically qualified reproductions or improvements. Published paper results, reproduced author baselines, and verified current SOTA are separate claims. A new split, easier inputs, smaller cohort or changed metric is an extension.
 
+## Recorded public evidence
+
+Each record keeps the scope of its original report. It is not current runtime qualification.
+
+- [Trusted operator reference](docs/provenance/trusted-figure3b-reference-20261124/RESULT.json): Complete selected Figure 3b trusted reference: 42 cells, 14 sessions, eight people and 5,685 fresh Ridge fits; two earlier zero-fit failures remain. Numerical reference agreement is not participant or whole-paper qualification.
+
+Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence PAPER-ROOT-ADD-001`. Programme evidence does not establish direct interpretation.
+
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
@@ -128,6 +136,9 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Archived Figure3b proposal: task.proposed.json (not current definition)](docs/proposals/figure3b-improvement-scope-v1/task.proposed.json)
 - [Immediate predecessor before Figure 3b definition adoption — provenance/current-definition-pre-figure3b-20261117/task.json](docs/provenance/current-definition-pre-figure3b-20261117/task.json)
 - [Immediate predecessor before Figure 3b definition adoption — provenance/current-definition-pre-figure3b-20261117/outcomes.v1.json](docs/provenance/current-definition-pre-figure3b-20261117/outcomes.v1.json)
+- [Complete selected Figure 3b trusted reference replay](docs/provenance/trusted-figure3b-reference-20261124/README.md)
+- [Selected Figure 3b trusted reference aggregate result](docs/provenance/trusted-figure3b-reference-20261124/RESULT.json)
+- [Selected Figure 3b trusted reference source and runtime provenance](docs/provenance/trusted-figure3b-reference-20261124/PROVENANCE.json)
 
 ## Implementation artifacts
 
@@ -181,6 +192,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Reviewed finite original-task source. Fixed time-only controls and preparation receipts are scoped engineering observations; general participant execution, assisted-arm results, AI reproduction/improvement, SOTA and protected-runtime qualification are not established. Namespace reset, hidden-label boundaries, author parity, unit/PCA exposure and clustered uncertainty remain separately scoped. The current task definition selects original Figure3b improvement under improvement.figure3b.v1.json; full 224-array reproduction remains separate. This scope adoption does not establish qualified execution or scientific success.
 - [Runtime tree adapter v1](implementations/runtime-tree-adapter-v1) — Reviewed source component.
   Scope: Source-only preparation of the ordinary immutable runtime tree required by the existing LANGUAGE exec-reset provider. Generated controls cover projection mechanics; authentic runtime construction, protected provider execution, containment and scientific qualification remain separately required. The existing provider, task endpoint and readiness are unchanged.
+- [Trusted figure3b reference v1](implementations/trusted-figure3b-reference-v1) — Reviewed source component.
+  Scope: Fixed trusted operator route for the selected original contextual population Figure 3b endpoint: 42 cells across 14 sessions and eight people, with 5,685 fresh source Ridge fits. The measured replay agrees with the provided author reference to floating-point precision. This is not an arbitrary participant executor, full 224-array or whole-paper reconstruction, AI result, improvement, information-condition comparison or SOTA. The original transformations, public exposure, failed preparation attempts and separate participant isolation requirements remain explicit.
 - [Original figure3 v1](implementations/original-figure3-v1) — Reviewed source component.
   Scope: Original Figure 3 output reduction. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 
