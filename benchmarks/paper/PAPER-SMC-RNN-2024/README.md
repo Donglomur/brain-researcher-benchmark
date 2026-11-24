@@ -90,6 +90,8 @@ Each record keeps the scope of its original report. It is not current runtime qu
 - [Author model inference probe](docs/native-cost-characterization.json): Actual selected author-checkpoint inference on the first train and eval chunks only; no complete predictions, scores or 32-repeat baseline.
 - [Author reference calibration](../../../docs/science/smc-author-calibration-20261117.json): Complete selected author predictions and four original aggregate metrics; recovered noncausal output retains its failed supervisor.
 - [Author reference calibration](../../../docs/science/smc-author-calibration-20261117.json): Complete selected author predictions and four original aggregate metrics; recovered noncausal output retains its failed supervisor.
+- [Historical reference rescore](../../../docs/science/smc-historical-rescore-20261120.json): Successful bounded rescoring of a complete previously frozen author prediction; no new author-model inference or AI candidate.
+- [Historical reference rescore](../../../docs/science/smc-historical-rescore-20261120.json): Successful bounded rescoring of a complete previously frozen author prediction; no new author-model inference or AI candidate.
 - [Participant material preparation](docs/official-assets-materials-v2-20261117.json): Complete external 71-file paper/data and author-code/released-model material pair; payloads are not published in this report.
 - [Paper source preparation](docs/source-preparation-evidence.json): Complete original MC\_Maze 20ms input preparation and paired participant materials, with generated source/scorer controls. This report excludes separately recorded author-model timing and all scientific performance evaluation.
 
