@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+from contextlib import contextmanager
 from dataclasses import dataclass
 import hashlib
 import io
@@ -147,8 +148,9 @@ def _panel_from_rows(rows):
                  tuple(predictions[i] for i in ITEMS), identity_hash)
 
 
-def load_original_archive(path):
-    """Operator-only. No extraction, pickle, source code or private oracle reads."""
+@contextmanager
+def original_rows(path):
+    """Operator-only authenticated CSV stream; no extraction or code execution."""
     with Path(path).open("rb") as raw:
         require(raw.seek(0, 2) == ARCHIVE_BYTES, "wrong OSF archive length")
         raw.seek(0)
@@ -164,7 +166,13 @@ def load_original_archive(path):
             with archive.extractfile(members[0]) as member:
                 reader = csv.DictReader(io.TextIOWrapper(member, encoding="utf-8-sig", newline=""))
                 require(reader.fieldnames == SOURCE_COLUMNS, "original CSV columns changed")
-                return _panel_from_rows(reader)
+                yield reader
+
+
+def load_original_archive(path):
+    """Operator-only. No extraction, pickle, source code or private oracle reads."""
+    with original_rows(path) as rows:
+        return _panel_from_rows(rows)
 
 
 def load_predictions(path):

@@ -143,6 +143,60 @@ class DeliveryTests(unittest.TestCase):
             self.assertEqual(sum(r["status"]=="failed" for r in rows),1)
             self.assertEqual(sum(r["status"]=="unstarted" for r in rows),175)
 
+    def test_both_outcomes_and_access_conditions_restore_identical_source_support(self):
+        documents = []
+        for outcome in ("reproduction", "improvement"):
+            for access in ("paper_data", "paper_data_author_code"):
+                with self.subTest(outcome=outcome, access=access):
+                    ctx = T.new_context("a"*64, access, "b"*64, outcome=outcome)
+                    ctx["run_nonce"] = "c"*64  # Fixed only to isolate control differences.
+                    obj, _ = self.new(ctx)
+                    # Select the same scientific fold despite different opaque dispatch order.
+                    score = obj.mapping.load_reference()
+                    key = (score.ANIMALS[0], score.DAYS[0], "short", "real", 2)
+                    fid = next(fid for fid in obj.plan.operator_fold_ids() if tuple(
+                        obj.plan.operator_binding(fid)[k] for k in
+                        ("animal", "day", "cue", "control", "trial_index")) == key)
+                    packet = obj.issue(fid, prepared(obj, fid))
+                    self.assertNotIn("outcome", packet)
+                    obj.submit(fid, response(packet, obj))
+                    document = self.resume(obj).finish()
+                    self.assertEqual(len(document["panels"]), 176)
+                    rows = all_rows(document)
+                    self.assertEqual(len(rows), 176)
+                    self.assertEqual([r["predicted_bins"] for r in rows if r["status"] == "finite"],
+                                     [[7, 6, 5, 4, 3, 2, 1]])
+                    self.assertEqual(sum(r["status"] == "unstarted" for r in rows), 175)
+                    documents.append(document)
+        self.assertTrue(all(document == documents[0] for document in documents))
+
+    def test_outcome_separates_identity_and_cannot_relabel_durable_store(self):
+        original, fid = self.new()
+        packet = original.issue(fid, prepared(original, fid))
+        changed, other = self.new({"outcome": "reproduction"})
+        self.assertEqual(context()["outcome"], "improvement")  # Existing caller compatibility.
+        self.assertTrue(set(original.plan.operator_fold_ids()).isdisjoint(changed.plan.operator_fold_ids()))
+        ctx = dict(original.context, outcome="reproduction")
+        with self.assertRaisesRegex(ValueError, "authentication"):
+            self.resume(original, ctx)
+        changed.issue(other, prepared(changed, other))
+        with self.assertRaises(ValueError):
+            changed.submit(other, response(packet, original))
+        failed = [r for r in all_rows(self.resume(changed).finish()) if r["status"] == "failed"]
+        self.assertEqual(len(failed), 1)
+        # The original store is still usable only with its original outcome/context.
+        original.submit(fid, response(packet, original))
+        self.assertEqual(sum(r["status"] == "finite" for r in all_rows(self.resume(original).finish())), 1)
+
+    def test_unsupported_outcome_cannot_create_a_store(self):
+        for outcome in ("", "reproduce", "combined", None, True):
+            with self.subTest(outcome=outcome):
+                path = FIXTURES / ("invalid-outcome-" + str(outcome))
+                ctx = T.new_context("a"*64, "paper_data", "b"*64, outcome=outcome)
+                with self.assertRaisesRegex(ValueError, "outcome|context"):
+                    T.SignalDelivery.create(path, generated_roster(), ctx, SECRET, mapping_path=MAPPING_PATH)
+                self.assertFalse(path.exists())
+
     def test_first_final_survives_restart_and_restores_existing_collector(self):
         obj,fid=self.new();packet=obj.issue(fid,prepared(obj,fid));obj.submit(fid,response(packet,obj))
         resumed=self.resume(obj)

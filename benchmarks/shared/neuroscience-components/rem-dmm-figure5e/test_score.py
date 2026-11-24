@@ -69,6 +69,86 @@ class ScientificControls(unittest.TestCase):
         self.assertNotEqual(o["historical"]["splits"][0]["test_ids"], o["historical"]["splits"][10]["test_ids"])
         self.assertEqual(len(s.score(o, c)["cells"]), 220)
 
+    def test_paired_accuracy_and_complete_mouse_trial_support(self):
+        o, c = fixture()
+        # Deliberately reuse one generated draw: 31 trials and two mice never
+        # appear in assessment, but must stay visible in the support census.
+        ids = [t["trial_id"] for t in o["trials"]]
+        held = ids[1:15]
+        for split in o["historical"]["splits"]:
+            split["train_ids"] = [tid for tid in ids if tid not in held]
+            split["test_ids"] = held[:]
+        c["case_plan_sha256"] = s.canonical_hash(s.public_plan(o))
+        c["predictions"] = [{"pc": pc, "repeat": rep, "trial_id": tid,
+                             "predicted_label": int(j >= rep)}
+                            for pc in range(1, 23) for rep in range(10)
+                            for j, tid in enumerate(held)]
+        baseline = copy.deepcopy(c)
+        for row in baseline["predictions"]:
+            row["predicted_label"] = int(held.index(row["trial_id"]) < 9)
+        baseline["predictions"].reverse()
+        report = s.score(o, c, baseline)
+        self.assertTrue(report["comparison_present"])
+        self.assertEqual(len(report["trial_support"]), 45)
+        self.assertEqual(sum(t["held_split_uses"] == 0 for t in report["trial_support"]), 31)
+        self.assertEqual(sum(t["held_split_uses"] for t in report["trial_support"]), 220 * 14)
+        for cell in report["cells"]:
+            rep = cell["repeat"]
+            self.assertEqual((cell["tp"], cell["tn"], cell["fp"], cell["fn"]), (14 - rep, 0, 0, rep))
+            self.assertEqual(cell["baseline_correct"], 9)
+            self.assertEqual((cell["candidate_only_correct"], cell["baseline_only_correct"]), (5, rep))
+            self.assertAlmostEqual(cell["paired_accuracy_delta"], (5 - rep) / 14)
+            self.assertEqual(len(cell["mice"]), 5)
+            for mouse in (cell["mice"][0], cell["mice"][4]):
+                self.assertEqual(mouse["n_test"], 0)
+                self.assertIsNone(mouse["accuracy"])
+                self.assertIsNone(mouse["baseline_accuracy"])
+                self.assertIsNone(mouse["paired_accuracy_delta"])
+            for key in ("n_test", "tp", "tn", "fp", "fn", "baseline_correct", "candidate_only_correct", "baseline_only_correct"):
+                self.assertEqual(sum(m[key] for m in cell["mice"]), cell[key])
+        for pc in report["principal_components"]:
+            self.assertEqual(pc["accuracies"], [(14 - rep) / 14 for rep in range(10)])
+            self.assertEqual(pc["baseline_accuracies"], [9 / 14] * 10)
+            self.assertEqual(pc["paired_accuracy_deltas"], [(5 - rep) / 14 for rep in range(10)])
+            self.assertAlmostEqual(pc["mean_paired_accuracy_delta"], 0.5 / 14)
+            self.assertIsNone(pc["baseline_summary"]["t_against_0_5"])
+        self.assertFalse(report["scientific_qualification"])
+
+    def test_paired_baseline_refuses_mismatched_or_incomplete_support(self):
+        mutations = [
+            lambda b: b.update(case_plan_sha256="0" * 64),
+            lambda b: b.update(mode="prospective_onset"),
+            lambda b: b["predictions"].pop(),
+            lambda b: b["predictions"].__setitem__(0, copy.deepcopy(b["predictions"][1])),
+            lambda b: b["predictions"][0].update(trial_id="synthetic_trial_01"),  # Training trial in first cell.
+            lambda b: b["predictions"][0].update(repeat=True),
+            lambda b: b["predictions"][0].update(predicted_label=True),
+            lambda b: b["predictions"][0].update(owner_target=1),
+        ]
+        o, c = fixture()
+        for i, mutate in enumerate(mutations):
+            with self.subTest(mutation=i):
+                baseline = copy.deepcopy(c)
+                mutate(baseline)
+                with self.assertRaises(s.Invalid):
+                    s.score(o, c, baseline)
+
+    def test_comparison_does_not_change_historical_statistics(self):
+        o, c = fixture()
+        plain, paired = s.score(o, c), s.score(o, c, c)
+        self.assertFalse(plain["comparison_present"])
+        for before, after in zip(plain["cells"], paired["cells"]):
+            for key in ("tp", "tn", "fp", "fn", "accuracy", "n_test"):
+                self.assertEqual(before[key], after[key])
+            self.assertEqual(after["paired_accuracy_delta"], 0)
+        for before, after in zip(plain["principal_components"], paired["principal_components"]):
+            self.assertEqual(before, {key: after[key] for key in before})
+
+    def test_historical_comparator_is_not_a_prospective_extension(self):
+        o, c = fixture("prospective_onset")
+        with self.assertRaisesRegex(s.Invalid, "historical_fig5e"):
+            s.score(o, c, c)
+
     def test_resampling_is_not_animal_replication(self):
         o, c = fixture()
         r = s.score(o, c)

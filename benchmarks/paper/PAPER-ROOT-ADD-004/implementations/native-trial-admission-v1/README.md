@@ -24,3 +24,36 @@ The 19-column header is verified against the names/order in the author helper. T
 `tests/test_native_trials.py` contains generated controls for the exhaustive outcome-code truth table, cue rounding, complete census retention, identity isolation, malformed inputs, missing response times, and the actual CLI's refusal to overwrite evidence. Generated checks cannot establish authentic preparation or native MATLAB parity.
 
 The original 18-person cohort, independent localizer training, all original eligible retrieval trials, ROC AUC time-generalization support, and participant-level comparison remain required. This component does not make a new participant split or use outcome significance as a performance score. The final article/source version, respiratory-event extraction, full cohort inventory, dependencies, author AUC results, and frozen improvement comparison remain unresolved.
+
+## Complete retrieval cohort preparation
+
+`native_cohort.py` composes the same metadata adapter over the original 18 participants, both learning categories (`object`, `scene`), and both retrieval blocks (`ret1`, `ret2`). It requires exactly those 72 cells before opening any metadata payload. It preserves every parsed row, source outcome code, exclusion reason, original and converted cue sample, and per-file byte/hash receipt. Session counts and participant summaries are preparation diagnostics, not decoding metrics.
+
+```sh
+python3 native_cohort.py retrieval-inputs.json retrieval-cohort.json
+```
+
+The input manifest has this structure; the abbreviated `sessions` list must be expanded to all 72 original cells:
+
+```json
+{
+  "schema": "respiration-native-retrieval-cohort-inputs-v1",
+  "data_kind": "authentic_public_source_metadata",
+  "sessions": [
+    {
+      "participant_id": "P02",
+      "category": "object",
+      "block": "ret1",
+      "recording_sample_rate_hz": 200,
+      "behavior": "metadata/P02_object_ret1.txt",
+      "markers": "metadata/P02_object_ret1.vmrk"
+    }
+  ]
+}
+```
+
+The example paths and sample rate illustrate the interface; they are not authenticated source locators. Resolve them against the actual source inventory and continuous recording. Relative paths resolve from the manifest directory. Declare each recording's own sampling rate; no global rate or ret1/pre, ret2/post interpretation is inferred. For generated controls, use `generated_engineering_control`. Source cells may appear in any order; output uses the pinned participant, category and block order. Missing, substituted and duplicate cells fail, as do the existing single-session parser/join failures. An invalid session does not create a partial cohort output; an existing output or source file is never replaced.
+
+The output is a **complete declared source-cell census**, not proof of authentic input identity or original trial completeness. Category and block remain manifest declarations; equal cue/behavior counts do not authenticate their positional join. No minimum label count, new exclusion, trial subsampling, localizer/retrieval split, or source-branch choice is added. The LMU archive's label masks are retained with their existing final-publication reconciliation hold. Both information conditions still require common authenticated inputs and matched exposure/budget protocols; this preparer does not create either protocol or establish reproduction or improvement.
+
+`tests/test_native_cohort.py` exercises the complete generated 72-cell route, exact all-row retention including recognition misses/unknown outcomes, per-recording cue clocks and receipts, missing/duplicate/substituted cells, source errors, relative-path CLI use, and output preservation. Run both affected metadata suites with `python3 -m unittest discover -s tests -p 'test_native*.py'`. No authentic dataset, EEG extraction, respiratory-event detection, native MATLAB execution or AUC surface was tested by these controls.

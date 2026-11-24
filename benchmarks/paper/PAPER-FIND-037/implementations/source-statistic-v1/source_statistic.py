@@ -117,14 +117,75 @@ def read_panel(body):
     return records
 
 
+def compare_panels(reference_records, candidate_records):
+    """Pair two complete panels for the same three source models.
+
+    This is arithmetic on supplied likelihoods, not a fit verifier or an
+    improvement decision. The fixed source penalties cancel within each model.
+    Compute differences before summing so small changes are not discarded by
+    subtracting two already-rounded cohort totals. No participant BIC is defined.
+    """
+    reference = reduce_panel(reference_records)
+    candidate = reduce_panel(candidate_records)
+    panels = [
+        {(row["participant_id"], row["model"]): float(row["log_likelihood"])
+         for row in records}
+        for records in (reference_records, candidate_records)
+    ]
+    models = {}
+    for model in MODEL_PARAMETERS:
+        differences = []
+        for participant in PARTICIPANTS:
+            key = (participant, model)
+            before, after = (panel[key] for panel in panels)
+            differences.append({
+                "participant_id": participant,
+                "reference_log_likelihood_nats": before,
+                "candidate_log_likelihood_nats": after,
+                "candidate_minus_reference_log_likelihood_nats": after - before,
+            })
+        total = math.fsum(row["candidate_minus_reference_log_likelihood_nats"]
+                          for row in differences)
+        models[model] = {
+            "paired_participant_count": len(differences),
+            "participant_differences": differences,
+            "candidate_minus_reference_sum_log_likelihood_nats": total,
+            "candidate_minus_reference_source_penalty": 0.0,
+            "candidate_minus_reference_literal_source_statistic": -2 * total,
+        }
+    return {
+        "schema_version": "freeenergy-paired-source-statistic/v1",
+        "task_id": "PAPER-FIND-037",
+        "scope": "paired_source_arithmetic_only",
+        "paired_fit_count": 75,
+        "reference": reference,
+        "candidate": candidate,
+        "models": models,
+        "difference_direction": "candidate_minus_reference; negative source-statistic change means lower supplied source statistic",
+        "same_source_models_and_likelihood_masks_authenticated": False,
+        "scientific_reproduction_verified": False,
+        "scientific_improvement_verified": False,
+        "readiness_promoted": False,
+    }
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", required=True, type=Path, help="Complete operator-exported likelihood CSV")
+    parser.add_argument("--reference", type=Path, help="Optional complete reference CSV; --input is the candidate in paired mode")
     parser.add_argument("--output", required=True, type=Path, help="New JSON result file; keep numerical results outside Git")
     args = parser.parse_args(argv)
     with args.input.open("rb") as stream:
         body = stream.read(INPUT_LIMIT + 1)
-    result = reduce_panel(read_panel(body))
+    records = read_panel(body)
+    if args.reference is None:
+        result = reduce_panel(records)
+    else:
+        with args.reference.open("rb") as stream:
+            reference_body = stream.read(INPUT_LIMIT + 1)
+        result = compare_panels(read_panel(reference_body), records)
+        result["reference_input_sha256"] = hashlib.sha256(reference_body).hexdigest()
+        result["candidate_input_sha256"] = hashlib.sha256(body).hexdigest()
     result["input_sha256"] = hashlib.sha256(body).hexdigest()
     output = json.dumps(result, indent=2, allow_nan=False) + "\n"
     with args.output.open("x", encoding="utf-8") as stream:

@@ -34,6 +34,10 @@ def _equal(a, b, path, errors):
 def score(reference, candidate):
     """Separate scientific and literal-deterministic scores; no unknown historical p-value target."""
     results = {name: [] for name in COMPONENTS}
+    # Historical v1 references retain their original cell/contrast-only score.
+    summary_component = "deterministic_figure_summary_reproduction"
+    if reference["schema"] == "tms-full-behavior-component-v2":
+        results[summary_component] = []
     if (type(candidate) is not dict or candidate.get("schema") != reference["schema"]
             or type(candidate.get("roster")) is not list
             or any(type(x) is not int for x in candidate["roster"])
@@ -56,6 +60,9 @@ def score(reference, candidate):
             for component in ("deterministic_figure_reproduction", "deterministic_helper_formula_reproduction"):
                 for key in COMPONENTS[component]:
                     _equal(e[key], c.get(key), metric + "/cells/" + str(i) + "/" + key, results[component])
+        if summary_component in results:
+            _equal(expected["figure_condition_summaries"], proposed.get("figure_condition_summaries"),
+                   metric + "/figure_condition_summaries", results[summary_component])
         contrasts = proposed["contrasts"]
         if type(contrasts) is not dict or set(contrasts) != set(expected["contrasts"]):
             return {"accepted": False, "failure": "contrast census", "whole_task_qualified": False}

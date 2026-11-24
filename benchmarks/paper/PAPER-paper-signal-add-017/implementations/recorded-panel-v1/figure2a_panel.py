@@ -17,6 +17,7 @@ REPLAY_MODELS = ("S1-B", "S1-F", "S2-B")
 MODELS = REPLAY_MODELS + ("S2-F",)
 SCHEMA = "finger017-recorded-panel-assessment/v1"
 PREDICTIONS_SCHEMA = "finger017-recorded-panel-predictions/v1"
+SUBMISSION_SCHEMA = "finger017-recorded-replay-submission/v1"
 
 
 
@@ -235,3 +236,79 @@ def compare_mi_me(assessments, authors, candidates, *, expected_assessment_sha25
                 expected_condition=condition) for condition in ("MI", "ME")},
             "paper_win": None, "scientific_outcome": "unknown", "readiness_promoted": False,
             "scope": "two complete declared recorded-decoding panels, never pooled across MI/ME"}
+
+
+def observation_manifest(assessment, *, expected_assessment_sha256, expected_condition="MI"):
+    """Export complete source/window identities without targets or online outputs.
+
+    This is a delivery manifest, not an EEG packet or permission to expose the
+    original MAT files. An independently qualified exporter must supply only
+    permitted EEG observations aligned to these identities.
+    """
+    trials, _ = validate_assessment(assessment, expected_sha256=expected_assessment_sha256,
+                                     expected_condition=expected_condition)
+    runs = []
+    for run in assessment["runs"]:
+        runs.append({field: run[field] for field in
+                     ("subject", "nclass", "run", "member", "source_sha256")})
+        runs[-1]["trials"] = [
+            {"id": trial["id"], "start_sample_zero_based": trial["start_sample_zero_based"],
+             "length_samples": trial["length_samples"],
+             "window_ids": list(trials[trial["id"]]["window_ids"])}
+            for trial in run["trials"]]
+    return {"schema": "finger017-recorded-observation-manifest/v1",
+            "condition": expected_condition,
+            "assessment_sha256": expected_assessment_sha256, "runs": runs}
+
+
+def _operator_panel(assessment, submission, expected_assessment_sha256, expected_condition):
+    """Join replay-only outputs with the evaluator's private recorded control."""
+    trials, _ = validate_assessment(assessment, expected_sha256=expected_assessment_sha256,
+                                     expected_condition=expected_condition)
+    keys(submission, ("schema", "assessment_sha256", "models"), "replay submission")
+    require(submission["schema"] == SUBMISSION_SCHEMA, "wrong replay submission schema")
+    require(submission["assessment_sha256"] == expected_assessment_sha256,
+            "submission assessment pin mismatch")
+    keys(submission["models"], REPLAY_MODELS, "replay-only source model panel")
+    models = dict(submission["models"])
+    models["S2-F"] = {
+        "role": "recorded_online_control",
+        "recorded_control_receipt_sha256": assessment["recorded_control_receipt_sha256"],
+        "trial_predictions": {tid: trial["recorded_prediction"] for tid, trial in trials.items()}}
+    return {"schema": PREDICTIONS_SCHEMA, "assessment_sha256": expected_assessment_sha256,
+            "models": models}
+
+
+def evaluate_replay_submission(assessment, submission, *, expected_assessment_sha256,
+                               expected_condition="MI"):
+    """Score all original arms without asking a participant for private S2-F."""
+    predictions = _operator_panel(assessment, submission, expected_assessment_sha256,
+                                  expected_condition)
+    return evaluate_panel(assessment, predictions,
+                          expected_assessment_sha256=expected_assessment_sha256,
+                          expected_condition=expected_condition)
+
+
+def compare_replay_submissions(assessment, author, candidate, *, expected_assessment_sha256,
+                               expected_condition="MI"):
+    """Pair the full replay support while keeping recorded S2-F operator-owned."""
+    before = _operator_panel(assessment, author, expected_assessment_sha256, expected_condition)
+    after = _operator_panel(assessment, candidate, expected_assessment_sha256, expected_condition)
+    return compare_complete_panels(assessment, before, after,
+                                   expected_assessment_sha256=expected_assessment_sha256,
+                                   expected_condition=expected_condition)
+
+
+def compare_mi_me_submissions(assessments, authors, candidates, *, expected_assessment_sha256s):
+    """Evaluate both separate original panels from replay-only submissions."""
+    for label, obj in (("assessments", assessments), ("authors", authors),
+                       ("candidates", candidates), ("external pins", expected_assessment_sha256s)):
+        keys(obj, ("MI", "ME"), label)
+    before, after = {}, {}
+    for condition in ("MI", "ME"):
+        before[condition] = _operator_panel(assessments[condition], authors[condition],
+                                            expected_assessment_sha256s[condition], condition)
+        after[condition] = _operator_panel(assessments[condition], candidates[condition],
+                                           expected_assessment_sha256s[condition], condition)
+    return compare_mi_me(assessments, before, after,
+                         expected_assessment_sha256s=expected_assessment_sha256s)

@@ -53,6 +53,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 
 - [Initial evaluator v1](implementations/initial-evaluator-v1) — Calibration only.
   Scope: Feature-level speech evaluation using speech-only DTW-aligned Pearson correlation across 40 Mel bands and paired-sentence WER/PER summarized across seven listeners, with declared trial/session coverage and exposure checks. Native frontend/DTW/tokenization parity, authentic trial membership, decoder training, waveform generation, original ten-fold controls and protected references remain held. No clinical or whole-paper result is established; scientific qualification is unknown. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
+- [Biosignal panel v1](implementations/biosignal-panel-v1) — Reviewed source component.
+  Scope: Complete declared biosignal-control panel assessment over 240 trials, five modalities, ten held folds and three systems using unchanged acoustic arithmetic. Historical trial/model/fold identity, native frontend parity and scientific reproduction/improvement remain unqualified.
 - [Source chronology v1](implementations/source-chronology-v1) — Reviewed source component.
   Scope: Published decoder chronology recovery. This registration records the reviewed source scope and its generated controls only; it does not activate a runtime or establish authentic-data execution, native interpretation, model performance or scientific qualification.
 

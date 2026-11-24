@@ -92,24 +92,42 @@ class Controls(unittest.TestCase):
             for index in range(count):
                 path=base/f'f{index}';path.write_bytes(b'x')
                 document['source_files'][str(path.relative_to(root))]={'bytes':1,'sha256':hashlib.sha256(b'x').hexdigest()}
+        for name in ('COMPARISON.md', 'compare_exports.py', 'tests/comparison_controls.py'):
+            path=root/'companions'/name;path.parent.mkdir(exist_ok=True)
+            path.write_bytes(b'x')
+            document['source_files'][str(path.relative_to(root))]={'bytes':1,'sha256':hashlib.sha256(b'x').hexdigest()}
         (root/'schema.json').write_bytes(b'{}')
         document['source_files']['schema.json']={'bytes':2,'sha256':hashlib.sha256(b'{}').hexdigest()}
         return root,document
-    def test_composite_exact_nine_plus_eight_and_schema(self):
+    def test_composite_exact_nine_plus_eleven_and_schema(self):
         root,document=self.composite_source();m.authenticate_sources(document,root)
+        self.assertEqual(len(document['source_files']),21)
+        # The previous eighteen-file closure cannot silently admit the extension.
+        legacy=json.loads(json.dumps(document))
+        for name in ('COMPARISON.md', 'compare_exports.py', 'tests/comparison_controls.py'):
+            del legacy['source_files']['companions/'+name]
+        with self.assertRaisesRegex(ValueError,'cardinality'):m.authenticate_sources(legacy,root)
     def test_composite_companion_extra_and_missing_refused(self):
         root,document=self.composite_source();extra=root/'companions'/'extra';extra.write_bytes(b'x')
         with self.assertRaisesRegex(ValueError,'unexpected'):m.authenticate_sources(document,root)
-        extra.unlink();(root/'companions'/'f0').unlink()
-        with self.assertRaisesRegex(ValueError,'membership mismatch'):m.authenticate_sources(document,root)
+        extra.unlink()
+        for name in ('f0', 'COMPARISON.md', 'compare_exports.py', 'tests/comparison_controls.py'):
+            path=root/'companions'/name;path.unlink()
+            with self.subTest(name=name),self.assertRaisesRegex(ValueError,'membership mismatch'):
+                m.authenticate_sources(document,root)
+            path.write_bytes(b'x')
     def test_composite_unlisted_source_and_pin_tamper_refused(self):
         root,document=self.composite_source();document['source_files']['foreign.json']={'bytes':2,'sha256':'0'*64}
-        with self.assertRaisesRegex(ValueError,'only seventeen'):m.authenticate_sources(document,root)
-        del document['source_files']['foreign.json'];(root/'companions'/'f0').write_bytes(b'y')
-        with self.assertRaisesRegex(ValueError,'pin mismatch'):m.authenticate_sources(document,root)
+        with self.assertRaisesRegex(ValueError,'only twenty'):m.authenticate_sources(document,root)
+        del document['source_files']['foreign.json']
+        for name in ('f0', 'COMPARISON.md', 'compare_exports.py', 'tests/comparison_controls.py'):
+            path=root/'companions'/name;path.write_bytes(b'y')
+            with self.subTest(name=name),self.assertRaisesRegex(ValueError,'pin mismatch'):
+                m.authenticate_sources(document,root)
+            path.write_bytes(b'x')
     def test_composite_commands_mounts_and_distinct_results(self):
         root,document=self.composite_source()
-        document.update({'schema':'exp003-generated-r-environment/v2','source_commit':'frozen','image':{'identity':'rocker/r-ver@sha256:'+'a'*64,'config_digest':'sha256:'+'b'*64},'jsonlite':{},'parse_expression':'parse-seven-only'})
+        document.update({'schema':'exp003-generated-r-environment/v3','source_commit':'frozen','namespace_revision':{'source_commit':'generated-extension'},'image':{'identity':'rocker/r-ver@sha256:'+'a'*64,'config_digest':'sha256:'+'b'*64},'jsonlite':{},'parse_expression':'parse-seven-only'})
         descriptor=self.root/'environment.json';raw=json.dumps(document).encode();descriptor.write_bytes(raw)
         archive=self.root/'package.tar.gz';archive.write_bytes(b'not installed')
         output=self.root/'output';captured=[]
@@ -136,6 +154,7 @@ class Controls(unittest.TestCase):
         result=json.loads((output/'result.json').read_text())
         self.assertEqual(result['suites'],{'collector':{'checks':219,'skips':0},'native_artifacts':{'checks':237,'skips':0}})
         self.assertEqual(result['parsed_files'],7);self.assertFalse(result['scientific_qualification'])
+        self.assertEqual(result['namespace_revision'],document['namespace_revision'])
 
     def test_response_read_is_extent_plus_one(self):
         response=io.BytesIO(b'abcdef');raw=bytearray();receipt={}

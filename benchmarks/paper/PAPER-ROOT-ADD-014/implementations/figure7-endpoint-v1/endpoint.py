@@ -226,10 +226,37 @@ def evaluate_predictions(selection, candidate, *, expected_selection_sha256, loa
             for method in ('candidate', 'author')}
         for metric in summaries
     }
+    # Preserve the complete source-ordered distribution for operator audit and
+    # figure reconstruction. Summary medians cannot recover these paired values.
+    per_electrode = []
+    for i, (participant, electrode_id) in enumerate(selection.selected):
+        per_electrode.append({
+            'participant': participant, 'electrode_id': electrode_id,
+            'metrics': {
+                metric: {
+                    signal: {
+                        'candidate_percent': paired['candidate'][i],
+                        'author_percent': paired['author'][i],
+                        'paired_difference_pp': _delta(paired['candidate'][i], paired['author'][i]),
+                    }
+                    for signal, paired in signals.items()
+                }
+                for metric, signals in values.items()
+            },
+            'baseline_correction_contrasts': {
+                metric: {
+                    method + '_corrected_minus_raw_pp': _delta(
+                        signals['corrected_alpha'][method][i], signals['raw_alpha'][method][i])
+                    for method in ('candidate', 'author')
+                }
+                for metric, signals in values.items()
+            },
+        })
     return {'schema': 'visual_alpha_figure7_prediction_report_v1',
             'selection_sha256': selection.selection_sha256,
             'electrodes': 31, 'selected_participants': len({p for p, _ in selection.selected}),
             'primary': 'source_cv.corrected_alpha.difference_of_medians_pp',
             'metrics': summaries, 'baseline_correction_contrasts': contrasts,
+            'per_electrode': per_electrode,
             'uncertainty': 'not_estimated; electrodes remain nested within participants',
             'qualification': 'software endpoint component; source identities and native replay require independent qualification'}

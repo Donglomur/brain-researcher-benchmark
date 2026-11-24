@@ -37,6 +37,60 @@ the three finite 90th-percentile outputs. It rejects missing, extra, mismatched
 or out-of-support values. **A hash identifies operands; it does not authenticate
 a claimed MATLAB calculation.** Generated control receipts are labeled as such.
 
+## Preparing the original Figure 3 input
+
+`prepare.py` adds the three upstream transformations in the pinned
+[Figure 3 caller](https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/EstrousRPEPaper/process/ProcessData_Figure3.m):
+convert rewards with the source
+[`convertreward.m`](https://github.com/constantinoplelab/published/blob/b7b68ca8c107d8ce4a061e16da214307f175c3e5/EstrousRPEPaper/process/behavior/convertreward.m),
+set each session's first ITI to missing, then set ITIs **strictly above** the
+native 99th percentile to missing. The percentile operands are the complete
+ITI vector **after** session-first masking, including all original missing
+positions. Neither percentile estimation nor MATLAB missing-value semantics
+are inferred by Python. The native result remains an external requirement.
+[Preparation source pins](PREPARATION_SOURCES.json) identify this added scope.
+
+Raw input has the same four top-level fields and `rat_trial` arrays as the
+model input below, but `preprocessing` must be `author_figure3_raw_ratTrial`.
+Reward values are the original native `ratTrial.reward` values. Both steps of
+`convertreward` are preserved: standard volume pairs 4/5, 8/10, 16/20, 32/40,
+and 64/80 become 5, 10, 20, 40, and 80 respectively. Unlisted values, including
+zero and negative values, are preserved by the source. Surviving input levels
+1, 2 and 3 become 5, 10 and 20. No new reward-validity filter is introduced.
+
+```sh
+python3 prepare.py requests raw.json --output preprocessing-request.json
+python3 prepare.py prepare raw.json --receipt native-p99.json --output prepared.json --audit-output preparation-audit.json
+python3 model.py requests prepared.json --output recurrence-request.json
+```
+
+The `native-p99.json` receipt has exactly `schema_version: 1`, the matching
+`input_kind`, `request_sha256`, a nonempty `producer` declaration, and `values`
+with the single key `iti_p99`. Its request hash binds the complete raw input
+identity and masked operands. The finite value must lie within the finite
+operand support. **These checks do not authenticate native execution or prove
+that the value is the 99th percentile.** Generated tests deliberately supply
+branch-control values and make no percentile-parity claim.
+
+The prepared JSON is directly accepted by `model.py`. The separate mandatory
+audit binds its hash to the raw input, statistic request and receipt and
+records every original row, reward transformation, first-ITI assignment,
+outlier mask and final recurrence inclusion. No row, trial identity or
+`ntrials` entry is removed. Zero-length sessions remain in the partition and
+repeat the source assignment at the next session's first row. A trailing
+zero-length session would extend MATLAB's ITI vector beyond the declared
+original row count; this unsupported alignment is rejected explicitly.
+All-missing percentile operands, fewer than two final retained ITIs, and
+retained rows with missing rewards are rejected, rather than silently
+subsetting or emitting an input that the recurrence cannot consume.
+
+Both output paths must be distinct and absent. If an I/O failure occurs
+between writes, any partial artifact is retained for inspection; the command
+returns failure and both complete outputs are required before use. Input and
+output hashes identify declared exports, not authentic original population
+membership. This fills an input-preparation gap without establishing native
+preparation, numerical parity, reproduction or improvement readiness.
+
 ## Input and commands
 
 The input has exactly `schema_version: 1`, `input_kind`, `preprocessing` equal

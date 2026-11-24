@@ -181,3 +181,56 @@ def build(spec, output, limits):
               'logical_IO_before_completion_record': used.copy()}
     completion = save('PRIMARY_CTF_INPUTS.json', encoded(result))
     return {'inputs': result, 'completion': completion, 'logical_IO': used.copy()}
+
+
+def main(argv=None):
+    """Bounded local operator entry; no download, model fit or runtime admission."""
+    import argparse
+    import re
+    import sys
+
+    parser = argparse.ArgumentParser(
+        description='Prepare the complete original65-person CTF primary inputs from local sources. '
+                    'This does not fit models or qualify scientific outcomes.')
+
+    def positive(value):
+        try:
+            number = int(value)
+        except ValueError as error:
+            raise argparse.ArgumentTypeError('a positive integer is required') from error
+        if number <= 0:
+            raise argparse.ArgumentTypeError('a positive integer is required')
+        return number
+
+    def digest(value):
+        if re.fullmatch('[0-9a-f]{64}', value) is None:
+            raise argparse.ArgumentTypeError('a lowercase SHA-256 digest is required')
+        return value
+
+    parser.add_argument('--spec', required=True, help='Local strict JSON with ctf_archive and ctf_directory descriptors')
+    parser.add_argument('--spec-bytes', type=positive, required=True, help='Exact specification byte count; charged to read budget')
+    parser.add_argument('--spec-sha256', type=digest, required=True, help='Externally selected specification identity')
+    parser.add_argument('--output', required=True, help='Fresh output directory; never resumed or overwritten')
+    parser.add_argument('--read-bytes', type=positive, required=True, help='Total logical read limit including specification')
+    parser.add_argument('--write-bytes', type=positive, required=True, help='Preparation output limit including completion record')
+    parser.add_argument('--array-bytes', type=positive, required=True, help='Per-array limit, not a peak RAM limit')
+    args = parser.parse_args(argv)
+    root = Path(args.output)
+    need(not root.exists() and not root.is_symlink(), 'Fresh primary-CTF output root')
+    need(args.spec_bytes < args.read_bytes, 'Specification leaves a positive primary-input read allocation')
+    spec_pin = {'bytes': args.spec_bytes, 'sha256': args.spec_sha256}
+    spec = strict(capture(args.spec, args.spec_bytes, spec_pin))
+    result = build(spec, root, {'read_bytes': args.read_bytes - args.spec_bytes,
+                              'write_bytes': args.write_bytes, 'array_bytes': args.array_bytes})
+    # Emit a receipt only after build has published its full completion record.
+    receipt = {'schema': 'osl_primary_ctf_cli_receipt_v1', 'task_id': TASK,
+               'specification': spec_pin, 'preparation': result,
+               'logical_IO': {'read': args.spec_bytes + result['logical_IO']['read'],
+                              'write': result['logical_IO']['write']},
+               'scientific_qualification': False}
+    sys.stdout.write(encoded(receipt).decode('utf-8'))
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

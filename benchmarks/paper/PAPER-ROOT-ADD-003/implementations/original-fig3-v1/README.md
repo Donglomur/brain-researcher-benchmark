@@ -37,3 +37,42 @@ maintained numerical revision.
 The new `test_centering_regression.py` controls use generated values and an
 independent exact-rational/80-digit Decimal oracle. They do not qualify an
 authentic reference, candidate run, reproduction or improvement.
+
+## Common participant inputs
+
+`prepare_inputs.py` supplies an operator preparation path for the selected Fig. 3
+endpoint. After authentic preparation is authorized, run:
+
+```sh
+python3 prepare_inputs.py --archive /operator/data.tar --output-dir /operator/new_common_inputs
+```
+
+The archive passes the same size, SHA256, member and column authentication used
+by the evaluator. Preparation requires every original training cell (five people
+848/853/865/875/876 × 1,000 baseline items), all three evaluation participants ×
+1,500 sentence identities, and identical sentence/condition identity wherever
+an item recurs. It retains source `response_target` units and per-person values;
+the official fit averages the five training people within item. Its source is the
+[pinned author fit script](https://raw.githubusercontent.com/gretatuckute/drive_suppress_brains/7175a12dc25f8765e2fb2196d71c2ea98e97604b/src/run_analyses/fit_mapping.py),
+argument defaults and LOAD NEURAL TARGET block.
+
+The new directory contains `sentences.csv` (`item_id,sentence`),
+`training_responses.csv` (`target_UID,item_id,response_target`), and a manifest
+with their exact hashes and source provenance. Final evaluation responses are
+never converted or exported; conditions, selection metadata, saved author
+predictions and raw BOLD columns are excluded. The output is common to both
+paper+data and paper+data+author-code conditions. Only the latter arm may also
+receive separately pinned official method code. The exporter supplies text and
+training responses, not GPT2-XL activations, fitted weights or a model run.
+Identifiers are joins only, never condition proxies or model covariates.
+
+Output creation requires a new directory and does not overwrite an earlier
+packet. If a filesystem write fails, a partial new directory may remain; it is
+not a complete packet unless the final manifest exists and its file hashes
+verify. This operator function must run outside the participant sandbox. It
+cannot enforce sandbox isolation, paired resource budgets or candidate freeze;
+the public historical exposure of the source responses remains disclosed.
+The generated controls validate complete source support, training/evaluation
+sentence agreement, field exclusion, exact CSV quoting and the authenticated
+loader path. No authentic input preparation, scientific run, reproduction or
+improvement is established by these controls.

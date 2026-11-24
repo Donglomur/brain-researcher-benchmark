@@ -1,8 +1,8 @@
 # Original BANC synapse evaluation: source count reconstruction
 
-This component authenticates the author's 16-cutout evaluation CSV and reconstructs its pooled precision, recall and F1 from integer TP/FP/FN. It preserves the cutout IDs, neuropils, regions and per-cutout diagnostics. It is an executable source-reproduction component for the same synaptic-link endpoint selected by the current task. It is neither a detector rerun nor an admitted paper-improvement evaluator.
+This component authenticates the author's 16-cutout evaluation CSV and reconstructs its pooled precision, recall and F1 from integer TP/FP/FN. It preserves the cutout IDs, neuropils, regions and per-cutout diagnostics. It is an executable count-reconstruction component for the retained secondary synaptic-link endpoint (Extended Data Figure 2b). The [authoritative task](../../task.json) retains sensory-to-effector graph organization as its primary scientific scope; reconstructing these synapse counts cannot discharge primary graph reproduction or improvement. This component is neither a detector rerun nor an admitted paper-improvement evaluator.
 
-The user now requests reproduction and improvement as separate first-class outcomes. For this component, the reproduction result is reconstruction of the released count table. Full detector reproduction, paired paper+data versus paper+data+author-code delivery, and improvement remain unqualified. This component does not alter the historical graph runtime or canonical task/contract.
+For this retained secondary component, the assessed result is reconstruction of the released count table. Full detector reproduction, paired paper+data versus paper+data+author-code delivery, and detector improvement remain unqualified. The [primary outcome contract](../../outcomes.v1.json) remains unavailable; this component does not select a primary numerical panel, justify a primary improvement comparison, or alter the historical graph runtime or canonical task/contract.
 
 ## Source recovered
 

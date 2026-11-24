@@ -426,8 +426,8 @@ jobs:
           rows = [
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-021/docs/initial-evaluator-v1.md",
-                  "bytes": 10873,
-                  "sha256": "0ceeb8c9ca1117ac71838d0dc457f0366bfd13aabe8f7ad577e07244096b86fb"
+                  "bytes": 13039,
+                  "sha256": "55efdd8701ccffe655ce5ce69dd246d7e68f95ec4cf7a6a0b0132428646fbe15"
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-021/implementations/initial-evaluator-v1/README.md",
@@ -436,8 +436,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-021/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 25468,
-                  "sha256": "c4c7750e34f42767693037794d4e333e23d3d50b003efa9b3bd2995cfc23b497"
+                  "bytes": 27763,
+                  "sha256": "6739acc6e36ffba46e9a0e4dc59e62198a0bed558c63cb37a147cec5c1fd7a68"
               },
               {
                   "path": "benchmarks/paper/PAPER-ROOT-ADD-021/implementations/initial-evaluator-v1/provenance.json",
@@ -698,6 +698,11 @@ jobs:
                   "path": "benchmarks/paper/PAPER-paper-method-add-008/implementations/initial-evaluator-v1/tests/test_prepare_exports.py",
                   "bytes": 7156,
                   "sha256": "8dadd3cab04fa2a2038ce52894379b63675fc2cfb7c17572b02e6161a4eb4fd2"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-ROOT-ADD-021/implementations/initial-evaluator-v1/tests/test_window_audit.py",
+                  "bytes": 5512,
+                  "sha256": "84d68a226f759509738436bcc6c84385bf44eafc46e07984594706e1dcfee8d9"
               }
           ]
           packages = [
@@ -710,8 +715,8 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-replacement-012/implementations/initial-evaluator-v1",
               "benchmarks/paper/PAPER-paper-signal-add-013/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 55 > 0
-          assert sum(row['bytes'] for row in rows) == 3048006 <= 33554432
+          assert len(rows) == 56 > 0
+          assert sum(row['bytes'] for row in rows) == 3057979 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -754,7 +759,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 3048006,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 3057979,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -1342,6 +1347,15 @@ jobs:
                             'generated_controls_only': True, 'scientific_qualification': False}))
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
+      - name: Generated controls (test_window_audit.py)
+        shell: bash
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/paper/PAPER-ROOT-ADD-021/implementations/initial-evaluator-v1/tests/test_window_audit.py
 
   expansion-d-paper-paper-method-010:
     name: Expansion D PAPER-paper-method-010

@@ -239,3 +239,73 @@ def admit_then_derive(manifest_raw, expected_manifest_sha256, panel_blobs,
     need(callable(private_derivation), "private derivation callback")
     admitted = admit(manifest_raw, expected_manifest_sha256, panel_blobs, operator_closures)
     return {"intake": admitted.receipt(), "private_derivation": private_derivation(admitted)}
+
+
+@dataclass(frozen=True)
+class MatchedConditions:
+    """Two complete arms and their shared target-free scientific commitments."""
+    common_support_raw: bytes
+    bundles: tuple
+
+    def receipt(self):
+        return {"schema": "thalamus_3c_matched_conditions_intake_receipt_v1",
+                "task_id": TASK,
+                "common_support_sha256": digest(self.common_support_raw),
+                "conditions": {bundle.information_condition: bundle.receipt()
+                               for bundle in self.bundles},
+                "scientific_qualification": "not_established",
+                "paper_win": None, "current_sota": "not_assessed"}
+
+
+def _common_support(manifest):
+    """Keep every scientific support field, excluding arm-specific identities.
+
+    Candidate methods, output IDs and producer IDs may differ between arms.
+    The qualified author recipe and each ordered original shuffle identity must
+    match, including repetitions. Prediction values are not equality targets.
+    """
+    shared = {key: value for key, value in manifest.items()
+              if key not in ("information_condition", "panels")}
+    shared["reference_family"] = [
+        {key: panel[key] for key in ("role", "program_sha256", "control_identity_sha256")}
+        for panel in manifest["panels"][1:]]
+    return json.dumps(shared, sort_keys=True, separators=(",", ":"),
+                      ensure_ascii=False, allow_nan=False).encode("utf-8")
+
+
+def admit_matched_conditions(condition_bundles):
+    """Admit both arms only when their entire scientific support matches.
+
+    Each value is the four named operator arguments to ``admit``. This is an
+    optional joint path for matched-condition assessment; single-condition
+    admission and its independent outcome remain available. Source qualification,
+    exposure and cumulative-budget enforcement remain external operator duties.
+    """
+    keys(condition_bundles, INFORMATION, "exactly both information conditions")
+    admitted, common = [], None
+    for condition in INFORMATION:
+        args = condition_bundles[condition]
+        keys(args, ("manifest_raw", "expected_manifest_sha256", "panel_blobs",
+                    "operator_closures"), "exact operator bundle arguments")
+        bundle = admit(**args)
+        need(bundle.information_condition == condition, "arm matches named information condition")
+        manifest, _ = _manifest(args["manifest_raw"], args["expected_manifest_sha256"])
+        support = _common_support(manifest)
+        if common is None:
+            common = support
+        else:
+            need(support == common,
+                 "identical observations, full original support, qualification and reference family")
+        admitted.append(bundle)
+    return MatchedConditions(common, tuple(admitted))
+
+
+def admit_matched_then_derive(condition_bundles, private_derivation):
+    """Call the trusted derivation once, after both complete arms match.
+
+    No private read is requested on missing, mismatched or incomplete support.
+    Callback exceptions propagate without retries or relabelling as a paper win.
+    """
+    need(callable(private_derivation), "private derivation callback")
+    matched = admit_matched_conditions(condition_bundles)
+    return {"intake": matched.receipt(), "private_derivation": private_derivation(matched)}

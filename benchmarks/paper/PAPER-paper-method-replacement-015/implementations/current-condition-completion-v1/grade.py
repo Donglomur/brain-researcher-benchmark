@@ -273,6 +273,81 @@ def _validate_public_candidates(loaded, root, host, plan, pair, roster, folds, b
     return candidates
 
 
+def _paired_summary(rows):
+    """Descriptive equal-neuron deltas; never subtract unmatched arm means."""
+    values = [row["delta"] for row in rows if row["delta"] is not None]
+    mean = median = None
+    if values:
+        scale = max(abs(value) for value in values)
+        mean = math.fsum(value / scale for value in values) / len(values) * scale if scale else 0.0
+        ordered = sorted(values)
+        half = len(ordered) // 2
+        median = (ordered[half] if len(ordered) % 2
+                  else ordered[half - 1] / 2 + ordered[half] / 2)
+    statuses = {}
+    for row in rows:
+        statuses[row["status"]] = statuses.get(row["status"], 0) + 1
+    return {"expected_neurons": len(rows), "defined_neurons": len(values),
+            "undefined_neurons": len(rows) - len(values), "status_counts": statuses,
+            "mean": mean, "median": median}
+
+
+def paired_access_summary(results, expected_neurons):
+    """Join existing candidate metrics by neuron, retaining undefined operands.
+
+    This compares the two information conditions on the adopted current bank.
+    It adds no source-paper metric, uncertainty estimate or success criterion.
+    """
+    need(set(results) == set(ARMS) and expected_neurons, "both complete access results required")
+    left, right = (results[arm] for arm in ARMS)
+    for key in ("condition_id", "bank_manifest_sha256", "operator_reference_manifest_sha256", "coverage"):
+        need(left[key] == right[key], "paired results require identical bank, reference and coverage")
+    rows = [result["metrics"]["per_neuron"] for result in (left, right)]
+    need(all(set(row) == set(expected_neurons) for row in rows), "exact original neuron pair required")
+    directions = {"correlation": "higher_is_better", "normalized_l1": "lower_is_better",
+                  "signed_bias": "signed_change_only_not_an_improvement_direction"}
+    paired = {}
+    for identity, cohort in sorted(expected_neurons.items()):
+        a, b = (row[identity] for row in rows)
+        need(all(a[key] == b[key] for key in ("total_bins", "scored_bins", "sampling_rate_hz")),
+             "paired neuron requires identical scored support")
+        values = {}
+        for metric in directions:
+            operands = {}
+            for arm, row in zip(ARMS, (a, b)):
+                candidate = row["methods"]["candidate"]
+                source = candidate["correlation"] if metric == "correlation" else candidate["rate_diagnostics"]
+                value = source["value" if metric == "correlation" else metric]
+                status = source["status"]
+                need((status == "defined" and _finite(value)) or (status != "defined" and value is None),
+                     "paired metric value and definition status must agree")
+                operands[arm] = {"value": value, "status": status}
+            av, bv = (operands[arm]["value"] for arm in ARMS)
+            delta = None
+            if av is None or bv is None:
+                status = ("both_undefined" if av is None and bv is None else
+                          "paper_data_undefined" if av is None else "paper_data_author_code_undefined")
+            else:
+                delta = bv - av
+                status = "defined" if math.isfinite(delta) else "unrepresentable_delta"
+                if status != "defined":
+                    delta = None
+            values[metric] = {"operands": operands, "delta": delta, "status": status}
+        paired[identity] = {"cohort": cohort, "scored_bins": a["scored_bins"], "metrics": values}
+    cohorts = {}
+    for cohort in sorted(set(expected_neurons.values())):
+        identities = sorted(identity for identity, group in expected_neurons.items() if group == cohort)
+        cohorts[cohort] = {"neuron_ids": identities, "metrics": {
+            metric: _paired_summary([paired[identity]["metrics"][metric] for identity in identities])
+            for metric in directions}}
+    return {"difference": "paper_data_author_code_minus_paper_data",
+            "aggregation": "within_neuron_delta_then_equal_neuron_separate_cohort_summary",
+            "metric_directions": directions, "per_neuron": paired, "cohorts": cohorts,
+            "rate_diagnostics_are_not_qualified_historical_bias_error": True,
+            "uncertainty_or_superiority_rule_defined": False,
+            "scientific_improvement_established": False}
+
+
 def grade_pair(attempt_root, *, host_exit_sha256, source_sha256, bank_root,
                reference_root, reference_manifest_sha256, loaded=None):
     """Internal injected module seam is for generated controls, never CLI input."""
@@ -295,7 +370,9 @@ def grade_pair(attempt_root, *, host_exit_sha256, source_sha256, bank_root,
             "bank_manifest_sha256": BANK_SHA, "operator_reference_manifest_sha256": reference_manifest_sha256,
             "closed_contexts": 88, "validated_recording_predictions": 232,
             "both_public_candidates_validated_before_protected_arrays": True,
-            "results": results, "reference_qualification_established": False,
+            "results": results,
+            "paired_access_summary": paired_access_summary(results, roster["expected_neurons"]),
+            "reference_qualification_established": False,
             "historical_paper_reproduction_established": False,
             "paper_improvement_or_SOTA_established": False,
             "external_outer_exit_independently_validated_by_this_grader": False,

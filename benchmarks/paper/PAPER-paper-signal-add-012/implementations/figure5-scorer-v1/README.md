@@ -2,7 +2,8 @@
 
 `scorer.py` supplies the missing **prediction metric computation** for the active
 paper-improvement contract: all 19 Dataset-1 participants in Figure 5b,c. It
-computes balanced accuracy and tie-correct ROC AUC for each participant, equal
+computes balanced accuracy, tie-correct ROC AUC and the exact empirical ROC
+curve for each participant, equal
 participant means, descriptive subject SEM, and paired candidate-minus-author
 differences. Reproduction and improvement are separate first-class outcomes:
 the report retains each arm's offset from the rounded source anchors separately
@@ -103,6 +104,25 @@ python scorer.py --targets /operator/frozen-targets.json \
 Paths above are illustrative, not artifacts. No authentic manifest or predictions
 are bundled. The CLI prevents its output from overwriting an input file.
 
+## Retained ROC curve diagnostics
+
+Each participant record in each arm also includes `roc_curve`: an ordered list
+of `{threshold, false_positive_rate, true_positive_rate}` objects. It starts at
+(0, 0) with a JSON `null` threshold meaning a cutoff above every supplied finite
+score. Each remaining point uses `score_awake >= threshold`, with thresholds in
+descending order; all tied scores enter together. The final point is (1, 1).
+No intermediate points are dropped, so vertical segments and tied-score steps
+remain available. The trapezoidal area under this empirical curve equals the
+rank-based `roc_auc`, including half credit for ties.
+
+These are separate participant diagnostics on the frozen original support,
+retained for both author and candidate. They are operator-only alongside the
+other detailed scores and never select the method's hard-decision threshold.
+The scorer does not pool scores across participants, average curves, or infer
+the paper's `source_roc_summary`. The original Figure 5c curve construction and
+its relationship to participant-macro AUC still require authentication; these
+curves are useful inputs to that work, not evidence that it is complete.
+
 ## Interpretation and remaining work
 
 The scorer makes no reproduction, improvement, pass/fail, or readiness decision.
@@ -122,7 +142,8 @@ as independent or imposing an unqualified significance test.
 `test_scorer.py` contains generated controls with 19 fictional identities: a
 hand-derived tie case; an independent pairwise AUC oracle over 200 generated
 cases; unequal window counts exposing pooled-versus-macro aggregation; score
-versus decision separation; reordered observations; missing/extra/duplicate
+versus decision separation; exact tied-threshold ROC coordinates, independent
+threshold/count checks and curve-area equality; reordered observations; missing/extra/duplicate
 windows; incomplete rosters and missing classes; invalid values; and a CLI
 roundtrip. They establish software behavior only. Tests use the shared bounded
 test pool during the parallel build; see the external handoff for actual runs.

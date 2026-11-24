@@ -25,7 +25,7 @@ MAX_COMPRESSED = 65536
 MAX_EXPANDED = 4 * 1024 * 1024
 MAX_ENTRIES = 128
 MAX_REPORT = 524288
-REPORT_SHAPE_BOUND = 403656
+REPORT_SHAPE_BOUND = 521592
 MAX_LITERAL_JSON = 96
 S = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
 R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
@@ -103,7 +103,7 @@ def bounded_cell(cell):
 def project_report(report):
     """Bound emitted identities only; complete-value groups/counts are already fixed."""
     result = dict(report)
-    result["schema"] = "food-ripples-workbook-lineage/v2"
+    result["schema"] = "food-ripples-workbook-lineage/v3"
     result["first_sheet_name"] = bounded_name(report["first_sheet_name"])
     result["selected_sheet_member"] = bounded_name(report["selected_sheet_member"])
     result["members_read"] = [dict(member, name=bounded_name(member["name"]))
@@ -112,7 +112,10 @@ def project_report(report):
     result["groups"] = [dict(group, animal=bounded_cell(group["animal"]),
                              day=bounded_cell(group["day"]),
                              session_counts=[bounded_cell(cell) for cell in group["session_counts"]],
-                             condition_counts=[bounded_cell(cell) for cell in group["condition_counts"]])
+                             condition_counts=[bounded_cell(cell) for cell in group["condition_counts"]],
+                             records=[dict(record, session=bounded_cell(record["session"]),
+                                           condition=bounded_cell(record["condition"]))
+                                      for record in group["records"]])
                         for group in report["groups"]]
     result["summary"] = dict(report["summary"])
     for field in ("session_values", "condition_values"):
@@ -288,6 +291,8 @@ def inspect_workbook(raw, expected=SOURCE_IDENTITY):
             animal, day = json.loads(key)
             group_rows.append({"animal": animal, "day": day,
                                "rows": [r["row"] for r in records],
+                               "records": [{"row": r["row"], "session": r["session"],
+                                            "condition": r["condition"]} for r in records],
                                "session_counts": typed_counts(r["session"] for r in records),
                                "condition_counts": typed_counts(r["condition"] for r in records)})
         summary = {

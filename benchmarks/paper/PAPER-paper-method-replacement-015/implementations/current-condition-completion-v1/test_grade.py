@@ -39,6 +39,128 @@ profile = load("_spinal_profile_test", HERE / "profile.py",
                {"source": types.SimpleNamespace(BANK_SHA=grade.BANK_SHA, IMAGE=grade.IMAGE, need=grade.need)})
 
 
+def generated_scores(neurons):
+    """Fictional evaluator receipt for paired-report controls, never paper data."""
+    return {"condition_id": grade.CONDITION, "bank_manifest_sha256": grade.BANK_SHA,
+            "operator_reference_manifest_sha256": "c" * 64,
+            "coverage": {"source_neurons": 44, "eligible_recordings": 116},
+            "metrics": {"per_neuron": {identity: {
+                "total_bins": 80, "scored_bins": 16, "sampling_rate_hz": 30.0,
+                "methods": {"candidate": {
+                    "correlation": {"value": None, "status": "constant_prediction"},
+                    "rate_diagnostics": {"normalized_l1": 2.0, "signed_bias": -0.2, "status": "defined"}}}}
+                for identity in neurons}}}
+
+
+class PairedAccessSummaryTests(unittest.TestCase):
+    def setUp(self):
+        self.neurons = {f"n{i:02d}": "glutamatergic" if i < 21 else "gabaergic" for i in range(44)}
+        self.results = {arm: generated_scores(self.neurons) for arm in grade.ARMS}
+
+    def candidate(self, arm, identity):
+        return self.results[arm]["metrics"]["per_neuron"][identity]["methods"]["candidate"]
+
+    def correlation(self, arm, identity, value):
+        self.candidate(arm, identity)["correlation"] = {"value": value,
+            "status": "defined" if value is not None else "constant_prediction"}
+
+    def summary(self):
+        return grade.paired_access_summary(self.results, self.neurons)
+
+    def test_pair_before_aggregation_when_each_arm_has_different_undefined_neurons(self):
+        a, b = grade.ARMS
+        for arm, identity, value in [(a, "n00", .2), (b, "n00", .6),
+                                      (b, "n01", .9), (a, "n02", .8)]:
+            self.correlation(arm, identity, value)
+        result = self.summary()
+        summary = result["cohorts"]["glutamatergic"]["metrics"]["correlation"]
+        self.assertEqual((summary["expected_neurons"], summary["defined_neurons"], summary["undefined_neurons"]), (21, 1, 20))
+        self.assertAlmostEqual(summary["mean"], .4)
+        self.assertNotAlmostEqual(summary["mean"], (.6 + .9) / 2 - (.2 + .8) / 2)
+        self.assertEqual(summary["status_counts"], {"defined": 1, "paper_data_undefined": 1,
+            "paper_data_author_code_undefined": 1, "both_undefined": 18})
+        self.assertEqual(result["per_neuron"]["n01"]["metrics"]["correlation"]["operands"][a],
+                         {"value": None, "status": "constant_prediction"})
+        self.assertEqual(len(result["per_neuron"]), 44)
+        self.assertEqual(result["cohorts"]["gabaergic"]["metrics"]["correlation"]["expected_neurons"], 23)
+
+    def test_rate_diagnostics_remain_separate_and_signed_bias_has_no_win_direction(self):
+        for identity in self.neurons:
+            self.candidate(grade.ARMS[1], identity)["rate_diagnostics"].update(normalized_l1=1.0, signed_bias=.2)
+        result = self.summary()
+        values = result["cohorts"]["glutamatergic"]["metrics"]
+        self.assertEqual(values["normalized_l1"]["mean"], -1.0)
+        self.assertAlmostEqual(values["signed_bias"]["mean"], .4)
+        self.assertEqual(result["metric_directions"]["signed_bias"], "signed_change_only_not_an_improvement_direction")
+        self.assertFalse(result["scientific_improvement_established"])
+        self.assertFalse(result["uncertainty_or_superiority_rule_defined"])
+
+    def test_unchanged_metric_kernel_outputs_preserve_calibration_change_at_equal_correlation(self):
+        metrics = load("_spinal_pair_metric_control", IMPL / "original-endpoint-metrics-v1/metrics.py")
+        for arm, scale in zip(grade.ARMS, (2.0, 1.0)):
+            observations = [{"neuron_id": identity, "target_hz": [0., 1., 2., 3.],
+                "support": [True] * 4,
+                "controls": {method: metrics.Prediction((0., 1., 2., 3.),
+                    "hz" if method in metrics.RATE_METHODS else "arbitrary")
+                    for method in metrics.SOURCE_CONTROLS},
+                "candidate": metrics.Prediction(tuple(scale * value for value in (0., 1., 2., 3.)), "hz")}
+                for identity in self.neurons]
+            self.results[arm]["metrics"] = metrics.score_condition(expected_neurons=self.neurons,
+                observations=observations, sampling_rate_hz=30.)
+        result = self.summary()
+        for cohort in ("glutamatergic", "gabaergic"):
+            summary = result["cohorts"][cohort]["metrics"]
+            self.assertEqual(summary["correlation"]["mean"], 0.0)
+            self.assertEqual(summary["normalized_l1"]["mean"], -1.0)
+            self.assertEqual(summary["signed_bias"]["mean"], -1.0)
+
+    def test_constant_control_retains_all_undefined_correlations_and_finite_json(self):
+        result = self.summary()
+        for cohort, count in (("glutamatergic", 21), ("gabaergic", 23)):
+            row = result["cohorts"][cohort]["metrics"]["correlation"]
+            self.assertEqual(row["undefined_neurons"], count)
+            self.assertIsNone(row["mean"])
+            self.assertEqual(row["status_counts"], {"both_undefined": count})
+        json.dumps(result, allow_nan=False)
+
+    def test_nonrepresentable_diagnostic_delta_remains_an_explicit_undefined_pair(self):
+        self.candidate(grade.ARMS[0], "n00")["rate_diagnostics"]["signed_bias"] = -1.7e308
+        self.candidate(grade.ARMS[1], "n00")["rate_diagnostics"]["signed_bias"] = 1.7e308
+        result = self.summary()
+        row = result["per_neuron"]["n00"]["metrics"]["signed_bias"]
+        self.assertIsNone(row["delta"])
+        self.assertEqual(row["status"], "unrepresentable_delta")
+        self.assertEqual(result["cohorts"]["glutamatergic"]["metrics"]["signed_bias"]["undefined_neurons"], 1)
+        json.dumps(result, allow_nan=False)
+
+    def test_neuron_order_cannot_change_pairing(self):
+        self.correlation(grade.ARMS[1], "n01", .7)
+        before = self.summary()
+        for arm in grade.ARMS:
+            rows = self.results[arm]["metrics"]["per_neuron"]
+            self.results[arm]["metrics"]["per_neuron"] = dict(reversed(list(rows.items())))
+        self.neurons = dict(reversed(list(self.neurons.items())))
+        self.assertEqual(before, self.summary())
+
+    def test_missing_neuron_changed_coverage_or_support_cannot_form_a_pair(self):
+        original = deepcopy(self.results)
+        mutations = [
+            lambda r: r["metrics"]["per_neuron"].pop("n43"),
+            lambda r: r["coverage"].update(eligible_recordings=115),
+            lambda r: r.update(operator_reference_manifest_sha256="d" * 64),
+            lambda r: r["metrics"]["per_neuron"]["n00"].update(scored_bins=15)]
+        for index, mutate in enumerate(mutations):
+            self.results = deepcopy(original)
+            mutate(self.results[grade.ARMS[1]])
+            with self.subTest(index=index), self.assertRaises(ValueError):
+                self.summary()
+
+    def test_inconsistent_metric_status_cannot_be_counted_as_defined(self):
+        self.candidate(grade.ARMS[1], "n00")["correlation"] = {"value": .5, "status": "constant_prediction"}
+        with self.assertRaisesRegex(ValueError, "definition status"):
+            self.summary()
+
+
 class Fixture:
     """Real original material/binding/capture functions on fictional 132 rows."""
     root = Path("/generated/spinal")
@@ -228,8 +350,9 @@ class Fixture:
     def evaluate(self, bank, reference, candidate):
         self.trace.append("protected_evaluate")
         grade.need(self.trace.count("public_candidate_payload") == 232, "both arms public validation must precede protected evaluation")
-        return {"operator_reference_manifest_sha256": reference.manifest_sha256,
-                "candidate_manifest_sha256": candidate.manifest_sha256, "generated_only": True}
+        result = generated_scores(bank.metadata["expected_neurons"])
+        result.update(candidate_manifest_sha256=candidate.manifest_sha256, generated_only=True)
+        return result
 
     def run(self, **extra):
         args = dict(host_exit_sha256=contract.pin(self.files[self.root / "HOST_EXIT.json"])["sha256"],
@@ -247,6 +370,8 @@ class ProtectedGradeTests(unittest.TestCase):
         self.assertEqual(f.trace.count("protected_evaluate"), 2)
         self.assertEqual(f.trace.index("reference_metadata"), 233)
         self.assertFalse(result["paper_improvement_or_SOTA_established"])
+        self.assertEqual(len(result["paired_access_summary"]["per_neuron"]), 44)
+        self.assertEqual(result["paired_access_summary"]["cohorts"]["gabaergic"]["metrics"]["correlation"]["undefined_neurons"], 23)
 
     def test_failed_worker_never_opens_bank_or_reference(self):
         f = Fixture(); f.change("HOST_EXIT.json", lambda x: x["worker_observation"].update(exit_code=1))

@@ -1,0 +1,111 @@
+{
+  "schema": "bold-taskchange-adjacent-source-audit/v1",
+  "task_id": "PAPER-paper-signal-add-013",
+  "scope": "Authenticated adjacent author notebook; source inspection only, not a Figure 5 reproduction or a qualified execution path.",
+  "source": {
+    "repository": "https://github.com/NeuroenergeticsLab/two_modes_of_hemodynamics",
+    "revision": "1b22c2cb03bab0d5cf70da6a45c4d720194dc523",
+    "path": "F_Fig4.ipynb",
+    "raw_url": "https://raw.githubusercontent.com/NeuroenergeticsLab/two_modes_of_hemodynamics/1b22c2cb03bab0d5cf70da6a45c4d720194dc523/F_Fig4.ipynb",
+    "tree_url": "https://api.github.com/repos/NeuroenergeticsLab/two_modes_of_hemodynamics/git/trees/1b22c2cb03bab0d5cf70da6a45c4d720194dc523?recursive=1",
+    "bytes": 766379,
+    "sha256": "cbc499b5f3e51afa17e21cde3edc476e28a443a46cd8efb19dbef9f0e4d2149b",
+    "git_blob_sha1": "9b349e1cc3319a556986ec3257ed68083afe063f",
+    "authentication": "Full body Git blob SHA1 equals the exact revision tree entry; byte count also agrees. This authenticates source identity, not stored outputs or scientific validity.",
+    "code_redistributed": false,
+    "recorded_license": "CC BY-NC-SA 4.0; distinct from dataset CC0",
+    "cell_numbering": "zero-based notebook cells"
+  },
+  "observations": [
+    {
+      "cells": [
+        4,
+        31
+      ],
+      "finding": "Task-change construction explicitly iterates sids_30 for both CALC and MEM; the fixed list contains the first 30 participants, ending at sub-p055. The top-level CALC40 selector does not change this nested task-change loop."
+    },
+    {
+      "cells": [
+        31
+      ],
+      "finding": "Baseline CMRO2 uses desc-orig, baseline OEF and CBF use direct map paths. Task CMRO2 and OEF use desc-semi-quant, or desc-semi-quant-corrected when corrected mode and CALC. Per-subject percentage changes precede per-voxel nanmedian."
+    },
+    {
+      "cells": [
+        31
+      ],
+      "finding": "Task-change stratum masks combine negative and positive BOLD sign masks with binarization within each task; these paths do not carry the baseline implementation GMmask suffix. Original map/mask membership is still unauthenticated."
+    },
+    {
+      "cells": [
+        32
+      ],
+      "finding": "In the two-task branch, MEM rows are removed for each CMRO2/OEF criterion first; CALC drop selectors then read the already-filtered MEM frames. The source must not be silently rewritten to CALC-specific selectors."
+    },
+    {
+      "cells": [
+        38,
+        39,
+        41,
+        42
+      ],
+      "finding": "Separate concordant and discordant models concatenate CALC before MEM, center OEF and CBF percentage-change predictors before missing-row removal, and fit an intercept. The notebook independently drops missing x and y rows before passing them to Pingouin; the statsmodels formula companion is a distinct path under mismatched missingness."
+    },
+    {
+      "cells": [
+        32
+      ],
+      "finding": "The saved notebook contains a plotting TypeError after the row-filter statements. Stored outputs in later cells do not establish an uninterrupted reproducible execution or prove they derive from the currently stored code."
+    }
+  ],
+  "source_cell_sha256": {
+    "4": "f6b036f0c978f9f844f677685ec246fcd4254863f19745257e83bb76f4a96507",
+    "31": "ef29a9ced2667e25b3fbcb5000af6803e817fa72565250a6db17885a5cdcd1c3",
+    "32": "a1fe14101736d55d17666511a911041a80cea5142d67161679a2756f0932037b",
+    "38": "27c090d11a34e66bfcd5390aa79f8db29a8d50df490a6871e28a7131daf93d03",
+    "39": "7c996b891ab14a0c24fd147d1b6771e7478614d5e24154cd85e80dcf00f99389",
+    "41": "c8f4b0e09771a3595c296ce0444fbfe11b7975d0e1497ced28a9e5e21958751c",
+    "42": "546402742e23c2ddb2f244fd9d5d05782e8900718fc4696354c794d24e583fee"
+  },
+  "stored_outputs_not_new_measurements": {
+    "status": "Unauthenticated stored notebook outputs; not recomputed and not an author-baseline qualification.",
+    "concordant": {
+      "pingouin_cell": 38,
+      "r_squared": 0.8608819727011594,
+      "df_residual": 21971,
+      "statsmodels_cell": 39,
+      "n_observations": 21974
+    },
+    "discordant": {
+      "pingouin_cell": 41,
+      "r_squared": 0.8425617424473401,
+      "df_residual": 14694,
+      "statsmodels_cell": 42,
+      "n_observations": 14697
+    },
+    "interpretation": "Their similarity to the paper rounded values cannot authenticate the original participant count, mask/row membership, map lineage or native environment."
+  },
+  "closure": {
+    "adjacent_notebook_recovered": true,
+    "paper_CALC40_MEM30_conflict_resolved": false,
+    "taskchange_map_lineage_resolved": false,
+    "taskchange_row_filter_ambiguity_resolved": false,
+    "historical_provenance_rewritten": false
+  },
+  "required_unresolved": [
+    "Resolve paper CALC40/MEM30 versus both recovered notebooks CALC30/MEM30 without changing the original task.",
+    "Authenticate original task-change map lineage, stratum masks, fitted-row identities and native environment; semiquantitative notebook paths do not automatically establish original Figure 5 inputs.",
+    "Resolve source CALC filtering and mismatched x/y missingness semantics from authoritative evidence before implementing a native task-change evaluator.",
+    "Independent computation on authentic inputs, original all-four-model fit and contribution/statistic reproduction criteria, and paired paper+data versus paper+data+author-code participant delivery remain absent.",
+    "A meaningful same-result improvement criterion beyond fitting the Fick-derived CMRO2 identity remains unresolved."
+  ],
+  "qualification": {
+    "source_inspection_only": true,
+    "authentic_data_prepared_or_evaluated": false,
+    "author_notebook_executed": false,
+    "new_scientific_runs": 0,
+    "full_figure5_reproduction": false,
+    "paper_improvement": false,
+    "readiness_promoted": false
+  }
+}

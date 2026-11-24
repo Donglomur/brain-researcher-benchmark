@@ -171,6 +171,58 @@ def compare_panel(cases, *, stimulus, train_times, test_times, fold_ids, frozen_
     reduction across conditions or temporal cells, inferential test, selected
     interval, scalar victory, or claim of authenticated author execution occurs.
     """
+    paired = ((key, targets, author, (candidate,))
+              for key, targets, author, candidate in cases)
+    return _compare_candidates(paired, candidate_names=("candidate",), stimulus=stimulus,
+        train_times=train_times, test_times=test_times, fold_ids=fold_ids,
+        frozen_trials=frozen_trials)["candidate"]
+
+
+def compare_information_conditions(cases, *, stimulus, train_times, test_times,
+                                   fold_ids, frozen_trials):
+    """Score both information conditions against one shared frozen source panel.
+
+    Each streamed case is (FoldKey, Targets, author Predictions,
+    paper_data Predictions, paper_data_author_code Predictions). Targets and
+    author predictions are consumed once per fold, so the two conditions cannot
+    silently use different labels or author baselines. Both arms must supply
+    every original participant/pipeline/condition/fold and exact trial/time axes.
+
+    Separate reconstruction errors and signed decoder gains use compare_panel's
+    unchanged equal-fold, equal-participant arithmetic. The additional arm
+    contrast retains every participant, pipeline, condition and temporal cell.
+    Positive code-minus-paper accuracy is a decoder gain; positive reconstruction
+    error reduction is closer agreement with the shared author accuracy panel.
+    Neither establishes full scientific reproduction, improvement, or a causal
+    effect of author-code access. Access, run pairing, budgets, authentic source
+    support, and participant-aware inference require independent qualification.
+    """
+    names = ("paper_data", "paper_data_author_code")
+    paired = ((key, targets, author, (paper, code))
+              for key, targets, author, paper, code in cases)
+    results = _compare_candidates(paired, candidate_names=names, stimulus=stimulus,
+        train_times=train_times, test_times=test_times, fold_ids=fold_ids,
+        frozen_trials=frozen_trials)
+    paper, code = (results[name] for name in names)
+    accuracy_contrast = code["candidate_accuracy_percent"] - paper["candidate_accuracy_percent"]
+    error_reduction = (
+        paper["participant_reconstruction_absolute_error_percentage_points"] -
+        code["participant_reconstruction_absolute_error_percentage_points"])
+    return {
+        "information_conditions": names,
+        "condition_results": results,
+        "participant_code_minus_paper_accuracy_percentage_points": accuracy_contrast,
+        "group_code_minus_paper_accuracy_percentage_points": accuracy_contrast.mean(axis=0),
+        "participant_reconstruction_error_reduction_with_code_percentage_points": error_reduction,
+        "group_reconstruction_error_reduction_with_code_percentage_points": error_reduction.mean(axis=0),
+        "pairing": "shared targets, author predictions, trial support, folds and time axes per case",
+        "qualified_reward": None,
+        "inference": "not performed; access, run pairing, budgets and scientific outcome remain unqualified",
+    }
+
+
+def _compare_candidates(cases, *, candidate_names, stimulus, train_times, test_times,
+                        fold_ids, frozen_trials):
     _require(stimulus in ("sound", "omission"), "sound and omission must be scored separately")
     train_times, test_times = _axis(train_times), _axis(test_times)
     _require(type(fold_ids) is tuple and bool(fold_ids) and
@@ -187,11 +239,13 @@ def compare_panel(cases, *, stimulus, train_times, test_times, fold_ids, frozen_
         _ids(ids)
     shape = (len(PARTICIPANTS), len(PIPELINES), len(CONDITIONS), len(train_times), len(test_times))
     author = np.zeros(shape, dtype=np.float64)
-    candidate = np.zeros(shape, dtype=np.float64)
+    candidates = {name: np.zeros(shape, dtype=np.float64) for name in candidate_names}
     denominators = np.zeros(shape[:3] + (len(fold_ids),), dtype=np.int64)
     seen = set()
     trial_sets = {}
     for key, targets, author_predictions, candidate_predictions in cases:
+        _require(type(candidate_predictions) is tuple and len(candidate_predictions) == len(candidate_names),
+                 "one prediction set per information condition required")
         _require(type(key) is FoldKey and type(key.fold) is int and key in expected and key not in seen,
                  "unexpected or duplicate participant/pipeline/condition/fold")
         slot = (PARTICIPANTS.index(key.participant), PIPELINES.index(key.pipeline), CONDITIONS.index(key.condition))
@@ -201,12 +255,21 @@ def compare_panel(cases, *, stimulus, train_times, test_times, fold_ids, frozen_
         _require(not previous.intersection(ids), "test trial appears in more than one fold")
         previous.update(ids)
         a = score_fold(targets, author_predictions, train_times=train_times, test_times=test_times)
-        c = score_fold(targets, candidate_predictions, train_times=train_times, test_times=test_times)
         author[slot] += 100.0 * a.correct / a.tested / len(fold_ids)
-        candidate[slot] += 100.0 * c.correct / c.tested / len(fold_ids)
+        for name, predictions in zip(candidate_names, candidate_predictions):
+            c = score_fold(targets, predictions, train_times=train_times, test_times=test_times)
+            candidates[name][slot] += 100.0 * c.correct / c.tested / len(fold_ids)
         denominators[slot + (fold_ids.index(key.fold),)] = a.tested
         seen.add(key)
     _require(seen == expected, "incomplete full participant/condition/control/fold panel")
+    results = {}
+    for name, candidate in candidates.items():
+        results[name] = _panel_result(author, candidate, denominators, stimulus,
+                                     train_times, test_times, fold_ids)
+    return results
+
+
+def _panel_result(author, candidate, denominators, stimulus, train_times, test_times, fold_ids):
     delta = candidate - author
     return {
         "stimulus": stimulus,

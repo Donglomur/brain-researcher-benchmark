@@ -89,6 +89,37 @@ python -I -B grade.py --attempt /operator/closed-attempt \
   --output /operator/private/paired-comparison.json
 ```
 
+The comparison also contains `paired_access_summary`: author-code access minus
+paper+data access for each of the same 44 neurons, followed by separate
+21-neuron glutamatergic and 23-neuron GABAergic summaries. Each correlation,
+normalized L1 and signed-bias delta is calculated within a neuron before any
+averaging. Both operands and their original definition statuses are retained.
+A pair with an undefined operand (or an unrepresentable delta) remains in the
+cohort census and undefined count, with a null delta and an explicit reason.
+Means and medians use only jointly defined finite deltas; their defined and
+undefined counts are reported separately. The report does not subtract
+independently filtered arm averages or pool the two cell types.
+The constant 1-Hz control therefore retains all its undefined correlations; it
+does not become a zero-correlation result.
+
+Correlation increases and normalized-L1 decreases have their usual separate
+descriptive directions. A signed-bias change alone has no improvement direction.
+These rate diagnostics remain the current metric kernel's single-pass values,
+not qualified historical paper bias/error outcomes. No uncertainty estimate,
+meaningful-effect threshold, paper reproduction or superiority decision is
+introduced. The original protected validation and reference requirements apply
+before either arm is scored or summarized.
+
+Generated paired-report controls and the protected grader can be run with:
+
+```sh
+python -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-replacement-015/implementations/current-condition-completion-v1 -p test_grade.py -v
+```
+
+`VALIDATION.json` retains its original historical source identity and controls;
+`PAIRED_ACCESS_VALIDATION.json` records the later paired-report source check.
+Neither receipt establishes authentic scientific execution.
+
 `SOURCE.json` includes the transitive original metric kernel as well as the
 delivery/evaluator closure. The current matched noise-7/30-Hz condition remains
 distinct from historical Figure 4 and the complete paper contract. Source-era

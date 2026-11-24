@@ -66,7 +66,12 @@ def window_indices(fs, n_samples, window):
 
 
 def validate_envelopes(values, fs):
-    a = np.asarray(values, dtype=float)
+    # Validate the supplied quantity before conversion: casting an analytic
+    # signal to float would silently discard its imaginary component.
+    a = np.asarray(values)
+    if a.dtype.kind not in "iuf":
+        raise ContractError("Hilbert amplitudes must be real numeric arrays; supply magnitudes, not complex analytic signals")
+    a = np.asarray(a, dtype=float)
     fs = _number(fs, "sampling_frequency_hz", 61)
     expected = int(np.floor(3.5 * fs + 0.5))
     if a.ndim != 2 or a.shape[0] < 2 or a.shape[1] != expected:

@@ -33,16 +33,21 @@ access conditions remain unresolved.
 ## Private API and public packet
 
 `SignalDelivery.create(path, roster, context, secret)` makes an exclusive private
-store. `new_context(candidate_sha256, access_condition, preparation_sha256)`
-creates a fresh 32-byte nonce; retain its exact result and a cryptographically
-random 32-byte secret for recovery. The outcome is fixed to `improvement` and the
-access condition is exactly `paper_data` or `paper_data_author_code`. The
+store. `new_context(candidate_sha256, access_condition, preparation_sha256,
+outcome="improvement")` creates a fresh 32-byte nonce; retain its exact result and
+a cryptographically random 32-byte secret for recovery. The keyword-only outcome
+is exactly `reproduction` or `improvement`; omitted values retain the existing
+`improvement` default. The access condition is exactly `paper_data` or
+`paper_data_author_code`. Create and freeze a separate context/store for each
+outcome and access condition. The
 candidate digest must identify the independently frozen candidate package.
 The caller is responsible for entropy, authenticity, independent freezes and
 secret custody. The API cannot detect an operator deliberately reusing or
 rolling back an entire store/context. Contexts bind the original input and
 preparation; the HMAC-derived mapper key changes opaque identities with the
-candidate, access condition, run nonce or preparation. Existing mapper logic
+candidate, outcome, access condition, run nonce or preparation. An existing store
+cannot be reopened under another outcome, and responses cannot be transferred
+between outcomes. Existing mapper logic
 supplies fold-specific IDs and inverse maps unchanged.
 
 For a selected operator `fold_id`, `issue(fold_id, prepared)` accepts exactly:
@@ -87,7 +92,8 @@ The participant responds with exactly:
 `submit` verifies the full signal packet and delivery binding, then bridges to
 the unchanged mapper response schema. Its collector validates and restores all
 seven predictions to private actual-bin order. `finish()` returns the original
-full-support prediction document through that collector, preserving unstarted
+full-support prediction document through that collector for either outcome,
+preserving unstarted
 and failed folds across all 176 panels. It never invokes the scorer or returns
 score feedback. Empty source cues retain their original positions under the
 existing collector; this component does not rewrite their meaning.
@@ -147,8 +153,12 @@ python3 -I -S -B test_transport.py --fixtures /operator/fresh-retained-fixture-d
 
 The fixture directory must not already exist. `--mapping-path` is only a named
 private-build dependency override and still requires the exact mapper hash.
-The 11 new methods test joins, field exclusion, content commitments, freshness,
-replay/refusal and restart behavior; they do not rerun the prior 11 mapper tests
+The 14 methods test joins, field exclusion, content commitments, freshness,
+replay/refusal and restart behavior, including both outcomes under both access
+conditions and rejection of cross-outcome recovery/submission. Outcome selection
+only labels and separates delivery runs; the collector and scientific scorer are
+unchanged. It does not assess whether a reproduction matches authentic author
+results or whether a candidate improves them. These tests do not rerun the prior 11 mapper tests
 or call numerical scoring. A cumulative 128 KiB fixture-write guard preserves
 failures and overwrites in the accounting. Central CI enrollment belongs to the
 sole integrator; discovery is not assumed.

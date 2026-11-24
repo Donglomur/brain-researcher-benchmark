@@ -243,5 +243,158 @@ class ProtectedIntakeChecks(unittest.TestCase):
             intake.strict_json(b"{}", 1)
 
 
+def condition_bundles(manifests=None):
+    if manifests is None:
+        manifests = {condition: fixture(condition) for condition in intake.INFORMATION}
+    names = ("manifest_raw", "expected_manifest_sha256", "panel_blobs", "operator_closures")
+    return {condition: dict(zip(names, bundle(manifest)))
+            for condition, manifest in manifests.items()}
+
+
+class MatchedConditionChecks(unittest.TestCase):
+    def rejected_before_private(self, args):
+        calls = []
+        with self.assertRaises(intake.IntakeError):
+            intake.admit_matched_then_derive(args, lambda matched: calls.append(matched))
+        self.assertEqual(calls, [])
+
+    def test_both_complete_arms_call_private_once_and_keep_full_support(self):
+        calls = []
+        result = intake.admit_matched_then_derive(condition_bundles(),
+            lambda matched: calls.append(matched) or {"status": "generated_only"})
+        self.assertEqual(len(calls), 1)
+        matched = calls[0]
+        self.assertEqual(tuple(b.information_condition for b in matched.bundles), intake.INFORMATION)
+        shared = json.loads(matched.common_support_raw)
+        self.assertEqual(shared["cells"], fixture()["cells"])
+        self.assertEqual(shared["animal_ids"], fixture()["animal_ids"])
+        self.assertEqual(shared["tone_ids"], fixture()["tone_ids"])
+        self.assertEqual(len(shared["reference_family"]), 3)
+        self.assertIsNone(result["intake"]["paper_win"])
+        self.assertEqual(result["intake"]["scientific_qualification"], "not_established")
+        with self.assertRaises(FrozenInstanceError):
+            matched.bundles = ()
+
+    def test_individually_valid_changed_scientific_support_rejected_jointly(self):
+        def change_partition(m):
+            m["cells"][-1]["trials"][0]["partition"] = "heldout"
+        changes = (
+            lambda m: m["cells"][-1].update(observations_sha256=sha("changed-observations")),
+            lambda m: m["cells"][-1]["trials"][0].update(trial_id="different-source-trial"),
+            change_partition,
+            lambda m: m["cells"][-1]["trials"].reverse(),
+            lambda m: m["tone_ids"].reverse(),
+            lambda m: m["animal_ids"].reverse(),
+            lambda m: [cell.update(animal_id="animal-1") for cell in m["cells"][:2]],
+            lambda m: m["qualification_evidence"].update(source_metric_policy=sha("different-metric")),
+            lambda m: m["qualification_evidence"].update(protected_execution_policy=sha("different-exposure")),
+        )
+        for change in changes:
+            with self.subTest(change=change):
+                manifests = {condition: fixture(condition) for condition in intake.INFORMATION}
+                change(manifests["paper_data_author_code"])
+                args = condition_bundles(manifests)
+                # Establish the actual gap: both arms pass existing single-arm admission.
+                for arm in args.values():
+                    self.assertEqual(len(intake.admit(**arm).support), 34)
+                self.rejected_before_private(args)
+
+    def test_reference_recipe_and_complete_ordered_shuffle_family_match(self):
+        for change in (
+            lambda m: m["panels"][1].update(program_sha256=sha("changed-author")),
+            lambda m: m["panels"][2].update(control_identity_sha256=sha("changed-shuffle")),
+            lambda m: m["panels"].pop(),
+            lambda m: m["panels"].__setitem__(slice(2, None), list(reversed(m["panels"][2:]))),
+        ):
+            manifests = {condition: fixture(condition) for condition in intake.INFORMATION}
+            change(manifests["paper_data_author_code"])
+            args = condition_bundles(manifests)
+            for arm in args.values():
+                intake.admit(**arm)
+            self.rejected_before_private(args)
+
+    def test_different_candidate_methods_probabilities_and_producers_are_allowed(self):
+        manifests = {condition: fixture(condition) for condition in intake.INFORMATION}
+        changed = manifests["paper_data_author_code"]
+        changed["panels"][0]["program_sha256"] = sha("independent-candidate-method")
+        for panel in changed["panels"]:
+            panel["panel_id"] += "-code-arm"
+            panel["producer_id"] += "-code-arm"
+        args = condition_bundles(manifests)
+        arm = args["paper_data_author_code"]
+        raw_args = tuple(arm.values())
+        # Neither candidate nor author prediction bodies are equality targets.
+        for panel_id in ("panel-0-code-arm", "panel-1-code-arm"):
+            replace_panel(raw_args, panel_id,
+                lambda p: p["cells"][0]["probability_randomised"].__setitem__(0, .8))
+        matched = intake.admit_matched_conditions(args)
+        self.assertNotEqual(matched.bundles[0].panels[0][2], matched.bundles[1].panels[0][2])
+        self.assertNotEqual(matched.bundles[0].panels[1][2], matched.bundles[1].panels[1][2])
+
+    def test_missing_extra_or_misnamed_information_arm(self):
+        args = condition_bundles()
+        del args["paper_data_author_code"]
+        self.rejected_before_private(args)
+        args = condition_bundles()
+        args["extra"] = args["paper_data"]
+        self.rejected_before_private(args)
+        args = condition_bundles()
+        args["paper_data_author_code"] = args["paper_data"]
+        self.rejected_before_private(args)
+
+    def test_late_output_or_closure_failure_blocks_paired_private_read(self):
+        for failure in ("output", "closure"):
+            args = condition_bundles()
+            arm = args["paper_data_author_code"]
+            if failure == "output":
+                replace_panel(tuple(arm.values()), "panel-3", lambda p: p["cells"].pop())
+            else:
+                arm["operator_closures"]["panel-3"]["closed"] = False
+            self.rejected_before_private(args)
+
+    def test_equivalent_json_serialization_matches(self):
+        args = condition_bundles()
+        arm = args["paper_data_author_code"]
+        manifest = json.loads(arm["manifest_raw"])
+        # Rebind the complete second family to a differently serialized manifest.
+        raw = json.dumps(manifest, indent=1).encode()
+        old_identity = arm["expected_manifest_sha256"]
+        arm["manifest_raw"] = raw
+        arm["expected_manifest_sha256"] = intake.digest(raw)
+        for panel_id, body in arm["panel_blobs"].items():
+            body = body.replace(old_identity.encode(), arm["expected_manifest_sha256"].encode())
+            arm["panel_blobs"][panel_id] = body
+            arm["operator_closures"][panel_id]["output_sha256"] = intake.digest(body)
+        matched = intake.admit_matched_conditions(args)
+        self.assertNotEqual(matched.bundles[0].manifest_sha256, matched.bundles[1].manifest_sha256)
+
+    def test_same_declared_shuffle_repetitions_are_preserved_in_both_arms(self):
+        manifests = {condition: fixture(condition) for condition in intake.INFORMATION}
+        for manifest in manifests.values():
+            manifest["panels"][3]["control_identity_sha256"] = manifest["panels"][2]["control_identity_sha256"]
+        matched = intake.admit_matched_conditions(condition_bundles(manifests))
+        family = json.loads(matched.common_support_raw)["reference_family"]
+        self.assertEqual(len(family), 3)
+        self.assertEqual(family[1], family[2])
+
+    def test_matched_private_failure_not_retried_or_relabelled(self):
+        calls = []
+        def fail(matched):
+            calls.append(matched)
+            raise RuntimeError("no qualified paired assessment")
+        with self.assertRaisesRegex(RuntimeError, "no qualified"):
+            intake.admit_matched_then_derive(condition_bundles(), fail)
+        self.assertEqual(len(calls), 1)
+
+    def test_pair_result_detached_and_receipts_not_shared(self):
+        args = condition_bundles()
+        matched = intake.admit_matched_conditions(args)
+        saved = matched.receipt()
+        args.clear()
+        altered = matched.receipt()
+        altered["conditions"].clear()
+        self.assertEqual(matched.receipt(), saved)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,6 +1,6 @@
 # Purkinje paired code access: source interfaces
 
-This adds two matched input packets and condition-bound artifact receipts for the existing **PAPER-FIND-REP-013** task. It reuses the corrected [numerical scorer](../../benchmarks/neuroscience/paper-find-rep-013-purkinje-morphology/program-v1/numeric_score.py) and [artifact transport](../purkinje-artifacts/README.md). It does not launch an agent or a participant program, qualify a runtime, register another benchmark, or establish a code-access effect.
+This adds two matched input packets and condition-bound artifact receipts for the existing **PAPER-FIND-REP-013** task. It reuses the corrected [numerical scorer](../registered-runtime/program-v1/numeric_score.py) and [artifact transport](../artifacts/README.md). It does not launch an agent or a participant program, qualify a runtime, register another benchmark, or establish a code-access effect.
 
 Both conditions use the complete ten released trees, thirteen components, 21,116 branches and 12,603 retained author sections, the same numerical outputs and fixed private-reference identities. Equal-cell branch-length RMSE remains primary; all 31 table fields and 58 summary errors remain separate. Both Size conventions, retrospective eligibility and missing donor assignments remain explicit in [TASK.md](TASK.md). Historical authentic results remain tied to their earlier scorer; the current correction is not automatically scientifically requalified.
 
@@ -19,11 +19,11 @@ The external provider directory must contain the twelve exact empirical names in
 
 The paper has an explicit 622,639-byte extent. The new materializer does not reuse the older 600,000-byte non-SWC cap or alter the older fifteen-file route. It resolves the complete selected source map and refuses source/output overlap before creating outputs. The source root is not mounted into a participant by this code.
 
-This example is deliberately **unselected** and refuses before copying original inputs:
+From the repository root, this example is deliberately **unselected** and refuses before copying original inputs:
 
 ```sh
-python3.11 -I -S -B components/purkinje-paired-access/paired_packet.py \
-  --repo . --contract components/purkinje-paired-access/CONTRACT.json \
+python3.11 -I -S -B benchmarks/paper/PAPER-FIND-REP-013/implementations/paired-access/paired_packet.py \
+  --repo . --contract benchmarks/paper/PAPER-FIND-REP-013/implementations/paired-access/CONTRACT.json \
   --contract-bytes 1721 \
   --contract-sha256 d33eed13fc27d31c65ddff3afe869390326fe6c7c1db5732eb9a6ff09a685b30 \
   --provider-root operator-assets/purkinje --condition A \
@@ -47,7 +47,7 @@ The missing owner must enforce fresh independent authoring contexts, exact condi
 From the repository root:
 
 ```sh
-python3.11 -I -S -B components/purkinje-paired-access/test_paired_packet.py
+python3.11 -I -S -B benchmarks/paper/PAPER-FIND-REP-013/implementations/paired-access/test_paired_packet.py
 ```
 
 The five selected relocation methods passed once against a fresh source tree containing this component, the existing adapter, six existing scientific source/descriptor files and the existing invented fixture. They cover explicit roots/missing provider/overlap, namespace and provider corruption, exact disabled templates, unchanged-score compatibility, and cross-arm/authority refusal before the target callback. Three are new relocation methods; two inherited methods are selected because the public dependency load and materialization setup changed. The original eight-method suite is not claimed to have been replayed in full. All eight method bodies remain available for a separately selected broader source suite.

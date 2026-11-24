@@ -209,5 +209,111 @@ class CompletePanelTests(unittest.TestCase):
 
 
 
+def replay_submission(predictions):
+    return {"schema": "finger017-recorded-replay-submission/v1",
+            "assessment_sha256": predictions["assessment_sha256"],
+            "models": {model: copy.deepcopy(predictions["models"][model])
+                       for model in ("S1-B", "S1-F", "S2-B")}}
+
+
+class ParticipantBoundaryTests(unittest.TestCase):
+    def setUp(self):
+        self.manifest, self.predictions = fixture()
+        self.pin = panel.digest(self.manifest)
+        self.submission = replay_submission(self.predictions)
+
+    def test_target_free_manifest_retains_every_trial_and_window(self):
+        result = panel.observation_manifest(self.manifest, expected_assessment_sha256=self.pin)
+        self.assertEqual(set(result), {"schema", "condition", "assessment_sha256", "runs"})
+        self.assertEqual(len(result["runs"]), 336)
+        self.assertEqual(sum(len(r["trials"]) for r in result["runs"]), 8400)
+        observed_windows = set()
+        for run, source in zip(result["runs"], self.manifest["runs"]):
+            self.assertEqual(set(run), {"subject", "nclass", "run", "member", "source_sha256", "trials"})
+            self.assertEqual(run["source_sha256"], source["source_sha256"])
+            for trial in run["trials"]:
+                self.assertEqual(set(trial), {"id", "start_sample_zero_based", "length_samples", "window_ids"})
+                observed_windows.update(trial["window_ids"])
+        self.assertEqual(observed_windows, set(self.submission["models"]["S1-B"]["window_predictions"]))
+        result["runs"][0]["trials"][0]["window_ids"].append("changed")
+        self.assertEqual(panel.digest(self.manifest), self.pin)
+        self.manifest["runs"][0]["trials"][0]["target"] = 4
+        with self.assertRaisesRegex(ValueError, "frozen pin"):
+            panel.observation_manifest(self.manifest, expected_assessment_sha256=self.pin)
+
+    def test_replay_only_submission_preserves_exact_operator_result(self):
+        original_manifest = copy.deepcopy(self.manifest)
+        original_submission = copy.deepcopy(self.submission)
+        expected = panel.evaluate_panel(self.manifest, self.predictions,
+                                         expected_assessment_sha256=self.pin)
+        actual = panel.evaluate_replay_submission(self.manifest, self.submission,
+                                                  expected_assessment_sha256=self.pin)
+        self.assertEqual(actual, expected)
+        self.assertEqual(self.manifest, original_manifest)
+        self.assertEqual(self.submission, original_submission)
+        self.assertEqual(len(actual["cells"]), 168)
+        self.assertFalse(actual["readiness_promoted"])
+
+    def test_participant_cannot_inject_recorded_control_or_change_frozen_reference(self):
+        self.submission["models"]["S2-F"] = self.predictions["models"]["S2-F"]
+        with self.assertRaisesRegex(ValueError, "replay-only source model panel"):
+            panel.evaluate_replay_submission(self.manifest, self.submission,
+                                             expected_assessment_sha256=self.pin)
+        self.submission = replay_submission(self.predictions)
+        self.submission["recorded_control_receipt_sha256"] = "c" * 64
+        with self.assertRaisesRegex(ValueError, "replay submission: exact fields"):
+            panel.evaluate_replay_submission(self.manifest, self.submission,
+                                             expected_assessment_sha256=self.pin)
+        self.submission = replay_submission(self.predictions)
+        self.manifest["runs"][0]["trials"][0]["recorded_prediction"] = 4
+        with self.assertRaisesRegex(ValueError, "frozen pin"):
+            panel.evaluate_replay_submission(self.manifest, self.submission,
+                                             expected_assessment_sha256=self.pin)
+
+    def test_wrong_support_pin_and_missing_replay_window_fail_closed(self):
+        self.submission["assessment_sha256"] = "f" * 64
+        with self.assertRaisesRegex(ValueError, "submission assessment pin mismatch"):
+            panel.evaluate_replay_submission(self.manifest, self.submission,
+                                             expected_assessment_sha256=self.pin)
+        self.submission = replay_submission(self.predictions)
+        self.submission["models"]["S2-B"]["window_predictions"].popitem()
+        with self.assertRaisesRegex(ValueError, "exact common assessment windows"):
+            panel.evaluate_replay_submission(self.manifest, self.submission,
+                                             expected_assessment_sha256=self.pin)
+
+    def test_paired_submissions_keep_operator_control_and_every_replay_cell(self):
+        author = copy.deepcopy(self.predictions)
+        wid = next(iter(author["models"]["S1-B"]["window_predictions"]))
+        author["models"]["S1-B"]["window_predictions"][wid] = 4
+        result = panel.compare_replay_submissions(self.manifest, replay_submission(author), self.submission,
+                                                  expected_assessment_sha256=self.pin)
+        expected = panel.compare_complete_panels(self.manifest, author, self.predictions,
+                                                 expected_assessment_sha256=self.pin)
+        self.assertEqual(result, expected)
+        self.assertEqual(len(result["paired_replay_cells"]), 126)
+        self.assertAlmostEqual(result["paired_replay_cells"][0]["candidate_minus_author"], 1 / 160)
+        self.assertIsNone(result["paper_win"])
+
+    def test_mi_me_submission_wrapper_preserves_separate_complete_panels(self):
+        me, me_predictions = fixture("ME")
+        assessments = {"MI": self.manifest, "ME": me}
+        predictions = {"MI": self.predictions, "ME": me_predictions}
+        submissions = {"MI": self.submission, "ME": replay_submission(me_predictions)}
+        pins = {"MI": self.pin, "ME": panel.digest(me)}
+        expected = panel.compare_mi_me(assessments, predictions, predictions,
+                                       expected_assessment_sha256s=pins)
+        result = panel.compare_mi_me_submissions(assessments, submissions, submissions,
+                                                expected_assessment_sha256s=pins)
+        self.assertEqual(result, expected)
+        self.assertEqual([result["panels"][c]["author"]["source_trial_count"] for c in ("MI", "ME")],
+                         [8400, 8400])
+        me_manifest = panel.observation_manifest(me, expected_assessment_sha256=pins["ME"],
+                                                 expected_condition="ME")
+        self.assertEqual(me_manifest["condition"], "ME")
+        with self.assertRaisesRegex(ValueError, "condition/source route mismatch"):
+            panel.observation_manifest(me, expected_assessment_sha256=pins["ME"])
+
+
+
 if __name__ == "__main__":
     unittest.main()

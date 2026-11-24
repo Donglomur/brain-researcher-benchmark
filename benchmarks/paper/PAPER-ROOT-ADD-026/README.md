@@ -77,6 +77,8 @@ This preserved declaration is lineage, not current execution qualification. Its 
   Scope: This is the source package currently selected by the published catalog; current does not assert executable/scientific qualification. Retained historical reproduction/calibration component; this implementation does not establish source-paper improvement success.
 - [Original26 input identity v1](contracts/original26-input-identity-v1) — Metadata only source evidence.
   Scope: Accepted original-26 input identity engineering documents under a dedicated artifact owner. Only the reviewed public locator spelling changes; existing task documentation, endpoint semantics and scientific/runtime readiness remain unchanged.
+- [Paired comparison v1](implementations/paired-comparison-v1) — Reviewed source component.
+  Scope: Paired descriptive comparison of retained source region arrays and both none/S slots on declared common support. It adds no scalar score, winner, superiority threshold, paired interval, lineage authentication or scientific qualification.
 - [Prediction interface v1](implementations/prediction-interface-v1) — Reviewed source component.
   Scope: Reviewed prediction interface and trusted fixed-control source with its scoped public engineering receipt. A fixed control is not participant/model execution, a new scientific result or runtime qualification; original evaluation and historical limits remain unchanged.
 - [Trusted fixed control v1](implementations/trusted-fixed-control-v1) — Reviewed source component.

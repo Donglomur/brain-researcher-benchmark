@@ -13,7 +13,7 @@ import json
 import math
 from pathlib import Path
 
-SCORER_SHA256 = "192438e3a2c6c066fc72ef0fd9f3b7d8fe2a54b1fa562d86eb95a942271b89c3"
+SCORER_SHA256 = "18b31699f611182b7e7c7c4646844df8e1291720128976bce25625744a69e661"
 SCHEMA = "fig5-target-variance-scatter/v1"
 
 

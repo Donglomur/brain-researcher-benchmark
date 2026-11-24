@@ -115,11 +115,36 @@ def _predictions(document, target_digest, expected, arm):
     return lookup
 
 
+def _roc_curve(ranked, positives, negatives):
+    """Exact empirical curve from ascending (score, label) pairs.
+
+    Equal scores enter together under score >= threshold. The initial null
+    threshold denotes a cutoff above every finite score, not a numeric cutoff.
+    No interpolation, pruning, pooling or cross-participant averaging occurs.
+    """
+    points = [{"threshold": None, "false_positive_rate": 0.0, "true_positive_rate": 0.0}]
+    tp = fp = 0
+    stop = len(ranked)
+    while stop:
+        start = stop - 1
+        while start and ranked[start - 1][0] == ranked[stop - 1][0]:
+            start -= 1
+        new_positives = sum(label for _, label in ranked[start:stop])
+        tp += new_positives
+        fp += stop - start - new_positives
+        points.append({"threshold": ranked[start][0],
+                       "false_positive_rate": fp / negatives,
+                       "true_positive_rate": tp / positives})
+        stop = start
+    return points
+
+
 def binary_metrics(labels, predictions, scores):
     """BA from declared hard decisions; AUC from tie-correct score ranks.
 
     AUC is P(awake score > LOR score) + 0.5 P(equal). Hard decisions are
     supplied by the frozen method; no threshold is selected using targets.
+    The exact empirical ROC curve is retained as an operator-only diagnostic.
     """
     if not labels or len(labels) != len(predictions) or len(labels) != len(scores):
         raise ValueError("nonempty equal-length labels, decisions and scores required")
@@ -150,7 +175,8 @@ def binary_metrics(labels, predictions, scores):
     return {"n_awake": positives, "n_lor": negatives, "true_awake": tp,
             "true_lor": tn, "sensitivity_awake": sensitivity,
             "specificity_lor": specificity,
-            "balanced_accuracy": (sensitivity + specificity) / 2, "roc_auc": auc}
+            "balanced_accuracy": (sensitivity + specificity) / 2, "roc_auc": auc,
+            "roc_curve": _roc_curve(ranked, positives, negatives)}
 
 
 def _summary(values):
@@ -198,6 +224,7 @@ def score_panel(target_blob, author_blob, candidate_blob, *, expected_target_sha
             "participant_count": SUBJECT_COUNT, "observation_count": len(labels),
             "aggregation": "equal participant means; never pooled window accuracy",
             "positive_class": "awake", "arms": scores,
+            "roc_curve_convention": "Per-participant empirical score_awake >= threshold; initial null threshold is above all finite scores. No pooled or averaged curve is inferred.",
             "declared_access_conditions": {name: doc["access_condition"] for name, doc in documents.items()},
             "reproduction_offsets_from_rounded_source": {
                 name: {metric: scores[name]["summary"][metric]["mean"] - anchor

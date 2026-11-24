@@ -1,5 +1,6 @@
 """Finite Figure 5e prediction evaluator. No fitting, loading neural arrays or code execution."""
 import argparse
+from collections import Counter
 import hashlib
 import json
 import math
@@ -202,46 +203,88 @@ def summarize_accuracies(values, factor):
             "bonferroni_factor": factor, "p_bonferroni": None if p is None or factor is None else min(1.0, p * factor)}
 
 
-def score(owner, candidate):
-    trials, splits = validate_owner(owner)
-    fields(candidate, ["schema", "task_id", "mode", "case_plan_sha256", "predictions"], "candidate")
+def prediction_rows(candidate, owner, plan_hash):
+    fields(candidate, ["schema", "task_id", "mode", "case_plan_sha256", "predictions"], "predictions")
     require(candidate["schema"] == "rem-dmm-predictions-v1" and candidate["task_id"] == TASK and candidate["mode"] == owner["mode"], "candidate identity/mode")
-    plan_hash = canonical_hash(public_plan(owner))
     require(candidate["case_plan_sha256"] == plan_hash, "case-plan mismatch")
     rows = candidate["predictions"]
     require(type(rows) is list, "prediction rows required")
+    return rows
+
+
+def historical_predictions(rows, splits):
+    require(len(rows) == sum(len(s["test_ids"]) for s in splits.values()), "complete held prediction grid required")
+    predictions = {}
+    for r in rows:
+        fields(r, ["pc", "repeat", "trial_id", "predicted_label"], "prediction")
+        require(type(r["pc"]) is int and type(r["repeat"]) is int, "integer indices required")
+        key = (r["pc"], r["repeat"])
+        require(key in splits and type(r["trial_id"]) is str and r["trial_id"] in splits[key]["test_ids"], "unexpected prediction support")
+        k = (*key, r["trial_id"])
+        require(k not in predictions, "duplicate prediction")
+        require(type(r["predicted_label"]) is int and r["predicted_label"] in (0, 1), "binary predicted label required")
+        predictions[k] = r["predicted_label"]
+    return predictions
+
+
+def historical_counts(ids, trials, predictions, pc, rep, baseline=None):
+    result = {"n_test": len(ids), "tp": 0, "fp": 0, "tn": 0, "fn": 0}
+    if baseline is not None:
+        result.update(baseline_correct=0, candidate_only_correct=0, baseline_only_correct=0)
+    for tid in ids:
+        y, yh = trials[tid]["rem_within_60s"], predictions[pc, rep, tid]
+        result[{(1, 1): "tp", (0, 1): "fp", (0, 0): "tn", (1, 0): "fn"}[y, yh]] += 1
+        if baseline is not None:
+            base_correct = baseline[pc, rep, tid] == y
+            result["baseline_correct"] += int(base_correct)
+            result["candidate_only_correct"] += int(yh == y and not base_correct)
+            result["baseline_only_correct"] += int(yh != y and base_correct)
+    correct = result["tp"] + result["tn"]
+    result["accuracy"] = correct / len(ids) if ids else None
+    if baseline is not None:
+        result["baseline_accuracy"] = result["baseline_correct"] / len(ids) if ids else None
+        result["paired_accuracy_delta"] = (correct - result["baseline_correct"]) / len(ids) if ids else None
+    return result
+
+
+def score(owner, candidate, baseline=None):
+    trials, splits = validate_owner(owner)
+    require(baseline is None or owner["mode"] == "historical_fig5e", "paired baseline requires historical_fig5e mode")
+    plan_hash = canonical_hash(public_plan(owner))
+    rows = prediction_rows(candidate, owner, plan_hash)
     report = {"schema": "rem-dmm-score-v1", "task_id": TASK, "mode": owner["mode"],
               "case_plan_sha256": plan_hash, "cohort_trials": 45, "biological_mice": 5,
               "author_pipeline_parity_established": False, "scientific_qualification": False,
               "information_isolation_established_by_scorer": False,
+              "comparison_present": baseline is not None,
               "scope": "Figure 5e dmM stimulation only; excludes Figure 2h and other interventions"}
     if owner["mode"] == "historical_fig5e":
-        require(len(rows) == sum(len(s["test_ids"]) for s in splits.values()), "complete held prediction grid required")
-        predictions = {}
-        for r in rows:
-            fields(r, ["pc", "repeat", "trial_id", "predicted_label"], "prediction")
-            require(type(r["pc"]) is int and type(r["repeat"]) is int, "integer indices required")
-            key = (r["pc"], r["repeat"])
-            require(key in splits and type(r["trial_id"]) is str and r["trial_id"] in splits[key]["test_ids"], "unexpected prediction support")
-            k = (*key, r["trial_id"])
-            require(k not in predictions, "duplicate prediction")
-            require(type(r["predicted_label"]) is int and r["predicted_label"] in (0, 1), "binary predicted label required")
-            predictions[k] = r["predicted_label"]
+        predictions = historical_predictions(rows, splits)
+        baseline_index = historical_predictions(prediction_rows(baseline, owner, plan_hash), splits) if baseline is not None else None
         cells, pcs = [], []
         for pc in range(1, 23):
-            accuracies = []
+            accuracies, baseline_accuracies, deltas = [], [], []
             for rep in range(10):
                 ids = splits[pc, rep]["test_ids"]
-                confusion = {"tp": 0, "fp": 0, "tn": 0, "fn": 0}
-                for tid in ids:
-                    y, yh = trials[tid]["rem_within_60s"], predictions[pc, rep, tid]
-                    confusion[{(1, 1): "tp", (0, 1): "fp", (0, 0): "tn", (1, 0): "fn"}[y, yh]] += 1
-                accuracy = (confusion["tp"] + confusion["tn"]) / len(ids)
-                accuracies.append(accuracy)
-                cells.append({"pc": pc, "repeat": rep, "n_test": len(ids), "accuracy": accuracy, **confusion})
-            pcs.append({"pc": pc, **summarize_accuracies(accuracies, owner["historical"]["bonferroni_factor"])})
-        report.update(cells=cells, principal_components=pcs, fit_cells=220,
-                      interpretation="Historical pooled-trial resampling statistic; resamples are not independent animals. Exact author splits, PCA/LDA implementation, rounding and correction family are not certified by an owner manifest.")
+                cell = {"pc": pc, "repeat": rep, **historical_counts(ids, trials, predictions, pc, rep, baseline_index)}
+                cell["mice"] = [{"mouse_id": mouse, **historical_counts(
+                    [tid for tid in ids if trials[tid]["mouse_id"] == mouse], trials, predictions, pc, rep, baseline_index)}
+                    for mouse in owner["mice"]]
+                accuracies.append(cell["accuracy"])
+                if baseline_index is not None:
+                    baseline_accuracies.append(cell["baseline_accuracy"])
+                    deltas.append(cell["paired_accuracy_delta"])
+                cells.append(cell)
+            summary = {"pc": pc, "accuracies": accuracies, **summarize_accuracies(accuracies, owner["historical"]["bonferroni_factor"])}
+            if baseline_index is not None:
+                summary.update(baseline_accuracies=baseline_accuracies,
+                               baseline_summary=summarize_accuracies(baseline_accuracies, owner["historical"]["bonferroni_factor"]),
+                               paired_accuracy_deltas=deltas, mean_paired_accuracy_delta=statistics.mean(deltas))
+            pcs.append(summary)
+        usage = Counter(tid for split in splits.values() for tid in split["test_ids"])
+        support = [{"trial_id": tid, "mouse_id": trial["mouse_id"], "held_split_uses": usage[tid]} for tid, trial in trials.items()]
+        report.update(cells=cells, principal_components=pcs, fit_cells=220, trial_support=support,
+                      interpretation="Historical pooled-trial resampling statistic; resamples are not independent animals. Paired accuracy differences are descriptive on the identical declared plan, not a superiority test or animal-level uncertainty. Every mouse and all 45 trials remain visible, including zero held support. Exact author splits, PCA/LDA implementation, rounding and correction family are not certified by an owner manifest.")
     else:
         require(len(rows) == 45, "complete prospective 45-trial support required")
         predictions = {}
@@ -269,12 +312,16 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("owner")
     parser.add_argument("candidate")
+    parser.add_argument("--baseline", help="Frozen historical Figure 5e comparator on the identical case plan")
     args = parser.parse_args()
     try:
         owner, oh = load(args.owner)
         candidate, ch = load(args.candidate)
-        result = score(owner, candidate)
+        baseline, bh = load(args.baseline) if args.baseline else (None, None)
+        result = score(owner, candidate, baseline)
         result.update(owner_sha256=oh, candidate_sha256=ch)
+        if baseline is not None:
+            result["baseline_sha256"] = bh
         print(json.dumps(result, sort_keys=True, allow_nan=False))
     except (Invalid, OSError, RecursionError) as error:
         print(json.dumps({"schema": "rem-dmm-refusal-v1", "error": str(error)}))

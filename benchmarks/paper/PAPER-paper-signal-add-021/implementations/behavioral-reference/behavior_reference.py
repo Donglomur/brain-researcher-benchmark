@@ -234,7 +234,7 @@ def literal_global_trial_shuffle(rows: list[dict], metric: str, a: str, b: str,
 
 def build_reference(rows: list[dict], *, seed: int = 20261114, bootstrap_draws: int = 2000,
                     literal_draws: int = 0) -> dict:
-    result = {"schema": "tms-full-behavior-component-v1", "roster": list(ROSTER),
+    result = {"schema": "tms-full-behavior-component-v2", "roster": list(ROSTER),
               "helper_reproduction_scope": "Signed mean/t/dz formulas on released figure predicates; not full author helper pipeline execution.",
               "metrics": {}, "complete_task_qualified": False}
     for metric in METRICS:
@@ -275,7 +275,13 @@ def build_reference(rows: list[dict], *, seed: int = 20261114, bootstrap_draws: 
         adjusted = holm({name: item["corrected_participant_sign_flip"]["p_two_sided"] for name, item in contrasts.items()})
         for name, value in adjusted.items():
             contrasts[name]["corrected_sign_flip_holm_six_contrasts"] = value
-        result["metrics"][metric] = {"participant_cells": cells, "contrasts": contrasts}
+        # generateFigure2.py plots the participant means with errorbar="se".
+        # Its per-person trial SD column is not the plotted across-person SEM.
+        summaries = [{"condition": group,
+                      **describe([lookup[person, group]["figure_mean_abs"] for person in ROSTER])}
+                     for group in CONDITIONS]
+        result["metrics"][metric] = {"participant_cells": cells, "contrasts": contrasts,
+                                     "figure_condition_summaries": summaries}
     return result
 
 

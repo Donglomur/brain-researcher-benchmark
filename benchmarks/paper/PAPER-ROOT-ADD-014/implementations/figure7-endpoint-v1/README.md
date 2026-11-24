@@ -55,6 +55,28 @@ difference of medians. Corrected-minus-raw contrasts and participant summaries
 are retained. Undefined metrics refuse the complete result; there is no
 candidate-dependent omission, score clipping or all-electrode substitution.
 
+## Granular operator report
+
+The report also retains `per_electrode`: exactly 31 rows in frozen selection
+order, keyed by `participant` and `electrode_id`. Each row contains both
+`source_cv` and `literal_eq6` metrics for all three signals, with
+`candidate_percent`, `author_percent`, and `paired_difference_pp`, plus each
+method's corrected-minus-raw alpha contrast in percentage points. The existing
+summary medians, primary comparison, selection and scoring formulas are unchanged.
+
+This table preserves the source Figure 7 prediction distributions that a median
+alone cannot reconstruct. The source violin consumes each selected electrode's
+xval value ([author script, lines 890–937](https://github.com/KenYMB/ECoG_alphaPRF/blob/4321eb4374db782d09f3f43362836f234a4e4f9b/scripts/ecog_APRFF_10k1e_checkalpha_bothgaind.m#L890-L937)).
+The table supports identity-level audit and downstream figure construction;
+plot rendering, gain/geometry outputs and the rest of the original panel remain
+unimplemented here. Source and literal metrics remain explicitly separate.
+
+These are operator evaluation outputs. They contain protected reference-derived
+scores and must not be exposed as candidate inputs or unrestricted development
+feedback. This API does not implement access control or a feedback budget.
+The table includes no raw response or prediction arrays and establishes no
+source authenticity, native parity, uncertainty interval or scientific win.
+
 ## Qualification and use limits
 
 The 366 population and 31 selected identities have **not** been authenticated or

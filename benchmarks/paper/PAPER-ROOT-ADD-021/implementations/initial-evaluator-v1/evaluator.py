@@ -142,17 +142,50 @@ def qc_and_smooth(rows):
         group = sorted(groups[key], key=lambda r: r["time"])
         values = {m: [r[m] for r in group] for m in METRICS}
         for index, row in enumerate(group):
+            neighbors = range(max(0, index-2), min(len(group), index+3))
+            row["smoothing_window_keys"] = [[group[j]["ID"], group[j]["region"], group[j]["time"]]
+                                             for j in neighbors]
             for metric in METRICS:
                 numerator = denominator = 0.0
-                for j in range(max(0, index-2), min(len(group), index+3)):
+                contributors = []
+                for j in neighbors:
                     if math.isfinite(values[metric][j]):
                         weight = math.exp(-0.5 * (j-index)**2)
                         numerator += weight * values[metric][j]
                         denominator += weight
+                        contributors.append({"key": [group[j]["ID"], group[j]["region"], group[j]["time"]],
+                                             "row_offset": j-index, "gaussian_weight": weight})
+                for contributor in contributors:
+                    contributor["normalized_weight"] = contributor["gaussian_weight"]/denominator
+                row[metric + "_smoothing_contributors"] = contributors
                 row[metric] = numerator/denominator if denominator else float("nan")
                 row[metric + "_filled"] = not math.isfinite(values[metric][index]) and math.isfinite(row[metric])
             output.append(row)
     return output
+
+
+def parameter_window_audit(processed):
+    """Retain every declared window and the exact post-QC smoothing support.
+
+    Keys are ID/region/time, independent of CSV row order. Contributions use
+    raw values from a neighbor that passes fit0 and has a finite endpoint;
+    filled values never become inputs to another smoothing window.
+    """
+    audit = []
+    for row in processed:
+        entry = {name: row[name] for name in ("ID", "age", "region", "ctx", "time")}
+        entry["raw_parameters"] = {
+            name: row[name + "_raw"] if name in METRICS else row[name]
+            for name in COLUMNS if name not in ("ID", "age", "region", "time")}
+        entry["fit0_pass"] = row["keep"]
+        entry["smoothing_window_keys"] = row["smoothing_window_keys"]
+        for metric in METRICS:
+            entry[metric] = {
+                "post_qc": row[metric + "_raw"] if row["keep"] else float("nan"),
+                "smoothed": row[metric], "filled_after_masking": row[metric + "_filled"],
+                "contributors": row[metric + "_smoothing_contributors"]}
+        audit.append(entry)
+    return audit
 
 
 def _betacf(a, b, x):
@@ -352,6 +385,11 @@ def analyze(rows, expected_participants):
                   "missing_raw":{m:sum(not math.isfinite(r[m+"_raw"]) for r in processed) for m in METRICS},
                   "filled_after_masking":{m:sum(r[m+"_filled"] for r in processed) for m in METRICS},
                   "remaining_missing":{m:sum(not math.isfinite(r[m]) for r in processed) for m in METRICS}},
+            "parameter_window_audit":parameter_window_audit(processed),
+            "parameter_window_audit_policy":{"identity":["ID","region","time"],
+                "order":"ID/region/time; prospective stable-time sorting, not original CSV row positions",
+                "smoothing":"centered five-row Gaussian sigma=1, clipped at group edges; metric-specific finite post-QC contributors",
+                "scope":"supplied-table lineage only; no authentication of recording, montage, spectra or native estimator"},
             "participant_region":regional,"participant_context_pooled_time_rows":contexts,"participant_omnibus_pooled_time_rows":omnibus,
             "source_age_models":source_models,"source_region_level_INT_PAF_interaction":interaction,
             "source_context_INT_PAF_age_models":contextual_coupling,"source_pooled_region_PAF_INT_correlation":correlation,

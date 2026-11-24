@@ -69,3 +69,49 @@ score has been produced. Both future paper+data and paper+data+author-code
 conditions need the same admitted population and independently defined
 scientific scoring; access to this audit/source report must be assigned
 consistently with those conditions.
+
+## Export the source coactivity curves
+
+`coactivity_curves.py` supplies a separate, partial original-endpoint preparation
+from the same metadata, plus normalized-coactivity responses joined by `row_id`.
+It exports all 11 source bins `[0,5)` through `[50,55)` for the two all-spine
+curves, four size-stratified curves and four session-stratified curves. These
+are the deposited `ClusteringbySpineSize.m` plotting calculations at lines
+278–295, 318–327 and 399–412, bound to the source SHA-256 above. They complement
+the row-order audit; they do not repair or fit the source mixed-effects tables.
+
+```sh
+python3 -B coactivity_curves.py KEYED_PAIR_RESPONSES.json NEW_CURVES.json
+python3 -B test_coactivity_curves.py -v
+```
+
+The input object has `schema_version: "rep011-coactivity-curves-input-v1"`,
+`source_sha256` equal to the pinned source hash, `input_kind` equal to
+`generated_engineering_control` or `empirical`, a nonempty `population_id`,
+and `native_pair_order_provenance` describing the identity mapping. `rows` is
+the audit's metadata list. `responses` is a list of objects containing
+`row_id` and `normalized_coactivity`. Every supplied row must have exactly one
+response, including distance-excluded rows. Response list order is immaterial.
+For example, a generated response is
+`{"row_id": "generated-pair-1", "normalized_coactivity": 0.5}`.
+
+Responses are nonnegative finite numbers, JSON `null` for source NaN, or the
+string `"Inf"` for source positive infinity. NaN is omitted from `nanmean`
+and the `nanstd/sqrt(non-NaN count)` calculation; infinity is retained and
+produces an infinite mean and undefined SEM. An empty or all-NaN bin has null
+mean and SEM; a singleton finite bin has zero SEM. The SEM uses the source's
+sample-standard-deviation convention and pair counts. It is **not** mouse-level
+uncertainty and does not treat directed/repeated pairs as independent animals.
+The export records each bin's row identities, total, nonmissing, NaN and
+infinite counts, including empty bins. Missing area excludes a row only from
+the size curves; it remains eligible for all-spine and session curves.
+
+An input content hash, all curve supports, distance/area exclusions and the
+unchanged row-permutation audit accompany the results. Output creation is
+exclusive. Both results and authentic identity records belong in external
+operator evidence. Complete supplied coverage is not verification of the
+original population: source-native acquisition, response derivation, cohort
+admission, other primary endpoint families, numerical-reference comparison,
+and both information-condition evaluations remain unresolved. Generated tests
+establish only this export's arithmetic, stratification and coverage behavior;
+no scientific reproduction or improvement is claimed.

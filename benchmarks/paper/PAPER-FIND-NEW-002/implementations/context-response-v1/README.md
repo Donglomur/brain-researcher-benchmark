@@ -17,7 +17,8 @@ already-derived conditions use `[123:126]` directly. The output retains all
 The source plotting code pools cells. `pooled_cell_means` preserves that
 weighting; separately named namespace means are diagnostics. The 108 revision
 rows do not imply one new experiment or 108 biological replicates. Their
-animal/session provenance remains unresolved. No inferential test is added.
+animal/session provenance remains unresolved. The optional statistics companion below replays the released pooled-cell tests;
+it does not establish biological independence.
 
 Panel H/I's source function does **not** use `nan_to_num`; Panel G's trace
 preparation does. Undefined H/I responses become explicit JSON `null` values
@@ -44,10 +45,29 @@ per-experiment clocks, upstream normalization, animal/session joins, complete
 primary controls, and a meaningful ordered same-result improvement comparison
 remain unresolved. Source frame indices are not relabeled as 300 ms.
 
-Generated controls can be run with NumPy already installed:
+`source_statistics.reconstruct_statistics(experiments, revision)` first calls
+that same complete 140-row reconstruction, then replays notebook cell 11's three
+`scipy.stats.mannwhitneyu` calls: matched versus unmatched, matched versus opto-only,
+and unmatched versus opto-only. The U statistic belongs to the first named
+condition. It retains the source's unpaired pooled-cell test even though the
+conditions share cells; it does not substitute an animal-level or paired test,
+add a multiple-testing correction, or define a new improvement criterion.
+
+The companion makes the runtime defaults explicit (two-sided, continuity
+correction enabled, method auto, NaNs propagated) and reports the SciPy version.
+The author's environment leaves SciPy unpinned, so exact historical p-value parity
+is unqualified. Both source samples have 140 entries. Every reconstructed row
+remains in the output; any undefined response invalidates each affected comparison
+instead of deleting cells or imputing values. A comparison of the other two finite
+conditions remains available. This is a literal released-notebook assessment,
+not complete primary reproduction, animal-level inference or paper improvement.
+
+The original arithmetic still needs only NumPy. The statistics companion and its
+generated controls additionally require SciPy already installed. Run the affected
+component controls together:
 
 ```sh
-python3 -B -m unittest discover -s . -p 'test_context_response.py'
+python3 -B -m unittest discover -s . -p 'test_*.py'
 ```
 
 Maintainers must enroll this component and command in the existing integrity

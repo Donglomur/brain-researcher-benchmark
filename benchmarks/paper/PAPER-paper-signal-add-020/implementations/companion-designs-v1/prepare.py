@@ -139,11 +139,30 @@ def build_designs(rows: list[dict[str, str]]) -> dict:
                 "x": x, "random_block": z, "y": values[spec["outcome"]],
             })
         identities = [[int(row["source_row"]), row["sub"], row["trialGlobal"]] for row in selected]
+        # Preserve every original participant, including those with zero retained
+        # rows. The three disjoint stages trace all source rows without treating
+        # trials as independent people or substituting a common model mask.
+        first_ids = {row["source_row"] for row in first}
+        selected_ids = {row["source_row"] for row in selected}
+        support = {}
+        for row in rows:
+            participant = support.setdefault(row["sub"], {
+                "sub": row["sub"], "source_rows": 0,
+                "excluded_missing_valence_pe_source_rows": [],
+                "excluded_model_complete_cases_source_rows": [],
+                "retained_source_rows": [],
+            })
+            participant["source_rows"] += 1
+            stage = ("excluded_missing_valence_pe_source_rows" if row["source_row"] not in first_ids
+                     else "excluded_model_complete_cases_source_rows" if row["source_row"] not in selected_ids
+                     else "retained_source_rows")
+            participant[stage].append(int(row["source_row"]))
         models[name] = {
             **spec, "source_rows": len(rows),
             "excluded_missing_valence_pe": len(rows) - len(first),
             "excluded_model_complete_cases": len(first) - len(selected),
             "retained_rows": len(selected), "participants": len({row["sub"] for row in selected}),
+            "participant_support": list(support.values()),
             "ordered_identity_sha256": sha256(json.dumps(identities, separators=(",", ":")).encode()),
             "rows": designs,
         }

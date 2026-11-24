@@ -82,14 +82,17 @@ python3 -I -B scorer.py \
   --reference /private/frozen-reference.json \
   --reference-sha256 <independently-recorded-sha256> \
   --candidate /private/candidate-predictions.json \
+  --candidate-sha256 <independently-recorded-candidate-sha256> \
   --output /private/new-score-panel.json
 ```
 
 The Python scorer uses only the standard library. It makes no download and never
-fits a model. Its required reference hash rejects changed reference bytes; it
-cannot certify the operator's source identity. Outputs refuse overwrite and
-include input hashes. Keep references, scores, candidate predictions and all
-numeric panels outside public Git. This is not a secure participant controller,
+fits a model. Its required reference and candidate hashes reject bytes changed
+after their independently recorded commitments, before JSON parsing or scoring.
+Record the candidate commitment before exposing protected assessment feedback.
+The checks cannot certify source identity or the chronology of those commitments.
+Outputs refuse overwrite and include both checked input hashes. Keep references,
+scores, candidate predictions and all numeric panels outside public Git. This is not a secure participant controller,
 and a shared process/filesystem does not protect targets from participants.
 
 The source reference and candidate JSON headers contain exactly:

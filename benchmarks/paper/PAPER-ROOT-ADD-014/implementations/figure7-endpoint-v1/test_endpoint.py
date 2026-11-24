@@ -66,6 +66,39 @@ class EndpointControls(unittest.TestCase):
                           'author_corrected_minus_raw_medians_pp': 75})
         self.assertEqual(report['selected_participants'], 2)
 
+    def test_complete_granular_distribution_retains_identity_and_pairing(self):
+        sel = selection()
+        report = E.evaluate_predictions(sel, candidate(sel), expected_selection_sha256=sel.selection_sha256,
+                                        load_reference=reference)
+        rows = report['per_electrode']
+        self.assertEqual([(r['participant'], r['electrode_id']) for r in rows], list(sel.selected))
+        self.assertEqual(len(rows), 31)
+        for i, row in enumerate(rows):
+            self.assertEqual(set(row), {'participant', 'electrode_id', 'metrics',
+                                        'baseline_correction_contrasts'})
+            self.assertEqual(set(row['metrics']), {'source_cv', 'literal_eq6'})
+            for metric in row['metrics'].values():
+                # Analytic proportional waveforms: COD is 100, 75 or 0 percent.
+                expected = 100 if i < 16 else 0
+                self.assertEqual(metric['corrected_alpha'], {
+                    'candidate_percent': expected, 'author_percent': 75,
+                    'paired_difference_pp': expected - 75})
+                self.assertEqual(metric['raw_alpha'], {
+                    'candidate_percent': 75, 'author_percent': 0, 'paired_difference_pp': 75})
+                self.assertEqual(metric['broadband'], {
+                    'candidate_percent': 100, 'author_percent': 100, 'paired_difference_pp': 0})
+            for contrast in row['baseline_correction_contrasts'].values():
+                self.assertEqual(contrast, {'candidate_corrected_minus_raw_pp': expected - 75,
+                                            'author_corrected_minus_raw_pp': 75})
+        # Reconstruct every summary from the complete table without response access.
+        for metric, signals in report['metrics'].items():
+            for signal, summary in signals.items():
+                for method in ('candidate', 'author'):
+                    vector = [r['metrics'][metric][signal][method + '_percent'] for r in rows]
+                    self.assertEqual(E._median(vector), summary[method + '_median_percent'])
+                differences = [r['metrics'][metric][signal]['paired_difference_pp'] for r in rows]
+                self.assertEqual(E._median(differences), summary['median_paired_difference_pp'])
+
     def test_identity_join_not_candidate_order(self):
         sel = selection()
         direct = E.evaluate_predictions(sel, candidate(sel), expected_selection_sha256=sel.selection_sha256,
@@ -85,6 +118,9 @@ class EndpointControls(unittest.TestCase):
                                         load_reference=reference)
         self.assertEqual(report['metrics']['source_cv']['corrected_alpha']['candidate_median_percent'], 100)
         self.assertLess(report['metrics']['literal_eq6']['corrected_alpha']['candidate_median_percent'], -100)
+        for row in report['per_electrode']:
+            self.assertEqual(row['metrics']['source_cv']['corrected_alpha']['candidate_percent'], 100)
+            self.assertLess(row['metrics']['literal_eq6']['corrected_alpha']['candidate_percent'], -100)
 
     def test_source_strict_boundaries_and_both_branches(self):
         for field, value in [('corrected_broadband_xval_percent', 31),

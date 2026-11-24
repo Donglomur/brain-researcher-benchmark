@@ -119,6 +119,10 @@ No new data were acquired and no authentic targets, neural data, weights, traini
 or native inference were used. Original paper split/cohort authentication,
 preprocessing/default reconciliation, the matching published neural-only baseline,
 EEG export aggregation reconciliation, author competence, protected execution and
-scientific uncertainty remain unresolved
-as recorded in the task's unchanged improvement contract. A successful conversion
-is not paper reproduction, improvement readiness or empirical superiority.
+scientific uncertainty remain unresolved. The current reproduction contract and
+paired outcome protocols explicitly retain the EEG grouping discrepancy; the
+unchanged improvement contract's aggregation field is preserved lineage metadata,
+not evidence that EEG parity was established. See the
+[EEG grouping and retained contract clarification](../../docs/v1-transcript-evaluation-v1.md#eeg-grouping-and-retained-contract-lineage).
+A successful conversion is not paper reproduction, improvement readiness or
+empirical superiority.
