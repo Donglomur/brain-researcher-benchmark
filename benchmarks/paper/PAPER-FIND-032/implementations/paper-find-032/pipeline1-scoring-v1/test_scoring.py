@@ -8,7 +8,8 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from scoring import (CONDITIONS, PARTICIPANTS, PIPELINES, FoldKey, Predictions,
-                     ScoreError, Targets, compare_panel, pinned_sound_folds, score_fold)
+                     ScoreError, Targets, compare_information_conditions, compare_panel,
+                     pinned_sound_folds, score_fold)
 
 
 TRAIN = np.array([0., .01])
@@ -181,6 +182,85 @@ class ScoringTests(unittest.TestCase):
         result = compare(fixture(), stimulus="omission")
         self.assertEqual(result["stimulus"], "omission")
         np.testing.assert_allclose(result["group_candidate_accuracy_percent"], 20.)
+
+
+class InformationConditionTests(unittest.TestCase):
+    def paired(self, rows, *, stimulus="sound", frozen=None):
+        return compare_information_conditions(iter(rows), stimulus=stimulus,
+            train_times=TRAIN, test_times=TEST, fold_ids=FOLDS,
+            frozen_trials={row[0]: row[1].trial_ids for row in rows} if frozen is None else frozen)
+
+    def test_shared_baseline_and_both_outcomes_match_independent_scoring(self):
+        rows = fixture()
+        paired = []
+        for key, target, author, paper in rows:
+            # Author: 100%, paper: 20%, code: 100% except one temporal cell.
+            # The first participant has a different code result to verify that
+            # the arm contrast retains people before the group mean.
+            author.labels[:] = 1
+            code = prediction(target.trial_ids, np.ones(len(target.trial_ids), dtype=np.int8))
+            if key.participant == PARTICIPANTS[0]:
+                code.labels[:] = 2
+            code.labels[:, 1, 2] = 2
+            paired.append((key, target, author, paper, code))
+        result = self.paired(paired)
+        paper = compare([(k, t, a, p) for k, t, a, p, c in paired])
+        code = compare([(k, t, a, c) for k, t, a, p, c in paired])
+        for name, expected in (("paper_data", paper), ("paper_data_author_code", code)):
+            actual = result["condition_results"][name]
+            for field, value in expected.items():
+                if isinstance(value, np.ndarray):
+                    np.testing.assert_array_equal(actual[field], value)
+                else:
+                    self.assertEqual(actual[field], value)
+        contrast = result["participant_code_minus_paper_accuracy_percentage_points"]
+        reduction = result["participant_reconstruction_error_reduction_with_code_percentage_points"]
+        self.assertEqual(contrast.shape, (33, 2, 4, 2, 3))
+        np.testing.assert_allclose(contrast[0], -20.)
+        np.testing.assert_allclose(contrast[1:, :, :, 0, 0], 80.)
+        np.testing.assert_allclose(contrast[:, :, :, 1, 2], -20.)
+        np.testing.assert_allclose(reduction, contrast)  # author is perfect here
+        self.assertAlmostEqual(result["group_code_minus_paper_accuracy_percentage_points"][0, 0, 0, 0],
+                               (32 * 80. - 20.) / 33)
+        self.assertIsNone(result["qualified_reward"])
+
+    def test_accuracy_gain_is_separate_from_reconstruction_and_arm_swap(self):
+        rows = [(key, target, author, author, candidate)
+                for key, target, author, candidate in fixture()]
+        forward = self.paired(rows, stimulus="omission")
+        reverse = self.paired([(k, t, a, c, p) for k, t, a, p, c in rows], stimulus="omission")
+        # Code gets 20 points more accuracy but is 20 points further from the
+        # all-wrong author. A gain is therefore not a reconstruction success.
+        np.testing.assert_allclose(forward["participant_code_minus_paper_accuracy_percentage_points"], 20.)
+        np.testing.assert_allclose(forward["participant_reconstruction_error_reduction_with_code_percentage_points"], -20.)
+        for field in ("participant_code_minus_paper_accuracy_percentage_points",
+                      "group_code_minus_paper_accuracy_percentage_points",
+                      "participant_reconstruction_error_reduction_with_code_percentage_points",
+                      "group_reconstruction_error_reduction_with_code_percentage_points"):
+            np.testing.assert_allclose(reverse[field], -forward[field])
+        for panel in forward["condition_results"].values():
+            self.assertEqual(panel["stimulus"], "omission")
+
+    def test_single_pass_source_and_incomplete_or_misaligned_second_arm_refused(self):
+        rows = [(key, target, author, author, candidate)
+                for key, target, author, candidate in fixture()]
+        manifest = {row[0]: row[1].trial_ids for row in rows}
+        visits = []
+        def one_pass():
+            for row in rows:
+                visits.append(row[0])
+                yield row
+        compare_information_conditions(one_pass(), stimulus="sound", train_times=TRAIN,
+            test_times=TEST, fold_ids=FOLDS, frozen_trials=manifest)
+        self.assertEqual(visits, [row[0] for row in rows])
+        with self.assertRaisesRegex(ScoreError, "incomplete"):
+            self.paired(rows[:-1], frozen=manifest)
+        key, target, author, paper, code = rows[1]
+        for bad_code in (replace(code, trial_ids=tuple(reversed(code.trial_ids))),
+                         replace(code, train_times=TRAIN + .01),
+                         replace(code, labels=code.labels[:1])):
+            with self.subTest(bad_code=bad_code), self.assertRaises(ScoreError):
+                self.paired([rows[0], (key, target, author, paper, bad_code)] + rows[2:], frozen=manifest)
 
 
 if __name__ == "__main__":

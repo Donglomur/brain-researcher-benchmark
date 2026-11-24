@@ -15,8 +15,10 @@ finding or establishes preactivation.
 
 For paired paper+data and paper+data+official-code evaluation, use the same frozen
 operator support and author baseline for each arm and report them separately.
-This component performs scoring; it does not issue participant access, enforce
-equal compute, or replace the existing paired-delivery machinery.
+`compare_information_conditions` now offers a single streamed evaluation for
+both arms, using each fold's shared targets and author predictions. This component
+performs scoring; it does not issue participant access, enforce equal compute,
+or replace the existing paired-delivery machinery.
 
 The result is a complete matrix panel, not a scalar benchmark reward. All 33
 declared participants, four entropy conditions, and both original and reordered
@@ -55,6 +57,22 @@ trials identify the omitted tone. Operator-owned labels stay outside the decoder
 interface and outside public Git. `cases` can stream one fold at a time; the
 scorer does not require a full study's prediction tensors in memory.
 
+`compare_information_conditions(cases, stimulus=..., train_times=...,
+test_times=..., fold_ids=..., frozen_trials=...)` takes streamed
+`(FoldKey, Targets, author_predictions, paper_data_predictions,
+paper_data_author_code_predictions)` cases. All three prediction sets use the
+same targets, author baseline, frozen trial support, folds and source axes.
+Both arms must cover the entire panel; an invalid or absent arm prevents a
+paired result. The return value's `condition_results` contains the unchanged
+single-candidate result schema under `paper_data` and `paper_data_author_code`.
+It additionally reports code-minus-paper accuracy and paper-minus-code absolute
+reconstruction error for each participant and the equal-participant group mean.
+Positive error reduction means closer agreement with author accuracy; it can
+have the opposite sign from decoder gain. All original panel axes remain.
+Sound and omission still require separate calls. A single-pass case iterator
+avoids retaining both arms' full-study prediction tensors. Shared scoring inputs
+do not establish matched access, run pairing, compute, or a causal code effect.
+
 `score_fold` computes correct counts, tested-trial counts, and genuine 4×4
 confusion counts for every train/test cell. The confusion axes are **actual,
 predicted**. Missing true classes retain zero count rows. No balanced-accuracy
@@ -91,8 +109,10 @@ The adjacent `test_scoring.py` uses generated labels and predictions only. Its
 oracle explicitly enumerates confusion counts, distinguishes equal-fold scoring
 from pooled-trial scoring, gives one participant ten times more trials to check
 equal participant weighting, and checks signed gains and nonuniform temporal
-cells. Run it through the shared lightweight test pool using the existing NumPy
-environment. Exact executed commands/results belong in `HANDOFF.json` after
+cells. Paired controls compare both arms with independent single-arm scoring,
+exercise code gains that worsen reconstruction, verify arm-swap signs, and
+refuse missing or misaligned second-arm support. Run it through the shared
+lightweight test pool using the existing NumPy environment. Exact executed commands/results belong in `HANDOFF.json` after
 execution; this README alone does not report a pass.
 
 No authentic data, source targets, fitted author model, candidate model, or agent
