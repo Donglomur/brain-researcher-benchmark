@@ -1,0 +1,136 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol",
+    "case_id",
+    "context_sha256",
+    "categories",
+    "trial_ids",
+    "scores"
+  ],
+  "properties": {
+    "protocol": {
+      "const": "neural075-v1"
+    },
+    "case_id": {
+      "enum": [
+        "Subject1/neural/imagery",
+        "Subject1/neural/perception",
+        "Subject1/no_neural/imagery",
+        "Subject1/no_neural/perception",
+        "Subject1/training_permuted/imagery",
+        "Subject1/training_permuted/perception",
+        "Subject2/neural/imagery",
+        "Subject2/neural/perception",
+        "Subject2/no_neural/imagery",
+        "Subject2/no_neural/perception",
+        "Subject2/training_permuted/imagery",
+        "Subject2/training_permuted/perception",
+        "Subject3/neural/imagery",
+        "Subject3/neural/perception",
+        "Subject3/no_neural/imagery",
+        "Subject3/no_neural/perception",
+        "Subject3/training_permuted/imagery",
+        "Subject3/training_permuted/perception",
+        "Subject4/neural/imagery",
+        "Subject4/neural/perception",
+        "Subject4/no_neural/imagery",
+        "Subject4/no_neural/perception",
+        "Subject4/training_permuted/imagery",
+        "Subject4/training_permuted/perception",
+        "Subject5/neural/imagery",
+        "Subject5/neural/perception",
+        "Subject5/no_neural/imagery",
+        "Subject5/no_neural/perception",
+        "Subject5/training_permuted/imagery",
+        "Subject5/training_permuted/perception"
+      ]
+    },
+    "context_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "categories": {
+      "const": [
+        "n01443537",
+        "n01621127",
+        "n01677366",
+        "n01846331",
+        "n01858441",
+        "n01943899",
+        "n01976957",
+        "n02071294",
+        "n02128385",
+        "n02139199",
+        "n02190790",
+        "n02274259",
+        "n02416519",
+        "n02437136",
+        "n02437971",
+        "n02690373",
+        "n02797295",
+        "n02824058",
+        "n02882301",
+        "n02916179",
+        "n02950256",
+        "n02951358",
+        "n03064758",
+        "n03122295",
+        "n03124170",
+        "n03237416",
+        "n03272010",
+        "n03345837",
+        "n03379051",
+        "n03452741",
+        "n03455488",
+        "n03482252",
+        "n03495258",
+        "n03584254",
+        "n03626115",
+        "n03710193",
+        "n03716966",
+        "n03761084",
+        "n03767745",
+        "n03941684",
+        "n03954393",
+        "n04210120",
+        "n04252077",
+        "n04254777",
+        "n04297750",
+        "n04387400",
+        "n04507155",
+        "n04533802",
+        "n04554684",
+        "n04572121"
+      ]
+    },
+    "trial_ids": {
+      "type": "array",
+      "minItems": 500,
+      "maxItems": 1750,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^q[a-f0-9]{24}$"
+      }
+    },
+    "scores": {
+      "type": "array",
+      "minItems": 500,
+      "maxItems": 1750,
+      "items": {
+        "type": "array",
+        "minItems": 50,
+        "maxItems": 50,
+        "items": {
+          "type": "number",
+          "minimum": -1000000.0,
+          "maximum": 1000000.0
+        }
+      }
+    }
+  },
+  "description": "Runtime additionally enforces500 imagery or1750 perception rows, exact trusted context identity and complete30-case order. Regex lexical matching is full-string at runtime.",
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
