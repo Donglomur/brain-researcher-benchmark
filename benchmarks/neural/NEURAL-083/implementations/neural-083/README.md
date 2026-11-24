@@ -4,7 +4,7 @@ This task exposes the reviewed source for preparing the complete 54-person, two-
 
 The [preparation guide](preparation/README.md) describes the exact captured-source entry, complete projection/finalization routes and external inputs. This package contains source only. It does not contain original neural data, observed schema bindings, identity keys, protected answers, native environments or independent scientific admission.
 
-From this task directory, select an absolute fresh absent cache prefix in an owned, nonshared parent and run:
+From the implementation directory, `benchmarks/neural/NEURAL-083/implementations/neural-083`, select an absolute fresh absent cache prefix in an owned, nonshared parent and run:
 
 ```sh
 python3 -I -S -B -X pycache_prefix=ABSOLUTE_FRESH_ABSENT_PREFIX \
@@ -16,7 +16,7 @@ This command captures and authenticates source bytes without importing the local
 From the repository root, the source-only checker is:
 
 ```sh
-python3 -I -S -B benchmarks/neuroscience/neural-083/test_preparation_source.py
+python3 -I -S -B benchmarks/neural/NEURAL-083/implementations/neural-083/test_preparation_source.py
 ```
 
 The existing [28-file programme manifest](https://github.com/Donglomur/brain-researcher-benchmark/blob/d3e2c5c27276a36eaa23c53a0502ef06c3bfbef3/docs/neuroscience-benchmarks/NEURAL083_SOURCE_MANIFEST.json) points to the already-published programme at its historical public paths. The new preparation source does not claim that the complete controller, native environment or empirical study is ready to run from this directory.

@@ -31,7 +31,7 @@ This package excludes authentic arrays, private labels/targets, credentials, pri
 From the repository root, with Python3.11 or later:
 
 ```
-python3 -I -S -B benchmarks/scientific_contracts/openbmi_case_adaptive/test_portability.py
+python3 -I -S -B benchmarks/neural/NEURAL-083/implementations/case-adaptive/test_portability.py
 ```
 
 The standard-library check works with ordinary0644 files/0755 directories. It authenticates the full41-role closure, builds trusted definitions with an explicitly inert denying capability, verifies restored import bindings, and exercises missing/denying capability refusals. Numerical imports, subprocess creation and network connections are poisoned. It does not invoke execute, protected_grade, a candidate, Provider, reference fit, native worker or the full probability graph. Test metadata serialization has an explicit64KiB virtual-I/O precharge; source reads have a separate fixed1MiB check-only allowance. Those are engineering-test limits, not production defaults.

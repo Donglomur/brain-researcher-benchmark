@@ -6,7 +6,7 @@ The ten original modules in `source/original` and `source/program` are retained 
 
 ## Direct source inspection
 
-Run from the task root, `benchmarks/neuroscience/neural-083`. Replace the cache placeholder with an absolute, fresh absent path whose parent directory is owned by the invoking user and is not group/world writable:
+Run from the implementation directory, `benchmarks/neural/NEURAL-083/implementations/neural-083`. Replace the cache placeholder with an absolute, fresh absent path whose parent directory is owned by the invoking user and is not group/world writable:
 
 ```sh
 python3 -I -S -B -X pycache_prefix=ABSOLUTE_FRESH_ABSENT_PREFIX \
@@ -17,7 +17,7 @@ The operator must externally select the exact entry, source manifest and trusted
 
 The entry is outside its own source manifest. Recording its identity is not self-authentication: the caller retains source, interpreter and cache-parent custody. Existing producing records bind particular entry/manifest identities and cannot be silently reassigned to this public counterpart. Source checks do not solve hostile privileged races or qualify an interpreter or scientific environment.
 
-The public repository does not yet provide generic source-component discovery for this task. The supported source route is the direct command above. The repository-root checker path is `benchmarks/neuroscience/neural-083/test_preparation_source.py`; its role is finite source/entry validation, not scientific execution.
+The public repository does not yet provide generic source-component discovery for this task. The supported source route is the direct command above. The repository-root checker path is `benchmarks/neural/NEURAL-083/implementations/neural-083/test_preparation_source.py`; its role is finite source/entry validation, not scientific execution.
 
 ## Exact external inventory and captured dependencies
 

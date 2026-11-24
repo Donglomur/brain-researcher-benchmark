@@ -4,10 +4,10 @@ This source-tested Python 3.11 component acquires the fixed NEURAL-083 motor-ima
 
 ## Portable, inert example
 
-From a physical checkout directory, run the following with Python 3.11. The supplied request deliberately refuses execution before output creation, resource-limit changes, or network access; a nonzero exit with `separate actual root execution selection required` is the expected result.
+From the physical repository root, run the following with Python 3.11. The supplied request deliberately refuses execution before output creation, resource-limit changes, or network access; a nonzero exit with `separate actual root execution selection required` is the expected result.
 
 ```sh
-NEURAL083_ACQUISITION="$(pwd -P)/benchmarks/neuroscience/neural-083/acquisition-v1"
+NEURAL083_ACQUISITION="$(pwd -P)/benchmarks/neural/NEURAL-083/implementations/neural-083/acquisition-v1"
 python3.11 -I -S -B "$NEURAL083_ACQUISITION/acquire.py" \
   --roster "$NEURAL083_ACQUISITION/publisher_roster.json" \
   --request "$NEURAL083_ACQUISITION/REQUEST.INERT.json" \
