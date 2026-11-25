@@ -11,6 +11,8 @@ import argparse
 import hashlib
 import json
 import math
+import sys
+from fractions import Fraction
 from pathlib import Path
 
 CONDITIONS = [30, 60, 300, 600, 3600]
@@ -50,8 +52,17 @@ def iteration_means(rows):
     values = [[onset(value) for value in row] for row in rows]
     means = []
     for column in zip(*values):
-        means.append(None if any(value is None for value in column)
-                     else math.fsum(value / ITERATIONS for value in column))
+        if any(value is None for value in column):
+            means.append(None)
+            continue
+        scaled = [value / ITERATIONS for value in column]
+        # Subnormal divided terms can lose contributions even when nonzero.
+        # Preserve the mean while keeping ordinary normal arithmetic intact.
+        if any(value < sys.float_info.min for value in scaled):
+            means.append(float(sum((Fraction(value) for value in column),
+                                   Fraction()) / ITERATIONS))
+        else:
+            means.append(math.fsum(scaled))
     return means
 
 

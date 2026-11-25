@@ -39,6 +39,10 @@ The tensor is the transpose of one source candidate's five-ITI by twenty-repeat
 slice. Arithmetic means are taken over the twenty iterations **before** log
 transformation. A single missing iteration propagates to that ITI mean, matching
 `mean(TTL,3)` without `omitnan`. Simulations are not biological replicates.
+When dividing a positive finite onset by twenty enters the binary64 subnormal
+range (including zero), an exact-rational fallback preserves the representable
+arithmetic mean. Normal divided terms keep the existing reduction, and missing
+iterations still propagate.
 
 The output retains every candidate's natural-log RSS, raw MSE, unpenalized AIC,
 parameter-penalized AIC and source corrected-AIC expression. Selection ranks
