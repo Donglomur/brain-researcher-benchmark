@@ -290,11 +290,33 @@ def _mean(values):
         raise ContractError("Infinite value cannot be omitted from an aggregate")
     values = [v for v in values if math.isfinite(v)]
     try:
-        result = math.fsum(v/len(values) for v in values) if values else float("nan")
+        if values and any(v != 0 and v/len(values) == 0 for v in values):
+            # Dividing first must not erase a representable subnormal mean.
+            from fractions import Fraction
+            result = float(sum(map(Fraction, values), Fraction()) / len(values))
+        else:
+            result = math.fsum(v/len(values) for v in values) if values else float("nan")
     except OverflowError as exc:
         raise ContractError("Nonfinite aggregate") from exc
     if math.isinf(result):
         raise ContractError("Nonfinite aggregate")
+    return result
+
+
+def _root_participant_mse(error_groups, macro_mse):
+    """Preserve equal-participant RMSE when intermediate squares round to zero."""
+    if not error_groups:
+        return float("nan")
+    if macro_mse != 0:
+        return math.sqrt(macro_mse)
+    scale = max(abs(error) for group in error_groups for error in group)
+    if scale == 0:
+        return 0.0
+    normalized = math.fsum(math.fsum((error/scale)**2 for error in group) / len(group)
+                           for group in error_groups) / len(error_groups)
+    result = scale * math.sqrt(normalized)
+    if result == 0:
+        raise ContractError("Nonzero root participant-macro error is below binary64 output range")
     return result
 
 
@@ -459,6 +481,7 @@ def evaluate_heldout(reference, submission):
     scores = {}
     for metric in METRICS:
         participant_scores = []
+        error_groups = {"candidate": [], "train_only_region_mean": []}
         for pid in roster:
             keys = [k for k in targets if k[0]==pid and k[2]==metric]
             if not keys:
@@ -471,12 +494,14 @@ def evaluate_heldout(reference, submission):
                 if not all(math.isfinite(v) for v in errors+squares):
                     raise ContractError("Nonfinite derived prediction error or squared error")
                 result[name] = {"mae":_mean([abs(v) for v in errors]),"mse":_mean(squares)}
+                error_groups[name].append(errors)
             participant_scores.append(result)
         scored = [r for r in participant_scores if r["status"]=="scored"]
         scores[metric] = {"participants":participant_scores,"scored_participant_count":len(scored)}
         for name in ("candidate","train_only_region_mean"):
             scores[metric][name] = {"participant_macro_mae":_mean([r[name]["mae"] for r in scored]),
-                "root_participant_macro_mse":math.sqrt(_mean([r[name]["mse"] for r in scored])) if scored else float("nan")}
+                "root_participant_macro_mse":_root_participant_mse(
+                    error_groups[name], _mean([r[name]["mse"] for r in scored]))}
     return {"task_id":TASK_ID,"assessment":"prospective_grouped_prediction_component_not_frozen_benchmark_score",
             "scientifically_qualified":False,"scores":scores,"protected_reference_requirement":"operator keeps targets and excludes evaluation feedback from selection",
             "training_exposure_verified":False,"preserved_holds":HOLDS}
