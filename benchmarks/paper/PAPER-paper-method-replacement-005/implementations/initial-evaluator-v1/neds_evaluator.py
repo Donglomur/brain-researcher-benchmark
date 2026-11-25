@@ -159,15 +159,31 @@ def bits_per_spike(counts, rates, train_counts=None):
 def r_squared(y, prediction):
     y, p = array(y, "continuous target"), array(prediction, "continuous prediction")
     require(y.shape == p.shape and y.size >= 2, "continuous target/prediction shape or support")
+    # Constant targets are a property of the observations, not rounded squares.
+    # In particular, a nonzero residual may have an underflowed squared sum.
+    constant = bool(np.all(y == y.flat[0]))
+    if constant:
+        return {"r2": float(np.array_equal(y, p)),
+                "constant_target": True, "sample_count": int(y.size)}
     with np.errstate(over="ignore", invalid="ignore"):
         residual = float(np.sum((y - p) ** 2))
         variance = float(np.sum((y - y.mean()) ** 2))
     require(np.isfinite(residual) and np.isfinite(variance), "R2 exceeds finite numeric range")
-    # sklearn's force_finite default: explicit and visible, never hide degeneracy.
-    value = float(1 - residual / variance) if variance else float(residual == 0)
+    if variance < np.finfo(float).tiny:
+        # A zero/subnormal variance has lost squared-residual precision. Shift
+        # before scaling so a large common offset cannot erase the variation.
+        shifted_y, errors = y - y.flat[0], y - p
+        scale = max(float(np.max(np.abs(shifted_y))), float(np.max(np.abs(errors))))
+        with np.errstate(over="ignore", invalid="ignore", under="ignore"):
+            normalized_y, normalized_errors = shifted_y / scale, errors / scale
+            residual = float(np.sum(normalized_errors ** 2))
+            variance = float(np.sum((normalized_y - normalized_y.mean()) ** 2))
+        require(np.isfinite(residual) and np.isfinite(variance) and variance > 0,
+                "R2 exceeds finite numeric range")
+    value = float(1 - residual / variance)
     require(np.isfinite(value), "R2 result exceeds finite numeric range")
     return {"r2": value,
-            "constant_target": variance == 0, "sample_count": int(y.size)}
+            "constant_target": False, "sample_count": int(y.size)}
 
 
 def classification(y, prediction, field):
