@@ -86,28 +86,40 @@ def _author_estimator():
     """Load the unchanged, already published author implementation by exact hash."""
     directory = Path(__file__).parent.parent / "dimensionality-programme" / "programme" / "scientific-runtime" / "finite_science" / "literal_author"
     pins = _source_pins()
-    for name, digest in pins.items():
-        _need(hashlib.sha256((directory / name).read_bytes()).hexdigest() == digest,
+    names = ("__init__.py", "_core.py", "estimators.py")
+    _need(set(pins) == set(names), "exact author dependency closure required")
+    # Authenticate the same immutable byte snapshots used for execution. The
+    # source path may be replaced after this read without changing the import.
+    sources = {name: (directory / name).read_bytes() for name in names}
+    for name, body in sources.items():
+        _need(hashlib.sha256(body).hexdigest() == pins[name],
               "published author dependency changed: " + name)
-    # A separate namespace prevents accidentally resolving an installed package.
     namespace = "_released_synthetic_author_f18de358"
-    if namespace not in sys.modules:
-        spec = importlib.util.spec_from_file_location(namespace, directory / "__init__.py",
-                                                     submodule_search_locations=[str(directory)])
-        package = importlib.util.module_from_spec(spec)
-        sys.modules[namespace] = package
-        spec.loader.exec_module(package)
-    name = namespace + ".estimators"
-    if name not in sys.modules:
-        spec = importlib.util.spec_from_file_location(name, directory / "estimators.py")
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[name] = module
-        try:
-            spec.loader.exec_module(module)
-        except Exception:
-            del sys.modules[name]
-            raise
-    return sys.modules[name].participation_ratio
+    module_names = (namespace, namespace + "._core", namespace + ".estimators")
+    # Retain repeated-call identity only for this authenticated module closure.
+    if all(name in sys.modules and
+           getattr(sys.modules[name], "_verified_source_sha256", None) == pins[source]
+           for name, source in zip(module_names, names)):
+        return sys.modules[module_names[-1]].participation_ratio
+    for name in reversed(module_names):
+        sys.modules.pop(name, None)
+    try:
+        for name, source in zip(module_names, names):
+            path = directory / source
+            options = {"submodule_search_locations": [str(directory)]} if source == "__init__.py" else {}
+            spec = importlib.util.spec_from_file_location(name, path, **options)
+            module = importlib.util.module_from_spec(spec)
+            sys.modules[name] = module
+            # Never ask the loader to reopen the authenticated source pathname.
+            exec(compile(sources[source], str(path), "exec"), module.__dict__)
+            module._verified_source_sha256 = pins[source]
+            if source != "__init__.py":
+                setattr(sys.modules[namespace], name.rsplit(".", 1)[1], module)
+    except BaseException:
+        for name in reversed(module_names):
+            sys.modules.pop(name, None)
+        raise
+    return sys.modules[module_names[-1]].participation_ratio
 
 
 def author_case(case):
