@@ -6,7 +6,7 @@ run candidates, or authenticate clinical provenance. All values are JSON types.
 import argparse
 from collections import Counter
 import hashlib
-import importlib.util
+import types
 import json
 import math
 from pathlib import Path
@@ -15,11 +15,12 @@ import random
 TASK = 'clinical-sensefog-stn-state'
 MAPPER_SHA256 = 'd833d2c7637d73ce047578788a75c0ab30a98cee89b694efde27b5f79fe8ef40'
 MAPPER_PATH = Path(__file__).resolve().parent.parent / 'recording-lag-controls' / 'sensefog_pairing.py'
-if hashlib.sha256(MAPPER_PATH.read_bytes()).hexdigest() != MAPPER_SHA256:
+_raw = MAPPER_PATH.read_bytes()
+if hashlib.sha256(_raw).hexdigest() != MAPPER_SHA256:
     raise ValueError('reviewed recording-grid mapper source changed')
-_spec = importlib.util.spec_from_file_location('_sensefog_frozen_mapper', MAPPER_PATH)
-_mapper = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(_mapper)
+_mapper = types.ModuleType('_sensefog_frozen_mapper')
+_mapper.__file__ = str(MAPPER_PATH)
+exec(compile(_raw, str(MAPPER_PATH), 'exec'), _mapper.__dict__)
 require, keys, integer = _mapper.require, _mapper.keys, _mapper.integer
 STATUSES = ('evaluable', 'ambiguous', 'missing_annotation', 'missing_signal', 'artifact')
 
