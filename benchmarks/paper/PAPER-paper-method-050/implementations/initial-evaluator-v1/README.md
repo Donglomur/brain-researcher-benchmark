@@ -12,6 +12,8 @@ PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests -v
 
 `--generated-engineering-control` is explicit fixture mode. Source mode validates the frozen inventory size/MD5 and requires all 13 datasets for scoring. The protected JSON packet is operator-controlled; declared receipt/settings lineage still requires audit. GPL-3.0 source and CC-BY-4.0 data obligations remain.
 
+Source conversion hashes and decodes one retained file descriptor. The receipt identifies those authenticated bytes; observed in-place source mutations during authentication or conversion are refused before publication. Path replacement cannot substitute another file for decoding. These checks do not establish authentic-data or scientific qualification.
+
 No authentic data, model run or native campaign was used. The all-pair mean diagnostic does not reconstruct the paper's day-specific, rate-filtered, three-method median/Friedman comparison or unmatched-distance/EMD endpoints. Native schema, biological animal metadata, protected-reference, resource and scientific qualification gates remain open.
 
 See the [complete interface, source mappings and limits](../../docs/initial-evaluator-v1.md) and `provenance.json`. `tests/test_evaluator.py::packet` provides an executable generated packet example.
