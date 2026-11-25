@@ -9,6 +9,8 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+import sys
+from fractions import Fraction
 
 PHASES = ("stimulus", "feedback", "interval")
 FIELDS = frozenset(("channel", "subject", "trial", "ACC", "phase", "ripple"))
@@ -124,8 +126,17 @@ def _positive_p99(values):
         return positive[-1]
     left = math.floor(h)
     fraction = h - left
-    # Weighted interpolation avoids overflowing a difference of finite numbers.
-    return positive[left - 1] * (1.0 - fraction) + positive[left] * fraction
+    lower, upper = positive[left - 1], positive[left]
+    low_part, high_part = lower * (1.0 - fraction), upper * fraction
+    if 0.0 < fraction < 1.0 and min(low_part, high_part) < sys.float_info.min:
+        # Keep a positive quantile from disappearing through subnormal weighted
+        # terms. Accumulate their exact binary64 values before the final rounding;
+        # an anchored float expression can also double-round these midpoints.
+        weight = Fraction.from_float(fraction)
+        return float(Fraction.from_float(lower) * (1 - weight) +
+                     Fraction.from_float(upper) * weight)
+    # Preserve ordinary-range arithmetic and the declared type-5 rank positions.
+    return low_part + high_part
 
 
 def analyze_rows(raw_rows):

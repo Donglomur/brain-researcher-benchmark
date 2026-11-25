@@ -142,6 +142,51 @@ class SourceLearnRTests(unittest.TestCase):
                     M.analyze_rows(rows)
                 self.assertEqual(accepted["raw_row_count"], 30)
 
+    def test_subnormal_equal_rates_retain_complete_phase_support(self):
+        # All300 rows are valid and equal, so none can exceed a phase quantile.
+        tiny = math.ulp(0.0)
+        rows = bank(100)
+        for row in rows:
+            row["ripple"] = tiny
+        result = M.analyze_rows(rows)
+        self.assertEqual(result["phase_positive_p99"], dict.fromkeys(M.PHASES, tiny))
+        self.assertEqual(result["source99_excluded_raw_row_ids"], [])
+        self.assertEqual(len(result["channel_records"]), 3)
+        self.assertEqual(sorted(i for record in result["channel_records"]
+                                for i in record["raw_row_ids"]), list(range(1, 301)))
+        for record in result["channel_records"]:
+            self.assertEqual(record["n_observations"], 100)
+            self.assertEqual(record["state"], "source_constant_nan")
+
+    def test_subnormal_midpoint_retains_exact_type5_cutoff(self):
+        from fractions import Fraction
+        tiny = math.ulp(0.0)
+        rows = bank(100)
+        for start in (0, 100, 200):
+            for row in rows[start:start + 100]:
+                row["ripple"] = tiny
+            rows[start + 99]["ripple"] = 2 * tiny
+        expected = float((Fraction.from_float(tiny) +
+                          Fraction.from_float(2 * tiny)) / 2)
+        result = M.analyze_rows(rows)
+        self.assertEqual(result["phase_positive_p99"], dict.fromkeys(M.PHASES, expected))
+        self.assertEqual(result["source99_excluded_raw_row_ids"], [])
+        self.assertEqual(sum(record["n_observations"]
+                             for record in result["channel_records"]), 300)
+
+    def test_ordinary_percentile_retains_existing_arithmetic(self):
+        rows = bank(100)
+        for start in (0, 100, 200):
+            for i, row in enumerate(rows[start:start + 100]):
+                row["ripple"] = 0.25 + i / 8
+        # For100 values, the original type-5 index is99.5.
+        expected = (0.25 + 98 / 8) * 0.5 + (0.25 + 99 / 8) * 0.5
+        result = M.analyze_rows(rows)
+        self.assertEqual(result["phase_positive_p99"], dict.fromkeys(M.PHASES, expected))
+        self.assertEqual(result["source99_excluded_raw_row_ids"], [100, 200, 300])
+        self.assertEqual(sum(record["n_observations"]
+                             for record in result["channel_records"]), 297)
+
     def test_all_wrong_rows_are_accounted_without_invented_channel_estimates(self):
         rows = bank()
         for row in rows: row["ACC"] = "wrong"
