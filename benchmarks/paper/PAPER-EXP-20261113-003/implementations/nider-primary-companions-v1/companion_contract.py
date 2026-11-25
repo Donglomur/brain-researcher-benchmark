@@ -79,10 +79,21 @@ def source_manifest(script, base):
 def artifact_identity(path):
     need(path.is_file() and not path.is_symlink(), 'regular_artifact_required:'+str(path))
     h = hashlib.sha256()
+    size = 0
     with path.open('rb') as stream:
         while block := stream.read(1024*1024):
             h.update(block)
-    return {'bytes': path.stat().st_size, 'sha256': h.hexdigest()}
+            size += len(block)
+    return {'bytes': size, 'sha256': h.hexdigest()}
+
+
+def read_artifact(path, expected):
+    """Validate the bytes consumed, rather than a preceding pathname read."""
+    with path.open('rb') as stream:
+        raw = stream.read(expected['bytes'] + 1)
+    need(len(raw) == expected['bytes'] and digest(raw) == expected['sha256'],
+         'artifact_changed_during_validation:' + str(path))
+    return raw
 
 
 def png_dimensions(raw):
@@ -272,10 +283,11 @@ def check_bundle(root, arm, byte_limit, base):
     inventory = {name: artifact_identity(root/name) for name in REQUIRED_ARTIFACTS}
     need(all(record['bytes'] > 0 for record in inventory.values()), 'empty_native_artifact')
     need(sum(record['bytes'] for record in inventory.values()) <= byte_limit, 'artifact_byte_limit')
-    full120 = base.validate_output((root/'full120.json').read_bytes(), arm, base.public_contract())
+    json_raws = {name:read_artifact(root/name, inventory[name]) for name in REQUIRED_ARTIFACTS
+                 if name.endswith('.json')}
+    full120 = base.validate_output(json_raws['full120.json'], arm, base.public_contract())
     decoder,_ = base.load_validator(base.public_contract())
-    json_documents = {name:decoder.decode_numeric_json((root/name).read_bytes()) for name in REQUIRED_ARTIFACTS
-                      if name.endswith('.json')}
+    json_documents = {name:decoder.decode_numeric_json(raw) for name,raw in json_raws.items()}
     ledger = json_documents['row_lineage.json']
     need(ledger['schema']=='nider_primary_native_row_lineage_v1' and ledger['task']==full120['task'] and
          ledger['workbook_sha256']==full120['workbook_sha256'],'row_ledger_identity')
@@ -294,9 +306,9 @@ def check_bundle(root, arm, byte_limit, base):
         bayes = json_documents['bayes/'+contrast+'.json']
         check_bayes_export(bayes, contrast, model)
     for name in FIGURES.values():
-        raw = (root/name).read_bytes()
+        raw = read_artifact(root/name, inventory[name])
         inventory[name]['png_dimensions'] = png_dimensions(raw)
-    runtime = json.loads((root/'runtime.json').read_text())
+    runtime = json.loads(json_raws['runtime.json'])
     need(runtime['evaluated_expression_count'] == 57 and runtime['R_version'] == '4.3.2',
          'runtime_completion_identity')
     need(runtime['full120_frozen_before_Bayesian_mutations'] is True, 'phase_freeze_missing')

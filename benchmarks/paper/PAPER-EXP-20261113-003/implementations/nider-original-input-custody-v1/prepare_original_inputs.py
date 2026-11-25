@@ -24,12 +24,12 @@ CONSUMERS = {
         "sha256": "d66ca0a2e177ad0843aaca7fbc7e1a766d158f6f40c7393ccbc4153b6a1f6d16"
     },
     "nider-primary-companions-v1/replay_companions.py": {
-        "bytes": 11077,
-        "sha256": "264c83e799f4ab44a73f401841305d509c092d40dd6f5df9947f6dfc623ce080"
+        "bytes": 11624,
+        "sha256": "89db9a3c1bcb82c5b05dc3b79059ecb5bd098f0f66c35bfeeb1d4242c236726a"
     },
     "nider-primary-companions-v1/companion_contract.py": {
-        "bytes": 16108,
-        "sha256": "35b3f4fb9adadba1bd9cc41ad7499272b753a098a0d6aa645042320c1d319d8c"
+        "bytes": 16563,
+        "sha256": "57e738ebd79ecd07620a20dccccf7873c5cbf57aace29342cd842592099977a8"
     },
     "nider-primary-producer-v2/collector.R": {
         "bytes": 7756,

@@ -17,14 +17,23 @@ contract.__file__ = str(HERE/'companion_contract.py')
 exec(compile((HERE/'companion_contract.py').read_bytes(),contract.__file__,'exec'),contract.__dict__)
 
 
-def copy_artifacts(source, destination):
-    for path in sorted(source.rglob('*')):
-        if path.is_file():
-            contract.need(not path.is_symlink(), 'symlink_artifact_forbidden')
-            target = destination/path.relative_to(source)
-            target.parent.mkdir(parents=True,exist_ok=True)
-            with path.open('rb') as src, target.open('xb') as dst:
-                shutil.copyfileobj(src,dst,1024*1024)
+def copy_artifacts(source, destination, inventory):
+    # Publish only the authenticated closure and bind the bytes actually copied.
+    for name, expected in inventory.items():
+        path = source/name
+        contract.need(path.is_file() and not path.is_symlink(), 'symlink_artifact_forbidden')
+        target = destination/name
+        target.parent.mkdir(parents=True,exist_ok=True)
+        digest = contract.hashlib.sha256()
+        size = 0
+        with path.open('rb') as src, target.open('xb') as dst:
+            while block := src.read(min(1024*1024, expected['bytes'] - size + 1)):
+                contract.need(size + len(block) <= expected['bytes'], 'artifact_changed_during_copy:' + name)
+                dst.write(block)
+                digest.update(block)
+                size += len(block)
+        contract.need(size == expected['bytes'] and digest.hexdigest() == expected['sha256'],
+                      'artifact_changed_during_copy:' + name)
 
 
 def run(args):
@@ -98,7 +107,7 @@ def run(args):
                 'excludes':['ability-questionnaire participant CSV branches','ED4 whole-brain jackknife',
                             'optional benchmark-added leave-study/cohort robustness'],
                 'source_expression_count':57}
-            copy_artifacts(root/'out',output)
+            copy_artifacts(root/'out',output,inventory)
             record['artifact_bundle_complete'] = True
             record['elapsed_wall_seconds'] = time.time()-started
             provenance = base.json_bytes(record)

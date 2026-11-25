@@ -261,7 +261,7 @@ def acquire_jsonlite(spec, output):
 
 
 def authenticate_sources(document, root):
-    names = (('namespace', 9), ('companion_namespace', 11))
+    names = (('namespace', 9), ('companion_namespace', 12))
     members = set()
     need(document['namespace'] != document['companion_namespace'], 'distinct source namespaces required')
     for key, count in names:
@@ -271,7 +271,7 @@ def authenticate_sources(document, root):
         exact_namespace(local(root, document[key]), expected)
         members.update(prefix + name for name in expected)
     need(set(document['source_files']) == members | {document['field_schema']}
-         and len(document['source_files']) == 21, 'only twenty source files and field schema are admitted')
+         and len(document['source_files']) == 22, 'only twenty-one source files and field schema are admitted')
     for name, pin in document['source_files'].items():
         pinned(local(root, name), pin['bytes'], pin['sha256'])
 
@@ -321,7 +321,7 @@ def main():
     controls = container(['Rscript','--vanilla','tests/collector_controls.R',inside],'generated-controls.log')
     artifacts = container(['Rscript','--vanilla','tests/artifact_controls.R',companion_inside],'generated-artifact-controls.log',workdir=companion_inside)
     strict_result(parsed, controls, artifacts)
-    (output/'result.json').write_text(json.dumps({'scope':'generated_R_source_controls_only','source_commit':document['source_commit'],'namespace_revision':document['namespace_revision'],'parsed_files':7,'suites':{'collector':{'checks':219,'skips':0},'native_artifacts':{'checks':237,'skips':0}},'scientific_qualification':False,'authentic_data_reads':0,'author_expression_evaluation':False}, indent=2)+'\n')
+    (output/'result.json').write_text(json.dumps({'scope':'generated_R_source_controls_only','source_commit':document['source_commit'],'namespace_revision':document['namespace_revision'],'current_namespace_revision':document['current_namespace_revision'],'parsed_files':7,'suites':{'collector':{'checks':219,'skips':0},'native_artifacts':{'checks':237,'skips':0}},'scientific_qualification':False,'authentic_data_reads':0,'author_expression_evaluation':False}, indent=2)+'\n')
 
 
 if __name__ == '__main__':
