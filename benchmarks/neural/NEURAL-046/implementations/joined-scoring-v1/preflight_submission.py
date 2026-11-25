@@ -12,7 +12,7 @@ import importlib.util
 from pathlib import Path
 
 
-ADAPTER_SHA256 = "b212a9bda9e6df77a75043a14b7041773954b4b8d247718c8c3a720bb8407632"
+ADAPTER_SHA256 = "519299feb9e0be727e66ef77335f049062d7293d0695f3e48c1e00c27fb7529c"
 
 
 def _load_adapter():
