@@ -3,8 +3,8 @@ import importlib.util
 import sys
 from common import HERE, body, descriptor, need, pin, read
 
-LEGACY_SOURCE = {'bytes': 1295, 'sha256': 'fd188e19d5ca4ed996d21b285210c0dc355c45789ec7312931b6533e8fffe278'}
-LEGACY_EPISODE = {'bytes': 34367, 'sha256': '29c200d0022ba5c36818719993b7b12224901a6fba2f7c515f3b278fcee1b1db'}
+LEGACY_SOURCE = {'bytes': 1295, 'sha256': '2f699ed8c6e3bebf942a10ef307afc13633bb34c2a884e9ac4aa9e7e1ab2ffa7'}
+LEGACY_EPISODE = {'bytes': 34950, 'sha256': '9ca755c82f769b6ba137189e08f56c665ffe4d4fe8a65e944b6ea0ed1f384d28'}
 RUNTIME_FILES = {'common.py', 'legacy.py', 'cli_custody.py', 'journal.py',
                  'process_owner.py', 'group_bootstrap.py', 'trusted_controller.py',
                  'owned_episode.py', 'controller.py', 'runner.py'}

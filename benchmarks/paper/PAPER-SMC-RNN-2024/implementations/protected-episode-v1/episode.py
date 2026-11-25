@@ -511,6 +511,13 @@ def grade(closed_path, closed_sha, target, evaluator, output, scratch_bytes):
         frozen = read(row['freeze_path'], row['freeze']['sha256'])
         need(pin(body(row['freeze_path'])) == row['freeze'] and frozen['condition'] == condition
              and frozen['outcome'] == protocol['outcome'] and set(frozen['submissions']) == set(KEYS[protocol['outcome']]), 'Complete frozen outcome')
+        # Keep the reported method/seed tied to the declaration used in execution,
+        # not merely to a self-consistent declaration inside a rebound freeze.
+        declaration_pin = protocol['programs'][condition]['declaration']['sha256']
+        executed_declaration = read(Path(closed['protocol_path']).parent / condition / 'declaration.json', declaration_pin)
+        need(frozen.get('declaration_sha256') == declaration_pin
+             and frozen.get('declaration') == executed_declaration,
+             'Frozen declaration must match the executed programme declaration')
         for key, filename in predictions.items():
             expected = receipt['output_inventory']['files'][key + '.h5']
             need(path(frozen['submissions'][key]['path']) == path(filename)
