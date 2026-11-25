@@ -67,6 +67,21 @@ class ContinuousControls(unittest.TestCase):
         self.assertAlmostEqual(group["root_mean_square_pair_error"], .125 / math.sqrt(10))
         self.assertEqual(sum(row["absolute_error"] != 0 for row in report["rows"]), 2)
 
+    def test_complete_panel_preserves_representable_tiny_rms(self):
+        for magnitude in (1e-200, 1e-162, math.ulp(0.0), .125):
+            ref, replay = panel()
+            ref = {key: 0.0 for key in ref}
+            for row in replay["normalized"]["pair_rows"]:
+                row["mean_r"] = magnitude
+            with self.subTest(magnitude=magnitude):
+                report = continuous.compare_continuous(ref, replay)
+                self.assertEqual((len(report["rows"]), len(report["summaries"])), (480, 24))
+                for summary in report["summaries"]:
+                    # For twenty equal errors RMS is exactly their magnitude.
+                    self.assertEqual(summary["root_mean_square_pair_error"], magnitude)
+                    self.assertEqual(summary["maximum_absolute_pair_error"], magnitude)
+                self.assertEqual(report["decision"], "not_made")
+
     def test_no_subset_raw_score_or_wrong_source_substitution(self):
         for kind in ("missing", "duplicate", "undefined", "raw", "revision", "generated", "axis"):
             ref, replay = panel()
