@@ -112,13 +112,23 @@ def prepare(manifest: dict, root: Path) -> dict:
     }
 
 
+def unique_object(pairs):
+    """Reject ambiguous manifest objects before validating or opening sources."""
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate JSON field: {key}")
+        result[key] = value
+    return result
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("manifest", type=Path)
     parser.add_argument("output", type=Path)
     args = parser.parse_args()
     raw = args.manifest.read_bytes()
-    manifest = json.loads(raw)
+    manifest = json.loads(raw, object_pairs_hook=unique_object)
     root = args.manifest.resolve().parent
     entries = plan_inputs(manifest, root)
     sources = {args.manifest.resolve()} | {entry[k] for entry in entries for k in ("behavior", "markers")}
