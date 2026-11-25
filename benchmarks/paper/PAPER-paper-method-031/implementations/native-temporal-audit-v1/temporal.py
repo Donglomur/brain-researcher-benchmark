@@ -144,11 +144,22 @@ def augmented_mean(frame_sums, pixels_per_frame):
     if not sums:
         raise TemporalError("full original frame sums are required")
     tail = min(len(sums), 100)
+    divisor = (len(sums) + tail) * pixels_per_frame
     try:
-        mean = math.fsum(sums + sums[-tail:]) / ((len(sums) + tail) * pixels_per_frame)
-    except OverflowError as exc:
-        raise TemporalError("augmented sum overflow") from exc
+        mean = math.fsum(sums + sums[-tail:]) / divisor
+    except OverflowError:
+        # Finite frame sums can overflow an intermediate reduction even though
+        # their weighted mean is representable. Preserve the original operands
+        # exactly in this exceptional algebraic-oracle path.
+        total = sum((Fraction(value) for value in sums + sums[-tail:]), Fraction())
+        mean = float(total / divisor)
     return _finite(mean, "augmented mean")
+
+
+def _half_average(left, right):
+    """Keep ordinary rounding, avoiding overflow of a finite half-sum."""
+    total = left + right
+    return 0.5 * total if math.isfinite(total) else left / 2.0 + right / 2.0
 
 
 def reconstruct_traces(plan, windows, source_mean):
@@ -196,7 +207,7 @@ def reconstruct_traces(plan, windows, source_mean):
             if previous is None:
                 original[frame] = row
             else:
-                original[frame] = [_finite(0.5 * (old + new), "overlap result")
+                original[frame] = [_finite(_half_average(old, new), "overlap result")
                                    for old, new in zip(previous, row)]
     if received != plan.window_count or any(row is None for row in original):
         raise TemporalError("incomplete native window stream")
