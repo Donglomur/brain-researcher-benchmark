@@ -1,4 +1,4 @@
-"""Replay complete NEURAL-021 visual receipts, then call the original scorer.
+"""Replay complete NEURAL-021 visual receipts, then call the pinned current scorer.
 
 This trusted-operator component establishes source-consistent observation/answer
 lineage. It does not establish who produced answers, prohibit tools, isolate a
@@ -27,8 +27,8 @@ SOURCES = {
                  'sha256':'d900456bbe77c27d813a5d5d8dc8352e6c67071c83c15b9e33afe38076ce0da3'},
     'interface': {'path':'paired-count-delivery-v1/interface.py','bytes':3533,
                   'sha256':'c748bdb0386713d505e1d5d79bec51645263b859471011df81f205168a6e61e2'},
-    'scorer': {'path':'neural021-deferred-grade/science/private/scorer.py','bytes':3290,
-               'sha256':'4438468f22511986c71fda03621b207cf82c523ee910e8bc6760c174cb16bcf4'},
+    'scorer': {'path':'neural021-deferred-grade/science/private/scorer.py','bytes':3567,
+               'sha256':'320234c9e89a6c8c282d88e273a629d82217b35a8714244dee52097625e60f01'},
 }
 PUBLIC_PINS = {
     'cases.json': {'bytes':4075,'sha256':'f5fc38ca363db9367e259c466fc017af9e8e216726b302cc6f757857554c34c0'},

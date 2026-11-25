@@ -20,15 +20,27 @@ exit, timeout, malformed result, skipped/expected-failure method, unexpected suc
 nonzero exit. It does not run any producer, dataset, candidate or scientific
 experiment. Source check success is not native/runtime qualification.
 
-The package contains all 13 original producer source members and their unchanged
-manifest, the unchanged deferred grader, interface and scorer. The `science/private`
+The package retains all 13 original producer source members and their unchanged
+manifest and public interface. The current deferred grader binds that original
+producer separately from the corrected current scorer. The `science/private`
 directory name denotes the scorer's operator-side role; it contains source code
 only. There are no target arrays or case artifacts in this package. `producer/BINDINGS.json`
 contains fixed provenance descriptors and file pins, not dataset bodies or private
-source imports. `DERIVATION.json` identifies every copied source byte and the few
-portable test-path changes. This is authored benchmark code, not a copy of the
+source imports. `DERIVATION.json` preserves the initial copied-source identities
+and portable test-path changes; it is historical evidence, not a current manifest. This is authored benchmark code, not a copy of the
 primary research repository. The producer's executable bodies are included to
 preserve its authenticated closure; generated checks never invoke their mains.
+
+The current scorer preserves ordinary finite-result arithmetic and uses a half-scaled
+sum only when adding two finite condition R² values overflows despite a finite
+equal-condition mean. Null rules, endpoints and weights are unchanged.
+`ORIGINAL_SCORER` authenticates the scorer recorded by the original producer;
+`SCORER` authenticates the corrected current grading code. Original selections,
+observer receipts, producer bindings and historical validation records must not
+be repinned to current code. The five focused generated methods in
+`test_scorer_numeric_range.py` are a separate regression entry point; the
+existing verifier continues to run its original 11 methods. Neither test set
+establishes authentic execution or scientific qualification.
 
 For a real deferred grade, first arrange the separately reviewed original producer
 run, independent original observer/outer-exit evidence, protected input preparation,
@@ -43,7 +55,8 @@ is deliberately disabled and cannot qualify its own evidence.
 
 This operator interface scores the complete immutable output of an already closed
 `neural021/full92-program-v1` run. It reuses the original complete observer
-admission, public validator and condition-specific trajectory R² scorer. It
+admission and public validator, with a pinned current implementation of the same
+condition-specific trajectory R² metric. It
 launches no candidate, model, container, native phase, signal preparation or
 reference. The existing ungraded controller and central registration stay intact.
 
@@ -56,7 +69,8 @@ does not establish scientific or runtime qualification.
 
 Use an independently captured SHA-256 of `grade_completed.py` and explicit paths
 to the original source directories. Inspection authenticates the fixed original
-13-member source manifest and the unchanged public interface and scorer. It does
+13-member source manifest, the unchanged public interface and the pinned current
+scorer. Original producer/scorer identities remain distinct from current grading. It does
 not open a selection, query roster, target, candidate or result artifact.
 
 ```text
@@ -118,7 +132,7 @@ denies grading. Opaque state is authenticated but never unpickled or executed.
 
 The captured immutable prediction is validated against all 92 query IDs and every
 30-by-2 finite nonboolean value before any protected callback. Only then does the
-unchanged scorer invoke the owner-only target loader, exactly once. The loader
+current scorer invoke the owner-only target loader, exactly once. The loader
 authenticates and parses the selected target bytes. The scorer independently
 rechecks roster/generation, target shape and numeric domain. Target failures
 remain failed grades, with no partial or favorable-case result.
@@ -150,7 +164,7 @@ natural final exit through signal-handler restoration and stream durability.
 
 ## Result and resource limits
 
-Successful output contains the unchanged scorer's condition-specific
+Successful output contains the current scorer's condition-specific
 variance-weighted R², per-axis R², squared Euclidean loss and equal-condition
 mean. Negative R² remains valid. A constant-target or numeric-range-undefined R²
 remains null with its original disposition; loss is retained. No clipping,
@@ -176,7 +190,7 @@ enclosure and measured feasibility remain separate requirements.
 ## Generated evidence and scientific interpretation
 
 `test_grade_completed.py` builds complete 92-query filesystem fixtures. It runs
-the unchanged observer admission, public interface and scorer; only source-bound
+the unchanged observer admission and public interface with the current scorer; only source-bound
 case/target metadata and receipts are replaced by explicitly invented fixtures.
 The production CLI has no fixture-binding override. Tests cover perfect,
 negative and undefined scores, malformed last queries, missing support, stale

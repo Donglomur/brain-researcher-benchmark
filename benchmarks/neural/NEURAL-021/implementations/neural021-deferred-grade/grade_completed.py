@@ -1,7 +1,7 @@
 """Operator-only numerical grade of an already closed complete NEURAL-021 run.
 
 No candidate, container, model, signal preparation or reference run is launched.
-The original full92 observer admission and numerical scorer remain unchanged.
+Original full92 observer admission is retained; current scoring has a pinned numerical guard.
 External operator selection and independent observed exit evidence are mandatory;
 hashes identify their bytes and do not establish who authored those observations.
 """
@@ -24,7 +24,8 @@ import types
 
 PRODUCER = {'bytes': 1799, 'sha256': 'df2bb2080cb2112b159fe93b05ff288bf2cf8dee6ab701f89a3ff03168ef0e35'}
 COMMON = {'bytes': 7829, 'sha256': 'fbeddddac17fe9c4e55344858222c4a55b0fa1c12bc4902b35a3922b2db2c654'}
-SCORER = {'bytes': 3290, 'sha256': '4438468f22511986c71fda03621b207cf82c523ee910e8bc6760c174cb16bcf4'}
+ORIGINAL_SCORER = {'bytes': 3290, 'sha256': '4438468f22511986c71fda03621b207cf82c523ee910e8bc6760c174cb16bcf4'}
+SCORER = {'bytes': 3567, 'sha256': '320234c9e89a6c8c282d88e273a629d82217b35a8714244dee52097625e60f01'}
 INTERFACE = {'bytes': 3533, 'sha256': 'c748bdb0386713d505e1d5d79bec51645263b859471011df81f205168a6e61e2'}
 SCOPE = {'training_trials': 272, 'query_trials': 92, 'active_queries': 52,
          'perturbation_queries': 40, 'units': 65, 'time_bins': 30,
@@ -239,10 +240,10 @@ def evaluate(request, adapter_pin, c, bodies, science_bodies, budget):
     c.need(c.only_pin(request['cases']) == binding['cases']
            and c.only_pin(request['private_targets']) == c.only_pin(by_name['private/data/targets.json'])
            and binding['interface'] == INTERFACE
-           and c.only_pin(by_name['private/scorer.py']) == SCORER,
+           and c.only_pin(by_name['private/scorer.py']) == ORIGINAL_SCORER,
            'original exact public roster, private target and scientific source generation')
     c.need(pin(science_bodies['interface.py']) == INTERFACE
-           and pin(science_bodies['scorer.py']) == SCORER, 'unchanged validation and R2 core')
+           and pin(science_bodies['scorer.py']) == SCORER, 'original validation and corrected current R2 core')
     policy = c.module(bodies, 'policy.py', producer_root, c=c)
     observer = c.module(bodies, 'observe.py', producer_root)
     interface = module(science_bodies['interface.py'], science_root / 'public/interface.py')
