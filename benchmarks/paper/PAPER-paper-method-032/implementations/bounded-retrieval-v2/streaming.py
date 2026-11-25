@@ -309,6 +309,16 @@ def mapped_npy(path, expected_sha256):
             mapped._mmap.close()
 
 
+def _unique_object(pairs):
+    """Reject ambiguous object fields before manifests reach feature scoring."""
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise ValueError("duplicate JSON key")
+        value[key] = item
+    return value
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("reference", "reference-sha256", "candidate", "image-features", "brain-features"):
@@ -322,8 +332,8 @@ def main(argv=None):
     raw = Path(args.reference).read_bytes()
     if hashlib.sha256(raw).hexdigest() != args.reference_sha256:
         raise ValueError("trusted reference SHA-256 mismatch")
-    reference = json.loads(raw)
-    candidate = json.loads(Path(args.candidate).read_text())
+    reference = json.loads(raw, object_pairs_hook=_unique_object)
+    candidate = json.loads(Path(args.candidate).read_text(), object_pairs_hook=_unique_object)
     validate_reference(reference)
     with mapped_npy(args.image_features, reference["image_features_sha256"]) as images:
         with mapped_npy(args.brain_features, candidate["brain_features_sha256"]) as brain:
