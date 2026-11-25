@@ -15,7 +15,7 @@ from pathlib import Path
 import re
 
 CORE_PATH = Path(__file__).resolve().parents[1] / "initial-evaluator-v1" / "grounding.py"
-CORE_SHA256 = "1a9ae2432fd941ef531b5f1078731f1ce3ee3dd878311aaa17e729c9573c0014"
+CORE_SHA256 = "14c7ba38ca656e7e5e1f8db11d6eb3ecc2e4dd06848aeb07c2e1212ccb1afa1d"
 if hashlib.sha256(CORE_PATH.read_bytes()).hexdigest() != CORE_SHA256:
     raise RuntimeError("reviewed grounding dependency changed")
 _spec = importlib.util.spec_from_file_location("umbrae_raw_grounding", CORE_PATH)

@@ -18,7 +18,7 @@ from typing import Any
 
 # Preserve and authenticate the reviewed first-box scorer; do not fork its math.
 CORE_PATH = Path(__file__).resolve().parents[1] / "initial-evaluator-v1" / "grounding.py"
-CORE_SHA256 = "1a9ae2432fd941ef531b5f1078731f1ce3ee3dd878311aaa17e729c9573c0014"
+CORE_SHA256 = "14c7ba38ca656e7e5e1f8db11d6eb3ecc2e4dd06848aeb07c2e1212ccb1afa1d"
 if hashlib.sha256(CORE_PATH.read_bytes()).hexdigest() != CORE_SHA256:
     raise RuntimeError("reviewed initial grounding scorer changed; re-review the v2 dependency")
 spec = importlib.util.spec_from_file_location("umbrae_reviewed_grounding_v1", CORE_PATH)
@@ -147,7 +147,10 @@ def evaluate(contract_path: Path, annotations_path: Path, image_order_path: Path
     report = g.evaluate(contract_path, annotations_path, image_order_path, bootstrap_draws=0, seed=seed)
     report.pop("paired_comparisons")
     report["component"] = "umbrae_endpoint_vector_v2"
-    report["endpoint_vector"] = compare_vectors(report["row_scores"], list(g.read_json(image_order_path)),
+    # prepare_reference validated contiguous image IDs, including empty images.
+    # Reuse that authenticated population instead of reopening a mutable input.
+    images = [str(i) for i in range(report["population"]["shared_images"])]
+    report["endpoint_vector"] = compare_vectors(report["row_scores"], images,
                                                 draws=draws, seed=seed, confidence=confidence)
     report["implementation_dependency_sha256"] = CORE_SHA256
     report["holds"] = report["holds"] + [
