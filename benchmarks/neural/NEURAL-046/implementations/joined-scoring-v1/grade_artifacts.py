@@ -141,7 +141,8 @@ def load_scorer():
     require(sha256(body) == SCORER_SHA256, "paired_scorer_source_changed")
     spec = importlib.util.spec_from_file_location("_neural046_paired_artifact_scorer", path)
     scorer = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(scorer)
+    # Execute the bytes authenticated above without reopening the source path.
+    exec(compile(body, str(path), "exec"), scorer.__dict__)
     return scorer
 
 

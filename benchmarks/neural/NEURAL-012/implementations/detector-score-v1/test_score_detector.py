@@ -131,6 +131,37 @@ class DetectorScoreTests(unittest.TestCase):
         self.assertFalse(result["frontier_improvement_established"])
         self.assertNotIn("maximum_scaled_reconstruction_error", io.encoded(result).decode())
 
+    def test_complete_operator_companion_support_and_localization(self):
+        result = self.score()
+        # Companion output must retain every person, including those with no
+        # alarms. The native summary alone drops these identities and exposure.
+        patients = result["patients"]
+        self.assertEqual(set(patients), {"CHB", "Siena"})
+        for cohort, count, offset in (("CHB", 23, 1000), ("Siena", 14, 2000)):
+            self.assertEqual(set(patients[cohort]),
+                             {format(offset + i, "024x") for i in range(count)})
+            self.assertTrue(all(set(arms) == set(ARMS)
+                                for arms in patients[cohort].values()))
+        self.assertEqual(result["observed_seconds"], 727000)
+        self.assertEqual(sum(arms["native"]["observed_seconds"]
+                             for people in patients.values() for arms in people.values()),
+                         result["observed_seconds"])
+        localized = result["target_false_alarm_localization"]
+        expected_ids = {format(i, "024x") for i in range(687, 728)}
+        self.assertEqual(len(localized), 41 * 4)
+        self.assertEqual({(row["recording_id"], row["arm"]) for row in localized},
+                         {(rid, arm) for rid in expected_ids for arm in ARMS})
+        for row in localized:
+            self.assertEqual(row["intervals"],
+                             [[800, 810]] if row["arm"] == "normalized" else [])
+        self.assertEqual(sum(len(row["intervals"]) for row in localized), 41)
+        # The added detail cannot alter any preserved scientific projection.
+        encoded_result = io.encoded(result)
+        self.assertLessEqual(len(encoded_result), io.MAX_JSON)
+        self.assertEqual(io.strict(encoded_result), result)
+        original = analysis.detector_outcomes(self.packet)
+        self.assertEqual({key: result[key] for key in original}, original)
+
     def test_missing_records_arms_phases_or_person_identity_fail(self):
         mutations = [lambda p: p["records"].pop(),
                      lambda p: p["records"][0]["arms"].pop("timing"),

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 from pathlib import Path
 import time
@@ -363,23 +364,24 @@ def main():
     parser.add_argument("--session-dir", required=True, type=Path, help="safe numeric NPZ exports, named session_id.npz")
     parser.add_argument("--output-dir", required=True, type=Path)
     args = parser.parse_args()
-    plan = json.loads(args.plan.read_text())
+    plan_raw = args.plan.read_bytes()
+    plan = json.loads(plan_raw)
     validate_plan(plan)
     sessions, input_pins = [], []
     for meta in plan["sessions"]:
         # Session identifiers are used as a basename, never a path traversal.
         require(Path(meta["session_id"]).name == meta["session_id"] and "/" not in meta["session_id"] and "\\" not in meta["session_id"], "unsafe session filename")
         path = args.session_dir / (meta["session_id"] + ".npz")
-        with np.load(path, allow_pickle=False) as archive:
+        raw = path.read_bytes()
+        with np.load(io.BytesIO(raw), allow_pickle=False) as archive:
             require(set(archive.files) == {"spks", "iarea", *SOURCE_FIELDS, "Corridor_Length", "UniqWalls", "stim_id"}, "unexpected/missing safe export fields")
             s = dict(meta, spks=archive["spks"], iarea=archive["iarea"], behavior={k: archive[k] for k in (*SOURCE_FIELDS, "Corridor_Length", "UniqWalls", "stim_id")})
         sessions.append(s)
-        with path.open("rb") as handle:
-            payload_hash = hashlib.file_digest(handle, "sha256").hexdigest()
-        input_pins.append({"session_id": meta["session_id"], "bytes": path.stat().st_size, "sha256": payload_hash})
+        input_pins.append({"session_id": meta["session_id"], "bytes": len(raw),
+                           "sha256": hashlib.sha256(raw).hexdigest()})
     report, predictions, public_query = evaluate(sessions, plan)
     report["input_pins"] = input_pins
-    report["plan_sha256"] = hashlib.sha256(args.plan.read_bytes()).hexdigest()
+    report["plan_sha256"] = hashlib.sha256(plan_raw).hexdigest()
     args.output_dir.mkdir(parents=True, exist_ok=True)
     for name, payload in (("report.json", report), ("predictions.json", predictions), ("public_query.json", public_query)):
         (args.output_dir / name).write_text(json.dumps(payload, indent=2, allow_nan=False) + "\n")

@@ -22,7 +22,7 @@ R&K technician hypnogram labels mapped to W,N1,N2,N3,R with source stages3/4 mer
 | Condition | Source availability | Representation and boundary | Missing |
 | --- | --- | --- | --- |
 | Direct observation | not\_delivered | Potential direct sleep interpretation from prespecified scaled waveforms/numeric samples with fixed surrounding epochs. No tools or decoder caches; same authenticated target epochs and fixed context for all participants. | No complete direct sleep transport or response collector is delivered. |
-| Typed viewer | not\_delivered | Potential typed channel/time/scale waveform viewer for EEG/EOG, retaining calibrated time/amplitude axes and epoch context. Rendered views only; no raw-array export, masks, labels or cached stage predictions. | No typed sleep viewer or restrictive participant transport currently linked. |
+| Typed viewer | not\_delivered | Source-registered typed channel/time/scale waveform viewer for EEG/EOG, retaining calibrated time/amplitude axes and epoch context; restrictive participant transport and a separately scoped epoch-isolated implementation are linked. Rendered views only; no raw-array export, masks, labels or cached stage predictions. | Source registration for the linked whole-night-viewer-v1, viewer-transport-v1 and epoch-isolated-pair-v1 implementations does not establish authentic full-model participation, provider delivery, participant isolation or current runtime qualification. |
 | Tool assisted | source\_available | Whole-night programme source supports case-adaptive numerical investigation and separately declared reference/tool conditions. Matched allowed views/tool opportunities, finite cumulative cost and fresh person state; supplied model outputs are explicit model assistance. | Qualified authentic complete-cohort execution; fresh external investigator model context not proven by file exchange. |
 | Frozen program | source\_available | Finite precommitted program with separate person processes and complete5,450-epoch output; full153 programme is separately scoped. Commit complete source/configuration before development dispatch; no cross-person mutable state or private labels. Shared-host audit is not hostile-code isolation. | Authentic hard-memory path requires qualified Linux runtime and exact dependency closure; old trials remain historical. |
 
@@ -42,7 +42,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 18749 bytes; SHA-256 `7e9af2ecd2cfd48c26b404af6244e505bb0dfb05c70d09cede76569f22231d9f`.
+- Specification identity: 18749 bytes; SHA-256 `53412d25b94ec7cef38ed3c10559dd074b2fb8baec3aeaec2e6d0892c775a5e8`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

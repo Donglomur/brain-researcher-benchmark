@@ -3,7 +3,7 @@
 This component compares complete `direct_observation` and `typed_viewer`
 submissions on the same original packet. It validates both observation histories
 and all 92 submitted trajectories before opening the protected target generation
-once. Both arms then use the unchanged original numerical scorer on the same
+once. Both arms then use the same pinned current numerical scorer on the same
 captured targets.
 
 The endpoint remains 52 active and 40 perturbation queries, all 30 signed x/y
@@ -67,9 +67,11 @@ Arm bytes are snapshotted before replay, so a target callback cannot replace the
 accepted submissions or exposure records. Target bytes are captured once and
 reparsed for each original scorer invocation.
 
-The grader and its three dependencies remain unchanged and are authenticated by
-their existing content pins. This additive source introduces no replacement
-runtime selection. Existing Python 3.11+ is required; the original public NPZ
+The grader and its dependencies are authenticated by their current content pins.
+The scorer includes the finite equal-condition-mean overflow guard; ordinary
+arithmetic, null rules, metric weights and original data generation are preserved.
+Historical execution receipts retain their original pins. This source update
+introduces no replacement runtime selection. Existing Python 3.11+ is required; the original public NPZ
 loader needs the operator's existing NumPy. The component installs nothing.
 Input limits and original view budgets remain unchanged; a 1 MiB captured target
 and 256 KiB comparison result bound this component's serialized records, not host

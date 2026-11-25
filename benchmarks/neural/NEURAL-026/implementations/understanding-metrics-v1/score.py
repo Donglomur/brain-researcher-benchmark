@@ -212,7 +212,9 @@ def evaluate(folder, design, trusted_private_loader, *, expected_admission=None)
                 fixed_neural_joint_mse=(r_sse['neural']/n).tolist(),
                 fixed_shifted_joint_mse=(r_sse['shifted']/n).tolist(),
                 fixed_neural_joint_incremental_ev=fixed_effect.tolist(),
-                candidate_minus_fixed_neural_incremental_ev=(effect-fixed_effect).tolist(),
+                # Cancel the shared nuisance SSE before division so a large
+                # nuisance error cannot erase a smaller candidate difference.
+                candidate_minus_fixed_neural_incremental_ev=((r_sse['neural']-c_sse)/sst).tolist(),
                 candidate_over_fixed_shifted_incremental_ev=shifted_effect.tolist(),
                 candidate_joint_r2=(1-c_sse/sst).tolist(),
                 fixed_nuisance_joint_r2=(1-r_sse['nuisance']/sst).tolist()))

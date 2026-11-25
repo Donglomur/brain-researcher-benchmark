@@ -10,7 +10,7 @@ from pathlib import Path
 
 TASK_ID = "NEURAL-028"
 SCHEMA = "neural028-numerical-claims/v1"
-REFERENCE_SHA256 = "67777d97d6d00037efff66ff58774a49f4cd28b27b0ed018f79f77ae218e12d7"
+REFERENCE_SHA256 = "cc7ed7ef1d95de3b92a44cd429f7b3054a4e794dc090d100f8da846bc28ebe25"
 ATOL = 1e-8
 RTOL = 1e-6
 HERE = Path(__file__).resolve().parent

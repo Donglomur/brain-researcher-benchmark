@@ -72,6 +72,16 @@ def score_responses(submission,public,private):
 
 def grade_investigation(submission, recomputed, tolerances):
     import math
+    require(type(tolerances) is dict and
+            {'absolute', 'relative'} <= tolerances.keys(), 'numerical tolerance fields')
+    for name in ('absolute', 'relative'):
+        value = tolerances[name]
+        try:
+            finite = math.isfinite(value)
+        except (TypeError, ValueError, OverflowError):
+            finite = False
+        require(type(value) in (int, float) and finite and value >= 0,
+                'finite nonnegative numerical tolerance: ' + name)
     require(submission['task']=='NEURAL-044', 'wrong investigation')
     require(submission['estimand']=='conditional_tuning_response_association', 'unsupported estimand/causal claim')
     require(submission['source_digest']==recomputed['source_digest'], 'source binding')

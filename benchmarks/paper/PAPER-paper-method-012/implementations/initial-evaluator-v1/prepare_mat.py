@@ -8,9 +8,29 @@ an uninspected supplementary MAT file has this shape.
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 
 from mint_reference import TASK_ID, validate_packet
+
+
+def _file_state(info):
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+
+def _load_bound_mat(data_path, loadmat):
+    """Hash and decode one file description, refusing changed source identity."""
+    with data_path.open("rb") as stream:
+        before = _file_state(os.fstat(stream.fileno()))
+        source_hash = hashlib.sha256()
+        for block in iter(lambda: stream.read(64 * 1024), b""):
+            source_hash.update(block)
+        stream.seek(0)
+        loaded = loadmat(stream, simplify_cells=True)
+        if (_file_state(os.fstat(stream.fileno())) != before or
+                _file_state(data_path.stat()) != before):
+            raise ValueError("MAT source changed during hashing or decoding")
+    return loaded, source_hash.hexdigest()
 
 
 def prepare(data_path, root_variable, identities):
@@ -20,7 +40,7 @@ def prepare(data_path, root_variable, identities):
     if not isinstance(root_variable, str) or not root_variable:
         raise ValueError("An explicit root variable is required")
     data_path = Path(data_path)
-    loaded = loadmat(data_path, simplify_cells=True)
+    loaded, source_sha256 = _load_bound_mat(data_path, loadmat)
     root = loaded.get(root_variable)
     if not isinstance(root, dict) or not root:
         raise ValueError("Named MAT root must be a nonempty session struct")
@@ -52,7 +72,7 @@ def prepare(data_path, root_variable, identities):
         # Avoid rounding nonintegral values: exactness already checked above.
         sessions[-1]["stimulus"] = [int(x) for x in sessions[-1]["stimulus"]]
         sessions[-1]["neural"] = [[int(x) for x in row] for row in sessions[-1]["neural"]]
-    packet = {"schema_version": 1, "task_id": TASK_ID, "data_kind": "operator_prepared_unqualified", "expected_session_ids": sorted(root), "provenance": {"source": str(data_path.resolve()), "file_sha256": hashlib.sha256(data_path.read_bytes()).hexdigest(), "root_variable": root_variable, "binning_status": "fixed_input_labels_native_provenance_unverified", "sample_id_origin": "MAT column indices; not verified trial identities", "identity_status": "operator supplied, not independently authenticated"}, "sessions": sessions}
+    packet = {"schema_version": 1, "task_id": TASK_ID, "data_kind": "operator_prepared_unqualified", "expected_session_ids": sorted(root), "provenance": {"source": str(data_path.resolve()), "file_sha256": source_sha256, "root_variable": root_variable, "binning_status": "fixed_input_labels_native_provenance_unverified", "sample_id_origin": "MAT column indices; not verified trial identities", "identity_status": "operator supplied, not independently authenticated"}, "sessions": sessions}
     validate_packet(packet)
     return packet
 

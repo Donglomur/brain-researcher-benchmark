@@ -1,9 +1,10 @@
 # Recovered full-cohort activity-rank report grading
 
 This package restores the previously absent **numerical report grader** for the
-historical full30 public investigation. It preserves the recovered estimator and
-artifact scorer byte for byte, adds portable input delivery, and tests rejection
-of scientifically wrong values. Structural admission alone does not establish
+historical full30 public investigation. It preserves the recovered estimator, adds portable input delivery, and tests
+rejection of scientifically wrong values. The current artifact scorer corrects
+mean accumulation so representable positive errors cannot disappear when each
+term is divided before summation; the declared metric and panel weights are unchanged. Structural admission alone does not establish
 numerical correctness.
 
 The exact historical feature is `spine_activity_rate`, projected as `event_rate`.
@@ -74,9 +75,9 @@ make the primary null. Defined coefficient, overlap-mass, effective-mouse and
 uncertainty errors remain secondary numerical diagnostics. A null primary is not
 a perfect score. No new pass tolerance is invented.
 
-Use only `operator.py` as the portable CLI. Files under `recovered/` preserve the
-old source exactly; their historical standalone CLIs expect the old package
-layout. `run_checks.py` runs all inherited generated controls and the new operator
+Use only `operator.py` as the portable CLI. Files under `recovered/` retain the
+historical estimator and interfaces, with the mean-accumulation correction in
+`score.py`; their historical standalone CLIs expect the old package layout. `run_checks.py` runs all inherited generated controls and the new operator
 controls. In this parallel construction wave it must run through the shared test
 pool; no authentic input is read by any test.
 
@@ -102,5 +103,8 @@ Primary provenance is Wright et al. (2025),
 The analysis is the benchmark's prospective estimator, not the paper's estimator.
 See [protocol/LICENSES.md](protocol/LICENSES.md) for attribution and the selected
 archive-member checksum limitation. The 2.1 GB whole-archive checksum was not
-newly verified. Exact recovered-source hashes and validation results are recorded
-in `RECOVERY.json`; external construction receipts retain actual resource costs.
+newly verified. Original recovered-source hashes and validation results remain recorded in
+`RECOVERY.json` as historical provenance; its original `score.py` hash describes
+the predecessor, not the corrected current scorer. `test_mean_precision.py` adds
+generated complete-report controls for that correction. External construction
+receipts retain actual resource costs.

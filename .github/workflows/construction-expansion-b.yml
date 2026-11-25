@@ -96,13 +96,18 @@ jobs:
               },
               {
                   "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 27214,
-                  "sha256": "67777d97d6d00037efff66ff58774a49f4cd28b27b0ed018f79f77ae218e12d7"
+                  "bytes": 27768,
+                  "sha256": "cc7ed7ef1d95de3b92a44cd429f7b3054a4e794dc090d100f8da846bc28ebe25"
               },
               {
                   "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/source-provenance.json",
                   "bytes": 3052,
                   "sha256": "205d691f30f293bb66d1d197636070daf37ecdacf9826022446b66470631917c"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/tests/test_dprime_stability.py",
+                  "bytes": 3249,
+                  "sha256": "ea761220a04fc55ef0c9dbc2f730c51176964cf939cd4821dddaf591a199fc42"
               },
               {
                   "path": "benchmarks/neural/NEURAL-028/implementations/initial-evaluator-v1/tests/test_evaluator.py",
@@ -341,8 +346,8 @@ jobs:
               "benchmarks/paper/PAPER-FIND-REP-011/implementations/initial-evaluator-v1",
               "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 56 > 0
-          assert sum(row['bytes'] for row in rows) == 730005 <= 33554432
+          assert len(rows) == 57 > 0
+          assert sum(row['bytes'] for row in rows) == 733808 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -385,7 +390,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 730005,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 733808,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 import hashlib
+import os
 from pathlib import Path
 from typing import Mapping
 
@@ -107,6 +108,11 @@ def decode_pala_volts(data: Mapping) -> tuple[Trial, ...]:
     return tuple(trials)
 
 
+def _source_state(handle):
+    info = os.fstat(handle.fileno())
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+
 def load_pala(path: str | Path) -> SourceRecording:
     """Authenticate the original data.mat, then decode source volts exactly once.
 
@@ -115,6 +121,7 @@ def load_pala(path: str | Path) -> SourceRecording:
     """
     md5, sha256 = hashlib.md5(), hashlib.sha256()
     with Path(path).open("rb") as handle:
+        source_state = _source_state(handle)
         byte_count = 0
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             byte_count += len(block)
@@ -122,11 +129,15 @@ def load_pala(path: str | Path) -> SourceRecording:
             sha256.update(block)
         if md5.hexdigest() != SOURCE_MD5:
             raise SourceContractError("data.mat differs from the source-recorded MD5")
+        if _source_state(handle) != source_state:
+            raise SourceContractError("source changed during authentication")
         handle.seek(0)
         try:
             content = loadmat(handle, simplify_cells=True)
         except (NotImplementedError, ValueError) as exc:
             raise SourceContractError("MAT format/schema is unsupported; no cohort was prepared") from exc
+        if _source_state(handle) != source_state:
+            raise SourceContractError("source changed during MAT decoding")
     if "data" not in content:
         raise SourceContractError("missing source MATLAB data struct")
     trials = decode_pala_volts(content["data"])

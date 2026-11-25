@@ -2,7 +2,8 @@
 
 The complete executor control substitutes the native producer and numeric
 grader with inert leaves. It tests ordering and path/mode handling, not a
-scientific score or native isolation. Scientific grader bytes stay unchanged.
+scientific score or native isolation. Historical source pins remain preserved;
+the current numerical scorer successor has a separate exact binding below.
 """
 import copy
 from contextlib import ExitStack
@@ -257,10 +258,22 @@ class BoundaryControls(unittest.TestCase):
 
     def test_scientific_method_and512MiB_resource_reservation_unchanged(self):
         previous=json.loads((HERE/'PREDECESSOR.json').read_bytes())['files']
-        for name in ('grade.py','core.py','source_identity_join.py','io_utils.py','RESOURCE_BOUND.json'):
+        for name in ('grade.py','source_identity_join.py','io_utils.py','RESOURCE_BOUND.json'):
             raw=(HERE/name).read_bytes()
             self.assertEqual(len(raw),previous[name]['bytes'])
             self.assertEqual(hashlib.sha256(raw).hexdigest(),previous[name]['sha256'])
+        # PREDECESSOR is historical evidence, not the current numerical scorer.
+        # Pin the reviewed successor separately while preserving the original
+        # metric definitions, target reader, identity join and resource policy.
+        self.assertEqual(previous['core.py'], {
+            'bytes': 7275,
+            'sha256': '69257f2b7d7931100834f1b36812a3b3652829caa4dbeadf963ccb85e4803550'})
+        current = {'bytes': len(BODIES['core.py']),
+                   'sha256': hashlib.sha256(BODIES['core.py']).hexdigest()}
+        self.assertEqual(current, {
+            'bytes': 9137,
+            'sha256': 'cfa13c3d1e43e7705221c74c6fe5ba1000934e3a743a014f4682b8445b3f3ed1'})
+        self.assertEqual(executor.METHOD['core.py'], (current['bytes'], current['sha256']))
         resource=json.loads(BODIES['RESOURCE_BOUND.json'])
         self.assertEqual(resource['aggregate_reservation_minimum_bytes'],536870912)
         self.assertEqual(contract.OUTPUT_BYTES,100000000)

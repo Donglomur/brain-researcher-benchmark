@@ -33,7 +33,7 @@ def backend():
     path = HERE.parent / 'understanding-metrics-v1' / 'score.py'
     body = path.read_bytes()
     need(hashlib.sha256(body).hexdigest() ==
-         'e5e2f21432e6d474cf2a5fb0d92823ee49c790cfd8721b137fd8720d698e22ff',
+         '45d39f3c6d66b7838c3aa725596eeb293517ed51cacf4b9738f79de27af3a5ea',
          'Pinned measured-score loader source')
     spec = importlib.util.spec_from_loader('neural026_preparation_score', loader=None)
     score = importlib.util.module_from_spec(spec)

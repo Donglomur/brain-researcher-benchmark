@@ -15,8 +15,8 @@ import sys
 import types
 
 HERE = Path(__file__).resolve().parent
-GRADE_PIN = {'bytes': 13817,
-             'sha256': 'f66b0c331a098af06172dd54793f04ac4425de1f7e8923120218cc68c57a3fc5'}
+GRADE_PIN = {'bytes': 13823,
+             'sha256': '5b3a4f212a8b8d43bffb399fc7e83d4dc6ffe751baa174a0b459ec65f42109c2'}
 MODES = ('direct_observation', 'typed_viewer')
 MAX_TARGET = 1024**2
 MAX_RESULT = 256 * 1024

@@ -1,13 +1,16 @@
+import hashlib
 import json
+import os
 from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 try:
     import numpy as np
-    from scipy.io import savemat
+    from scipy.io import loadmat, savemat
 except ImportError:
     np = None
 from prepare_mat import prepare
@@ -30,6 +33,43 @@ class PrepareTests(unittest.TestCase):
             json.dumps(packet, allow_nan=False)
             with self.assertRaises(ValueError): prepare(path, "invented_root", identities)
             with self.assertRaises(ValueError): prepare(path, "Hippocampus_data", {})
+
+    def test_source_hash_binds_decoded_bytes(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "generated.mat"; self.save(path)
+            expected_hash = hashlib.sha256(path.read_bytes()).hexdigest()
+            identities = {"session_A": {"animal_id": "generated-animal", "neuron_ids": ["a", "b"]}}
+            packet = prepare(path, "Hippocampus_data", identities)
+            self.assertEqual(packet["provenance"]["file_sha256"], expected_hash)
+            self.assertEqual(packet["sessions"][0]["stimulus"], list(range(8)))
+            self.assertEqual(packet["sessions"][0]["neural"],
+                             [[0, 1], [1, 1], [0, 0], [1, 0]] * 2)
+
+    def test_atomic_source_replacement_after_decode_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "generated.mat"; self.save(path)
+            replacement = Path(tmp) / "replacement.mat"
+            replacement.write_bytes(path.read_bytes())
+            def replacing_loadmat(source, **options):
+                decoded = loadmat(source, **options)
+                os.replace(replacement, path)
+                return decoded
+            with mock.patch("scipy.io.loadmat", side_effect=replacing_loadmat):
+                with self.assertRaisesRegex(ValueError, "MAT source changed"):
+                    prepare(path, "Hippocampus_data", {
+                        "session_A": {"animal_id": "a", "neuron_ids": ["x", "y"]}})
+
+    def test_inplace_source_mutation_after_decode_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "generated.mat"; self.save(path)
+            def mutating_loadmat(source, **options):
+                decoded = loadmat(source, **options)
+                path.write_bytes(b"changed after successful decoding")
+                return decoded
+            with mock.patch("scipy.io.loadmat", side_effect=mutating_loadmat):
+                with self.assertRaisesRegex(ValueError, "MAT source changed"):
+                    prepare(path, "Hippocampus_data", {
+                        "session_A": {"animal_id": "a", "neuron_ids": ["x", "y"]}})
 
     def test_noninteger_raw_traces_are_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -50,8 +50,15 @@ def score(submission_bytes, cases_bytes, load_private_targets, interface):
             axis_r2=axis_r2,
             squared_euclidean_loss_m2_s2=math.fsum(sse)/n)
     values = [reports[c]['r2_variance_weighted'] for c in ('active','passive')]
+    mean_condition_r2 = None
+    if None not in values:
+        try:
+            mean_condition_r2 = math.fsum(values) / 2
+        except OverflowError:
+            # The sum can overflow even when the equal-condition mean is finite.
+            mean_condition_r2 = math.fsum(value / 2 for value in values)
     return dict(schema='neural021_condition_scores_v1', task_id='NEURAL-021',
-        conditions=reports, mean_condition_r2=None if None in values else math.fsum(values)/2,
+        conditions=reports, mean_condition_r2=mean_condition_r2,
         aggregation='equal condition; equal trial and time within condition',
         inferential_unit='one session; whole trials, not independent time bins',
         binary_success_threshold=None)

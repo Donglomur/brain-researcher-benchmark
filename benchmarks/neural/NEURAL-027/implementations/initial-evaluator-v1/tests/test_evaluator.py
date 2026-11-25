@@ -1,6 +1,7 @@
 """Generated engineering controls; not authentic source payloads or science runs."""
 import copy
 import importlib.util
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -8,6 +9,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -189,6 +191,78 @@ class PacketTests(unittest.TestCase):
             self.assertEqual(len(report["input_pins"]), 4)
             self.assertEqual(report["resources"]["evaluation_packets"], 16)
 
+
+    def test_cli_npz_pin_identifies_consumed_bytes_after_replacement(self):
+        plan, sessions = fixture()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "plan.json").write_text(json.dumps(plan))
+            for session in sessions:
+                np.savez(root / (session["session_id"] + ".npz"),
+                         spks=np.concatenate(session["spks"]),
+                         iarea=session["iarea"], **session["behavior"])
+            target = root / (sessions[0]["session_id"] + ".npz")
+            captured = target.read_bytes()
+            original_load = e.np.load
+            replaced = False
+
+            class ReplacingArchive:
+                def __init__(self, archive):
+                    self.archive = archive
+                def __enter__(self):
+                    return self.archive.__enter__()
+                def __exit__(self, *args):
+                    nonlocal replaced
+                    result = self.archive.__exit__(*args)
+                    if not replaced:
+                        target.write_bytes(b"different generated file after consumption")
+                        replaced = True
+                    return result
+
+            def load_then_replace(*args, **kwargs):
+                return ReplacingArchive(original_load(*args, **kwargs))
+
+            command = [str(MODULE), "--plan", str(root / "plan.json"),
+                       "--session-dir", tmp, "--output-dir", str(root / "out")]
+            with mock.patch.object(sys, "argv", command), \
+                 mock.patch.object(e.np, "load", side_effect=load_then_replace):
+                e.main()
+            report = json.loads((root / "out/report.json").read_text())
+            self.assertTrue(replaced)
+            self.assertNotEqual(target.read_bytes(), captured)
+            self.assertEqual(report["input_pins"][0]["sha256"], hashlib.sha256(captured).hexdigest())
+            self.assertEqual(report["input_pins"][0]["bytes"], len(captured))
+            self.assertEqual(report["resources"]["evaluation_packets"], 16)
+
+    def test_cli_plan_pin_identifies_parsed_bytes_after_replacement(self):
+        plan, sessions = fixture()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            plan_path = root / "plan.json"
+            captured = json.dumps(plan).encode()
+            plan_path.write_bytes(captured)
+            for session in sessions:
+                np.savez(root / (session["session_id"] + ".npz"),
+                         spks=np.concatenate(session["spks"]),
+                         iarea=session["iarea"], **session["behavior"])
+            original_evaluate = e.evaluate
+
+            def evaluate_then_replace(*args, **kwargs):
+                result = original_evaluate(*args, **kwargs)
+                changed = copy.deepcopy(plan)
+                changed["pre_reward_training_attestation"] = False
+                plan_path.write_text(json.dumps(changed))
+                return result
+
+            command = [str(MODULE), "--plan", str(plan_path), "--session-dir", tmp,
+                       "--output-dir", str(root / "out")]
+            with mock.patch.object(sys, "argv", command), \
+                 mock.patch.object(e, "evaluate", side_effect=evaluate_then_replace):
+                e.main()
+            report = json.loads((root / "out/report.json").read_text())
+            self.assertFalse(json.loads(plan_path.read_text())["pre_reward_training_attestation"])
+            self.assertEqual(report["plan_sha256"], hashlib.sha256(captured).hexdigest())
+            self.assertEqual(report["resources"]["evaluation_packets"], 16)
 
 class ScoringTests(unittest.TestCase):
     def oracle(self):

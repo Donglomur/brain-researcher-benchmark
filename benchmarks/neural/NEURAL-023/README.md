@@ -39,7 +39,7 @@ Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evide
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 32026 bytes; SHA-256 `b831d7047d7c6e658f497afa80d23bce826a3f2cf5d4f4120a980473d0cc77dd`.
+- Specification identity: 32026 bytes; SHA-256 `c5f30ea08a58a4d260c7966a7b6569fc0fec0daff0c8fa201b63be684357a81e`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

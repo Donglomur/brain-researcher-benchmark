@@ -6,6 +6,7 @@ paper/metrics.py. NumPy's default argsort is intentional, including tied values.
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 from pathlib import Path
@@ -154,6 +155,43 @@ def _digest(value):
     return isinstance(value, str) and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
 
 
+def _packet_member(payload, key):
+    """Check fixed primitive geometry before NumPy can allocate from a header."""
+    if payload[:6] != b"\x93NUMPY" or len(payload) < 10:
+        raise ValueError("packet member must be an NPY array")
+    version = tuple(payload[6:8])
+    if version not in ((1, 0), (2, 0), (3, 0)):
+        raise ValueError("unsupported NPY version")
+    width = 2 if version == (1, 0) else 4
+    size = int.from_bytes(payload[8:8 + width], "little")
+    offset = 8 + width + size
+    # Match NumPy's default bounded header admission.
+    if not 0 < size <= 10000 or offset > len(payload):
+        raise ValueError("invalid or oversized NPY header")
+    try:
+        meta = ast.literal_eval(payload[8 + width:offset].decode(
+            "utf8" if version == (3, 0) else "latin1").strip())
+    except (ValueError, SyntaxError, UnicodeError, RecursionError) as error:
+        raise ValueError("invalid NPY header") from error
+    if not isinstance(meta, dict) or set(meta) != {"descr", "fortran_order", "shape"}:
+        raise ValueError("unexpected NPY header fields")
+    shape = meta["shape"]
+    allowed = ((6000,),) if key == "neuron_id" else ((6000,), (6000, 1))
+    if (type(shape) is not tuple or any(type(n) is not int for n in shape)
+            or shape not in allowed or type(meta["fortran_order"]) is not bool):
+        raise ValueError("packet member must retain the fixed 6000-neuron geometry")
+    if not isinstance(meta["descr"], str):
+        raise ValueError("packet member must have a primitive real dtype")
+    try:
+        dtype = np.dtype(meta["descr"])
+    except (TypeError, ValueError) as error:
+        raise ValueError("invalid packet dtype") from error
+    if dtype.kind not in ("iu" if key == "neuron_id" else "fiu") or dtype.hasobject:
+        raise ValueError("packet member must have a primitive real dtype")
+    if len(payload) != offset + 6000 * dtype.itemsize:
+        raise ValueError("packet member extent differs from fixed geometry")
+
+
 def _load_artifact(record, keys):
     if not isinstance(record, dict) or set(record) != {"path", "sha256"} or not _digest(record["sha256"]):
         raise ValueError("artifact requires exactly path and lowercase sha256")
@@ -162,16 +200,26 @@ def _load_artifact(record, keys):
         raise ValueError("operator artifact paths must be absolute")
     # Only compact target/embedding packets belong here; never load the activity
     # matrix. Hash and parse the same bytes to avoid a path replacement race.
-    if path.stat().st_size > 1024 * 1024:
+    with path.open("rb") as handle:
+        payload = handle.read(1024 * 1024 + 1)
+    if len(payload) > 1024 * 1024:
         raise ValueError("target/embedding packet exceeds 1 MiB")
-    payload = path.read_bytes()
     if hashlib.sha256(payload).hexdigest() != record["sha256"]:
         raise ValueError("artifact SHA-256 mismatch")
     import io
     import zipfile
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
-        if sum(x.file_size for x in archive.infolist()) > 1024 * 1024:
+        entries = archive.infolist()
+        if len(entries) != len(keys) or {x.filename for x in entries} != {key + ".npy" for key in keys}:
+            raise ValueError("packet has missing, duplicate or unexpected fields")
+        if sum(x.file_size for x in entries) > 1024 * 1024:
             raise ValueError("expanded packet exceeds 1 MiB")
+        for entry in entries:
+            with archive.open(entry) as stream:
+                body = stream.read(1024 * 1024 + 1)
+            if len(body) > 1024 * 1024 or len(body) != entry.file_size:
+                raise ValueError("expanded packet member exceeds its declared extent")
+            _packet_member(body, entry.filename[:-4])
     with np.load(io.BytesIO(payload), allow_pickle=False) as data:
         if set(data.files) != set(keys) or len(data.files) != len(keys):
             raise ValueError("packet has missing, duplicate or unexpected fields")
