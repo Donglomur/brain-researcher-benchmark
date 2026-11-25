@@ -150,6 +150,33 @@ class PairedFlyScorerTests(unittest.TestCase):
         args[2]["predictions"].reverse()
         self.assertEqual(evaluate(args), expected)
 
+    def test_complete_score_preserves_representable_subnormal_losses_and_gain(self):
+        args = operands()
+        args[0]["episodes"] = [episode("a1", "A"), episode("a2", "A"),
+                               episode("b1", "B"), episode("b2", "B")]
+        for arm, prediction in ((args[1], 2.0 ** -537), (args[2], 0.0)):
+            arm["predictions"] = [{"episode_id": row["episode_id"], "prediction_mm_s": prediction}
+                                  for row in args[0]["episodes"]]
+        # Each squared error, each fly mean and the fly-macro mean are exactly
+        # the minimum positive binary64 value. Dividing each addend first loses it.
+        minimum = float.fromhex("0x0.0000000000001p-1022")
+        primary = evaluate(args)["genotype_reports"][0]["primary"]
+        for report in [primary["fly_macro"], *primary["all_fly_effects"]]:
+            self.assertEqual(report["nuisance_mse_mm2_s2"], minimum)
+            self.assertEqual(report["neural_mse_mm2_s2"], 0.0)
+            self.assertEqual(report["paired_loss_reduction_mm2_s2"], minimum)
+        self.assertEqual((primary["census_episodes"], primary["eligible_episodes"]), (4, 4))
+        self.assertEqual((primary["census_flies"], primary["scored_flies"]), (2, 2))
+
+    def test_finite_mean_avoids_intermediate_overflow_and_preserves_signed_cancellation(self):
+        largest = float.fromhex("0x1.fffffffffffffp+1023")
+        minimum = float.fromhex("0x0.0000000000001p-1022")
+        self.assertEqual(score.finite_mean([largest, largest]), largest)
+        self.assertEqual(score.finite_mean([largest, -largest]), 0.0)
+        self.assertEqual(score.finite_mean([minimum, -minimum]), 0.0)
+        self.assertEqual(score.finite_mean([-minimum, -minimum]), -minimum)
+        self.assertEqual(score.finite_mean([0.0, 0.0]), 0.0)
+
     def test_source_authentication_duplicate_keys_and_nonfinite_json(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "operand.json"
