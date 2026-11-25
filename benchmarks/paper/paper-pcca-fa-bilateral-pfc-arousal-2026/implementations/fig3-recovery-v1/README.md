@@ -38,6 +38,7 @@ Use Python 3.11 or later on POSIX; no third-party packages are required:
 ```sh
 python3 -I -B evaluate.py /operator/support.json /operator/submission.json > report.json
 python3 -I -B test_evaluate.py
+python3 -I -B test_population_sd.py
 ```
 
 The programme's `compare(support_bytes, candidate_bytes)` interface accepts strict,
@@ -94,6 +95,10 @@ four-component endpoint layout. It does not execute source fitting code.
 errors are percentage points; dimensionality errors are dimensions. The source
 pCCA comparator accompanies the 12 across-area combinations. All area-specific
 errors are preserved in `per_draw`.
+
+The population-SD calculation uses a scaled norm when squaring the centered
+errors would lose precision below the normal floating-point range. This preserves
+a representable nonzero SD without changing the statistic or its support.
 
 `reproduction_discrepancies` keeps candidate-minus-author values separately from
 recovery against ground truth. Reproduction is a first-class intended outcome,
