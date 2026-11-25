@@ -142,6 +142,35 @@ class ModelActorTransportTests(unittest.TestCase):
                     self.invoke()
                 self.assertFalse((self.out / 'result.json').exists())
 
+    def test_duplicate_direct_fields_cannot_replace_a_model_answer(self):
+        probabilities = json.dumps([0.5] * 27)
+        answers = [
+            '{"status":"complete","status":"abstain"}',
+            '{"status":"complete","probabilities":[1],"probabilities":' + probabilities + '}',
+        ]
+        for answer in answers:
+            with self.subTest(answer=answer):
+                self.answer = answer
+                with self.assertRaisesRegex(ValueError, 'Duplicate'):
+                    self.invoke()
+                self.assertFalse((self.out / 'result.json').exists())
+                self.assertFalse((self.out / 'usage.json').exists())
+
+    def test_duplicate_nested_claim_fields_cannot_replace_interpretation(self):
+        self.request = {'phase': 'interpret', 'tools': [],
+                        'report': {'status': 'COMPLETE_UNQUALIFIED',
+                                   'points': {'generated-effect': 1}}}
+        claim = {'estimand': 'generated-effect', 'evidence_ids': ['generated-effect'],
+                 'value': 1, 'units': 'balanced_logloss', 'uncertainty': 'descriptive',
+                 'comparison': 'generated', 'alternative_explanations': [],
+                 'limitations': [], 'falsification_needed': [], 'citations': []}
+        serialized = json.dumps(claim).replace('"value": 1', '"value": 0, "value": 1')
+        self.answer = '{"status":"interpreted","claims":[' + serialized + ']}'
+        with self.assertRaisesRegex(ValueError, 'Duplicate'):
+            self.invoke()
+        self.assertFalse((self.out / 'result.json').exists())
+        self.assertFalse((self.out / 'usage.json').exists())
+
     def test_context_budget_counts_full_prompt_and_never_truncates(self):
         self.policy['qualified_context_tokens'] = 30
         with self.assertRaisesRegex(ValueError, 'no truncation'):

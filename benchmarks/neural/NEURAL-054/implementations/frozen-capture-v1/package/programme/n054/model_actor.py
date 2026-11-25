@@ -34,7 +34,16 @@ def prompt_text(request, policy):
 
 def response_value(decoded, phase):
     """Validate a whole model answer against the existing participant protocol."""
-    value = json.loads(decoded)  # No parser repair or fallback predictions.
+    def unique_fields(pairs):
+        value = {}
+        for key, item in pairs:
+            if key in value:
+                raise ValueError('Duplicate model response JSON field')
+            value[key] = item
+        return value
+
+    # An ambiguous object is not repaired by selecting its final field value.
+    value = json.loads(decoded, object_pairs_hook=unique_fields)
     if type(value) is not dict:
         raise ValueError('Typed model response required')
     if phase == 'diagnose':
