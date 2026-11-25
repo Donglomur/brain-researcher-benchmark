@@ -10,7 +10,7 @@ Authentic preparation produced a complete store with 16,226 traces and 31,689,37
 
 Manual persistence evidence comprises six passing methods in the initial campaign and four passing methods in the corrected campaign. The initial failed campaign is retained; this must not be described as a fresh ten-pass campaign. Corrected controls checked bounded underlying ingress, short-read failure, complete 1,872-final reconstruction without reopening annotations, the complete invalid-response panel, and seven dependency/input mutations. These used generated fixtures and a generated private-loader double.
 
-No participant/model study or target scoring was performed during that preparation. The packaged manual source is byte-identical to the corrected accepted source. Packaging has not rerun those controls or authentic preparation.
+No participant/model study or target scoring was performed during that preparation. The packaged manual source retains that capture behavior and updates its helper pins for the response-recursion correction. The earlier controls and authentic preparation remain historical evidence, not reruns of this successor.
 
 ## Files and prerequisites
 
@@ -22,7 +22,7 @@ No participant/model study or target scoring was performed during that preparati
 | raster.py | Accepted deterministic trace-page renderer |
 | COMMON_DOCUMENTATION.txt | Identical candidate instructions for both arms |
 
-Keep these package files together. Loaders authenticate exact dependency bytes. The manual source is 35,856 bytes, SHA256 667d857eef3829f64e211e160500f81362ab9b80c06f3c3a3cf9119949fe8eca. Do not edit dependencies or common instructions to make a mismatched bundle load.
+Keep these package files together. Loaders authenticate exact dependency bytes. The manual source is 35,856 bytes, SHA256 a656f6086a4dcc17e899fccad9bba2683b144335e2e4dce02cf3996bcba0cc50. Do not edit dependencies or common instructions to make a mismatched bundle load.
 
 Use a selected Python environment on a POSIX host with fcntl, ordinary file permissions and directory fsync. Accepted controls used Python 3.11; packaging does not establish compatibility with Windows or arbitrary Python versions. The CLI supplies no process/RAM limiter or candidate sandbox. The operator must enforce selected time, memory, access and cumulative publication limits with an outer runner.
 
@@ -176,3 +176,9 @@ The result remains unverified_operator_arithmetic with the original false admiss
 The full store stays operator-only. One live case view is reused by both arms and retired afterward. This bounds retained image storage, not cumulative writes for 936 different views. One accepted seven-page capacity view is not an allocation for a complete participant study.
 
 The representation has a 384 MiB per-view publication cap. Deadlines are cooperative, not outer process limits. Programme bytes are capped at 1 MiB, each journal record at 64 KiB, each retained final record at 12 KiB, and the complete score envelope at 256 KiB. Reconstruction reads the bounded roster/index and completed journal prefix; its cost grows with the attempt. Select total read/write, runtime and memory limits for the entire operation and retain failure artifacts and cumulative costs.
+
+## Response-recursion correction
+
+A first final containing JSON nested beyond the interpreter limit is retained as an invalid response during scoring, rather than aborting the complete one-shot score. The failed arm keeps its full required denominator and withholds aggregate metrics; the other arm can still be scored. No first final is replaced.
+
+The corrected release helper changes only that exception classification. Observation preparation and metric definitions are unchanged. Store admission accepts only the current helper identity or the exact preserved predecessor identity, in addition to all existing external completion, native input, roster, packet and document pins. Existing observation manifests retain their original producer identity. This does not reopen or migrate an existing manual session: its externally pinned source closure remains unchanged.

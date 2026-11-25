@@ -484,7 +484,7 @@ class Pair:
                     value = decode(raw, decimal=True)
                     need(type(value) is dict and set(value) == {'case_id', 'predicted_annotation_code'} and value['case_id'] == cid, 'prediction schema/ID')
                     predictions[cid] = prediction_number(value['predicted_annotation_code'])
-                except (ValueError, TypeError, KeyError, InvalidOperation):
+                except (ValueError, TypeError, KeyError, InvalidOperation, RecursionError):
                     failure.append(cid)
             output = {'coverage': {'required': 936, 'valid': len(predictions), 'invalid': len(failure)},
                       'failure_case_ids': failure, 'aggregate_withheld': bool(failure)}

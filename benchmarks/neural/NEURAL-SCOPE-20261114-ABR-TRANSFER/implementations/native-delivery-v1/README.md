@@ -31,7 +31,7 @@ Each response attempt is consumed before bounded ingress. A short or invalid res
 
 ## Evidence
 
-The exact preparer completed the 936-case authentic store and one complete maximum-size case view. Images for the remaining cases are deterministic on-demand operations; the capacity view is not an all-case visual review or a neuroscience performance result.
+The preserved preparer version completed the 936-case authentic store and one complete maximum-size case view. Images for the remaining cases are deterministic on-demand operations; the capacity view is not an all-case visual review or a neuroscience performance result.
 
 Manual persistence evidence combines six passes from the preserved initial campaign with four passing corrected controls. The initial failed campaign remains part of the record. The corrected capture path uses an unbuffered read and rejects an incomplete expected prefix. The generated controls exercised all 1,872 final records and label-last restart behavior; they did not open authentic target annotations or run a participant/model study.
 
@@ -47,3 +47,7 @@ Run the five relocated-entry checks with a fresh generated output directory:
 ```
 
 These checks use generated inputs and do not prepare the authentic store or replay the full manual persistence suite. Keep the operator guide, distribution recipe and source metadata out of participant instructions; participants receive only the fixed common instructions and their current case view.
+
+## Malformed-response handling
+
+The current release helper records a bounded but excessively nested JSON first final as invalid coverage instead of aborting the one-shot score. Metric definitions and observation construction are unchanged. The preparer accepts the exact preserved predecessor producer pin for existing externally pinned stores, without rewriting those manifests; new stores record the current helper pin. Existing manual sessions remain bound to their own original source closure. See the operator guide for provenance and the focused generated regression.
