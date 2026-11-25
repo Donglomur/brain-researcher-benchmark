@@ -7,6 +7,8 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import os
+from contextlib import contextmanager
 import json
 from pathlib import Path
 from typing import Any
@@ -436,6 +438,34 @@ def patient_contrasts(roster: list[dict[str, Any]], records: list[dict[str, Any]
             'bootstrap': bootstrap, 'seed': seed, 'scientific_qualification': 'unknown'}
 
 
+def _file_identity(stream):
+    info = os.fstat(stream.fileno())
+    return (info.st_dev, info.st_ino, info.st_size,
+            info.st_mtime_ns, info.st_ctime_ns)
+
+
+@contextmanager
+def _verified_stream(path, expected_sha256, expected_bytes=None):
+    """Keep authenticated bytes and decoded data on one unchanged descriptor."""
+    with Path(path).open('rb') as stream:
+        identity = _file_identity(stream)
+        digest = hashlib.sha256()
+        for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+            digest.update(chunk)
+        if (not isinstance(expected_sha256, str) or len(expected_sha256) != 64
+                or digest.hexdigest() != expected_sha256
+                or (expected_bytes is not None and identity[2] != expected_bytes)):
+            raise ValueError(f'Content hash mismatch: {path}')
+        if _file_identity(stream) != identity:
+            raise ValueError('Input changed during authentication')
+        stream.seek(0)
+        try:
+            yield stream
+        finally:
+            if _file_identity(stream) != identity:
+                raise ValueError('Input changed during authenticated decoding')
+
+
 def load_nwb(path: str | Path, receipt: dict[str, Any], *, example: str) -> dict[str, Any]:
     """Local read only; verifies bytes against a supplied source receipt, not its trust.
 
@@ -449,12 +479,6 @@ def load_nwb(path: str | Path, receipt: dict[str, Any], *, example: str) -> dict
     if any(k not in receipt for k in required) or receipt['version'] != SNAPSHOT or receipt['dandiset'] != '000673':
         raise ValueError('complete exact 2024 DANDI receipt required')
     p = Path(path)
-    digest = hashlib.sha256()
-    with p.open('rb') as fh:
-        for chunk in iter(lambda: fh.read(1024 * 1024), b''):
-            digest.update(chunk)
-    if p.stat().st_size != receipt['bytes'] or digest.hexdigest() != receipt['sha256']:
-        raise ValueError('local file does not match supplied receipt')
     subject, channel, unit = (4, 49, None) if example == 'lfp' else (26, 33, 20)
     expected_path = f'sub-{subject}/sub-{subject}_ses-1_ecephys+image.nwb'
     if receipt['path'] != expected_path:
@@ -464,7 +488,7 @@ def load_nwb(path: str | Path, receipt: dict[str, Any], *, example: str) -> dict
     def text_scalar(value):
         value = value[()]
         return value.decode() if isinstance(value, bytes) else str(value)
-    with h5py.File(p, 'r') as f:
+    with _verified_stream(p, receipt['sha256'], receipt['bytes']) as stream, h5py.File(stream, 'r') as f:
         if text_scalar(f['general/subject/subject_id']) != str(subject) or text_scalar(f['general/session_id']) != '1':
             raise ValueError('NWB subject/session identity does not match example')
         dataset = f['acquisition/LFPs/data']

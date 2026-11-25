@@ -14,3 +14,17 @@ python3 evaluator.py patient-contrast /approved/cohort.json --output /approved/c
 NWB commands are documented interfaces, not evidence of authentic execution. Single-unit execution requires an explicitly prospective repair of a source sample-length defect. Population eligibility, native parity, grading/protected evaluation and component rights remain open. Original source mixes BSD3 and GPL-2.0-or-later components; no author implementation files are vendored.
 
 See the [full source contract, usage and limitations](../../docs/initial-evaluator-v1.md), `source_contract.json`, and `tests/test_evaluator.py`.
+
+## Authenticated NWB input descriptor
+
+The NWB bridge hashes and decodes the same retained descriptor. It verifies
+descriptor device/inode, size and modification/change times before and after
+hashing and HDF5 reads, refusing detected in-place changes before returning the
+detached arrays. It does not claim an immutable filesystem or protection from
+a hostile kernel. The existing exact source-asset receipt requirements remain.
+
+Three generated controls in `tests/test_verified_nwb.py` preserve unchanged
+array values and source-pin refusal, and reproduce pathname-replacement and
+in-place-write failures. Their explicitly injected tiny HDF5 fixtures are not
+source assets. No authentic recording, model fit or scientific qualification
+is established, and all numerical analysis definitions remain unchanged.
