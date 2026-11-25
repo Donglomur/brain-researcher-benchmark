@@ -12,7 +12,10 @@ METRICS=('balanced_accuracy','avoidance_recall','escape_recall','brier','reporti
 
 def phase_admission(collection,records):
     expected=phases(records,collection['model_cap_bytes']);need(collection['contexts']==expected and len(collection['phases'])==1320 and collection['all1320closed']is True and collection['private_grade_called']is False,'all 1,320 expected phases before any targets')
-    origin,end=collection['original_origin'],collection['original_deadline'];previous=origin;resource_names=set()
+    origin,end=collection['original_origin'],collection['original_deadline']
+    need(all(type(x)in(int,float)and math.isfinite(x)for x in (origin,end)),
+         'finite original collection clocks')
+    previous=origin;resource_names=set()
     for ctx,r in zip(expected,collection['phases']):
         need(r['schema']=='foraging_owned_phase_v1'and r['context']==ctx and r['status']=='captured'and r['error']is None,'exact complete phase receipt')
         need(all(r[k]is True for k in ('all_resources_closed','producer_closed_before_capture','cli_reaped'))and r['private_scoring_called']is False,'natural closure before private scoring')
