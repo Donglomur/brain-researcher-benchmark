@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -377,29 +378,49 @@ def evaluate(manifest, arrays):
         "holds": HOLDS}
 
 
+def _read_bound_envelopes(path, expected_sha256, participant_id):
+    """Authenticate and decode one unchanged open NPZ, never a reopened path."""
+    def state(stream):
+        value = os.fstat(stream.fileno())
+        return (value.st_dev, value.st_ino, value.st_size,
+                value.st_mtime_ns, value.st_ctime_ns)
+
+    with path.open("rb") as stream:
+        before = state(stream)
+        digest = hashlib.sha256()
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+        digest = digest.hexdigest()
+        if expected_sha256 != digest:
+            raise ContractError(f"input file digest mismatch: {participant_id}")
+        stream.seek(0)
+        with np.load(stream, allow_pickle=False) as content:
+            if set(content.files) != set(CONDITIONS):
+                raise ContractError("NPZ must contain exactly index and pinky arrays")
+            arrays = {c: content[c] for c in CONDITIONS}
+        if state(stream) != before:
+            raise ContractError(f"input changed during hash/decode: {participant_id}")
+    return arrays, {"participant_id": participant_id, "sha256": digest, "bytes": before[2]}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("manifest", type=Path)
     parser.add_argument("output", type=Path)
     args = parser.parse_args()
-    manifest = json.loads(args.manifest.read_text())
+    manifest_data = args.manifest.read_bytes()
+    manifest = json.loads(manifest_data)
     arrays, pins = {}, []
     for row in manifest.get("participants", []):
         pid = row["participant_id"]
         if pid in AUTHOR_EXCLUSIONS:
             continue
         path = args.manifest.parent / row["envelopes_npz"]
-        digest = hashlib.sha256(path.read_bytes()).hexdigest()
-        if row.get("envelopes_sha256") != digest:
-            raise ContractError(f"input file digest mismatch: {pid}")
-        with np.load(path, allow_pickle=False) as content:
-            if set(content.files) != set(CONDITIONS):
-                raise ContractError("NPZ must contain exactly index and pinky arrays")
-            arrays[pid] = {c: content[c] for c in CONDITIONS}
-        pins.append({"participant_id": pid, "sha256": digest, "bytes": path.stat().st_size})
+        arrays[pid], pin = _read_bound_envelopes(path, row.get("envelopes_sha256"), pid)
+        pins.append(pin)
     result = evaluate(manifest, arrays)
     result["input_pins"] = pins
-    result["manifest_sha256"] = hashlib.sha256(args.manifest.read_bytes()).hexdigest()
+    result["manifest_sha256"] = hashlib.sha256(manifest_data).hexdigest()
     args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
 
 
