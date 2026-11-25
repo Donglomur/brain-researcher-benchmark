@@ -5,6 +5,7 @@ the preserved assembly schema. It neither reads NWB nor runs/fits a model.
 """
 import math
 from collections import Counter
+from fractions import Fraction
 
 POLICIES = ("prestate_history", "outcome_conditioned_sensitivity")
 CELL_TYPES = ("Slc17a7-IRES2-Cre", "Sst-IRES-Cre", "Vip-IRES-Cre")
@@ -36,8 +37,9 @@ def mean(values):
     values = [number(v) for v in values]
     if not values:
         raise ScoringError("nonempty mean required")
-    scale = max(map(abs, values))
-    return 0.0 if scale == 0 else number(scale * math.fsum(v / scale / len(values) for v in values))
+    # Sum exact binary64 values before division so signed cancellation cannot
+    # erase a small representable mean or overflow an intermediate total.
+    return number(float(sum((Fraction(v) for v in values), Fraction()) / len(values)))
 
 
 def _token(value):
