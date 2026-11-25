@@ -7,6 +7,7 @@ explicit prospective conventions; historical stochastic parity is not claimed.
 from __future__ import annotations
 
 import argparse
+from contextlib import ExitStack
 import hashlib
 import importlib.util
 import json
@@ -14,7 +15,7 @@ from pathlib import Path
 
 import numpy as np
 
-SCORER_SHA256 = "6059486fcf3cf1c07c53fb1c214e5f5f76ded53995757c329d6ada557b812bae"
+SCORER_SHA256 = "c2643973762868391ea1d32b9c7ed54f546740f615db65bb2c920bc4ca9a493a"
 METRICS = ("correlation_explained_percent", "variance_explained_percent")
 SAMPLING = "prospective_NumPy_PCG64_Poisson_two_explicit_trial_seeds"
 
@@ -150,17 +151,18 @@ def score_comparison_panel(manifest, input_root):
         original, comparator = source_cases[key], lnp_cases[key]
         if comparator["time_bins"] != original["time_bins"]:
             raise ValueError("LNP and ICNet temporal support differs")
-        rates = scorer._load_array(root, comparator["rates"])
-        if rates.shape != (original["time_bins"], 512):
-            raise ValueError("LNP rate columns or temporal support differ")
-        rates, samples = poisson_trials(rates, trial_seeds=comparator["trial_seeds"])
-        observed = [scorer._load_array(root, original["arrays"][name])
-                    for name in ("recorded_trial1", "recorded_trial2")]
-        animal = panel["animals"][str(key[0])]
-        lnp_scores = scorer.score_case(
-            *observed, *samples, rates, rates,
-            eligible_mask=animal["eligible_mask"], unit_ids=animal["unit_ids"],
-            variance_ddof=panel["variance_ddof"])
+        with ExitStack() as stack:
+            rates = stack.enter_context(scorer._load_array(root, comparator["rates"]))
+            if rates.shape != (original["time_bins"], 512):
+                raise ValueError("LNP rate columns or temporal support differ")
+            rates, samples = poisson_trials(rates, trial_seeds=comparator["trial_seeds"])
+            observed = [stack.enter_context(scorer._load_array(root, original["arrays"][name]))
+                        for name in ("recorded_trial1", "recorded_trial2")]
+            animal = panel["animals"][str(key[0])]
+            lnp_scores = scorer.score_case(
+                *observed, *samples, rates, rates,
+                eligible_mask=animal["eligible_mask"], unit_ids=animal["unit_ids"],
+                variance_ddof=panel["variance_ddof"])
         results.append({"animal": key[0], "sound": key[1],
                         "measurement_times_seconds": original["measurement_times_seconds"],
                         "lnp_rates": comparator["rates"],

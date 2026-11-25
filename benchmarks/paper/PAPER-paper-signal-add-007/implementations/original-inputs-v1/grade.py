@@ -14,7 +14,7 @@ from source import (ANIMALS, SOUNDS, TIME_BINS, UNITS, SOURCE_FILES, InputError,
                     read_json_with_pin, require, sha256_file, validate_policy, write_json)
 from predictions import MAX_BLOCK_BINS, inside, load_array, validate_public
 
-SCORER_SHA256 = "6059486fcf3cf1c07c53fb1c214e5f5f76ded53995757c329d6ada557b812bae"
+SCORER_SHA256 = "c2643973762868391ea1d32b9c7ed54f546740f615db65bb2c920bc4ca9a493a"
 
 
 def _canonical_hash(value):
@@ -143,10 +143,11 @@ def assemble(public_path, reference_path, predictions_path, workspace_root, *, v
 
 def grade(manifest, workspace_root):
     path = Path(__file__).resolve().parent.parent / "source-equations-v1" / "scorer.py"
-    require(sha256_file(path) == SCORER_SHA256, "retained source-equation scorer changed")
+    scorer_bytes = path.read_bytes()
+    require(hashlib.sha256(scorer_bytes).hexdigest() == SCORER_SHA256, "retained source-equation scorer changed")
     spec = importlib.util.spec_from_file_location("icnet_retained_source_equations", path)
     scorer = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(scorer)
+    exec(compile(scorer_bytes, str(path), "exec"), scorer.__dict__)
     result = scorer.score_panel(manifest, workspace_root)
     result["input_adapter_schema"] = "icnet-original-inputs/v1"
     result["retained_scorer_sha256"] = SCORER_SHA256
