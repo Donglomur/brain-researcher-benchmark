@@ -212,6 +212,48 @@ class AdapterControls(unittest.TestCase):
             bridge.finish()
         bundle.close()
 
+    def test_budget_requires_key_lookup_and_answer_for_every_private_case(self):
+        f = self.f
+        count = len(f.plan.query_map)
+        for cap in (count, 2 * count - 1):
+            with self.subTest(max_actions=cap):
+                bundle = f.bundle()
+                options = f.options(bundle=bundle)
+                options["limits"] = dataclasses.replace(f.limits, max_actions=cap)
+                try:
+                    with self.assertRaisesRegex(adapter.InputError, "budget"):
+                        adapter.QueryInput(**options)
+                    self.assertEqual(bundle.values_by_id.ledger.actual_bytes, 0)
+                finally:
+                    bundle.close()
+
+    def test_exact_minimum_budget_completes_using_only_visible_case_keys(self):
+        f = self.f
+        count = len(f.plan.query_map)
+        bundle = f.bundle()
+        options = f.options(bundle=bundle)
+        options["limits"] = dataclasses.replace(f.limits, max_actions=2 * count)
+        try:
+            bridge = adapter.QueryInput(**options)
+            seen = []
+            for ordinal in range(count):
+                status = bridge.dispatch({"action": "status"})
+                self.assertEqual(status["ordinal"], ordinal)
+                seen.append(status["case_id"])
+                response = bridge.dispatch({"action": "answer",
+                    "case_id": status["case_id"], "probabilities": None})
+                self.assertEqual(response["responses"], ordinal + 1)
+            self.assertEqual(response["state"], "all_responses_collected")
+            result = bridge.finish()
+            self.assertEqual(result["viewer_collection"]["actions"], 2 * count)
+            self.assertEqual([r["case_id"] for r in result["viewer_collection"]["records"]], seen)
+            self.assertEqual([r["case_id"] for r in result["source_records"]],
+                             [r[0] for r in f.plan.query_map])
+            self.assertTrue(all(r["probabilities"] is None for r in result["source_records"]))
+            self.assertEqual(bundle.values_by_id.ledger.actual_bytes, 0)
+        finally:
+            bundle.close()
+
     def test_canonical_backing_identity_native_geometry_units_and_public_projection(self):
         f = self.f
         bundle = f.bundle()

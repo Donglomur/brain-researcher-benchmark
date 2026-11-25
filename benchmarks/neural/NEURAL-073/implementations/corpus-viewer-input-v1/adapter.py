@@ -212,8 +212,10 @@ class QueryInput:
         need(all(v.token(alias) for alias, _, _ in pairs) and
              len({alias for alias, _, _ in pairs}) == len(pairs), "display alias collision")
         aliases = tuple(row[0] for row in pairs)
-        need(type(limits) is v.Limits and limits.max_actions >= len(aliases),
-             "budget must permit the complete query answer roster")
+        # Each private case key is obtained through a charged status/describe
+        # action before its answer. No following key is disclosed by answer.
+        need(type(limits) is v.Limits and limits.max_actions >= 2 * len(aliases),
+             "budget must permit key lookup and answer for the complete query roster")
         self._corpus, self._viewer, self._bundle = c, v, bundle
         self._query = {alias: (key, rid) for alias, key, rid in pairs}
         self._aliases = aliases
