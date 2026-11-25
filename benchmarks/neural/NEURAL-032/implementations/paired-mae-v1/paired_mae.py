@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 from collections import Counter, defaultdict
 from decimal import Decimal
+from fractions import Fraction
 import hashlib
 import json
 import math
@@ -176,6 +177,11 @@ def folds_for(selected):
             for mouse in mice]
 
 
+def finite_mean(values):
+    """Round the complete arithmetic mean once, preserving subnormal losses."""
+    return float(sum((Fraction(value) for value in values), Fraction()) / len(values))
+
+
 def score_rows(rows, submission, input_sha256):
     selected, support = select_support(rows)
     expected = folds_for(selected)
@@ -216,7 +222,7 @@ def score_rows(rows, submission, input_sha256):
         for arm in ("baseline", "neural"):
             errors = [abs(by_id[row_id][arm] - targets[row_id]) for row_id in spec["query_row_ids"]]
             require(all(finite(error) for error in errors), "absolute error exceeds binary64 range")
-            losses[arm + "_mae"] = math.fsum(error / n for error in errors)
+            losses[arm + "_mae"] = finite_mean(errors)
         results.append({"mouse_id": mouse, "n": n, **losses,
                         "baseline_minus_neural_mae": losses["baseline_mae"] - losses["neural_mae"]})
     metrics = ("baseline_mae", "neural_mae", "baseline_minus_neural_mae")
@@ -224,7 +230,7 @@ def score_rows(rows, submission, input_sha256):
             "input_sha256": input_sha256, "evaluation_scope": "exposed_outcome_retrospective_loss_audit",
             "target": "followup_volume / baseline_volume", "units": "dimensionless volume ratio",
             "support": support, "per_mouse": results,
-            "equal_mouse": {key: math.fsum(row[key] / len(results) for row in results) for key in metrics}}
+            "equal_mouse": {key: finite_mean([row[key] for row in results]) for key in metrics}}
 
 
 def load_observations(path):
