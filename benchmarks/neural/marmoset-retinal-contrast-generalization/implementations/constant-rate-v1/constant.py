@@ -13,11 +13,12 @@ import struct
 
 def _dependency(name, relative, expected):
     path = Path(__file__).resolve().parent.parent / relative
-    if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != expected:
         raise ValueError("constant baseline dependency identity mismatch: " + relative)
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    exec(compile(raw, str(path), "exec"), module.__dict__)
     return module
 
 
