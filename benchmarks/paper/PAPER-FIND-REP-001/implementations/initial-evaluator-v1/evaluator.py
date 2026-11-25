@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 from pathlib import Path
 from typing import Any
@@ -127,22 +128,20 @@ def _sha256(value: Any, name: str) -> str:
     return value
 
 
-def _pinned_path(root: Path, value: Any, expected: Any) -> tuple[Path, dict[str, Any]]:
+def _pinned_input(root: Path, value: Any, expected: Any) -> tuple[bytes, dict[str, Any]]:
+    """Capture once so decoded arrays and reported identity use the same bytes."""
     relative = _nonempty_string(value, "array path")
     path = (root / relative).resolve()
     if Path(relative).is_absolute() or not path.is_relative_to(root.resolve()):
         raise ContractError("array paths must resolve within the manifest directory")
-    digest = hashlib.sha256()
     try:
-        with path.open("rb") as handle:
-            for block in iter(lambda: handle.read(1024 * 1024), b""):
-                digest.update(block)
+        payload = path.read_bytes()
     except OSError as exc:
         raise ContractError(f"cannot read array: {relative}") from exc
-    actual = digest.hexdigest()
+    actual = hashlib.sha256(payload).hexdigest()
     if actual != _sha256(expected, "array sha256"):
         raise ContractError(f"array SHA256 mismatch: {relative}")
-    return path, {"path": relative, "sha256": actual, "bytes": path.stat().st_size}
+    return payload, {"path": relative, "sha256": actual, "bytes": len(payload)}
 
 
 def _validate_animal(animal: Any) -> list[dict[str, Any]]:
@@ -221,11 +220,11 @@ def evaluate_manifest(manifest_path: str | Path) -> dict[str, Any]:
         day_results, day_means = [], []
         registered_ids = None
         for session in selected:
-            path, pin = _pinned_path(manifest_path.parent, session.get("arrays"), session.get("sha256"))
+            payload, pin = _pinned_input(manifest_path.parent, session.get("arrays"), session.get("sha256"))
             try:
-                with path.open("rb") as input_handle, np.load(input_handle, allow_pickle=False) as arrays:
-                    if set(arrays.files) != {"near_binF", "far_binF", "cell_ids"}:
-                        raise ContractError("NPZ requires exactly near_binF, far_binF, cell_ids")
+                with np.load(io.BytesIO(payload), allow_pickle=False) as arrays:
+                    if len(arrays.files) != 3 or set(arrays.files) != {"near_binF", "far_binF", "cell_ids"}:
+                        raise ContractError("NPZ requires exactly near_binF, far_binF, cell_ids, without duplicate members")
                     near, far, ids = arrays["near_binF"], arrays["far_binF"], arrays["cell_ids"]
             except (OSError, ValueError, TypeError, EOFError, zipfile.BadZipFile) as exc:
                 if isinstance(exc, ContractError):
