@@ -19,7 +19,7 @@ import secrets
 import numpy as np
 
 BASE_PATH = Path(__file__).resolve().parents[1] / "initial-evaluator-v1" / "evaluator.py"
-BASE_SHA256 = "77b4d047e176e52e2212ad5eb8dc814683226f83a25ac53e70c0f17a0f929b21"
+BASE_SHA256 = "5f15b481e16bde099ce1df514d7d9ecff22a8902339cdaa2998839a51903e145"
 if hashlib.sha256(BASE_PATH.read_bytes()).hexdigest() != BASE_SHA256:
     raise RuntimeError("reviewed predecessor evaluator changed")
 _spec = importlib.util.spec_from_file_location("neural027_evaluator", BASE_PATH)

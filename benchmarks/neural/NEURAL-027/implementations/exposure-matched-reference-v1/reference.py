@@ -13,7 +13,7 @@ import math
 from pathlib import Path
 
 
-DELIVERY_SHA256 = "165a7826f0b0942097d5ae3c8ccf8f08b8125ec01c4f49e309f4135fcd5a64ea"
+DELIVERY_SHA256 = "9ffecec777dd3b4971c4889977d63721c6b7ee5ba358959aba272b5d49581f72"
 DELIVERY_PATH = Path(__file__).resolve().parents[1] / "direct-packets-v1" / "delivery.py"
 if hashlib.sha256(DELIVERY_PATH.read_bytes()).hexdigest() != DELIVERY_SHA256:
     raise RuntimeError("reviewed direct-packet implementation changed")
