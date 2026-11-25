@@ -91,6 +91,14 @@ def score_bytes(raw, input_sha256, analysis, io):
     io.need(counts == RAW_ANNOTATION_COUNTS,
             "complete original raw annotation support: 198 CHB and 47 Siena")
     result = analysis.detector_outcomes(packet)
+    # The primary projection intentionally omits record-local and person support.
+    # Keep the source's computed companions in this operator-private report so
+    # false-alarm localization and observed exposure remain inspectable. This
+    # repeats only deterministic arithmetic on the same parsed packet; no input
+    # file, detector, or protected-data loader is invoked again.
+    companions = analysis.reconstruct(packet)
+    for key in ("patients", "target_false_alarm_localization", "observed_seconds"):
+        result[key] = companions[key]
     result["input_sha256"] = input_sha256
     result["scorer_sources_sha256"] = hashlib.sha256(io.encoded(SOURCE_PINS)).hexdigest()
     result["evidence_scope"] = "post_prediction_packet_recalculation_only"

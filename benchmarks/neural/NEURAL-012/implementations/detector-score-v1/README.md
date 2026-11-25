@@ -22,6 +22,13 @@ and phase evidence. It is not a candidate-facing input. Output is bound to the
 input bytes and scorer-source identity. Existing outputs cannot be overwritten.
 The CLI makes no network requests and needs only Python's standard library.
 
+The operator-private result retains every person's arm metrics, all target
+record-by-arm false-alarm intervals (including empty lists), and total observed
+seconds. These mandatory companions come from the unchanged reconstruction
+function; the original primary and secondary projections remain unchanged.
+The wrapper repeats deterministic reconstruction on the already parsed packet
+to retrieve these fields. It does not reopen inputs or execute a detector.
+
 The original endpoint is preserved: all 686 CHB and 41 Siena records, 23 and 14
 disjoint people, four arms, 96 logical jobs and 192 declared phases. Counts pool
 within each person before equal-person averaging. Siena arm differences remain
