@@ -25,7 +25,7 @@ MAX_PLAN_BYTES = 262144
 MAX_REPORT_BYTES = 16 * 1024 * 1024
 PINS = {
     "implementations/pala-source-adapter-v2/source_adapter.py":
-        (6104, "2a71d95b068b3ad9119ae231628d1895c67e3ff01fed4c3df6f1b12c248f56e2"),
+        (6567, "531988a0c9e809a4b092226c014350a5a9a73a8e055050e16a4d52a9ba68f1f9"),
     "implementations/initial-evaluator-v1/evaluator.py":
         (20045, "4d7ec918f40b1607841ccbd0e6da8036b105a9491460983e67f8fe0f06d2cfcb"),
     "implementations/initial-evaluator-v1/third_party/neuron_stat.py":

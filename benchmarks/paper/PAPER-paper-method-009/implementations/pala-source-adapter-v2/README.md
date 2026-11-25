@@ -10,7 +10,10 @@ refuses the trace as starting above its −30 mV threshold.
 
 `source_adapter.load_pala` authenticates the original `data.mat` against its
 recorded MD5, decodes its expected MATLAB fields, and converts each voltage
-sample from V to mV exactly once. There is no unit guessing, resampling, row
+sample from V to mV exactly once. File identity, size and modification metadata
+are checked across authentication and decoding so a changed file cannot retain
+an earlier checksum receipt. This is a mutation check, not a hostile-host sandbox.
+There is no unit guessing, resampling, row
 sorting, concatenation, trial exclusion, cohort selection, or spline fit. Stable
 one-based source row IDs, mouse/cell identities, trial types, 20 kHz sampling,
 individual trace lengths, and trial boundaries are retained. The returned
