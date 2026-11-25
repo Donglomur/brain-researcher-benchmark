@@ -13,7 +13,7 @@ import numpy as np
 
 
 AUDIT_PATH = Path(__file__).with_name("audit_packet.py")
-AUDIT_SHA256 = "75a2ace959cb8a6f5ff54936ee8b4a3cc5ba8e815a6cef451ff16b42da8eaa30"
+AUDIT_SHA256 = "9668855b498d7c5ebfd4467c44105ebf9aa37f3790a27caad1ecf1b867034063"
 MIXED = ("mixed_trial_only", "mixed_time_only", "mixed_slice12_1")
 FEATURES = 182
 BLOCK_BINS = 10
@@ -21,11 +21,12 @@ BLOCK_BINS = 10
 
 def original_audit():
     """Load the preserved audit; importing this module alone reads no artifacts."""
-    if hashlib.sha256(AUDIT_PATH.read_bytes()).hexdigest() != AUDIT_SHA256:
+    source = AUDIT_PATH.read_bytes()
+    if hashlib.sha256(source).hexdigest() != AUDIT_SHA256:
         raise ValueError("original audit dependency identity differs")
     spec = importlib.util.spec_from_file_location("slice_representation_original_audit", AUDIT_PATH)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    exec(compile(source, str(AUDIT_PATH), "exec"), module.__dict__)
     return module
 
 

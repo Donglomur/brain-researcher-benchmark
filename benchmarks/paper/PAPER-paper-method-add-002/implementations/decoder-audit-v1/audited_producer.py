@@ -17,11 +17,12 @@ import numpy as np
 
 PRODUCER_SHA256 = "c7746e42f4433a128418520e466e68ae1c92461a8e7a5fce4155e9d7a6c04de9"
 PRODUCER_PATH = Path(__file__).resolve().parents[1] / "source-producer-v1" / "producer.py"
-if hashlib.sha256(PRODUCER_PATH.read_bytes()).hexdigest() != PRODUCER_SHA256:
+_producer_source = PRODUCER_PATH.read_bytes()
+if hashlib.sha256(_producer_source).hexdigest() != PRODUCER_SHA256:
     raise ValueError("immutable source producer identity differs")
 _spec = importlib.util.spec_from_file_location("slicetca_audit_original_producer", PRODUCER_PATH)
 p = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(p)
+exec(compile(_producer_source, str(PRODUCER_PATH), "exec"), p.__dict__)
 e = p.endpoints
 
 

@@ -19,9 +19,12 @@ import numpy as np
 HERE=Path(__file__).resolve().parent
 PRODUCER=HERE.parent/'source-producer-v1'/'producer.py'
 PRODUCER_SHA='c7746e42f4433a128418520e466e68ae1c92461a8e7a5fce4155e9d7a6c04de9'
-if hashlib.sha256(PRODUCER.read_bytes()).hexdigest()!=PRODUCER_SHA:raise ValueError('producer dependency identity differs')
+_producer_source=PRODUCER.read_bytes()
+if hashlib.sha256(_producer_source).hexdigest()!=PRODUCER_SHA:raise ValueError('producer dependency identity differs')
 spec=importlib.util.spec_from_file_location('slicetca_native_producer',PRODUCER)
-p=importlib.util.module_from_spec(spec);spec.loader.exec_module(p)
+p=importlib.util.module_from_spec(spec)
+# Execute the authenticated capture; a loader reopen or stale bytecode is not the pinned source.
+exec(compile(_producer_source,str(PRODUCER),'exec'),p.__dict__)
 e=p.endpoints
 TASK='PAPER-paper-method-add-002'
 SHAPE=(511,182,150)
