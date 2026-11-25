@@ -351,5 +351,39 @@ class IndexedExport(unittest.TestCase):
         self.assertEqual(self.collections["choice.null_run_score"]["value_role"], "recorded_source_scalar_not_rescored")
 
 
+class FiniteReductionExtremes(unittest.TestCase):
+    def test_full_panel_finite_null_scores_keep_representable_effects(self):
+        roster, bundle = fixture()
+        for row in bundle["records"]:
+            if row["endpoint"].startswith("wheel_") and row["pseudo_id"] > 0:
+                row["score"] = -1e308
+        report = s.evaluate(roster, bundle, include_indexed=True)
+        for row in report["sessions"]:
+            if row["endpoint"].startswith("wheel_"):
+                self.assertEqual(row["paper_null_only_median"], -1e308)
+                self.assertEqual(row["source_median_including_observed"], -1e308)
+                self.assertEqual(row["paper_corrected_score"], 1e308)
+        for row in report["regions"]:
+            if row["endpoint"].startswith("wheel_"):
+                self.assertEqual(row["source_figure_effect"], 1e308)
+                self.assertEqual(row["paper_text_effect"], 1e308)
+        for endpoint in ("wheel_speed", "wheel_velocity"):
+            rows = report["indexed_collections"]["collections"][endpoint + ".null_pseudo_run_mean"]["records"]
+            self.assertEqual(len(rows), 200)
+            self.assertTrue(all(row["value"] == -1e308 for row in rows))
+        # Complete output remains serializable under the existing finite-JSON policy.
+        json.dumps(report, allow_nan=False)
+
+    def test_even_session_medians_do_not_overflow(self):
+        rows = [dict(endpoint="wheel_speed", region="R", eid=str(i), subject=str(i),
+                     real_score=1.0, source_median_including_observed=-1e308,
+                     paper_corrected_score=1e308, source_session_p=1/101)
+                for i in range(2)]
+        row = s.summarize_regions(rows)[0]
+        self.assertEqual(row["source_figure_effect"], 1e308)
+        self.assertEqual(row["paper_text_effect"], 1e308)
+        self.assertEqual(row["n_sessions"], 2)
+
+
 if __name__ == "__main__":
     unittest.main()
