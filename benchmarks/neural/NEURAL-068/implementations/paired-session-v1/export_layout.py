@@ -21,7 +21,7 @@ import types
 import zipfile
 
 
-SCORER_PIN = {"bytes": 13859, "sha256": "aa3866913ba47b5d23bc97b10d4df160ffecd68d0b8ff931edc692d71498b6bb"}
+SCORER_PIN = {"bytes": 13947, "sha256": "14c4b87dccbc863419c01b9968cd873c1d0be2eeca9f33c95eb375dfae2b7a76"}
 LABELS = ["tx", "ty", "tz", "rx", "g1", "g2", "g3"]
 TRAIN = ("19250101T111740", "19250101T112404", "19250108T110520", "19250108T111022",
          "19250108T111455", "19250113T120811", "19250113T121303", "19250115T110633",
