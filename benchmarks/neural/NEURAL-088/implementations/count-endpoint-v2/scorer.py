@@ -6,6 +6,7 @@ it must never replace historical numerical results or historical grading.
 """
 import argparse
 from decimal import Decimal, localcontext
+from fractions import Fraction
 import hashlib
 import json
 import math
@@ -146,7 +147,11 @@ def _contrast(left, right):
     # Both arms always have identical sorted presynaptic membership.
     gains = [a['deviance'] - b['deviance'] if a['deviance'] is not None and b['deviance'] is not None else None
              for a, b in zip(left['per_presynaptic'], right['per_presynaptic'])]
-    return {'equal_presynaptic_loss_difference': None if None in gains else weighted_mean(gains, [1] * len(gains)),
+    # Signed contrasts can cancel across neurons. A fixed-precision Decimal sum
+    # can discard a small gain before a later large opposite gain cancels.
+    # Sum the already-computed binary64 gains exactly, then round only the mean.
+    mean = None if None in gains else float(sum((Fraction(gain) for gain in gains), Fraction()) / len(gains))
+    return {'equal_presynaptic_loss_difference': mean,
             'per_presynaptic': [{'pre_id': row['pre_id'], 'loss_difference': gain}
                                 for row, gain in zip(left['per_presynaptic'], gains)]}
 
