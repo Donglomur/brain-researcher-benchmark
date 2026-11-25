@@ -42,15 +42,19 @@ def valid_hash(value: Any) -> bool:
     return isinstance(value, str) and len(value) == 64 and all(c in "0123456789abcdef" for c in value)
 
 
-def read_json(path: Path) -> Any:
+def parse_json(data: str) -> Any:
     def unique(pairs):
         result = {}
         for key, value in pairs:
             require(key not in result, f"duplicate JSON key: {key}")
             result[key] = value
         return result
-    return json.loads(path.read_text(), object_pairs_hook=unique,
+    return json.loads(data, object_pairs_hook=unique,
                       parse_constant=lambda _: (_ for _ in ()).throw(InputError("nonfinite JSON constant")))
+
+
+def read_json(path: Path) -> Any:
+    return parse_json(path.read_text())
 
 
 def _path(value: Any, base: Path) -> Path:
@@ -139,8 +143,9 @@ def stream_roi_mean(path: Path, expected_sha256: str, mask: np.ndarray,
 def validate_panel(panel: dict[str, Any]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     require(set(panel) == {"schema_version", "task_id", "population_sha256", "methods", "recordings"}, "unsupported panel fields")
     require(panel["schema_version"] == 1 and panel["task_id"] == TASK_ID, "wrong task or schema")
-    require(panel["population_sha256"] == sha256_bytes(POPULATION.read_bytes()), "population hash mismatch")
-    catalogue = {row["recording_id"]: row for row in read_json(POPULATION)["recordings"]}
+    population_bytes = POPULATION.read_bytes()
+    require(panel["population_sha256"] == sha256_bytes(population_bytes), "population hash mismatch")
+    catalogue = {row["recording_id"]: row for row in parse_json(population_bytes.decode())["recordings"]}
     methods = panel["methods"]
     require(isinstance(methods, list) and all(isinstance(m, str) and m for m in methods), "named methods required")
     require(len(methods) == len(set(methods)) and "raw" in methods and "cellmincer" in methods
