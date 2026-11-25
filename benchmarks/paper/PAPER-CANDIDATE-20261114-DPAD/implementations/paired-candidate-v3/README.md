@@ -83,3 +83,12 @@ regressions. These controls are software checks rather than scientific results.
 
 `provenance.json` retains the earlier numerical-revision record. The current
 source binding also identifies the added preflight interface and its controls.
+
+## Authenticated evaluator loading
+
+The paired scorer compiles the exact evaluator bytes whose SHA256 it checked.
+It does not execute a timestamp-valid bytecode cache or reopen the evaluator path
+after authentication. The unchanged predecessor pin and numerical policy still
+govern the calculation. `python3 -B -m unittest -v test_authenticated_dependency`
+checks valid loading, source refusal, an unrelated cache and a file replacement
+using generated source fixtures only.
