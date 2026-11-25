@@ -1,6 +1,6 @@
 # NEURAL-028 numerical investigation claims
 
-This component checks a complete numerical investigation report against the original packet's measured arrays. It advances the missing submission-claim checker in the current [understanding contract](../../understanding.v1.json). The earlier [evaluator](../initial-evaluator-v1/README.md), original task, and historical files are unchanged.
+This component checks a complete numerical investigation report against the original packet's measured arrays. It advances the missing submission-claim checker in the current [understanding contract](../../understanding.v1.json). The [evaluator](../initial-evaluator-v1/README.md) supplies the statistics; the original task and historical files are unchanged.
 
 It is an **operator numerical checker**, not a delivered participant access mode or a free-text understanding grader. It has no native data, participant sandbox, answer transport, or real solver result. A passing report means numerical agreement under the frozen estimator; it cannot establish direct interpretation, causal reasoning, authentic source coverage, or behavior-matched reward coding.
 
@@ -11,7 +11,8 @@ Every declared session and every session-local neuron must be present, including
 The primary result includes session means within each animal/phase, paired after-minus-before changes, equal-animal regime means, frozen animal-bootstrap intervals, and supervised-minus-unsupervised changes. Both phase session lists and denominators remain visible when a phase is undefined. Absent regions, constant cells, incomplete estimates and singleton uncertainty remain `null`; null, negative and positive scientific outcomes are equally valid answers. The checker requires every section, so reporting only a favorable contrast or dropping an undefined region fails.
 
 The calculation reuses the pinned, previously reviewed numerical evaluator rather than accepting precomputed truths from a submission. The checker captures the evaluator source once, verifies its SHA-256, and executes those exact bytes. Replacing the file after capture or leaving stale timestamp-valid bytecode cannot substitute a different reference. The pinned SHA-256 is:
-`67777d97d6d00037efff66ff58774a49f4cd28b27b0ed018f79f77ae218e12d7`.
+`cc7ed7ef1d95de3b92a44cd429f7b3054a4e794dc090d100f8da846bc28ebe25`.
+The evaluator uses a common per-neuron scale and a stable weighted standard deviation to prevent finite signal rescaling from turning defined d-prime into zero or an undefined value. The population-SD definition, weights, sign and zero-variance policy are unchanged.
 The original source revision is `ba64ac697f5d9914926baac79399e80707a5f3a6`; source definitions and acquisition limits remain in the predecessor's [provenance](../initial-evaluator-v1/source-provenance.json). No author code or native data is copied here.
 
 ## Report and operator interface

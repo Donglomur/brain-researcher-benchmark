@@ -69,18 +69,27 @@ def dprime(x1, x2, w1=None, w2=None):
     x1, x2 = finite(x1, 'x1', 2), finite(x2, 'x2', 2)
     require(x1.shape[0] == x2.shape[0], 'dprime neuron counts differ')
     require(x1.shape[1] >= 2 and x2.shape[1] >= 2, 'dprime requires at least two observations per arm')
+    # D-prime is unchanged by one positive scale shared by both arms of a
+    # neuron. Normalize before subtraction so finite opposite-sign samples do
+    # not overflow, and tiny but defined responses do not lose their variance.
+    scale = np.maximum(np.max(np.abs(x1), axis=1), np.max(np.abs(x2), axis=1))
+    scale[scale == 0] = 1
     moments = []
     for x, weights in ((x1, w1), (x2, w2)):
         w = np.ones(x.shape[1]) if weights is None else finite(weights, 'weights', 1)
         require(w.shape == (x.shape[1],) and np.all(w > 0), 'invalid dprime weights')
+        w = w / w.max()
         w = w / w.sum()
+        x = x / scale[:, None]
         # Center before summing: identical 0.1 samples with unequal arm sizes must
         # not acquire rounding-only dispersion and a spurious finite d-prime.
         centered = x - x[:, :1]
         offset = centered @ w
         mean = x[:, 0] + offset
-        variance = ((centered - offset[:, None]) ** 2) @ w
-        moments.append((mean, np.sqrt(variance)))
+        # hypot retains a small nonzero SD when the other arm's constant level
+        # sets a much larger common scale; directly squaring would underflow.
+        sd = np.hypot.reduce((centered - offset[:, None]) * np.sqrt(w), axis=1)
+        moments.append((mean, sd))
     denominator = moments[0][1] + moments[1][1]
     result = np.full(x1.shape[0], np.nan)
     np.divide(2 * (moments[0][0] - moments[1][0]), denominator,
