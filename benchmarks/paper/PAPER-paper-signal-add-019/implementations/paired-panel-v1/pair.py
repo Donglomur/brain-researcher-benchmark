@@ -12,7 +12,7 @@ import math
 from pathlib import Path
 
 DEPENDENCIES = {
-    "contrast-panel-v2/panel.py": (14807, "7ad801136f12e66c477ab96270159ffd6c4723465af9a684edbd020e51cbdbec"),
+    "contrast-panel-v2/panel.py": (15164, "da36249e5a538d87377be320c31ec2bbfef7b11b97083688d4791b0f81d672b9"),
     "initial-evaluator-v1/evaluator.py": (25780, "2cbfa3be223cdef714619c2db287bb77de0833c40f9c0c7e20044e6cc272e9f9"),
 }
 for _relative, (_size, _sha) in DEPENDENCIES.items():
@@ -122,7 +122,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     raw = {key: getattr(args, key).read_bytes() for key in ("targets",) + ACCESS}
-    result = evaluate_pair(*(json.loads(raw[key]) for key in ("targets",) + ACCESS))
+    result = evaluate_pair(*(panel.load_json(raw[key]) for key in ("targets",) + ACCESS))
     result["input_file_sha256"] = {key: hashlib.sha256(body).hexdigest() for key, body in raw.items()}
     with args.output.open("x") as handle:
         handle.write(json.dumps(result, indent=2, allow_nan=False) + "\n")

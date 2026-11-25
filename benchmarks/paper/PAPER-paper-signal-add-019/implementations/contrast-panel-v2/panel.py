@@ -23,6 +23,17 @@ CONDITIONS = ("accuracy", "speed")
 AUTHOR_MODELS = ("fechner", "pieron", "linear")
 
 
+def load_json(raw):
+    """Reject duplicate object names before validating panel inputs."""
+    def unique_object(pairs):
+        result = {}
+        for key, value in pairs:
+            require(key not in result, "duplicate JSON object key")
+            result[key] = value
+        return result
+    return json.loads(raw, object_pairs_hook=unique_object)
+
+
 def target_digest(targets):
     """Bind both populations, all targets, identities, exclusions and units."""
     return hashlib.sha256(json.dumps(targets, sort_keys=True, separators=(",", ":"),
@@ -234,7 +245,7 @@ def main():
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
     targets_raw, predictions_raw = args.targets.read_bytes(), args.predictions.read_bytes()
-    result = evaluate(json.loads(targets_raw), json.loads(predictions_raw))
+    result = evaluate(load_json(targets_raw), load_json(predictions_raw))
     result["input_file_sha256"] = dict(targets=hashlib.sha256(targets_raw).hexdigest(),
                                      predictions=hashlib.sha256(predictions_raw).hexdigest())
     args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
