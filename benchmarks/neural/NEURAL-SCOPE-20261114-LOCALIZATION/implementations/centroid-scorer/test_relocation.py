@@ -26,7 +26,7 @@ class RelocationTests(unittest.TestCase):
         package = json.loads((HERE / 'SOURCE.json').read_text())
         names = {item['path'] for item in package['files']}
         self.assertEqual(names, {'neutral_contract.py', 'centroid_control.py',
-            'test_centroid_control.py', 'test_relocation.py', 'README.md', 'SPECIFICATION.md', 'ATTRIBUTION.md'})
+            'test_centroid_control.py', 'test_relocation.py', 'test_median_precision.py', 'README.md', 'SPECIFICATION.md', 'ATTRIBUTION.md'})
         for member in package['files']:
             self.assertEqual(Path(member['path']).name, member['path'])
             raw = (HERE / member['path']).read_bytes()

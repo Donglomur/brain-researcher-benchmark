@@ -16,7 +16,7 @@ import platform
 import struct
 import types
 
-PACKET_SHA256 = 'c21434fe37da998dc53449e15e530427ae0a7187c9a2cc960ec7218a078c401d'
+PACKET_SHA256 = '8be89ee7834dcfeb9955bd7027396edcf96b4add63e1006d2e9309d710a9c8d0'
 PACKET_BYTES = 12760
 MAX_PROGRAM_BYTES = 256 * 1024
 ALLOWED_IMPORTS = {'math', 'statistics', 'struct'}

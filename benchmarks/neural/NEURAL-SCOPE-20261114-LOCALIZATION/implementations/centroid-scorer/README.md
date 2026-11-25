@@ -5,8 +5,10 @@ This portable source component supports the existing registered task
 16 degradation conditions × 5 realizations**, and every requested individual
 spike and template. These are cases within one task, not 880 benchmarks or animals.
 
-`neutral_contract.py` is the complete previously reviewed scorer and normalized
-input projection, unchanged byte for byte. `centroid_control.py` implements the
+`neutral_contract.py` preserves the complete reviewed scorer and normalized
+input projection. Even-distance medians accumulate the two middle values exactly
+and round once, avoiding overflow and premature rounding of both normal and
+subnormal distances. The strict `<50 µm` primary endpoint is unchanged. `centroid_control.py` implements the
 registered geometry-centroid negative control. Its prediction is the arithmetic
 mean of every probe contact's two ordered coordinates in µm. It reads no
 waveform, template, observed-support mask, corruption mask or spatial-target body.
@@ -86,8 +88,11 @@ external. The producer's receipt describes its own requested roles only.
 checks. `test_relocation.py` adds three new checks for exact package closure,
 full 880-case CLI/scorer use from an unrelated directory, and refusal of a changed
 local dependency or program before geometry access. The public CI job explicitly
-loads both suites and requires all 16 tests; it does not depend on recursive
-test discovery. The relocation phase reruns only its three new checks locally.
+loads the existing suites and four `test_median_precision.py` controls, requiring
+20 tests in total. The precision controls exercise the full 880-case score, the
+strict primary threshold, normal and subnormal midpoint diagnostics, and large
+distances. This correction changes diagnostic rounding, not the scientific
+median definition or support. Only new or affected controls are rerun locally.
 
 All fixtures are invented. Prior independent controls distinguished the intended
 hierarchical accuracy 13/24 from cell pooling 3/11 and spike pooling 5/21, while

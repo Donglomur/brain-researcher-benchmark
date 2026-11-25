@@ -68,7 +68,7 @@ def distance_or_none(left, right):
 
 
 def nonnegative_median(values):
-    """Finite distance median without the overflowing (low + high) / 2."""
+    """Finite distance median without overflow or premature rounding."""
     ordered = sorted(values)
     require(ordered and all(finite_number(x) and x >= 0 for x in ordered),
             "finite nonnegative median support")
@@ -76,7 +76,9 @@ def nonnegative_median(values):
     if len(ordered) % 2:
         return ordered[middle]
     low, high = ordered[middle - 1], ordered[middle]
-    return low + (high - low) / 2
+    # Accumulate both finite middle values exactly and round once.
+    # Splitting the midpoint can misround normal and subnormal distances.
+    return statistics.mean((low, high))
 
 
 def canonical(value):

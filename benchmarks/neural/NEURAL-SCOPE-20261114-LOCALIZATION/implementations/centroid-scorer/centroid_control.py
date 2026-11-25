@@ -16,8 +16,8 @@ import struct
 import types
 
 NEUTRAL_PATH = 'neutral_contract.py'
-NEUTRAL_BYTES = 20220
-NEUTRAL_SHA256 = '6934657dcd65ac11ad1b1ee8fae19b8ac52f5e4c1e07a837f149c4f7e011c588'
+NEUTRAL_BYTES = 20365
+NEUTRAL_SHA256 = '5069aca47290434f302c9c2b43fd51d81aa21c91f3ff281194bee04731aeeef8'
 DTYPES = {'<f4': ('f', 4), '<f8': ('d', 8), '<i4': ('i', 4), '<i8': ('q', 8)}
 MAX_JSON_BYTES = 16 * 1024 * 1024
 MAX_HEADER_BYTES = 65536

@@ -15,9 +15,9 @@ or prepared in this revision.
 
 ## Inputs and invocation
 
-Keep this directory adjacent to the unchanged `centroid-scorer` directory.
-`packet.py` authenticates the 20,220-byte `neutral_contract.py` at SHA-256
-`6934657dcd65ac11ad1b1ee8fae19b8ac52f5e4c1e07a837f149c4f7e011c588` before loading
+Keep this directory adjacent to the pinned `centroid-scorer` directory.
+`packet.py` authenticates the 20,365-byte `neutral_contract.py` at SHA-256
+`5069aca47290434f302c9c2b43fd51d81aa21c91f3ff281194bee04731aeeef8` before loading
 its complete-grid validator and allowlist projection. Python's standard library
 and Unix `O_NOFOLLOW`/directory descriptors are required. No NumPy, scientific
 dependency installation or original author repository is needed.
