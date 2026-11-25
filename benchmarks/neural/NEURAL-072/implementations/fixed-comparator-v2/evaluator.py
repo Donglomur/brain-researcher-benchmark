@@ -140,6 +140,11 @@ def score(protocol, cases, test_targets, candidate, reference_bytes, expected_re
     reference = authenticated_reference(protocol, cases, reference_bytes, expected_reference_sha256)
     prediction = joined_prediction(protocol, cases, reference, candidate)
     report = legacy.score(protocol, cases, test_targets, prediction)
+    # The preserved helper rounds its acceptance count down for small panels.
+    # Apply the declared strict >10% empty-draw failure rule without rounding.
+    uncertainty = report['uncertainty']
+    require(10 * uncertainty['empty'] <= uncertainty['requested'],
+            'too many empty crossed-cluster bootstrap draws')
     arrays = legacy.prediction_arrays(protocol, cases, prediction)
     ys = legacy.targets(cases, test_targets, {'test'})
     # Expose absolute prediction errors as well as signed increments. Preserve
