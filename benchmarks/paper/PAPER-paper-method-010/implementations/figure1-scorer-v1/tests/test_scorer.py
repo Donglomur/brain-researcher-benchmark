@@ -154,5 +154,57 @@ class PacketTests(unittest.TestCase):
         self.assertNotIn(str(self.path), encoded)
 
 
+class AllocationAdmissionTests(unittest.TestCase):
+    """Generated headers only; oversized claimed arrays are never allocated."""
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.tmp.cleanup)
+        self.path = Path(self.tmp.name) / "packet.npz"
+
+    def packet(self, embedding_body):
+        import io
+        import zipfile
+        ids = io.BytesIO()
+        np.save(ids, np.arange(6000, dtype="<i4"), allow_pickle=False)
+        with zipfile.ZipFile(self.path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+            archive.writestr("neuron_id.npy", ids.getvalue())
+            archive.writestr("embedding.npy", embedding_body)
+        return {"path": str(self.path), "sha256": hashlib.sha256(self.path.read_bytes()).hexdigest()}
+
+    def test_invalid_geometry_and_extent_refused_before_numpy_materialization(self):
+        import io
+        for shape in ((2**40,), (5999,), (6000,)):
+            with self.subTest(shape=shape):
+                body = io.BytesIO()
+                np.lib.format.write_array_header_1_0(body,
+                    {"descr": "<f8", "fortran_order": False, "shape": shape})
+                packet = self.packet(body.getvalue())  # Header only: never allocate its declared shape.
+                with mock.patch.object(scorer.np, "load", side_effect=AssertionError("unvalidated materialization")) as load:
+                    with self.assertRaises(ValueError):
+                        scorer._load_artifact(packet, {"embedding", "neuron_id"})
+                    load.assert_not_called()
+
+    def test_valid_column_vector_and_integer_ids_preserved(self):
+        import io
+        values = np.zeros((6000, 1), dtype=">f4")
+        body = io.BytesIO(); np.save(body, values, allow_pickle=False)
+        result = scorer._load_artifact(self.packet(body.getvalue()), {"embedding", "neuron_id"})
+        np.testing.assert_array_equal(result["embedding"], values)
+        self.assertEqual(result["embedding"].dtype, values.dtype)
+        np.testing.assert_array_equal(result["neuron_id"], np.arange(6000))
+
+    def test_compressed_input_read_is_bounded_on_consumed_stream(self):
+        import io
+        stream = io.BytesIO(b"x" * (1024 * 1024 + 1))
+        path = mock.MagicMock(); path.is_absolute.return_value = True
+        path.open.return_value.__enter__.return_value = stream
+        with mock.patch.object(scorer, "Path", return_value=path):
+            with self.assertRaisesRegex(ValueError, "exceeds 1 MiB"):
+                scorer._load_artifact({"path": "/operator/packet.npz", "sha256": "0" * 64},
+                                      {"embedding", "neuron_id"})
+        self.assertEqual(stream.tell(), 1024 * 1024 + 1)
+        path.read_bytes.assert_not_called()
+
+
 if __name__ == "__main__":
     unittest.main()
