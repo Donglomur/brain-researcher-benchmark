@@ -8,7 +8,7 @@ import os
 import re
 import zipfile
 
-from .artifacts import collect
+from .artifacts import collect, admit_npz_headers
 from .core import Custody, Refusal, read_exact
 from .full_outputs import inspect_result, validate_metadata
 
@@ -62,6 +62,7 @@ def _npz(root_fd, row, budget, custody, *, member_bytes):
             need(len(entries) == len(expected) and {x.filename for x in entries} == set(expected) and
                  all(not x.is_dir() and not (x.flag_bits & 1) for x in entries) and
                  sum(x.file_size for x in entries) <= member_bytes, "exact bounded full scientific NPZ members")
+            admit_npz_headers(directory)
             stream.seek(0)
             arrays = np.load(stream, allow_pickle=False)
             result = {name[:-4]: arrays[name[:-4]] for name in expected}

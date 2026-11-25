@@ -34,6 +34,69 @@ def save_product(root_fd, key, array, axes, budget, custody, *, member_bytes):
     return {'key': [key.participant, key.stimulus, key.pipeline, key.condition, key.score], **row}
 
 
+def admit_npz_headers(directory):
+    """Bound declared allocations by captured member bytes before NumPy loads.
+
+    ZIP extents alone do not constrain a malicious NPY shape declaration. Keep
+    semantic dtype/shape checks in the existing callers; this only verifies that
+    nonobject arrays fit their actual decompressed member extent.
+    """
+    import ast
+    import math
+    import struct
+    import tokenize
+    import numpy as np
+    for entry in directory.infolist():
+        with directory.open(entry) as member:
+            magic = member.read(8)
+            if len(magic) != 8 or magic[:6] != b"\x93NUMPY" or tuple(magic[6:]) not in ((1, 0), (2, 0), (3, 0)):
+                raise Refusal('supported NPY member header required')
+            version = tuple(magic[6:])
+            width = 2 if version == (1, 0) else 4
+            size_raw = member.read(width)
+            if len(size_raw) != width:
+                raise Refusal('complete NPY header length required')
+            size = struct.unpack('<H' if width == 2 else '<I', size_raw)[0]
+            # np.load caps decoded header characters; UTF-8 uses up to4bytes.
+            if size > (40000 if version == (3, 0) else 10000) or 8 + width + size > entry.file_size:
+                raise Refusal('bounded NPY header extent required')
+            body = member.read(size)
+            if len(body) != size:
+                raise Refusal('complete NPY header required')
+            try:
+                text = body.decode('utf-8' if version == (3, 0) else 'latin1')
+                if len(text) > 10000:
+                    raise ValueError('NPY header character ceiling')
+                try:
+                    header = ast.literal_eval(text)
+                except SyntaxError:
+                    if version == (3, 0):
+                        raise
+                    # Preserve NumPy's support for Python2 integer suffixes.
+                    tokens, previous = [], None
+                    for token in tokenize.generate_tokens(io.StringIO(text).readline):
+                        if token.type == tokenize.NAME and token.string == 'L' and previous == tokenize.NUMBER:
+                            continue
+                        tokens.append(token)
+                        previous = token.type
+                    header = ast.literal_eval(tokenize.untokenize(tokens))
+                if type(header) is not dict or set(header) != {'descr', 'fortran_order', 'shape'}:
+                    raise ValueError('NPY fields')
+                shape = header['shape']
+                if (type(header['fortran_order']) is not bool or not isinstance(shape, tuple) or
+                        not all(isinstance(n, int) and n >= 0 for n in shape)):
+                    raise ValueError('NPY shape/order')
+                dtype = np.lib.format.descr_to_dtype(header['descr'])
+            except (ValueError, TypeError, SyntaxError, UnicodeError, RecursionError, tokenize.TokenError) as error:
+                raise Refusal('supported NPY array header required') from error
+            if dtype.hasobject or dtype.itemsize <= 0:
+                raise Refusal('positive-width nonobject NPY array required')
+            required = math.prod(shape) * dtype.itemsize
+            available = entry.file_size - (8 + width + size)
+            if required > available:
+                raise Refusal('NPY declared array exceeds captured member payload')
+
+
 def load_product(root_fd, row, budget, custody, *, member_bytes):
     import numpy as np
     if set(row) != {'key', 'name', 'bytes', 'sha256'} or len(row['key']) != 5:
@@ -55,6 +118,7 @@ def load_product(root_fd, row, budget, custody, *, member_bytes):
                 raise Refusal('exact NPZ members required')
             if sum(x.file_size for x in directory.infolist()) > member_bytes:
                 raise Refusal('expanded NPZ extent exceeds cap')
+            admit_npz_headers(directory)
             stream.seek(0)
             archive = np.load(stream, allow_pickle=False)
             axes = (archive['train_times'], archive['test_times'])
