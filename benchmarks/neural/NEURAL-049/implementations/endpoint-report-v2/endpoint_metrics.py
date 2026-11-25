@@ -1,5 +1,6 @@
 """Folded-angle/pixel diagnostics; no data access, fitting or admission effects."""
 import math
+from fractions import Fraction
 
 UNITS = {'angle': 'degrees', 'magnitude': 'pixels', 'speed': 'pixels/second'}
 
@@ -31,9 +32,28 @@ def finite_mean(values):
 
 
 def _squares(pairs):
+    # Preserve ordinary squared-term/fsum arithmetic. Recover only positive
+    # terms that binary64 multiplication rounded to zero; their full sum can
+    # still be representable even when each individual square is not.
+    underflow = Fraction(0)
+
+    def terms():
+        nonlocal underflow
+        for left, right in pairs:
+            residual = left - right
+            square = residual ** 2
+            if square == 0. and residual != 0.:
+                exact = Fraction.from_float(residual)
+                underflow += exact * exact
+            yield square
+
     try:
-        result = math.fsum((left - right) ** 2 for left, right in pairs)
-    except OverflowError:
+        result = math.fsum(terms())
+        if underflow:
+            result = float(Fraction.from_float(result) + underflow)
+            if result == 0.:
+                return None
+    except (OverflowError, ValueError):
         return None
     return result if math.isfinite(result) else None
 

@@ -39,6 +39,10 @@ complete endpoint. Negative R² remains negative.
 - `endpoint_metrics.py` checks the common projection relation, rejects invalid
   authentic label domains without clipping labels, and reports nonrepresentable
   SSE/SST/R² as `undefined_numerical_failure` with null unavailable numbers.
+  Positive squared terms that underflow individually are accumulated exactly
+  before final binary64 rounding. A positive full error/variation sum that
+  still rounds to zero is a numerical failure, never exact-zero error or a
+  constant person; representable aggregate subnormal sums remain available.
   The macro remains undefined when any required person is undefined. Ordinary
   `fsum / n` arithmetic is retained; a scaled compensated mean is used only when
   its intermediate sum overflows. Bootstrap deviations and interval endpoints

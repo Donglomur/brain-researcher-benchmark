@@ -190,6 +190,28 @@ class EndpointControls(unittest.TestCase):
             self.assertIsNone(grade.macro(rows)['value'])
             json.dumps(rows, allow_nan=False)
 
+    def test_nonzero_underflowed_error_is_not_exact_zero(self):
+        row = person_score([0., 1.], [1e-200, 1.])
+        self.assertEqual(row['status'], 'undefined_numerical_failure')
+        self.assertIsNone(row['sse'])
+        self.assertIsNone(row['r2'])
+        self.assertIsNone(grade.macro({person: row for person in PEOPLE})['value'])
+
+    def test_nonconstant_tiny_support_is_numerical_failure_not_constant(self):
+        row = person_score([-1e-200, 1e-200], [-1e-200, 1e-200])
+        self.assertEqual(row['sse'], 0.)
+        self.assertIsNone(row['sst'])
+        self.assertEqual(row['status'], 'undefined_numerical_failure')
+        detail = paired_day_score([0., 1.], [1e-200, 1.], [1e-200, 1.], 'magnitude')
+        self.assertEqual(detail['projected']['status'], 'undefined_numerical_failure')
+
+    def test_underflowed_terms_can_sum_to_representable_error(self):
+        tiny = 2. ** -538
+        row = person_score([0., 0., 0., 0., 1.], [tiny, tiny, tiny, tiny, 1.])
+        self.assertEqual(row['sse'], 2. ** -1074)
+        self.assertEqual(row['status'], 'defined')
+        self.assertEqual(row['n'], 5)
+
     def test_large_finite_mean_and_constant_support(self):
         self.assertEqual(finite_mean([1e308, 1e308]), 1e308)
         row = person_score([1e308, 1e308], [1e308, 1e308])
