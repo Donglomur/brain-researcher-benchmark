@@ -1,5 +1,6 @@
 """Generated software controls, never authentic neural observations."""
 import copy
+import hashlib
 import json
 import math
 from pathlib import Path
@@ -167,6 +168,41 @@ class ReplayTests(unittest.TestCase):
             mutate(doc)
             with self.assertRaises(replay.ReplayError):
                 replay.replay(doc)
+
+    def test_cli_hashes_exact_scored_input_snapshots(self):
+        for include_candidate in (False, True):
+            with self.subTest(candidate=include_candidate), tempfile.TemporaryDirectory() as folder:
+                source = fixture()
+                proposal = self.candidate(source) if include_candidate else None
+                expected = replay.replay(source, proposal)
+                paths = {"author_export": Path(folder) / "author.json"}
+                documents = {"author_export": source}
+                if include_candidate:
+                    paths["candidate_file"] = Path(folder) / "candidate.json"
+                    documents["candidate_file"] = proposal
+                original_bytes = {name: json.dumps(document).encode("utf-8")
+                                  for name, document in documents.items()}
+                for name, path in paths.items():
+                    path.write_bytes(original_bytes[name])
+                original_replay = replay.replay
+                def replace_after_replay(*args):
+                    result = original_replay(*args)
+                    for path in paths.values():
+                        replacement = path.with_suffix(".replacement")
+                        replacement.write_bytes(b'{"replaced_after_scoring": true}')
+                        replacement.replace(path)
+                    return result
+                output = Path(folder) / "report.json"
+                argv = ["replay.py", "--author-export", str(paths["author_export"]),
+                        "--output", str(output)]
+                if include_candidate:
+                    argv += ["--candidate", str(paths["candidate_file"])]
+                with patch.object(sys, "argv", argv), patch.object(replay, "replay", replace_after_replay):
+                    replay.main()
+                report = json.loads(output.read_text())
+                for name, raw in original_bytes.items():
+                    self.assertEqual(report.pop(name + "_sha256"), hashlib.sha256(raw).hexdigest())
+                self.assertEqual(report, expected)
 
     def test_cli_receipts_and_exclusive_output(self):
         with tempfile.TemporaryDirectory() as folder:

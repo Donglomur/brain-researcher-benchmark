@@ -263,15 +263,21 @@ def compare_conditions(document, paper_data, paper_data_author_code):
             "condition_resource_exposure_comparability_verified": False}
 
 
-def read_json(path):
+def _read_json_snapshot(path):
+    raw = Path(path).read_bytes()
     def pairs(items):
         result = {}
         for k, v in items:
             require(k not in result, "duplicate JSON key: " + k)
             result[k] = v
         return result
-    return json.loads(Path(path).read_text(), object_pairs_hook=pairs,
-                      parse_constant=lambda value: (_ for _ in ()).throw(ReplayError("nonfinite JSON")))
+    value = json.loads(raw.decode("utf-8"), object_pairs_hook=pairs,
+                       parse_constant=lambda value: (_ for _ in ()).throw(ReplayError("nonfinite JSON")))
+    return value, hashlib.sha256(raw).hexdigest()
+
+
+def read_json(path):
+    return _read_json_snapshot(path)[0]
 
 
 def main():
@@ -295,14 +301,15 @@ def main():
         sources["candidate"] = Path(args.candidate).resolve()
     output = Path(args.output).resolve()
     require(output not in sources.values(), "output cannot overwrite an input")
-    document = read_json(sources["author_export"])
+    snapshots = {name: _read_json_snapshot(path) for name, path in sources.items()}
+    document = snapshots["author_export"][0]
     if paired:
-        result = compare_conditions(document, read_json(sources["paper_data"]),
-                                    read_json(sources["paper_data_author_code"]))
+        result = compare_conditions(document, snapshots["paper_data"][0],
+                                    snapshots["paper_data_author_code"][0])
     else:
-        result = replay(document, read_json(sources["candidate"]) if "candidate" in sources else None)
-    for name, path in sources.items():
-        result[name + "_sha256"] = hashlib.sha256(path.read_bytes()).hexdigest()
+        result = replay(document, snapshots["candidate"][0] if "candidate" in sources else None)
+    for name, (_, source_hash) in snapshots.items():
+        result[name + "_sha256"] = source_hash
     with output.open("x") as handle:
         json.dump(result, handle, indent=2, allow_nan=False)
         handle.write("\n")

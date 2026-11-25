@@ -1,10 +1,13 @@
 """Generated engineering controls only; no authentic data or source fitting."""
 import copy
+import hashlib
 import importlib.util
 import json
 from pathlib import Path
 import tempfile
+import sys
 import unittest
+from unittest.mock import patch
 
 SPEC = importlib.util.spec_from_file_location("dentate_decode_replay", Path(__file__).parents[1] / "decode_replay.py")
 replay = importlib.util.module_from_spec(SPEC)
@@ -136,6 +139,43 @@ class DecoderReplayTests(unittest.TestCase):
         with self.assertRaises(replay.ReplayError): replay.replay(source)
         source = fixture(); source["cells"][0]["groups"][0]["models"][0]["aligned_time_ms"] = [-200, 0, 199]
         with self.assertRaises(replay.ReplayError): replay.replay(source)
+
+    def test_cli_hashes_exact_scored_input_snapshots(self):
+        for mode in ("author", "candidate", "paired"):
+            with self.subTest(mode=mode), tempfile.TemporaryDirectory() as folder:
+                source = fixture()
+                proposal = candidate(source)
+                documents = {"author_export": source}
+                if mode == "candidate":
+                    documents["candidate"] = proposal
+                elif mode == "paired":
+                    documents.update(paper_data=proposal, paper_data_author_code=proposal)
+                paths = {name: Path(folder) / (name + ".json") for name in documents}
+                original_bytes = {name: json.dumps(document).encode("utf-8")
+                                  for name, document in documents.items()}
+                for name, path in paths.items():
+                    path.write_bytes(original_bytes[name])
+                operation = "compare_conditions" if mode == "paired" else "replay"
+                original_operation = getattr(replay, operation)
+                args = (source, proposal, proposal) if mode == "paired" else (source, proposal if mode == "candidate" else None)
+                expected = original_operation(*args)
+                def replace_after_replay(*args):
+                    result = original_operation(*args)
+                    for path in paths.values():
+                        replacement = path.with_suffix(".replacement")
+                        replacement.write_bytes(b'{"replaced_after_scoring": true}')
+                        replacement.replace(path)
+                    return result
+                output = Path(folder) / "report.json"
+                argv = ["decode_replay.py", "--output", str(output)]
+                for name, path in paths.items():
+                    argv += ["--" + name.replace("_", "-"), str(path)]
+                with patch.object(sys, "argv", argv), patch.object(replay, operation, replace_after_replay):
+                    replay.main()
+                report = json.loads(output.read_text())
+                for name, raw in original_bytes.items():
+                    self.assertEqual(report.pop(name + "_sha256"), hashlib.sha256(raw).hexdigest())
+                self.assertEqual(report, expected)
 
     def test_duplicate_json_and_nonfinite_rejected(self):
         with tempfile.TemporaryDirectory() as temporary:
