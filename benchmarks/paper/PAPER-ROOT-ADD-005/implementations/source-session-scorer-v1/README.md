@@ -110,10 +110,12 @@ Pearson calculations scale columns before centering to avoid product overflow
 or underflow at extreme finite units. They use the same mathematical estimator,
 not the identical floating-point operations as the author.
 
-The CLI hashes all four inputs before and after loading, rejects changed inputs,
-records their SHA256 values, and exclusively creates its output to preserve
-existing evidence. These hashes authenticate the bytes read, not source identity
-or a training protocol. Do not publish response archives, predictions, private
+The CLI retains the same open file descriptors for all four inputs through
+hashing and decoding, verifies their hashes and file metadata afterward, and
+rejects detected changes before scoring. A pathname replacement cannot make the
+decoder read a different file under the original file's hash. It records SHA256
+values and exclusively creates its output to preserve existing evidence. These
+checks bind the decoded inputs, not source identity or a training protocol. Do not publish response archives, predictions, private
 paths or full sensitive scoring outputs in the repository.
 
 This implementation loads numeric archives into memory and uses identity-indexed
@@ -153,3 +155,9 @@ maintained numerical revision.
 The new `test_centering_regression.py` controls use generated values and an
 independent exact-rational/80-digit Decimal oracle. They do not qualify an
 authentic reference, candidate run, reproduction or improvement.
+
+The input-identity regression controls use generated complete three-participant,
+twelve-fold archives. They check unchanged scores and hashes, pathname
+replacement followed by restoration, and in-place replacement followed by
+restoration during decoding. These are software controls, not empirical
+reproduction or candidate evaluation.

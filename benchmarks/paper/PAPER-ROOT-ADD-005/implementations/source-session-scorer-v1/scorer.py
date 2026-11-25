@@ -6,8 +6,10 @@ conversion, voxel aggregation, empirical admission, or paper-win decision.
 from __future__ import annotations
 
 import argparse
+from contextlib import ExitStack
 import hashlib
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -230,15 +232,27 @@ def load_npz(path: Path) -> dict[str, Any]:
         return {key: archive[key] for key in archive.files}
 
 
-def digest(path: Path) -> str:
+def digest_stream(stream) -> str:
+    """Hash the same retained file description used by the decoder."""
     sha = hashlib.sha256()
-    with path.open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
-            sha.update(block)
+    stream.seek(0)
+    for block in iter(lambda: stream.read(1024 * 1024), b""):
+        sha.update(block)
+    stream.seek(0)
     return sha.hexdigest()
 
 
-def load_roster(path: Path) -> dict[str, Any]:
+def digest(path: Path) -> str:
+    with path.open("rb") as stream:
+        return digest_stream(stream)
+
+
+def file_identity(stream) -> tuple[int, ...]:
+    stat = os.fstat(stream.fileno())
+    return stat.st_dev, stat.st_ino, stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns
+
+
+def parse_roster(text: str) -> dict[str, Any]:
     def unique_object(pairs):
         out = {}
         for key, value in pairs:
@@ -247,10 +261,14 @@ def load_roster(path: Path) -> dict[str, Any]:
             out[key] = value
         return out
 
-    roster = json.loads(path.read_text(), object_pairs_hook=unique_object)
+    roster = json.loads(text, object_pairs_hook=unique_object)
     if not isinstance(roster, dict):
         raise ValueError("Roster must be a JSON object")
     return roster
+
+
+def load_roster(path: Path) -> dict[str, Any]:
+    return parse_roster(path.read_text())
 
 
 def main() -> None:
@@ -261,12 +279,17 @@ def main() -> None:
     inputs = {key: getattr(args, key) for key in ("roster", "reference", "author", "candidate")}
     if args.output.resolve() in {path.resolve() for path in inputs.values()}:
         raise ValueError("Output must not overwrite an input")
-    # Hash before and after loading to reject changing input files.
-    hashes = {key: digest(path) for key, path in inputs.items()}
-    roster = load_roster(args.roster)
-    arrays = {key: load_npz(inputs[key]) for key in ("reference", "author", "candidate")}
-    if hashes != {key: digest(path) for key, path in inputs.items()}:
-        raise ValueError("An input changed while it was being loaded")
+    # Retain each opened input through both hashes and decoding. Reopening a
+    # pathname would permit replacement bytes to be scored between equal hashes.
+    with ExitStack() as stack:
+        streams = {key: stack.enter_context(path.open("rb")) for key, path in inputs.items()}
+        identities = {key: file_identity(stream) for key, stream in streams.items()}
+        hashes = {key: digest_stream(stream) for key, stream in streams.items()}
+        roster = parse_roster(streams["roster"].read().decode("utf-8"))
+        arrays = {key: load_npz(streams[key]) for key in ("reference", "author", "candidate")}
+        if (hashes != {key: digest_stream(stream) for key, stream in streams.items()}
+                or identities != {key: file_identity(stream) for key, stream in streams.items()}):
+            raise ValueError("An input changed while it was being loaded")
     result = evaluate(roster, **arrays)
     result["input_sha256"] = hashes
     # Exclusive create preserves previous operator evidence on accidental reruns.
