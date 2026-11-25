@@ -152,14 +152,13 @@ def _panel_from_rows(rows):
 def original_rows(path):
     """Operator-only authenticated CSV stream; no extraction or code execution."""
     with Path(path).open("rb") as raw:
-        require(raw.seek(0, 2) == ARCHIVE_BYTES, "wrong OSF archive length")
-        raw.seek(0)
-        digest = hashlib.sha256()
-        while chunk := raw.read(1 << 20):
-            digest.update(chunk)
-        require(digest.hexdigest() == ARCHIVE_SHA256, "wrong OSF archive SHA256")
-        raw.seek(0)
-        with tarfile.open(fileobj=raw, mode="r:*") as archive:
+        body = raw.read(ARCHIVE_BYTES + 1)
+    require(len(body) == ARCHIVE_BYTES, "wrong OSF archive length")
+    require(hashlib.sha256(body).hexdigest() == ARCHIVE_SHA256, "wrong OSF archive SHA256")
+    # Decode exactly the bytes whose identity was checked. A retained file
+    # descriptor alone does not prevent in-place changes after authentication.
+    with io.BytesIO(body) as authenticated:
+        with tarfile.open(fileobj=authenticated, mode="r:*") as archive:
             members = [m for m in archive.getmembers() if m.name == MEMBER]
             require(len(members) == 1 and members[0].isfile() and members[0].size == MEMBER_BYTES,
                     "exact original regular CSV member required")
