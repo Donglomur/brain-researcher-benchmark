@@ -46,3 +46,16 @@ The final-paper versus released-code cohort, model, trial/condition identity, te
 The task-local control entry point is `test_artifact_evaluator.py`. Run it only through the shared reviewed lightweight test pool during parallel construction, with one thread, at most 1 GiB declared RAM and at most 180 seconds. It exercises positive arithmetic and counterexamples for target injection, hash tampering, wrong rows, invalid JSON, metric-specific reductions, common-vector pairing, constancy, missing cases and preserved paper/execution holds. Actual results and measured costs are retained in the external handoff.
 
 The additional `test_numeric_scale.py` controls cover finite scaling invariance, negative signed VE, constant/malformed input refusal, the actual paired artifact evaluator path, and failed predictions retained in the full assignment denominator. These generated controls do not change scientific readiness.
+
+## Representable variation around large offsets
+
+The maintained arithmetic subtracts an observed anchor before normalizing target
+variation, and forms signed prediction errors before rescaling. This preserves
+the declared squared Pearson and signed1−SSE/SST formulas when finite inputs have
+a large common offset. For example, targets `[M,M+2,M+4]` at `M=3*2**52` and
+predictions `[M+2,M+4,M+6]` have squared correlation1 and signed variance explained
+−0.5. Earlier raw-value scaling returned distorted values for this admitted case.
+
+`python3 -B -m unittest -v test_numeric_offset` checks exact arithmetic oracles,
+the complete generated paired-artifact path, and small/ordinary/constant inputs.
+These source controls do not establish original-data or paper-level qualification.
