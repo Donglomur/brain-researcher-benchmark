@@ -398,7 +398,10 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         paths = [Path(args.plan), Path(args.reference), Path(args.prediction)]
-        require(Path(args.output).resolve() not in {p.resolve() for p in paths}, "output must not overwrite an input")
+        output = Path(args.output)
+        require(output.resolve() not in {p.resolve() for p in paths}, "output must not overwrite an input")
+        require(not (output.exists() and any(output.samefile(path) for path in paths)),
+                "output must not overwrite an input")
         raw_inputs = [p.read_bytes() for p in paths]
         values = [parse_json(raw) for raw in raw_inputs]
         result = (evaluate_acoustic(*values, args.max_dtw_cells) if args.mode == "acoustic"

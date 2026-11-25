@@ -15,8 +15,8 @@ increase. Generated controls demonstrate software behavior, not understanding.
 ## Owner interface
 
 Keep this directory next to `participant-packet` and `centroid-scorer`. The loader
-authenticates the unchanged packet source before importing it; that component in
-turn authenticates the unchanged neutral contract. Exact dependencies are in
+authenticates the pinned packet source before importing it; that component in
+turn authenticates the pinned neutral contract. Exact dependencies are in
 `SOURCE.json`. Python's standard library and Unix descriptor interfaces are used.
 
 ```python

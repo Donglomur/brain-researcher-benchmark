@@ -21,8 +21,8 @@ class SelectionError(ValueError):
 DEPENDENCIES = {
     "roster": ("direction-scorer/roster.py", 2755,
         "0f1ac943d56edc5305be4ba74f5d27c8cfa626e555092b7a51a1f6f2641dd4c9"),
-    "scorer": ("direction-scorer/scorer.py", 14394,
-        "6956a375c850a21abab2febc99cb3579900e74606cf3dd199ac2661ab0270dc7"),
+    "scorer": ("direction-scorer/scorer.py", 14874,
+        "11d1b2a330d5c32c6c2ea93c5c54de5d58c9d4d31008ccafd235afa3a732ad50"),
     "reference": ("rendered-references-v1/reference.py", 11970,
         "ed37e6dda9d55e791f8bd751d787ea0d6c314a5c463d631f8266e01e5c73985a"),
     # Filled from the separately authored, frozen admission source before use.

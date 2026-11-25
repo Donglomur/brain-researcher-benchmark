@@ -66,10 +66,25 @@ def _mode_mask(prediction):
     return prediction != modal
 
 
+def _root_mean_square(residual):
+    """Keep the original reduction except when squared values underflow.
+
+    The inputs are bounded normalized positions (or their centered summaries).
+    Scaling only the affected arithmetic retains a representable nonzero RMSE
+    without changing the source masks, denominator or scientific metric.
+    """
+    residual = np.asarray(residual, dtype=float)
+    squared = residual ** 2
+    if np.any((residual != 0) & (squared < np.finfo(float).tiny)):
+        scale = float(np.max(np.abs(residual)))
+        return scale * float(np.sqrt(np.mean((residual / scale) ** 2)))
+    return float(np.sqrt(np.mean(squared)))
+
+
 def _rmse(truth, prediction, mask):
     if not np.any(mask):
         return None
-    return float(np.sqrt(np.mean((truth[mask] - prediction[mask]) ** 2)))
+    return _root_mean_square(truth[mask] - prediction[mask])
 
 
 def source_error(truth, prediction, author_prediction):
@@ -185,7 +200,7 @@ def score(reference, candidate):
                 pairs.append({"author": source_error(truth, author_pred, author_pred),
                               "candidate": source_error(truth, candidate_pred, author_pred),
                               "reproduction_prediction_comparison": {
-                                  "rmse_from_author": float(np.sqrt(np.mean(discrepancy ** 2))),
+                                  "rmse_from_author": _root_mean_square(discrepancy),
                                   "max_absolute_difference": float(np.max(np.abs(discrepancy)))}})
             summaries = {method: {metric: _mean_complete([p[method][metric] for p in pairs])
                                   for metric in METRICS}
@@ -218,7 +233,7 @@ def score(reference, candidate):
                 panel[condition][method][metric] = {
                     "mouse_values": values, "mean": _mean_complete(values),
                     "population_std_ddof_0": None if any(v is None for v in values)
-                    else float(np.std(values, ddof=0)),
+                    else _root_mean_square(np.asarray(values) - np.mean(values)),
                 }
     return {
         "task_id": "PAPER-ROOT-ADD-007", "component": "fig1-position-scoring-v1",

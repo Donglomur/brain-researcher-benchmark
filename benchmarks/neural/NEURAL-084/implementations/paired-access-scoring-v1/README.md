@@ -42,9 +42,12 @@ python3 -I -S -B score.py --pool /protected/pool.json \
 
 These paths illustrate deployment; no authentic files are bundled. The scorer
 reuses, and checks the SHA-256 of, the accepted `full-cohort-scoring-v1/score.py`
-and `delivery-source/public/io_utils.py`. A trusted source mirror may set
-`NEURAL084_SOURCE_IMPLEMENTATIONS` to their implementations directory. No
-historical source or pin is rewritten. `grade(pool_raw, prediction_loader,
+and `delivery-source/public/io_utils.py`. Both source loaders execute the exact
+captured bytes whose identities they verified; a later pathname replacement
+cannot substitute unreviewed scorer or IO code. A trusted source mirror may set
+`NEURAL084_SOURCE_IMPLEMENTATIONS` to their implementations directory. Frozen
+historical construction receipts remain unchanged; current executable pins
+identify the maintained source. `grade(pool_raw, prediction_loader,
 gold_loader)` exposes the same operation to a trusted operator; callbacks must
 never be participant-provided code. Directory/IO checks are source controls,
 not a filesystem or network sandbox.
@@ -84,3 +87,8 @@ EEG, model, private inputs, downloaded datasets or empirical scores.
 The sole integrator must register this additive component, enroll its focused
 test in CI and bind a future protected scoring handoff. Existing programme
 closure receipts and readiness remain unchanged.
+
+`python3 -I -S -B test_source_capture.py` additionally checks scorer and IO
+replacement after authenticated reads, using temporary generated source mirrors.
+Its complete-cohort generated control preserves the same metrics, strata and
+input receipts. These source controls do not qualify an authentic-data runtime.

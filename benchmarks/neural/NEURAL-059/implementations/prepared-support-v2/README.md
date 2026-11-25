@@ -91,3 +91,11 @@ composition is an integration proposal, not a change made by this package.
 oversized positive/negative integer refusals through the actual primary scoring
 entrypoint, complete failure retention, and unchanged valid endpoint arithmetic.
 These generated controls do not establish authentic recording or model results.
+
+`_retained.load()` executes the dependency bytes that passed the declared hashes,
+including the active evaluation successor. It builds a fresh temporary package
+and restores prior operator modules afterward; pathname replacements and cached
+modules cannot replace the authenticated source. This is a trusted sequential
+bootstrap, not a participant sandbox. `test_captured_sources.py` checks source
+replacement, cache independence, hash refusal, cleanup and unchanged generated
+probability arithmetic. No retained source file or metric definition changes.

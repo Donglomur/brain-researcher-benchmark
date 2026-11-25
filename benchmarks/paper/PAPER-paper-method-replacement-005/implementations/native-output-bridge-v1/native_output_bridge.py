@@ -15,7 +15,7 @@ from pathlib import Path
 TASK_ID = "PAPER-paper-method-replacement-005"
 COMMIT = "61d2ef65556dbbc2b828d542f19bd4e7134c92f3"
 DEPENDENCIES = {
-    "neds_evaluator.py": "6bd0b39102e8ea5afd6c5dad4e09830e0c13b3d29070d6e92f46892ad16f05d2",
+    "neds_evaluator.py": "7f3914791a2ec0692e158f32a6762d41d17e118c67185b55aea14538818a4712",
     "cohort.json": "2f68e7934f7b7c5071c8e8e4763a0f3503669fe0671fd7a0ad3349fe8e0ecda5",
 }
 ENCODING = {

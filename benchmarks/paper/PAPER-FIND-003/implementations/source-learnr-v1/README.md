@@ -69,9 +69,11 @@ From this directory:
 python3 -I -S -B -m unittest discover -s tests -p test_learnr.py
 ```
 
-Seventeen generated controls cover analytic rank results, ties, eligibility
+Twenty generated controls cover analytic rank results, ties, eligibility
 boundaries, missing/constant/perfect groups, original selection order, complete
-row accounting, unsupported structure and lossless integer rank inputs. They do not verify historical MATLAB
+row accounting, unsupported structure, lossless integer rank inputs and
+subnormal percentile support. Weighted subnormal percentile terms accumulate
+exactly before final binary64 rounding; ordinary-range arithmetic is unchanged. They do not verify historical MATLAB
 execution or empirical reproduction. Shared CI runs this suite through
 `PAPER-FIND-003.command-01` in `benchmarks/integrity/parallel-source-controls.v1.json`;
 its expected count must accompany changes to the suite.

@@ -24,34 +24,45 @@ def _pair(observed, predicted):
     return observed, predicted
 
 
-def _scaled(values):
-    """Normalize before centering/squaring; do not alter the metric formula."""
-    scale = max(abs(v) for v in values)
-    return tuple(v / scale for v in values) if scale else values
+def _centered_scaled(values):
+    """Remove a finite offset before scaling away overflow/underflow risk."""
+    shifted = tuple(v - values[0] for v in values)
+    if not all(isfinite(v) for v in shifted):
+        shifted = tuple(v * .5 - values[0] * .5 for v in values)
+    scale = max(abs(v) for v in shifted)
+    if scale == 0:
+        return shifted
+    scaled = tuple(v / scale for v in shifted)
+    center = fsum(scaled) / len(scaled)
+    return tuple(v - center for v in scaled)
 
 
 def signed_variance_explained(observed, predicted):
     """1-SSE/SST with a common scale; negative scores survive.
 
-    Scaling both vectors by the observed magnitude cancels from SSE/SST and
-    avoids declaring small, nonconstant finite observations to be constant
-    merely because their squares underflow. True zero-variance targets remain
-    undefined. An unrepresentable prediction/target ratio remains undefined.
+    Subtract the observed anchor before normalizing target variation. Form
+    residuals before rescaling, so a common large offset cannot round away
+    representable errors. Both scales cancel from SSE/SST. True zero-variance
+    targets and unrepresentable arithmetic remain undefined.
     """
     y, p = _pair(observed, predicted)
-    scale = max(abs(v) for v in y)
+    shifted = tuple(v - y[0] for v in y)
+    if not all(isfinite(v) for v in shifted):
+        y, p = tuple(v * .5 for v in y), tuple(v * .5 for v in p)
+        shifted = tuple(v - y[0] for v in y)
+    scale = max(abs(v) for v in shifted)
     if scale == 0:
         raise UndefinedMetric("constant observed support")
-    y = tuple(v / scale for v in y)
-    p = tuple(v / scale for v in p)
-    if not all(isfinite(v) for v in p):
+    residual = tuple((v - w) / scale for v, w in zip(y, p))
+    y = tuple(v / scale for v in shifted)
+    if not all(isfinite(v) for v in residual):
         raise UndefinedMetric("nonfinite arithmetic")
     center = fsum(y) / len(y)
     denominator = fsum((v-center)**2 for v in y)
     if denominator == 0 or not isfinite(denominator):
         raise UndefinedMetric("constant observed support")
     try:
-        value = 1-fsum((v-w)**2 for v, w in zip(y, p))/denominator
+        value = 1-fsum(v*v for v in residual)/denominator
     except OverflowError as exc:
         raise UndefinedMetric("nonfinite arithmetic") from exc
     if not isfinite(value):
@@ -60,16 +71,14 @@ def signed_variance_explained(observed, predicted):
 
 
 def squared_pearson_correlation(observed, predicted):
-    """Squared centered correlation after independent positive rescaling.
+    """Squared correlation after anchored centering and positive rescaling.
 
     Positive vector scales cancel from Pearson correlation. This prevents
     square underflow for valid tiny operands, without fitting the prediction,
     dropping rows, changing supports, or replacing signed variance explained.
     """
     y, p = _pair(observed, predicted)
-    y, p = _scaled(y), _scaled(p)
-    ym, pm = fsum(y)/len(y), fsum(p)/len(p)
-    yc, pc = tuple(v-ym for v in y), tuple(v-pm for v in p)
+    yc, pc = _centered_scaled(y), _centered_scaled(p)
     yy, pp = fsum(v*v for v in yc), fsum(v*v for v in pc)
     if yy == 0 or pp == 0 or not isfinite(yy) or not isfinite(pp):
         raise UndefinedMetric("constant correlation support")

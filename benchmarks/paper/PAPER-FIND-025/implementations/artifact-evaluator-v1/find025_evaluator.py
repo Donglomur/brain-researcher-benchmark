@@ -30,7 +30,7 @@ def _dependency(filename, expected_hash):
 c = _dependency('find025_contract.py',
                 'adccd1362fc7f96b967467377ca834b3fbb95581252bd3c8210d79e6eb6d3ce9')
 m = _dependency('metric_primitives_v2.py',
-                'd90a741396ca362050697c71426b5e6fcfcd8e7eed536dfa4f028e49d34f7990')
+                '76ca917cec57db9b60b0379b8cfb5f8db890584f0b89742ef9752a066ad0d4be')
 MAX_PAYLOAD_BYTES = 4 * 1024 * 1024
 MAX_TOTAL_BYTES = 64 * 1024 * 1024
 MAX_ROWS = 100000

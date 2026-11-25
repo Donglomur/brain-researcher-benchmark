@@ -131,5 +131,56 @@ class FullCohortPreparationControls(unittest.TestCase):
         self.assertFalse(output.exists())
 
 
+class ManifestObjectControls(unittest.TestCase):
+    """Exercise the real manifest CLI before its metadata-preparation boundary."""
+
+    def manifest(self):
+        return {"schema": cohort.SCHEMA,
+                "data_kind": "generated_engineering_control",
+                "sessions": [{"participant_id": p, "category": c, "block": b,
+                              "recording_sample_rate_hz": 200,
+                              "behavior": f"{p}_{c}_{b}.txt",
+                              "markers": f"{p}_{c}_{b}.vmrk"}
+                             for p, c, b in cohort.CELLS]}
+
+    def invoke(self, raw, reject=False):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            manifest, output = root / "manifest.json", root / "output.json"
+            manifest.write_text(raw)
+            # The source metadata is deliberately absent. This unit control
+            # verifies admission before any scientific input is consumed.
+            with patch.object(sys, "argv", [str(MODULE), str(manifest), str(output)]), \
+                    patch.object(cohort, "prepare", return_value={"generated_control": True}) as prepare:
+                if reject:
+                    with self.assertRaisesRegex(ValueError, "duplicate JSON field"):
+                        cohort.main()
+                    prepare.assert_not_called()
+                    self.assertFalse(output.exists())
+                else:
+                    cohort.main()
+                    prepare.assert_called_once()
+                    result = json.loads(output.read_text())
+                    self.assertTrue(result["generated_control"])
+                    self.assertEqual(result["input_manifest"]["sha256"],
+                                     hashlib.sha256(raw.encode()).hexdigest())
+
+    def test_complete_unambiguous_manifest_still_reaches_preparation(self):
+        self.invoke(json.dumps(self.manifest()))
+
+    def test_conflicting_root_provenance_is_rejected_before_preparation(self):
+        raw = json.dumps(self.manifest()).replace(
+            '"data_kind": "generated_engineering_control"',
+            '"data_kind": "authentic_public_source_metadata", '
+            '"data_kind": "generated_engineering_control"', 1)
+        self.invoke(raw, reject=True)
+
+    def test_conflicting_nested_participant_is_rejected_before_preparation(self):
+        raw = json.dumps(self.manifest()).replace(
+            '"participant_id": "P02"',
+            '"participant_id": "P99", "participant_id": "P02"', 1)
+        self.invoke(raw, reject=True)
+
+
 if __name__ == "__main__":
     unittest.main()

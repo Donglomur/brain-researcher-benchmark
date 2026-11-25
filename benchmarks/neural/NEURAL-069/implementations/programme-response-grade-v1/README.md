@@ -1,12 +1,12 @@
 # NEURAL-069: complete programme delivery to the current response scorer
 
-This additive component joins the original, review-bound programme transport to the accepted `response-scorer-v1/score.grade`. It preserves all 10 participants, all 8 ROIs per participant, all 1,000 training and 102 query videos, and every native coordinate in each of the 80 required prediction arrays. The original controller, adapter, numerical scorer, and transport dependencies are unchanged. No task definition, canonical contract, registration count, or scientific qualification changes here.
+This additive component joins the original, review-bound programme transport to the accepted `response-scorer-v1/score.grade`. It preserves all 10 participants, all 8 ROIs per participant, all 1,000 training and 102 query videos, and every native coordinate in each of the 80 required prediction arrays. The original controller, adapter, and transport dependencies are preserved. The numerical scorer follows the reviewed current source identities in `SOURCE.json`; its representable-error correction preserves the declared endpoint and complete support without establishing scientific qualification. No task definition, canonical contract, registration count, or scientific qualification changes here.
 
 The delivered condition is a frozen programme using the original prepared public features and training responses. It is not a direct-observation or viewer condition. The participant can build an arbitrary Python prediction method within the original commitment and resource envelope; there is no newly selected baseline recipe.
 
 ## Scientific endpoint and information access
 
-The current primary is `participant_macro_roi_macro_voxel_pearson`: average coordinate-wise Pearson correlations within each ROI, weight the eight ROIs equally within each participant, then weight the ten participants equally. The report separately retains `participant_macro_family_macro_voxel_pearson`, the historical weighting that pools coordinates within V1, MT, and STS families before averaging the three families and then participants. These metrics are not interchangeable. Negative correlations are retained. Constant predictions against varying truth score zero; constant truth can make required support undefined and must not become available-case scoring. Raw MSE remains a separate companion in squared prepared-response units. The unchanged scorer retains uncertainty as unresolved.
+The current primary is `participant_macro_roi_macro_voxel_pearson`: average coordinate-wise Pearson correlations within each ROI, weight the eight ROIs equally within each participant, then weight the ten participants equally. The report separately retains `participant_macro_family_macro_voxel_pearson`, the historical weighting that pools coordinates within V1, MT, and STS families before averaging the three families and then participants. These metrics are not interchangeable. Negative correlations are retained. Constant predictions against varying truth score zero; constant truth can make required support undefined and must not become available-case scoring. Raw MSE remains a separate companion in squared prepared-response units. The current scorer retains uncertainty as unresolved.
 
 ROIs are `lV1v`, `rV1v`, `lV1d`, `rV1d`, `lMT`, `rMT`, `lSTS`, and `rSTS`. Predictions have shape `(102, V)` for each exact original native-coordinate support; the original lock supplies every V. Training responses are means of three repetitions and query responses means of ten. The original transport exposes all 101 public files, totaling 219,855,316 bytes, including the complete fixed feature and training-response inputs. It does not mount query targets, private bindings, the Docker socket, host home, or their parent directories into the candidate.
 
@@ -21,7 +21,7 @@ This is the prepared Version B/MNI152 release, not a claimed recreation of the m
 5. A separate, prospectively authorized numerical phase uses the unchanged NEURAL-007 vendor transport in the reference role. It receives only the 81 preserved candidate artifacts, all 80 private targets, binding/roster metadata, and the pinned trusted scorer/worker sources. Private target mounting and provider authentication begin only after stage 3. No candidate program is mounted or executed in this phase.
 6. `grade_worker.py` calls the unchanged current `score.grade`. Both capture boundaries are bound again, and its private target loader is guarded until all 81 exact candidate captures complete. The numerical phase must naturally exit zero and close its resources before its complete report is admitted. Current and historical metric identities, source, binding, roster, stopped outputs, and private phase receipts are joined before outer completion.
 
-A malformed candidate at stage 3 produces the original `invalid_submission` / `score: null` disposition without private phase dispatch. Operator packet or metadata errors remain failures rather than candidate zeros. `undefined_required_support` remains an explicit scientific disposition from the unchanged scorer. There is no automatic retry or fallback to fewer cases.
+A malformed candidate at stage 3 produces the original `invalid_submission` / `score: null` disposition without private phase dispatch. Operator packet or metadata errors remain failures rather than candidate zeros. `undefined_required_support` remains an explicit scientific disposition from the current scorer. There is no automatic retry or fallback to fewer cases.
 
 The original child observer proves the reaped leader and closed streams. It does **not** certify that every descendant or process-group member is absent. The original executor/holder/container closure joins are still required. Forced supervisor termination can leave Docker or nested work requiring separate owned-resource recovery; this component never assumes that killing a CLI proves native closure and never signals unrelated processes.
 
@@ -39,7 +39,7 @@ The only production entrypoint is:
 
 ```sh
 python -I -B benchmarks/neural/NEURAL-069/implementations/programme-response-grade-v1/run.py \
-  --source-pin '{"bytes":7090,"sha256":"55b5efacd28e0dd2eec370493b1ddb52ef25b9d380676dff35929fa7ac7e745e"}' \
+  --source-pin '{"bytes":7090,"sha256":"7fdeb8cfde4c99bc5fbd1ceb8174e51c0e3d9dda2ea3e9f0e7af2919b768772d"}' \
   --configuration /operator/selected-neural069.json
 ```
 

@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections import Counter
 from dataclasses import dataclass
 import hashlib
+import os
 from pathlib import Path
 import re
 
@@ -146,13 +147,23 @@ def read_mat(path, member, expected_sha256, expected_class_counts):
             "require source MAT SHA256")
     path = Path(path)
     digest = hashlib.sha256()
-    # Keep the same open file handle for hashing and parsing.
+    # Keep the same descriptor and require stable metadata across both passes.
+    # A retained descriptor prevents pathname replacement, but not writes to
+    # that same open inode while the authenticated MAT is being decoded.
     with path.open("rb") as handle:
+        def identity():
+            state = os.fstat(handle.fileno())
+            return (state.st_dev, state.st_ino, state.st_size,
+                    state.st_mtime_ns, state.st_ctime_ns)
+
+        original_identity = identity()
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
         require(digest.hexdigest() == expected_sha256, "source MAT checksum mismatch")
+        require(identity() == original_identity, "source MAT changed during authentication")
         handle.seek(0)
         mat = loadmat(handle, variable_names=["eeg", "event"], simplify_cells=True)
+        require(identity() == original_identity, "source MAT changed during decoding")
     require(isinstance(mat.get("eeg"), dict), "missing source eeg structure")
     eeg = mat["eeg"]
     require({"data", "fsample", "nChans", "nSamples"} <= set(eeg), "incomplete source eeg structure")

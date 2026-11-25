@@ -2,6 +2,8 @@
 from __future__ import annotations
 import argparse
 import hashlib
+import os
+from contextlib import contextmanager, ExitStack
 import json
 from pathlib import Path
 import numpy as np
@@ -34,6 +36,34 @@ def _grid(value, name):
     return a
 
 
+def _file_identity(stream):
+    info = os.fstat(stream.fileno())
+    return (info.st_dev, info.st_ino, info.st_size,
+            info.st_mtime_ns, info.st_ctime_ns)
+
+
+@contextmanager
+def _verified_stream(path, expected_sha256, expected_bytes=None):
+    """Keep authenticated bytes and decoded data on one unchanged descriptor."""
+    with Path(path).open('rb') as stream:
+        identity = _file_identity(stream)
+        digest = hashlib.sha256()
+        for chunk in iter(lambda: stream.read(1024 * 1024), b''):
+            digest.update(chunk)
+        if (not isinstance(expected_sha256, str) or len(expected_sha256) != 64
+                or digest.hexdigest() != expected_sha256
+                or (expected_bytes is not None and identity[2] != expected_bytes)):
+            raise ValueError(f'Content hash mismatch: {path}')
+        if _file_identity(stream) != identity:
+            raise ValueError('Input changed during authentication')
+        stream.seek(0)
+        try:
+            yield stream
+        finally:
+            if _file_identity(stream) != identity:
+                raise ValueError('Input changed during authenticated decoding')
+
+
 def file_sha256(path):
     h = hashlib.sha256()
     with open(path, 'rb') as f:
@@ -45,7 +75,8 @@ def file_sha256(path):
 def read_meta(path):
     """Read SpikeGLX key/value text without assuming acquisition units."""
     result = {}
-    for line in Path(path).read_text().splitlines():
+    text = path.read().decode() if hasattr(path, 'read') else Path(path).read_text()
+    for line in text.splitlines():
         if not line.strip():
             continue
         if '=' not in line:
@@ -67,47 +98,47 @@ def load_raw_lfp(binary, meta, channel_map, *, patient, start_sample, stop_sampl
     from scipy.io import loadmat
     if patient not in PATIENTS or Path(binary).name != f'{patient}.imec0.lf.bin':
         raise ValueError('Only explicitly named raw human LFP inputs are accepted')
-    for path, expected in [(binary, expected_sha256), (meta, expected_meta_sha256),
-                           (channel_map, expected_map_sha256)]:
-        if not isinstance(expected, str) or len(expected) != 64 or file_sha256(path) != expected:
-            raise ValueError(f'Content hash mismatch: {path}')
-    m = read_meta(meta)
-    rate = float(m['imSampRate'])
-    channels = int(m['nSavedChans'])
-    if not np.isfinite(rate) or rate <= 0 or channels <= 0:
-        raise ValueError('Invalid sample rate/channel count')
-    n_ap, n_lf, n_sync = map(int, m['snsApLfSy'].split(','))
-    if n_ap != 0 or n_lf <= 0 or n_lf + n_sync != channels:
-        raise ValueError('Not a validated LF-only SpikeGLX layout')
-    size = Path(binary).stat().st_size
-    if size % (2 * channels):
-        raise ValueError('Incomplete raw sample frame')
-    n_samples = size // (2 * channels)
-    if (type(start_sample) is not int or type(stop_sample) is not int or
-            not 0 <= start_sample < stop_sample <= n_samples):
-        raise ValueError('Invalid half-open sample segment')
-    cm = loadmat(channel_map)
-    ids, x, z, connected = [np.asarray(cm[k]).ravel() for k in
-                           ('chanMap', 'xcoords', 'ycoords', 'connected')]
-    if not len(ids) or not (len(ids) == len(x) == len(z) == len(connected)):
-        raise ValueError('Channel-map shape mismatch')
-    if not all(np.isfinite(a).all() for a in (ids, x, z, connected)):
-        raise ValueError('Nonfinite geometry')
-    if (not np.equal(ids, np.floor(ids)).all() or len(set(ids)) != len(ids)
-            or ids.min() < 1 or ids.max() > n_lf or not np.isin(connected, [0, 1]).all()):
-        raise ValueError('Invalid one-based raw signal channel map')
-    use = np.flatnonzero((x == column_x) & (connected == 1))
-    use = use[np.argsort(z[use])]
-    depths = _grid(z[use], 'column depths')
-    if len(use) < 6:
-        raise ValueError('At least six connected depths required for channel holdout')
-    raw = np.memmap(binary, dtype='<i2', mode='r', shape=(n_samples, channels))
-    values = np.asarray(raw[start_sample:stop_sample, ids[use].astype(int) - 1], dtype=float)
-    return {'values': values, 'depths_um': depths,
-            'times_s': np.arange(start_sample, stop_sample) / rate,
-            'sample_rate_hz': rate, 'channel_ids_one_based': ids[use].astype(int),
-            'units': 'ADC_counts_no_voltage_gain_claim', 'patient': patient,
-            'recording_sha256': expected_sha256}
+    with ExitStack() as stack:
+        binary_stream = stack.enter_context(_verified_stream(binary, expected_sha256))
+        meta_stream = stack.enter_context(_verified_stream(meta, expected_meta_sha256))
+        map_stream = stack.enter_context(_verified_stream(channel_map, expected_map_sha256))
+        m = read_meta(meta_stream)
+        rate = float(m['imSampRate'])
+        channels = int(m['nSavedChans'])
+        if not np.isfinite(rate) or rate <= 0 or channels <= 0:
+            raise ValueError('Invalid sample rate/channel count')
+        n_ap, n_lf, n_sync = map(int, m['snsApLfSy'].split(','))
+        if n_ap != 0 or n_lf <= 0 or n_lf + n_sync != channels:
+            raise ValueError('Not a validated LF-only SpikeGLX layout')
+        size = os.fstat(binary_stream.fileno()).st_size
+        if size % (2 * channels):
+            raise ValueError('Incomplete raw sample frame')
+        n_samples = size // (2 * channels)
+        if (type(start_sample) is not int or type(stop_sample) is not int or
+                not 0 <= start_sample < stop_sample <= n_samples):
+            raise ValueError('Invalid half-open sample segment')
+        cm = loadmat(map_stream)
+        ids, x, z, connected = [np.asarray(cm[k]).ravel() for k in
+                               ('chanMap', 'xcoords', 'ycoords', 'connected')]
+        if not len(ids) or not (len(ids) == len(x) == len(z) == len(connected)):
+            raise ValueError('Channel-map shape mismatch')
+        if not all(np.isfinite(a).all() for a in (ids, x, z, connected)):
+            raise ValueError('Nonfinite geometry')
+        if (not np.equal(ids, np.floor(ids)).all() or len(set(ids)) != len(ids)
+                or ids.min() < 1 or ids.max() > n_lf or not np.isin(connected, [0, 1]).all()):
+            raise ValueError('Invalid one-based raw signal channel map')
+        use = np.flatnonzero((x == column_x) & (connected == 1))
+        use = use[np.argsort(z[use])]
+        depths = _grid(z[use], 'column depths')
+        if len(use) < 6:
+            raise ValueError('At least six connected depths required for channel holdout')
+        raw = np.memmap(binary_stream, dtype='<i2', mode='r', shape=(n_samples, channels))
+        values = np.asarray(raw[start_sample:stop_sample, ids[use].astype(int) - 1], dtype=float)
+        return {'values': values, 'depths_um': depths,
+                'times_s': np.arange(start_sample, stop_sample) / rate,
+                'sample_rate_hz': rate, 'channel_ids_one_based': ids[use].astype(int),
+                'units': 'ADC_counts_no_voltage_gain_claim', 'patient': patient,
+                'recording_sha256': expected_sha256}
 
 
 def preprocess(values, sample_rate_hz, *, target_rate_hz, cutoff_hz, order=4):
@@ -326,7 +357,8 @@ def main():
     parser.add_argument('protocol', type=Path)
     parser.add_argument('output', type=Path)
     args = parser.parse_args()
-    protocol = json.loads(args.protocol.read_text())
+    protocol_bytes = args.protocol.read_bytes()
+    protocol = json.loads(protocol_bytes)
     if protocol.get('task_id') != TASK_ID or protocol.get('source_commit') != SOURCE_COMMIT:
         raise ValueError('Task/source identity mismatch')
     if protocol.get('metric_status') != 'prospective_unqualified':
@@ -356,15 +388,13 @@ def main():
         estimates = {}
         for method in REQUIRED_METHODS:
             spec = s['estimates'][method]; path = base / spec['path']
-            if file_sha256(path) != spec['sha256']:
-                raise ValueError('Displacement file hash mismatch')
             if spec['recording_sha256'] != s['recording_sha256'] or spec['start_sample'] != s['start_sample'] or spec['stop_sample'] != s['stop_sample']:
                 raise ValueError('Native displacement segment mismatch')
             if spec.get('fit_channels') != s['fit_channels']:
                 raise ValueError('Native estimates must use the same reserved fit channels')
             if spec['source_commit'] != SOURCE_COMMIT or not isinstance(spec['settings'], dict) or not spec['settings']:
                 raise ValueError('Native snapshot and nonempty declared settings metadata required')
-            with np.load(path, allow_pickle=False) as f:
+            with _verified_stream(path, spec['sha256']) as stream, np.load(stream, allow_pickle=False) as f:
                 if not np.array_equal(f['times_s'], packet['times_s']) or not np.array_equal(f['depths_um'], packet['depths_um']):
                     raise ValueError('Native displacement time/geometry mismatch; no implicit interpolation')
                 estimates[method] = f['displacement_um'].copy()
@@ -373,7 +403,7 @@ def main():
                                   displacements=estimates, rigid_settings=protocol['rigid_settings'],
                                   fixed_offset_um=protocol['fixed_offset_um'])
         records.append({'patient': s['patient'], 'segment_id': s['segment_id'], 'result': result})
-    output = {'task_id': TASK_ID, 'protocol_sha256': file_sha256(args.protocol),
+    output = {'task_id': TASK_ID, 'protocol_sha256': hashlib.sha256(protocol_bytes).hexdigest(),
               'segment_results': records, 'cohort': summarize_cohort(records)}
     args.output.write_text(json.dumps(output, indent=2, allow_nan=False) + '\n')
 

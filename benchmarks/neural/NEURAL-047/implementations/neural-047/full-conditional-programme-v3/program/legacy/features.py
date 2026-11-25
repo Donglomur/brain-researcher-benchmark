@@ -27,8 +27,14 @@ def summaries(view, arm):
             mean = math.fsum(values) / n
             centered = [v - mean for v in values]
             variance = math.fsum(v * v for v in centered) / n
+            standard_deviation = math.sqrt(variance)
+            if variance == 0 and any(centered):
+                # Keep representable spread when squaring small values underflows.
+                scale = max(abs(v) for v in centered)
+                standard_deviation = scale * math.sqrt(
+                    math.fsum((v / scale) ** 2 for v in centered) / n)
             slope = math.fsum((t - tm) * v for t, v in zip(times, centered)) / denominator
-            result.extend([values[-1], mean, math.sqrt(variance), min(values), max(values), slope])
+            result.extend([values[-1], mean, standard_deviation, min(values), max(values), slope])
         except (OverflowError, ValueError) as error:
             raise ValueError('Unrepresentable declared summaries') from error
     need(all(finite(x) for x in result), 'Finite declared summaries')

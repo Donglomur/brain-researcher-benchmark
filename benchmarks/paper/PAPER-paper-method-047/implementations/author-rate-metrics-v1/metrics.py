@@ -131,6 +131,8 @@ def main():
     args = parser.parse_args()
     with np.load(args.input, allow_pickle=False) as packet:
         names = set(packet.files)
+        if len(packet.files) != len(names):
+            parser.error("duplicate NPZ members")
         if names not in ({"prediction", "target", "valid_mask"},
                          {"prediction", "author", "target", "valid_mask"}):
             parser.error("unexpected NPZ members")

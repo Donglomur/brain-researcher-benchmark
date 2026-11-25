@@ -5,14 +5,14 @@ equal perceptual information, method provenance, or authentic-data qualification
 """
 import argparse
 import hashlib
-import importlib.util
 import os
 from pathlib import Path
+from types import ModuleType
 
 HERE = Path(__file__).resolve().parent
 SOURCE_PINS = {
     "full-cohort-scoring-v1/score.py":
-        "e99434136e6ed85934838ece23a4f74f9f4b71f23072ea797602dc18fe5f6cff",
+        "da991b4fd0d8ce571ba9858703650db49e5aac9f42328ddb26ad69bee7a8742e",
     "delivery-source/public/io_utils.py":
         "9ba54409ff3aae8e17d2c0e96f1c5f335fa46cd33aeaf83d3be427a8ebf585d7",
 }
@@ -21,13 +21,22 @@ SOURCE_PINS = {
 def source():
     # The optional location is trusted operator configuration for source mirrors.
     root = Path(os.environ.get("NEURAL084_SOURCE_IMPLEMENTATIONS", HERE.parent))
+    captured = {}
+    extents = {"full-cohort-scoring-v1/score.py": 10715,
+               "delivery-source/public/io_utils.py": 4396}
     for name, expected in SOURCE_PINS.items():
-        if hashlib.sha256((root / name).read_bytes()).hexdigest() != expected:
+        with (root / name).open("rb") as stream:
+            raw = stream.read(extents[name] + 1)
+        if len(raw) != extents[name] or hashlib.sha256(raw).hexdigest() != expected:
             raise ValueError("Exact reviewed scoring source required: " + name)
-    spec = importlib.util.spec_from_file_location(
-        "neural084_paired_dependency", root / "full-cohort-scoring-v1/score.py")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+        captured[name] = raw
+    path = root / "full-cohort-scoring-v1/score.py"
+    module = ModuleType("neural084_paired_dependency")
+    module.__file__ = str(path)
+    # Execute the bytes whose identity was checked, never reopen their pathname.
+    # The scorer independently captures, checks and executes its IO dependency.
+    exec(compile(captured["full-cohort-scoring-v1/score.py"], str(path), "exec"),
+         module.__dict__)
     return module
 
 

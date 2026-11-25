@@ -9,7 +9,7 @@ import types
 ROOT = Path(__file__).resolve().parent.parent
 SOURCE_PINS = {
     'signal-packets-v1/sensefog_packets.py': 'c51ade4d35d35d910d432475c6d141f703e2bc5fef21f1f4bff9de035c184eea',
-    'primary-scoring-v1/sensefog_score.py': 'eb784bde679a79488e253a5b86da09ed1cb77103dd0f00af54ca8f2adc23c89e',
+    'primary-scoring-v1/sensefog_score.py': 'a1f9ed00292de575436a86860c3856646df22050f864b20f59e53296de99192c',
 }
 
 

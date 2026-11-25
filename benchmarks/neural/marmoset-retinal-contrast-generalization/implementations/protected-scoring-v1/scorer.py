@@ -3,11 +3,13 @@
 No paths, source loaders, model execution, smoothing, cropping or selection.
 The caller owns target custody and authentication of every external identity.
 """
+from fractions import Fraction
 import hashlib
 import json
 import math
 import statistics
 import struct
+import sys
 
 TASK = "marmoset-retinal-contrast-generalization"
 DATASETS = {"20220412_SN_252MEA6010_le_s4", "20220426_SS_252MEA6010_le_n3"}
@@ -231,6 +233,34 @@ def row_values(packet, row, repeats, frames):
     return [value[0] for value in struct.iter_unpack("<" + code, body)]
 
 
+def finite_mean(source, total, *, weighted=False):
+    """Stream ordinary losses; replay fixed in-memory operands only for fallback.
+
+    ``source`` returns a fresh iterator of (loss, observation_weight) pairs.
+    This keeps the common reduction independent of per-stream observation
+    count in memory. Rare exact fallback replays the same validated operands,
+    rather than retaining every point loss on the ordinary path.
+    """
+    exact_required = False
+
+    def terms():
+        nonlocal exact_required
+        for value, weight in source():
+            term = value * (weight / total) if weighted else value / total
+            if value != 0 and abs(term) < sys.float_info.min:
+                exact_required = True
+            yield term
+
+    try:
+        result = math.fsum(terms())
+    except OverflowError:
+        exact_required = True
+    if not exact_required and math.isfinite(result):
+        return result
+    return float(sum((Fraction(value) * weight for value, weight in source()),
+                     Fraction()) / total)
+
+
 def summarize(rows):
     fields = ("candidate_r", "reference_r", "paired_delta_r")
     result = {"cells": len(rows)}
@@ -240,8 +270,9 @@ def summarize(rows):
         result[field + "_median_all_cells"] = statistics.median(values) if len(values) == len(rows) else None
     observations = sum(row["repeat_observations"] for row in rows)
     for arm in ("candidate", "reference"):
-        result[arm + "_poisson_nll_per_observation"] = math.fsum(
-            row[arm + "_poisson_nll"] * (row["repeat_observations"] / observations) for row in rows)
+        result[arm + "_poisson_nll_per_observation"] = finite_mean(
+            lambda: ((row[arm + "_poisson_nll"], row["repeat_observations"])
+                     for row in rows), observations, weighted=True)
     result["repeat_observations"] = observations
     return result
 
@@ -281,8 +312,9 @@ def score(policy, targets, candidate, reference, *, policy_sha256, targets_sha25
                     predictions[arm].extend(pred)
                     item[name] = pearson(pred, average)
                     # Each repeat is scored separately, including the factorial.
-                    loss = math.fsum(poisson_nll(float(k), float(pred[i % frames]), floor) /
-                                     (repeats * frames) for i, k in enumerate(counts))
+                    loss = finite_mean(
+                        lambda: ((poisson_nll(float(k), float(pred[i % frames]), floor), 1)
+                                 for i, k in enumerate(counts)), repeats * frames)
                     losses[arm].append((loss, repeats * frames))
                 observations += repeats * frames
                 stream_results.append(item)
@@ -293,7 +325,8 @@ def score(policy, targets, candidate, reference, *, policy_sha256, targets_sha25
                    "paired_delta_r": None if any(c["r"] is None for c in corr) else corr[0]["r"] - corr[1]["r"],
                    "streams": stream_results}
             for arm, name in enumerate(("candidate", "reference")):
-                out[name + "_poisson_nll"] = math.fsum(value * (n / observations) for value, n in losses[arm])
+                out[name + "_poisson_nll"] = finite_mean(
+                    lambda: iter(losses[arm]), observations, weighted=True)
             rows.append(out)
     per_preparation = [{"dataset": dataset, **summarize([r for r in rows if r["dataset"] == dataset])}
                        for dataset in preparations]

@@ -79,8 +79,14 @@ def impute_sae_observations(masked_rows, mask_bits, method, feature_count):
             # Every point in a gap uses the same adjacent available endpoints;
             # this is their arithmetic mean, not temporal interpolation and
             # not recursive filling from previously imputed observations.
-            mean = [0.5 * a + 0.5 * b
-                    for a, b in zip(result[left], result[right])]
+            # Add before halving when possible: halving each endpoint first
+            # can erase a representable subnormal mean. Only same-sign large
+            # endpoints need the overflow-safe half-sum fallback.
+            mean = []
+            for a, b in zip(result[left], result[right]):
+                total = a + b
+                mean.append(0.5 * total if math.isfinite(total)
+                            else 0.5 * a + 0.5 * b)
             for index in range(left + 1, right):
                 result[index] = mean.copy()
         left = right

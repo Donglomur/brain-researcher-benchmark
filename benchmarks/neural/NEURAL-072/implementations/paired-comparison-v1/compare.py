@@ -13,7 +13,7 @@ import types
 
 
 SCORER_PATH = Path(__file__).resolve().parents[1] / 'fixed-comparator-v2' / 'evaluator.py'
-SCORER_SHA256 = 'ec830cb0ce94112faeb8a7778dc8ee254ec2e60997b1bf3792025a75ef2bbe54'
+SCORER_SHA256 = 'ef77dccd5d8bae3edcb6c8a4ad41221f531b792ceec7af98c42910faceebd854'
 _source = SCORER_PATH.read_bytes()
 if hashlib.sha256(_source).hexdigest() != SCORER_SHA256:
     raise RuntimeError('NEURAL-072 fixed-comparator source pin mismatch')

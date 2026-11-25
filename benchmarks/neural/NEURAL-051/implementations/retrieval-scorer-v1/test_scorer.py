@@ -7,7 +7,9 @@ import itertools
 import json
 from pathlib import Path
 import tempfile
+import sys
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -157,6 +159,62 @@ class RetrievalControls(unittest.TestCase):
         roster, _ = fixture()
         result = scorer.evaluate("unopened", {}, roster, lambda: self.fail("private read"))
         self.assertEqual(result["status"], "invalid_submission")
+
+
+class CliFailureControls(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.temporary = tempfile.TemporaryDirectory(prefix="neural051-cli-generated-")
+        cls.root = Path(cls.temporary.name).resolve()
+        roster, _ = fixture()
+        cls.roster = cls.root / "roster.json"
+        cls.roster.write_text(json.dumps(roster, separators=(",", ":")))
+        cls.roster_sha = hashlib.sha256(cls.roster.read_bytes()).hexdigest()
+        cls.submission = cls.root / "submission"
+        cls.submission.mkdir()
+        cls.private_design = cls.root / "never-created-private-design.json"
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.temporary.cleanup()
+
+    def invoke(self, roster_path, roster_sha, manifest, output_name):
+        (self.submission / "submission.json").write_bytes(manifest)
+        output = self.root / output_name
+        arguments = ["scorer.py", "--submission", str(self.submission),
+                     "--roster", str(roster_path), "--roster-sha256", roster_sha,
+                     "--design", str(self.private_design), "--design-sha256", "0" * 64,
+                     "--output", str(output)]
+        capture = scorer._io.capture
+        def observed_capture(path, *args, **kwargs):
+            self.assertNotEqual(Path(path), self.private_design, "private design opened on invalid input")
+            return capture(path, *args, **kwargs)
+        with mock.patch.object(sys, "argv", arguments), mock.patch.object(scorer._io, "capture", observed_capture):
+            code = scorer.main()
+        return code, json.loads(output.read_text())
+
+    def test_nested_submission_is_reported_without_private_read(self):
+        raw = b"[" * 3000 + b"0" + b"]" * 3000
+        self.assertLess(len(raw), 10_000)
+        code, result = self.invoke(self.roster, self.roster_sha, raw, "nested-submission.json")
+        self.assertEqual(code, 1)
+        self.assertEqual(result, {"status": "invalid_submission", "primary": None,
+                                  "private_reference_invoked": False})
+
+    def test_nested_operator_roster_keeps_operator_classification(self):
+        raw = b"[" * 3000 + b"0" + b"]" * 3000
+        roster = self.root / "nested-roster.json"
+        roster.write_bytes(raw)
+        code, result = self.invoke(roster, hashlib.sha256(raw).hexdigest(), b"{}", "nested-operator.json")
+        self.assertEqual(code, 2)
+        self.assertEqual(result, {"status": "operator_error", "primary": None,
+                                  "private_reference_invoked": False})
+
+    def test_ordinary_invalid_manifest_retains_existing_report(self):
+        code, result = self.invoke(self.roster, self.roster_sha, b"{}", "ordinary-invalid.json")
+        self.assertEqual(code, 1)
+        self.assertEqual(result, {"status": "invalid_submission", "primary": None,
+                                  "private_reference_invoked": False})
 
 
 if __name__ == "__main__":

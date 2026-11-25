@@ -16,11 +16,14 @@ from statistics import mean
 
 LEGACY = Path(__file__).resolve().parents[1] / "initial-evaluator-v1" / "evaluator.py"
 LEGACY_SHA256 = "719931616b93504815b0becc0135278d4e55d41ce689b681f241bf79d7a6d3f3"
-if hashlib.sha256(LEGACY.read_bytes()).hexdigest() != LEGACY_SHA256:
+_legacy_body = LEGACY.read_bytes()
+if hashlib.sha256(_legacy_body).hexdigest() != LEGACY_SHA256:
     raise RuntimeError("predecessor evaluator changed; review metric lineage before use")
 _spec = importlib.util.spec_from_file_location("dpad_initial_evaluator", LEGACY)
 e = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(e)
+# Execute the exact authenticated source, not a reopened path or an unchecked
+# timestamp-valid bytecode cache beside the preserved evaluator.
+exec(compile(_legacy_body, str(LEGACY), "exec"), e.__dict__)
 
 PAIRED_PREDECESSOR = Path(__file__).resolve().parents[1] / "paired-candidate-v2" / "paired.py"
 PAIRED_PREDECESSOR_SHA256 = "a16df76e033e6112371a457fda58fe02952e799fcac3fe88761f4b826dbd5c42"

@@ -17,7 +17,7 @@ from scipy.stats import sem
 from inputs import (CONSISTENCY, DECODING, SOURCE_SHA256, InputError, array_pin,
                     is_sha, read_bytes, require, row_index, sha256, source_rows)
 
-SCORER_SHA256 = '467e310bdb64366f0cb31dac0b0adb96f5aa221ab63d35d609d63d8040bc0933'
+SCORER_SHA256 = '5f3938de84672f0a146fba9f807d17e3275c812b2699f56fd03833114dbd8921'
 METHODS = ('cebra-time', 'cebra-behaviour', 'marble')
 
 

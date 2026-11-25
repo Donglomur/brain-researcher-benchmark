@@ -12,7 +12,7 @@ from pathlib import Path
 import json
 
 METHODS = ("RRR", "NDT2", "POYO+")
-BRIDGE_SHA256 = "ba0a51dffd0c467239885a4955ca1a923a1ef70e808eb4d07ed4b36c0b0613e8"
+BRIDGE_SHA256 = "51f023b92851520bff34120f8909a90cb12b5427adb7984cc83b1d05330f34ad"
 FIELDS = ("choice", "block", "wheel", "whisker")
 ENDPOINTS = ("choice:accuracy", "block:accuracy", "wheel:r2", "whisker:r2")
 

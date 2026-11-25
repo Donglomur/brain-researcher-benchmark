@@ -328,11 +328,14 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args(argv)
     try:
-        require(sha256(args.panel) == args.panel_sha256, "frozen panel SHA256 mismatch")
-        panel = json.loads(args.panel.read_text())
-        submissions = json.loads(args.submissions.read_text())
+        panel_bytes = args.panel.read_bytes()
+        require(hashlib.sha256(panel_bytes).hexdigest() == args.panel_sha256, "frozen panel SHA256 mismatch")
+        submission_bytes = args.submissions.read_bytes()
+        panel = json.loads(panel_bytes.decode("utf-8"))
+        submissions = json.loads(submission_bytes.decode("utf-8"))
         report = evaluate(panel, submissions, args.panel.parent, args.submissions.parent)
-        report["input_pins"] = {"panel_sha256": args.panel_sha256, "submissions_sha256": sha256(args.submissions)}
+        report["input_pins"] = {"panel_sha256": args.panel_sha256,
+                                "submissions_sha256": hashlib.sha256(submission_bytes).hexdigest()}
         args.output.write_text(json.dumps(report, indent=2, allow_nan=False) + "\n")
     except (ContractError, KeyError, TypeError, OSError, ValueError) as error:
         print(f"evaluation rejected: {error}", file=sys.stderr)

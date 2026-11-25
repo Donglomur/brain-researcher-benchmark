@@ -165,7 +165,7 @@ def grade(record, reference):
         center = t['mean_peak_index1']; left, right = max(1, center - 2), min(350, center + 1)
         difference = [abs(x-y) for x, y in zip(t['mean_silencing'], g['mean_silencing'])]
         require(all(math.isfinite(x) for x in difference), 'Finite representable timing errors')
-        result.update(mean_trace_MAE=math.fsum(x / 350 for x in difference),
+        result.update(mean_trace_MAE=finite_mean(difference),
                       mean_trace_max_abs_error=max(difference),
                       mean_peak_abs_error_ms=10 * abs(center - g['mean_peak_index1']),
                       trial_timing_MAE_ms=math.fsum(10 * abs(x-y) for x, y in
@@ -176,6 +176,25 @@ def grade(record, reference):
                       mean_peak_is_own_first_argmax=center == t['mean_silencing'].index(max(t['mean_silencing'])) + 1,
                       trial_indices_within_own_selected_window=all(left <= x <= right for x in t['trial_peak_indices1']))
     return result
+
+
+def finite_mean(values):
+    """Preserve ordinary reductions and avoid premature subnormal rounding.
+
+    Dividing each term first avoids sum overflow, but may erase representable
+    mean errors. Only the subnormal/overflow cases use an exact binary mean.
+    """
+    values = list(values)
+    require(values, 'Nonempty mean support required')
+    scaled = [value / len(values) for value in values]
+    if not any(value != 0 and abs(part) < sys.float_info.min
+               for value, part in zip(values, scaled)):
+        try:
+            return math.fsum(scaled)
+        except OverflowError:
+            pass
+    from fractions import Fraction
+    return float(sum((Fraction(value) for value in values), Fraction()) / len(values))
 
 
 def aggregate(rows, roster):
@@ -194,9 +213,9 @@ def aggregate(rows, roster):
         by_mouse = {}
         for mouse in mice:
             group = [r for r in subset if r['identity']['mouse_source_label'] == mouse]
-            by_mouse[mouse] = {k: math.fsum(r[k] / len(group) for r in group) for k in columns}
+            by_mouse[mouse] = {k: finite_mean(r[k] for r in group) for k in columns}
         answer[figure] = {'records': len(subset), 'mice': len(mice), 'by_mouse': by_mouse,
-            'equal_mouse_mean': {k: math.fsum(by_mouse[m][k] / len(mice) for m in mice) for k in columns},
+            'equal_mouse_mean': {k: finite_mean(by_mouse[m][k] for m in mice) for k in columns},
             'worst_curve_abs_error': max(r['curve_max_abs_error'] for r in subset),
             'exact_selected_index_disagreements': sum(r['selected_index_disagrees'] for r in subset),
             'selection_outside_uncertainty': sum(not r['selection_within_reference_uncertainty'] for r in subset),

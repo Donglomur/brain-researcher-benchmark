@@ -119,7 +119,14 @@ def submission(raw, prepared, binding):
 
 def moments(values):
     avg = math.fsum(values) / len(values)
-    return {"mean": avg, "std_population": math.sqrt(math.fsum((x - avg) ** 2 for x in values) / len(values)), "n_area_values": len(values)}
+    residuals = [x - avg for x in values]
+    variance = math.fsum(x ** 2 for x in residuals) / len(values)
+    deviation = math.sqrt(variance)
+    if variance < sys.float_info.min and any(residuals):
+        # A finite population SD can be representable when its squared
+        # intermediate is not. Retain the same centered population statistic.
+        deviation = math.hypot(*residuals) / math.sqrt(len(values))
+    return {"mean": avg, "std_population": deviation, "n_area_values": len(values)}
 
 
 def compare(support_raw, candidate_raw):

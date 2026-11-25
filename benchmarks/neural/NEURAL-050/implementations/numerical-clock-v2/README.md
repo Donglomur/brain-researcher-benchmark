@@ -90,3 +90,17 @@ rejection before decoder entry when captured bytes fail the expected hash. The
 historical 39-control receipt in `provenance.json` remains evidence for its prior
 revision. Neither the identity repair nor generated checks qualify authentic
 source exports or participant performance.
+
+## Constant targets and units
+
+The scorer now marks a target constant only when all observed values are equal.
+The former absolute variance cutoff (`1e-15` pixels²/second²) could erase a
+defined delta-R² after a change of movement scale. Nonconstant, representable
+variances retain their normalized increment. If the variance intermediate
+underflows or overflows, a narrow exact-arithmetic fallback on the observed
+binary64 operands retains any representable normalized increment. MSE values
+below binary64 range may round to zero, while the ratio is formed before that
+rounding. Nonfinite reported final values are refused explicitly. Ordinary
+variance arithmetic, folds, patient/day weighting and true constant-target
+handling are unchanged. Generated controls cover the public independent scorer
+and complete evaluator; they do not qualify authentic data or participant results.

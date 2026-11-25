@@ -23,11 +23,13 @@ BUNDLE_SCHEMA = "typing-v1-author-capture-bundle-v1"
 
 def _load_evaluator():
     path = Path(__file__).resolve().parent.parent / "v1-transcript-evaluation-v1" / "evaluator.py"
-    if hashlib.sha256(path.read_bytes()).hexdigest() != EVALUATOR_SHA256:
+    source = path.read_bytes()
+    if hashlib.sha256(source).hexdigest() != EVALUATOR_SHA256:
         raise RuntimeError("frozen predecessor evaluator identity mismatch")
     spec = importlib.util.spec_from_file_location("typing_v1_frozen_evaluator", path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # Execute the same bytes that passed the frozen source identity check.
+    exec(compile(source, str(path), "exec"), module.__dict__)
     return module
 
 

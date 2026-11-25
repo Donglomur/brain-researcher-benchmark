@@ -76,3 +76,14 @@ The generated controls validate complete source support, training/evaluation
 sentence agreement, field exclusion, exact CSV quoting and the authenticated
 loader path. No authentic input preparation, scientific run, reproduction or
 improvement is established by these controls.
+
+## Authenticated archive snapshot
+
+The loader reads at most the pinned archive size plus one byte, verifies the
+exact length and SHA256, then streams the CSV from those same immutable bytes.
+Replacing or modifying the filesystem archive after authentication cannot alter
+the decoded rows under an earlier digest. The fixed archive snapshot is about
+7.8 MB; no files are extracted. `test_archive_snapshot.py` checks complete
+generated 4,500-row archives, an in-place rewrite between authentication and
+decoding, and rejection of an extra byte. These are software controls, not
+authentic preparation or scientific qualification.

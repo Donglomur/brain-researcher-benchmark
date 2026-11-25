@@ -69,11 +69,7 @@ jobs:
         run: |
           python3 -I -S -B - <<'PY'
           import hashlib, os, stat
-          pins = [
-              {'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': '7a433a13670e83058aa60258227dafba08569af41e44673bd569443ccfd42193'},
-              {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': '4bf07208359292f1f8a8034959c1beb24ea3fa05cb13118e675058715099ae0b'},
-              {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 603462, 'sha256': 'd202b2fcdd43a76dde465d2de76bfb7c035b05562e8422949b092081296a0079'},
-          ]
+          pins = [{'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': '45837e72ac92fd31f18ba3d0a4a7688a35bcbd4a51835fe08cfd5795950cdcab'}, {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': '870c4071b3c7a858c9877eb2741f24fc923dd3b74a9c2f418cdfd561889d11ae'}, {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 639901, 'sha256': 'dcb9d20ca9ea6e72d4a7958f0e4f1c5065b8edba101f8758f2d6d7ff193b7af6'}]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
               with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), "rb") as stream:
@@ -703,14 +699,6 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/paper/PAPER-ROOT-ADD-003/implementations/original-fig3-v1/test_prepare_inputs.py
-      - name: Check PAPER-ROOT-ADD-004 generated preparation and comparison controls
-        if: matrix.group == 'stdlib-b'
-        shell: bash
-        env:
-          PYTHONDONTWRITEBYTECODE: "1"
-        run: |
-          set -euo pipefail
-          timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/paper/PAPER-ROOT-ADD-004/implementations/native-trial-admission-v1/tests/test_native_cohort.py
       - name: Check PAPER-ROOT-ADD-010 generated preparation and comparison controls
         if: matrix.group == 'numpy226'
         shell: bash
@@ -780,16 +768,6 @@ jobs:
           trap 'rm -rf -- "$scratch"' EXIT
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-053/implementations/programme-source/implementation-v4/test_prior_comparisons_v1.py
-      - name: "Check NEURAL-054 generated source controls"
-        if: "matrix.group == 'stdlib-b'"
-        shell: bash
-        run: |
-          set -euo pipefail
-          umask 077
-          scratch="$(mktemp -d "${RUNNER_TEMP}/neural054.XXXXXX")"
-          trap 'rm -rf -- "$scratch"' EXIT
-          export TMPDIR="$scratch"
-          timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-054/implementations/frozen-capture-v1/tests/test_model_actor_transport.py --scratch "$scratch"
       - name: "Check NEURAL-056 generated source controls"
         if: "matrix.group == 'numpy'"
         shell: bash

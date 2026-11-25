@@ -57,7 +57,7 @@ def summarize_panel(support, predictions, targets):
     comparisons = {}
     for comparator in METHODS[:-1]:
         differences = errors["marble"] - errors[comparator]
-        mean = math.fsum(float(value) for value in differences) / endpoint.QUERY_COUNT
+        mean = endpoint.finite_mean([float(value) for value in differences])
         endpoint.require(math.isfinite(mean), "paired mean difference overflow")
         comparisons["marble_minus_" + comparator] = {
             "paired_rows": endpoint.QUERY_COUNT,

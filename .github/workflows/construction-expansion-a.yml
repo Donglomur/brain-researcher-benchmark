@@ -2214,9 +2214,14 @@ jobs:
                   "sha256": "7f2d521a921d7fe8481d5a133e01853cba5961a9c924658f68708f6e54e8db81"
               },
               {
+                  "path": "benchmarks/paper/PAPER-paper-method-add-003/historical/task.pre-improvement.v1.json",
+                  "bytes": 30135,
+                  "sha256": "d49aa3d8687475d00aecefe55ac9e71e5e8c727e32bf72af95809c109638be68"
+              },
+              {
                   "path": "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1651,
-                  "sha256": "6701b0ca1fd1bb7543cf101a33fc154c09891e30de7bd8eb50a15ae5ecc7cced"
+                  "bytes": 2511,
+                  "sha256": "67dfebb39c0af595c24e366530764f02900721e064f8effbc2dffd4dbcbde1e4"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/UPSTREAM-LICENSE.txt",
@@ -2225,8 +2230,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 20860,
-                  "sha256": "a5a9f9168e1dc057204737cab9d9d7ec46dd72a7fb4ee940b8834cfec277ae09"
+                  "bytes": 22291,
+                  "sha256": "689fdcdc29f807b1944da34468bc6605a54e0975483240d2c4bfde413488a526"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/source-provenance.json",
@@ -2239,16 +2244,16 @@ jobs:
                   "sha256": "3a4f3e8ef17c63a8b356932cfcbf70dc9fee869299bbeb0650c6942044955eb6"
               },
               {
-                  "path": "benchmarks/paper/PAPER-paper-method-add-003/historical/task.pre-improvement.v1.json",
-                  "bytes": 30135,
-                  "sha256": "d49aa3d8687475d00aecefe55ac9e71e5e8c727e32bf72af95809c109638be68"
+                  "path": "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1/tests/test_verified_inputs.py",
+                  "bytes": 7484,
+                  "sha256": "5c3fc184f6c14da51387b6bbb73dee4731e1046e2eae2d90c82b7faebea7c237"
               }
           ]
           packages = [
               "benchmarks/paper/PAPER-paper-method-add-003/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 7 > 0
-          assert sum(row['bytes'] for row in rows) == 81638 <= 33554432
+          assert len(rows) == 8 > 0
+          assert sum(row['bytes'] for row in rows) == 91413 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -2291,7 +2296,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 81638,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 91413,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -2377,6 +2382,11 @@ jobs:
                   "sha256": "4530bb91921ffb3cb838a9c6aca49785cc649071ad3bd6367d40b24fa465164b"
               },
               {
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/historical/task.pre-improvement.v1.json",
+                  "bytes": 26106,
+                  "sha256": "2b84b970780fb271fdfddaa2b459fc41f2db4580cccb923e81c6ded057fd0f3a"
+              },
+              {
                   "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/.gitignore",
                   "bytes": 19,
                   "sha256": "862263fa1f46c20f0d1e4dac5ffcc75abd55c08211b2c3864c5f8764b9d87793"
@@ -2393,8 +2403,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/neds_evaluator.py",
-                  "bytes": 23099,
-                  "sha256": "6bd0b39102e8ea5afd6c5dad4e09830e0c13b3d29070d6e92f46892ad16f05d2"
+                  "bytes": 24069,
+                  "sha256": "7f3914791a2ec0692e158f32a6762d41d17e118c67185b55aea14538818a4712"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/provenance.json",
@@ -2407,16 +2417,16 @@ jobs:
                   "sha256": "9ef5daf63e1eb54ca2b191c23e9f7585391b573317ea535682d85403afcaee69"
               },
               {
-                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/historical/task.pre-improvement.v1.json",
-                  "bytes": 26106,
-                  "sha256": "2b84b970780fb271fdfddaa2b459fc41f2db4580cccb923e81c6ded057fd0f3a"
+                  "path": "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1/tests/test_r2_underflow.py",
+                  "bytes": 4474,
+                  "sha256": "3b54ccd00e1bebbfd83e5ac12d82b9e51068177d91c740e8a66fcb5a3cdc672a"
               }
           ]
           packages = [
               "benchmarks/paper/PAPER-paper-method-replacement-005/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 8 > 0
-          assert sum(row['bytes'] for row in rows) == 89482 <= 33554432
+          assert len(rows) == 9 > 0
+          assert sum(row['bytes'] for row in rows) == 94926 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -2459,7 +2469,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 89482,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 94926,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -2544,14 +2554,19 @@ jobs:
                   "sha256": "d16a3477239e9e730097f8ae95f95052ff2de8c2e77da6e7e97d374111766ef3"
               },
               {
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-001/historical/task.pre-improvement.v1.json",
+                  "bytes": 21335,
+                  "sha256": "af6f2bf29ed18bc720632f05388a77aab696879bcf83c01ef20872a1e5022aca"
+              },
+              {
                   "path": "benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/README.md",
-                  "bytes": 1453,
-                  "sha256": "73408acf4d67c57b3e2acbc78ce85b3954e05f58e6301988299bf72e348b789a"
+                  "bytes": 2264,
+                  "sha256": "4c8817da94fe611e2638bbeaa26443afcc7155e2d308b5c2880c764b616cec1a"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 28690,
-                  "sha256": "3d70e63ef6ff4a1624c93167b56cc8456411651941c58fda2cba555450e6243b"
+                  "bytes": 29654,
+                  "sha256": "acaf92c0fd220a581ac15507b48e86fe286935668e5541879fb20167bd22219b"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/source_contract.json",
@@ -2564,16 +2579,16 @@ jobs:
                   "sha256": "c59a5a971cda2f8c50f4cc7de686ab8875e30609d65561351549222604047460"
               },
               {
-                  "path": "benchmarks/paper/PAPER-paper-signal-add-001/historical/task.pre-improvement.v1.json",
-                  "bytes": 21335,
-                  "sha256": "af6f2bf29ed18bc720632f05388a77aab696879bcf83c01ef20872a1e5022aca"
+                  "path": "benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1/tests/test_verified_nwb.py",
+                  "bytes": 3908,
+                  "sha256": "0dcdb797162d929317e2f979e0fb3c2b67169ecad19c899b8eda516ff71a838e"
               }
           ]
           packages = [
               "benchmarks/paper/PAPER-paper-signal-add-001/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 6 > 0
-          assert sum(row['bytes'] for row in rows) == 91989 <= 33554432
+          assert len(rows) == 7 > 0
+          assert sum(row['bytes'] for row in rows) == 97672 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -2616,7 +2631,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 91989,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 97672,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY

@@ -12,7 +12,7 @@ import json
 import math
 from pathlib import Path
 
-SCORER_SHA256 = "6059486fcf3cf1c07c53fb1c214e5f5f76ded53995757c329d6ada557b812bae"
+SCORER_SHA256 = "c2643973762868391ea1d32b9c7ed54f546740f615db65bb2c920bc4ca9a493a"
 METRICS = ("correlation_explained_percent", "variance_explained_percent")
 SHARED_PREPARATION = ("source_mask_sha256", "alignment_protocol_sha256",
                       "measurement_times_sha256", "mask_origin", "split")

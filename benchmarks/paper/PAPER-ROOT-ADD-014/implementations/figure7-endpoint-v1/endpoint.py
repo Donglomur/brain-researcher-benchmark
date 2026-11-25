@@ -115,7 +115,10 @@ def _validate_selection(selection, expected_selection_sha256):
 def _series(value):
     _need(type(value) is list and len(value) == 75 and all(_finite(x) for x in value),
           'all 75 finite source-ordered samples required; no omissions or clipping')
-    return value
+    # The locked metric evaluates represented binary64 samples. Normalize here
+    # so finite integer inputs cannot become an unsigned/object NumPy array only
+    # after protected reference access. This preserves the metric conversion.
+    return [float(x) for x in value]
 
 
 def _median(values):
@@ -187,8 +190,8 @@ def evaluate_predictions(selection, candidate, *, expected_selection_sha256, loa
         for kind in ('observations', 'author_predictions'):
             _need(type(reference[kind]) is dict and set(reference[kind]) == set(SIGNALS),
                   'complete operator signal panel')
-            for signal in SIGNALS:
-                _series(reference[kind][signal])
+        reference = {kind: {signal: _series(reference[kind][signal]) for signal in SIGNALS}
+                     for kind in ('observations', 'author_predictions')}
         for signal in SIGNALS:
             y = reference['observations'][signal]
             for method, prediction in (('candidate', admitted[key][signal]),

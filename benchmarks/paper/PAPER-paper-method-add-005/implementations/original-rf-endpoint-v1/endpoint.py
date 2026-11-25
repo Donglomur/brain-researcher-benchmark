@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -31,12 +32,33 @@ def digest_json(value):
     return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(",", ":"), allow_nan=False).encode()).hexdigest()
 
 
-def digest_file(path):
+def digest_stream(stream):
     h = hashlib.sha256()
-    with open(path, "rb") as stream:
-        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-            h.update(chunk)
+    for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+        h.update(chunk)
     return h.hexdigest()
+
+
+def digest_file(path):
+    with open(path, "rb") as stream:
+        return digest_stream(stream)
+
+
+def load_case_input(path):
+    """Bind the decoded NPZ and receipt to one unchanged open file."""
+    def state(stream):
+        value = os.fstat(stream.fileno())
+        return (value.st_dev, value.st_ino, value.st_size,
+                value.st_mtime_ns, value.st_ctime_ns)
+
+    with path.open("rb") as stream:
+        before = state(stream)
+        digest = digest_stream(stream)
+        stream.seek(0)
+        with np.load(stream, allow_pickle=False) as source:
+            arrays = dict(source)
+        require(state(stream) == before, "input changed during hash/decode")
+    return arrays, digest
 
 
 def valid_digest(value):
@@ -264,16 +286,17 @@ def main(argv=None):
     try:
         require(not args.output.exists(), "refusing to overwrite output")
         if args.command == "score-case":
-            with np.load(args.input, allow_pickle=False) as source:
-                result = evaluate_case(dict(source), participant=args.participant, dropout=args.dropout, repeat=args.repeat, input_digest=digest_file(args.input), kind=args.kind)
+            arrays, digest = load_case_input(args.input)
+            result = evaluate_case(arrays, participant=args.participant, dropout=args.dropout, repeat=args.repeat, input_digest=digest, kind=args.kind)
         else:
             rows = json.loads(args.manifest.read_text())
             require(isinstance(rows, list) and len(rows) == 180, "180 bound receipt files required")
             records = []
             for item in rows:
                 path = args.manifest.parent / item["path"]
-                require(digest_file(path) == item["sha256"], "case receipt modified")
-                records.append(json.loads(path.read_text()))
+                data = path.read_bytes()
+                require(hashlib.sha256(data).hexdigest() == item["sha256"], "case receipt modified")
+                records.append(json.loads(data))
             result = aggregate_panel(records)
         # Native event identities and prepared arrays stay in operator-only inputs.
         with args.output.open("x") as stream:

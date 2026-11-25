@@ -1,8 +1,10 @@
 """Recovered NEURAL-069 numerical primitives; source hashes in SOURCE_PINS.json.
 
-Function bodies below are verbatim from the historical benchmark implementation.
-The public scorer separately names the current ROI-macro endpoint and legacy
-family-macro companion; no inference, fitting, or source-data reads occur here.
+Definitions were recovered from the historical benchmark implementation.
+The current _mean additionally preserves representable subnormal averages;
+SOURCE_PINS.json distinguishes that correction from verbatim definitions.
+The public scorer separately names current ROI-macro and historical family-macro
+endpoints; no inference, fitting, or source-data reads occur here.
 """
 from __future__ import annotations
 import math
@@ -47,6 +49,23 @@ def _pair(truth, prediction):
 
 
 
+def _exact_binary_mean(values):
+    """Exact binary64 sum with one integer accumulator and one final Fraction.
+
+    Binary64 denominators are powers of two. Aligning their integer numerators
+    avoids constructing and reducing one Fraction per sample in a large ROI.
+    """
+    total, shift = 0, 0
+    for value in values:
+        numerator, denominator = float(value).as_integer_ratio()
+        exponent = denominator.bit_length() - 1
+        if exponent > shift:
+            total <<= exponent - shift
+            shift = exponent
+        total += numerator << (shift - exponent)
+    return float(Fraction(total, len(values) << shift))
+
+
 def _mean(values):
     """Finite convex average without overflowing an intermediate unscaled sum."""
     values = list(values)
@@ -54,12 +73,19 @@ def _mean(values):
         raise MetricInputError("empty aggregate")
     if all(v == values[0] for v in values):
         return float(values[0])
+    # Dividing each operand before summing can erase positive representable
+    # averages when those divisions enter the subnormal range. Preserve the
+    # original finite float operands exactly on that exceptional path; normal
+    # inputs retain the recovered reduction order and its rounding.
+    if any(v != 0 and abs(float(v) / len(values)) < float.fromhex("0x1p-1022")
+           for v in values):
+        return _exact_binary_mean(values)
     try:
         return math.fsum(float(v) / len(values) for v in values)
     except OverflowError:
         # At DBL_MAX, rounding each division can put a finite convex mean a
         # fraction of an ULP over the range. Recover the exact float-input mean.
-        return float(sum(Fraction.from_float(float(v)) for v in values) / len(values))
+        return _exact_binary_mean(values)
 
 
 

@@ -231,12 +231,12 @@ def main():
     try:
         roster = _io.decode(_io.capture(args.roster, 3_000_000, args.roster_sha256)[0])
         validate_roster(roster)
-    except (ValueError, TypeError, KeyError, OSError):
+    except (ValueError, TypeError, KeyError, OSError, RecursionError):
         result = {"status": "operator_error", "primary": None, "private_reference_invoked": False}
     else:
         try:
             manifest = _io.decode(_io.capture(Path(args.submission) / "submission.json", 10_000)[0])
-        except (ValueError, TypeError, KeyError, OSError):
+        except (ValueError, TypeError, KeyError, OSError, RecursionError):
             result = {"status": "invalid_submission", "primary": None, "private_reference_invoked": False}
         else:
             result = evaluate(args.submission, manifest, roster,

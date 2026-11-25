@@ -54,11 +54,13 @@ def read_json(path):
 
 def evaluator():
     path = Path(__file__).resolve().parents[1] / "initial-evaluator-v1/worm_evaluator.py"
-    require(hashlib.sha256(path.read_bytes()).hexdigest() == EVALUATOR_SHA256,
+    source = path.read_bytes()
+    require(hashlib.sha256(source).hexdigest() == EVALUATOR_SHA256,
             "predecessor evaluator changed; review and repin transport before use")
     spec = importlib.util.spec_from_file_location("worm_transport_predecessor", path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # Execute the authenticated snapshot, not a second read of the pathname.
+    exec(compile(source, str(path), "exec"), module.__dict__)
     return module
 
 

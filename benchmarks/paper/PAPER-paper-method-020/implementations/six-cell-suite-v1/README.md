@@ -14,7 +14,7 @@ python3 -B suite.py manifest.json candidate-suite.json vocabulary.json \
   --reference-suite reference-suite.json > operator-comparison.json
 ```
 
-The source manifest, ordered vocabulary and individual run traces use the unchanged [v2 interface](../source-scoring-v2/README.md). Both source modules are checked against fixed raw SHA256 identities before import, including the source scorer with empty-branch aggregate handling. This is a dependency identity check, not runtime isolation. All inputs and reports are operator-only: manifests contain answers, and reports contain identifying per-query ledgers. Keep them outside participant environments and Git. The CLI inherits duplicate-key and nonfinite-JSON rejection from the source scorer.
+The source manifest, ordered vocabulary and individual run traces use the unchanged [v2 interface](../source-scoring-v2/README.md). Both source modules are checked against fixed raw SHA256 identities, then executed from those same byte snapshots, including the source scorer with empty-branch aggregate handling. This is a dependency identity check, not runtime isolation. All inputs and reports are operator-only: manifests contain answers, and reports contain identifying per-query ledgers. Keep them outside participant environments and Git. The CLI inherits duplicate-key and nonfinite-JSON rejection from the source scorer.
 
 `suite.json` has exactly four fields:
 
@@ -58,4 +58,4 @@ python3 -I -B -m unittest discover \
   -s benchmarks/paper/PAPER-paper-method-020/implementations/six-cell-suite-v1/tests -v
 ```
 
-The existing `stdlib-b` commands now discover 14 suite methods and 12 source-scorer methods.
+The existing `stdlib-b` commands now discover 18 suite methods and 12 source-scorer methods. Four suite controls cover changed dependency loads, hash rejection before execution and valid six-cell output.

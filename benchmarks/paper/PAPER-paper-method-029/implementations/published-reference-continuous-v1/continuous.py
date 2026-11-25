@@ -31,6 +31,14 @@ def _load_predecessor():
 reference_api = _load_predecessor()
 
 
+def _root_mean_square(values):
+    """Compute the declared RMS without squaring away small nonzero errors."""
+    scale = max(abs(value) for value in values)
+    if scale == 0:
+        return 0.0
+    return scale * math.sqrt(math.fsum((value / scale) ** 2 for value in values) / len(values))
+
+
 def compare_continuous(reference, replay):
     """Return every pair discrepancy; do not infer provenance or a pass/fail."""
     reference_api.require(isinstance(reference, dict) and set(reference) == reference_api.EXPECTED_KEYS,
@@ -54,7 +62,7 @@ def compare_continuous(reference, replay):
             "mean_signed_error": math.fsum(row["signed_error"] for row in group) / 20,
             "mean_absolute_pair_error": math.fsum(row["absolute_error"] for row in group) / 20,
             "maximum_absolute_pair_error": max(row["absolute_error"] for row in group),
-            "root_mean_square_pair_error": math.sqrt(math.fsum(row["signed_error"] ** 2 for row in group) / 20),
+            "root_mean_square_pair_error": _root_mean_square([row["signed_error"] for row in group]),
         })
     return {
         "schema": "deeprecon_published_pair_discrepancies/v1", "task_id": reference_api.TASK_ID,

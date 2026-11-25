@@ -1,6 +1,6 @@
 # NEURAL-047: cross-worm turn prediction
 
-This is a source implementation for one conditional neuroscience task: predict dorsal versus ventral post-reversal turns in entirely held-out worms using processed SAAV calcium signals, recent behavior, or both. It contains the complete 27-file V3 operative source closure with a correction to clock arithmetic. The original runtime manifest, protocol, scientific contract and required gates retain their historical bytes; a separate current runtime manifest identifies the corrected source.
+This is a source implementation for one conditional neuroscience task: predict dorsal versus ventral post-reversal turns in entirely held-out worms using processed SAAV calcium signals, recent behavior, or both. It contains the complete 27-file V3 operative source closure with corrections to clock and small-value arithmetic. The original runtime manifest, protocol, scientific contract and required gates retain their historical bytes; a separate current runtime manifest identifies the corrected source.
 
 **Deployment is unconfigured. No authentic data preparation, candidate run, reference fit or scientific evaluation has been completed. This release adds no scientifically qualified or submission-ready benchmark.**
 
@@ -21,7 +21,7 @@ The neural view's animal-macro balanced accuracy is primary, with equal-animal b
 - [GATES.json](GATES.json) retains all 12 open qualification gates.
 - [DEPLOYMENT.json](DEPLOYMENT.json) leaves all eight deployment authorities null.
 - [RUNTIME_SOURCE_MANIFEST.json](RUNTIME_SOURCE_MANIFEST.json) preserves the 27 predecessor source pins.
-- [CURRENT_RUNTIME_SOURCE_MANIFEST.json](CURRENT_RUNTIME_SOURCE_MANIFEST.json) pins the same 27 operative paths with only the clock arithmetic source changed.
+- [CURRENT_RUNTIME_SOURCE_MANIFEST.json](CURRENT_RUNTIME_SOURCE_MANIFEST.json) pins the same 27 operative paths with the corrected history and feature arithmetic identified explicitly.
 - `program/` implements input admission, native-clock mapping, preparation, references, execution accounting and protected scoring.
 - `native_export/export_WB_fields.m` is benchmark-authored MATLAB source for a future admitted field conversion. MATLAB, data and external code are not bundled.
 
@@ -50,6 +50,19 @@ python3 -I -S -B tests/benchmarks/test_neural047_clock_arithmetic.py -v
 ```
 
 The clock correction establishes arithmetic consistency of supplied values only. Native clock lineage, physical precision, animal identity, authentic data, reference numerics and deployment qualification remain open.
+
+## Small-value arithmetic corrections
+
+The active reference feature map preserves a representable nonzero population standard deviation when squaring very small centered values would underflow to zero. A scaled calculation is used only in that case; constant histories and the normal arithmetic path are unchanged.
+
+Post-reversal direction is determined from the sign of the exact sum of the two supplied binary64 or integer curvature values. This is the sign of their mathematical mean. It preserves a nonzero direction when halving each tiny value separately would produce zero, while exact cancellation retains the existing zero-direction exclusion. No epsilon, new threshold or different target window is introduced.
+
+Generated controls cover strict JSON transport, the active feature-validation path, complete three-animal construction, tiny nonzero direction, exact zero exclusion and ordinary/large-value parity. These are source arithmetic checks, not authentic input qualification, reference fitting or model performance:
+
+```sh
+python3 -I -S -B tests/benchmarks/test_neural047_summary_underflow.py -v
+python3 -I -S -B tests/benchmarks/test_neural047_direction_underflow.py -v
+```
 
 ## Interpretation and provenance
 

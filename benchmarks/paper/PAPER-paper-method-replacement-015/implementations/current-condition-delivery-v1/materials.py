@@ -18,7 +18,7 @@ import types
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-EVALUATOR_SHA256 = '392ab16d6e5ce3451b434e9bf03a6c9fe0e2013ffdd879f5213e72c5a6f71a1c'
+EVALUATOR_SHA256 = '3cfdecb445c678be0ad9bef57186c230272d9cbfdf169a7af110aef2cc628cc5'
 ARTIFACT_IO_SHA256 = 'ea37f8f03ba74c837582199f8f80e251b083f0077a74b5da5c0e1659dfe08344'
 ASSETS_SHA256 = '0e51909ec008a8e4feab14bd5fb9e4b694a9f45ec03e7d9a10ad1bd3c65c4869'
 CONDITION_ID = 'current_source_noise7_eligible_v1'

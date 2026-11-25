@@ -11,7 +11,7 @@ import time
 import types
 
 TASK = "PAPER-FIND-REP-015"
-CORE_PIN = (11539, "81aab53cdc08376c00bac759f842196abd2dad8c1127d926750a063cb5fa23a3")
+CORE_PIN = (12241, "6963e84e33f24f0b838352a6fdf68d1db9eef31c9776dd247785df4961fd536f")
 ROSTER_PIN = (122364, "5fc17a0e33f646fee83ea19eccb7954e6ff11e2b87e6920cb3b1e4b9fb3a2128")
 CANDIDATE_SCHEMA = "cerebellar-committed-numerical-artifacts-v1"
 REFERENCE_SCHEMA = "cerebellar-canonical-private-references-v1"

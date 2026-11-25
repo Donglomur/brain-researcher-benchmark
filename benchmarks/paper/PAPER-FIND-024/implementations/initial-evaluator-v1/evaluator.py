@@ -308,7 +308,8 @@ def _load_captured_input(path, manifest_payload):
         digest = hashlib.sha256(payload).hexdigest()
         _require(source.get("sha256") == digest, "timecourse file SHA256 mismatch")
         with np.load(io.BytesIO(payload), allow_pickle=False) as packed:
-            _require(set(packed.files) == {"D", "t"}, "NPZ must contain exactly D and t")
+            _require(len(packed.files) == 2 and set(packed.files) == {"D", "t"},
+                     "NPZ must contain exactly D and t, without duplicate members")
             arrays[p["participant_id"]] = {"D": packed["D"], "t": packed["t"]}
         receipts.append({"participant_id": p["participant_id"], "sha256": digest, "bytes": len(payload)})
     return manifest, arrays, receipts

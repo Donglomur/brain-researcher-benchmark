@@ -23,11 +23,14 @@ session-local condition cannot cross stimulus families. Unknown public
 top-level fields are rejected so accidental source/target attachments cannot
 pass this check. The packet schema and all source-roster digests remain v1.
 
-The scorer then calls the preserved v1 implementation. Spike counts, valid
-exposure, training-only controls, mouse-macro Poisson bits per spike, held-family
-breakdowns, zero-rate dispositions and mouse bootstrap are unchanged. The
-output adds only `declared_roster_coverage`, with observation and exclusion
-counts. Source preparation and control fitting continue to use v1.
+The scorer retains v1 validation, training-only controls and row-level likelihood
+arithmetic. Its current reducer preserves ordinary arithmetic and uses an exact
+binary sum only when a finite-term sum overflows before a representable ratio or
+mean. Mouse-bootstrap means use the same reducer; finite quantile interpolation
+has an exact fallback if an intermediate difference overflows. Spike counts,
+valid exposure, mouse-macro Poisson bits per spike, held-family breakdowns,
+zero-rate dispositions and bootstrap sampling are unchanged. The output adds
+`declared_roster_coverage`, with observation and exclusion counts. Source preparation and control fitting continue to use v1.
 
 From the repository root, score an existing operator-owned export with:
 

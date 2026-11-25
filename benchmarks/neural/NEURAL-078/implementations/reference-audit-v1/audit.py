@@ -6,6 +6,7 @@ The source packet validator is shared; matching and statistics are recomputed.
 from __future__ import annotations
 
 import argparse
+from fractions import Fraction
 import hashlib
 import json
 import math
@@ -110,8 +111,12 @@ def prefix_pairs(errors, correct, rt, ids):
 def mean(values):
     values = list(values)
     need(bool(values), "Mean requires observations")
-    result = math.fsum(float(value) / len(values) for value in values)
-    need(math.isfinite(result), "Finite arithmetic required")
+    # Accumulate the exact binary values before dividing. Dividing each term
+    # first can erase an entirely representable mean of subnormal samples.
+    exact = sum((Fraction.from_float(float(value)) for value in values), Fraction()) / len(values)
+    result = float(exact)
+    need(math.isfinite(result) and (result != 0 or exact == 0),
+         "Mean outside finite representable arithmetic range")
     return result
 
 

@@ -1,6 +1,7 @@
 """Generated arithmetic and adversarial software controls; no scientific data."""
 import copy
 import importlib.util
+import itertools
 import math
 from pathlib import Path
 import sys
@@ -410,6 +411,50 @@ class PopulationMembershipTests(unittest.TestCase):
                 catalogue, secondary, {}, None, None)
         with self.assertRaises(RuntimeError):
             self.programme_module("native_pipeline").main()
+
+
+class MeanCancellationTests(unittest.TestCase):
+    """Generated complete-policy contrasts and finite arithmetic boundaries."""
+
+    def test_complete_policy_keeps_small_signed_equal_mouse_contrast(self):
+        for policy in core.POLICIES:
+            candidate, targets, reference = fixture(policy)
+            first = [1e308, -1e308, 1e-20] + [0.0] * 11
+            for row in targets["cases"]:
+                if row["subset"] == "new_image":
+                    index = int(row["mouse"].removeprefix("query"))
+                    row["target"] = first[index] if row["phase"] == "FIRST" else 0.0
+            values = {row["id"]: row["target"] for row in targets["cases"]}
+            for row in candidate["predictions"]:
+                for arm in core.ARMS:
+                    row[arm] = values[row["id"]]
+            for family in core.FAMILIES:
+                for arm in core.ARMS:
+                    reference["predictions"][family][arm] = dict(values)
+            result = score(candidate, targets, reference, policy)
+            self.assertTrue(result["complete_primary_support"])
+            self.assertEqual(result["primary_prediction_error"], 0.0)
+            self.assertEqual(result["primary_fixed_reference_gain"], 0.0)
+            contrast = result["celltypes"]["new_image/" + core.CELL_TYPES[0]]
+            self.assertEqual(len(contrast["mice"]), 14)
+            self.assertEqual(contrast["supported_case_count"], 28)
+            self.assertEqual(contrast["observed_equal_mouse"], 1e-20 / 14)
+            self.assertEqual(contrast["predicted_equal_mouse"], 1e-20 / 14)
+            self.assertEqual(contrast["contrast_absolute_error_equal_mouse"], 0.0)
+
+    def test_finite_mean_cancellation_permutation_and_representable_boundaries(self):
+        for values in itertools.permutations((1e308, -1e308, 1e-20)):
+            self.assertEqual(core.mean(values), 1e-20 / 3)
+            self.assertEqual(core.mean(-value for value in values), -1e-20 / 3)
+        self.assertEqual(core.mean([1e308] * 14), 1e308)
+        self.assertEqual(core.mean([math.ulp(0.0)] * 14), math.ulp(0.0))
+        self.assertEqual(core.mean([1.0, 2.0, 3.0]), 2.0)
+        self.assertEqual(core.mean([0.0] * 14), 0.0)
+
+    def test_mean_keeps_existing_invalid_input_rejections(self):
+        for values in ([], [True], [float("nan")], [float("inf")], ["1"]):
+            with self.assertRaises(core.ScoringError):
+                core.mean(values)
 
 
 if __name__ == "__main__":

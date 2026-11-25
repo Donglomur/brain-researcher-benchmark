@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter, defaultdict
+from fractions import Fraction
 import hashlib
 import json
 import math
@@ -152,9 +153,9 @@ def validate_predictions(predictions, targets, targets_sha256, arm):
 
 
 def finite_mean(values):
-    """Avoid overflowing an otherwise representable mean solely in its sum."""
+    """Round the exact binary mean once, without per-value underflow or sum overflow."""
     try:
-        result = math.fsum(value / len(values) for value in values)
+        result = float(sum((Fraction(value) for value in values), Fraction()) / len(values))
     except (OverflowError, ValueError) as exc:
         raise InvalidEvaluation("loss aggregation exceeds numeric range") from exc
     require(math.isfinite(result), "loss aggregation exceeds numeric range")

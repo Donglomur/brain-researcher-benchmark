@@ -25,8 +25,8 @@ from unittest import mock
 import zlib
 
 
-PREPARE_PIN = (4378, "0d81e1b4467a3b3077d51f3f9c240a9a9e2f2b99a659189fd41e90fb79b54cb0")
-SELECTOR_PIN = (13267, "74fb73a271fe441207e5053f8c03a01a21705567018aca9b70498c40fd983cf4")
+PREPARE_PIN = (4378, "d86d0adb428af14a87e49c6701f8dba01c56a1579909880478d6e03bbe05bf12")
+SELECTOR_PIN = (13267, "332b63dc681668e614b2e2c9d4f0c6e7f3cfde90e4dfd6ef2044527a74bfcd18")
 CONFIGS = (("uniform", None), ("squared_distance", None), ("cosine", None),
            ("linear_ridge", .001), ("linear_ridge", .01), ("linear_ridge", .1),
            ("linear_ridge", 1), ("linear_ridge", 10), ("linear_ridge", 100))

@@ -10,6 +10,7 @@ import hashlib
 import json
 import math
 from pathlib import Path
+from fractions import Fraction
 from statistics import median
 
 REVISION = "118fc36cb3602934466ad2c6087c2b3b441f9f1f"
@@ -176,11 +177,32 @@ def validate_roster(roster):
     return {cell_key(c): c for c in cells}
 
 
+def finite_mean(values):
+    """Keep the ordinary reduction; recover a representable mean after overflow."""
+    try:
+        return math.fsum(values) / len(values)
+    except OverflowError:
+        # Every imported score is finite, but their intermediate sum need not be.
+        total = sum((Fraction.from_float(value) for value in values), Fraction())
+        return float(total / len(values))
+
+
+def finite_median(values):
+    """Avoid an overflowing even-pair sum without changing median membership."""
+    values = list(values)
+    result = median(values)
+    if math.isfinite(result):
+        return result
+    ordered = sorted(values)
+    middle = len(ordered) // 2
+    return finite_mean(ordered[middle - 1:middle + 1])
+
+
 def summarize_session(real_scores, null_scores):
-    real = math.fsum(real_scores) / len(real_scores)
-    nulls = [math.fsum(scores) / len(scores) for scores in null_scores]
-    source_null = median([real, *nulls])
-    paper_null = median(nulls)
+    real = finite_mean(real_scores)
+    nulls = [finite_mean(scores) for scores in null_scores]
+    source_null = finite_median([real, *nulls])
+    paper_null = finite_median(nulls)
     return {"real_score": real, "source_median_including_observed": source_null,
             "paper_null_only_median": paper_null,
             "paper_corrected_score": real - paper_null,
@@ -196,9 +218,9 @@ def summarize_regions(sessions):
     for (endpoint, region), rows in sorted(groups.items()):
         output.append({"endpoint": endpoint, "region": region, "n_sessions": len(rows),
                        "n_mice": len({r["subject"] for r in rows}),
-                       "source_figure_effect": median(r["real_score"] for r in rows) -
-                           median(r["source_median_including_observed"] for r in rows),
-                       "paper_text_effect": median(r["paper_corrected_score"] for r in rows),
+                       "source_figure_effect": finite_median(r["real_score"] for r in rows) -
+                           finite_median(r["source_median_including_observed"] for r in rows),
+                       "paper_text_effect": finite_median(r["paper_corrected_score"] for r in rows),
                        "source_fisher_p": fisher([r["source_session_p"] for r in rows]),
                        "source_fraction_significant_sessions": sum(r["source_session_p"] < .05 for r in rows)/len(rows)})
     for endpoint in ENDPOINTS:
@@ -265,7 +287,7 @@ def indexed_collections(cells, indexed, real_by_cell, sessions, regions):
                 values.append(value)
                 append(endpoint, "null_run_score", dict(identity, pseudo_id=pseudo, run_id=run), value)
             append(endpoint, "null_pseudo_run_mean", dict(identity, pseudo_id=pseudo),
-                   math.fsum(values) / runs)
+                   finite_mean(values))
     for row in sessions:
         for name, field in session_members.items():
             append(row["endpoint"], name, row, row[field])

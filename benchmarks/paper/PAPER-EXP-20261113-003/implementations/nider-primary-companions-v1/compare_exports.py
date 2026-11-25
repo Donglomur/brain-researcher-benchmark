@@ -15,7 +15,7 @@ from pathlib import Path
 import stat
 
 TASK = 'PAPER-EXP-20261113-003'
-CONTRACT_SHA = '35b3f4fb9adadba1bd9cc41ad7499272b753a098a0d6aa645042320c1d319d8c'
+CONTRACT_SHA = '57e738ebd79ecd07620a20dccccf7873c5cbf57aace29342cd842592099977a8'
 IDS = ('quest_self', 'amy_quest', 'amy_self')
 FILES = ('full120.json', 'row_lineage.json', 'table1/habit_associations.csv') + tuple(
     kind + '/' + contrast + '.json' for kind in ('dl', 'bayes') for contrast in IDS)

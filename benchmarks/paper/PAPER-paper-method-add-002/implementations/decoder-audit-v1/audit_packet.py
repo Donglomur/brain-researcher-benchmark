@@ -19,16 +19,17 @@ import stat
 import numpy as np
 
 HERE = Path(__file__).resolve().parent
-BRIDGE_SHA256 = "c5a56e942273fb90805fc939910612a4f0cbe922ddb28dd5b5a36254c0938396"
-AUDITED_PRODUCER_SHA256 = "df9534b38bc0caeae4811960b4487f30c64e4350f2b1d98b76a41d6eb1a7184c"
+BRIDGE_SHA256 = "386f8bb05317e88b58ea2f7766da2ea5efc6dd804a6fc6cd2abb6b7bf067a962"
+AUDITED_PRODUCER_SHA256 = "a1b4662768dd1cfa7fe447a44a2df37b44ef210328e92884a62642b2da142e90"
 
 
 def _load(name, path, expected):
-    if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+    source = path.read_bytes()
+    if hashlib.sha256(source).hexdigest() != expected:
         raise ValueError("dependency identity differs: " + name)
     spec = importlib.util.spec_from_file_location(name, path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    exec(compile(source, str(path), "exec"), module.__dict__)
     return module
 
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 from collections import defaultdict
 from datetime import datetime
+from fractions import Fraction
 import hashlib
 import io
 import json
@@ -365,6 +366,29 @@ def folds(rows, mode):
         yield f"{patient}/{day or 'all-days'}", train, test
 
 
+def _variance_fallback(y, baseline, augmented):
+    """Recover reportable ratios when the variance intermediate is out of range."""
+    observed = [Fraction(float(value)) for value in y]
+    count = len(observed)
+    mean = sum(observed) / count
+    variance = sum((value - mean) ** 2 for value in observed) / count
+    require(variance > 0, "nonconstant target is not distinct in binary64")
+    errors = [sum((target - Fraction(float(prediction))) ** 2
+                  for target, prediction in zip(observed, values, strict=True)) / count
+              for values in (baseline, augmented)]
+    delta = errors[0] - errors[1]
+    result = []
+    for name, value in zip(("baseline MSE", "gamma MSE", "delta MSE", "delta R2"),
+                           (*errors, delta, delta / variance), strict=True):
+        try:
+            rounded = float(value)
+        except OverflowError as error:
+            raise ValueError(name + " is not representable") from error
+        require(math.isfinite(rounded), name + " is not representable")
+        result.append(rounded)
+    return result
+
+
 def score_predictions(rows, baseline, augmented):
     ids = {r["id"] for r in rows}
     require(set(baseline) == ids and set(augmented) == ids, "prediction IDs must equal complete target IDs")
@@ -378,12 +402,21 @@ def score_predictions(rows, baseline, augmented):
         y = np.array([r["movement"] for r in values])
         b = np.array([baseline[r["id"]] for r in values])
         a = np.array([augmented[r["id"]] for r in values])
+        constant_target = bool(np.all(y == y[0]))
         denominator = float(np.mean((y - y.mean()) ** 2))
-        # A constant target has no defined R2; retain MSE and mark it explicitly.
+        # Constancy is an exact property of the observed target, not an absolute
+        # threshold in pixel units. Keep the established arithmetic for ordinary
+        # variances; an under/overflowed intermediate need not invalidate a finite
+        # normalized score. The rare fallback uses the exact binary64 operands.
         mb, ma = float(np.mean((y - b) ** 2)), float(np.mean((y - a) ** 2))
+        if not constant_target and (not math.isfinite(denominator) or denominator <= 0):
+            mb, ma, delta, delta_r2 = _variance_fallback(y, b, a)
+        else:
+            delta = mb - ma
+            delta_r2 = delta / denominator if not constant_target else None
         results.append({"patient": patient, "day": day, "n_windows": len(y), "baseline_mse": mb, "gamma_mse": ma,
-                        "delta_mse": mb - ma, "delta_r2": (mb - ma) / denominator if denominator > 1e-15 else None,
-                        "constant_target": denominator <= 1e-15, "constant_gamma_prediction": bool(np.ptp(a) <= 1e-12)})
+                        "delta_mse": delta, "delta_r2": delta_r2,
+                        "constant_target": constant_target, "constant_gamma_prediction": bool(np.ptp(a) <= 1e-12)})
     return results
 
 

@@ -43,13 +43,9 @@ def _uncertainty(values, seed, replicates):
               "replicates": replicates, "confidence": 0.95, "limits": None}
     if len(values) >= 2 and all(value is not None for value in values):
         rng = random.Random(seed)
-        draws = sorted(math.fsum(rng.choices(values, k=len(values))) / len(values)
+        draws = sorted(roster.finite_mean(rng.choices(values, k=len(values)))
                        for _ in range(replicates))
-        def quantile(p):
-            position = (len(draws) - 1) * p
-            low = int(position)
-            return draws[low] + (draws[min(low + 1, len(draws) - 1)] - draws[low]) * (position - low)
-        result["limits"] = [quantile(0.025), quantile(0.975)]
+        result["limits"] = [roster.finite_quantile(draws, 0.025), roster.finite_quantile(draws, 0.975)]
     return result
 
 
@@ -90,7 +86,7 @@ def _difference(restricted, program, seed, replicates):
     values = [row["difference_bits_per_spike"] for row in mice]
     return {"contrast": "frozen_program_minus_restricted_observation", "mouse_count": len(mice),
             "mice": mice, "status": status,
-            "mouse_macro_difference_bits_per_spike": math.fsum(values) / len(values) if status == "finite" else None,
+            "mouse_macro_difference_bits_per_spike": roster.finite_mean(values) if status == "finite" else None,
             "uncertainty": _uncertainty(values, seed, replicates)}
 
 

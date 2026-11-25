@@ -12,11 +12,14 @@ from pathlib import Path
 
 LEGACY_SHA256 = "cd2dc29f52e4aa79a5dc5b913aad9bef57b08e9bbf74f7c7a463b923c9e03d57"
 LEGACY_PATH = Path(__file__).resolve().parents[1] / "initial-evaluator-v1" / "evaluator.py"
-if hashlib.sha256(LEGACY_PATH.read_bytes()).hexdigest() != LEGACY_SHA256:
+_legacy_source = LEGACY_PATH.read_bytes()
+if hashlib.sha256(_legacy_source).hexdigest() != LEGACY_SHA256:
     raise RuntimeError("NEURAL-048 history dependency changed; independent review required")
 _spec = importlib.util.spec_from_file_location("neural048_halfcycle_legacy", LEGACY_PATH)
 legacy = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(legacy)
+# Execute the exact bytes authenticated above; the pathname may change.
+exec(compile(_legacy_source, str(LEGACY_PATH), "exec"), legacy.__dict__)
+del _legacy_source
 
 ContractError = legacy.ContractError
 SCHEMA = "neural048-halfcycle-support/v1"

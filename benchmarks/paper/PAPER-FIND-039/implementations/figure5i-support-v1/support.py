@@ -13,8 +13,8 @@ from pathlib import Path
 
 TASK_ID = "PAPER-FIND-039"
 SOURCE_REVISION = "1a9dd3040c9f77662caf26a34c9452403579087a"
-SCORER_SHA256 = "d33bdef4ca06fd30a774f5f9c49f5066abfd83ff291f5d9c9efac7a5b5e058da"
-SCORER_BYTES = 10409
+SCORER_SHA256 = "46e9365b602bf57b4ba47e4fb329990f3ce64e60af35905c5e9ef310420cf500"
+SCORER_BYTES = 11032
 EVIDENCE_ROLES = frozenset({"original_downsampling", "original_test_partition",
                             "original_real_training", "original_spike_shuffle_training"})
 SESSION_FIELDS = frozenset({"mouse_id", "session_id", "age_group", "optimal_k",

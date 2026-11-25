@@ -112,7 +112,11 @@ def extract(record):
             elif any(record['dv'][i] is None for i in (end + 1, end + 2)):
                 reason = 'missing_post_reversal_orientation'
             else:
-                label_value = record['dv'][end + 1] / 2 + record['dv'][end + 2] / 2
+                # Compare against the negated second value: only the mean's sign
+                # is needed, with no sum/halving overflow or underflow.
+                first = record['dv'][end + 1]
+                opposite_second = -record['dv'][end + 2]
+                label_value = (first > opposite_second) - (first < opposite_second)
                 if label_value == 0:
                     reason = 'zero_direction_endpoint'
         if reason is not None:

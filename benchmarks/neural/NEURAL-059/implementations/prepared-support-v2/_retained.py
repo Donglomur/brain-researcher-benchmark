@@ -16,17 +16,46 @@ NAME = "_neural059_probability_scientific_v2"
 EVALUATION_SHA256 = "bb145291cc0a0c2e23393887d6c5c2cf9df9bc3a96e37239cecd45e850995313"
 
 
+def _captured_module(name, path, body, *, package=False):
+    spec = importlib.util.spec_from_file_location(
+        name, path, submodule_search_locations=[] if package else None)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    exec(compile(body, str(path), "exec"), module.__dict__)
+    return module
+
+
 def load():
+    # Keep both the immutable source lineage and the active successor checks,
+    # then execute only the authenticated bytes. Normal file imports would
+    # reopen these paths and can select a changed file or stale module cache.
+    bodies = {}
     for filename, expected in PINS.items():
-        if hashlib.sha256((ROOT / filename).read_bytes()).hexdigest() != expected:
+        body = (ROOT / filename).read_bytes()
+        if hashlib.sha256(body).hexdigest() != expected:
             raise ValueError("retained_scientific_source_changed:" + filename)
-    if hashlib.sha256((HERE / "evaluation.py").read_bytes()).hexdigest() != EVALUATION_SHA256:
+        bodies[filename] = body
+    body = (HERE / "evaluation.py").read_bytes()
+    if hashlib.sha256(body).hexdigest() != EVALUATION_SHA256:
         raise ValueError("probability_successor_source_changed")
-    if NAME not in sys.modules:
-        spec = importlib.util.spec_from_file_location(
-            NAME, ROOT / "__init__.py", submodule_search_locations=[str(HERE), str(ROOT)])
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[NAME] = module
-        spec.loader.exec_module(module)
-    return (__import__(NAME + ".contracts", fromlist=["contracts"]),
-            __import__(NAME + ".evaluation", fromlist=["evaluation"]))
+    bodies["successor_evaluation.py"] = body
+    names = (NAME, NAME + ".diagnostics", NAME + ".contracts", NAME + ".evaluation")
+    missing = object()
+    prior = {name: sys.modules.get(name, missing) for name in names}
+    try:
+        package = _captured_module(NAME, ROOT / "__init__.py",
+                                   bodies["__init__.py"], package=True)
+        for stem in ("diagnostics", "contracts", "evaluation"):
+            path = HERE / "evaluation.py" if stem == "evaluation" else ROOT / (stem + ".py")
+            key = "successor_evaluation.py" if stem == "evaluation" else stem + ".py"
+            module = _captured_module(NAME + "." + stem, path, bodies[key])
+            setattr(package, stem, module)
+        return package.contracts, package.evaluation
+    finally:
+        # The bootstrap remains trusted and sequential. Do not retain mutable
+        # scoring modules or disturb an earlier operator import after loading.
+        for name, module in prior.items():
+            if module is missing:
+                sys.modules.pop(name, None)
+            else:
+                sys.modules[name] = module

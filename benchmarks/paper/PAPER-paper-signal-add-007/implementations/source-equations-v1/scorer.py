@@ -8,9 +8,12 @@ No response-based unit selection or sound pooling.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager, ExitStack
 import hashlib
 import json
 import math
+import os
+import stat
 from pathlib import Path
 
 import numpy as np
@@ -172,18 +175,54 @@ def _sha(value):
             and all(c in "0123456789abcdef" for c in value))
 
 
+def _identity(stream):
+    info = os.fstat(stream.fileno())
+    return (info.st_dev, info.st_ino, info.st_size, info.st_mtime_ns, info.st_ctime_ns)
+
+
+@contextmanager
 def _load_array(root, entry):
+    """Keep the authenticated descriptor and mapping alive through scoring."""
     if set(entry) != {"path", "sha256"} or not _sha(entry["sha256"]):
         raise ValueError("every NPY requires a relative path and SHA256")
     path = (root / entry["path"]).resolve()
     if Path(entry["path"]).is_absolute() or not path.is_relative_to(root):
         raise ValueError("array path escapes the operator input root")
-    if sha256_file(path) != entry["sha256"]:
-        raise ValueError("NPY SHA256 mismatch")
-    array = np.load(path, mmap_mode="r", allow_pickle=False)
-    if not isinstance(array, np.ndarray):
-        raise ValueError("only uncompressed NPY arrays are supported")
-    return array
+    flags = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0)
+    descriptor = os.open(path, flags)
+    with os.fdopen(descriptor, "rb") as stream:
+        if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
+            raise ValueError("NPY must be an ordinary file")
+        before = _identity(stream)
+        digest = hashlib.sha256()
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+        if digest.hexdigest() != entry["sha256"]:
+            raise ValueError("NPY SHA256 mismatch")
+        stream.seek(0)
+        version = np.lib.format.read_magic(stream)
+        if version == (1, 0):
+            shape, fortran, dtype = np.lib.format.read_array_header_1_0(stream)
+        elif version in ((2, 0), (3, 0)):
+            # Numeric descriptors use ASCII, common to the v2/v3 encodings.
+            shape, fortran, dtype = np.lib.format.read_array_header_2_0(stream)
+        else:
+            raise ValueError("unsupported NPY version")
+        if dtype.kind not in "iuf" or len(shape) != 2 or min(shape, default=0) <= 0:
+            raise ValueError("NPY must contain a nonempty real numeric matrix")
+        offset = stream.tell()
+        if offset + math.prod(shape) * dtype.itemsize > before[2]:
+            raise ValueError("truncated NPY payload")
+        array = np.memmap(stream, mode="r", dtype=dtype, offset=offset,
+                          shape=shape, order="F" if fortran else "C")
+        try:
+            if _identity(stream) != before:
+                raise ValueError("NPY changed during authentication")
+            yield array
+            if _identity(stream) != before:
+                raise ValueError("NPY changed during scoring")
+        finally:
+            array._mmap.close()
 
 
 def score_panel(manifest, input_root):
@@ -235,12 +274,14 @@ def score_panel(manifest, input_root):
         if (len(times) != 2 or any(type(x) not in (int, float) or not math.isfinite(x)
                                   or x < 0 for x in times)):
             raise ValueError("two finite trial-specific measurement times required")
-        arrays = [_load_array(root, case["arrays"][key]) for key in ARRAY_NAMES]
-        if type(case["time_bins"]) is not int or arrays[0].shape != (case["time_bins"], 512):
-            raise ValueError("prepared arrays must match declared time bins and 512 columns")
-        animal = animals[str(case["animal"])]
-        scores = score_case(*arrays, eligible_mask=animal["eligible_mask"],
-                            unit_ids=animal["unit_ids"], variance_ddof=ddof)
+        with ExitStack() as stack:
+            arrays = [stack.enter_context(_load_array(root, case["arrays"][key]))
+                      for key in ARRAY_NAMES]
+            if type(case["time_bins"]) is not int or arrays[0].shape != (case["time_bins"], 512):
+                raise ValueError("prepared arrays must match declared time bins and 512 columns")
+            animal = animals[str(case["animal"])]
+            scores = score_case(*arrays, eligible_mask=animal["eligible_mask"],
+                                unit_ids=animal["unit_ids"], variance_ddof=ddof)
         results.append({"animal": case["animal"], "sound": case["sound"],
                         "measurement_times_seconds": times, **scores})
     return {

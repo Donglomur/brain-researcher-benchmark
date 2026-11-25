@@ -11,7 +11,8 @@ workbooks, reference positions, model outputs or native method source.
 The normalized validator/projector/scorer and geometry-centroid control are
 benchmark construction code. They do not copy the native COM/MT/GC implementations.
 The scorer retains the accepted benchmark's complete 11-cell/16-condition/5-seed
-scope and balanced metric. Its source is reproduced unchanged; the control only
+scope and balanced metric. Its endpoint and support are retained; the current source corrects premature
+rounding of even-median midpoints. The control only
 changes the dependency locator to the sibling source in this portable package.
 
 The original repository's license and the separate paper/data permissions do not

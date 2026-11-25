@@ -35,7 +35,8 @@ def _baseline(path=None):
              "accepted baseline implementation identity changed")
     spec = importlib.util.spec_from_file_location("bold_baseline_contribution_dependency", path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    # Execute the authenticated snapshot, not a second read of its pathname.
+    exec(compile(body, str(path), "exec"), module.__dict__)
     return module
 
 

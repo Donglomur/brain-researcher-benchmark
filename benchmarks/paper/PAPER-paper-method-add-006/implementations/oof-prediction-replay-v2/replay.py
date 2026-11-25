@@ -93,6 +93,13 @@ def _mean_deviance(y, mu):
     # log1p avoids subtracting two almost equal logarithms near a perfect fit.
     values = np.empty_like(y_pos)
     values[near] = y_pos[near] * (relative_error[near] - np.log1p(relative_error[near]))
+    # At very small relative errors, r - log1p(r) loses its nonzero r**2/2
+    # term. Evaluate the same deviance by a sixth-order series instead. For
+    # |r| <= 1e-4, the omitted tail relative to the leading term is < 3e-21.
+    tiny = np.abs(relative_error) <= 1e-4
+    r = relative_error[tiny]
+    values[tiny] = (y_pos[tiny] * r * r
+                    * (0.5 + r * (-1/3 + r * (0.25 + r * (-0.2 + r/6)))))
     values[~near] = (mu_pos[~near] - y_pos[~near]
                      + y_pos[~near] * (np.log(y_pos[~near]) - np.log(mu_pos[~near])))
     term[positive] = values

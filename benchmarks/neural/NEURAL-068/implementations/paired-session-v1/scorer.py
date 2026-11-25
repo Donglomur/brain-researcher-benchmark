@@ -202,7 +202,8 @@ def score(layout, submission, target_loader):
         group = grouped[row["session"]]
         group["runs"].append({"run": row["run"], "full_rows": len(row["row_ids"]), "scored_rows": len(selected),
                               "calibration_labeled_rows": row["calibration_labeled_rows"]})
-        group["targets"].extend(gold["targets"][i] for i in selected)
+        # Freeze admitted rows before a later target callback reuses its buffers.
+        group["targets"].extend(list(gold["targets"][i]) for i in selected)
         for arm in ARMS:
             for budget in BUDGETS:
                 values = contexts[context_id(row["run"], arm, budget)]["predictions"]

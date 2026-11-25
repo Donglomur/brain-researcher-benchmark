@@ -6,9 +6,11 @@ labels, or promotes engineering controls to scientific admission.
 from __future__ import annotations
 import argparse
 from collections import defaultdict
+from contextlib import contextmanager
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 import shutil
 import tempfile
@@ -43,6 +45,33 @@ def digest(path, algorithm='sha256'):
         for part in iter(lambda: stream.read(1024 * 1024), b''):
             h.update(part)
     return h.hexdigest()
+
+def _source_stat(stream):
+    record = os.fstat(stream.fileno())
+    return (record.st_dev, record.st_ino, record.st_size,
+            record.st_mtime_ns, record.st_ctime_ns)
+
+
+@contextmanager
+def _authenticated_spikeinfo(source, asset, source_kind):
+    """Hash and decode one descriptor; refuse observed in-place mutations."""
+    with source.open('rb') as stream:
+        before = _source_stat(stream)
+        if source_kind == 'source_asset':
+            require(before[2] == asset['bytes'], 'source byte size differs from frozen inventory')
+        sha256, md5 = hashlib.sha256(), hashlib.md5()
+        for part in iter(lambda: stream.read(1024 * 1024), b''):
+            sha256.update(part)
+            md5.update(part)
+        require(_source_stat(stream) == before, 'source changed during authentication')
+        if source_kind == 'source_asset':
+            require('md5:' + md5.hexdigest() == asset['checksum'],
+                    'source MD5 differs from frozen inventory')
+        stream.seek(0)
+        yield stream, {'name': source.name, 'bytes': before[2],
+                       'sha256': sha256.hexdigest()}
+        require(_source_stat(stream) == before, 'source changed during conversion')
+
 
 def integer(value, label):
     require(isinstance(value, (int, np.integer)) and not isinstance(value, (bool, np.bool_)), f'{label} must be integer')
@@ -88,72 +117,70 @@ def convert_spikeinfo(source, destination, dataset, *, source_kind='source_asset
     require(source_kind in ('source_asset', 'generated_engineering_control'), 'invalid source_kind')
     require(not destination.exists(), 'destination already exists')
     asset = ROSTER[dataset]
-    if source_kind == 'source_asset':
-        require(source.stat().st_size == asset['bytes'], 'source byte size differs from frozen inventory')
-        require('md5:' + digest(source, 'md5') == asset['checksum'], 'source MD5 differs from frozen inventory')
     destination.parent.mkdir(parents=True, exist_ok=True)
     staging = Path(tempfile.mkdtemp(prefix='.spikeinfo-', dir=destination.parent))
     try:
-        with h5py.File(source, 'r') as h:
-            require('spikeInfo' in h, 'missing spikeInfo')
-            g = h['spikeInfo']
-            require('RatName' in g and g['RatName'].ndim == 2 and g['RatName'].shape[1] == 1, 'RatName must have source N x 1 reference layout')
-            n = g['RatName'].shape[0]
-            require(n > 0, 'empty unit population')
-            fields = ['SpikeTimes', 'SessionIndex', 'Waveform', 'Kcoords', 'Xcoords', 'Ycoords']
-            if 'PETH' in g:
-                fields.append('PETH')
-            for name in fields:
-                require(name in g and g[name].shape == (n, 1), f'{name} must have source N x 1 reference layout')
-                require(h5py.check_dtype(ref=g[name].dtype) is not None, f'{name} must contain HDF5 references')
-            def deref(name, unit):
-                ref = g[name][unit, 0]
-                require(bool(ref), f'null {name} reference')
-                return finite_array(h[ref][()], name)
-            coords = {name: deref(name, 0).reshape(-1) for name in ('Kcoords','Xcoords','Ycoords')}
-            channels = len(coords['Xcoords'])
-            require(channels > 0 and all(len(v) == channels for v in coords.values()), 'coordinate channel counts differ')
-            require(np.equal(coords['Kcoords'], np.floor(coords['Kcoords'])).all(), 'channel shanks must be integral')
-            waveforms, sessions, peths = [], [], []
-            (staging / 'spike_times').mkdir()
-            for unit in range(n):
-                # The author uses the first coordinate reference; reject disagreement
-                # so this independent bridge cannot silently discard a channel map.
-                for name in coords:
-                    require(np.array_equal(deref(name, unit).reshape(-1), coords[name]), f'{name} varies by unit')
-                waveform = deref('Waveform', unit)
-                require(waveform.ndim == 2 and waveform.shape[1] == channels, 'source waveform must be samples x channels')
-                waveform = waveform.T
-                require(not waveforms or waveform.shape == waveforms[0].shape, 'inconsistent waveform shape')
-                waveforms.append(waveform)
-                session = deref('SessionIndex', unit).reshape(-1)
-                require(session.size == 1 and session[0] >= 1 and session[0] == math.floor(session[0]), 'session must be positive integer scalar')
-                sessions.append(int(session[0]))
-                times = deref('SpikeTimes', unit).reshape(-1)
-                require(np.all(times >= 0) and np.all(np.diff(times) >= 0), 'spike times must be ordered nonnegative milliseconds')
-                np.save(staging / 'spike_times' / f'Unit{unit}.npy', times, allow_pickle=False)
+        with _authenticated_spikeinfo(source, asset, source_kind) as (source_stream, source_identity):
+            with h5py.File(source_stream, 'r') as h:
+                require('spikeInfo' in h, 'missing spikeInfo')
+                g = h['spikeInfo']
+                require('RatName' in g and g['RatName'].ndim == 2 and g['RatName'].shape[1] == 1, 'RatName must have source N x 1 reference layout')
+                n = g['RatName'].shape[0]
+                require(n > 0, 'empty unit population')
+                fields = ['SpikeTimes', 'SessionIndex', 'Waveform', 'Kcoords', 'Xcoords', 'Ycoords']
                 if 'PETH' in g:
-                    feature = deref('PETH', unit).squeeze()
-                    require(feature.ndim == 1 and len(feature) > 1, 'PETH must be a vector')
-                    require(not peths or feature.shape == peths[0].shape, 'inconsistent PETH shape')
-                    peths.append(feature)
-            unique = sorted(set(sessions))
-            require(unique[0] == 1 and unique[-1] == len(unique), 'session indices must be contiguous from one; no silent renumbering')
-            arrays = {
-                'waveform_all.npy': np.stack(waveforms),
-                'session_index.npy': np.asarray(sessions, dtype=np.int64),
-                'channel_locations.npy': np.column_stack((coords['Xcoords'], coords['Ycoords'])),
-                'channel_shanks.npy': coords['Kcoords'],
-            }
-            if peths:
-                arrays['peth.npy'] = np.stack(peths)
-            for name, array in arrays.items():
-                np.save(staging / name, array, allow_pickle=False)
+                    fields.append('PETH')
+                for name in fields:
+                    require(name in g and g[name].shape == (n, 1), f'{name} must have source N x 1 reference layout')
+                    require(h5py.check_dtype(ref=g[name].dtype) is not None, f'{name} must contain HDF5 references')
+                def deref(name, unit):
+                    ref = g[name][unit, 0]
+                    require(bool(ref), f'null {name} reference')
+                    return finite_array(h[ref][()], name)
+                coords = {name: deref(name, 0).reshape(-1) for name in ('Kcoords','Xcoords','Ycoords')}
+                channels = len(coords['Xcoords'])
+                require(channels > 0 and all(len(v) == channels for v in coords.values()), 'coordinate channel counts differ')
+                require(np.equal(coords['Kcoords'], np.floor(coords['Kcoords'])).all(), 'channel shanks must be integral')
+                waveforms, sessions, peths = [], [], []
+                (staging / 'spike_times').mkdir()
+                for unit in range(n):
+                    # The author uses the first coordinate reference; reject disagreement
+                    # so this independent bridge cannot silently discard a channel map.
+                    for name in coords:
+                        require(np.array_equal(deref(name, unit).reshape(-1), coords[name]), f'{name} varies by unit')
+                    waveform = deref('Waveform', unit)
+                    require(waveform.ndim == 2 and waveform.shape[1] == channels, 'source waveform must be samples x channels')
+                    waveform = waveform.T
+                    require(not waveforms or waveform.shape == waveforms[0].shape, 'inconsistent waveform shape')
+                    waveforms.append(waveform)
+                    session = deref('SessionIndex', unit).reshape(-1)
+                    require(session.size == 1 and session[0] >= 1 and session[0] == math.floor(session[0]), 'session must be positive integer scalar')
+                    sessions.append(int(session[0]))
+                    times = deref('SpikeTimes', unit).reshape(-1)
+                    require(np.all(times >= 0) and np.all(np.diff(times) >= 0), 'spike times must be ordered nonnegative milliseconds')
+                    np.save(staging / 'spike_times' / f'Unit{unit}.npy', times, allow_pickle=False)
+                    if 'PETH' in g:
+                        feature = deref('PETH', unit).squeeze()
+                        require(feature.ndim == 1 and len(feature) > 1, 'PETH must be a vector')
+                        require(not peths or feature.shape == peths[0].shape, 'inconsistent PETH shape')
+                        peths.append(feature)
+                unique = sorted(set(sessions))
+                require(unique[0] == 1 and unique[-1] == len(unique), 'session indices must be contiguous from one; no silent renumbering')
+                arrays = {
+                    'waveform_all.npy': np.stack(waveforms),
+                    'session_index.npy': np.asarray(sessions, dtype=np.int64),
+                    'channel_locations.npy': np.column_stack((coords['Xcoords'], coords['Ycoords'])),
+                    'channel_shanks.npy': coords['Kcoords'],
+                }
+                if peths:
+                    arrays['peth.npy'] = np.stack(peths)
+                for name, array in arrays.items():
+                    np.save(staging / name, array, allow_pickle=False)
         files = [{ 'path': str(p.relative_to(staging)), 'bytes': p.stat().st_size, 'sha256': digest(p)} for p in sorted(staging.rglob('*.npy'))]
         receipt = {
             'task_id': TASK_ID, 'contract_sha256': CONTRACT_SHA256,
             'source_kind': source_kind, 'dataset': dataset, 'source_code_revision': REVISION,
-            'source': {'name': source.name, 'bytes': source.stat().st_size, 'sha256': digest(source)},
+            'source': source_identity,
             'frozen_asset': asset, 'unit_count': n, 'session_count': len(unique),
             'units': [{'unit_id': i, 'session': s} for i, s in enumerate(sessions)],
             'files': files, 'spike_time_unit': 'source values unchanged; pinned settings assume milliseconds; native metadata verification held',

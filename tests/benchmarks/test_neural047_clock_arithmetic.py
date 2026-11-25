@@ -276,8 +276,8 @@ class CurrentSourceBinding(unittest.TestCase):
             if {"bytes": len(body), "sha256": hashlib.sha256(body).hexdigest()} != {
                     key: item[key] for key in ("bytes", "sha256")}:
                 changed.append(item["path"])
-        self.assertEqual(changed, ["program/legacy/history.py"])
-        old_history = next(item for item in manifest["files"] if item["path"] == changed[0])
+        self.assertEqual(changed, ["program/legacy/features.py", "program/legacy/history.py"])
+        old_history = next(item for item in manifest["files"] if item["path"] == "program/legacy/history.py")
         self.assertEqual(descriptor["predecessor_history"], old_history)
         self.assertFalse(descriptor["native_manifest_selection"])
         self.assertFalse(descriptor["scientific_qualification"])
@@ -306,7 +306,7 @@ class RuntimeSourceIdentity(unittest.TestCase):
         self.assertEqual([r["path"] for r in self.current["files"]],
                          [r["path"] for r in self.historical["files"]])
         self.assertEqual([new["path"] for new, old in zip(self.current["files"], self.historical["files"])
-                          if new != old], ["program/legacy/history.py"])
+                          if new != old], ["program/legacy/features.py", "program/legacy/history.py"])
         self.deployment.code_snapshot(PACKAGE, self.current, self.ledger())
         with tempfile.TemporaryDirectory(prefix="neural047-current-source-") as temporary:
             ledger = self.ledger()

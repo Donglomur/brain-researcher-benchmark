@@ -201,14 +201,19 @@ def replay(document, candidate=None):
             "qualification": "software_replay_only"}
 
 
-def load_json(path):
+def _load_json_snapshot(path):
+    raw = Path(path).read_bytes()
     def pairs(items):
         result = {}
         for key, value in items:
             require(key not in result, "duplicate JSON object key: " + key)
             result[key] = value
         return result
-    return json.loads(Path(path).read_text(), object_pairs_hook=pairs)
+    return json.loads(raw.decode("utf-8"), object_pairs_hook=pairs), hashlib.sha256(raw).hexdigest()
+
+
+def load_json(path):
+    return _load_json_snapshot(path)[0]
 
 
 def main():
@@ -220,10 +225,12 @@ def main():
     output = Path(args.output).resolve()
     inputs = [Path(x).resolve() for x in (args.author_export, args.candidate) if x]
     require(output not in inputs, "output cannot overwrite an input")
-    result = replay(load_json(args.author_export), load_json(args.candidate) if args.candidate else None)
-    result["author_export_sha256"] = hashlib.sha256(inputs[0].read_bytes()).hexdigest()
+    document, author_hash = _load_json_snapshot(inputs[0])
+    candidate, candidate_hash = _load_json_snapshot(inputs[1]) if args.candidate else (None, None)
+    result = replay(document, candidate)
+    result["author_export_sha256"] = author_hash
     if args.candidate:
-        result["candidate_file_sha256"] = hashlib.sha256(inputs[1].read_bytes()).hexdigest()
+        result["candidate_file_sha256"] = candidate_hash
     with output.open("x") as handle:
         json.dump(result, handle, indent=2, allow_nan=False)
         handle.write("\n")

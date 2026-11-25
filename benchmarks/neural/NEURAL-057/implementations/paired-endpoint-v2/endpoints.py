@@ -60,8 +60,10 @@ def mean_loss(values):
     require(bool(values), "nonempty complete endpoint support")
     if any(math.isinf(x) for x in values):
         return math.inf
-    # Dividing first avoids overflow when the representable mean is finite.
-    return math.fsum(x / len(values) for x in values)
+    # Admitted Bernoulli losses are bounded by -log(minimum positive
+    # binary64), with at most200 concepts or10 people. Their sum is finite.
+    # Sum before division so representable subnormal means are not erased.
+    return math.fsum(values) / len(values)
 
 
 def difference(left, right):
@@ -139,7 +141,7 @@ def contrast(index_left, index_right, mode, left_panel, right_panel):
                    "concept_sem_ddof1": None}
     if all(x["status"] == "finite" for x in persons.values()):
         values = [persons[p]["value"] for p in PEOPLE]
-        mean = math.fsum(v / 10 for v in values)
+        mean = math.fsum(values) / 10
         # The inputs originate as bounded finite Bernoulli losses. No subset
         # estimate is substituted if an actual endpoint is infinite/undefined.
         sem = math.sqrt(math.fsum((v - mean) ** 2 for v in values) / 90)

@@ -12,7 +12,7 @@ import re
 
 TASK = "PAPER-paper-method-replacement-009"
 REGIONS = frozenset(("PO", "LP", "DG", "CA1", "VISa"))
-METRICS_SHA256 = "833da18fb4f0e7f792ffb032c1d50b4c7556064ab9419ebe5b2f24ee8f671435"
+METRICS_SHA256 = "babce8d4b10837d6d9b0307adc10e0ab35d83f5c57bd1e8f8580d0aba7543a4d"
 MAX_DOCUMENT_BYTES = 64 * 1024 * 1024
 
 

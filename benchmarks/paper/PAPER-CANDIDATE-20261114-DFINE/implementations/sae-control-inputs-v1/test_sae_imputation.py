@@ -1,4 +1,7 @@
 import copy
+from fractions import Fraction
+import math
+import sys
 import importlib.util
 from pathlib import Path
 import unittest
@@ -71,6 +74,31 @@ class SAEControlInputs(unittest.TestCase):
             with self.subTest(args=args):
                 with self.assertRaises(module.ImputationError):
                     impute(*args)
+
+    def test_neighbor_average_preserves_representable_subnormal_values(self):
+        tiny = math.ulp(0.0)
+        for endpoint in (tiny, -tiny, 3 * tiny, -3 * tiny):
+            with self.subTest(endpoint=endpoint):
+                rows = [[endpoint], None, None, [endpoint]]
+                self.assertEqual(
+                    impute(rows, "1001", "sae_average_smooth", 1),
+                    [[endpoint], [endpoint], [endpoint], [endpoint]])
+                self.assertEqual(rows, [[endpoint], None, None, [endpoint]])
+
+    def test_neighbor_average_matches_exact_binary_midpoint(self):
+        tiny = math.ulp(0.0)
+        largest = sys.float_info.max
+        pairs = [(tiny, 2 * tiny), (tiny, -3 * tiny),
+                 (-tiny, -2 * tiny), (largest, largest),
+                 (-largest, -largest), (largest, -largest),
+                 (largest, math.nextafter(largest, 0.0)),
+                 (2.0, 10.0), (-4.0, 8.0)]
+        for a, b in pairs:
+            with self.subTest(a=a, b=b):
+                expected = float((Fraction(a) + Fraction(b)) / 2)
+                self.assertEqual(
+                    impute([[a], None, [b]], "101", "sae_average_smooth", 1),
+                    [[a], [expected], [b]])
 
     def test_midpoint_of_finite_extremes_stays_finite(self):
         self.assertEqual(impute([[1e308], None, [1e308]], "101",

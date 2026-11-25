@@ -93,6 +93,16 @@ def squared(value):
     return result
 
 
+def normalized_squared(error, variance):
+    """Preserve a representable NSE when the unnormalized square underflows."""
+    value = squared(error)
+    if value == 0.0 and error != 0.0:
+        # The variance is positive and finite from fit_training(). Normalize
+        # first only when squaring discarded a nonzero residual entirely.
+        return squared(error / math.sqrt(variance))
+    return value / variance
+
+
 def unit_key(row):
     return row["monkey"], row["unit_id"]
 
@@ -334,10 +344,10 @@ def score(owner, submission, candidate_program_bytes):
         key = unit_key(target)
         cid = target["condition_id"]
         scale = fitted[key]["variance"]
-        cell_errors[(key, cid)].append(mean(squared(p - y) / scale
+        cell_errors[(key, cid)].append(mean(normalized_squared(p - y, scale)
                                             for p, y in zip(pred["values"], target["values"])))
         control = fitted[key]["condition_means"][cid]
-        cell_baselines[(key, cid)].append(mean(squared(p - y) / scale
+        cell_baselines[(key, cid)].append(mean(normalized_squared(p - y, scale)
                                                for p, y in zip(control, target["values"])))
     per_unit = []
     for key in sorted(checked["eligible"]):

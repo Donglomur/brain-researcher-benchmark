@@ -21,7 +21,7 @@ METHODS = (
     "default-mlspike", "tuned-mlspike",
 )
 COMPARISON_BASELINES = ("gc8-pooled-cascade", "gc8-variant-cascade")
-METRIC_SHA256 = "222cf71530a1e02c89eeee59db02811cfeba96f31c41d0c09a3a7a506df41e05"
+METRIC_SHA256 = "f16acb1c0ae81efddf25885796c29e37f07970006e2c024944810c31a6fbdf51"
 METRIC_PATH = Path(__file__).resolve().parent.parent / "author-rate-metrics-v1" / "metrics.py"
 
 
