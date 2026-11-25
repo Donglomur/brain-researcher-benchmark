@@ -8,6 +8,7 @@ import json
 import math
 import re
 from collections import Counter
+from fractions import Fraction
 from roster import FIELDS, ROSTER
 
 CONTRACT_SHA256 = "a0fc7cd1008f907df8d24c8a2133896d99b90915764debd141194022914f301f"
@@ -187,7 +188,15 @@ def session_score(queries, values, invalidate_all):
         confusion[y][predicted] += 1
         distance = abs(predicted - y)
         angles.append(45.0 * min(distance, 8 - distance))
-        briers.append(math.fsum((p[i] - int(i == y)) ** 2 for i in range(8)))
+        residuals = [p[i] - int(i == y) for i in range(8)]
+        squares = [r ** 2 for r in residuals]
+        if any(r != 0 and square < float.fromhex("0x1p-1022")
+               for r, square in zip(residuals, squares)):
+            # Round the complete sum once when individual squares underflow.
+            # Normal-range inputs keep the established reduction unchanged.
+            briers.append(float(sum((Fraction(r) ** 2 for r in residuals), Fraction())))
+        else:
+            briers.append(math.fsum(squares))
         b = bins[min(9, int(max(p) * 10))]
         b["count"] += 1
         b["confidence_sum"] += max(p)

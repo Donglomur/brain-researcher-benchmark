@@ -25,7 +25,7 @@ class DeliveryError(ValueError):
 
 _DEPENDENCIES = {
     "roster": (2755, "0f1ac943d56edc5305be4ba74f5d27c8cfa626e555092b7a51a1f6f2641dd4c9"),
-    "scorer": (14394, "6956a375c850a21abab2febc99cb3579900e74606cf3dd199ac2661ab0270dc7"),
+    "scorer": (14874, "11d1b2a330d5c32c6c2ea93c5c54de5d58c9d4d31008ccafd235afa3a732ad50"),
 }
 _FOLD = re.compile(r"fold_[0-9a-f]{32}\Z")
 _ID = re.compile(r"q_[0-9a-f]{32}\Z")

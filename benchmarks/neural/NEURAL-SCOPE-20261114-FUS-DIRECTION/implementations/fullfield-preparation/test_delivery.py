@@ -11,9 +11,9 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parent
-UNCHANGED = {
+CURRENT = {
     'fullfield.py': (12927, '20fe65ee870ae6a7a18c8534e3b935cdd30b75b49993adb9a644ff0f9b1422d6'),
-    'scorer.py': (14394, '6956a375c850a21abab2febc99cb3579900e74606cf3dd199ac2661ab0270dc7'),
+    'scorer.py': (14874, '11d1b2a330d5c32c6c2ea93c5c54de5d58c9d4d31008ccafd235afa3a732ad50'),
     'roster.py': (2755, '0f1ac943d56edc5305be4ba74f5d27c8cfa626e555092b7a51a1f6f2641dd4c9'),
     'test_fullfield.py': (10939, '2c3d0d20a321dc1f4f15bb15c769eb7a3f7f008ad7c1899c1bcb6ea7703a265e'),
 }
@@ -60,8 +60,8 @@ class PortableChecks(unittest.TestCase):
         self.assertLessEqual(len(result.stdout.encode()) + len(result.stderr.encode()), 16384)
         return result
 
-    def test_unchanged_science_and_preserved_independent_function_bodies(self):
-        for name, expected in UNCHANGED.items():
+    def test_current_source_and_preserved_independent_function_bodies(self):
+        for name, expected in CURRENT.items():
             raw = (self.root / name).read_bytes()
             self.assertEqual((len(raw), hashlib.sha256(raw).hexdigest()), expected)
         provenance = json.loads((self.root / 'PROVENANCE.json').read_bytes())
