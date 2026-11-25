@@ -85,9 +85,21 @@ jobs:
                   os.close(parent)
 
           local_pins = [
-              {"path": "scripts/maintenance/run_exp003_generated_r.py", "bytes": 16284, "sha256": "c977988004b0863f4d378afb5f81ca9534dee590c4d41b8bed018e74cd68b78a"},
-              {"path": "benchmarks/integrity/exp003-generated-r.environment.v1.json", "bytes": 10187, "sha256": "3002e0888d52b3aa9391aa5a1e8c6f029a3524caa5577df0832d29fee0eafbf6"},
-              {"path": "tests/maintenance/test_exp003_generated_r.py", "bytes": 20215, "sha256": "132dcabf7c1228caa19d022216f1f47baec542ac0a14eba69e6d461aeb9f4216"},
+              {
+                  "path": "scripts/maintenance/run_exp003_generated_r.py",
+                  "bytes": 16356,
+                  "sha256": "b3c91d860ab8ad5113f070239b0bd86546881dbe5399c2c7d8a5dd89a149f17e"
+              },
+              {
+                  "path": "benchmarks/integrity/exp003-generated-r.environment.v1.json",
+                  "bytes": 11499,
+                  "sha256": "ebedf0f6be837d58fa30c6fac2e637263ecd8c94828f312b70dc59115c6dcdac"
+              },
+              {
+                  "path": "tests/maintenance/test_exp003_generated_r.py",
+                  "bytes": 21205,
+                  "sha256": "e22f5e5019b62976846b2c80c033b8735affd70a882a7c7a3c91398b135ea1d0"
+              }
           ]
           verified = {item["path"]: pinned(Path(item["path"]), item["bytes"], item["sha256"]) for item in local_pins}
           p = sys.argv[1]

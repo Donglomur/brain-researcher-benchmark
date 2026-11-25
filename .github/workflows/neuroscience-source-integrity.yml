@@ -3502,7 +3502,7 @@ jobs:
               raise RuntimeError("source controls require assertions enabled")
           root = pathlib.Path("benchmarks/neural/NEURAL-SCOPE-20261114-LOCALIZATION/implementations/centroid-scorer").resolve()
           body = (root / "SOURCE.json").read_bytes()
-          if len(body) != 1821 or hashlib.sha256(body).hexdigest() != "d8903d3d8c15fda04f7c74b8aeb732f7f14bfd8b71e34a5181ea6d9c221ff9e6":
+          if len(body) != 2260 or hashlib.sha256(body).hexdigest() != "93951320ccee674f67281ec338e51603cb4cab33490102a08bc213b93201284f":
               raise RuntimeError("selected localization source distribution changed")
           distribution = json.loads(body)
           for member in distribution["files"]:
@@ -3857,7 +3857,7 @@ jobs:
           if root.is_symlink() or not root.is_dir() or manifest.is_symlink() or not manifest.is_file():
               raise RuntimeError('ordinary component directory and manifest required')
           raw = manifest.read_bytes()
-          if len(raw) != 1734 or hashlib.sha256(raw).hexdigest() != '8bde2b2f23b0a12110741b6461b82dbc8a8cbb128068c8e7a95713fa8ed6ee8e':
+          if len(raw) != 1941 or hashlib.sha256(raw).hexdigest() != '737180ba393b861e081e7e277139fa79c22f2ff029da6ce8702c24c50a69daf5':
               raise RuntimeError('selected fUS source distribution changed')
           members = json.loads(raw)['files']
           expected = {member['path'] for member in members} | {'SOURCE.json'}

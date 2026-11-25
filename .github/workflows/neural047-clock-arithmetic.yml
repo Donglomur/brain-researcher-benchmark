@@ -47,13 +47,18 @@ jobs:
           rows = [
               {
                   "path": "benchmarks/integrity/current-closures/numeric-neural047/SOURCE.json",
-                  "bytes": 6995,
-                  "sha256": "30d20c62884f03d630566b6c9731eefe256ba191f4841e8664d707a2c059a785"
+                  "bytes": 7654,
+                  "sha256": "e40eb56436fbdde96d26f9d76c7722f4fd88916589962d34e9d7f2d5460beb4e"
+              },
+              {
+                  "path": "benchmarks/neural/NEURAL-047/historical/task.pre-understanding.v1.json",
+                  "bytes": 10439,
+                  "sha256": "860e5f137bc2e2d1b73decdd75414264d2526dd3b09e66d301bbe22c6db077ef"
               },
               {
                   "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/CURRENT_RUNTIME_SOURCE_MANIFEST.json",
                   "bytes": 4274,
-                  "sha256": "87501a1a940ba7e2fe6f832885ccaf3cc1435ae914a40d06de6551832526944f"
+                  "sha256": "0a654f8beb04bfc9f9035fe2e046a24cc4abf4819f1ce93e37776c5e6d359b0a"
               },
               {
                   "bytes": 717,
@@ -77,8 +82,8 @@ jobs:
               },
               {
                   "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/README.md",
-                  "bytes": 7055,
-                  "sha256": "7d8db4076269f66ad61e7d0f1cecd4e9daf575f810e41f66d580faee97bfed4e"
+                  "bytes": 8287,
+                  "sha256": "ace342ad263e93e931ddd7bd474463bb759fb77db23ae2fd03681339bf84d1c0"
               },
               {
                   "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/RUNTIME_SOURCE_MANIFEST.json",
@@ -151,14 +156,14 @@ jobs:
                   "sha256": "9ba54409ff3aae8e17d2c0e96f1c5f335fa46cd33aeaf83d3be427a8ebf585d7"
               },
               {
-                  "bytes": 1836,
+                  "bytes": 2200,
                   "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/legacy/features.py",
-                  "sha256": "91eb0446aad27e7179f25ebb052af4977879d5613ec0955e6633b39866b6361e"
+                  "sha256": "5ce99f60bee8027a31ee4c409c63441348d9dfd682495bbd716d868b6c25e56f"
               },
               {
-                  "bytes": 9230,
+                  "bytes": 9486,
                   "path": "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3/program/legacy/history.py",
-                  "sha256": "b038c5013ab01b7a3239493ddf8ebcd7969548fa9f02d9446d13b41aec228f22"
+                  "sha256": "6044bd00fa1f6a505fce5d5cc66d4a6d4356479aaa64e40760c212b4532e165b"
               },
               {
                   "bytes": 7895,
@@ -221,21 +226,26 @@ jobs:
                   "sha256": "07c8ea453fc70ed09285086adb550452adb3f1be2301e843e96ce912f47f724e"
               },
               {
-                  "path": "benchmarks/neural/NEURAL-047/historical/task.pre-understanding.v1.json",
-                  "bytes": 10439,
-                  "sha256": "860e5f137bc2e2d1b73decdd75414264d2526dd3b09e66d301bbe22c6db077ef"
+                  "path": "tests/benchmarks/test_neural047_clock_arithmetic.py",
+                  "bytes": 18808,
+                  "sha256": "2da1756de35e84fcaeae89bc05f7fe5921237f266aa46da645f61b5e231d25a6"
               },
               {
-                  "path": "tests/benchmarks/test_neural047_clock_arithmetic.py",
-                  "bytes": 18731,
-                  "sha256": "f088b4118506057c7f6ae6280e30aea5255b175c0948a05fe37e22d0e96ab47b"
+                  "path": "tests/benchmarks/test_neural047_direction_underflow.py",
+                  "bytes": 5599,
+                  "sha256": "3d8f284f53bc722dbd05f2a7eabb518aca46f278b2f44b1d63cd7e059dd1f72d"
+              },
+              {
+                  "path": "tests/benchmarks/test_neural047_summary_underflow.py",
+                  "bytes": 3192,
+                  "sha256": "06ed50cdf671476db1c44134f16696df852ae7df56ee17189a38043db4372241"
               }
           ]
           packages = [
               "benchmarks/neural/NEURAL-047/implementations/neural-047/full-conditional-programme-v3"
           ]
-          assert len(rows) == 37 > 0
-          assert sum(row['bytes'] for row in rows) == 202398 <= 33554432
+          assert len(rows) == 39 > 0
+          assert sum(row['bytes'] for row in rows) == 213777 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -278,7 +288,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 202398,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 213777,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -290,15 +300,23 @@ jobs:
           import json
           import sys
           import unittest
-          suite = unittest.defaultTestLoader.discover('tests/benchmarks', pattern='test_neural047_clock_arithmetic.py')
+          suite = unittest.defaultTestLoader.discover('tests/benchmarks', pattern='test_neural047_*.py')
+          def case_ids(node):
+              if isinstance(node, unittest.TestSuite):
+                  return [identity for child in node for identity in case_ids(child)]
+              return [node.id()]
+          expected_ids = ['test_neural047_clock_arithmetic.ClockArithmetic.test_both_existing_feature_validators_remain_strict', 'test_neural047_clock_arithmetic.ClockArithmetic.test_coarse_clock_excludes_five_second_history_and_two_second_landmark', 'test_neural047_clock_arithmetic.ClockArithmetic.test_complete_generated_panel_keeps_all_animals_events_and_views', 'test_neural047_clock_arithmetic.ClockArithmetic.test_complete_maximal_event_roster_is_still_required', 'test_neural047_clock_arithmetic.ClockArithmetic.test_exact_endpoints_are_inclusive', 'test_neural047_clock_arithmetic.ClockArithmetic.test_existing_endpoint_exclusions_and_sign_are_preserved', 'test_neural047_clock_arithmetic.ClockArithmetic.test_generated_integer_and_fractional_clock_families', 'test_neural047_clock_arithmetic.ClockArithmetic.test_lower_boundary_and_adjacent_represented_values', 'test_neural047_clock_arithmetic.ClockArithmetic.test_missing_channel_at_excluded_lower_sample_is_not_used', 'test_neural047_clock_arithmetic.ClockArithmetic.test_mixed_integer_float_difference_is_rounded_only_once', 'test_neural047_clock_arithmetic.ClockArithmetic.test_native_gap_at_lower_boundary_still_rejects', 'test_neural047_clock_arithmetic.ClockArithmetic.test_new_boundary_exclusion_cannot_silently_drop_an_animal', 'test_neural047_clock_arithmetic.ClockArithmetic.test_ordinary_landmark_waits_for_minimum_elapsed_time', 'test_neural047_clock_arithmetic.ClockArithmetic.test_outside_landmark_and_short_reversal_remain_exclusions', 'test_neural047_clock_arithmetic.ClockArithmetic.test_recording_coverage_uses_exact_boundary', 'test_neural047_clock_arithmetic.ClockArithmetic.test_relative_float_rounding_does_not_expand_membership', 'test_neural047_clock_arithmetic.ClockArithmetic.test_unrepresentable_offsets_abort_extraction_and_whole_panel', 'test_neural047_clock_arithmetic.CurrentSourceBinding.test_current_source_and_predecessor_are_explicitly_distinct', 'test_neural047_clock_arithmetic.RuntimeSourceIdentity.test_changed_manifest_bytes_cannot_retain_selected_manifest_pin', 'test_neural047_clock_arithmetic.RuntimeSourceIdentity.test_changed_source_bytes_cannot_retain_current_identity', 'test_neural047_clock_arithmetic.RuntimeSourceIdentity.test_complete_current_identity_passes_both_existing_source_guards', 'test_neural047_clock_arithmetic.RuntimeSourceIdentity.test_historical_manifest_refuses_corrected_source', 'test_neural047_direction_underflow.DirectionUnderflow.test_exact_zero_remains_excluded', 'test_neural047_direction_underflow.DirectionUnderflow.test_nonzero_tiny_direction_survives_complete_three_animal_construction', 'test_neural047_direction_underflow.DirectionUnderflow.test_opposed_mixed_and_boundary_inputs_retain_exact_mean_sign', 'test_neural047_direction_underflow.DirectionUnderflow.test_ordinary_large_and_tiny_nonzero_signs', 'test_neural047_summary_underflow.SummaryUnderflow.test_constant_and_ordinary_features_preserve_declared_values', 'test_neural047_summary_underflow.SummaryUnderflow.test_representable_tiny_spread_survives_binary64_json_and_active_admission', 'test_neural047_summary_underflow.SummaryUnderflow.test_smallest_representable_standard_deviation']
+          actual_ids = sorted(case_ids(suite))
+          assert len(actual_ids) == len(set(actual_ids)), 'Duplicate discovered cases refused'
+          assert actual_ids == expected_ids, 'Discovered case identities differ from reviewed roster'
           actual_count = suite.countTestCases()
-          assert actual_count == 22, f"Expected 22 cases, discovered {actual_count}"
+          assert actual_count == 29, f"Expected 29 cases, discovered {actual_count}"
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 22, f"Expected 22 executed cases, ran {result.testsRun}"
+          assert result.testsRun == 29, f"Expected 29 executed cases, ran {result.testsRun}"
           assert not result.expectedFailures, "Expected-failure tests do not establish completed controls"
           actual_skips = sorted(case.id() for case, _ in result.skipped)
           assert actual_skips == [], f"Unexpected skipped cases: {actual_skips}"
-          print(json.dumps({'test_file': 'tests/benchmarks/test_neural047_clock_arithmetic.py', 'tests_run': result.testsRun,
+          print(json.dumps({'test_files': ['tests/benchmarks/test_neural047_clock_arithmetic.py', 'tests/benchmarks/test_neural047_direction_underflow.py', 'tests/benchmarks/test_neural047_summary_underflow.py'], 'tests_run': result.testsRun,
                             'skipped': actual_skips, 'generated_controls_only': True,
                             'scientific_qualification': False}))
           sys.exit(0 if result.wasSuccessful() else 1)
