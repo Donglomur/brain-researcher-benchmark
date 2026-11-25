@@ -1,7 +1,9 @@
 """Continuous descriptive errors and separate support/qualification checks."""
 from __future__ import annotations
 
+from fractions import Fraction
 import math
+import sys
 
 from trajectory import METHOD, REASONS, TrajectoryError, require
 
@@ -89,6 +91,23 @@ def expected_answer(reference):
             "uncertainty": {"status": "not_qualified", "reason_codes": list(REASONS)}}
 
 
+def _mean_absolute_error(values):
+    """Keep ordinary reduction, without erasing representable tiny errors."""
+    count = len(values)
+    scaled = [value / count for value in values]
+    # The complete answer has at most192 values per field. Exact binary
+    # accumulation is bounded and avoids rounding every subnormal term away.
+    if any(value > 0 and part < sys.float_info.min
+           for value, part in zip(values, scaled)):
+        return float(sum((Fraction(value) for value in values), Fraction()) / count)
+    try:
+        return math.fsum(scaled)
+    except OverflowError:
+        # Finite nonnegative operands have a finite mean even when the
+        # rounded intermediate sum overflows.
+        return float(sum((Fraction(value) for value in values), Fraction()) / count)
+
+
 def grade(reference, answer):
     """Grade against an operator-owned frozen reference; no binary paper win.
 
@@ -133,7 +152,7 @@ def grade(reference, answer):
     complete_numeric = not missing_numeric and bool(errors[NUMERIC_FIELDS[0]])
     numerical = {}
     for field, values in errors.items():
-        numerical[field] = ({"mean_absolute_error_hz": math.fsum(v/len(values) for v in values),
+        numerical[field] = ({"mean_absolute_error_hz": _mean_absolute_error(values),
                              "max_absolute_error_hz": max(values), "scored_values": len(values)}
                             if complete_numeric else None)
     return {
