@@ -24,7 +24,7 @@ def _dependency(name, relative, expected):
 TRAIN = _dependency("retina_constant_train", "training-response/train_only.py",
     "ddae29d684b1c808156529538dd9f1153697023c82f4fc523b1af0edc06521ce")
 SCORE = _dependency("retina_constant_score", "protected-scoring-v1/scorer.py",
-    "2c61c9c04657ab4a63dc5fabe0540b671c73ec413b499a0f11b33c3ae4f3c51b")
+    "d991e4453f83f31f547d481d7124571e615f114c779fe0d0fd36edb8e18e75f0")
 SOURCE_SHA256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
 InputError = SCORE.InputError
 need, exact = SCORE.need, SCORE.exact
