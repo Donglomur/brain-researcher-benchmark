@@ -25,7 +25,7 @@ import runtime_contract as contract
 HERE = Path(__file__).resolve().parent
 METHOD = {
     'grade.py': (2251, '0615bdabd0aa402e588c4f1a075dbb0af987965c0a9e9b54a6b17e69313e5774'),
-    'core.py': (7275, '69257f2b7d7931100834f1b36812a3b3652829caa4dbeadf963ccb85e4803550'),
+    'core.py': (9137, 'cfa13c3d1e43e7705221c74c6fe5ba1000934e3a743a014f4682b8445b3f3ed1'),
     'io_utils.py': (2996, '2f0ac23b3456432933c96e6579708b949b1e093659f99ebc6bfce5ae3f222f7e'),
     'source_identity_join.py': (15773, '9abd80cfea2e92a48e59d24af2672e6988faaf45b2397a18c74c57923ab328b3')}
 SHA = re.compile('[0-9a-f]{64}')

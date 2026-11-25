@@ -1,5 +1,6 @@
 """Registered 1s-to-2s calcium response metric; no I/O or fitting."""
 import math
+import sys
 from source_identity_join import support_report
 
 
@@ -33,6 +34,36 @@ def validate(doc, public, np):
     return result
 
 
+def mean_square_and_rms(values, np):
+    """Preserve ordinary reduction; scale only an unrepresentable square mean.
+
+    RMSE may be representable even when its square is subnormal or overflows.
+    Scaling the residuals by their maximum leaves the mathematical RMS intact.
+    The float range dispatch is numerical, not a scientific acceptance tolerance.
+    """
+    with np.errstate(over='ignore', under='ignore', invalid='raise'):
+        square_mean = float(np.mean(values ** 2))
+    if math.isfinite(square_mean) and (square_mean >= sys.float_info.min or not np.any(values)):
+        return square_mean, math.sqrt(square_mean)
+    peak = float(np.max(np.abs(values)))
+    need(math.isfinite(peak) and peak > 0, 'finite complete residuals')
+    rms = peak * math.sqrt(float(np.mean((values / peak) ** 2)))
+    need(math.isfinite(rms) and rms > 0, 'representable nonzero root mean square')
+    return square_mean, rms
+
+
+def normalized_rms(square_mean, rms, scale):
+    if not scale:
+        return None
+    ratio = square_mean / scale
+    if math.isfinite(ratio) and ((square_mean >= sys.float_info.min and ratio >= sys.float_info.min) or rms == 0):
+        return math.sqrt(ratio)
+    value = rms / math.sqrt(scale)
+    need(math.isfinite(value) and (value > 0 or rms == 0),
+         'representable normalized root mean square')
+    return value
+
+
 def grade(doc, public, private_loader, np):
     answer = validate(doc, public, np)
     # The operator's private target reader is called only after every output passes.
@@ -59,27 +90,37 @@ def grade(doc, public, private_loader, np):
                  np.isfinite(y).all() and np.isfinite(baseline).all() and
                  type(scale) in (int, float) and math.isfinite(scale) and scale >= 0,
                  'finite exact private target/baseline geometry')
-            mse = float(np.mean((x - y) ** 2))
-            base_mse = float(np.mean((baseline[None] - y) ** 2))
-            fixed_warp_mse = float(np.mean((fixed_warp[None] - y) ** 2))
-            variance = float(np.mean((y - np.mean(y, axis=(0, 2), keepdims=True)) ** 2))
-            need(all(math.isfinite(z) for z in (mse, base_mse, fixed_warp_mse, variance)), 'representable arithmetic')
-            normalized = math.sqrt(mse / scale) if scale else None
-            base_normalized = math.sqrt(base_mse / scale) if scale else None
-            fixed_warp_normalized = math.sqrt(fixed_warp_mse / scale) if scale else None
-            r2 = 1 - mse / variance if variance else None
+            mse, rmse = mean_square_and_rms(x - y, np)
+            base_mse, base_rmse = mean_square_and_rms(baseline[None] - y, np)
+            fixed_warp_mse, fixed_warp_rmse = mean_square_and_rms(fixed_warp[None] - y, np)
+            # Exact per-cell constancy has zero variance even when a floating
+            # mean of repeated nonzero values has summation roundoff.
+            constant = np.all(y == y[:1, :, :1], axis=(0, 2), keepdims=True)
+            centered = np.where(constant, 0., y)
+            centered = centered - np.mean(centered, axis=(0, 2), keepdims=True)
+            variance, target_rms = mean_square_and_rms(centered, np)
+            normalized = normalized_rms(mse, rmse, scale)
+            base_normalized = normalized_rms(base_mse, base_rmse, scale)
+            fixed_warp_normalized = normalized_rms(fixed_warp_mse, fixed_warp_rmse, scale)
+            if not target_rms:
+                r2 = None
+            elif math.isfinite(mse) and (mse >= sys.float_info.min or rmse == 0) and math.isfinite(variance) and variance >= sys.float_info.min:
+                r2 = 1 - mse / variance
+            else:
+                ratio = rmse / target_rms
+                r2 = 1 - ratio * ratio
             need(all(v is None or math.isfinite(v) for v in (normalized, base_normalized, fixed_warp_normalized, r2)),
                  'representable normalized metrics')
             rows.append({'pair_id': p['pair_id'], 'mouse_id': t['mouse_id'],
                 'query_trials': len(p['query_ids']), 'registered_cells': len(p['cell_ids']),
-                'time_bins': 61, 'rmse': math.sqrt(mse), 'nrmse': normalized,
-                'baseline_nrmse': base_normalized, 'baseline_rmse': math.sqrt(base_mse),
-                'fixed_warp_nrmse': fixed_warp_normalized, 'fixed_warp_rmse': math.sqrt(fixed_warp_mse),
+                'time_bins': 61, 'rmse': rmse, 'nrmse': normalized,
+                'baseline_nrmse': base_normalized, 'baseline_rmse': base_rmse,
+                'fixed_warp_nrmse': fixed_warp_normalized, 'fixed_warp_rmse': fixed_warp_rmse,
                 'r_squared': r2,
                 'candidate_minus_baseline': None if normalized is None else normalized - base_normalized,
                 'candidate_minus_fixed_warp': None if normalized is None else normalized - fixed_warp_normalized,
                 'fixed_warp_minus_baseline': None if normalized is None else fixed_warp_normalized - base_normalized,
-                'undefined_normalization': scale == 0, 'undefined_target_variance': variance == 0})
+                'undefined_normalization': scale == 0, 'undefined_target_variance': target_rms == 0})
     def mean(values):
         return None if any(x is None for x in values) else math.fsum(values) / len(values)
     mice = []
