@@ -48,8 +48,9 @@ history are represented or verified here. Compute and exposure are not matched.
 
 The preserved [complete-roster v2](../complete-roster-evaluator-v2/complete_roster.py)
 checks all declared session/unit/presentation observations and exclusions, then
-calls the unchanged [v1 scorer](../initial-evaluator-v1/evaluator.py). Each
-condition retains its complete original report: mouse-macro held-out Poisson
+uses the unchanged [v1 source](../initial-evaluator-v1/evaluator.py) for validation,
+controls and original row arithmetic with current overflow-safe reductions.
+Each condition retains its complete original report: mouse-macro held-out Poisson
 bits per spike relative to train-only unit rate, family breakdowns, exposure-aware likelihood,
 zero-rate behavior, mouse bootstrap and declared-roster counts. No units,
 repeats, stimulus families or mice are selected based on predictions.
@@ -83,10 +84,10 @@ access conditions and an executed scientific comparison remain absent.
 `research_qualified`, `access_conditions_enforced`, and
 `actual_information_access_verified` are always false in this component.
 
-Dependencies, unchanged by this addition:
+Current source dependencies (the preserved v1 file is unchanged):
 
 - v1 `evaluator.py`: SHA-256 `16606e98d575cce41cf18c0b8b20b3f6b313bccf1ec94bcfd52286c7d56153d4`.
-- v2 `complete_roster.py`: SHA-256 `3fa62aaf3d85c4e377d8171fbcec172711fc775767c558ff4b4608b33f6dd8f9`.
+- v2 `complete_roster.py`: SHA-256 `98a742511ecc4b96260573737405accf234abda0974b8f7557793ac913eaaac6`.
 
 The v1 source mapping retains AllenSDK commit
 `a9b5c685396126d9748f1ccecf7c00f440569f69`; no source or historical pin changes.

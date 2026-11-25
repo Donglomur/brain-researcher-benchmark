@@ -4,6 +4,9 @@ This validates an existing export, not native recording authenticity. The
 preserved v1 scorer owns counts, exposure, controls and the original estimand.
 """
 import argparse
+from fractions import Fraction
+import math
+import random
 from collections import defaultdict
 import importlib.util
 from pathlib import Path
@@ -156,11 +159,93 @@ def validate_packet(public, private):
             "selected_units": len(expected_units), "selected_sessions": len(sessions)}
 
 
+def finite_sum_ratio(values, denominator):
+    """Preserve ordinary arithmetic; divide an exact sum only if fsum overflows."""
+    values = list(values)
+    try:
+        total = math.fsum(values)
+    except OverflowError:
+        v1.require(all(math.isfinite(value) for value in values),
+                   "nonfinite likelihood aggregate")
+        return float(sum((Fraction(value) for value in values), Fraction())
+                     / Fraction(denominator))
+    return total / denominator
+
+
+def finite_mean(values):
+    return finite_sum_ratio(values, len(values))
+
+
+def finite_quantile(draws, probability):
+    position = (len(draws) - 1) * probability
+    low = int(position)
+    left, right = draws[low], draws[min(low + 1, len(draws) - 1)]
+    weight = position - low
+    result = left + (right - left) * weight
+    if not math.isfinite(result):
+        v1.require(math.isfinite(left) and math.isfinite(right), "nonfinite quantile operand")
+        result = float(Fraction(left) * (1 - Fraction(weight)) + Fraction(right) * Fraction(weight))
+    return result
+
+
+def aggregate(rows):
+    mice = defaultdict(list)
+    for row in rows:
+        mice[row["mouse_id"]].append(row)
+    records = []
+    for mouse, group in sorted(mice.items()):
+        spikes = sum(r["count"] for r in group)
+        undefined = sorted({r["undefined"] for r in group if r["undefined"]})
+        if not spikes:
+            undefined.append("zero_heldout_spikes")
+        value = finite_sum_ratio((r["gain"] for r in group), spikes * math.log(2)) if not undefined and not any(r["negative_infinity"] for r in group) else None
+        records.append({"mouse_id": mouse, "spikes": spikes, "observations": len(group),
+                        "bits_per_spike": value,
+                        "status": "undefined:" + ",".join(undefined) if undefined else
+                        "negative_infinity" if value is None else "finite"})
+    values = [r["bits_per_spike"] for r in records]
+    status = "undefined" if any(r["status"].startswith("undefined") for r in records) else "negative_infinity" if None in values else "finite"
+    return {"mouse_count": len(records), "mice": records, "status": status,
+            "mouse_macro_bits_per_spike": finite_mean(values) if status == "finite" else None}
+
+
 def score(public, private, predictions, bootstrap_seed=0, bootstrap_replicates=1000):
     coverage = validate_packet(public, private)
-    result = v1.score(public, private, predictions, bootstrap_seed, bootstrap_replicates)
-    result["declared_roster_coverage"] = coverage
-    return result
+    v1.require(private["task_id"] == v1.TASK_ID and private["public_sha256"] == v1.digest(public), "protected packet binding mismatch")
+    v1.require(type(bootstrap_seed) is int, "bootstrap seed must be integer")
+    v1.require(type(bootstrap_replicates) is int and 1 <= bootstrap_replicates <= 100000, "invalid bootstrap count")
+    expected = {tuple(row["key"]) for row in public["query"]}
+    rates = v1.keyed_rows(predictions, expected, "rate_hz")
+    counts = v1.keyed_rows(private["targets"], expected, "count")
+    means = {tuple(row["key"]): row["rate_hz"] for row in v1.fit_controls(public)["mean_rate"]}
+    results = []
+    for row in public["query"]:
+        key = tuple(row["key"])
+        rate = v1.number(rates[key], "predicted rate", 0)
+        count = counts[key]
+        v1.require(type(count) is int and count >= 0, "target count must be a nonnegative integer")
+        exposure = row["exposure_seconds"]
+        reference = means[key]
+        undefined = "zero_training_rate_positive_target" if reference == 0 and count > 0 else None
+        negative = rate == 0 and count > 0 and not undefined
+        gain = -exposure * (rate - reference)
+        if count and not undefined and not negative:
+            gain += count * (math.log(rate) - math.log(reference))
+        v1.require(math.isfinite(gain), "nonfinite likelihood gain from numeric overflow")
+        results.append({"mouse_id": row["mouse_id"], "family": row["family"], "count": count,
+                        "gain": gain, "undefined": undefined, "negative_infinity": negative})
+    overall = aggregate(results)
+    families = {family: aggregate([r for r in results if r["family"] == family]) for family in public["heldout_families"]}
+    interval_result = {"method": "mouse_percentile_bootstrap", "seed": bootstrap_seed,
+                       "replicates": bootstrap_replicates, "confidence": 0.95, "limits": None}
+    if overall["status"] == "finite" and overall["mouse_count"] >= 2:
+        rng = random.Random(bootstrap_seed)
+        values = [row["bits_per_spike"] for row in overall["mice"]]
+        draws = sorted(finite_mean(rng.choices(values, k=len(values))) for _ in range(bootstrap_replicates))
+        interval_result["limits"] = [finite_quantile(draws, 0.025), finite_quantile(draws, 0.975)]
+    return {"task_id": v1.TASK_ID, "scope": "construction_component_only", "research_qualified": False,
+            "overall": overall, "stimulus_families": families, "uncertainty": interval_result,
+            "exclusion_count": len(private["exclusions"]), "declared_roster_coverage": coverage}
 
 
 def main():

@@ -54,6 +54,22 @@ def comparison(public, private, restricted_rate=1, program_rate=2):
                      submission(public, "frozen_program", program_rate), 17, 100)
 
 
+def numeric_range_fixture():
+    """Complete two-mouse/one-held-family generated packet, not biological data."""
+    public, private = fixture()
+    public["heldout_families"] = ["natural_scenes"]
+    public["query"] = [row for row in public["query"] if row["family"] == "natural_scenes"]
+    for row in public["training"]:
+        row["count"] = 1
+    keys = {tuple(row["key"]) for row in public["query"]}
+    private["targets"] = [{"key": row["key"], "count": 1} for row in private["targets"]
+                          if tuple(row["key"]) in keys]
+    for row in private["source_roster"]:
+        row["presentation_ids"] = ["p0", "p1"]
+    private["public_sha256"] = e.v1.digest(public)
+    return public, private
+
+
 class PairedControls(unittest.TestCase):
     def test_hand_calculated_mouse_macro_is_not_spike_pooled(self):
         public, private = fixture()
@@ -78,6 +94,46 @@ class PairedControls(unittest.TestCase):
             b = result["condition_scores"]["frozen_program"]["stimulus_families"][family]
             self.assertAlmostEqual(paired_family["mouse_macro_difference_bits_per_spike"],
                                    b["mouse_macro_bits_per_spike"] - a["mouse_macro_bits_per_spike"])
+
+    def test_finite_full_packet_mean_and_bootstrap_survive_sum_overflow(self):
+        public, private = numeric_range_fixture()
+        result = comparison(public, private, 1.0, 9e307)
+        expected = -9e307 / math.log(2)
+        programme = result["condition_scores"]["frozen_program"]
+        self.assertEqual(programme["overall"]["status"], "finite")
+        self.assertEqual(programme["overall"]["mouse_macro_bits_per_spike"], expected)
+        self.assertEqual(programme["uncertainty"]["limits"], [expected, expected])
+        self.assertEqual(result["paired_overall"]["mouse_macro_difference_bits_per_spike"], expected)
+        self.assertEqual(result["paired_overall"]["uncertainty"]["limits"], [expected, expected])
+        self.assertEqual(programme["declared_roster_coverage"]["query_observations"], 2)
+        json.dumps(result, allow_nan=False)
+
+    def test_finite_per_mouse_likelihood_ratio_survives_gain_sum_overflow(self):
+        public, private = fixture()
+        result = comparison(public, private, 2.0, 9e307)
+        programme = result["condition_scores"]["frozen_program"]["overall"]
+        expected = [-9e307 * (2 / (4 * math.log(2))),
+                    -9e307 * (3 / (8 * math.log(2)))]
+        self.assertEqual(programme["status"], "finite")
+        for row, value in zip(programme["mice"], expected):
+            self.assertTrue(math.isclose(row["bits_per_spike"], value, rel_tol=1e-15))
+        self.assertTrue(math.isfinite(programme["mouse_macro_bits_per_spike"]))
+        json.dumps(result, allow_nan=False)
+
+    def test_opposed_finite_differences_have_finite_paired_quantiles(self):
+        public, private = numeric_range_fixture()
+        restricted = submission(public, "restricted_observation", 1.0)
+        programme = submission(public, "frozen_program", 1.0)
+        restricted["predictions"][0]["rate_hz"] = 9e307
+        programme["predictions"][1]["rate_hz"] = 9e307
+        paired = e.compare(public, private, restricted, programme, 0, 2)["paired_overall"]
+        expected = (9e307 / math.log(2)) * 0.95
+        self.assertEqual(paired["status"], "finite")
+        self.assertEqual(paired["mouse_macro_difference_bits_per_spike"], 0.0)
+        lower, upper = paired["uncertainty"]["limits"]
+        self.assertTrue(math.isclose(lower, -expected, rel_tol=1e-15))
+        self.assertTrue(math.isclose(upper, expected, rel_tol=1e-15))
+        self.assertTrue(math.isfinite(lower) and math.isfinite(upper))
 
     def test_identical_predictions_and_reordered_rows_have_zero_paired_interval(self):
         public, private = fixture()
