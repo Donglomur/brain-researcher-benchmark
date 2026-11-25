@@ -5,16 +5,22 @@ All four modes' complete predictions are captured before opening gold.
 """
 import argparse
 from collections import Counter
-import importlib.util
+import hashlib
 import math
 from pathlib import Path
 import re
+from types import ModuleType
 
 HERE = Path(__file__).resolve().parent
-_spec = importlib.util.spec_from_file_location(
-    "neural084_scoring_io", HERE.parent / "delivery-source/public/io_utils.py")
-io = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(io)
+_io_path = HERE.parent / "delivery-source/public/io_utils.py"
+with _io_path.open("rb") as _stream:
+    _io_body = _stream.read(4397)
+if (len(_io_body) != 4396 or hashlib.sha256(_io_body).hexdigest() !=
+        "9ba54409ff3aae8e17d2c0e96f1c5f335fa46cd33aeaf83d3be427a8ebf585d7"):
+    raise ValueError("Exact reviewed scoring IO source required")
+io = ModuleType("neural084_scoring_io")
+io.__file__ = str(_io_path)
+exec(compile(_io_body, str(_io_path), "exec"), io.__dict__)
 PEOPLE = tuple(range(1, 55))
 SESSIONS = (1, 2)
 PHASES = ("train", "test")
