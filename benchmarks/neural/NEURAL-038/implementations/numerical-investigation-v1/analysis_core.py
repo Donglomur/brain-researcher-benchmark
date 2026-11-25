@@ -1,5 +1,6 @@
 """Fixed source-frame incremental-response decomposition; no inferential test."""
 import math
+from fractions import Fraction
 from delivery_io import need
 
 FIELDS=('matched_increment','unmatched_increment','opto_only','context_interaction',
@@ -11,7 +12,9 @@ BLOCKS=('original_expt1','original_expt2','original_expt3','revision_pool')
 
 def mean(values):
     values=list(values);need(bool(values),'Nonempty arithmetic support')
-    value=math.fsum(float(v)/len(values) for v in values)
+    # Sum exact represented floats, divide once, then round the finite mean.
+    # Per-value division can erase a representable subnormal mean.
+    value=float(sum((Fraction(float(v)) for v in values), Fraction())/len(values))
     need(math.isfinite(value),'Finite source arithmetic')
     return value
 

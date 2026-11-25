@@ -6,8 +6,12 @@ contain. It also supplies a complete public-export evaluator. It is an operator
 component for the current sensory-context investigation, not a participant
 transport or an admission of benchmark readiness.
 
-`analysis_core.py`, `scorer_core.py`, and `delivery_io.py` are byte-identical
-recoveries from the retained full140 investigation source. `evaluate.py` adds
+`scorer_core.py` and `delivery_io.py` remain byte-identical recoveries from the
+retained full140 investigation source. The current `analysis_core.py` corrects
+its mean reducer to accumulate exact represented float values and divide once
+before rounding. This prevents per-value division from erasing a representable
+subnormal mean; condition algebra, windows, missingness and weights are
+unchanged. The historical runtime copy remains unchanged. `evaluate.py` adds
 strict 9/13/10/108 membership coverage, 300/300/300/200 frame dimensions,
 condition/identity joins, metadata and array digest verification, bounded NPY
 decoding, and independent recomputation from permitted public measurements.
@@ -94,13 +98,19 @@ original 9/13/10 declarations, revision 108×200 declaration and window offsets.
 The separate block summaries and complete-case mask are retained benchmark
 conventions, not a reproduction of the author's pooled statistical test.
 
-Recovered source identities:
+Recovered predecessor source identities (historical):
 
 | File | SHA-256 |
 | --- | --- |
 | analysis_core.py | e75be729ca9a5f3df444b7b3441400c36af52013862b75f4eb946ed0651ed511 |
 | scorer_core.py | 9cbfd7d824935274406c6e6e3a209c96934a57833939ebc3e79838fb2ccb436b |
 | delivery_io.py | 9ba54409ff3aae8e17d2c0e96f1c5f335fa46cd33aeaf83d3be427a8ebf585d7 |
+
+The corrected current `analysis_core.py` is 3,288 bytes, SHA-256
+`9c893a705c3bf1f197cf91ae287f6873d2c72aaa07f316eab4a0904cedfeef3a`.
+`test_mean_precision.py` provides five generated scalar controls for the
+correction; it uses neighboring production modules and supports ordinary
+`unittest` discovery without private paths.
 
 The recovered public export metadata was inspected without opening its
 arrays: `input.json` SHA-256

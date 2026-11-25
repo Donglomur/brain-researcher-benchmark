@@ -1,7 +1,7 @@
 # Full 140-membership programme and current numerical evaluation
 
 This additive route recovers the existing full140 producer and joins its
-independently observed completion to the unchanged numerical-investigation-v1
+independently observed completion to the current numerical-investigation-v1
 evaluator. It is source construction, not a completed participant study or an
 activation of the canonical task. No authentic arrays, native containers,
 candidate models or saved private answers were executed during this revision.
@@ -58,10 +58,17 @@ Earlier metadata/stat inspection found all 25 public files at expected extents:
 inspection did not read or rehash those array bodies; presence is not a new
 scientific source-authenticity result.
 
-DEPENDENCIES.json pins the four unchanged numerical-investigation-v1 modules
-from accepted commit `31c05a9d2675c7d4235f7a8a0df88c88981b9395`. The loader
-compiles captured, verified bytes, avoiding stale module/bytecode resolution.
-The original analysis_core, scorer_core and delivery_io arithmetic is unchanged.
+DEPENDENCIES.json pins the four current numerical-investigation-v1 modules.
+Its `accepted_commit` value, `31c05a9d2675c7d4235f7a8a0df88c88981b9395`,
+identifies their accepted predecessor base; the file pins identify the current
+bytes. The current `analysis_core.py` mean reducer uses exact accumulation
+and one final division/rounding to preserve representable subnormal means.
+The condition algebra, windows, missingness, weights and grading tolerance are
+unchanged. The other three dependency entries retain their previous pins.
+The loader compiles captured, verified bytes, avoiding stale module/bytecode
+resolution, and the numerical grade recomputes with this current evaluator.
+The historical producer runtime, its analysis mirror, SOURCE_MANIFEST,
+trusted-entry pins, BINDINGS and external source/export pins remain unchanged.
 The wrapper, authority files and source checkout must remain operator-controlled
 and stable: the initial local library load precedes source-identity checks, so
 these hashes do not sandbox an untrusted code loader.
@@ -97,7 +104,7 @@ to `evaluate(root, panel, inputs, submission)` without rereading the report path
 A valid replacement after capture cannot silently become the scored report.
 
 The numerical worker binds panel/input metadata and every array descriptor to
-the same complete candidate-visible export. The unchanged evaluator admits the
+the same complete candidate-visible export. The current evaluator admits the
 complete submitted structure before reading the 18 public arrays and recomputing
 all numerical values. It does not use a saved private answer. The numerical
 child must itself exit naturally and publish a matching score before the caller
@@ -185,8 +192,8 @@ real 20 GiB free-space margin. Original floor/retention arithmetic, actual file
 inventory, copy/retirement and write limits remain active. These controls still
 require POSIX file operations and interval timers; the scripted capacity values
 are not measured host properties or native qualification. The existing
-closed-form numerical fixture is reused without replaying the unchanged
-evaluator's full suite. The new seam tests stopped-report custody, complete
+closed-form numerical fixture is reused without replaying the evaluator's
+full suite. The new seam tests stopped-report custody, complete
 source-to-array binding, numerical authority, root separation, clocks and
 failure handling. They establish software behavior, not isolation on a real
 host or participant performance. Actual interpreter/NumPy versions, attempted
