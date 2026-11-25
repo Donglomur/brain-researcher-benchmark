@@ -15,16 +15,22 @@ import sys
 _IMPLEMENTATIONS = Path(__file__).resolve().parents[1]
 _PINS = {
     "initial-evaluator-v1/evaluator.py": "9d7ddf27151465693feb9346f906e3ad583194b022135a5c0cbfbfa1782b21a6",
-    "source-scoring-v2/source_score.py": "dc56371804d6e011e16ea2b7fe9382f9cf6992d29ef1581e235f5bea247ed0a6",
+    "source-scoring-v2/source_score.py": "98dbe47c56f34e111f8f4862836e701f846921d5a45913cc63a9293de0d5e039",
 }
+_verified_sources = {}
 for _relative, _expected in _PINS.items():
-    if hashlib.sha256((_IMPLEMENTATIONS / _relative).read_bytes()).hexdigest() != _expected:
-        raise ValueError("unchanged source-scoring dependency identity differs: " + _relative)
+    _raw = (_IMPLEMENTATIONS / _relative).read_bytes()
+    if hashlib.sha256(_raw).hexdigest() != _expected:
+        raise ValueError("source-scoring dependency identity differs: " + _relative)
+    _verified_sources[_relative] = _raw
 _spec = importlib.util.spec_from_file_location(
     "neurona_six_cell_source_score", _IMPLEMENTATIONS / "source-scoring-v2/source_score.py")
 source = importlib.util.module_from_spec(_spec)
 sys.modules[_spec.name] = source
-_spec.loader.exec_module(source)
+source._pinned_legacy_bytes = _verified_sources["initial-evaluator-v1/evaluator.py"]
+exec(compile(_verified_sources["source-scoring-v2/source_score.py"],
+             str(_IMPLEMENTATIONS / "source-scoring-v2/source_score.py"), "exec"), source.__dict__)
+del _verified_sources, _raw
 
 ContractError = source.ContractError
 SCHEMA = "neurona-six-cell-trace-suite/v1"

@@ -18,7 +18,13 @@ _legacy_path = Path(__file__).resolve().parents[1] / "initial-evaluator-v1" / "e
 _spec = importlib.util.spec_from_file_location("neurona_initial_evaluator_v1", _legacy_path)
 legacy = importlib.util.module_from_spec(_spec)
 sys.modules[_spec.name] = legacy
-_spec.loader.exec_module(legacy)
+# A composing suite supplies the exact bytes it authenticated. Standalone
+# invocation reads one snapshot itself; neither route reopens it for execution.
+_legacy_bytes = globals().pop("_pinned_legacy_bytes", None)
+if _legacy_bytes is None:
+    _legacy_bytes = _legacy_path.read_bytes()
+exec(compile(_legacy_bytes, str(_legacy_path), "exec"), legacy.__dict__)
+del _legacy_bytes
 ContractError = legacy.ContractError
 BUILTINS = ["equal", "greater_than", "less_than"]
 SCHEMA = "neurona-source-trace/v2"
