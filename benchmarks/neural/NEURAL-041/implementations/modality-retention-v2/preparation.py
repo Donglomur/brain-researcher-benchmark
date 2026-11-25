@@ -36,6 +36,9 @@ def validate_review(review,roster):
     need(review['schema']=='n041_clinical_review_v1' and review['dataset']==DATASET and review['author_revision']==AUTHOR_REVISION,'fixed archive/code')
     regions=review['regions'];need(regions==sorted(set(AREA.values())),'all five source areas, even when unavailable in a patient')
     need(review['provenance'],'actual clinical/exclusion/source preprocessing evidence required')
+    # Reject duplicate session decisions before a dictionary can discard one.
+    need(type(review['sessions'])is list and len(review['sessions'])==len(roster['assets']),
+        'one clinical review per source session')
     sessions={x['asset_id']:x for x in review['sessions']}
     need(len(sessions)==len(roster['assets']) and set(sessions)=={x['asset_id'] for x in roster['assets']},'all source sessions reviewed')
     for asset in roster['assets']:
