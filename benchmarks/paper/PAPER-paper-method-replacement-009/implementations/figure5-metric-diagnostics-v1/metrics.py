@@ -5,6 +5,8 @@ It makes two incompatible existing R2 conventions observable on identical rows.
 No source/model/data execution, file loading, or truth discovery occurs here.
 """
 from math import fsum, isfinite, sqrt
+from fractions import Fraction
+from sys import float_info
 
 
 TARGETS = ("choice", "prior", "wheel-speed", "whisker-motion-energy")
@@ -44,15 +46,52 @@ def _result(value=None, reason=None):
     return {"value": value, "undefined_reason": reason}
 
 
+def _finite_mean(values):
+    try:
+        return fsum(values) / len(values)
+    except OverflowError:
+        return float(sum(Fraction.from_float(v) for v in values) / len(values))
+
+
+def _exact_r2(truth, prediction):
+    """Fallback over exact binary inputs when squared reductions lose range."""
+    y = [Fraction.from_float(v) for v in truth]
+    p = [Fraction.from_float(v) for v in prediction]
+    center = sum(y) / len(y)
+    denominator = sum((v - center) ** 2 for v in y)
+    if denominator == 0:
+        return _result(reason="constant_truth")
+    numerator = sum((a - b) ** 2 for a, b in zip(y, p))
+    try:
+        return _result(float(1 - numerator / denominator))
+    except OverflowError:
+        return _result(reason="nonfinite_arithmetic")
+
+
 def _r2(truth, prediction):
     if len(truth) < 2:
         return _result(reason="fewer_than_two_scalar_observations")
-    center = fsum(truth) / len(truth)
-    denominator = fsum((v - center) ** 2 for v in truth)
-    if denominator == 0:
+    if all(value == truth[0] for value in truth):
         return _result(reason="constant_truth")
-    numerator = fsum((a - b) ** 2 for a, b in zip(truth, prediction))
-    return _result(1.0 - numerator / denominator)
+    try:
+        center = _finite_mean(truth)
+        deviations = [v - center for v in truth]
+        residuals = [a - b for a, b in zip(truth, prediction)]
+        d_terms = [v ** 2 for v in deviations]
+        n_terms = [v ** 2 for v in residuals]
+        denominator, numerator = fsum(d_terms), fsum(n_terms)
+        # Zero/subnormal squares can erase variation or nonzero residuals.
+        # The threshold is binary64's normal range, not a scientific tolerance.
+        lost_range = any((term == 0 and value != 0) or
+                         (0 < term < float_info.min)
+                         for value, term in zip(deviations + residuals,
+                                                d_terms + n_terms))
+        if (not lost_range and isfinite(denominator) and denominator > 0 and
+                isfinite(numerator)):
+            return _result(1.0 - numerator / denominator)
+    except OverflowError:
+        pass
+    return _exact_r2(truth, prediction)
 
 
 def _auc(truth, prediction):
@@ -131,7 +170,7 @@ def score_case(target, truth, prediction):
                    for j in range(shape[1])]
         undefined = [j for j, value in enumerate(columns) if value["value"] is None]
         uniform = (_result(reason="undefined_output_bins") if undefined else
-                   _result(fsum(v["value"] for v in columns) / len(columns)))
+                   _result(_finite_mean([v["value"] for v in columns])))
         report["metrics"] = {"r2_flattened": flattened,
                              "r2_uniform_output_strict": uniform}
         report["per_output_r2"] = columns
@@ -203,7 +242,7 @@ def summarize_group(expected_cases, scores, metric_name):
     def complete_mean(items):
         if any(r["status"] != "complete" for r in items):
             return None
-        return fsum(r["value"] for r in items) / len(items)
+        return _finite_mean([r["value"] for r in items])
 
     animals = [{"animal": animal, "sessions": [r["session"] for r in items],
                 "value": complete_mean(items)}
@@ -215,6 +254,6 @@ def summarize_group(expected_cases, scores, metric_name):
             "expected_animals": len(animals), "rows": rows, "animals": animals,
             "complete_support": complete,
             "equal_session_diagnostic": complete_mean(rows),
-            "equal_animal_diagnostic": (fsum(a["value"] for a in animals) / len(animals)
+            "equal_animal_diagnostic": (_finite_mean([a["value"] for a in animals])
                                          if complete else None),
             "original_panel_aggregation": None}

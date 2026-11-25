@@ -47,8 +47,11 @@ orientation, animal identities, source admission and the prediction/target
 barrier independently. This module does not read files or issue qualification.
 It accepts ordinary Python lists/tuples; no additional dependencies are required.
 Pearson centers independently scaled inputs to avoid overflow from large finite
-values. R² still uses binary64 arithmetic; extreme finite magnitudes can raise
-an arithmetic overflow instead of producing a score.
+values. Ordinary R² reductions retain their binary64 arithmetic. If squared reductions
+lose numerical range, the fallback evaluates the same metric from exact binary
+input values. Constant truth remains undefined; a result outside finite output
+range remains explicitly undefined. Complete finite diagnostic means also survive
+overflow of their intermediate sum.
 
 All controls in `test_metrics.py` use tiny generated values and hand-derived
 results. Run them through the wave's shared two-slot `test_pool.py`, with owner
