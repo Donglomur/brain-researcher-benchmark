@@ -251,7 +251,8 @@ def main():
     parser.add_argument("--output", type=Path, required=True, help="operator-only detailed report")
     args = parser.parse_args()
     paths = (args.targets, args.author, args.candidate)
-    if args.output.resolve() in {path.resolve() for path in paths}:
+    if (args.output.resolve() in {path.resolve() for path in paths}
+            or (args.output.exists() and any(args.output.samefile(path) for path in paths))):
         parser.error("output must not overwrite a source input")
     report = score_panel(*(path.read_bytes() for path in paths),
                          expected_target_sha256=args.expected_target_sha256)
