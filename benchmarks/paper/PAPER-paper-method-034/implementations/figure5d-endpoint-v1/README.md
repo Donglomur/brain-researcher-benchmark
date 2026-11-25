@@ -133,3 +133,12 @@ Run `python -B test_panel.py` in the existing numerical environment through the
 shared test pool. The generated controls cover the full three-method panel,
 independently calculated errors including the final row, shared training labels,
 method completeness, row order, and target access only after all decoders finish.
+
+## Finite numerical range
+
+The ordinary mean and deviation reductions are preserved. If their intermediate
+sum or squared deviations overflow, or a nonconstant error distribution produces
+zero deviation by squared underflow, a bounded exact-input reduction supplies
+the same finite mathematical statistics. This also preserves finite signed panel
+means when their intermediate sum overflows. Source support, units and scientific
+qualification are unchanged. Generated range controls include all2,000 rows.

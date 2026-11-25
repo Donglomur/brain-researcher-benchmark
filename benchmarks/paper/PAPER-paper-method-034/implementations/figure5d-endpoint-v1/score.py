@@ -9,6 +9,7 @@ import argparse
 import hashlib
 import json
 import math
+from fractions import Fraction
 from pathlib import Path
 
 TASK_ID = "PAPER-paper-method-034"
@@ -93,6 +94,16 @@ def decode(support, training, query):
     return prediction.tolist()
 
 
+def finite_mean(values):
+    """Preserve finite means when their intermediate binary64 sum overflows."""
+    try:
+        value = math.fsum(values) / len(values)
+    except OverflowError:
+        value = float(sum(Fraction.from_float(v) for v in values) / len(values))
+    require(math.isfinite(value), "mean outside finite output range")
+    return value
+
+
 def error_summary(support, prediction, targets):
     """Mean is primary; SD denominators are explicit, never a guessed paper SD."""
     _, query_ids = support_check(support)
@@ -102,13 +113,35 @@ def error_summary(support, prediction, targets):
     target = numbers(targets["position_m"], QUERY_COUNT, "query position")
     errors = abs(pred - target)
     require(all(math.isfinite(float(x)) for x in errors), "absolute error overflow")
-    # fsum avoids dependence on vector reduction ordering for the primary mean.
-    mean = math.fsum(float(x) for x in errors) / QUERY_COUNT
-    squares = math.fsum((float(x) - mean) ** 2 for x in errors)
-    require(math.isfinite(squares), "squared error deviation overflow")
+    # Preserve the ordinary fsum reduction; use exact binary input values only
+    # when an intermediate total/square cannot represent the finite statistic.
+    values = [float(x) for x in errors]
+    mean = finite_mean(values)
+    try:
+        terms = [(value - mean) ** 2 for value in values]
+        squares = math.fsum(terms)
+        population = math.sqrt(squares / QUERY_COUNT)
+        sample = math.sqrt(squares / (QUERY_COUNT - 1))
+        varying = any(value != values[0] for value in values)
+        fallback = (not math.isfinite(squares) or
+                    (varying and (population == 0.0 or sample == 0.0)))
+    except OverflowError:
+        fallback = True
+    if fallback:
+        # Scaling the exact variance avoids both squared underflow and overflow.
+        # Center exactly here: a rounded subnormal mean can itself be zero.
+        exact = [Fraction.from_float(value) for value in values]
+        center = sum(exact) / QUERY_COUNT
+        variance = sum((value - center) ** 2 for value in exact) / QUERY_COUNT
+        scale = max(values)
+        scaled = variance / Fraction.from_float(scale) ** 2 if scale else Fraction(0)
+        population = scale * math.sqrt(float(scaled))
+        sample = scale * math.sqrt(float(scaled * QUERY_COUNT / (QUERY_COUNT - 1)))
+    require(math.isfinite(population) and math.isfinite(sample),
+            "error deviation outside finite output range")
     return {"samples": QUERY_COUNT, "mean_absolute_error_m": mean,
-            "absolute_error_sd_population_m": math.sqrt(squares / QUERY_COUNT),
-            "absolute_error_sd_sample_m": math.sqrt(squares / (QUERY_COUNT - 1))}
+            "absolute_error_sd_population_m": population,
+            "absolute_error_sd_sample_m": sample}
 
 
 def _prediction_report(support, prediction, targets):

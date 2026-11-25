@@ -290,7 +290,7 @@ class SourceSupportControls(unittest.TestCase):
     def test_existing_endpoint_still_rejects_1999_rows_before_decoding(self):
         path = HERE.parent / "figure5d-endpoint-v1/score.py"
         self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),
-                         "467e310bdb64366f0cb31dac0b0adb96f5aa221ab63d35d609d63d8040bc0933")
+                         "5f3938de84672f0a146fba9f807d17e3275c812b2699f56fd03833114dbd8921")
         spec = importlib.util.spec_from_file_location("marble_retained_endpoint_under_test", path)
         endpoint = importlib.util.module_from_spec(spec); spec.loader.exec_module(endpoint)
         support = {"schema": "marble_figure5d_support_v1", "task_id": "PAPER-paper-method-034",
