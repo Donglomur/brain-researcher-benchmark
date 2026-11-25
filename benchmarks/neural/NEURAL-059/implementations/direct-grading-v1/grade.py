@@ -14,7 +14,7 @@ import sys
 
 
 HERE = Path(__file__).resolve().parent
-DELIVERY_SHA256 = "bb4b028b3fdfbf2bd295d411c443ac68420e0cfe592936b84a64c909af78d8e1"
+DELIVERY_SHA256 = "b0bb99a13d380c022442f7fcf6152c96b9178cf46c006a0ef9b71d034b7cd99e"
 
 
 class GradingError(ValueError):
