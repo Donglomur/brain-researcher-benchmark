@@ -211,11 +211,13 @@ def _prediction_arrays(bundle, row):
 
 def load_metrics():
     path = HERE.parent / 'original-endpoint-metrics-v1' / 'metrics.py'
-    if digest(path.read_bytes()) != METRICS_SHA256:
+    source = path.read_bytes()
+    if digest(source) != METRICS_SHA256:
         raise ValueError('unchanged scientific metric kernel required')
     spec = importlib.util.spec_from_file_location('spinal_eligible_metric_kernel', path)
     module = importlib.util.module_from_spec(spec); sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
+    # Execute the exact bytes authenticated above; importlib would reopen the path.
+    exec(compile(source, str(path), 'exec'), module.__dict__)
     return module
 
 

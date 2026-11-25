@@ -10,7 +10,7 @@ import types
 
 HERE = Path(__file__).resolve().parent
 BASE = HERE.parent / 'current-condition-delivery-v1'
-BASE_SHA = 'bf7fda1003ebbe37a64e7efc5bf97777bb3fa2b10643096d1c4f8f3f53c7da38'
+BASE_SHA = 'a4bb4152fcbc86de70a8aa9c63eef204a42f1af30b34ef0970415c2a5bc059c2'
 BANK_SHA = '33085162e9ba9ea64ef9862f681ec6f43c7065256b89430c313e5ac0dab5c726'
 IMAGE = 'sha256:385454f413cc6f607bc7e6bfc0246c365fe3a5d6ee8f8a9fdef47196b6141156'
 
