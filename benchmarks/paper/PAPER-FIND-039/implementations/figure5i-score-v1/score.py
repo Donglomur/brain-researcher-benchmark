@@ -38,9 +38,25 @@ def cosine_score(target_radians, predicted_radians):
     predicted = _angles(predicted_radians, "predicted_radians")
     if len(target) != len(predicted):
         raise ValueError("target and prediction lengths differ")
-    # Reduce individually before subtraction to avoid overflow for finite inputs.
-    return math.fsum(math.cos(math.remainder(t, math.tau) - math.remainder(p, math.tau))
+    return math.fsum(_cosine_difference(t, p)
                      for t, p in zip(target, predicted)) / len(target)
+
+
+def _cosine_difference(target, predicted):
+    # Let libm reduce a representable difference. Reducing each input modulo
+    # binary64 tau first loses angular accuracy for large finite radians.
+    difference = target - predicted
+    try:
+        if math.isfinite(difference):
+            return math.cos(difference)
+    except OverflowError:
+        # Two admitted finite Python integers may have a larger difference.
+        pass
+    # If subtraction overflows, the angle-difference identity avoids forming
+    # that unrepresentable intermediate. Bound only the final roundoff.
+    value = math.fsum((math.cos(target) * math.cos(predicted),
+                       math.sin(target) * math.sin(predicted)))
+    return max(-1.0, min(1.0, value))
 
 
 def reference_digest(reference):

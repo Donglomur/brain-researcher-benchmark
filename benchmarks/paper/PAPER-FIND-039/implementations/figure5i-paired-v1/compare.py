@@ -17,9 +17,9 @@ CONDITIONS = ("paper_data", "paper_data_author_code")
 OUTCOMES = ("reproduction", "improvement")
 DEPENDENCIES = {
     "figure5i-score-v1/score.py": (
-        10409, "d33bdef4ca06fd30a774f5f9c49f5066abfd83ff291f5d9c9efac7a5b5e058da"),
+        11032, "46e9365b602bf57b4ba47e4fb329990f3ce64e60af35905c5e9ef310420cf500"),
     "figure5i-support-v1/support.py": (
-        9255, "688fdd5da0689cfd7c7ec2ef79edda2e7287c39377cfb3caeedda6735ccd8965"),
+        9255, "f10fec22bacd348ab3c6de64419b6173e8c1c2e666ffabf8745c7cbdfff97444"),
 }
 
 
