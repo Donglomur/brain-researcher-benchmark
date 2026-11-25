@@ -12,6 +12,7 @@ import json
 import math
 import statistics
 from collections import defaultdict
+from fractions import Fraction
 from pathlib import Path
 
 
@@ -72,6 +73,28 @@ def pooled_r2(target, prediction):
     return result
 
 
+def finite_median(values):
+    """Preserve the median when its even-count midpoint would overflow."""
+    values = list(values)
+    result = statistics.median(values)
+    if math.isfinite(result):
+        return result
+    ordered = sorted(values)
+    middle = len(ordered) // 2
+    # Run and null scores have already passed finite R-squared admission.
+    # Exact binary accumulation is needed only when the usual midpoint fails.
+    return float((Fraction(ordered[middle - 1]) + Fraction(ordered[middle])) / 2)
+
+
+def finite_mean(values):
+    """Retain a finite regional mean even if the intermediate sum overflows."""
+    values = list(values)
+    try:
+        return statistics.fmean(values)
+    except OverflowError:
+        return float(sum(map(Fraction, values), Fraction()) / len(values))
+
+
 def trial_ids(value):
     require(isinstance(value, list) and len(value) >= 250,
             "published session inclusion requires at least 250 retained trials")
@@ -127,7 +150,7 @@ def score_draw(draw, expected_trials, modality):
         partitions[run_id] = digest(run["test_fold"])
         predictions[run_id] = digest(run["prediction"])
     return {
-        "median_run_r2": statistics.median(scores.values()),
+        "median_run_r2": finite_median(scores.values()),
         "target_sha256": digest(target),
         "folds_sha256": digest([partitions[i] for i in range(10)]),
         "predictions_sha256": digest([predictions[i] for i in range(10)]),
@@ -251,7 +274,7 @@ def score_cell(metadata, draws):
     require(set(scored) == DRAW_IDS, "complete real plus 1000 pseudosessions required")
     real = scored[-1]["median_run_r2"]
     null = [scored[i]["median_run_r2"] for i in range(1, 1001)]
-    null_median = statistics.median(null)
+    null_median = finite_median(null)
     return {
         **{f: metadata[f] for f in ("modality", "subject", "eid", "region", "predictor")},
         "input_manifest_sha256": metadata["input_manifest_sha256"],
@@ -325,8 +348,8 @@ def summarize_panel(expected_cells, summaries):
         regions.append({
             "modality": modality, "region": region,
             "n_sessions": len(rows), "n_mice": len({r["subject"] for r in rows}),
-            "mean_session_r2": statistics.fmean(r["r2"] for r in rows),
-            "mean_session_corrected_r2": statistics.fmean(r["corrected_r2"] for r in rows),
+            "mean_session_r2": finite_mean(r["r2"] for r in rows),
+            "mean_session_corrected_r2": finite_mean(r["corrected_r2"] for r in rows),
         })
     return {"regional_effects": regions, "movement_comparisons": movement,
             "n_neural_cells": sum(k[-1] == "neural" for k in actual),
