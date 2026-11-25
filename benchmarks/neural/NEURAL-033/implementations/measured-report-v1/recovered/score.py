@@ -1,6 +1,7 @@
 """Strict artifact grading. Never imports or executes submitted code."""
 import argparse
 import math
+from fractions import Fraction
 from pathlib import Path
 import sys
 sys.path.insert(0,str(Path(__file__).resolve().parent))
@@ -91,7 +92,9 @@ def relative_error(a,b):
     return abs(a-b)/scale if (a>=0)==(b>=0) else abs(a)/scale+abs(b)/scale
 
 def finite_mean(values):
-    return math.fsum(x/len(values) for x in values) if values else None
+    # Accumulate exact binary inputs before division; per-item division can
+    # erase a positive subnormal error even when the final mean is representable.
+    return float(sum((Fraction(value) for value in values), Fraction()) / len(values)) if values else None
 
 def discrepancy(candidate,expected,path='',numbers=None,mismatches=None):
     numbers=[] if numbers is None else numbers;mismatches=[] if mismatches is None else mismatches
