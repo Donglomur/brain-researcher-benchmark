@@ -15,11 +15,13 @@ import random
 
 SCORER_SHA256 = 'd593735fec77f50e826636e988d8e0ec19253d1807a629f25ff7549a7a8257d8'
 SCORER_PATH = Path(__file__).resolve().parent.parent / 'fixed-origin-forecast' / 'scorer.py'
-if hashlib.sha256(SCORER_PATH.read_bytes()).hexdigest() != SCORER_SHA256:
+_scorer_source = SCORER_PATH.read_bytes()
+if hashlib.sha256(_scorer_source).hexdigest() != SCORER_SHA256:
     raise RuntimeError('fixed-origin scorer source mismatch')
 _spec = importlib.util.spec_from_file_location('hypodrift_uncertainty_scorer', SCORER_PATH)
 s = importlib.util.module_from_spec(_spec)
-_spec.loader.exec_module(s)
+# Execute the authenticated snapshot, without reopening the path or using bytecode.
+exec(compile(_scorer_source, str(SCORER_PATH), 'exec'), s.__dict__)
 
 SUMMARY_FIELDS = ['primary_defined', 'undefined_reason', 'candidate_mse',
                   'reference_mse', 'paired_loss_reduction', 'groups', 'mice']

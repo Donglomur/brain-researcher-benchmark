@@ -254,5 +254,75 @@ class DeliveryControls(unittest.TestCase):
             self.assertEqual(got, d.join_forecasts(self.forecasts, self.bindings))
 
 
+class SourceAuthenticationControls(unittest.TestCase):
+    """Generated source replacements, without authentic neural observations."""
+
+    def load_consumer(self, root, name):
+        path = root / name / ('delivery.py' if name == 'fixed-origin-delivery-v1'
+                              else 'uncertainty.py')
+        spec = importlib.util.spec_from_file_location('generated_source_consumer', path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
+    def prepared(self, root, name):
+        source = root / 'fixed-origin-forecast' / 'scorer.py'
+        source.parent.mkdir(parents=True)
+        source.write_bytes((HERE.parent / 'fixed-origin-forecast' / 'scorer.py').read_bytes())
+        consumer = root / name
+        consumer.mkdir()
+        filename = 'delivery.py' if name == 'fixed-origin-delivery-v1' else 'uncertainty.py'
+        (consumer / filename).write_bytes((HERE.parent / name / filename).read_bytes())
+        return source
+
+    def test_replacement_after_hash_uses_authenticated_source(self):
+        for name in ('fixed-origin-delivery-v1', 'paired-mouse-resampling-v1'):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                source = self.prepared(root, name)
+                original_read = Path.read_bytes
+                replaced = []
+
+                def captured_read(path):
+                    raw = original_read(path)
+                    if path.resolve() == source.resolve() and not replaced:
+                        source.write_text("raise RuntimeError('unverified replacement executed')\n")
+                        replaced.append(True)
+                    return raw
+
+                with patch.object(Path, 'read_bytes', captured_read):
+                    module = self.load_consumer(root, name)
+                self.assertEqual(replaced, [True])
+                self.assertEqual(module.s.TASK_ID, d.s.TASK_ID)
+                self.assertEqual(module.s.loss(2.0, 1.0), 1.0)
+
+    def test_stale_timestamp_bytecode_cannot_override_verified_source(self):
+        import py_compile
+        for name in ('fixed-origin-delivery-v1', 'paired-mouse-resampling-v1'):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                source = self.prepared(root, name)
+                original = source.read_bytes()
+                marker = b"raise RuntimeError('unverified bytecode executed')\n"
+                source.write_bytes(marker + b'#' * (len(original) - len(marker)))
+                stamp = source.stat()
+                py_compile.compile(str(source), doraise=True,
+                                   invalidation_mode=py_compile.PycInvalidationMode.TIMESTAMP)
+                source.write_bytes(original)
+                os.utime(source, ns=(stamp.st_atime_ns, stamp.st_mtime_ns))
+                module = self.load_consumer(root, name)
+                self.assertEqual(module.s.TASK_ID, d.s.TASK_ID)
+                self.assertEqual(module.s.loss(2.0, 1.0), 1.0)
+
+    def test_wrong_source_pin_is_rejected_before_execution(self):
+        for name in ('fixed-origin-delivery-v1', 'paired-mouse-resampling-v1'):
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp)
+                source = self.prepared(root, name)
+                source.write_text("raise RuntimeError('unverified source executed')\n")
+                with self.assertRaisesRegex(RuntimeError, '^fixed-origin scorer source mismatch$'):
+                    self.load_consumer(root, name)
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)
