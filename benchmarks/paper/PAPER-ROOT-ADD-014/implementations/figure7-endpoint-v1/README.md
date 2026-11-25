@@ -34,7 +34,9 @@ Their source-normalisation step must be completed before this API.
 load_reference=...)` accepts a list of exactly 31 identity-keyed prediction rows.
 Each has `participant`, `electrode_id` and `predictions`, mapping
 `corrected_alpha`, `raw_alpha`, and `broadband` to 75 finite numbers. All candidate
-rows are admitted and copied before the reference callback runs. Input order
+rows are admitted and copied before the reference callback runs. Candidate numbers
+are normalized to the locked metric's binary64 representation during admission,
+before reference access. Input order
 may vary; the participant/electrode pair defines the join. A candidate cannot
 submit a score, choose a subset, or replace a companion control.
 
