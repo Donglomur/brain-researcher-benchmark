@@ -77,3 +77,11 @@ percentiles, source normalization, both panels, paired-versus-unpaired summaries
 and refusals for additional prototypes, changed geometry, supplied rescaling,
 missing groups, duplicate units and invalid anatomy/animal joins. Run it only
 through the shared generated-test pool during coordinated construction.
+
+The all-unit diagnostic retains the original sum-then-divide arithmetic for
+ordinary values. If the finite nonnegative distance sum overflows, it rescales
+by the maximum distance before reducing; the finite mean remains bounded by
+that maximum. Region-wise quantiles, source support and scientific scope are
+unchanged. `test_mean_overflow.py` exercises generated complete 19,186-unit
+panels with finite extreme candidate distances, unequal groups and ordinary
+values; these controls are not authentic source execution.

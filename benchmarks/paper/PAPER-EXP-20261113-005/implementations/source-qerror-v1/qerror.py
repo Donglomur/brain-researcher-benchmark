@@ -163,6 +163,17 @@ def distances(points, prototypes):
     return errors, bmus
 
 
+def mean_error(values):
+    """Retain the original reduction, rescaling only an overflowing sum."""
+    try:
+        return math.fsum(values) / len(values)
+    except OverflowError:
+        # Errors are finite nonnegative distances. Their arithmetic mean is
+        # bounded by their maximum even when the unreduced sum is too large.
+        scale = max(values)
+        return (math.fsum(value / scale for value in values) / len(values)) * scale
+
+
 def score(packet, candidate, *, require_source_population=True):
     points, source_nodes, groups = validate_packet(
         packet, require_source_population=require_source_population)
@@ -193,8 +204,8 @@ def score(packet, candidate, *, require_source_population=True):
         "n_units_without_source_parent": len(points) - len(assigned),
         "panels": panels,
         "diagnostic_all_unit_mean": {
-            "source": math.fsum(source_error) / len(points),
-            "candidate": math.fsum(candidate_error) / len(points)},
+            "source": mean_error(source_error),
+            "candidate": mean_error(candidate_error)},
     }
 
 
