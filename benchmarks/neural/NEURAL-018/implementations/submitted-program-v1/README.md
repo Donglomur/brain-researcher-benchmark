@@ -5,7 +5,7 @@ existing NEURAL-018 numerical grader. The accepted task previously shipped an
 artifact scorer whose host launcher retained old workspace and Docker paths.
 The new route freezes one submitted Python file, exposes exactly the three
 historical public operands, captures its output only after producer removal,
-and invokes the unchanged numerical worker and core in a separate trusted
+and invokes the original numerical worker and corrected core in a separate trusted
 container. Source construction and generated controls do not qualify the native
 environment or establish a model result. Canonical registration is unchanged.
 
@@ -32,7 +32,7 @@ Submit one ordinary Python file, at most 200,000 bytes. It runs as:
 python -I -B /program/program.py --input /input --out /output
 ```
 
-Write only `/output/predictions.npz`, at most **34 MiB**. The unchanged scorer
+Write only `/output/predictions.npz`, at most **34 MiB**. The scorer
 requires `expected_counts` (574,40,182), complete `trial_ids`, `forecast_unit_ids`,
 `bin_left_edges_ms`, `prediction_units`, and `panel_fingerprint`. Rates must be
 finite and strictly positive. All original identity and unit constraints apply.
@@ -85,7 +85,14 @@ This repairs a source-level access mismatch, not an observed native run.
 
 The trusted `grade.py` adapts the original launcher only for operator path/source
 binding and individual file mounts. The original numerical `worker.py`,
-`scoring_core.py`, `assets.json`, and strict absence parser remain unchanged.
+`assets.json`, and strict absence parser remain unchanged. The active
+`scoring_core.py` now lives in this component and validates spike-count targets
+in their original dtype before float64 conversion. An integer such as
+`2**53 + 1` must not round down into the accepted count domain; extended-precision
+fractions must not round into integer counts. The likelihood equation, fixed
+mask, complete panel, prediction validation, zero-spike handling and comparison
+rules are unchanged. `PROVENANCE.json` retains the historical numerical source
+identities, and the operational `SOURCE.json` binds this correction.
 The active grader accepts Docker inspect's equivalent enabled security-option
 spellings `no-new-privileges` and `no-new-privileges:true`, while rejecting
 missing, disabled, malformed, duplicate or conflicting declarations. This is a
@@ -109,7 +116,7 @@ Docker Desktop compatibility and forced-stop recovery are unqualified.
 Imports precede source hashing. This route therefore assumes a stable trusted
 operator checkout and configuration; it is not a loader sandbox against hostile
 host source replacement. The source manifest binds every implementation and
-unchanged numerical dependency, and the operator supplies its expected digest.
+declared numerical dependency, and the operator supplies its expected digest.
 
 ## Future operator invocation
 
@@ -190,3 +197,13 @@ restores owner write permission before its adversarial mutation. The default
 suite now contains 29 methods; this change selects these four new controls and
 the changed output-mutation control, without replaying unrelated controls.
 Generated-file checks do not establish a UID-separated native bind mount.
+
+Target-domain regression controls run with:
+
+```sh
+python -I -B benchmarks/neural/NEURAL-018/implementations/submitted-program-v1/test_target_domain.py
+```
+
+These generated checks cover original integer and floating count boundaries,
+masked invalid values, zero-spike outcomes, valid-score parity and the active
+grader mount. They do not read authentic targets or qualify native execution.
