@@ -58,11 +58,22 @@ def _pairs(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
     return obj
 
 
-def read_json(path: Path) -> Any:
+def _parse_json(payload: bytes) -> Any:
     def invalid(value: str) -> None:
         raise ContractError(f"non-finite JSON number: {value}")
-    return json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_pairs,
+    return json.loads(payload.decode("utf-8"), object_pairs_hook=_pairs,
                       parse_constant=invalid)
+
+
+def read_json(path: Path) -> Any:
+    return _parse_json(path.read_bytes())
+
+
+def read_json_snapshot(path: Path) -> tuple[Any, dict[str, Any]]:
+    """Parse and identify the same bytes, even if the input is later replaced."""
+    payload = path.read_bytes()
+    return _parse_json(payload), {"sha256": hashlib.sha256(payload).hexdigest(),
+                                 "bytes": len(payload)}
 
 
 def file_sha256(path: Path) -> str:
@@ -246,22 +257,23 @@ def validate_design(contract: Any, image_order: dict[str, str]) -> None:
 
 def evaluate(contract_path: Path, annotations_path: Path, image_order_path: Path,
              *, bootstrap_draws: int = 1000, seed: int = 0) -> dict[str, Any]:
-    contract = read_json(contract_path)
-    annotations = read_json(annotations_path)
-    image_order = read_json(image_order_path)
+    contract, contract_pin = read_json_snapshot(contract_path)
+    annotations, annotations_pin = read_json_snapshot(annotations_path)
+    image_order, image_order_pin = read_json_snapshot(image_order_path)
     _require(isinstance(contract, dict), "contract must be an object")
     targets = prepare_reference(annotations, image_order, contract.get("profile"))
     validate_design(contract, image_order)
-    _require(file_sha256(annotations_path) == contract["annotations_sha256"], "annotation bytes do not match contract pin")
-    _require(file_sha256(image_order_path) == contract["image_order_sha256"], "image order bytes do not match contract pin")
+    _require(annotations_pin["sha256"] == contract["annotations_sha256"], "annotation bytes do not match contract pin")
+    _require(image_order_pin["sha256"] == contract["image_order_sha256"], "image order bytes do not match contract pin")
     scores, rows, input_pins = {}, {}, {}
     for role in ROLES:
         rows[role], scores[role], input_pins[role] = {}, {}, {}
         for subject in SUBJECTS:
             path = contract_path.parent / contract["runs"][role]["responses"][subject]
-            rows[role][subject] = score_subject(targets, set(image_order), read_json(path))
+            responses, response_pin = read_json_snapshot(path)
+            rows[role][subject] = score_subject(targets, set(image_order), responses)
             scores[role][subject] = summarize(rows[role][subject])
-            input_pins[role][subject] = {"sha256": file_sha256(path), "bytes": path.stat().st_size}
+            input_pins[role][subject] = response_pin
     comparisons = {role: paired_image_bootstrap(rows["candidate"], rows[role], sorted(image_order, key=int), bootstrap_draws, seed)
                    for role in ROLES if role != "candidate"}
     return {"task_id": TASK, "component": "brainhub_rec_grounding_v1", "profile": contract["profile"],
@@ -271,8 +283,8 @@ def evaluate(contract_path: Path, annotations_path: Path, image_order_path: Path
                            "observed_class_count": len({category for _, category in targets}),
                            "ontology_class_count": len(GROUPS["All"]),
                            "all_annotation_boxes": sum(len(boxes) for cats in annotations.values() for boxes in cats.values())},
-            "source_revision": BRAINHUB_REVISION, "input_pins": {"contract_sha256": file_sha256(contract_path),
-            "annotations_sha256": file_sha256(annotations_path), "image_order_sha256": file_sha256(image_order_path), "responses": input_pins},
+            "source_revision": BRAINHUB_REVISION, "input_pins": {"contract_sha256": contract_pin["sha256"],
+            "annotations_sha256": annotations_pin["sha256"], "image_order_sha256": image_order_pin["sha256"], "responses": input_pins},
             "scores": scores, "paired_comparisons": comparisons, "holds": HOLDS,
             "exposure_status": "matching declarations only; no execution attestation",
             "row_scores": rows}

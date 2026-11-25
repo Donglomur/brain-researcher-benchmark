@@ -12,10 +12,12 @@ IMAGE = 'sha256:ab2bea4ced8dac37524a995444e928b80c4db04e9f5e7fddd26ea5dd3962781e
 INVENTORY = {'bytes':768588,'sha256':'ca8b7fc9d589fd3998fe81169d222597c73c3f2ba1addb4182b7763c4345f8b6'}
 PYTHON = {'path':'usr/local/bin/python3.11','bytes':6168,'sha256':'9741b3a41b5a52cb1e3ef98902b8ed9fe4c8a608df791d965604394f646ccb15'}
 TARFILE = {'bytes':106231,'sha256':'d6957647c11b6592e58e37d4e9f02f6cf9ee695cb0653b1072b542b8afac700d'}
+# Complete document <=41,942,205 bytes under the admitted row/audit/manifest
+# bounds. Its separate40MiB cap does not enlarge4MiB collection admission.
 LIMITS = {'archive_bytes':536870912,'member_bytes':134217728,'nodes':100000,
           'path_chars':1024,'alias_hops':64,'output_bytes':1073741824,
           'metadata_bytes':33554432,'audit_bytes':33554432,'plan_bytes':4194304,
-          'manifest_bytes':4194304,'read_bytes':6442450944,
+          'manifest_bytes':4194304,'plan_document_bytes':41943040,'read_bytes':6442450944,
           'extension_each':65536,'extension_total':8388608}
 SLOTS = ('input','candidate','artifacts','executor','tmp','proc','dev')
 EMPTY = ('executor/entry.py','input/features.npy','input/request.json','input/responses.bin')
@@ -59,14 +61,21 @@ class Budget:
             for key,value in limits.items():
                 need(integer(value) and value<=LIMITS[key],'limits can only tighten');self.limits[key]=value
         self.deadline=time.monotonic()+seconds
+        self.plan_document_metadata_bytes=0
         self.counters={'read_bytes':0,'written_bytes':0,'metadata_bytes':0,
                        'inner_tar_metadata_bytes_read':0,'inner_tar_boundary_probe_bytes_read':0}
     def check(self): need(time.monotonic()<self.deadline,'finite projection deadline')
-    def read(self,n,metadata=False):
+    def read(self,n,metadata=False,plan_document=False):
         self.check();need(integer(n) and self.counters['read_bytes']+n<=self.limits['read_bytes'],'explicit read stop before allocation')
-        if metadata:need(self.counters['metadata_bytes']+n<=self.limits['metadata_bytes'],'metadata read stop before allocation')
+        need(type(plan_document) is bool and (not plan_document or metadata is True),'plan document reads require metadata accounting')
+        if metadata:
+            if plan_document:
+                need(self.plan_document_metadata_bytes+n<=self.limits['plan_document_bytes'],'plan document read stop before allocation')
+            else:
+                need(self.counters['metadata_bytes']-self.plan_document_metadata_bytes+n<=self.limits['metadata_bytes'],'ordinary metadata read stop before allocation')
         self.counters['read_bytes']+=n
         if metadata:self.counters['metadata_bytes']+=n
+        if plan_document:self.plan_document_metadata_bytes+=n
     def write(self,n):
         self.check();need(integer(n) and self.counters['written_bytes']+n<=1656750080,'aggregate projection write stop')
         self.counters['written_bytes']+=n
@@ -89,8 +98,11 @@ def open_regular(path, size=None):
 def check_input(handle,path,before):
     need(stable(os.fstat(handle.fileno()))==stable(before)==stable(Path(path).lstat()),'stable input identity and extent')
 
-def read_exact(handle,n,budget,metadata=False):
-    need(integer(n) and n<=CHUNK,'bounded single input read');budget.read(n,metadata)
+def read_exact(handle,n,budget,metadata=False,plan_document=False):
+    need(integer(n) and n<=CHUNK,'bounded single input read')
+    need(type(plan_document) is bool,'boolean plan document read mode')
+    if plan_document:budget.read(n,metadata,plan_document=True)
+    else:budget.read(n,metadata)
     raw=handle.read(n);need(len(raw)==n,'truncated input');return raw
 
 def hash_range(handle,offset,size,budget):
@@ -99,13 +111,14 @@ def hash_range(handle,offset,size,budget):
         raw=read_exact(handle,min(CHUNK,left),budget);h.update(raw);left-=len(raw)
     return h.hexdigest()
 
-def bounded_json(path,pin,budget,cap):
+def bounded_json(path,pin,budget,cap,*,plan_document=False):
     need(type(pin) is dict and integer(pin.get('bytes')) and pin['bytes']<=cap and digest(pin.get('sha256')),'bounded JSON descriptor')
+    need(type(plan_document) is bool and (not plan_document or (integer(cap) and cap<=budget.limits['plan_document_bytes'])),'bounded plan document read mode')
     handle,before=open_regular(path,pin['bytes'])
     try:
         parts=[];left=pin['bytes']
         while left:
-            raw=read_exact(handle,min(CHUNK,left),budget,True);parts.append(raw);left-=len(raw)
+            raw=read_exact(handle,min(CHUNK,left),budget,True,plan_document=plan_document);parts.append(raw);left-=len(raw)
         data=b''.join(parts);need(hashlib.sha256(data).hexdigest()==pin['sha256'],'JSON digest');check_input(handle,path,before)
         return parse(data)
     finally:handle.close()
@@ -520,14 +533,14 @@ def main():
             need(hash_range(handle,0,archive['bytes'],budget)==archive['sha256'],'whole completed export hash');roster=scan_export(handle,archive['bytes'],budget);check_input(handle,archive['path'],before)
         finally:handle.close()
         projection=project_roster(roster,required,budget);plan={'schema':'language-provider-rootfs-plan/v1','image':IMAGE,'archive':{k:archive[k] for k in ('bytes','sha256')},'required':required,'projection':projection};verify_projection(plan,budget)
-        raw=bounded_encoded(plan,LIMITS['plan_bytes'])
+        raw=bounded_encoded(plan,LIMITS['plan_document_bytes'])
         tool_names=re.compile(r'^(?:cc|gcc(?:-[0-9]+)?|clang(?:-[0-9]+)?|ld(?:\..+)?|as|ar|make|meson|ninja|pkg-config|capability\.h|libcap\.so(?:\..+)?|libcap\.pc)$')
         tools=[row for row in projection['files'] if tool_names.fullmatch(row['path'].rsplit('/',1)[-1])]
         audit=bounded_encoded({'schema':'language-rootfs-projection-audit/v1','raw_roster':roster,'normalizations':projection['audit'],'tool_path_candidates':tools,'tool_version_execution_performed':False,'scope':'Projection, not full OCI equivalence','counters':budget.counters},LIMITS['audit_bytes'])
         apin=publish(profile['audit'],audit,budget);ppin=publish(profile['plan']['path'],raw,budget)
         result={'plan':ppin,'audit':apin,'counters':dict(budget.counters),'selected_image':IMAGE,'provider_qualified':False,'scientific_qualified':False}
     else:
-        plan=bounded_json(profile['plan']['path'],profile['plan'],budget,LIMITS['plan_bytes']);need(plan['archive']=={k:archive[k] for k in ('bytes','sha256')} and plan['required']==required,'selected plan/archive/full scientific roster join')
+        plan=bounded_json(profile['plan']['path'],profile['plan'],budget,LIMITS['plan_document_bytes'],plan_document=True);need(plan['archive']=={k:archive[k] for k in ('bytes','sha256')} and plan['required']==required,'selected plan/archive/full scientific roster join')
         result=apply_plan(plan,archive['path'],profile['output_root'],profile['manifest'],budget)
     raw=encoded(result);need(len(raw)<=65536,'bounded result receipt');sys.stdout.buffer.write(raw);return 0
 

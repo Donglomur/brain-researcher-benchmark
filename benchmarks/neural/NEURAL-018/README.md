@@ -31,7 +31,7 @@ Source availability does not establish a qualified runtime. A programme score ca
 ## Specification and implementation
 
 - [Authoritative task specification](task.json)
-- Specification identity: 20634 bytes; SHA-256 `f95746f7a3e651b4656759c7782e8f29f9db83eb6739b916b46bd2e76cc997a1`.
+- Specification identity: 20634 bytes; SHA-256 `c89b52e67c2c4bc9fa0afab1d122071c8a1b9d3c48deffee0b01286446a58be1`.
 - [Preserved legacy runtime declaration](implementations/registered-runtime/manifest.json)
 - [Legacy declaration package](implementations/registered-runtime)
 

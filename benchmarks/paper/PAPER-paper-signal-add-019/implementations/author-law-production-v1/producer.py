@@ -20,7 +20,7 @@ AUTHOR_REVISION = "76464a9ca15564897e58256081af4b99d08ae8db"
 AUTHOR_URL = ("https://raw.githubusercontent.com/GWeindel/decision-times/"
               + AUTHOR_REVISION + "/models.py")
 _dependencies = {
-    "contrast-panel-v2/panel.py": (14807, "7ad801136f12e66c477ab96270159ffd6c4723465af9a684edbd020e51cbdbec"),
+    "contrast-panel-v2/panel.py": (15164, "da36249e5a538d87377be320c31ec2bbfef7b11b97083688d4791b0f81d672b9"),
     "initial-evaluator-v1/evaluator.py": (25780, "2cbfa3be223cdef714619c2db287bb77de0833c40f9c0c7e20044e6cc272e9f9"),
 }
 for _relative, (_size, _sha) in _dependencies.items():

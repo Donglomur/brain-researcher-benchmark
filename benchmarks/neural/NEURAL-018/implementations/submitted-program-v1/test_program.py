@@ -23,7 +23,7 @@ import grade
 import run
 from transport import bounds, holder, provider
 from transport.contract import validate_request, validate_exposure
-sys.path.insert(0, str(common.SCORER))
+sys.path.insert(0, str(HERE))
 import scoring_core
 
 WRITTEN = 0

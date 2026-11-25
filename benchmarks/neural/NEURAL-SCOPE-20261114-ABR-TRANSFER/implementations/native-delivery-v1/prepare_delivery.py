@@ -19,7 +19,10 @@ import time
 import types
 
 
-IMPLEMENTATION_PIN = (31191, '502d99158a16f87511bba36106a0c0b206947907ff93fc61cbb9bffaf89f4aa1')
+IMPLEMENTATION_PIN = (31207, '827faa77da9c81a34c1d5b60875ad5446881db564f3671e0a5db2466abb5852e')
+# Observation construction is unchanged by the response-recursion correction.
+# Preserve the producer identity in existing externally pinned store manifests.
+PREVIOUS_IMPLEMENTATION_PIN = (31191, '502d99158a16f87511bba36106a0c0b206947907ff93fc61cbb9bffaf89f4aa1')
 RASTER_PIN = (8179, 'b8cc040978a38104a9adc7747748411e4abe61aa9df9c5a6cdd3c00902dd2a18')
 DOCUMENTS_PIN = (3489, '455d5777bd6e49162055cbccfff079689517d8934bebc1a6adf4e49ee0c7b754')
 COMPLETE_PIN = (22643, '507b7e77a2a4d09f5056e6191efe34db7092ca4eab70a4880e425ae7eade1972')
@@ -302,7 +305,7 @@ def open_store(release, root, complete_pin):
     root = ordinary_path(root)
     m = release.decode(pinned_bytes(root / 'COMPLETE.json', complete_pin, MANIFEST_LIMIT))
     need(m['schema'] == 'abr-complete-delivery-preparation-v1' and m['mode'] == MODE and
-         m['native_complete_pin'] == list(COMPLETE_PIN) and m['implementation_pin'] == list(IMPLEMENTATION_PIN) and
+         m['native_complete_pin'] == list(COMPLETE_PIN) and m['implementation_pin'] in (list(IMPLEMENTATION_PIN), list(PREVIOUS_IMPLEMENTATION_PIN)) and
          m['raster_pin'] == list(RASTER_PIN) and m['documents_pin'] == list(DOCUMENTS_PIN), 'prepared store source identity')
     need(m['cases'] == CASE_COUNT and m['traces'] == TRACE_COUNT and m['samples'] == TOTAL_SAMPLES, 'prepared complete denominator')
     for key, value in HOLDS.items():

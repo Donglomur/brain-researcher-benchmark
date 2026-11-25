@@ -10,7 +10,7 @@ import math
 import os
 import struct
 import re
-from .common import capture, decode, descriptor, need, npy_header, ordinary, pin
+from .common import capture, decode, descriptor, need, npy_header, npy_layout, ordinary, pin
 from .science import confusion, combine_confusions, person_macro, probabilities
 
 
@@ -31,7 +31,12 @@ def array_rows(artifact, epochs, columns, dtype, meter):
         def take(n):
             nonlocal count
             meter.read(n);body=os.read(fd,n);need(len(body)==n,'No truncated numeric artifact');count+=n;digest.update(body);return body
-        take(h['header_bytes'])
+        # The initial header is only a bounded preflight. Revalidate the exact
+        # bytes from this authenticated capture before interpreting any rows.
+        # A path replacement between opens must not borrow another file's layout.
+        consumed = npy_layout(take(h['header_bytes']), st.st_size, expected['bytes'])
+        need(consumed['shape'] == shape and consumed['dtype'] == dtype,
+             'Exact consumed full-clock output geometry')
         code='<'+'d'*columns if dtype=='<f8' else ('b' if dtype=='|i1' else '?')
         width=8*columns if dtype=='<f8' else 1
         for _ in range(epochs):

@@ -2051,8 +2051,10 @@ def language_nested_candidate_records(doc, source, provenance, narrative, refere
     require(0 <= worker <= number(doc['owner_seconds']) <= outer, 'nested-Ridge worker/owner/outer clocks differ')
     row = record('language-fixed-nested-ridge-negative-20261124', 'PAPER-ROOT-ADD-001',
         'trusted_operator_candidate_comparison', source, '/',
-        'Complete fixed nested-Ridge operator comparison is non-improving on all 42 original Figure 3b cells, '
-        '14 sessions and eight people. The completed fresh A3 reference is reused, without a second reference fit.',
+        'Complete fixed nested-Ridge operator comparison covers all 42 original Figure 3b cells, '
+        '14 sessions and eight people. Its equal-session primary endpoint is non-improving; '
+        'the cell, session and person diagnostics include both positive and negative directions. '
+        'The completed fresh A3 reference is reused, without a second reference fit.',
         'trusted_operator_fixed_training_sentence_nested_ridge', [
             'Eight people are clusters; 5,685 requests and 90,960 fits are computational counts, not independent biological samples.',
             'Primary weighting remains equal over all14 sessions; person and leave-one-person-out directions are descriptive diagnostics.',

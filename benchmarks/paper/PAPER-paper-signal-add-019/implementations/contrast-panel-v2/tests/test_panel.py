@@ -241,6 +241,30 @@ class SourcePanelControls(unittest.TestCase):
         self.assertEqual(next(r for r in cells if r["target"] == "encoding")["source_rmse_ms"], 200)
         self.assertEqual(next(r for r in cells if r["target"] == "decision")["source_rmse_ms"], 300)
 
+    def test_cli_rejects_duplicate_json_fields_before_scoring(self):
+        target = fixture()
+        valid = [json.dumps(target), json.dumps(submission(target))]
+        cases = [
+            (0, '{"schema":"conflicting",' + valid[0][1:]),
+            (1, '{"access_condition":"paper_data_author_code",' + valid[1][1:]),
+            (1, valid[1].replace('"latency_ms": 0', '"latency_ms": 999, "latency_ms": 0', 1)),
+        ]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            paths = [root / "targets.json", root / "predictions.json"]
+            for path, body in zip(paths, valid):
+                path.write_text(body)
+            for index, body in cases:
+                with self.subTest(input=index, nested='latency_ms' in body[:100]):
+                    paths[index].write_text(body)
+                    output = root / "result.json"
+                    run = subprocess.run([sys.executable, "-I", "-S", "-B", str(PACKAGE / "panel.py"),
+                        *map(str, paths), "--output", str(output)], capture_output=True, text=True)
+                    self.assertNotEqual(run.returncode, 0)
+                    self.assertIn("duplicate JSON object key", run.stderr)
+                    self.assertFalse(output.exists())
+                    paths[index].write_text(valid[index])
+
     def test_cli_and_file_pins(self):
         target = fixture()
         with tempfile.TemporaryDirectory() as directory:

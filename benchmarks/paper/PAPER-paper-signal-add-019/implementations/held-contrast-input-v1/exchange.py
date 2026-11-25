@@ -14,7 +14,7 @@ import re
 
 _path = Path(__file__).resolve().parents[1] / "author-law-production-v1" / "producer.py"
 _raw = _path.read_bytes()
-if len(_raw) != 12238 or hashlib.sha256(_raw).hexdigest() != "6a9e1afd076ca1ffc9931a49f28a488a34ba53168f6fba7ff41b826d3fa4317e":
+if len(_raw) != 12238 or hashlib.sha256(_raw).hexdigest() != "09a69d6231789cb6421363c5ba3dbcbfdfc1c6e292cb6c8e3833ef0d562d0ec5":
     raise ValueError("accepted author-law input plan changed")
 _spec = importlib.util.spec_from_file_location("decision_times_author_input_plan", _path)
 source = importlib.util.module_from_spec(_spec)

@@ -9,7 +9,7 @@ import unittest
 
 HERE = Path(__file__).resolve().parent
 TASK = 'NEURAL-018'
-EXPECTED_SOURCE = {'bytes': 3554, 'sha256': '955073f9573aac5560c60acb1afe9744eceea3f3deed1f15aa6a91eadcb8fe8f'}
+EXPECTED_SOURCE = {'bytes': 3757, 'sha256': '73518f78dbd4f358daec08a14710a621a2600308a252fcbff132a0f6f6706bda'}
 EXPECTED_MANIFEST = {'bytes': 987, 'sha256': '188b0dbe622f6a35ab7ab8ed3b34015704064f412d16d28054ed4c02dc86ba7a'}
 HOLDER_MEMORY = 268435456
 

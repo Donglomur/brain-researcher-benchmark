@@ -97,7 +97,7 @@ Within the existing improvement contract, historical graders and pilot scores re
 
 Each record keeps the scope of its original report. It is not current runtime qualification.
 
-- [Trusted operator candidate comparison](docs/provenance/trusted-figure3b-nested-ridge-20261124/RESULT.json): Complete fixed nested-Ridge operator comparison is non-improving on all 42 original Figure 3b cells, 14 sessions and eight people. The completed fresh A3 reference is reused, without a second reference fit.
+- [Trusted operator candidate comparison](docs/provenance/trusted-figure3b-nested-ridge-20261124/RESULT.json): Complete fixed nested-Ridge operator comparison covers all 42 original Figure 3b cells, 14 sessions and eight people. Its equal-session primary endpoint is non-improving; the cell, session and person diagnostics include both positive and negative directions. The completed fresh A3 reference is reused, without a second reference fit.
 - [Trusted operator reference](docs/provenance/trusted-figure3b-reference-20261124/RESULT.json): Complete selected Figure 3b trusted reference: 42 cells, 14 sessions, eight people and 5,685 fresh Ridge fits; two earlier zero-fit failures remain. Numerical reference agreement is not participant or whole-paper qualification.
 
 Inspect conditions, metrics and limits with `python3 scripts/neurobench.py evidence PAPER-ROOT-ADD-001`. Programme evidence does not establish direct interpretation.

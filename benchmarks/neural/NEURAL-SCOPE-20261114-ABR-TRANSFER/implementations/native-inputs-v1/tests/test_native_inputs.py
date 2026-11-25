@@ -213,6 +213,44 @@ class ArchiveAndBundle(unittest.TestCase):
    with self.assertRaisesRegex(native.SourceError,'hash mismatch'):native.prepare({k:source for k in native.PINS},root/'bundle',b'k'*32)
    self.assertFalse((root/'bundle').exists())
 
+ def test_archive_path_replacement_cannot_change_consumed_members(self):
+  # Tiny ZIPs exercise the real prepare/authenticate/open path. Stop after the
+  # first member rather than constructing a generated complete source corpus.
+  with tempfile.TemporaryDirectory(dir=HERE) as d:
+   root=Path(d);paths={};pins={};seen=[]
+   for lab in native.PINS:
+    paths[lab]=root/(lab+'.zip')
+    pins[lab]=write_zip(paths[lab],[('generated.csv',b'original')])
+   replacement=root/'replacement.zip'
+   write_zip(replacement,[('generated.csv',b'replaced')])
+   bundle_class=native.Bundle
+   def replacing_bundle(destination,key):
+    bundle=bundle_class(destination,key)
+    replacement.replace(paths['manor'])
+    return bundle
+   def stop_after_member(body,lab):
+    seen.append((lab,body))
+    raise native.SourceError('generated stop after member read')
+   with mock.patch.object(native,'PINS',pins),mock.patch.object(native,'Bundle',side_effect=replacing_bundle),mock.patch.object(native,'parse_wave_csv',side_effect=stop_after_member):
+    with self.assertRaisesRegex(native.SourceError,'generated stop'):
+     native.prepare(paths,root/'bundle',b'g'*32)
+   self.assertEqual(seen,[('manor',b'original')])
+   self.assertFalse((root/'bundle/COMPLETE.json').exists())
+
+ def test_retained_source_mutation_is_refused_before_completion(self):
+  with tempfile.TemporaryDirectory(dir=HERE) as d:
+   root=Path(d);paths={};pins={}
+   for lab in native.PINS:
+    paths[lab]=root/(lab+'.zip')
+    pins[lab]=write_zip(paths[lab],[('generated.csv',b'original')])
+   with mock.patch.object(native,'PINS',pins):
+    with native.verified_sources(paths) as sources:
+     native.check_sources(sources)
+     with paths['manor'].open('ab') as stream:stream.write(b'changed')
+     with self.assertRaisesRegex(native.SourceError,'source changed during preparation: manor'):
+      native.check_sources(sources)
+    self.assertTrue(all(stream.closed for stream,_ in sources.values()))
+
  def test_complete_generated_archive_roundtrip_and_private_projection(self):
   with tempfile.TemporaryDirectory(dir=HERE) as d:
    root=Path(d);paths,pins=generated_sources(root)

@@ -18,9 +18,9 @@ import unittest
 
 
 PINS = {
-    'prepare_delivery.py': (24532, '67e6332b78ce9aa723313787d30f129b173f6d51dc9cf8352e70b5936d69c43d'),
-    'manual_session.py': (35856, '667d857eef3829f64e211e160500f81362ab9b80c06f3c3a3cf9119949fe8eca'),
-    'abr_release.py': (31191, '502d99158a16f87511bba36106a0c0b206947907ff93fc61cbb9bffaf89f4aa1'),
+    'prepare_delivery.py': (24833, '38a5185491c0e0edfa0707bb9abb6f9949a19c97554121fc9c0c08bbc37541c9'),
+    'manual_session.py': (35856, 'a656f6086a4dcc17e899fccad9bba2683b144335e2e4dce02cf3996bcba0cc50'),
+    'abr_release.py': (31207, '827faa77da9c81a34c1d5b60875ad5446881db564f3671e0a5db2466abb5852e'),
     'raster.py': (8179, 'b8cc040978a38104a9adc7747748411e4abe61aa9df9c5a6cdd3c00902dd2a18'),
     'COMMON_DOCUMENTATION.txt': (3489, '455d5777bd6e49162055cbccfff079689517d8934bebc1a6adf4e49ee0c7b754'),
 }

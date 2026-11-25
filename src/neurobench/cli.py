@@ -59,7 +59,7 @@ def public_summary(catalog):
             'paper_outcomes': catalog['paper_outcome_counts'],
             'neural_understanding': catalog['neural_understanding_counts'],
             'recorded_evidence': {key: catalog['recorded_evidence'][key]
-                                  for key in ('counts', 'reports', 'scope')},
+                                  for key in ('counts', 'reports', 'scope', 'count_definitions')},
             'count_basis': 'Current benchmark registry and its pinned task definitions. '
                            'Selected public reports are indexed separately with their scopes. '
                            'Raw runtime receipts, candidate code, data and private construction ledgers are not inspected.',

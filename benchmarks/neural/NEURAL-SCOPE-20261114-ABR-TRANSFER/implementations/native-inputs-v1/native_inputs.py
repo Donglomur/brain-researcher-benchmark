@@ -5,6 +5,7 @@ or a scored reference. No author code, model weights, fitting or inferred labels
 """
 from __future__ import annotations
 import argparse
+import contextlib
 import csv
 import gzip
 import hashlib
@@ -207,17 +208,45 @@ class Bundle:
   for s in self.streams.values():s.close()
   for f in self.files.values():f.close()
 
+def source_identity(st):
+ return (st.st_dev,st.st_ino,st.st_size,st.st_mtime_ns,st.st_ctime_ns)
+
+@contextlib.contextmanager
+def verified_sources(paths):
+ """Authenticate and retain exactly the descriptors later consumed by ZipFile."""
+ with contextlib.ExitStack() as stack:
+  sources={}
+  for lab,pin in PINS.items():
+   path=Path(paths[lab]);st=path.lstat();need(stat.S_ISREG(st.st_mode),'source must be regular nonsymlink file')
+   fd=os.open(path,os.O_RDONLY|getattr(os,'O_NOFOLLOW',0)|getattr(os,'O_NONBLOCK',0))
+   stream=stack.enter_context(os.fdopen(fd,'rb'))
+   before=os.fstat(stream.fileno())
+   need(stat.S_ISREG(before.st_mode),'source must be regular nonsymlink file')
+   need(before.st_size==pin['bytes'],'source size/hash mismatch: '+lab)
+   h=hashlib.sha256()
+   for chunk in iter(lambda:stream.read(1024**2),b''):h.update(chunk)
+   need(h.hexdigest()==pin['sha256'],'source size/hash mismatch: '+lab)
+   need(source_identity(before)==source_identity(os.fstat(stream.fileno())),'source changed during verification: '+lab)
+   stream.seek(0)
+   sources[lab]=(stream,source_identity(before))
+  yield sources
+
+def check_sources(sources):
+ for lab,(stream,before) in sources.items():
+  need(before==source_identity(os.fstat(stream.fileno())),'source changed during preparation: '+lab)
+
 def prepare(paths,destination,key):
  need(len(key)==32,'opaque ID key must contain32bytes')
  # Verify all archives before creating a bundle. Exact version pins cannot be overridden.
- for lab,pin in PINS.items():
-  path=Path(paths[lab]);st=path.lstat();need(stat.S_ISREG(st.st_mode),'source must be regular nonsymlink file')
-  need(st.st_size==pin['bytes'] and digest_file(path)==pin['sha256'],'source size/hash mismatch: '+lab)
+ with verified_sources(paths) as sources:
+  return _prepare(sources,destination,key)
+
+def _prepare(sources,destination,key):
  bundle=Bundle(destination,key);counts={};target={};thresholds=None;observed_animals={};offsets={};annotation_members=[];annotation_animals=set()
  try:
   for lab,pin in PINS.items():
    totals={'members':0,'tables':0,'traces':0,'waveform_values':0,'annotation_tables':0}
-   with zipfile.ZipFile(paths[lab]) as archive:
+   with zipfile.ZipFile(sources[lab][0]) as archive:
     for member in safe_members(archive,pin):
      name=member.filename;totals['members']+=1
      body=archive.read(member) # bounded<=8MiB; read-to-end checks ZIP CRC.
@@ -280,6 +309,8 @@ def prepare(paths,destination,key):
   bundle.json('private/preparation-manifest.json.gz',manifest)
   bundle.json('private/id-key.json.gz',{'key_hex':key.hex(),'handling':'operator-only; public IDs do not authenticate protected evaluation'})
  finally:bundle.close()
+ # Refuse mutation of any descriptor consumed during this preparation.
+ check_sources(sources)
  # Completion seal appears only after all source members, joins, and outputs succeeded.
  files={str(p.relative_to(bundle.root)):{'bytes':p.stat().st_size,'sha256':digest_file(p)} for p in sorted(bundle.root.rglob('*')) if p.is_file()}
  completion={'status':manifest['status'],'candidate_delivery_admitted':False,'target_animals':104,'target_cases':len(target),'files':files,'manifest':manifest}

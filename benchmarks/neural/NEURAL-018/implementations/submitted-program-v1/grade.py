@@ -92,7 +92,9 @@ def execute(action, submission, output, configuration, original_deadline, source
     root = Path(configuration['assets_root'])
     submission = regular(submission, 34*1024**2, empty=True)
     submission_sha256 = digest(submission) if submission else None
-    mounts = {'/package/' + name: str(SCORER / name) for name in ('worker.py', 'scoring_core.py', 'assets.json')}
+    mounts = {'/package/' + name: str(SCORER / name) for name in ('worker.py', 'assets.json')}
+    # Corrected target admission; retain the original worker and asset identity.
+    mounts['/package/scoring_core.py'] = str(HERE / 'scoring_core.py')
     mounts.update({'/input/public.npz': str(root / assets['public']['past']['path']), '/input/manifest.json': str(root / assets['public']['manifest']['path'])})
     if submission: mounts['/input/submission.npz'] = str(submission)
     if action != 'validate':

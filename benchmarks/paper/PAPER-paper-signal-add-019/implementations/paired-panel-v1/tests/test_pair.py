@@ -64,6 +64,25 @@ def fixture(people=2):
 
 
 class PairedControls(unittest.TestCase):
+    def test_cli_rejects_duplicate_fields_in_every_input(self):
+        valid = [json.dumps(value) for value in fixture(1)]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            paths = [root / name for name in ("targets.json", "left.json", "right.json")]
+            for path, body in zip(paths, valid):
+                path.write_text(body)
+            for index in range(3):
+                with self.subTest(input=index):
+                    field = "schema" if index == 0 else "access_condition"
+                    paths[index].write_text('{"' + field + '":"conflicting",' + valid[index][1:])
+                    output = root / "result.json"
+                    run = subprocess.run([sys.executable, "-I", "-S", "-B", str(PACKAGE / "pair.py"),
+                        *map(str, paths), "--output", str(output)], capture_output=True, text=True)
+                    self.assertNotEqual(run.returncode, 0)
+                    self.assertIn("duplicate JSON object key", run.stderr)
+                    self.assertFalse(output.exists())
+                    paths[index].write_text(valid[index])
+
     def test_complete_26_person_panel_preserves_all_outcomes(self):
         targets, left, right = fixture(26)
         out = p.evaluate_pair(targets, left, right)

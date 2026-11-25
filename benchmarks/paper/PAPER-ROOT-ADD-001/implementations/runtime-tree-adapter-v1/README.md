@@ -40,8 +40,23 @@ python3.11 -I -B test_rootfs_projection.py --output-root /absolute/fresh/control
 
 The generated campaign exercises small invented tar/tree inputs. It does not process the authentic image, install a runtime, run a model, or qualify Linux containment.
 
+
+The separate focused serialization regression preserves the nine original methods and exercises the complete-plan bound, document accounting and ordinary-read compatibility:
+
+```sh
+python3.11 -I -S -B test_plan_serialization.py --output-root /absolute/fresh/serialization-controls
+```
+
+These four generated methods do not repeat the scanner suite or establish authentic runtime qualification.
+
 ## Bounds and remaining qualification
 
-The fixed stops are 512 MiB for the completed export, 128 MiB per regular member, 100,000 nodes, 1,024-character paths, 64 alias hops, 1 GiB of materialized file bytes, 32 MiB of audit and metadata, and 4 MiB each for the plan and manifest. Explicit controlled reads share a 6 GiB stop. Logical buffers and stream reads are bounded; the prospective 512 MiB construction memory allowance is not a hard aggregate RSS claim. Alias expansion or audit size can exceed the finite stops, in which case partial evidence remains and no successful manifest is published.
+The fixed stops are 512 MiB for the completed export, 128 MiB per regular member, 100,000 nodes, 1,024-character paths, 64 alias hops, 1 GiB of materialized file bytes, 32 MiB each for audit and ordinary metadata, and 4 MiB for the runtime manifest. The existing `plan_bytes` limit remains a 4 MiB path/file collection budget. A separate `plan_document_bytes` limit allows 40 MiB for the complete plan, which also contains normalization records, directories and required identities. This does not admit additional files, aliases or content.
+
+The complete serialized plan is bounded by 41,942,205 bytes, including JSON escaping, separators and its final newline. File-row accounting contributes at most 4 MiB minus 1,023 bytes; normalization rows at most 32 MiB plus one byte; the admitted manifest bounds directories plus required identities by 4 MiB minus 107 bytes; the remaining fixed envelope and newline contribute 294 bytes. The 40 MiB document stop leaves 835 bytes of margin. Other admission limits can still refuse an operation. This bound applies to documents emitted after successful `project_roster` admission. The unchanged `verify_projection` does not replay the producer's collection charges or complete normalization provenance for arbitrary external JSON. A future owned application must join the exact authenticated descriptor of a successfully produced plan; the wider document read cap is intentional.
+
+An application plan read has its own 40 MiB subtotal while retaining the 32 MiB ordinary scanner, inventory and profile metadata stop. All document reads remain counted in both `read_bytes` and `metadata_bytes`; the latter is an aggregate and may reach 72 MiB during application. Explicit controlled reads still share the 6 GiB stop. Existing profiles lacking the new limit are refused by the unchanged exact-profile check. Owners must refresh plan descriptor bounds, source/profile pins and resource quotes before using the larger document; no existing native allocation is implicitly enlarged.
+
+Logical buffers and stream reads are bounded; the prospective 512 MiB construction memory allowance is not a hard aggregate RSS claim. Alias expansion or audit size can exceed finite stops, in which case partial evidence remains and no successful manifest is published.
 
 The manifest uses the existing `language-frozen-public-tree/v1` runtime/generic contract. The unchanged provider must still authenticate the actual ordinary tree and exact mount/interpreter requirements. A separate trusted numerical recheck, bubblewrap/dependency qualification, and protected provider invocation are still required. Source and generated-control acceptance alone do not establish authentic runtime, provider, or scientific qualification.
