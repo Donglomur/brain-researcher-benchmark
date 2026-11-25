@@ -235,8 +235,8 @@ jobs:
               },
               {
                   "path": "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 23792,
-                  "sha256": "77b4d047e176e52e2212ad5eb8dc814683226f83a25ac53e70c0f17a0f929b21"
+                  "bytes": 23774,
+                  "sha256": "5f15b481e16bde099ce1df514d7d9ecff22a8902339cdaa2998839a51903e145"
               },
               {
                   "path": "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/implementation.json",
@@ -245,8 +245,8 @@ jobs:
               },
               {
                   "path": "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1/tests/test_evaluator.py",
-                  "bytes": 13943,
-                  "sha256": "f1696df127a6a5acc308d3cb134be7202bb1e111583bea2ab8b6cf2fb862b94e"
+                  "bytes": 17654,
+                  "sha256": "65de0b2e35f87e7267ee0a39d0e545270be624b8fd426d6d38af3e94dff838c1"
               },
               {
                   "path": "benchmarks/neural/NEURAL-027/historical/task.pre-understanding.v1.json",
@@ -258,7 +258,7 @@ jobs:
               "benchmarks/neural/NEURAL-027/implementations/initial-evaluator-v1"
           ]
           assert len(rows) == 6 > 0
-          assert sum(row['bytes'] for row in rows) == 77216 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 80909 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -301,7 +301,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 77216,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 80909,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -342,11 +342,11 @@ jobs:
               if isinstance(item, unittest.TestSuite):
                   return [value for child in item for value in case_ids(child)]
               return [item.id()]
-          expected_ids = ['test_evaluator.PacketTests.test_bad_neural_source_area_and_stimuli', 'test_evaluator.PacketTests.test_behavior_tail_audited_and_short_vector_rejected', 'test_evaluator.PacketTests.test_cli_safe_numeric_npz', 'test_evaluator.PacketTests.test_complete_frame_to_endpoint_path', 'test_evaluator.PacketTests.test_equal_class_availability_required', 'test_evaluator.PacketTests.test_exact_last_edge_and_internal_edge', 'test_evaluator.PacketTests.test_infinite_unselected_trial_rejected_but_nan_audited', 'test_evaluator.PacketTests.test_no_cross_trial_interpolation', 'test_evaluator.PacketTests.test_population_phase_and_mouse_leakage', 'test_evaluator.PacketTests.test_position_units_outside_domain_rejected', 'test_evaluator.PacketTests.test_source_wall_mapping_and_trial_bins', 'test_evaluator.PacketTests.test_string_source_wall_identity_mapping', 'test_evaluator.PacketTests.test_target_and_query_values_do_not_fit_reference', 'test_evaluator.PacketTests.test_train_class_and_mouse_weighting', 'test_evaluator.ScoringTests.test_cluster_uncertainty_and_single_mouse', 'test_evaluator.ScoringTests.test_independent_mouse_macro_oracle', 'test_evaluator.ScoringTests.test_malformed_missing_duplicate_unknown_probabilities', 'test_evaluator.ScoringTests.test_null_zero_and_tie_policy', 'test_evaluator.ScoringTests.test_pairing_rejects_different_items_and_label_bindings', 'test_evaluator.ScoringTests.test_public_scorer_and_reference_reject_invalid_class_sets']
+          expected_ids = ['test_evaluator.PacketTests.test_bad_neural_source_area_and_stimuli', 'test_evaluator.PacketTests.test_behavior_tail_audited_and_short_vector_rejected', 'test_evaluator.PacketTests.test_cli_npz_pin_identifies_consumed_bytes_after_replacement', 'test_evaluator.PacketTests.test_cli_plan_pin_identifies_parsed_bytes_after_replacement', 'test_evaluator.PacketTests.test_cli_safe_numeric_npz', 'test_evaluator.PacketTests.test_complete_frame_to_endpoint_path', 'test_evaluator.PacketTests.test_equal_class_availability_required', 'test_evaluator.PacketTests.test_exact_last_edge_and_internal_edge', 'test_evaluator.PacketTests.test_infinite_unselected_trial_rejected_but_nan_audited', 'test_evaluator.PacketTests.test_no_cross_trial_interpolation', 'test_evaluator.PacketTests.test_population_phase_and_mouse_leakage', 'test_evaluator.PacketTests.test_position_units_outside_domain_rejected', 'test_evaluator.PacketTests.test_source_wall_mapping_and_trial_bins', 'test_evaluator.PacketTests.test_string_source_wall_identity_mapping', 'test_evaluator.PacketTests.test_target_and_query_values_do_not_fit_reference', 'test_evaluator.PacketTests.test_train_class_and_mouse_weighting', 'test_evaluator.ScoringTests.test_cluster_uncertainty_and_single_mouse', 'test_evaluator.ScoringTests.test_independent_mouse_macro_oracle', 'test_evaluator.ScoringTests.test_malformed_missing_duplicate_unknown_probabilities', 'test_evaluator.ScoringTests.test_null_zero_and_tie_policy', 'test_evaluator.ScoringTests.test_pairing_rejects_different_items_and_label_bindings', 'test_evaluator.ScoringTests.test_public_scorer_and_reference_reject_invalid_class_sets']
           assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
-          assert suite.countTestCases() == 20 > 0
+          assert suite.countTestCases() == 22 > 0
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 20, "Executed case count differs from reviewed roster"
+          assert result.testsRun == 22, "Executed case count differs from reviewed roster"
           assert not result.skipped, "Skipped controls are forbidden"
           assert not result.expectedFailures, "Expected failures are forbidden"
           assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
@@ -1705,8 +1705,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/prepare_mat.py",
-                  "bytes": 4163,
-                  "sha256": "37c794374481901cde582ac57f2c2b69ac7cf8d3f4b9ad2d135efec14c131246"
+                  "bytes": 4943,
+                  "sha256": "93fd522a8a7af46df8667c3c745d7feeb80ded7f4326145c5a24adb5fe55a95c"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/provenance.json",
@@ -1715,8 +1715,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/tests/test_prepare_mat.py",
-                  "bytes": 1942,
-                  "sha256": "242e18e17ce78bdfc46b7b6ab37daa2af843a7aae8e1a5025476b56e7232c855"
+                  "bytes": 4173,
+                  "sha256": "eb3b3829316514c2be211b3abed80a2d654753756a27ec1e290086849a2bd4f8"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1/tests/test_reference.py",
@@ -1733,7 +1733,7 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-012/implementations/initial-evaluator-v1"
           ]
           assert len(rows) == 9 > 0
-          assert sum(row['bytes'] for row in rows) == 84434 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 87445 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -1776,7 +1776,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 84434,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 87445,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -1818,11 +1818,11 @@ jobs:
               if isinstance(item, unittest.TestSuite):
                   return [value for child in item for value in case_ids(child)]
               return [item.id()]
-          expected_ids = ['test_prepare_mat.PrepareTests.test_generated_mat_readthrough', 'test_prepare_mat.PrepareTests.test_noninteger_raw_traces_are_rejected']
+          expected_ids = ['test_prepare_mat.PrepareTests.test_atomic_source_replacement_after_decode_is_rejected', 'test_prepare_mat.PrepareTests.test_generated_mat_readthrough', 'test_prepare_mat.PrepareTests.test_inplace_source_mutation_after_decode_is_rejected', 'test_prepare_mat.PrepareTests.test_noninteger_raw_traces_are_rejected', 'test_prepare_mat.PrepareTests.test_source_hash_binds_decoded_bytes']
           assert sorted(case_ids(suite)) == expected_ids, "Discovered case identities differ from reviewed roster"
-          assert suite.countTestCases() == 2 > 0
+          assert suite.countTestCases() == 5 > 0
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 2, "Executed case count differs from reviewed roster"
+          assert result.testsRun == 5, "Executed case count differs from reviewed roster"
           assert not result.skipped, "Skipped controls are forbidden"
           assert not result.expectedFailures, "Expected failures are forbidden"
           assert not result.unexpectedSuccesses, "Unexpected successes are forbidden"
