@@ -131,7 +131,8 @@ def main(argv=None):
     _require(digest == args.expected_sha256, "loss-grid SHA256 mismatch")
     required = {"loss", "intper_sec", "delay_sec_start", "shape", "boundstrength", "channel_ids", "rates"}
     with np.load(io.BytesIO(raw), allow_pickle=False) as packed:
-        _require(set(packed.files) == required, "NPZ must contain exactly the documented seven arrays")
+        _require(len(packed.files) == len(required) and set(packed.files) == required,
+                 "NPZ must contain exactly the documented seven arrays, without duplicate members")
         channels = packed["channel_ids"]
         _require(channels.ndim == 1 and channels.dtype.kind == "U", "channel_ids must be a Unicode vector")
         result = select_tied_shape(packed["loss"],
