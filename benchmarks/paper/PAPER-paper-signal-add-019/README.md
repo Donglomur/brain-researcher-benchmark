@@ -69,6 +69,7 @@ No legacy runtime declaration is linked to this registered ID. The current imple
 - [Released decision-times targets and behavioral lineage requirements](docs/released-target-lineage-20261124.md)
 - [Decision-times released-target lineage evidence](docs/released-target-lineage-20261124.json)
 - [Protected fit-only access and paired-arm isolation requirements](docs/protected-access-20261124.md)
+- [Complete Table 1 reporting comparison (2026-11-25)](docs/table-comparison-20261125.md)
 
 ## Implementation artifacts
 
