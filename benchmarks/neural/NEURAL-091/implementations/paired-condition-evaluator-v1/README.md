@@ -8,6 +8,13 @@ runner, freeze a program, enforce no-tools behavior, or authenticate observation
 
 Both submissions are admitted using public data before any protected target is
 examined. In the CLI this includes admission before opening the private file.
+Before reading any payload, the CLI rejects a private path that aliases the public
+packet or either submission, and an output path that aliases any input. Resolved
+paths and existing-file identity checks cover alternate path spelling, symlinks
+and hardlinks. Other input aliases remain subject to the existing payload rules.
+The trusted operator must keep paths stable during execution; these checks do
+not isolate hostile concurrent filesystem changes.
+
 Each submission must contain exactly:
 
 ```json
@@ -94,7 +101,8 @@ The v1 source mapping retains AllenSDK commit
 The test suite uses tiny generated tables only. It covers a hand-calculated
 unequally sized two-mouse cohort, preserved condition reports, calibrated-packet
 mismatch, pre-private admission failures, roster omission, zero-rate and
-undefined arithmetic, one-mouse uncertainty, and CLI ordering. It establishes
+undefined arithmetic, one-mouse uncertainty, CLI ordering, metadata-only alias
+refusal before payload I/O, unchanged input bytes and distinct-path scoring. It establishes
 software behavior, not neural competence.
 
 ```sh
