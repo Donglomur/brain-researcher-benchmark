@@ -1,0 +1,344 @@
+{
+  "schema": "nomad_recovered_parameter_facts_v3",
+  "authority": "Numerical facts transcribed from S Tables1–8; visually checked pages19–21. This is not an authenticated run configuration.",
+  "tables": {
+    "T1": {
+      "source": "S p19 Table1",
+      "units_literal": true,
+      "rows": [
+        {
+          "task": "isometric",
+          "variable": "force",
+          "unit": "mV",
+          "x": [
+            -1500,
+            800
+          ],
+          "y": [
+            -1100,
+            600
+          ]
+        },
+        {
+          "task": "isometric",
+          "variable": "dF/dt",
+          "unit": "mV/t",
+          "x": [
+            -100,
+            100
+          ],
+          "y": [
+            -100,
+            100
+          ]
+        },
+        {
+          "task": "reaching",
+          "variable": "cursor_position",
+          "unit": "cm",
+          "x": [
+            0.5,
+            1.5
+          ],
+          "y": [
+            -1.1,
+            -0.25
+          ]
+        },
+        {
+          "task": "reaching",
+          "variable": "cursor_velocity",
+          "unit": "cm/t",
+          "x": [
+            -0.025,
+            0.025
+          ],
+          "y": [
+            -0.025,
+            0.025
+          ]
+        }
+      ]
+    },
+    "T2": {
+      "source": "S p19 Table2",
+      "monkey": {
+        "readin": 50,
+        "ic_encoder": 100,
+        "controller_input_encoder": 100,
+        "generator": 100,
+        "controller": 100,
+        "controller_output": 4,
+        "factors": 30,
+        "external_input": 0
+      },
+      "human": {
+        "readin": 100,
+        "ic_encoder": 100,
+        "controller_input_encoder": 100,
+        "generator": 100,
+        "controller": 100,
+        "controller_output": 4,
+        "factors": 30,
+        "external_input": 0
+      }
+    },
+    "T3": {
+      "source": "S p19 Table3",
+      "dropout": 0.05,
+      "coordinated_dropout": 0.3,
+      "batch_size": 1000,
+      "sample_validation_rate": 0,
+      "initial_lr": 0.001,
+      "gradient_norm": 200,
+      "lr_decay": 0.95,
+      "adam_epsilon": 1e-08,
+      "lr_patience": 6,
+      "controller_prior_autoregressive_constant": 10.0,
+      "l2_controller_and_generator": 1e-06,
+      "controller_prior_noise_variance": 0.1,
+      "l2_encoders": 0,
+      "ic_prior_noise_variance": 0.1,
+      "l2_ramp_epochs": 100,
+      "ic_posterior_minimum_variance": 0.0001,
+      "ic_and_controller_kl_weight": 0.0001,
+      "gru_hidden_state_max_magnitude": 5.0,
+      "kl_ramp_epochs": 100,
+      "controller_input_lag_bins": 1,
+      "behavior_lr": 0.001,
+      "total_loss_multiplier": 10000,
+      "behavior_cost_scale": 0.1,
+      "lowd_readin_l2": 0.005,
+      "behavior_cost_ramp_epochs": 100,
+      "sequence_bins": 30,
+      "human_sequence_override_from_P_Sec29": 50
+    },
+    "T4": {
+      "source": "S p20 Table4",
+      "scope": "human AutoLFADS; not automatically monkey S1",
+      "ranges": {
+        "initial_lr": [
+          1e-05,
+          0.001
+        ],
+        "dropout": [
+          0,
+          0.6
+        ],
+        "coordinated_dropout": [
+          0.01,
+          0.99
+        ],
+        "generator_l2": [
+          1e-05,
+          1
+        ],
+        "controller_l2": [
+          1e-05,
+          1
+        ],
+        "controller_kl": [
+          1e-05,
+          0.001
+        ],
+        "ic_encoder_kl": [
+          1e-05,
+          0.001
+        ]
+      },
+      "workers_from_P_Sec29": 20,
+      "epochs_per_selection_mutation_round_from_P_Sec29": 25,
+      "sampling_and_population_rule": null
+    },
+    "T5": {
+      "source": "S p20 Table5",
+      "initial_lr": {
+        "monkey": 0.002,
+        "human": 0.0001
+      },
+      "gradient_norm": 2000,
+      "lr_decay": 0.95,
+      "readin_l2": 0.005,
+      "lr_patience": 6,
+      "batch_size": 300,
+      "nll_weight": 10,
+      "early_stop_patience": {
+        "monkey": 40,
+        "human": 30
+      },
+      "nll_ramp_epochs": 100,
+      "adam_epsilon": 1e-08,
+      "kl_ramp_epochs": {
+        "monkey": 10,
+        "human": 100
+      },
+      "ic_kl_weight": 0.0001,
+      "controller_kl_weight": 0.0001,
+      "distribution_kl_coefficient_not_printed_in_table": true
+    },
+    "T6": {
+      "source": "S p20 Table6",
+      "latents": 10,
+      "random_fa_models": 5,
+      "em_max_iterations": 100000,
+      "em_stop": 1e-05,
+      "private_variance_minimum": 0.1,
+      "alignment_rows": 90,
+      "alignment_l2_norm_threshold": 0.01
+    },
+    "T7": {
+      "source": "S p21 Table7",
+      "decoder_latents": 10,
+      "decoder_batch_size": 64,
+      "decoder_epochs": 400,
+      "decoder_lr": 0.001,
+      "decoder_steps": 4,
+      "decoder_layers": 1,
+      "adan_epochs": 200,
+      "adan_batch_size": 4,
+      "discriminator_lr": 5e-05,
+      "generator_lr": 0.0001
+    },
+    "T8": {
+      "source": "S p21 Table8",
+      "l2_regularization_weight": 1,
+      "update_rate": 0.0005,
+      "initial_neural_nll_weight": 1.0,
+      "dropout": 0.15,
+      "initial_behavior_loss_weight": 0.2,
+      "variance_minimum": 0.0001,
+      "lambda_q": 100,
+      "prior_variance": 1,
+      "initial_lr": 0.01,
+      "adam_beta1": 0.9,
+      "adam_beta2": 0.999,
+      "adam_epsilon": 1e-08,
+      "lr_decay": 0.95,
+      "lr_patience": 10,
+      "minimum_lr": 1e-05,
+      "relevant_factors": 2,
+      "irrelevant_factors": 2,
+      "encoder": 64,
+      "gradient_norm": 200,
+      "batch_size": 16,
+      "l2_regularization_separately_printed": 1,
+      "relevant_ic": 64,
+      "irrelevant_ic": 64,
+      "relevant_decoder": 64,
+      "irrelevant_decoder": 64,
+      "epochs_from_P_Sec38": 1000,
+      "exact_six_loss_schedule_mapping": null
+    }
+  },
+  "figure_grids": {
+    "S1_references": {
+      "isometric": [
+        0,
+        28,
+        95
+      ],
+      "reaching": [
+        0,
+        10,
+        38
+      ]
+    },
+    "S14_references": {
+      "isometric": [
+        0,
+        28,
+        95
+      ],
+      "reaching": [
+        0,
+        10,
+        38
+      ]
+    },
+    "S13_rnn_sweep": [
+      100,
+      150,
+      200,
+      250,
+      300
+    ],
+    "S13_sequence_sweep": [
+      10,
+      30,
+      50,
+      70,
+      90
+    ],
+    "S13_channels": 256,
+    "S13_hz": 50,
+    "S13_samples_per_setting": 12500,
+    "S13_source": "visually reviewed S p15",
+    "S16_exact_dimension_grid": null,
+    "S16_display_only_observation": "Markers near5,10,20...100; NOT an authenticated integer schedule, and not sufficient to resolve96-channel/rank constraint.",
+    "S13_reported_hardware": {
+      "machine": "Dell Optiplex 7000 small form factor",
+      "cpu": "Intel i9-13900",
+      "memory_GB_reported": 128,
+      "source": "P/Sec32",
+      "actual_environment_measured": false
+    },
+    "S7_literal_labels": [
+      "Static decoder",
+      "Aligned FA",
+      "ADAN",
+      "NoMAD",
+      "TNDM",
+      "Adaptive TNDM",
+      "Aligner ablated",
+      "Static LFADS"
+    ]
+  },
+  "no_fits_or_scientific_arrays": true,
+  "additive_precedence": "SCIENTIFIC_CORRECTIONS.md",
+  "T11": {
+    "sources": [
+      "P/Sec7",
+      "S10"
+    ],
+    "representations": {
+      "Static": "smoothed spikes",
+      "RTI": "smoothed spikes",
+      "NoMAD": "LFADS recurrent Generator states",
+      "NoMAD+RTI": "LFADS recurrent Generator states"
+    },
+    "post_calibration_counts": [
+      "B1",
+      "B2"
+    ],
+    "post_calibration_method_slots": "4*(B1+B2)",
+    "calibration_slots": 8,
+    "distinct_initial_representation_decoder_endpoints": 4,
+    "first_evaluation_slots": 8,
+    "first_evaluation_is_subset_of_post_calibration": true,
+    "shared_first_products": 4,
+    "counts_are_symbolic_not_observed": true
+  },
+  "original_training_facts": {
+    "source": "P/Sec28–31",
+    "monkey_chop_bins": 30,
+    "monkey_overlap_bins": 6,
+    "validation_fraction": 0.2,
+    "validation_contiguous_blocks": true,
+    "validation_training_overlap_max_fraction": 0.05,
+    "behavior_optimizer": "separate Adam",
+    "isometric_behavior": [
+      "force",
+      "force derivative"
+    ],
+    "reaching_behavior": [
+      "position",
+      "velocity"
+    ],
+    "reported_behavior_preprocess": "mean-center and scale to extrema -1 and +1; exact ordering/support/constants unresolved",
+    "day0_nonimproving_epoch_stop": 10,
+    "day0_lr_stop": 1e-06,
+    "lfads_jitter_max_bins_each_direction": 2,
+    "dayk_checkpoint": "minimum validation loss",
+    "fixed_hp_search": "one hyperparameter at a time on a subset; grid/subset/order/selection not recovered"
+  }
+}
