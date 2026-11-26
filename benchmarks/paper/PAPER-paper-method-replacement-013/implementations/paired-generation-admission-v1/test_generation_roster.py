@@ -172,6 +172,110 @@ class GenerationRosterTests(unittest.TestCase):
         self.assertIsNone(report["paper_win"])
         self.assertNotIn("ids", repr(report))
 
+    def set_generated_events(self, packet, events):
+        packet["prediction"] = {"ID": [neuron for neuron, _ in events],
+            "dt": [0.] * len(events), "Trial": [0] * len(events),
+            "Interval": [M._float32(interval) for _, interval in events]}
+
+    def two_true_windows(self, run):
+        return tuple({"interval": M._float32(row["end_tick"] * .01), "trial": 0, "ids": (i,)}
+                     for i, row in enumerate(run["support"]["evaluation"]))
+
+    def assess_preserving_original_diagnostics(self):
+        metrics = self.loaded.modules["run_metrics"]
+        original, captured = metrics.grade_generation, []
+        def retain(*args, **kwargs):
+            diagnostic = original(*args, **kwargs)
+            captured.append(copy.deepcopy(diagnostic))
+            return diagnostic
+        with patch.object(metrics, "grade_generation", retain):
+            report = self.run_assess()
+        self.assertEqual([run["diagnostics"] for run in report["runs"]], captured)
+        self.assertEqual([kind for kind, _ in self.calls], ["truth"] * 4 + ["runtime"])
+        self.assertTrue(report["all_predictions_admitted_before_targets_and_runtime"])
+        self.assertTrue(report["full_declared_window_support_checked"])
+        self.assertFalse(report["true_event_values_returned"])
+        self.assertNotIn("ids", repr(report))
+        for key in ("physical_isolation_qualified", "source_study_authenticated", "source_complete",
+                    "scientifically_qualified", "paper_result_reproduced"):
+            self.assertFalse(report[key])
+        self.assertIsNone(report["selected_paper_figure6_metric"])
+        self.assertIsNone(report["paper_win"])
+        for pair in report["comparisons"]:
+            self.assertTrue(pair["paired_truth_equal"])
+            self.assertFalse(pair["scientifically_qualified"])
+            self.assertIsNone(pair["paper_win"])
+        return report
+
+    def assert_scikit_support(self, report, equal, reference_count, candidate_count):
+        for pair in report["comparisons"]:
+            self.assertEqual(pair["effective_window_support"], {"compute_scores_scikit": {
+                "equal": equal, "source_reference_count": reference_count, "candidate_count": candidate_count,
+                "reason": "same_predicted_present_windows" if equal else "different_predicted_present_windows"}})
+            if not equal or reference_count == candidate_count == 0:
+                self.assertEqual(pair["candidate_minus_reference"]["compute_scores_scikit"],
+                                 {metric: None for metric in M.METRICS})
+
+    def test_equal_count_different_windows_has_no_scikit_effect(self):
+        self.truth = self.two_true_windows
+        for index, packet in enumerate(self.packets):
+            self.set_generated_events(packet, [(2, 2.)] if index % 2 == 0 else [(1, 2.05)])
+        report = self.assess_preserving_original_diagnostics()
+        self.assert_scikit_support(report, False, 1, 1)
+        self.assertEqual(report["runs"][0]["diagnostics"]["branches"]["compute_scores_scikit"],
+                         {metric: 0. for metric in M.METRICS})
+        self.assertEqual(report["runs"][1]["diagnostics"]["branches"]["compute_scores_scikit"],
+                         {metric: 1. for metric in M.METRICS})
+        self.assertEqual(report["comparisons"][0]["candidate_minus_reference"]["compute_scores"],
+                         {metric: .5 for metric in M.METRICS})
+
+    def test_difficult_window_omission_retains_raw_diagnostics_without_scikit_effect(self):
+        self.truth = self.two_true_windows
+        for index, packet in enumerate(self.packets):
+            self.set_generated_events(packet, [(0, 2.), (2, 2.05)] if index % 2 == 0 else [(0, 2.)])
+        report = self.assess_preserving_original_diagnostics()
+        self.assert_scikit_support(report, False, 2, 1)
+        self.assertEqual(report["runs"][0]["diagnostics"]["branches"]["compute_scores_scikit"],
+                         {metric: .5 for metric in M.METRICS})
+        self.assertEqual(report["runs"][1]["diagnostics"]["branches"]["compute_scores_scikit"],
+                         {metric: 1. for metric in M.METRICS})
+        self.assertEqual(report["comparisons"][0]["candidate_minus_reference"]["compute_scores"],
+                         {metric: 0. for metric in M.METRICS})
+
+    def test_exact_sets_allow_effect_despite_event_order_and_multiplicity(self):
+        self.truth = self.two_true_windows
+        for index, packet in enumerate(self.packets):
+            self.set_generated_events(packet, [(0, 2.), (2, 2.05)] if index % 2 == 0
+                                      else [(1, 2.05), (0, 2.), (0, 2.)])
+        report = self.assess_preserving_original_diagnostics()
+        self.assert_scikit_support(report, True, 2, 2)
+        for pair in report["comparisons"]:
+            self.assertEqual(pair["candidate_minus_reference"],
+                             {branch: {metric: .5 for metric in M.METRICS} for branch in M.BRANCHES})
+
+    def test_empty_predictions_have_equal_support_but_no_scikit_effect(self):
+        for packet in self.packets:
+            self.set_generated_events(packet, [])
+        report = self.assess_preserving_original_diagnostics()
+        self.assert_scikit_support(report, True, 0, 0)
+        for run in report["runs"]:
+            self.assertEqual(run["diagnostics"]["branches"]["compute_scores_scikit"], {})
+            self.assertEqual(run["diagnostics"]["branches"]["compute_scores"],
+                             {metric: 0. for metric in M.METRICS})
+
+    def test_one_empty_prediction_stream_is_admitted_with_null_scikit_effect(self):
+        for empty_index in (0, 1):
+            with self.subTest(empty_role=M.ROLES[empty_index]):
+                self.calls.clear()
+                for index, packet in enumerate(self.packets):
+                    self.set_generated_events(packet, [] if index % 2 == empty_index else [(0, 2.)])
+                report = self.assess_preserving_original_diagnostics()
+                self.assert_scikit_support(report, False, int(empty_index != 0), int(empty_index != 1))
+                self.assertEqual(report["runs"][empty_index]["diagnostics"]["branches"]["compute_scores_scikit"], {})
+                other = report["runs"][1 - empty_index]["diagnostics"]["branches"]["compute_scores_scikit"]
+                self.assertEqual(set(other), set(M.METRICS))
+                self.assertTrue(all(value is not None for value in other.values()))
+
     def test_last_bad_packet_blocks_every_target_and_runtime(self):
         self.packets[-1]["prediction"]["ID"][-1] = True
         self.assert_admission_refuses()
@@ -261,12 +365,14 @@ class GenerationRosterTests(unittest.TestCase):
         def mutate(run):
             for packet in self.packets:
                 packet["prediction"]["ID"][:] = [100, 100]
+                packet["prediction"]["Interval"][:] = [999., 999.]
             self.study["runs"].clear()
             return original(run)
         self.truth = mutate
         report = self.run_assess()
         self.assertEqual(report["runs"][0]["diagnostics"]["branches"]["compute_scores"]["F1"], 1.)
         self.assertEqual(len(report["runs"]), 4)
+        self.assert_scikit_support(report, False, 1, 2)
 
     def test_empty_source_branches_remain_empty_with_null_effect(self):
         for packet in self.packets:
@@ -277,6 +383,7 @@ class GenerationRosterTests(unittest.TestCase):
         self.assertEqual(report["runs"][0]["diagnostics"]["branches"], {branch: {} for branch in M.BRANCHES})
         self.assertTrue(all(value is None for branch in report["comparisons"][0]["candidate_minus_reference"].values()
                             for value in branch.values()))
+        self.assert_scikit_support(report, True, 0, 0)
 
     def test_embedded_generator_truth_is_not_read(self):
         class DoNotRead:
