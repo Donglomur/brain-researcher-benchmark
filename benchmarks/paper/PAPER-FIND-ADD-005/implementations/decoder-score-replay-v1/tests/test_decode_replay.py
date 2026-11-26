@@ -47,7 +47,134 @@ def candidate(source):
     return {"schema": "dentate-decoder-predictions-v1", "models": [model]}
 
 
+def two_subgroup_fixture():
+    source = fixture()
+    cell = source["cells"][0]
+    cell["selected_prefiltered_trial_indices"] = list(range(2, 42, 2))
+    cell["source_trial_numbers"] = list(range(101, 121))
+    second = copy.deepcopy(cell["groups"][0])
+    second.update(subgroup_index=2, values=[2, 3],
+                  selected_experiment_trial_indices=list(range(11, 21)),
+                  target=[value + 2 for value in second["target"]])
+    second["models"][0]["first_experiment_prediction"] = [
+        [value + 2 for value in row]
+        for row in second["models"][0]["first_experiment_prediction"]]
+    cell["groups"].append(second)
+    return source
+
+
+def subgroup_candidate(source, perfect=True):
+    models = []
+    for report in replay.replay(source)["models"]:
+        cell = next(cell for cell in source["cells"]
+                    if (cell["monkey"], cell["cell_id"]) == (report["monkey"], report["cell_id"]))
+        group = next(group for group in cell["groups"]
+                     if (group["variable"], group["values"]) == (report["variable"], report["values"]))
+        model = {name: report[name] for name in ("monkey", "cell_id", "variable", "values", "alignment",
+                                                "aligned_time_ms", "support_sha256")}
+        model["source_trial_numbers"] = [cell["source_trial_numbers"][i - 1]
+                                         for i in group["selected_experiment_trial_indices"]]
+        model["prediction"] = [[target if perfect else group["values"][0]] * len(report["aligned_time_ms"])
+                               for target in group["target"]]
+        models.append(model)
+    return {"schema": "dentate-decoder-predictions-v1", "models": models}
+
+
 class DecoderReplayTests(unittest.TestCase):
+    def test_same_variable_trial_overlap_rejected_in_all_replay_modes(self):
+        source = two_subgroup_fixture()
+        proposal = subgroup_candidate(source)
+        source["cells"][0]["groups"][1]["selected_experiment_trial_indices"] = list(range(1, 11))
+        before = copy.deepcopy(source)
+        for mode in ("replay", "candidate", "paired"):
+            with self.subTest(mode=mode), self.assertRaisesRegex(replay.ReplayError, "overlapping source trials"):
+                if mode == "replay":
+                    replay.replay(source)
+                elif mode == "candidate":
+                    replay.replay(source, proposal)
+                else:
+                    replay.compare_conditions(source, proposal, proposal)
+        self.assertEqual(source, before)
+
+    def test_unfitted_overlap_rejected_in_either_source_order(self):
+        for unfitted_first in (False, True):
+            source = two_subgroup_fixture()
+            groups = source["cells"][0]["groups"]
+            groups[1].update(status="insufficient_group_trials", selected_experiment_trial_indices=[1, 2],
+                             target=[2, 3], trial_weights=[0.5, 0.5], models=[])
+            if unfitted_first:
+                groups.reverse()
+            for ordinal, group in enumerate(groups, 1):
+                group["subgroup_index"] = ordinal
+            with self.subTest(unfitted_first=unfitted_first), self.assertRaisesRegex(
+                    replay.ReplayError, "overlapping source trials"):
+                replay.replay(source)
+
+    def test_two_unfitted_subgroups_cannot_reuse_trials(self):
+        source = fixture()
+        source["configuration"]["behavior_variables"].append("past_gap")
+        for ordinal, values in enumerate(([2, 3], [4, 5]), 1):
+            source["cells"][0]["groups"].append({
+                "variable": "past_gap", "subgroup_index": ordinal, "values": values,
+                "status": "insufficient_group_trials", "selected_experiment_trial_indices": [1, 2],
+                "target": values, "trial_weights": [0.5, 0.5], "models": []})
+        with self.assertRaisesRegex(replay.ReplayError, "overlapping source trials"):
+            replay.replay(source)
+
+    def test_disjoint_subgroups_preserve_accuracy_support_and_pairing(self):
+        source = two_subgroup_fixture()
+        data = subgroup_candidate(source, perfect=False)
+        code = subgroup_candidate(source)
+        report = replay.replay(source)
+        paired = replay.compare_conditions(source, data, code)
+        self.assertEqual([row["source_trial_numbers"] for row in data["models"]],
+                         [list(range(101, 111)), list(range(111, 121))])
+        self.assertEqual(len(report["models"]), 2)
+        self.assertEqual(paired["source_exclusions"], [])
+        for original, row in zip(report["models"], paired["models"]):
+            self.assertEqual({name: row[name] for name in original}, original)
+            self.assertEqual(row["first_experiment_accuracy"], [0.5, 0.5, 1.0])
+            self.assertEqual(row["condition_scores"]["paper_data"]["accuracy"], [0.5] * 3)
+            self.assertEqual(row["condition_scores"]["paper_data_author_code"]["accuracy"], [1.0] * 3)
+            self.assertEqual(row["condition_scores"]["paper_data_author_code"]
+                             ["minus_retained_first_experiment"], [0.5, 0.5, 0.0])
+            self.assertEqual(row["paper_data_author_code_minus_paper_data"], [0.5] * 3)
+        self.assertFalse(paired["paper_reproduction_established"])
+        self.assertFalse(paired["paper_improvement_established"])
+
+    def test_disjoint_unfitted_subgroup_preserves_exclusion(self):
+        source = two_subgroup_fixture()
+        source["cells"][0]["groups"][1].update(
+            status="insufficient_group_trials", selected_experiment_trial_indices=[11, 12],
+            target=[2, 3], trial_weights=[0.5, 0.5], models=[])
+        proposal = subgroup_candidate(source)
+        report = replay.compare_conditions(source, proposal, proposal)
+        self.assertEqual(len(report["models"]), 1)
+        self.assertEqual(report["models"][0]["first_experiment_accuracy"], [0.5, 0.5, 1.0])
+        self.assertEqual(report["models"][0]["paper_data_author_code_minus_paper_data"], [0.0] * 3)
+        self.assertEqual(report["source_exclusions"], [{
+            "monkey": "Mi", "cell_id": "generated_cell", "variable": "gap_direction", "values": [2, 3],
+            "subgroup_index": 2, "status": "insufficient_group_trials", "n_trials": 2}])
+
+    def test_trial_reuse_across_variables_and_cells_remains_valid(self):
+        source = fixture()
+        source["configuration"]["behavior_variables"].append("past_gap")
+        group = copy.deepcopy(source["cells"][0]["groups"][0])
+        group["variable"] = "past_gap"
+        source["cells"][0]["groups"].append(group)
+        cell = copy.deepcopy(source["cells"][0])
+        cell.update(monkey="Mo", cell_id="generated_second")
+        source["cells"].append(cell)
+        proposal = subgroup_candidate(source)
+        report = replay.compare_conditions(source, proposal, proposal)
+        self.assertEqual(len(report["models"]), 4)
+        self.assertEqual({(row["monkey"], row["variable"]) for row in report["models"]},
+                         {("Mi", "gap_direction"), ("Mi", "past_gap"), ("Mo", "gap_direction"), ("Mo", "past_gap")})
+        self.assertEqual(report["source_exclusions"], [])
+        for row in report["models"]:
+            self.assertEqual(row["first_experiment_accuracy"], [0.5, 0.5, 1.0])
+            self.assertEqual(row["paper_data_author_code_minus_paper_data"], [0.0] * 3)
+
     def test_weighted_not_unweighted_accuracy(self):
         result = replay.replay(fixture())
         self.assertEqual(result["models"][0]["first_experiment_accuracy"], [0.5, 0.5, 1.0])
