@@ -22,6 +22,22 @@ The independently supplied file digest binds declarations; extractor conformance
 actual provenance, protected execution and scientific qualification remain open.
 Passing this check does not establish native or viewer interpretation.
 
+The maintained entrypoint also requires the union of held-out evaluation rows
+to equal **every declared protocol row**. A recording, block or electrode cannot
+be counted as included solely because its rows are used for fitting. A row may
+be used to fit other independent folds, but must itself be held out exactly once.
+The predecessor still checks person/movie separation, duplicate held-out rows
+and complete blocks; this gate adds the missing exhaustive evaluation check.
+Together with the predecessor's included-recording check, this means every
+declared included recording contributes held-out rows. Frozen source exclusions
+remain explicit; actual native word/electrode completeness remains unverified.
+
+Incomplete evaluation support is rejected before the CLI opens nuisance,
+candidate or private-target files. Both the callable `evaluate` route and CLI
+use this gate. Historical initial-evaluator and bound-nuisance implementations
+and their generated fixtures are preserved unchanged; callers needing the
+current complete-coverage contract must use this maintained entrypoint.
+
 The manifest has exactly these top-level fields:
 
 ```json
@@ -60,9 +76,15 @@ candidate or private-target reads. Comparator replacement is still rejected
 before private targets. Scores replace the destination atomically only after
 successful evaluation. This CLI is not a filesystem sandbox.
 
-The focused generated controls in `test_evaluator.py` cover effective support,
+The 18 authored generated controls in `test_evaluator.py` cover effective support,
 latency, the whole-word/post-onset trap, lagged availability, guard coverage,
 complete feature identity, fixed byte/protocol binding, retained scores and
-rejection before private inputs. They contain no authentic signals or fits.
+rejection before private inputs. Coverage controls reject a fit-only included
+recording and an omitted declared block/electrode, retain split/exactly-once
+checks, and accept all three declared generated recordings in independent folds.
+Perfect, constant and biased predictions are compared with the unchanged scorer
+on identical complete support, retaining both signed SSE-based R² and distinct EV.
+They contain no authentic signals or fits. Authored tests are not evidence of a
+passing run; execution requires the coordinator's separately selected shared pool.
 The component is additive and requires explicit enrollment by the repository
 integrator; neither a canonical contract nor readiness is changed here.
