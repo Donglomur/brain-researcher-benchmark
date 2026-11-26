@@ -42,22 +42,50 @@ they do not authenticate an arbitrary caller-supplied JSON document. Neither thi
 extension nor its tests open or replace the target-release barrier. Do not deliver
 these loss/error-derived reports to a prediction actor.
 
-The existing source manifests and frozen controller are preserved. Enrolling this
-extension in a newly frozen controller/source manifest is an integration action;
-the retained historical runtime does not call it automatically. Thus this is an
-implemented scoring/reporting component, not a newly qualified runtime or study.
+The integrated central driver now calls this unchanged kernel inside its existing
+`prediction_grade` phase and retains `PAIRED_PREDICTION_CONTRASTS.json` beside the
+unchanged `PREDICTION_GRADE.json` in private `parent-bodies`. The observer requires
+the pair whenever grading completes, even if a later phase fails, and joins the
+report's input digest to the exact observed grade bytes. Historical outputs remain
+bound to their historical source and do not acquire this new completion claim.
+
+The captured kernel copy is byte-identical to this standalone implementation.
+The effective parent/grader, original grade schema/bytes, fifteen phases and
+comparison mathematics are unchanged. A failed derivation or retention keeps the
+original grade and fails the existing grading phase; normal phase dependencies
+continue to apply. Valid incomplete grades still produce incomplete comparisons,
+with missing partners and undefined aggregates preserved. Numerical coverage does
+not establish HMP qualification: retain the original grade and its
+`supplied_HMP_condition_complete` flag. P/I compare tool/program modes, not native
+versus tool use; no population confidence interval is added.
+
+The driver charges one logical in-memory grade traversal and reserves temporary
+space of four times the retained grade bytes plus one MiB for the fixed report
+structures, spanning derivation and serialization. This is a conservative declared
+logical allowance, not a Python/OS peak-memory guarantee. Existing inherited
+clock, read/live/write/retention, body and file-count ceilings remain in force;
+no cap is increased and no authentic runtime or study is qualified.
 Original 26-person FIF admission, qualified native HMP/reference execution,
 matched protected participant delivery, and empirical reference competence remain
 open. No authentic predictions or empirical gains were examined or produced here.
 
 Generated checks run with the coordinator's shared two-slot test pool, using
-`python3 -I -B test_paired_contrasts.py` as the child command. They include a
+`python3 -I -B test_paired_contrasts.py` and
+`python3 -I -B test_programme_integration.py` as child commands. They include a
 nonuniform person-size example with a hand-derived signed macro difference,
 failure propagation, support/arithmetic mutations, and the retained real
 `person_loss` function applied solely to generated inputs. The exact pool command
 and outcome are recorded in the external handoff; checks do not qualify scientific
 performance.
 
-Source identities and the prior audit scope are recorded in
-`SOURCE_EVIDENCE.json`. All predecessor files and canonical contracts remain
-unchanged.
+The integration controls exercise the actual protected grade, captured driver,
+body retention and receipt validator on generated 26-person support. Other
+scientific phases and external authority/transport are explicit uncredentialed
+doubles. They check original grade bytes, later failure, missing or altered
+artifacts, digest linkage, missing partners, and inherited resource refusals.
+They do not establish authenticated process custody or scientific performance.
+
+`SOURCE_EVIDENCE.json` preserves the historical standalone audit and its source
+pointers, including the then-absent automatic integration.
+`PROGRAMME_INTEGRATION.json` records the current integrated source descriptors.
+The standalone numerical kernel and effective parent remain byte-identical.

@@ -2,6 +2,7 @@
 import base64
 from collections.abc import Mapping
 from central_io import need,encoded,pin,cleanup_note
+from .paired_contrasts import paired_contrasts
 PHASES=('runtime','commit','prepare','hmp','references','prediction_actors','dispositions','prediction_closure','prediction_grade',
  'reconstruction_actors','reconstruction_grade','spatial','explanations','reasoning_grade','study_closeout')
 class Envelopes(Mapping):
@@ -94,7 +95,19 @@ def run(io,bound,parent):
   jobs={r['binding_digest']for r in programme.transport.records}
   return programme.close_predictions(Envelopes(programme.closed_dispositions,token),Envelopes(jobs,token),token)
  phase('prediction_closure',['dispositions'],close_predictions)
- phase('prediction_grade',['prediction_closure'],lambda:programme.grade(token))
+ def grade_predictions():
+  grade=programme.grade(token)
+  retained=programme.bodies.records['PREDICTION_GRADE.json']
+  # Logical in-memory traversal and conservative temporary allowance, not an
+  # OS/Python peak-memory guarantee. Existing inherited limits stay unchanged.
+  programme.ledger.reserve({'read_bytes':retained['bytes']},'paired report logical grade traversal')
+  with programme.ledger.live(4*retained['bytes']+1048576,'paired grade/report logical temporary space'):
+   programme.ledger.tick();report=paired_contrasts(grade);programme.ledger.tick()
+   need(report['input_grade_sha256']==retained['sha256'],'Paired report binds the exact retained protected grade')
+   programme.bodies.put_json('PAIRED_PREDICTION_CONTRASTS.json',report)
+   programme.ledger.tick()
+  return grade
+ phase('prediction_grade',['prediction_closure'],grade_predictions)
  views=parent.module('views')
  recon_keys=[views.opaque(programme.seed,'context','reconstruction',[m,p])for m in common.MODES for p in common.PEOPLE]
  phase('reconstruction_actors',['prepare'],lambda:programme.reconstruction_actors(None,None,access,Envelopes(recon_keys,token)),
