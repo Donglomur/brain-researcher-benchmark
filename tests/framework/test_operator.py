@@ -119,6 +119,82 @@ class OperatorTests(unittest.TestCase):
             self.assertFalse(failed['complete'])
             self.assertEqual(failed['members'][-1]['status'], 'unavailable_or_changed')
 
+    def test_lifecycle_exit_codes_are_normalized_and_preserved(self):
+        for action, task in (('prepare', 'NEURAL-077'), ('programme', 'NEURAL-077'),
+                             ('sleep-audit', 'NEURAL-007')):
+            for child_code in (0, 1, 2, 3, -15, 17):
+                with self.subTest(action=action, child_code=child_code):
+                    output = self.base / (action + '-' + str(child_code))
+                    args = argparse.Namespace(action=action, task=task, output=str(output),
+                        data_root=str(self.base / 'data'), layout='original', step='commit',
+                        run=str(self.base / 'packet'), source=str(self.base / 'method'),
+                        entrypoint='candidate.py', witness=str(self.base / 'witness.json'))
+                    life = mock.Mock()
+                    life.packet.return_value = {'task_id': task}
+                    def child(argv, destination):
+                        (destination / 'stdout').write_text('generated child stdout\n')
+                        (destination / 'stderr').write_text('generated child stderr\n')
+                        return child_code
+                    with mock.patch.object(op, 'load_lifecycle', return_value=life), \
+                         mock.patch.object(op, 'inspect_inputs', return_value={'complete': True}), \
+                         mock.patch.object(op, 'dispatch', side_effect=child) as dispatch:
+                        result, code = op.run(args, self.repo)
+                    expected = 0 if child_code == 0 else 3
+                    self.assertEqual(code, expected)
+                    self.assertEqual(result['exit_code'], expected)
+                    self.assertEqual(result['status'], 'completed' if expected == 0 else 'refused_or_failed')
+                    self.assertEqual(result['authentic_grading'], 'not_executed')
+                    self.assertEqual(result['scientific_qualification'], 'not_established')
+                    self.assertEqual(result['source']['tool.py'], op.digest(self.source))
+                    self.assertEqual(dispatch.call_count, 1)
+                    if action != 'prepare':
+                        life.packet.assert_called_once_with(args.run)
+                    self.assert_child_evidence(output, result, child_code)
+
+    def test_native_exit_codes_preserve_contract_and_failure_evidence(self):
+        for action in ('validate', 'grade'):
+            for child_code in (0, 1, 2, 3, -15, 17):
+                with self.subTest(action=action, child_code=child_code):
+                    output = self.base / (action + '-' + str(child_code))
+                    args = argparse.Namespace(action=action, task='NEURAL-077', output=str(output),
+                        purpose='development-control', artifacts='descriptor.json', submission='s.npz',
+                        docker_cli='/docker', docker_host='unix:///socket', docker_config='/config')
+                    status = ('scored' if action == 'grade' else 'valid_prediction_contract') if child_code == 0 else (
+                        'invalid_submission' if child_code == 2 else 'operator_execution_failed')
+                    private_stage = action == 'grade' and child_code in (0, 3)
+                    def child(argv, destination):
+                        (destination / 'stdout').write_text('generated child stdout\n')
+                        (destination / 'stderr').write_text('generated child stderr\n')
+                        (destination / 'native').mkdir()
+                        op.save(destination / 'native/result.json', {'status': status})
+                        op.save(destination / 'native/receipt.json', {'private_stage_dispatched': private_stage})
+                        return child_code
+                    with mock.patch.object(op, 'dispatch', side_effect=child):
+                        result, code = op.run(args, self.repo)
+                    expected = child_code if child_code in (0, 2, 3) else 3
+                    self.assertEqual(code, expected)
+                    self.assertEqual(result['exit_code'], expected)
+                    self.assertEqual(result['status'], 'completed' if expected == 0 else 'refused_or_failed')
+                    self.assertEqual(result['native_status'], status)
+                    self.assertEqual(result['native_result'], op.digest(output / 'native/result.json'))
+                    self.assertEqual(result['native_receipt'], op.digest(output / 'native/receipt.json'))
+                    self.assertEqual(result['private_stage_dispatched'], private_stage)
+                    self.assertEqual(result['scientific_qualification'], 'not_established')
+                    if action == 'grade':
+                        self.assertEqual(result['authentic_grading'], 'completed_for_supplied_submission' if expected == 0 else (
+                            'attempted_unsuccessful' if private_stage else 'private_stage_not_dispatched'))
+                        if expected != 0:
+                            self.assertNotIn('evaluation_kind', result)
+                    self.assert_child_evidence(output, result, child_code)
+
+    def assert_child_evidence(self, output, result, child_code):
+        self.assertEqual(result['child_returncode'], child_code)
+        self.assertEqual(op.read_json(output / 'operator.json'), result)
+        self.assertEqual(op.read_json(output / 'dispatch.json')['argv'], result['argv'])
+        for name in ('stdout', 'stderr'):
+            self.assertEqual((output / name).read_text(), 'generated child ' + name + '\n')
+            self.assertEqual(result[name], op.digest(output / name))
+
     def test_native_failure_cannot_be_qualified(self):
         args = argparse.Namespace(action='grade', task='NEURAL-077', output=str(self.base/'grade'),
                                   purpose='development-control', artifacts='descriptor.json', submission='s.npz',
@@ -166,6 +242,7 @@ class OperatorTests(unittest.TestCase):
                 self.assertEqual(code, 3)
                 self.assertEqual(result['status'], 'refused_or_failed')
                 self.assertEqual(result['authentic_grading'], 'dispatch_attempted_not_completed')
+                self.assertEqual(result['child_returncode'], 0)
                 self.assertEqual(op.read_json(Path(args.output) / 'operator.json')['exit_code'], 3)
 
     def test_child_loader_cannot_consume_existing_unpinned_bytecode(self):

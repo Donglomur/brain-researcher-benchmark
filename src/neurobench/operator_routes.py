@@ -267,7 +267,10 @@ def run(args, root):
             save(output / 'dispatch.json', receipt)
             if args.action == 'grade':
                 receipt['authentic_grading'] = 'dispatch_attempted_not_completed'
-            code = dispatch(argv, output)
+            child_code = dispatch(argv, output)
+            receipt['child_returncode'] = child_code
+            code = child_code if child_code == 0 or (
+                args.action in ('validate', 'grade') and child_code in (2, 3)) else 3
             if args.action in ('validate', 'grade'):
                 need((output / 'native/result.json').is_file(), 'Native result missing; retain dispatch failure')
                 result = read_json(output / 'native/result.json')
