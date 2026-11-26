@@ -121,7 +121,7 @@ jobs:
         run: |
           python3 -I -S -B - <<'PY'
           import hashlib, os, stat
-          pins = [{'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 29993, 'sha256': 'c60f2db58bfd156a9a83c72eb35a8959d67763af70932f833ef98a2083b38e36'}, {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 51098, 'sha256': '073f920a233d8853ceb1e2143c63a2a07692bae242937a1eafa743fbd8ce3141'}, {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 639901, 'sha256': 'b804fc90a7dc1000a385af744ef880dcfb03548620abdb8369124d75c426e53c'}]
+          pins = [{'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 29993, 'sha256': 'c60f2db58bfd156a9a83c72eb35a8959d67763af70932f833ef98a2083b38e36'}, {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 51098, 'sha256': '073f920a233d8853ceb1e2143c63a2a07692bae242937a1eafa743fbd8ce3141'}, {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 640011, 'sha256': 'bebfea78d2705572b582b6280375ccb1841352b6ed1a2d7920bfaad40f98d3de'}]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
               with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), "rb") as stream:
@@ -1053,6 +1053,98 @@ jobs:
           N90_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural90-generated.XXXXXX")"
           trap 'rm -rf -- "$N90_SCRATCH"' EXIT
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-090/implementations/neural-090/mode-comparison-v1/test_comparison.py --scratch-root "$N90_SCRATCH" -v
+      - name: "Check UMBRAE raw-vector custody with generated controls"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          UMBRAE_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/umbrae-custody-generated.XXXXXX")"
+          trap 'rm -rf -- "$UMBRAE_SCRATCH"' EXIT
+          export UMBRAE_CONTROL_ROOT="$UMBRAE_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B - "$GITHUB_WORKSPACE" "$UMBRAE_SCRATCH" <<'PY_UMBRAE_CUSTODY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+          import unittest
+
+
+          def require(ok, message):
+              if not ok:
+                  raise AssertionError(message)
+
+
+          root = Path(sys.argv[1]).resolve(strict=True)
+          scratch = Path(sys.argv[2]).resolve(strict=True)
+          require(root.is_dir() and scratch.is_dir() and not scratch.is_relative_to(root), 'external generated scratch required')
+          require(os.environ.get('UMBRAE_CONTROL_ROOT') == str(scratch), 'UMBRAE generated scratch contract required')
+          pins = [{'path': 'benchmarks/paper/PAPER-paper-method-042/implementations/endpoint-vector-v2/endpoint_vector.py', 'bytes': 9917, 'sha256': '2a32ac480f91b4d643aca0162d24d8ee7a4891da932c7891713df04a107e837b'}, {'path': 'benchmarks/paper/PAPER-paper-method-042/implementations/initial-evaluator-v1/grounding.py', 'bytes': 18770, 'sha256': '14c7ba38ca656e7e5e1f8db11d6eb3ecc2e4dd06848aeb07c2e1212ccb1afa1d'}, {'path': 'benchmarks/paper/PAPER-paper-method-042/implementations/raw-response-parser-v1/README.md', 'bytes': 6615, 'sha256': '76bc7fedd3a0d99d0538674dafa86fa4d509abfa11ae48b57bfcd48ddbc83cdb'}, {'path': 'benchmarks/paper/PAPER-paper-method-042/implementations/raw-response-parser-v1/VERIFIED_SCORING.md', 'bytes': 8197, 'sha256': '3e15267efec75fc3c3968c657caaae2a42fd2cd4eca89e307765836848cad40a'}, {'path': 'benchmarks/paper/PAPER-paper-method-042/implementations/raw-response-parser-v1/raw_response.py', 'bytes': 12269, 'sha256': '99bbc9ba86e04028ad8e4029b8a5746ce955dff8cc4bd465e8673ac12a2f7b3c'}, {'path': 'benchmarks/paper/PAPER-paper-method-042/implementations/raw-response-parser-v1/tests/test_verify_and_score.py', 'bytes': 20164, 'sha256': 'cea06d7f3babd1624befa827e6d880ef5279f1050662feaede1fdfe16599d165'}, {'path': 'benchmarks/paper/PAPER-paper-method-042/implementations/raw-response-parser-v1/verify_and_score.py', 'bytes': 18346, 'sha256': 'b96806dc3b3b1158e11f106569541bca1efd43ff13e6fea862e05be7264df413'}]
+          for pin in pins:
+              path = root / pin['path']
+              require(not path.is_symlink() and all(not parent.is_symlink() for parent in path.parents if parent.is_relative_to(root)), pin['path'])
+              before = path.lstat()
+              require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == pin['bytes'], pin['path'])
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  raw = stream.read(pin['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              final = path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              require(all(getattr(before, f) == getattr(opened, f) == getattr(after, f) == getattr(final, f) for f in fields), pin['path'])
+              require(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'], pin['path'])
+
+          require(sys.implementation.name == 'cpython' and sys.version_info[:3] == (3, 11, 18), 'existing CPython profile required')
+          expected = ['test_verify_and_score.CustodyControls.test_competing_output_writer_is_not_overwritten', 'test_verify_and_score.CustodyControls.test_complete_manifest_and_all_streams_required', 'test_verify_and_score.CustodyControls.test_contract_cannot_select_other_output', 'test_verify_and_score.CustodyControls.test_dependency_snapshots_and_pin_fail_closed', 'test_verify_and_score.CustodyControls.test_duplicate_nonfinite_and_invalid_unicode_inputs', 'test_verify_and_score.CustodyControls.test_exact_numeric_image_and_category_order', 'test_verify_and_score.CustodyControls.test_fifo_and_aggregate_size_refused_before_capture', 'test_verify_and_score.CustodyControls.test_first_box_tamper_rejected_even_with_updated_file_pin', 'test_verify_and_score.CustodyControls.test_full_generated_982_image_paper_geometry', 'test_verify_and_score.CustodyControls.test_incomplete_raw_query_cannot_reduce_denominator', 'test_verify_and_score.CustodyControls.test_independent_raw_and_roster_commitments', 'test_verify_and_score.CustodyControls.test_input_and_output_aliases_rejected_before_capture', 'test_verify_and_score.CustodyControls.test_missing_empty_invalid_first_and_strict_threshold', 'test_verify_and_score.CustodyControls.test_missing_file_and_subject_swap', 'test_verify_and_score.CustodyControls.test_optional_comparison_metadata_is_not_attested', 'test_verify_and_score.CustodyControls.test_output_failures_leave_no_complete_final_artifact', 'test_verify_and_score.CustodyControls.test_real_converter_and_verifier_cli', 'test_verify_and_score.CustodyControls.test_roster_reference_join_includes_empty_images', 'test_verify_and_score.CustodyControls.test_scoring_uses_captured_values_after_path_replacement', 'test_verify_and_score.CustodyControls.test_valid_bundle_matches_original_kernels']
+          package = root / 'benchmarks/paper/PAPER-paper-method-042/implementations/raw-response-parser-v1'
+          loader = unittest.TestLoader()
+          suite = loader.discover(str(package / 'tests'), pattern='test_verify_and_score.py')
+          require(not loader.errors, 'UMBRAE discovery error')
+          module = sys.modules.get('test_verify_and_score')
+          require(module is not None and Path(module.__file__).resolve() == package / 'tests/test_verify_and_score.py', 'unexpected UMBRAE test module')
+          require(Path(module.c.__file__).resolve() == package / 'verify_and_score.py', 'unexpected UMBRAE custody module')
+
+
+          def flatten(suite):
+              if isinstance(suite, unittest.TestSuite):
+                  return [identifier for child in suite for identifier in flatten(child)]
+              return [suite.id()]
+
+
+          discovered = flatten(suite)
+          require(discovered == expected and len(discovered) == len(set(discovered)) == suite.countTestCases() == 20, 'exact twenty unique IDs required')
+
+
+          class CompleteResult(unittest.TextTestResult):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  self.started, self.stopped, self.succeeded = [], [], []
+
+              def startTest(self, test):
+                  self.started.append(test.id())
+                  super().startTest(test)
+
+              def stopTest(self, test):
+                  self.stopped.append(test.id())
+                  super().stopTest(test)
+
+              def addSuccess(self, test):
+                  self.succeeded.append(test.id())
+                  super().addSuccess(test)
+
+
+          result = unittest.TextTestRunner(verbosity=2, resultclass=CompleteResult).run(suite)
+          require(result.testsRun == 20 and result.started == result.stopped == result.succeeded == expected, 'exact execution rosters required')
+          require(result.wasSuccessful() and not any([result.failures, result.errors, result.skipped, result.expectedFailures, result.unexpectedSuccesses]), 'all twenty outcomes must succeed without skips')
+          print(json.dumps({'task': 'PAPER-paper-method-042', 'suite': 'raw-vector-custody-v1', 'tests_run': result.testsRun,
+                            'discovered_ids': discovered, 'started_ids': result.started, 'stopped_ids': result.stopped,
+                            'successful_ids': result.succeeded, 'failures': len(result.failures), 'errors': len(result.errors),
+                            'skips': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'unexpected_successes': len(result.unexpectedSuccesses),
+                            'generated_only': True, 'scientific_qualification': False}, sort_keys=True))
+          PY_UMBRAE_CUSTODY
       - name: "Check NEURAL-091 generated paired or observation controls"
         if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
