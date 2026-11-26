@@ -96,5 +96,109 @@ class EvidenceReferenceTests(unittest.TestCase):
                                      "curator_note": "Unexecuted plan"})
 
 
+def transition(outcome="released", stage="ADJUDICATE",
+               from_state="benchmark_calibrated", to_state=None):
+    result = {
+        "schema_version": "CurationTransitionV1",
+        "transition_id": "fixture-transition",
+        "job_id": "fixture-job",
+        "opportunity_id": "fixture-opportunity",
+        "candidate_id": "fixture-candidate",
+        "stage": stage,
+        "from_state": from_state,
+        "to_state": outcome if to_state is None else to_state,
+        "outcome": outcome,
+        "actor": {
+            "human_owner": "fixture-owner",
+            "executed_by": {
+                "agent": "fixture-worker", "model_snapshot": "fixture-snapshot",
+                "skill_sha": "b" * 64, "tool_manifest_ref": artifact_ref(),
+            },
+            "human_reviewed_by": "fixture-reviewer" if outcome == "released" else None,
+        },
+        "artifact_refs": [artifact_ref()],
+    }
+    if outcome == "released":
+        result["maximum_defensible_claim"] = "Generated schema fixture only."
+    return result
+
+
+class AdjudicationTransitionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+        Draft202012Validator.check_schema(cls.schema)
+        cls.validator = definition_validator(cls.schema, "CurationTransition")
+
+    def test_terminal_outcomes_accept_both_calibrated_source_states(self):
+        for outcome in ("released", "retired"):
+            for state in ("benchmark_calibrated", "family_calibrated"):
+                with self.subTest(outcome=outcome, from_state=state):
+                    self.validator.validate(transition(outcome, from_state=state))
+
+    def test_terminal_outcomes_reject_wrong_stage_or_uncalibrated_state(self):
+        for outcome in ("released", "retired"):
+            for stage, state in (("SCOUT", "unstarted"),
+                                 ("SCOUT", "benchmark_calibrated"),
+                                 ("ADJUDICATE", "data_acquired")):
+                with self.subTest(outcome=outcome, stage=stage, from_state=state):
+                    self.assertFalse(self.validator.is_valid(
+                        transition(outcome, stage, state)))
+
+    def test_terminal_outcomes_require_the_matching_target_state(self):
+        for outcome, other in (("released", "retired"), ("retired", "released")):
+            for target in (other, "blocked"):
+                with self.subTest(outcome=outcome, to_state=target):
+                    self.assertFalse(self.validator.is_valid(
+                        transition(outcome, to_state=target)))
+
+    def test_existing_release_review_and_claim_requirements_remain(self):
+        missing_claim = transition()
+        del missing_claim["maximum_defensible_claim"]
+        self.assertFalse(self.validator.is_valid(missing_claim))
+        empty_claim = transition()
+        empty_claim["maximum_defensible_claim"] = ""
+        self.assertFalse(self.validator.is_valid(empty_claim))
+        for reviewer in (None, ""):
+            invalid = transition()
+            invalid["actor"]["human_reviewed_by"] = reviewer
+            with self.subTest(reviewer=reviewer):
+                self.assertFalse(self.validator.is_valid(invalid))
+        # Retirement retains its existing nullable reviewer and optional claim.
+        retired = transition("retired")
+        self.assertNotIn("maximum_defensible_claim", retired)
+        self.assertIsNone(retired["actor"]["human_reviewed_by"])
+        self.validator.validate(retired)
+
+    def test_ordinary_outcomes_keep_the_declared_stage_transitions(self):
+        for stage, rule in self.schema["x-stage-transition-contract"].items():
+            for start in rule["inputs"]:
+                for outcome in ("passed", "killed"):
+                    if outcome in rule:
+                        with self.subTest(stage=stage, start=start, outcome=outcome):
+                            self.validator.validate(
+                                transition(outcome, stage, start, rule[outcome]))
+                with self.subTest(stage=stage, start=start, outcome="blocked"):
+                    self.validator.validate(transition("blocked", stage, start, "blocked"))
+                with self.subTest(stage=stage, target=start, outcome="retry"):
+                    self.validator.validate(transition("retry", stage, "blocked", start))
+
+    def test_worker_results_still_cannot_release_or_retire(self):
+        validator = definition_validator(self.schema, "StageResult")
+        result = {
+            "schema_version": "curation-stage-result-v1",
+            "job_id": "fixture-job", "opportunity_id": "fixture-opportunity",
+            "stage": "ADJUDICATE", "outcome": "passed",
+            "artifact_refs": [artifact_ref()], "evidence": [], "deviations": [],
+            "next_stage_candidate": None, "next_job_inputs": [],
+            "maximum_defensible_claim": "Generated schema fixture only.",
+            "public_summary": "Recommendation only.",
+        }
+        validator.validate(result)
+        for outcome in ("released", "retired"):
+            with self.subTest(outcome=outcome):
+                self.assertFalse(validator.is_valid({**result, "outcome": outcome}))
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -212,6 +212,19 @@ def main() -> None:
     assert not _stage_result_is_valid([])
 
     transitions = schema["x-stage-transition-contract"]
+    terminal_conditions = {
+        rule["if"]["properties"]["outcome"]["const"]: rule["then"]["properties"]
+        for rule in transition_schema["allOf"]
+    }
+    for outcome in ("released", "retired"):
+        properties = terminal_conditions[outcome]
+        assert properties["stage"] == {"const": "ADJUDICATE"}
+        assert set(properties["from_state"]["enum"]) == set(
+            transitions["ADJUDICATE"]["inputs"]
+        )
+        assert properties["to_state"] == {
+            "const": transitions["ADJUDICATE"][outcome]
+        }
     assert _transition_is_valid(
         transitions, "SCOUT", "unstarted", "scouted", "passed"
     )

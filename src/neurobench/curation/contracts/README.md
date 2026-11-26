@@ -69,6 +69,11 @@ produces `blocked`; and `retry` moves from `blocked` back to one declared input
 state. `ADJUDICATE` alone may produce `released` or `retired`. The controller,
 not the worker, chooses and appends the transition.
 
+The schema requires `released` and `retired` transitions to name `ADJUDICATE`,
+start from `benchmark_calibrated` or `family_calibrated`, and end in the state
+matching their outcome. This checks declared lifecycle fields; it does not prove
+that calibration was executed.
+
 The normal paths are:
 
 ```text

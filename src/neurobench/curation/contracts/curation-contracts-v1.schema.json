@@ -361,11 +361,27 @@
           "then": {
             "required": ["maximum_defensible_claim"],
             "properties": {
+              "stage": {"const": "ADJUDICATE"},
+              "from_state": {"enum": ["benchmark_calibrated", "family_calibrated"]},
+              "to_state": {"const": "released"},
               "actor": {
                 "properties": {
                   "human_reviewed_by": {"type": "string", "minLength": 1}
                 }
               }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"outcome": {"const": "retired"}},
+            "required": ["outcome"]
+          },
+          "then": {
+            "properties": {
+              "stage": {"const": "ADJUDICATE"},
+              "from_state": {"enum": ["benchmark_calibrated", "family_calibrated"]},
+              "to_state": {"const": "retired"}
             }
           }
         }
