@@ -155,6 +155,36 @@ class EvidenceTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'selected profile evidence'):
             evidence.load(self.root)
 
+    def test_historical_control_indices_cannot_hide_outcomes(self):
+        for pointer in ('/controls/4/passed', '/controls/04/passed', '/controls/-1/passed',
+                        '/controls/+0/passed', '/controls/0.0/passed', '/controls/x/passed',
+                        '/controls//passed', '/controls', '/controls/', '/controls/0', '/controls/0/'):
+            with self.subTest(pointer=pointer):
+                document = self.document(evidence.HISTORY)
+                item = next(row for row in document['evidence']
+                            if row['evidence_id'] == 'rtt-program-controls')
+                item['selected_fields'][pointer] = False
+                if pointer == '/controls/4/passed':
+                    item['selected_fields']['/controls/4/name'] = 'additional_failed_control'
+                self.install(evidence.HISTORY, document)
+                with self.assertRaisesRegex(ValueError, 'historical control pointer'):
+                    evidence.load(self.root)
+
+        document = self.document(evidence.HISTORY)
+        fields = next(row for row in document['evidence']
+                      if row['evidence_id'] == 'rtt-program-controls')['selected_fields']
+        for index in range(4):
+            fields['/controls/' + str(index) + '/passed'] = False
+        fields['/controls/0/diagnostic_note'] = 'Generated metadata remains unprojected.'
+        self.install(evidence.HISTORY, document)
+        result = evidence.load(self.root)
+        controls = result['records']['NEURAL-023'][0]['controls']
+        self.assertEqual(len(controls), 4)
+        self.assertTrue(all(control['passed'] is False for control in controls))
+        self.assertTrue(all(set(control) == {'name', 'passed'} for control in controls))
+        self.assertEqual(result['counts']['historical_programme_controls'], 4)
+        self.assertEqual(result['records']['NEURAL-023'][0]['qualification_effect'], 'none')
+
     def test_native_controls_are_separate_from_pilot_and_historical_attempts(self):
         for name in (evidence.PILOT, evidence.HISTORY, evidence.DIRECT, evidence.VIEWER, evidence.NATIVE):
             self.install(name)
