@@ -501,6 +501,7 @@ def discover(root=ROOT):
             checked_pin(reader, pin, 'Historical registry')
     tasks = []
     classes = {'canonical': [], 'expansion': []}
+    paper_engine = None
     for row in rows:
         identifier, track = row['id'], row['track']
         directory = task_directory(identifier, track)
@@ -553,7 +554,9 @@ def discover(root=ROOT):
                  'Initial paper registration differs from its preserved snapshot')
             contract = (bound_outcomes['retained_improvement_contract'] if bound_outcomes is not None
                         else checked_pin(reader, pin, 'Paper improvement contract'))
-            engine = improvement_module()
+            if paper_engine is None:
+                paper_engine = improvement_module()
+            engine = paper_engine
             errors = engine.validate_contract(contract, task_id=identifier)
             need(not errors, 'Invalid paper improvement contract: ' + identifier + ': ' + '; '.join(errors))
             need(contract.get('legacy', {}).get('role') == 'no_predecessor'
@@ -626,7 +629,9 @@ def discover(root=ROOT):
             need(pin['path'] == directory + '/improvement.v1.json', 'Improvement contract is outside its task')
             contract = (bound_outcomes['retained_improvement_contract'] if bound_outcomes is not None
                         else checked_pin(reader, pin, 'Paper improvement contract'))
-            engine = improvement_module()
+            if paper_engine is None:
+                paper_engine = improvement_module()
+            engine = paper_engine
             errors = engine.validate_contract(contract, task_id=identifier)
             need(not errors, 'Invalid paper improvement contract: ' + identifier + ': ' + '; '.join(errors))
             need(contract.get('legacy', {}).get('role') == 'calibration_only'
