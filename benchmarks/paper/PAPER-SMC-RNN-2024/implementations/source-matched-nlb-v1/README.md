@@ -13,15 +13,17 @@ The two arms are the paper's causal-proposal and noncausal-proposal models. Both
 
 Exceeding SMC-RNN would not establish current SOTA. See the [original paper](https://papers.neurips.cc/paper_files/paper/2024/file/209423f076b6479ab3a4f45886e30306-Paper-Conference.pdf), supplement B.5/Table 2 and D.7.
 
+## Standalone ANTLR dependency component
+
+The [offline ANTLR 4.9.3 source-wheel builder](dependency-builders/antlr4-runtime-4.9.3/README.md) uses local authenticated source and locked build-tool wheels. It does not acquire packages or supply a benchmark adapter, scorer, provider, model or dataset. Its software-build receipt applies only to the recorded builder environment: a cached ARM CPython 3.11.18 builder is distinct from the unresolved scientific Linux amd64 environment. This dependency component does not establish an installable or scientifically qualified SMC runtime.
+
 ## Run the real input path
 
-Create an external staging directory and reserve resources before acquisition. `acquire.py` fetches only the manifest's required code, selected checkpoint files and two NWBs; no released test target is acquired. Payloads must stay outside public Git. `requirements-preparation.txt` pins the original pandas 1.3.4 preparation path on Python 3.9; `requirements-cpu.txt` records the separate CPU inference environment. Pandas 1.4+ is unsupported: our 1.5.3 attempt truncated the original final trial through a changed TimedeltaIndex union order, reproducing [NLB issue 3](https://github.com/neurallatents/nlb_tools/issues/3). The wrapper rejects that version before input reads. No global installation is required.
+Create an external staging directory and reserve resources before acquisition. `acquire.py` fetches only the manifest's required code, selected checkpoint files and two NWBs; no released test target is acquired. Payloads must stay outside public Git. `requirements-preparation.txt` preserves the original pandas 1.3.4 preparation path recorded with Python 3.9. `requirements-cpu.txt` preserves an observed CPU inference inventory, **not an installable current lock**: `nlb-tools==0.0.3` requires `pandas<=1.3.4`, while the inventory pins `pandas==1.5.3`. Pandas 1.4+ is unsupported: our 1.5.3 attempt truncated the original final trial through a changed TimedeltaIndex union order, reproducing [NLB issue 3](https://github.com/neurallatents/nlb_tools/issues/3). The wrapper rejects that version before input reads. The commands below retain historical interfaces and require separately admitted environments. The recorded Python 3.9 preparation route does not resolve the CPU dependency conflict; neither does bypassing dependency resolution with `--no-deps`. No current CPU installation command is supplied.
 
 ```sh
 python3.9 -m venv "$SMC_STAGE/prep-venv"
 "$SMC_STAGE/prep-venv/bin/python" -m pip install -r requirements-preparation.txt
-python3 -m venv "$SMC_STAGE/venv"
-"$SMC_STAGE/venv/bin/python" -m pip install -r requirements-cpu.txt
 "$SMC_STAGE/venv/bin/python" acquire.py --destination "$SMC_STAGE" --assets both
 "$SMC_STAGE/prep-venv/bin/python" prepare.py \
   --nwb-dir "$SMC_STAGE/nwb/sub-Jenkins" --output "$SMC_STAGE/inputs" --cpu-seconds-remaining 7200

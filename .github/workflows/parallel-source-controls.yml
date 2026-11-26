@@ -2046,6 +2046,74 @@ jobs:
           assert result.wasSuccessful(), (result.failures, result.errors)
           print(json.dumps({'task': 'NEURAL-018', 'tests_run': result.testsRun, 'skipped': len(result.skipped), 'generated_controls_only': True, 'scientific_qualification': False}, sort_keys=True))
           PY
+      - name: Check SMC standalone ANTLR wheel integrity controls
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
+        shell: bash
+        run: |
+          set -euo pipefail
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - <<'PY'
+          import hashlib, importlib.util, json, sys, unittest
+          from pathlib import Path
+
+          # Offline generated integrity fixtures only: no package acquisition or backend build.
+          assert sys.version_info[:3] == (3, 11, 18), sys.version
+          source_rows = [{'path': 'benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/dependency-builders/antlr4-runtime-4.9.3/build_antlr.py', 'bytes': 15094, 'sha256': '8549fe2c12b1619c7eded3302d7287cb32c569ca80df4327b5673bb46d9b1345'}, {'path': 'benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/dependency-builders/antlr4-runtime-4.9.3/TOOL_LOCK.json', 'bytes': 10744, 'sha256': 'ab0a8775f808dbafb9864e1a22238aec04500245c177a2e5a97aae05ceb538aa'}, {'path': 'benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/dependency-builders/antlr4-runtime-4.9.3/SOURCE.json', 'bytes': 1353, 'sha256': '1c8e1417db0926ef81774f3be2abe844aa75938847717a31c1c3643483905870'}, {'path': 'benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/dependency-builders/antlr4-runtime-4.9.3/test_build_antlr.py', 'bytes': 3023, 'sha256': '143aba2200e6746f94aebf9e97d0b2f4481b335ecf184901866974012b40cb28'}, {'path': 'benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/dependency-builders/antlr4-runtime-4.9.3/README.md', 'bytes': 4572, 'sha256': '7ecc2d3c341a0e8a3109456b04b6a6649a7e690a57e980bf3307772245e8bc03'}, {'path': 'benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/dependency-builders/antlr4-runtime-4.9.3/SOFTWARE_BUILD.json', 'bytes': 5863, 'sha256': '21b4b5168ba5315058dc07268e42c0498da9fb73667ae4cab2118c35f9ccd3b5'}]
+          root = Path.cwd().resolve()
+          for row in source_rows:
+              path = root / row['path']
+              assert path.is_file() and not path.is_symlink(), row['path']
+              body = path.read_bytes()
+              assert len(body) == row['bytes'], row['path']
+              assert hashlib.sha256(body).hexdigest() == row['sha256'], row['path']
+
+          expected = ['test_build_antlr.WheelIntegrityControls.test_accepts_outer_metadata_with_vendored_metadata', 'test_build_antlr.WheelIntegrityControls.test_rejects_native_payload_despite_pure_wheel_tag', 'test_build_antlr.WheelIntegrityControls.test_rejects_record_content_mismatch', 'test_build_antlr.WheelIntegrityControls.test_rejects_traversal_before_escaping_owned_output']
+          test_path = root / 'benchmarks/paper/PAPER-SMC-RNN-2024/implementations/source-matched-nlb-v1/dependency-builders/antlr4-runtime-4.9.3/test_build_antlr.py'
+          spec = importlib.util.spec_from_file_location('test_build_antlr', test_path)
+          assert spec is not None and spec.loader is not None
+          module = importlib.util.module_from_spec(spec)
+          sys.modules[spec.name] = module
+          spec.loader.exec_module(module)
+          loader = unittest.TestLoader()
+          suite = loader.loadTestsFromModule(module)
+          def flatten(items):
+              for item in items:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+          actual = [case.id() for case in flatten(suite)]
+          assert not loader.errors, loader.errors
+          assert actual == expected and len(actual) == 4, (actual, expected)
+
+          class StrictResult(unittest.TextTestResult):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  self.started = []
+                  self.stopped = []
+                  self.successful = []
+              def startTest(self, test):
+                  self.started.append(test.id())
+                  super().startTest(test)
+              def stopTest(self, test):
+                  self.stopped.append(test.id())
+                  super().stopTest(test)
+              def addSuccess(self, test):
+                  self.successful.append(test.id())
+                  super().addSuccess(test)
+          result = unittest.TextTestRunner(verbosity=2, resultclass=StrictResult).run(suite)
+          assert result.testsRun == 4, result.testsRun
+          assert result.started == expected, result.started
+          assert result.stopped == expected, result.stopped
+          assert result.successful == expected, result.successful
+          assert not result.errors and not result.failures
+          assert not result.skipped and not result.expectedFailures and not result.unexpectedSuccesses
+          assert result.wasSuccessful()
+          print(json.dumps({'task': 'PAPER-SMC-RNN-2024', 'component': 'antlr4-runtime-4.9.3',
+                            'tests': 4, 'skips': 0, 'generated_integrity_controls_only': True,
+                            'package_acquisition': False, 'backend_build': False,
+                            'scientific_runtime_qualification': False}, sort_keys=True))
+          PY
+
       - name: Check SMC protected grading declaration binding
         if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
