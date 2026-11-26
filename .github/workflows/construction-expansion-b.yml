@@ -226,8 +226,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 19014,
-                  "sha256": "9c51bd567115bdc66674d26580c0fbc077510fb7f78e25232dee8946b2fc07c4"
+                  "bytes": 19401,
+                  "sha256": "f96c0a1046c3896bd7ae58fc45ad61026a656f84ca3b2c5024509a68fc747c85"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/source-provenance.json",
@@ -236,8 +236,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/tests/test_evaluator.py",
-                  "bytes": 17797,
-                  "sha256": "00a3f6072c859fcd1281a9d3fb1cbc20ab47e51fb7436c8d0fee54bc59b479ba"
+                  "bytes": 22524,
+                  "sha256": "9cf4972b39e3aba39f8c8e2278536b53bd0385805a6d4bda753477ca01afdf41"
               },
               {
                   "path": "benchmarks/paper/PAPER-FIND-ADD-009/docs/initial-evaluator-v1.md",
@@ -352,7 +352,7 @@ jobs:
               "benchmarks/paper/PAPER-ROOT-ADD-007/implementations/initial-evaluator-v1"
           ]
           assert len(rows) == 58 > 0
-          assert sum(row['bytes'] for row in rows) == 737201 <= 33554432
+          assert sum(row['bytes'] for row in rows) == 742315 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -395,7 +395,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 737201,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 742315,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -1010,7 +1010,7 @@ jobs:
           import json
           import sys
           import unittest
-          expected_ids = ['test_evaluator.CorrelationTests.test_bad_stimulus_exclusion_is_audited', 'test_evaluator.CorrelationTests.test_cached_input_role_fails', 'test_evaluator.CorrelationTests.test_cli_manifest_receipt_binds_evaluated_snapshot', 'test_evaluator.CorrelationTests.test_cli_pins_input_and_rejects_tampering', 'test_evaluator.CorrelationTests.test_complex_inputs_are_not_silently_projected_to_real', 'test_evaluator.CorrelationTests.test_duplicate_physical_context_rejected', 'test_evaluator.CorrelationTests.test_extreme_finite_pearson_and_orthogonal_reference', 'test_evaluator.CorrelationTests.test_hand_derived_same_and_opposite_context', 'test_evaluator.CorrelationTests.test_independent_corrected_correlation_above_one_is_not_clipped', 'test_evaluator.CorrelationTests.test_interpolation_exposes_zero_variance_without_dropping', 'test_evaluator.CorrelationTests.test_loaded_arrays_are_bound_to_captured_npz_after_path_replacement', 'test_evaluator.CorrelationTests.test_loaded_snapshot_survives_path_unlink_after_capture', 'test_evaluator.CorrelationTests.test_missing_cell_after_bad_stimulus_exclusion_fails', 'test_evaluator.CorrelationTests.test_missing_participant_fails', 'test_evaluator.CorrelationTests.test_near_equal_rates_are_canonicalized_and_cannot_duplicate_cells', 'test_evaluator.CorrelationTests.test_negative_ceiling_remains_unclipped_and_undefined_ratio', 'test_evaluator.CorrelationTests.test_no_out_of_bounds_or_nonfinite_or_assessment_selection', 'test_evaluator.CorrelationTests.test_no_silent_segment_intersection', 'test_evaluator.CorrelationTests.test_prospective_holdout_preserves_story_rows', 'test_evaluator.CorrelationTests.test_ratio_of_means_is_not_mean_of_ratios', 'test_evaluator.CorrelationTests.test_same_stimulus_cannot_cross_rates', 'test_evaluator.CorrelationTests.test_segment_cannot_be_in_recorded_poststimulus_padding', 'test_evaluator.CorrelationTests.test_story_split_is_global_and_mode_explicit', 'test_evaluator.CorrelationTests.test_subnormal_ceiling_preserves_raw_values_and_nulls_overflow', 'test_evaluator.CorrelationTests.test_summary_balances_participants_not_electrodes', 'test_evaluator.CorrelationTests.test_two_nearly_identical_slow_rates_cannot_replace_fast_rate']
+          expected_ids = ['test_evaluator.CorrelationTests.test_bad_stimulus_exclusion_is_audited', 'test_evaluator.CorrelationTests.test_cached_input_role_fails', 'test_evaluator.CorrelationTests.test_cli_manifest_receipt_binds_evaluated_snapshot', 'test_evaluator.CorrelationTests.test_cli_pins_input_and_rejects_tampering', 'test_evaluator.CorrelationTests.test_complete_large_offset_evaluation_matches_independent_oracles', 'test_evaluator.CorrelationTests.test_complex_inputs_are_not_silently_projected_to_real', 'test_evaluator.CorrelationTests.test_duplicate_physical_context_rejected', 'test_evaluator.CorrelationTests.test_extreme_finite_pearson_and_orthogonal_reference', 'test_evaluator.CorrelationTests.test_hand_derived_same_and_opposite_context', 'test_evaluator.CorrelationTests.test_independent_corrected_correlation_above_one_is_not_clipped', 'test_evaluator.CorrelationTests.test_interpolation_exposes_zero_variance_without_dropping', 'test_evaluator.CorrelationTests.test_large_common_offsets_preserve_known_half_correlation', 'test_evaluator.CorrelationTests.test_loaded_arrays_are_bound_to_captured_npz_after_path_replacement', 'test_evaluator.CorrelationTests.test_loaded_snapshot_survives_path_unlink_after_capture', 'test_evaluator.CorrelationTests.test_missing_cell_after_bad_stimulus_exclusion_fails', 'test_evaluator.CorrelationTests.test_missing_participant_fails', 'test_evaluator.CorrelationTests.test_near_equal_rates_are_canonicalized_and_cannot_duplicate_cells', 'test_evaluator.CorrelationTests.test_near_maximum_same_sign_spread_preserves_known_half', 'test_evaluator.CorrelationTests.test_negative_ceiling_remains_unclipped_and_undefined_ratio', 'test_evaluator.CorrelationTests.test_no_out_of_bounds_or_nonfinite_or_assessment_selection', 'test_evaluator.CorrelationTests.test_no_silent_segment_intersection', 'test_evaluator.CorrelationTests.test_opposite_sign_extremes_remain_finite_and_signed', 'test_evaluator.CorrelationTests.test_prospective_holdout_preserves_story_rows', 'test_evaluator.CorrelationTests.test_ratio_of_means_is_not_mean_of_ratios', 'test_evaluator.CorrelationTests.test_same_stimulus_cannot_cross_rates', 'test_evaluator.CorrelationTests.test_segment_cannot_be_in_recorded_poststimulus_padding', 'test_evaluator.CorrelationTests.test_story_split_is_global_and_mode_explicit', 'test_evaluator.CorrelationTests.test_subnormal_ceiling_preserves_raw_values_and_nulls_overflow', 'test_evaluator.CorrelationTests.test_subnormal_spread_and_offset_constants_preserve_domain', 'test_evaluator.CorrelationTests.test_summary_balances_participants_not_electrodes', 'test_evaluator.CorrelationTests.test_two_nearly_identical_slow_rates_cannot_replace_fast_rate']
           suite = unittest.defaultTestLoader.discover('benchmarks/paper/PAPER-FIND-024/implementations/initial-evaluator-v1/tests', pattern='test_evaluator.py')
           def flatten(suite):
               for item in suite:
@@ -1020,9 +1020,9 @@ jobs:
                       yield item
           actual_ids = sorted(case.id() for case in flatten(suite))
           assert actual_ids == expected_ids, (actual_ids, expected_ids)
-          assert suite.countTestCases() == 26 > 0
+          assert suite.countTestCases() == 31 > 0
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 26, result.testsRun
+          assert result.testsRun == 31, result.testsRun
           assert not result.skipped, result.skipped
           assert not result.expectedFailures, result.expectedFailures
           assert not result.unexpectedSuccesses, result.unexpectedSuccesses

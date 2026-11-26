@@ -79,8 +79,16 @@ def _pearson(x, y):
     y = _real_array(y, "correlation y")
     _require(x.shape == y.shape and x.ndim == 1 and x.size >= 3, "correlation needs at least three matched segments")
     _require(np.isfinite(x).all() and np.isfinite(y).all(), "nonfinite correlation samples")
-    # Scale before centering as well as before dot products: even the mean of
-    # several individually finite, large values can otherwise overflow.
+    # Remove a common same-sign offset before scaling can round away its
+    # variation. The endpoint nearest zero keeps every subtraction finite;
+    # vectors spanning zero retain their original values and overflow safety.
+    shifted = []
+    for values in (x, y):
+        low, high = float(np.min(values)), float(np.max(values))
+        origin = low if low > 0 else high if high < 0 else 0.0
+        shifted.append(values - origin)
+    x, y = shifted
+    # Scale before taking means or dot products, which could otherwise overflow.
     sx, sy = float(np.max(np.abs(x))), float(np.max(np.abs(y)))
     if sx == 0 or sy == 0:
         return None
