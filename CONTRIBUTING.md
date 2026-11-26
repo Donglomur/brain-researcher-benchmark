@@ -12,15 +12,18 @@ regression tests, documentation and current source bindings needed for that chan
 to work and be reviewed. Separate unrelated work, but keep coupled fixes together;
 do not split a complete change or repeat merged work just to increase PR counts.
 
-A separately selected source-package capability may use two ordinary commits in
-its one PR when registration needs a commit that already contains the package.
-The first commit records the reviewed immutable package; the second adds its
-complete registration, CI and documentation, with `source_commit` and linked
-evidence naming that real first commit. Keep both commits private until the
-complete change is reviewed, then push them together. This selected exception
-currently covers the NEURAL-031 numerical-observation and direct-provider
-capabilities and the NEURAL-077 adaptive image-interval reference addition; it does not permit an intermediate PR or
-relax any serial review, identity or check gate.
+A separately selected new source-package capability may use exactly two ordinary
+commits in its one complete PR when registration needs a commit that already
+contains the package. Snapshot A must have the verified actual preceding default
+as its parent and contain the exact reviewed package. Registration B must have A
+as its parent, preserve every package byte, and complete the registration, tests,
+CI, documentation and current bindings, with `source_commit` and linked
+`evidence.commit` naming actual A. Review the complete feature, ordered history
+and containing-file identities before pushing both commits together once. Do not
+push an intermediate snapshot, open an intermediate PR or dispatch CI for an
+incomplete change. This exception requires separate selection; it does not extend
+any separately scoped publication-helper authorization. All serial review,
+identity and check gates remain in force.
 
 Independent work can be prepared in parallel. In this serial delivery queue, keep
 only one open, unmerged PR at a time; this limit does not restrict unrelated
