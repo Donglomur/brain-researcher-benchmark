@@ -117,6 +117,14 @@ def validate(io,bound,q,observed):
   need(type(name)is str and Path(name).name==name and set(d)=={'path','bytes','sha256'}and d['path']==name,'Exact parent body descriptor')
   validated[name]=hash_file(io,root/name,{k:d[k]for k in ('bytes','sha256')},p['artifact_max_bytes'])
  inventory(io,root,members,p['max_output_files'])
+ # A completed grading phase requires its derived report even when a later
+ # phase failed. Hash linkage uses the unchanged canonical grade bytes; this
+ # observer does not recompute any scientific metric or discard partial output.
+ if any(r['phase']=='prediction_grade'and r['status']=='completed'for r in ret['phases']):
+  need(all(n in members for n in ('PREDICTION_GRADE.json','PAIRED_PREDICTION_CONTRASTS.json')),'Completed grading requires protected grade and paired report')
+  paired=parse(io.capture(root/'PAIRED_PREDICTION_CONTRASTS.json',validated['PAIRED_PREDICTION_CONTRASTS.json'],bound['config']['body_cap']))
+  need(type(paired)is dict and paired.get('schema')=='neural004_paired_contrasts_v1'and
+   paired.get('input_grade_sha256')==validated['PREDICTION_GRADE.json']['sha256'],'Paired report links exact observed protected grade bytes')
  hmp_validated={};hmp_partial={};hroot=bound['output']/'hmp-private';hmp_present=os.path.lexists(hroot)
  if hmp_present:need(ordinary(hroot).is_dir(),'Ordinary private HMP output directory')
  if 'HMP_RESULT_INDEX.json'in members:
