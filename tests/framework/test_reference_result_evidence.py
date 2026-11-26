@@ -2,6 +2,7 @@
 import copy
 import importlib.util
 import json
+import math
 from pathlib import Path
 import tempfile
 import unittest
@@ -154,6 +155,36 @@ class ReferenceResultTests(unittest.TestCase):
             'precision-summary': lambda d: d['ordering_and_precision_comparison'].update(maximum_individual_iou_float32_vs_float64_difference=0),
             'status-denominator': lambda d: d['canonical_keyed_float32_diagnostics']['S1']['All']['keyed_prediction_status_counts'].update(valid=2419),
         })
+
+    def test_umbrae_accuracy_cannot_credit_empty_answers(self):
+        ceiling = (2419 - 8) / 2419
+
+        def synchronized_accuracy(value):
+            doc = self.document(evidence.UMBRAE_RESCORE)
+            values = {key: value for key in ('0.3', '0.5', '0.7')}
+            for seed in ('0', '1'):
+                doc['source_panels'][seed]['S1']['All']['accuracy'] = dict(values)
+                doc['recovered_primary_percent_by_seed'][seed]['S1'] = 100 * value
+            doc['canonical_keyed_float64_panel']['S1']['All']['accuracy'] = dict(values)
+            doc['canonical_keyed_float32_diagnostics']['S1']['All']['keyed_float32_accuracy'] = dict(values)
+            doc['published_v2_primary_percent']['S1'] = round(100 * value, 2)
+            self.install(evidence.UMBRAE_RESCORE, doc)
+
+        # All four accuracy views and both percentage summaries agree. Only the
+        # eight retained empty answers make these claimed accuracies impossible.
+        serialized_ceiling = math.nextafter(ceiling, math.inf)
+        for value in (1.0, math.nextafter(serialized_ceiling, math.inf)):
+            with self.subTest(rejected_accuracy=value):
+                synchronized_accuracy(value)
+                with self.assertRaisesRegex(ValueError, 'nonempty-answer denominator'):
+                    evidence.load(self.root, TASKS)
+        for value in (ceiling, serialized_ceiling):
+            with self.subTest(accepted_accuracy=value):
+                synchronized_accuracy(value)
+                row = self.rows()['released_output_scoring_reference']
+                self.assertEqual(row['metrics'][0]['value'], 100 * value)
+                self.assertEqual(row['diagnostics']['empty_answers_by_subject']['S1'], 8)
+                self.assertEqual(row['qualification_effect'], 'none')
 
     def test_annotation_all_conditions_are_provenance_without_model_metrics(self):
         row = self.rows()['annotation_representation_provenance']
