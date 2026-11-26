@@ -1410,6 +1410,52 @@ jobs:
           assert "historical_recursion_error_reproduced" not in report
           print(json.dumps({"abr_nested_response_controls": "passed", "checks": 4, "generated_only": True, "scientific_qualification": False}, sort_keys=True))
           PY
+      - name: Check adaptive-image interval ERP reference
+        if: matrix.group == 'stdlib-b' && matrix.shard == 0
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch=$(mktemp -d "${RUNNER_TEMP}/adaptive-image-reference.XXXXXX")
+          trap 'rm -rf -- "$scratch"' EXIT
+          python -I -S -B - <<'PYCI'
+          import hashlib
+          from pathlib import Path
+          pins = {'benchmarks/neural/NEURAL-077/implementations/adaptive-image-interval-reference-v1/README.md': {'bytes': 9605, 'sha256': '8ea1a824f990eb68a4c578ea5962a9e5ecaa770b71a34210e269ed070c790e77'}, 'benchmarks/neural/NEURAL-077/implementations/adaptive-image-interval-reference-v1/SOURCE_BINDINGS.json': {'bytes': 1202, 'sha256': '7854cbe2bdd07bbcb30611b71d3f784cf1b8caec64d143631b1480b8d0009d44'}, 'benchmarks/neural/NEURAL-077/implementations/adaptive-image-interval-reference-v1/VALIDATION.json': {'bytes': 4879, 'sha256': 'fa3e61ba1d952e94b9d5ec176d84107e5de52445586c119c3c8246cab50f837e'}, 'benchmarks/neural/NEURAL-077/implementations/adaptive-image-interval-reference-v1/reference.py': {'bytes': 7369, 'sha256': 'c3cc15ed95b55319ace6490f95ef7f83fa59c012723b7a8732a65a10763cf237'}, 'benchmarks/neural/NEURAL-077/implementations/adaptive-image-interval-reference-v1/runner.py': {'bytes': 21367, 'sha256': 'ac326516e85f7c8bba887fba82c2c0adc950dcb0661f568bda13a9fec08b38c2'}, 'benchmarks/neural/NEURAL-077/implementations/adaptive-image-interval-reference-v1/test_reference.py': {'bytes': 18187, 'sha256': '9caad81844c948d1e327295e8eb830b10ce834a3a54ae2889d218907b9293b70'}}
+          for name, expected in pins.items():
+              path = Path(name)
+              assert path.is_file() and not path.is_symlink() and path.stat().st_nlink == 1
+              body = path.read_bytes()
+              assert len(body) == expected['bytes'] and hashlib.sha256(body).hexdigest() == expected['sha256'], name
+          PYCI
+          child_status=0
+          timeout --signal=TERM --kill-after=5s 60s python -I -S -B benchmarks/neural/NEURAL-077/implementations/adaptive-image-interval-reference-v1/test_reference.py --repository-root "$GITHUB_WORKSPACE" --scratch-root "$scratch/fixtures" >"$scratch/result.log" 2>"$scratch/tests.log" || child_status=$?
+          cat "$scratch/tests.log"
+          cat "$scratch/result.log"
+          test "$child_status" -eq 0
+          python -I -S -B - "$scratch/result.log" "$scratch/tests.log" <<'PYCI'
+          import collections, json, pathlib, re, sys
+          result_lines = pathlib.Path(sys.argv[1]).read_text().splitlines()
+          assert result_lines, "missing final source-control summary"
+          result = json.loads(result_lines[-1])
+          expected_counts = {"tests": 16, "run": 16, "failures": 0, "errors": 0, "skips": 0}
+          assert isinstance(result, dict), result
+          assert all(type(result.get(key)) is int and result[key] == value for key, value in expected_counts.items()), result
+          assert result.get("generated_only") is True and result.get("scientific_qualification") is False, result
+          expected_ids = ['__main__.Collection.test_corrupt_first_output_blocks_target_loader', '__main__.Collection.test_existing_target_last_ordering_and_join_endpoint_unchanged', '__main__.Collection.test_failure_retains_first_outputs_and_never_emits_complete', '__main__.Collection.test_full6400_first_outputs_frozen_before_queries_and_endpoint_compatible', '__main__.Collection.test_original_inventory_rejects_partial_extra_target_and_wrong_condition', '__main__.Geometry.test_audited_projection_selects_gain_and_commits_every_attempt', '__main__.Geometry.test_cap_clipped_all_missing_retains_six_attempts_and_half_probability', '__main__.Geometry.test_exact_four_demo_labels_fixed_and_query_does_not_mutate_model', '__main__.Geometry.test_first_response_rejects_boolean_probability_and_wrong_gain', '__main__.Geometry.test_flat_signal_native_geometry_and_cross_gain_rounding_bound', '__main__.Geometry.test_interval_gap_direction_resolution_and_missing_baseline', '__main__.Geometry.test_invalid_feature_values_fail_before_zero_support_fallback', '__main__.Geometry.test_projection_admission_binds_prefix_selection_and_complete_pin', '__main__.Geometry.test_rendered_plateau_baseline_subtraction_contains_true_native_difference', '__main__.Geometry.test_same_column_support_rejects_disjoint_equal_coverage', '__main__.Geometry.test_source_loading_is_bounded_and_charged_before_query_work']
+          log = pathlib.Path(sys.argv[2]).read_text()
+          assert "expected failure" not in log.casefold() and "unexpected success" not in log.casefold(), log
+          success_ids = []
+          for line in log.splitlines():
+              matched = re.fullmatch(r"(test_[A-Za-z0-9_]+) \(([^()]+)\) \.\.\. ok", line)
+              if matched:
+                  method, identity = matched.groups()
+                  assert identity.rsplit(".", 1)[-1] == method, line
+                  success_ids.append(identity)
+          assert collections.Counter(success_ids) == collections.Counter(expected_ids), {"observed": success_ids, "expected": expected_ids}
+          assert len(success_ids) == len(set(success_ids)) == 16
+          PYCI
+
       - name: Acquire exact public source fixtures
         shell: bash
         run: |
