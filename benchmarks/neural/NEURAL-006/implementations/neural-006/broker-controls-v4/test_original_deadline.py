@@ -8,8 +8,8 @@ import math
 from pathlib import Path
 import sys
 
-CI_BYTES = 18605
-CI_SHA = 'ec1c45d98c57d3b9ddd79469c2be745d08ca704d3b485af43c8d569023c61c06'
+CI_BYTES = 18635
+CI_SHA = '2f60dbd39698324591ad5bcc97ecaff766127e015dd75fd2c876613e0f98bfcb'
 
 
 def check(ok,reason):
