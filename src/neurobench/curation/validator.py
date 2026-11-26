@@ -90,7 +90,9 @@ def _private_artifact_is_valid(ref: dict[str, object]) -> bool:
 
 
 def _evidence_item_is_valid(item: dict[str, object]) -> bool:
-    return item.get("status") != "measured" or bool(item.get("evidence_refs"))
+    return item.get("status") not in {"reported", "verified", "measured"} or bool(
+        item.get("evidence_refs")
+    )
 
 
 def _worker_release_status_is_valid(status: str) -> bool:
@@ -147,11 +149,16 @@ def main() -> None:
     assert evidence_schema["allOf"][0]["then"]["properties"]["evidence_refs"][
         "minItems"
     ] == 1
-    assert _evidence_item_is_valid(
-        {"status": "measured", "evidence_refs": [{"artifact_id": "run"}]}
-    )
-    assert not _evidence_item_is_valid({"status": "measured", "evidence_refs": []})
-    assert _evidence_item_is_valid({"status": "planned", "evidence_refs": []})
+    assert set(evidence_schema["allOf"][0]["if"]["properties"]["status"]["enum"]) == {
+        "reported", "verified", "measured"
+    }
+    for status in ("reported", "verified", "measured"):
+        assert _evidence_item_is_valid(
+            {"status": status, "evidence_refs": [{"artifact_id": "source"}]}
+        )
+        assert not _evidence_item_is_valid({"status": status, "evidence_refs": []})
+    for status in ("planned", "missing"):
+        assert _evidence_item_is_valid({"status": status, "evidence_refs": []})
 
     transition_schema = schema["$defs"]["CurationTransition"]
     assert transition_schema["properties"]["schema_version"]["const"] == (

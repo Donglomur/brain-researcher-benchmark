@@ -53,6 +53,11 @@ controller. This schema deliberately does not define that public view.
 | `planned` | A bounded probe is specified but has not run. It cannot satisfy a pass gate. |
 | `missing` | No adequate evidence or executable probe is currently available. |
 
+`reported`, `verified`, and `measured` evidence items require at least one
+complete artifact reference. `planned` and `missing` items may have an empty
+reference list; this does not make them sufficient for a pass gate. A reference
+binds the declaration to evidence but does not authenticate the scientific claim.
+
 Never silently promote `reported` or `planned` evidence to `measured`.
 
 ## Lifecycle
@@ -109,3 +114,17 @@ their visibility is `author_private`, `oracle_private`, or `restricted`, never
 `EvolvableQuestionFamily` release statuses are only `draft` or
 `adjudication_pending`; retirement and release are expressed by an adjudication
 transition, not by a worker artifact.
+
+## Schema regression checks
+
+The standard-library consistency command remains `scripts/validate_curation.py`.
+For actual Draft 2020-12 payload validation, run the dedicated regression suite
+with the CI-pinned `jsonschema` dependency environment available:
+
+```sh
+python3 -I -B -m unittest discover -s tests/curation -p 'test_*.py' -v
+```
+
+This suite requires its validator dependency and does not skip when it is absent.
+It tests contract acceptance and rejection, not artifact authenticity or
+scientific execution.
