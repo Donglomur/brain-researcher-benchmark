@@ -2414,6 +2414,144 @@ jobs:
           set -euo pipefail
           umask 077
           timeout --signal=TERM --kill-after=5s 1200s python -I -B scripts/maintenance/run_parallel_source_controls.py --manifest benchmarks/integrity/parallel-source-controls.v1.json --group "$PARALLEL_CONTROL_GROUP" --shard-index "$PARALLEL_CONTROL_SHARD" --shard-count "$PARALLEL_CONTROL_SHARDS" --fixtures "${RUNNER_TEMP}/parallel-fixtures-${PARALLEL_CONTROL_GROUP}-${PARALLEL_CONTROL_SHARD}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" --output "${RUNNER_TEMP}/parallel-source-${PARALLEL_CONTROL_GROUP}-${PARALLEL_CONTROL_SHARD}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+      - name: Check NoMAD candidate-role generated comparisons
+        if: (matrix.group == 'numpy') && matrix.shard == 0
+        shell: bash
+        env:
+          NOMAD_CANDIDATE_TIMEOUT_SECONDS: "600"
+          OPENBLAS_NUM_THREADS: "1"
+          OMP_NUM_THREADS: "1"
+          MKL_NUM_THREADS: "1"
+          NUMEXPR_NUM_THREADS: "1"
+          VECLIB_MAXIMUM_THREADS: "1"
+          BLIS_NUM_THREADS: "1"
+        run: |
+          set -euo pipefail
+          umask 077
+          [[ "$NOMAD_CANDIDATE_TIMEOUT_SECONDS" =~ ^[1-9][0-9]*$ ]] || { echo 'Root-selected NoMAD wall bound required' >&2; exit 2; }
+          NOMAD_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/nomad-candidate-generated.XXXXXX")"
+          export NOMAD_TEST_ARTIFACT_ROOT="$NOMAD_SCRATCH" TMPDIR="$NOMAD_SCRATCH"
+          timeout --signal=TERM --kill-after=5s "${NOMAD_CANDIDATE_TIMEOUT_SECONDS}s" python -I -S -B - "$GITHUB_WORKSPACE" "$NOMAD_SCRATCH" <<'PY_NOMAD_CANDIDATE'
+          import hashlib
+          import importlib.metadata
+          import importlib.util
+          import json
+          import os
+          from pathlib import Path
+          import platform
+          import shutil
+          import stat
+          import sys
+          import sysconfig
+          import unittest
+
+
+          def require(ok, message):
+              if not ok:
+                  raise AssertionError(message)
+
+
+          root = Path(sys.argv[1]).resolve(strict=True)
+          scratch = Path(sys.argv[2]).resolve(strict=True)
+          require(root.is_dir() and scratch.is_dir() and not scratch.is_relative_to(root), 'external generated scratch required')
+          require(str(scratch).isascii() and len(str(scratch)) <= 768 and all(not p.is_symlink() for p in (scratch, *scratch.parents)), 'canonical bounded scratch required')
+          require(os.environ.get('NOMAD_TEST_ARTIFACT_ROOT') == str(scratch), 'exact retained artifact root required')
+          available_bytes = shutil.disk_usage(scratch).free
+          require(available_bytes >= 2214592512, 'NoMAD generated artifacts require at least2112MiB available disk before case generation')
+          print(json.dumps({'nomad_disk_preflight_available_bytes': available_bytes, 'required_artifact_bytes': 2214592512}, sort_keys=True))
+          require(sys.implementation.name == 'cpython' and sys.version_info[:3] == (3, 11, 18), 'existing CPython3.11.18 profile required')
+          require(sys.flags.isolated and sys.flags.no_site and sys.dont_write_bytecode, 'isolated stdlib bootstrap required')
+          require(sys.platform == 'linux' and platform.machine() == 'x86_64', 'existing Linux x86_64 profile required')
+          pins = [{'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/COMPONENT.json', 'bytes': 2491, 'sha256': '65d0bbabcbac19a7b16b07c78d3645903ba015599c2752d792706aa801e923fc'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/LICENSE', 'bytes': 1073, 'sha256': '5e90f4aae29b549ac9009dc25f223e06c9a09a469fe8bedf981a00c23cc302e5'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/README.md', 'bytes': 5180, 'sha256': '0e24ff2c2aa78d0699951b68056c2b59d03b31d293b2a2fe6eceebd779b91770'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/SOURCE_MANIFEST.json', 'bytes': 3513, 'sha256': 'c7604430fe25e72f21910bef000167726ff2dc08fba1d5dd7cfd2421e69b617f'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/bootstrap.py', 'bytes': 7294, 'sha256': 'a6c01568714bf4c65874d72059f270a461204dffb9a3e62dbd53bf8000cd57a7'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/operator_entry.py', 'bytes': 10315, 'sha256': 'eb2c5388af74995bf45881e002f0c3383b3caf1c83820797aaa303c97fe325eb'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/__init__.py', 'bytes': 81, 'sha256': 'c11c3bec15e0e0cd95fd43aa46200ae85fbeadfa28881495e43052e487a42c1f'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/artifact_io.py', 'bytes': 7044, 'sha256': 'd0a51f0d4972e8d080e0eb378c262fd878bdf3d07485d2d16424e7150fc06ab2'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/nomad_archive.py', 'bytes': 8984, 'sha256': '55af01d6d3e3dcbd4400c2ecda7a27ddaee5fe79b98cf07959e59822df5514a8'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/nomad_artifacts.py', 'bytes': 7926, 'sha256': '2db80c992e218b0b0ed54fc63e0e31e52b98d973fa9fe0a1dab889f4e67d42c8'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/nomad_entry.py', 'bytes': 32705, 'sha256': 'a9fcdb5e65d601773dd18c8359f6582859712d4e915e9d6b72a2bbb0fbadda10'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/nomad_math.py', 'bytes': 23482, 'sha256': 'aad8e8a7632c7344ba04bf5c2eba8efbe1168bdd8f8b432026e117f3d27f67a5'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/nomad_nwb.py', 'bytes': 12003, 'sha256': '245b9e7741a31b0881a9dc540a54ef5374f8faa6bfc87c3f2ea82556f23ab354'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/nomad_products.py', 'bytes': 9800, 'sha256': '8bf11dba37890e055c6c1238a41eb96167459e3dc70e06831f1c17fdc1335621'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/nomad_t11.py', 'bytes': 19789, 'sha256': 'b5a5d3709d34480dae2b48bb390d6502a626cacfbf7a817454bfdaa9ae1051aa'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/nomad_windows.py', 'bytes': 15012, 'sha256': '1ed6139e1aee4bb8c878efa05b72a1afb00828d026f4a03a859b527321742f73'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/statistics/__init__.py', 'bytes': 330, 'sha256': '838efb4fcf511ba7ea607fb27aa6b0a8b67bff3f7f77605acdba99ee1ad09fe3'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/statistics/nomad_stat_math.py', 'bytes': 12302, 'sha256': '02f80e079c7b55b83e865a6ea72a3fc2d13427d8acfe4307484dd74a80ae98a3'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/statistics/nomad_stat_roster.py', 'bytes': 31404, 'sha256': '9e8103fb2881e374bd8fc3c1a59bf421c2a6357ab28465fe109bee01d518f27b'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source/statistics/nomad_statistics.py', 'bytes': 12532, 'sha256': '04f87e3ac060ad785c111b8552609c51a6665ffe3a4c8504ecc734b1daf0753b'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source_data/OBLIGATIONS_V3.json', 'bytes': 11532, 'sha256': '82a43023c05952d4bf97ccb3753dafc04c0d353cae787307cec66efd6117c6ac'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source_data/PARAMETER_FACTS_V3.json', 'bytes': 8521, 'sha256': '069ef9247b9c8bed894014913051153a2adb1d3924024cb91b31900549704d1d'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source_data/STATISTICAL_ENDPOINTS.json', 'bytes': 13265, 'sha256': '0dc9229d07ec810abfe6d7a204579ee627633c63a15842fa7a13c0d02d76b9d0'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/source_data/UNRESOLVED_V3.json', 'bytes': 9480, 'sha256': '53acee5289570f8e25abef4c2f981c9c10dc0fd2e44dafcd2f35909305f06b80'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/tests/fixture_builder.py', 'bytes': 23891, 'sha256': '7509a46c0b9a3a1c59ed7894bf2c016d3d7b1417efe0ba41a4a6c489d0dcbe5a'}, {'path': 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1/tests/test_candidate_grade.py', 'bytes': 24127, 'sha256': '7d826c4e9f9da751ea4d4e4997b3bc6a61565e4e9e4666bc7817537cbda030c3'}]
+          require(len(pins) == 26 and sum(p['bytes'] for p in pins) == 314076, 'complete frozen package extent required')
+          for pin in pins:
+              path = root / pin['path']
+              require(not path.is_symlink() and all(not p.is_symlink() for p in path.parents if p.is_relative_to(root)), pin['path'])
+              before = path.lstat()
+              require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == pin['bytes'], pin['path'])
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  raw = stream.read(pin['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              final = path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              require(all(getattr(before, f) == getattr(opened, f) == getattr(after, f) == getattr(final, f) for f in fields), pin['path'])
+              require(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'], pin['path'])
+          package = root / 'benchmarks/paper/PAPER-paper-method-add-001/implementations/recovered-operators-candidate-v1'
+          expected_members = {p['path'] for p in pins}
+          actual_members = set()
+          for directory, dirs, names in os.walk(package, followlinks=False):
+              for name in dirs:
+                  child = Path(directory) / name
+                  require(not child.is_symlink() and stat.S_ISDIR(child.lstat().st_mode), 'ordinary package directory required')
+              for name in names:
+                  actual_members.add((Path(directory) / name).relative_to(root).as_posix())
+          require(actual_members == expected_members, 'exact26-member package namespace required')
+
+          # The existing binary-only, hash-locked numpy profile installed this distribution.
+          # Admit its real installed parent without importing NumPy before the captured entry.
+          runtime = Path(sysconfig.get_path('platlib')).resolve(strict=True)
+          require(runtime.is_dir() and runtime.is_absolute(), 'installed numerical package parent required')
+          distributions = [d for d in importlib.metadata.distributions(path=[str(runtime)]) if d.metadata.get('Name', '').lower() == 'numpy']
+          require(len(distributions) == 1 and distributions[0].version == '2.4.6', 'existing NumPy2.4.6 distribution required')
+          require(Path(distributions[0].locate_file('')).resolve(strict=True) == runtime, 'numerical distribution parent mismatch')
+          require((runtime / 'numpy').is_dir() and not (runtime / 'numpy').is_symlink(), 'ordinary installed NumPy package required')
+          require('numpy' not in sys.modules, 'numerical import must occur through accepted captured entry')
+          os.environ['NOMAD_TEST_NUMPY_VERSION'] = '2.4.6'
+          os.environ['NOMAD_TEST_NUMPY_DIR'] = str(runtime)
+          expected = ['test_candidate_grade.CandidateGradeTests.test_anchor_axis_mismatch_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_anchor_sample_mismatch_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_candidate_anchor_failure_and_nonfinite_query_remain_in_slots', 'test_candidate_grade.CandidateGradeTests.test_candidate_label_collision_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_candidate_profile_mismatch_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_complete_panels_use_actual_pooled_metric_and_keep_original_hold', 'test_candidate_grade.CandidateGradeTests.test_duplicate_anchor_reference_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_duplicate_pair_fact_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_equal_bytes_distinct_arms_and_reverse_capture_order', 'test_candidate_grade.CandidateGradeTests.test_missing_anchor_selector_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_missing_candidate_panel_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_missing_pair_fact_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_panel_median_difference_is_not_median_pair_difference', 'test_candidate_grade.CandidateGradeTests.test_product_id_alias_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_query_support_mismatch_refuses_before_target', 'test_candidate_grade.CandidateGradeTests.test_wrong_anchor_role_refuses_before_target']
+          test_path = package / 'tests/test_candidate_grade.py'
+          require('test_candidate_grade' not in sys.modules, 'fresh test module required')
+          spec = importlib.util.spec_from_file_location('test_candidate_grade', test_path)
+          require(spec is not None and spec.loader is not None, 'exact test loader required')
+          module = importlib.util.module_from_spec(spec)
+          sys.modules['test_candidate_grade'] = module
+          spec.loader.exec_module(module)
+          require(Path(module.__file__).resolve(strict=True) == test_path, 'unexpected test source')
+          loader = unittest.TestLoader()
+          suite = loader.loadTestsFromModule(module)
+          require(not loader.errors, 'NoMAD test loading error')
+
+
+          def flatten(suite):
+              if isinstance(suite, unittest.TestSuite):
+                  return [identifier for child in suite for identifier in flatten(child)]
+              return [suite.id()]
+
+
+          discovered = flatten(suite)
+          require(discovered == expected and len(discovered) == len(set(discovered)) == suite.countTestCases() == 16, 'exact sixteen unique IDs required; empty discovery forbidden')
+
+
+          class CompleteResult(unittest.TextTestResult):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  self.started, self.stopped, self.succeeded = [], [], []
+
+              def startTest(self, test):
+                  self.started.append(test.id())
+                  super().startTest(test)
+
+              def stopTest(self, test):
+                  self.stopped.append(test.id())
+                  super().stopTest(test)
+
+              def addSuccess(self, test):
+                  self.succeeded.append(test.id())
+                  super().addSuccess(test)
+
+
+          result = unittest.TextTestRunner(verbosity=2, resultclass=CompleteResult).run(suite)
+          require(result.testsRun == 16 and result.started == result.stopped == result.succeeded == expected, 'exact16 execution and success rosters required')
+          require(result.wasSuccessful() and not any([result.failures, result.errors, result.skipped, result.expectedFailures, result.unexpectedSuccesses]), 'all16 outcomes must succeed without skips or expected failures')
+          print(json.dumps({'task': 'PAPER-paper-method-add-001', 'suite': 'nomad-candidate-role-generated-controls',
+                            'tests_run': result.testsRun, 'discovered_ids': discovered, 'started_ids': result.started,
+                            'stopped_ids': result.stopped, 'successful_ids': result.succeeded,
+                            'failures': len(result.failures), 'errors': len(result.errors), 'skips': len(result.skipped),
+                            'expected_failures': len(result.expectedFailures), 'unexpected_successes': len(result.unexpectedSuccesses),
+                            'numpy_version': '2.4.6', 'numpy_parent': str(runtime), 'retained_scratch': str(scratch),
+                            'verified_source_bytes': 314076, 'generated_only': True, 'scientific_qualification': False}, sort_keys=True))
+          PY_NOMAD_CANDIDATE
       - name: Check curation contracts with actual Draft 2020-12 validation
         if: matrix.group == 'stdlib-b' && matrix.shard == 0
         timeout-minutes: 6
@@ -2587,6 +2725,7 @@ jobs:
             ${{ runner.temp }}/parallel-fixtures-${{ matrix.group }}-${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}/acquisition-receipt.json
             ${{ runner.temp }}/language-serialization-${{ github.run_id }}-${{ github.run_attempt }}/RESULT.json
             ${{ runner.temp }}/language-serialization-${{ github.run_id }}-${{ github.run_attempt }}/TEST_LOG.txt
+            ${{ runner.temp }}/nomad-candidate-generated.*/
       - name: Preserve Meg generated fixtures
         if: always() && matrix.group == 'torch-cpu'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
