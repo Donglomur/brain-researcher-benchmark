@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shlex
 import sys
 import tempfile
 import unittest
@@ -141,15 +142,133 @@ class PinControls(unittest.TestCase):
         jobs = []
         for path in (ROOT / '.github/workflows').glob('*.yml'):
             workflow = path.read_text().split('\njobs:\n', 1)[1]
-            jobs.extend((name, body) for name, body in re.findall(
-                r'^  ([\w-]+):\n(.*?)(?=^  [\w-]+:|\Z)', workflow, re.M | re.S)
-                        if ('-m unittest discover -s ' in body or 'unittest.defaultTestLoader.discover(' in body)
-                        and directory in body)
+            for name, body in re.findall(
+                    r'^  ([\w-]+):\n(.*?)(?=^  [\w-]+:|\Z)', workflow, re.M | re.S):
+                jobs.extend((name, body) for _ in range(
+                    self.discovery_enrollment_count(body, directory)))
         self.assertEqual(len(jobs), 1, 'Package needs exactly one generated CI enrollment')
         name, body = jobs[0]
         declared = set(re.findall(r'^\s+([a-zA-Z0-9_-]+)==[^\s]+ --hash=sha256:', body, re.M))
         self.assertTrue(required <= declared,
                         f'{name}: undeclared generated test dependencies: {sorted(required - declared)}')
+
+    @staticmethod
+    def discovery_enrollment_count(body, directory):
+        """Count exact literal discovery targets in the supported CI forms."""
+        count = 0
+        for line in body.splitlines():
+            line = line.strip()
+            # Parse one-line Python calls, not comments, strings or a nearby
+            # directory reference. Dynamic and multiline targets fail closed.
+            try:
+                statement = ast.parse(line)
+            except SyntaxError:
+                statement = None
+            if statement is not None:
+                for node in ast.walk(statement):
+                    if not (isinstance(node, ast.Call)
+                            and isinstance(node.func, ast.Attribute)
+                            and node.func.attr == 'discover'
+                            and isinstance(node.func.value, ast.Attribute)
+                            and node.func.value.attr == 'defaultTestLoader'
+                            and isinstance(node.func.value.value, ast.Name)
+                            and node.func.value.value.id == 'unittest'):
+                        continue
+                    target = (node.args[0] if node.args else
+                              next((item.value for item in node.keywords
+                                    if item.arg == 'start_dir'), None))
+                    if isinstance(target, ast.Constant) and target.value == directory:
+                        count += 1
+
+            # Preserve the existing timeout/python -m unittest discover form.
+            # Only literal start-directory arguments count; shell variables,
+            # comments and other commands are not inferred as enrollments.
+            try:
+                words = shlex.split(line, comments=True)
+            except ValueError:
+                continue
+            if words and words[0] == 'timeout':
+                words = words[1:]
+                while words and words[0].startswith('--') and '=' in words[0]:
+                    words = words[1:]
+                if not words or not re.fullmatch(r'\d+(?:\.\d+)?[smhd]?', words[0]):
+                    continue
+                words = words[1:]
+            if not words or not re.fullmatch(r'python(?:3(?:\.\d+)?)?', words[0]):
+                continue
+            words = words[1:]
+            while words and re.fullmatch(r'-[ISB]+', words[0]):
+                words = words[1:]
+            if words[:3] != ['-m', 'unittest', 'discover']:
+                continue
+            arguments = words[3:]
+            targets = []
+            for index, argument in enumerate(arguments):
+                if argument in ('-s', '--start-directory') and index + 1 < len(arguments):
+                    targets.append(arguments[index + 1])
+                elif argument.startswith('--start-directory='):
+                    targets.append(argument.split('=', 1)[1])
+            if targets == [directory]:
+                count += 1
+        return count
+
+    def assert_fixture_ci_dependencies(self, bodies, *, declared=True):
+        directory = 'generated/package'
+        self.write(directory + '/test_dependencies.py',
+                   b'def lazy_import():\n    import numpy\n')
+        workflow = 'name: generated\njobs:\n'
+        for index, body in enumerate(bodies):
+            workflow += f'  generated-{index}:\n    steps:\n      - run: |\n'
+            if declared:
+                workflow += '          numpy==1.0 --hash=sha256:' + '0' * 64 + '\n'
+            workflow += ''.join('          ' + line + '\n' for line in body.splitlines())
+        self.write(ci.CPU_WORKFLOW, workflow.encode())
+        with patch.dict(globals(), {'ROOT': self.root}):
+            self.assert_ci_dependencies(directory)
+
+    def test_ci_dependency_selection_requires_enrollment(self):
+        with self.assertRaisesRegex(AssertionError, 'exactly one generated CI enrollment'):
+            self.assert_fixture_ci_dependencies(['print("no discovery")'])
+
+    def test_ci_dependency_selection_rejects_duplicate_enrollments(self):
+        call = "suite = unittest.defaultTestLoader.discover('generated/package', pattern='test_*.py')"
+        for bodies in ([call + '\n' + call], [call, call]):
+            with self.subTest(jobs=len(bodies)):
+                with self.assertRaisesRegex(AssertionError, 'exactly one generated CI enrollment'):
+                    self.assert_fixture_ci_dependencies(bodies)
+
+    def test_ci_dependency_selection_accepts_exact_python(self):
+        call = "suite = unittest.defaultTestLoader.discover('generated/package', pattern='test_*.py')"
+        self.assert_fixture_ci_dependencies([call])
+        with self.assertRaisesRegex(AssertionError, 'undeclared generated test dependencies'):
+            self.assert_fixture_ci_dependencies([call], declared=False)
+
+    def test_ci_dependency_selection_accepts_exact_shell(self):
+        call = ("timeout --signal=TERM --kill-after=5s 120s python -I -B "
+                "-m unittest discover -s 'generated/package' -p 'test_*.py' -v")
+        self.assert_fixture_ci_dependencies([call])
+
+    def test_ci_dependency_selection_rejects_descendant(self):
+        for call in (
+                "suite = unittest.defaultTestLoader.discover('generated/package/dependency-builders/antlr', pattern='test_*.py')",
+                "python -I -S -B -m unittest discover -s 'generated/package/child' -p 'test_*.py'"):
+            with self.subTest(call=call):
+                with self.assertRaisesRegex(AssertionError, 'exactly one generated CI enrollment'):
+                    self.assert_fixture_ci_dependencies([call])
+
+    def test_ci_dependency_selection_ignores_unrelated_references(self):
+        unrelated = (
+            "source_pin = {'path': 'generated/package/dependency-builders/antlr/test_build_antlr.py'}\n"
+            "directory = 'somewhere/else'\n"
+            "suite = unittest.defaultTestLoader.discover(directory, pattern='test_*.py')\n"
+            "other = unittest.defaultTestLoader.discover('somewhere/else', pattern='test_*.py')\n"
+            "# unittest.defaultTestLoader.discover('generated/package')\n"
+            'quoted = "unittest.defaultTestLoader.discover(\'generated/package\')"\n'
+            'python -I -B -m unittest discover -s "$directory" -p "test_*.py"')
+        with self.assertRaisesRegex(AssertionError, 'exactly one generated CI enrollment'):
+            self.assert_fixture_ci_dependencies([unrelated])
+        exact = "suite = unittest.defaultTestLoader.discover('generated/package', pattern='test_*.py')"
+        self.assert_fixture_ci_dependencies([exact, unrelated])
 
     def test_fixture_passes(self):
         self.assertEqual(ci.audit(self.root)['source_files'], 1)
