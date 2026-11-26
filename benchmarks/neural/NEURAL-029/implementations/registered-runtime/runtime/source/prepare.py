@@ -25,6 +25,15 @@ def interpolate(x, t, np):
     return y
 
 
+def training_scale_squared(train, np):
+    """Pooled within-cell variance over every source trial and time bin."""
+    # Exact constant cells have zero variance even when a floating mean of
+    # repeated nonzero values has summation roundoff. Retain their full weight.
+    constant = np.all(train == train[:1, :, :1], axis=(0, 2), keepdims=True)
+    centered = np.where(constant, 0., train)
+    return float(np.mean((centered - centered.mean(axis=(0, 2), keepdims=True)) ** 2))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--source-root', required=True)
@@ -90,7 +99,7 @@ def main():
         train_pin = write_npz(out / 'public' / (pair_id + '.npz'), calibration=train[:split], validation=train[split:])
         with np.errstate(over='raise', invalid='raise'):
             baseline = train.mean(axis=0)
-            scale = float(np.mean((train - train.mean(axis=(0, 2), keepdims=True)) ** 2))
+            scale = training_scale_squared(train, np)
         safe.need(np.isfinite(baseline).all() and np.isfinite(scale), 'representable train-only normalization')
         fixed_warp = fixed_warp_mean(baseline, public['time_seconds'], public['time_seconds'], np)
         target_pin = write_npz(out / 'private' / (pair_id + '.npz'), target=query, baseline=baseline, fixed_warp_baseline=fixed_warp)

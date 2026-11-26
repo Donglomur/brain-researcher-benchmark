@@ -17,10 +17,10 @@ import subprocess
 import sys
 import time
 
-SOURCE_FREEZE_BYTES = 11628
-SOURCE_FREEZE_SHA256 = "de3b5c4ffc0bc5c5dba00febaa174c720b5b1d084dbb8248b3e18ff81b2c8673"
+SOURCE_FREEZE_BYTES = 12150
+SOURCE_FREEZE_SHA256 = "f0a49f7c2bb30523c299045cfd48f0770843c6482fe0400f8378e52f14714f7b"
 SOURCE_ROLE_COUNT = 24
-SOURCE_TOTAL_BYTES = 201227
+SOURCE_TOTAL_BYTES = 202562
 PRIMARY_WEIGHTING = "pair sqrt(pooled MSE / pooled training variance); equal pairs within mouse; equal mice"
 
 def need(ok, reason):
@@ -84,8 +84,10 @@ class HostRuntime:
              freeze["task_id"] == "NEURAL-029" and
              freeze["role_count"] == len(rows) == SOURCE_ROLE_COUNT and
              freeze["all_original_bodies_unchanged"] is False and
-             freeze["all_scientific_implementation_bodies_unchanged"] is True and
-             freeze["provenance_metadata_projection"] is True, "complete inherited source contract")
+             freeze["all_scientific_implementation_bodies_unchanged"] is False and
+             freeze["provenance_metadata_projection"] is True and
+             freeze["current_source_maintenance"] == "exact_constant_source_variance_v1",
+             "complete maintained source contract with historical original pins")
         names = [r["path"] for r in rows]
         need(len(set(names)) == SOURCE_ROLE_COUNT and
              sum(r["bytes"] for r in rows) == SOURCE_TOTAL_BYTES, "complete inherited role census")

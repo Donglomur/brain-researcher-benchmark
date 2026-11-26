@@ -123,7 +123,19 @@ def run():
     prepare_tree = ast.parse((root / 'prepare.py').read_text())
     scales = [ast.unparse(n.value) for n in ast.walk(prepare_tree) if isinstance(n, ast.Assign)
               and any(isinstance(t, ast.Name) and t.id == 'scale' for t in n.targets)]
-    ck('pooled_training_scale_expression_preserved', scales == ['float(np.mean((train - train.mean(axis=(0, 2), keepdims=True)) ** 2))'])
+    ck('pooled_training_scale_dispatch', scales == ['training_scale_squared(train, np)'])
+    scale_function = next(n for n in prepare_tree.body if isinstance(n, ast.FunctionDef)
+                          and n.name == 'training_scale_squared')
+    scale_assignments = {n.targets[0].id: ast.unparse(n.value) for n in scale_function.body
+                         if isinstance(n, ast.Assign) and len(n.targets) == 1
+                         and isinstance(n.targets[0], ast.Name)}
+    ck('exact_complete_source_cell_constancy', scale_assignments['constant'] ==
+       'np.all(train == train[:1, :, :1], axis=(0, 2), keepdims=True)')
+    ck('constant_cells_retained_as_zero_variance', scale_assignments['centered'] ==
+       'np.where(constant, 0.0, train)')
+    scale_return = next(n for n in scale_function.body if isinstance(n, ast.Return))
+    ck('nonconstant_pooled_training_scale_expression_preserved', ast.unparse(scale_return.value) ==
+       'float(np.mean((centered - centered.mean(axis=(0, 2), keepdims=True)) ** 2))')
     for file in sorted(root.glob('*.json')):
         if file.name != 'INERT_CHECKS.json':
             json.loads(file.read_text())
