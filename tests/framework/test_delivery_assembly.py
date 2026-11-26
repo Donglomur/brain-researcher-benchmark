@@ -87,6 +87,105 @@ class DeliveryTests(unittest.TestCase):
         self.assertFalse(result["package_built"])
         self.assertFalse((self.root / self.output / data["target"]).exists())
 
+    def test_omitted_component_members_round_trip_as_partial(self):
+        item = self.value["files"][3]
+        path = self.root / item["source"]
+        body = path.read_bytes()
+        for status in ("missing_file", "invalid_file"):
+            with self.subTest(status=status):
+                if status == "missing_file":
+                    path.unlink()
+                else:
+                    path.write_bytes(b"x" * len(body))
+                original = copy.deepcopy(self.value)
+                inspected = tool.inspect(self.root, self.value)
+                output = self.output + "-" + status
+                result = tool.assemble(self.root, self.value, self.pin, output, allow_partial=True)
+                checked = tool.check_export(self.root, output)
+                self.assertFalse(checked["package_built"])
+                self.assertTrue(checked["package_claim_consistent"])
+                self.assertEqual(checked["files_checked"], 4)
+                self.assertEqual(checked["file_integrity_issues"], [])
+                self.assertEqual(result["source_manifest"], self.pin)
+                self.assertEqual(result["file_issues"], inspected["file_issues"])
+                self.assertEqual(result["file_issues"][0]["status"], status)
+                self.assertEqual(result["components"]["data"], {
+                    "status": "partial", "targets": [],
+                    "blockers": ["Not exported: " + item["target"]]})
+                self.assertFalse((self.root / output / item["target"]).exists())
+                self.assertEqual(self.value, original)
+
+    def test_omission_projection_preserves_existing_blockers_and_present_targets(self):
+        item = self.value["files"][3]
+        component = self.value["components"]["data"]
+        component.update(status="partial", blockers=["Recordings absent"],
+                         targets=[item["target"], "public/TASK.md"])
+        (self.root / item["source"]).unlink()
+        original = copy.deepcopy(self.value)
+        result = tool.assemble(self.root, self.value, self.pin, self.output, allow_partial=True)
+        checked = tool.check_export(self.root, self.output)
+        self.assertFalse(checked["package_built"])
+        self.assertTrue(checked["package_claim_consistent"])
+        self.assertEqual(result["components"]["data"], {
+            "status": "partial", "targets": ["public/TASK.md"],
+            "blockers": ["Recordings absent", "Not exported: " + item["target"]]})
+        self.assertEqual(self.value, original)
+
+    def test_omission_projection_does_not_hide_corruption_or_dangling_targets(self):
+        item = self.value["files"][3]
+        (self.root / item["source"]).unlink()
+        tool.assemble(self.root, self.value, self.pin, self.output, allow_partial=True)
+        copied = self.root / self.output / "public/TASK.md"
+        copied.chmod(0o600)
+        copied.write_bytes(b"changed")
+        checked = tool.check_export(self.root, self.output)
+        self.assertFalse(checked["package_built"])
+        self.assertTrue(checked["package_claim_consistent"])
+        self.assertEqual(len(checked["file_integrity_issues"]), 1)
+        self.assertEqual(checked["file_integrity_issues"][0]["target"], "public/TASK.md")
+        manifest = self.root / self.output / tool.MANIFEST
+        value = tool.decode(manifest.read_bytes())
+        value["components"]["data"]["targets"] = [item["target"]]
+        manifest.chmod(0o600)
+        manifest.write_bytes(tool.encode(value))
+        with self.assertRaisesRegex(tool.DeliveryError, "allowlisted files"):
+            tool.check_export(self.root, self.output)
+
+    def test_visibility_projection_lists_only_copied_component_targets(self):
+        item = self.value["files"][3]
+        (self.root / item["source"]).unlink()
+        for visibility in ("public", "private"):
+            with self.subTest(visibility=visibility):
+                output = self.output + "-" + visibility
+                original_verify = tool.verify_file
+                def verify(root, row, destination=None):
+                    self.assertEqual(row["visibility"], visibility)
+                    return original_verify(root, row, destination)
+                with patch.object(tool, "verify_file", verify):
+                    result = tool.assemble(self.root, self.value, self.pin, output,
+                                           visibility=visibility, allow_partial=True)
+                targets = {row["target"] for row in result["files"]}
+                for component in result["components"].values():
+                    self.assertTrue(set(component["targets"]) <= targets)
+                self.assertFalse(result["package_built"])
+                checked = tool.check_export(self.root, output)
+                self.assertFalse(checked["package_built"])
+                self.assertTrue(checked["package_claim_consistent"])
+                self.assertEqual(checked["file_integrity_issues"], [])
+                if visibility == "public":
+                    self.assertEqual(result["components"]["data"], {
+                        "status": "not_in_public_export", "targets": []})
+                    self.assertEqual(result["components"]["task_contract"], {
+                        "status": "included", "targets": ["public/TASK.md"]})
+                    self.assertEqual(result["file_issues"][0]["target"], item["target"])
+                    self.assertNotIn(b"private/", tool.encode(result))
+                    self.assertNotIn("source_manifest", result)
+                else:
+                    self.assertEqual(result["source_manifest"], self.pin)
+                    self.assertEqual(result["components"]["data"], {
+                        "status": "partial", "targets": [],
+                        "blockers": ["Not exported: " + item["target"]]})
+
     def test_wrong_digest_is_not_copied_as_valid(self):
         self.value["files"][3]["sha256"] = "0" * 64
         result = tool.inspect(self.root, self.value)
