@@ -48,3 +48,13 @@ Each raw response is limited to 65,536 UTF-8 bytes and each input file to 256 Mi
 Generated controls cover the restrictive lexical grammar, multiple groups/boxes, Unicode decimal digits, invalid first boxes, complete sixteen-stream membership, explicit missingness, original scorer denominator preservation, empty-query images, all 982 generated image IDs, comparison disagreements, input-byte pins, duplicate/nonfinite JSON, CLI output pins and overwrite refusal. Run `python3 -m unittest discover -s tests -v` through the project's existing coordinated two-slot test pool.
 
 The local dependency hash is checked before importing the existing grounding scorer. Primary pages were inspected through the web tool; the author module was not downloaded or executed, and its raw bytes were not locally authenticated. No NSD arrays, annotations, image tensors, checkpoints, model calls, training, inference or scientific scoring occurred. Query provenance, checkpoint/preprocessing lineage, exposure equivalence, protected execution, native parity, complete numerical reproduction and a justified improvement decision remain unresolved. This component does not add a benchmark or promote readiness.
+
+## Verify raw-to-vector custody
+
+The additive [verified scoring route](VERIFIED_SCORING.md) checks independently
+committed raw/roster snapshots, the completed conversion manifest and all sixteen
+extracted files, replays the unchanged converter, and scores only those verified
+in-memory values with the original vector kernels. It preserves numeric image
+order and rejects an edited extraction even if its manifest hash is updated.
+The route records its own verification completion; it does not attest a historical
+converter exit, response generation or scientific readiness.
