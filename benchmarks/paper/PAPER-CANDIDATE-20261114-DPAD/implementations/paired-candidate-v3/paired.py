@@ -11,6 +11,8 @@ import importlib.util
 import itertools
 import math
 import json
+import os
+import tempfile
 from pathlib import Path
 from statistics import mean
 
@@ -351,6 +353,51 @@ def compare(targets, reference, plan, predictions, reference_sha256, plan_sha256
             "limitations": LIMITS}
 
 
+def _new_output_path(value):
+    """Metadata-only refusal before reading any operator input payload."""
+    output = Path(os.path.abspath(value))
+    # lexists also refuses dangling symlinks. Refusing every existing path
+    # protects input aliases, hard links, directories and earlier result files.
+    e.require(not os.path.lexists(output), "output already exists; choose a new destination")
+    e.require(output.parent.is_dir(), "output parent must be an existing directory")
+    return output
+
+
+def _publish_output(output, body):
+    """Publish fully serialized bytes exclusively; never remove the destination.
+
+    A same-directory hard link makes only the completed pending file visible.
+    If another writer wins the destination after preflight, link refuses it.
+    Trusted operator paths are assumed; this is not filesystem isolation.
+    """
+    fd, name = tempfile.mkstemp(prefix=".dpad-result-", suffix=".pending", dir=output.parent)
+    pending = Path(name)
+    identity = None
+    try:
+        info = os.fstat(fd)
+        identity = (info.st_dev, info.st_ino)
+        stream = os.fdopen(fd, "wb")
+        fd = None  # The stream now owns the descriptor, including error closure.
+        with stream:
+            if stream.write(body) != len(body):
+                raise OSError("incomplete result write")
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.link(pending, output)
+    finally:
+        if fd is not None:
+            os.close(fd)
+        try:
+            info = pending.lstat()
+            if (info.st_dev, info.st_ino) == identity:
+                pending.unlink()
+        except OSError:
+            # Cleanup cannot overwrite the original failure or turn an already
+            # complete publication into failure. A private pending file may
+            # remain; it is not a completed result at the requested destination.
+            pass
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -369,6 +416,7 @@ def main():
         command.add_argument("--output", required=True)
     args = parser.parse_args()
     try:
+        output = _new_output_path(args.output)
         if args.command == "freeze-author":
             result = freeze_reference(e.read_json(args.training), e.read_json(args.targets), e.read_json(args.predictions))
         elif args.command == "select-candidate":
@@ -378,8 +426,10 @@ def main():
         else:
             result = compare(e.read_json(args.targets), e.read_json(args.reference), e.read_json(args.plan),
                              e.read_json(args.predictions), args.reference_sha256, args.plan_sha256)
-        Path(args.output).write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
-        print(json.dumps({"schema": result["schema"], "canonical_sha256": e.digest(result)}))
+        body = (json.dumps(result, indent=2, allow_nan=False) + "\n").encode("utf-8")
+        receipt = {"schema": result["schema"], "canonical_sha256": e.digest(result)}
+        _publish_output(output, body)
+        print(json.dumps(receipt))
     except (e.ContractError, KeyError, TypeError, ValueError, OSError) as exc:
         parser.exit(2, "DPAD paired input rejected: " + str(exc) + "\n")
 
