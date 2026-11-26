@@ -34,3 +34,58 @@ jobs:
           python -I -S -B scripts/check_repository.py
           # Verify source maintenance rejection controls.
           python -I -S -B -m unittest discover -s tests/maintenance -p 'test_workflow_source_pins.py' -v
+
+          # Verify the exact offline workflow-transport roster without network or lint.
+          timeout --signal=TERM --kill-after=5s 15s python -I -S -B - <<'PY_WORKFLOW_TRANSPORT'
+          import json
+          import sys
+          import unittest
+
+          if sys.version_info[:3] != (3, 11, 18):
+              raise RuntimeError('Python 3.11.18 required for the admitted maintenance controls')
+          expected = ['test_workflow_syntax.WorkflowSyntaxControls.test_acquisition_failure_stops_before_extract_or_lint', 'test_workflow_syntax.WorkflowSyntaxControls.test_archive_failure_stops_without_redownload_or_lint', 'test_workflow_syntax.WorkflowSyntaxControls.test_body_timeout_discards_partial_response_before_retry', 'test_workflow_syntax.WorkflowSyntaxControls.test_child_mode_emits_only_verified_archive_bytes', 'test_workflow_syntax.WorkflowSyntaxControls.test_child_mode_rejects_unknown_asset_and_preserves_fetch_failure', 'test_workflow_syntax.WorkflowSyntaxControls.test_forbidden_final_url_and_failed_status_do_not_retry', 'test_workflow_syntax.WorkflowSyntaxControls.test_forbidden_redirect_is_rejected_without_retry', 'test_workflow_syntax.WorkflowSyntaxControls.test_integrity_failures_never_retry', 'test_workflow_syntax.WorkflowSyntaxControls.test_lint_failure_does_not_retry_or_relax_core_checks', 'test_workflow_syntax.WorkflowSyntaxControls.test_non_timeout_transport_and_http_errors_do_not_retry', 'test_workflow_syntax.WorkflowSyntaxControls.test_open_timeout_then_success_retries_only_once', 'test_workflow_syntax.WorkflowSyntaxControls.test_parent_refuses_unreviewed_asset_before_process_start', 'test_workflow_syntax.WorkflowSyntaxControls.test_parent_rejects_bad_worker_bytes_and_failed_exit_without_retry', 'test_workflow_syntax.WorkflowSyntaxControls.test_parent_timeout_kills_and_reaps_unresponsive_worker', 'test_workflow_syntax.WorkflowSyntaxControls.test_parent_timeout_preserves_diagnostic_without_retry', 'test_workflow_syntax.WorkflowSyntaxControls.test_parent_verifies_worker_bytes_and_fixed_launch', 'test_workflow_syntax.WorkflowSyntaxControls.test_retry_preserves_original_deadline_and_rejects_late_body', 'test_workflow_syntax.WorkflowSyntaxControls.test_stage_markers_are_flushed_before_blocking_operations', 'test_workflow_syntax.WorkflowSyntaxControls.test_success_uses_exact_extent_and_closes_response', 'test_workflow_syntax.WorkflowSyntaxControls.test_successful_lint_keeps_original_result', 'test_workflow_syntax.WorkflowSyntaxControls.test_two_transport_timeouts_exhaust_attempts', 'test_workflow_syntax.WorkflowSyntaxControls.test_urllib_wrapped_aggregate_deadline_does_not_retry', 'test_workflow_syntax.WorkflowSyntaxControls.test_urllib_wrapped_transport_timeout_can_retry']
+          suite = unittest.defaultTestLoader.discover('tests/maintenance', pattern='test_workflow_syntax.py')
+
+          def flatten(value):
+              for item in value:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+
+          loaded = [test.id() for test in flatten(suite)]
+          if len(expected) != 23 or len(set(expected)) != 23 or loaded != expected:
+              raise RuntimeError('Exact nonempty ordered 23-method workflow transport roster required')
+
+          class StrictResult(unittest.TextTestResult):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  self.started_ids = []
+                  self.stopped_ids = []
+                  self.successful_ids = []
+
+              def startTest(self, test):
+                  self.started_ids.append(test.id())
+                  super().startTest(test)
+
+              def stopTest(self, test):
+                  self.stopped_ids.append(test.id())
+                  super().stopTest(test)
+
+              def addSuccess(self, test):
+                  self.successful_ids.append(test.id())
+                  super().addSuccess(test)
+
+          result = unittest.TextTestRunner(verbosity=2, failfast=True, resultclass=StrictResult).run(suite)
+          report = {'controls': 'workflow-syntax-transport', 'discovered_ids': loaded,
+                    'testsRun': result.testsRun, 'started_ids': result.started_ids,
+                    'stopped_ids': result.stopped_ids, 'successful_ids': result.successful_ids,
+                    'errors': len(result.errors), 'failures': len(result.failures),
+                    'skips': len(result.skipped), 'expectedFailures': len(result.expectedFailures),
+                    'unexpectedSuccesses': len(result.unexpectedSuccesses)}
+          print(json.dumps(report, sort_keys=True))
+          if (result.testsRun != 23 or result.started_ids != expected or result.stopped_ids != expected
+                  or result.successful_ids != expected or result.errors or result.failures or result.skipped
+                  or result.expectedFailures or result.unexpectedSuccesses or not result.wasSuccessful()):
+              raise RuntimeError('All 23 offline controls must start, stop and succeed exactly once with zero exceptional outcomes')
+          PY_WORKFLOW_TRANSPORT

@@ -51,5 +51,21 @@ member roster is checked at runtime; the local qualification used macOS arm64.
 Downloads are limited to 8 MiB and declared expanded members to 16 MiB. The
 linter has a 60-second timeout, one Go scheduler thread, and a 256 MiB Go soft
 memory target; that target is not an operating-system memory limit.
+Acquisition runs in one fixed, same-interpreter worker. Its parent allows a
+45-second communication timeout across both attempts and verifies the returned
+archive bytes again before extraction. The worker permits at most one retry,
+only for a transport `TimeoutError` or a `URLError` whose direct reason is that
+timeout. Each request is limited to 20 seconds or the remaining shared deadline;
+a retry does not reset the deadline. HTTP errors, aggregate deadline expiry,
+URL or integrity failures, archive failures and lint failures are not retried.
+Flushed attempt and stage markers are retained when acquisition fails.
+
+Process creation and cleanup are outside the parent's communication timeout;
+the existing 120-second CI step remains the outer limit. The 60-second lint
+timeout and archive admission rules above are unchanged. Offline controls in
+`tests/maintenance/test_workflow_syntax.py` use fake transport and lint results;
+one harmless short-lived child exercises timeout kill and reap behavior.
+These 23 controls do not download an archive or run actionlint.
+
 This source lint pass does not add benchmark tasks, scientific test units,
 model runs, or evidence of reproduced or improved neuroscience results.
