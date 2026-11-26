@@ -18,7 +18,7 @@ jobs:
   source-preflight:
     uses: ./.github/workflows/source-maintenance-preflight.yml
   generated-controls:
-    name: Generated controls (${{ matrix.group }})
+    name: Generated controls (${{ matrix.group }}, shard ${{ matrix.shard }}/${{ matrix.shards }})
     needs: source-preflight
     runs-on: ubuntu-24.04
     timeout-minutes: 30
@@ -28,36 +28,88 @@ jobs:
         include:
           - group: stdlib-a
             python: '3.11.18'
+            shard: 0
+            shards: 2
+          - group: stdlib-a
+            python: '3.11.18'
+            shard: 1
+            shards: 2
           - group: stdlib-b
             python: '3.11.18'
+            shard: 0
+            shards: 2
+          - group: stdlib-b
+            python: '3.11.18'
+            shard: 1
+            shards: 2
           - group: numpy
             python: '3.11.18'
+            shard: 0
+            shards: 4
+          - group: numpy
+            python: '3.11.18'
+            shard: 1
+            shards: 4
+          - group: numpy
+            python: '3.11.18'
+            shard: 2
+            shards: 4
+          - group: numpy
+            python: '3.11.18'
+            shard: 3
+            shards: 4
           - group: scientific
             python: '3.11.18'
+            shard: 0
+            shards: 1
           - group: torch-cpu
             python: '3.11.18'
+            shard: 0
+            shards: 1
           - group: legacy-pandas
             python: '3.9.25'
+            shard: 0
+            shards: 1
           - group: numpy226
             python: '3.11.18'
+            shard: 0
+            shards: 1
           - group: meg-reference
             python: '3.11.18'
+            shard: 0
+            shards: 1
           - group: marble-native
             python: '3.11.18'
+            shard: 0
+            shards: 1
           - group: neural063-range
             python: '3.11.18'
+            shard: 0
+            shards: 1
           - group: language-rootfs
             python: '3.11.6'
+            shard: 0
+            shards: 1
           - group: jaxley-input-cpu
             python: '3.11.18'
+            shard: 0
+            shards: 1
           - group: erp-core-builder
             python: '3.11.6'
+            shard: 0
+            shards: 1
           - group: smc-restricted-valid
             python: '3.11.6'
+            shard: 0
+            shards: 1
           - group: smc-gain-calibration
             python: '3.11.6'
+            shard: 0
+            shards: 1
     env:
       PARALLEL_CONTROL_GROUP: ${{ matrix.group }}
+      PARALLEL_CONTROL_SHARD: ${{ matrix.shard }}
+      PARALLEL_CONTROL_SHARDS: ${{ matrix.shards }}
       PIP_DISABLE_PIP_VERSION_CHECK: "1"
       PIP_NO_INPUT: "1"
     steps:
@@ -69,7 +121,7 @@ jobs:
         run: |
           python3 -I -S -B - <<'PY'
           import hashlib, os, stat
-          pins = [{'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 27324, 'sha256': '45837e72ac92fd31f18ba3d0a4a7688a35bcbd4a51835fe08cfd5795950cdcab'}, {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 35609, 'sha256': '870c4071b3c7a858c9877eb2741f24fc923dd3b74a9c2f418cdfd561889d11ae'}, {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 639901, 'sha256': 'dcb9d20ca9ea6e72d4a7958f0e4f1c5065b8edba101f8758f2d6d7ff193b7af6'}]
+          pins = [{'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 29993, 'sha256': 'c60f2db58bfd156a9a83c72eb35a8959d67763af70932f833ef98a2083b38e36'}, {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 51098, 'sha256': '073f920a233d8853ceb1e2143c63a2a07692bae242937a1eafa743fbd8ce3141'}, {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 639901, 'sha256': 'dcb9d20ca9ea6e72d4a7958f0e4f1c5065b8edba101f8758f2d6d7ff193b7af6'}]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
               with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), "rb") as stream:
@@ -270,7 +322,7 @@ jobs:
           fi
           python -VV
       - name: Authenticate declared N063 installed library sources
-        if: matrix.group == 'neural063-range'
+        if: (matrix.group == 'neural063-range') && matrix.shard == 0
         shell: bash
         run: |
           python -I -B - <<'PY'
@@ -299,22 +351,22 @@ jobs:
           print(json.dumps({'checked_n063_library_sources': 6, 'source_bytes': sum(row['bytes'] for row in spec['files'].values()), 'scientific_qualification': False}))
           PY
       - name: Verify launcher on the default and legacy interpreters
-        if: matrix.group == 'stdlib-a' || matrix.group == 'legacy-pandas'
+        if: (matrix.group == 'stdlib-a' || matrix.group == 'legacy-pandas') && matrix.shard == 0
         shell: bash
         run: timeout --signal=TERM --kill-after=5s 60s python -I -S -B tests/maintenance/test_parallel_source_controls.py
       - name: Check fixed-image ERP payload preparation with generated PNGs
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         working-directory: benchmarks/neural/NEURAL-077/implementations/fixed-image-dispatch-v1
         run: timeout --signal=TERM --kill-after=5s 90s python -B -m unittest test_dispatch_manifest -v
       - name: Check exploratory32 image subset scorer with generated records
-        if: matrix.group == 'erp-core-builder'
+        if: (matrix.group == 'erp-core-builder') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-077/implementations/exploratory32-image-scorer-v1/controls/test_score_subset.py
       - name: "Check UMBRAE released-reference rescoring with generated records"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -340,7 +392,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
       - name: Check NEURAL-007 consumed prediction headers with generated records
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -366,7 +418,7 @@ jobs:
           sys.exit(0 if result.wasSuccessful() else 1)
           PY
       - name: Check new stdlib endpoint and image reference interfaces
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -375,7 +427,7 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-077/implementations/four-demo-image-reference-v1/test_reference.py --renderer benchmarks/neural/NEURAL-077/implementations/visual-viewer-v1/raster.py -v
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-DISC-20261114-VOLTRON-SPIKES/implementations/voltron-optical-mad-v1/test_detector.py
       - name: Check paired ICNet and seizure comparisons
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -383,200 +435,200 @@ jobs:
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-signal-add-007/implementations/source-equations-v1/test_candidate_comparison.py
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-009/implementations/paired-detector-comparison-v1/test_compare.py
       - name: Check finite sleep CSV submission builder
-        if: matrix.group == 'erp-core-builder'
+        if: (matrix.group == 'erp-core-builder') && matrix.shard == 0
         shell: bash
         run: timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-007/implementations/submission-builder-v1/test_compose.py -v
       - name: Check mixed investigator evidence preservation
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-004/implementations/mixed-analysis-evidence-v1/test_mixed_evidence.py
       - name: Check direct NEURAL-006 loss admission
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-006/implementations/direct-loss-v1 -p test_direct_loss.py -v
       - name: Check complete Siena LOPO comparison
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-011/implementations/complete-lopo-evaluator-v1/tests/test_lopo.py -v
       - name: Check PER public preflight
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         working-directory: benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 30s python -E -S -B test_preflight.py
       - name: Check calcium opaque-query preflight
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-015/implementations/opaque-query-v1/tests -p test_preflight.py -v
       - name: Check NEURAL-021 generated source controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-021/implementations/paired-observation-grade-v1/test_compare.py
       - name: Check NEURAL-025 generated source controls
-        if: matrix.group == 'scientific'
+        if: (matrix.group == 'scientific') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-025/implementations/participant-delivery-v2/test_preflight.py -v
       - name: Check NEURAL-026 generated source controls
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-026/implementations/matched-ablation-grading-v1/test_compare.py
       - name: Check NEURAL-029 generated source controls
-        if: matrix.group == 'numpy226'
+        if: (matrix.group == 'numpy226') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-029/implementations/public-source-view-v1/test_view_source.py
       - name: Check NEURAL-030 generated source controls
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -I -B benchmarks/neural/NEURAL-030/implementations/cerebellar-executor/test_active_score.py -v
       - name: Check NEURAL-031 generated source controls
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-031/implementations/context-preflight-v1/test_preflight.py
       - name: Check NEURAL-037 generated source controls
-        if: matrix.group == 'erp-core-builder'
+        if: (matrix.group == 'erp-core-builder') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-037/implementations/condition-reference-v1/test_reference.py
       - name: Check NEURAL-039 generated source controls
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B -c "import runpy,sys; from pathlib import Path; p=Path('benchmarks/neural/NEURAL-039/implementations/movie10-evaluator-v1').resolve(); sys.path.insert(0,str(p)); sys.argv=['test_submission.py','-v']; runpy.run_path(str(p/'test_submission.py'),run_name='__main__')"
       - name: Check NEURAL-040 generated source controls
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-040/implementations/fixed-fit-evaluator-v2/tests/test_input_snapshots.py -v
       - name: Check NEURAL-041 generated source controls
-        if: matrix.group == 'erp-core-builder'
+        if: (matrix.group == 'erp-core-builder') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-041/implementations/epoch-reader-v2/test_epoch_io.py --scratch "${RUNNER_TEMP}"
       - name: Check NEURAL-043 generated source controls
-        if: matrix.group == 'scientific'
+        if: (matrix.group == 'scientific') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B -m unittest discover -s benchmarks/neural/NEURAL-043/implementations/direction-scoring-v2 -p 'test_submission_preflight.py' -v
       - name: Check NEURAL-046 generated source controls
-        if: matrix.group == 'stdlib-b'
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-046/implementations/joined-scoring-v1/test_preflight_submission.py
       - name: Check NEURAL-047 generated source controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-047/implementations/neural-047/history-delivery-v1/test_compare.py
       - name: Check NEURAL-048 generated source controls
-        if: matrix.group == 'stdlib-b'
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/neural/NEURAL-048/implementations/frozen-comparator-v1/tests/test_freeze_behavior.py -v
       - name: Check PAPER-paper-method-001 generated test_finite_population controls
-        if: matrix.group == 'scientific'
+        if: (matrix.group == 'scientific') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-001/implementations/dimensionality-programme/test_finite_population.py
       - name: Check PAPER-paper-method-007 generated test_prepare_summary controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-007/implementations/paper-cited-source-v1/test_prepare_summary.py -v
       - name: Check PAPER-paper-method-012 generated test_decoder_information controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-012/implementations/decoder-information-v1 -p test_decoder_information.py -v
       - name: Check PAPER-paper-method-018 generated test_components controls
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-018/implementations/likelihood-components-v1/tests -p test_components.py -v
       - name: Check PAPER-paper-method-024 generated test_alignment controls
-        if: matrix.group == 'scientific'
+        if: (matrix.group == 'scientific') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-024/implementations/original-endpoints-float64-v2/test_alignment.py
       - name: Check PAPER-paper-method-034 generated test_panel controls
-        if: matrix.group == 'scientific'
+        if: (matrix.group == 'scientific') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-034/implementations/figure5d-endpoint-v1/test_panel.py
       - name: Check PAPER-paper-method-050 generated test_scorer controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-method-050/implementations/figure5-joint-sort-v1/tests/test_scorer.py
       - name: Check PAPER-paper-method-add-008 generated source controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-method-add-008/implementations/initial-evaluator-v1/tests/test_prepare_exports.py -v
       - name: Check PAPER-paper-method-replacement-003 generated source controls
-        if: matrix.group == 'scientific'
+        if: (matrix.group == 'scientific') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-replacement-003/implementations/paper-method-replacement-003/tests/spike_order_checks.py --work-dir "${RUNNER_TEMP}"
       - name: Check PAPER-paper-method-replacement-005 generated source controls
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         working-directory: benchmarks/paper/PAPER-paper-method-replacement-005/implementations/table10-comparators-v1
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B test_decoder_comparators.py -v
       - name: Check PAPER-paper-method-replacement-006 generated source controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         working-directory: benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -S -B -m unittest -v test_score_native
       - name: Check PAPER-paper-method-replacement-008 generated source controls
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/paper/PAPER-paper-method-replacement-008/implementations/selected-primary-v1/test_assemble.py
       - name: Check PAPER-paper-method-replacement-012 generated source controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         working-directory: benchmarks/paper/PAPER-paper-method-replacement-012/implementations/seed-summary-v1
         env:
@@ -585,61 +637,61 @@ jobs:
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -S -B -m unittest -v test_summary
       - name: Check PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113 generated interfaces
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -I -S -B benchmarks/paper/PAPER-ADMISSION-STRUCTURED-EXPERIENCE-20261113/implementations/original-fold-bridge-v1/tests/test_loader.py
       - name: Check PAPER-CANDIDATE-20261114-CONSENSUS generated interfaces
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-CONSENSUS/implementations/likelihood-terms-v1/test_likelihood_terms.py
       - name: Check PAPER-CANDIDATE-20261114-DPAD generated interfaces
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -B benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/test_candidate_preflight.py -v
       - name: Check PAPER-CANDIDATE-20261114-DUNL generated interfaces
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-DUNL/implementations/dunl-paired-events-v1/test_paired_events.py
       - name: Check PAPER-CANDIDATE-20261114-POYO generated interfaces
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -I -S -B benchmarks/paper/PAPER-CANDIDATE-20261114-POYO/implementations/paired-grid-evaluator/test_compare.py
       - name: Check PAPER-FIND-004 generated interfaces
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -I -B benchmarks/paper/PAPER-FIND-004/implementations/journal-metrics-v2/tests/test_pairing_receipts.py
       - name: Check PAPER-FIND-024 generated interfaces
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -I -S -B -m unittest discover -s benchmarks/paper/PAPER-FIND-024/implementations/paired-window-quantities-v1/tests -v
       - name: Check Kilosort4 supported source20 representations
-        if: matrix.group == 'erp-core-builder'
+        if: (matrix.group == 'erp-core-builder') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-006/implementations/registered-runtime/tests -p 'test_source20_admission.py' -v
       - name: Check PAPER-EXP-20261113-002 generated paper controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/paper/PAPER-EXP-20261113-002/implementations/within-time-prediction-audit-v1/test_within_time_audit.py
       - name: Check PAPER-EXP-20261113-003 generated paper controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -647,13 +699,13 @@ jobs:
           trap 'rm -rf -- "$paper1_nider_scratch"' EXIT
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/paper/PAPER-EXP-20261113-003/implementations/nider-primary-companions-v1/tests/comparison_controls.py --implementations "${GITHUB_WORKSPACE}/benchmarks/paper/PAPER-EXP-20261113-003/implementations" --scratch "$paper1_nider_scratch"
       - name: Check PAPER-FIND-039 generated paper controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -B -m unittest discover -s benchmarks/paper/PAPER-FIND-039/implementations/figure5i-paired-v1/tests -p 'test_*.py' -v
       - name: Check PAPER-FIND-044 generated paper controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         env:
           PYTHONDONTWRITEBYTECODE: "1"
@@ -661,38 +713,38 @@ jobs:
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -B -m unittest discover -s benchmarks/paper/PAPER-FIND-044/implementations/public-submission-v1 -p test_submission.py -v
       - name: Check PAPER-FIND-ADD-006 generated paper controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/paper/PAPER-FIND-ADD-006/implementations/figure4d-condition-comparison-v1/test_compare.py
       - name: Check PAPER-FIND-ADD-009 generated paper controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -B -m unittest discover -s benchmarks/paper/PAPER-FIND-ADD-009/implementations/biosignal-panel-v1/tests -v
       - name: Check PAPER-FIND-ADD-015 fig5-group-summary-v1 generated controls
-        if: matrix.group == 'scientific'
+        if: (matrix.group == 'scientific') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -I -B benchmarks/paper/PAPER-FIND-ADD-015/implementations/fig5-group-summary-v1/test_group_summary.py
       - name: Check PAPER-FIND-REP-007 figure3h-similarity-v1 generated controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -I -S -B benchmarks/paper/PAPER-FIND-REP-007/implementations/figure3h-similarity-v1/tests/test_similarity.py
       - name: Check PAPER-FIND-REP-011 coactivity-curves generated controls
-        if: matrix.group == 'stdlib-b'
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         working-directory: "benchmarks/paper/PAPER-FIND-REP-011/implementations/source-row-audit-v1"
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 180s python -B test_coactivity_curves.py -v
       - name: Check PAPER-ROOT-ADD-003 generated preparation and comparison controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         env:
           PYTHONDONTWRITEBYTECODE: "1"
@@ -700,7 +752,7 @@ jobs:
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/paper/PAPER-ROOT-ADD-003/implementations/original-fig3-v1/test_prepare_inputs.py
       - name: Check PAPER-ROOT-ADD-010 generated preparation and comparison controls
-        if: matrix.group == 'numpy226'
+        if: (matrix.group == 'numpy226') && matrix.shard == 0
         shell: bash
         env:
           PYTHONDONTWRITEBYTECODE: "1"
@@ -710,7 +762,7 @@ jobs:
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -B -m unittest discover -s benchmarks/paper/PAPER-ROOT-ADD-010/implementations/paired-oddball-v1/tests -p 'test_*.py' -v
       - name: Check PAPER-ROOT-ADD-016 generated preparation and comparison controls
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         env:
           PYTHONDONTWRITEBYTECODE: "1"
@@ -718,7 +770,7 @@ jobs:
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/paper/PAPER-ROOT-ADD-016/implementations/paired-decoding-comparison-v1/test_compare.py -v
       - name: Check PAPER-ROOT-ADD-019 generated preparation and comparison controls
-        if: matrix.group == 'stdlib-b'
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         env:
           PYTHONDONTWRITEBYTECODE: "1"
@@ -726,7 +778,7 @@ jobs:
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/paper/PAPER-ROOT-ADD-019/implementations/figure6h-fold-input-v1/test_prepare.py
       - name: Check PAPER-ROOT-ADD-026 generated preparation and comparison controls
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         env:
           PYTHONDONTWRITEBYTECODE: "1"
@@ -741,25 +793,25 @@ jobs:
           export TEMPORAL_GENERATED_ROOT="$ROOT026_GENERATED_DIR"
           timeout --signal=TERM --kill-after=5s 120s python -B benchmarks/paper/PAPER-ROOT-ADD-026/implementations/paired-comparison-v1/test_compare.py
       - name: Check dimension branches reject split overlap
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-method-replacement-016/implementations/dimension-branches/test_split_separation.py -v
       - name: Check primary CTF preparation CLI
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B benchmarks/paper/PAPER-paper-signal-add-004/implementations/latent-state-programme/tests/test_primary_ctf_cli.py -v
       - name: Check matched contrast access panels
-        if: matrix.group == 'stdlib-a'
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -S -B -m unittest discover -s benchmarks/paper/PAPER-paper-signal-add-019/implementations/paired-panel-v1/tests -p 'test_pair.py' -v
       - name: "Check NEURAL-053 generated source controls"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -769,7 +821,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-053/implementations/programme-source/implementation-v4/test_prior_comparisons_v1.py
       - name: "Check NEURAL-056 generated source controls"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -780,7 +832,7 @@ jobs:
           export NEURAL056_REPO="$GITHUB_WORKSPACE"
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-056/implementations/precision-v1/tests/test_role_comparison.py
       - name: "Check NEURAL-057 generated source controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -790,7 +842,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-057/implementations/query-observation-v1/tests -p test_observation.py -v
       - name: "Check NEURAL-058 typed viewer"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -800,7 +852,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-058/implementations/observation-viewer-v1/controls/test_viewer.py
       - name: "Check NEURAL-058 generated corpus adapter"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -810,7 +862,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-058/implementations/observation-viewer-v1/controls/check_corpus_adapter.py --programme-root "benchmarks/neural/NEURAL-058/implementations/programme-source/implementation-v1/program" --scratch-parent "$scratch"
       - name: "Check NEURAL-059 generated source controls"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -820,7 +872,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-059/implementations/direct-grading-v1/test_grade.py
       - name: "Check NEURAL-060 generated source controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -830,7 +882,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-060/implementations/workflow-comparison-v1/test_compare.py --repository "$GITHUB_WORKSPACE" --scratch "$scratch"
       - name: "Check NEURAL-062 generated source controls"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -841,7 +893,7 @@ jobs:
           export NEURAL062_TEST_TMP="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-062/implementations/phase-access-v1 -p test_phase_input.py -v
       - name: "Check NEURAL-063 generated source controls"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -851,7 +903,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-063/implementations/restricted-viewer-v1 -p test_viewer.py -v
       - name: "Check NEURAL-065 observation Python controls"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -861,7 +913,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-065/implementations/observation-viewer-v1/tests -p test_view.py -v
       - name: "Check NEURAL-065 observation JavaScript controls"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -873,7 +925,7 @@ jobs:
           node --version
           timeout --signal=TERM --kill-after=5s 120s node --max-old-space-size=256 benchmarks/neural/NEURAL-065/implementations/observation-viewer-v1/tests/test_navigation.cjs
       - name: "Check NEURAL-066 generated source controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -883,7 +935,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-066/implementations/observation-pages-v1/test_observation.py
       - name: "Check NEURAL-067 generated source controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -893,7 +945,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-067/implementations/participant-client-v1 -p test_client.py -v
       - name: "Check NEURAL-068 reviewed source capability"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -903,7 +955,7 @@ jobs:
           export TMPDIR="$CONTROL_TMP"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-068/implementations/paired-session-v1/test_compare_access.py -v
       - name: "Check NEURAL-069 reviewed source capability"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -913,7 +965,7 @@ jobs:
           export TMPDIR="$CONTROL_TMP"
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-069/implementations/response-scorer-v1/test_comparison.py -v
       - name: "Check NEURAL-070 reviewed source capability"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -923,7 +975,7 @@ jobs:
           export TMPDIR="$CONTROL_TMP"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B tests/test_neural070_coordinate_roster.py -v
       - name: "Check NEURAL-072 reviewed source capability"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -933,7 +985,7 @@ jobs:
           export TMPDIR="$CONTROL_TMP"
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-072/implementations/paired-comparison-v1/tests/test_compare.py -v
       - name: "Check NEURAL-074 reviewed source capability"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -943,7 +995,7 @@ jobs:
           export TMPDIR="$CONTROL_TMP"
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-074/implementations/primary-score-v1/test_compare_primary.py -v
       - name: "Check NEURAL-076 reviewed source capability"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -953,7 +1005,7 @@ jobs:
           export TMPDIR="$CONTROL_TMP"
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-076/implementations/hierarchy-scorer-v2/test_compare.py -v
       - name: "Check NEURAL-081 reviewed source capability"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -963,7 +1015,7 @@ jobs:
           export TMPDIR="$CONTROL_TMP"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-081/implementations/waveform-observation-v1/test_session.py -v
       - name: "Check NEURAL-084 generated paired or observation controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -973,7 +1025,7 @@ jobs:
           export NEURAL084_TEST_TMP="$N84_SCRATCH"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-084/implementations/paired-access-scoring-v1/test_score.py -v
       - name: "Check NEURAL-088 generated paired or observation controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -983,7 +1035,7 @@ jobs:
           export NEURAL088_TEST_TMP="$N88_SCRATCH/fixtures"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-088/implementations/count-endpoint-v2/test_paired_access.py -v
       - name: "Check NEURAL-089 generated paired or observation controls"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -993,7 +1045,7 @@ jobs:
           export TMPDIR="$N89_SCRATCH"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-089/implementations/same-panel-comparison-v1 -p test_compare.py -v
       - name: "Check NEURAL-090 generated paired or observation controls"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1002,7 +1054,7 @@ jobs:
           trap 'rm -rf -- "$N90_SCRATCH"' EXIT
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-090/implementations/neural-090/mode-comparison-v1/test_comparison.py --scratch-root "$N90_SCRATCH" -v
       - name: "Check NEURAL-091 generated paired or observation controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1012,28 +1064,28 @@ jobs:
           export NEURAL091_TEST_TMPDIR="$N91_SCRATCH"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-091/implementations/paired-condition-evaluator-v1 -p test_paired_conditions.py -v
       - name: "Check NEURAL-092 generated paired or observation controls"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           umask 077
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-092/implementations/observed-text-delivery-v1/test_observed_text.py -v
       - name: "Check NEURAL-093 generated paired or observation controls"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           umask 077
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-093/implementations/four-arm-scoring-v1/test_paired_programs.py -v
       - name: "Check NEURAL-094 generated paired or observation controls"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
           umask 077
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/neural/NEURAL-094/implementations/reference-preflight-v1/test_reference_preflight.py -v
       - name: "Check NEURAL-097 generated paired or observation controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1043,7 +1095,7 @@ jobs:
           export N097_TEST_TMPDIR="$N97_SCRATCH"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-097/implementations/restricted-observation-v1/tests/test_observation.py -v
       - name: "Check NEURAL-EXP-005 generated participant controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1055,7 +1107,7 @@ jobs:
           export HELSINKI_NUMERIC_PROOF_PATH="$CONTROL_SCRATCH/proof.json"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-EXP-005/implementations/numeric-program-v1/test_run.py
       - name: "Check NEURAL-SCOPE-20261114-LOCALIZATION generated participant controls"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1065,7 +1117,7 @@ jobs:
           export TMPDIR="$CONTROL_SCRATCH"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/NEURAL-SCOPE-20261114-LOCALIZATION/implementations/frozen-participant/test_participant.py
       - name: "Check apcx-odor-pulse-evidence generated participant controls"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1076,7 +1128,7 @@ jobs:
           unset APCX_IMPLEMENTATIONS_ROOT
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/apcx-odor-pulse-evidence/implementations/typed-count-stdio-v1/test_bridge.py
       - name: "Check clinical-ccep-stimulation-attribution generated participant controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1086,7 +1138,7 @@ jobs:
           export TMPDIR="$CONTROL_SCRATCH"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/clinical-ccep-stimulation-attribution/implementations/complete-observation-v1/test_observation.py
       - name: "Check clinical-sensefog-stn-state generated participant controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1096,7 +1148,7 @@ jobs:
           export TMPDIR="$CONTROL_SCRATCH"
           timeout --signal=TERM --kill-after=5s 120s python -I -S -B benchmarks/neural/clinical-sensefog-stn-state/implementations/participant-delivery-v1/test_delivery.py
       - name: "Check complete NEURAL-075 numeric observations"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         env:
           OPENBLAS_NUM_THREADS: "1"
@@ -1108,7 +1160,7 @@ jobs:
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 130s python -I -B benchmarks/neural/NEURAL-075/implementations/numeric-observation-v1/test_numeric_observation.py
       - name: "Check NEURAL-085 complete numeric observation controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1116,7 +1168,7 @@ jobs:
           unset NEUROBENCH_TEST_SOURCE_ROOT
           timeout --signal=TERM --kill-after=5s 420s python -I -S -B benchmarks/neural/NEURAL-085/implementations/released-summary-response-v1/test_response.py --control-timeout-seconds 360
       - name: "Check full32 ERP image-reference portable controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1141,7 +1193,7 @@ jobs:
           print(json.dumps({"erp_adapter_portable_ci": "passed", "tests": 14, "passed": 13, "allowed_platform_skips": 1, "sandbox_qualified": False}, sort_keys=True))
           PY
       - name: "Check authenticated DeepCaImX notebook source controls"
-        if: "matrix.group == 'stdlib-a'"
+        if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1151,7 +1203,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 60s python -I -S -B -m unittest discover -s benchmarks/paper/PAPER-paper-method-013/implementations/streaming-input-v1/tests -p test_notebook_sources.py -v
       - name: "Check complete Foraging HW reference source controls"
-        if: "matrix.group == 'numpy'"
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1162,7 +1214,7 @@ jobs:
           unset FORAGING_EXISTING_SOURCE_ROOT
           timeout --signal=TERM --kill-after=5s 120s python -I -B benchmarks/paper/PAPER-FIND-036/implementations/foraging-programme/full-hw-reference-v1/test_reference.py -v
       - name: "Check REVE phase observer source controls"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         working-directory: benchmarks/paper/PAPER-paper-method-003/implementations/matched-reference-v1
         run: |
@@ -1173,7 +1225,7 @@ jobs:
           export TMPDIR="$scratch"
           timeout --signal=TERM --kill-after=5s 60s python -I -B observer_tests.py
       - name: "Check complete adaptive-gain ERP observation source"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1201,7 +1253,7 @@ jobs:
           print(json.dumps({"adaptive_observation_ci": "passed", "tests": 16, "peak_rss_bytes": rss_bytes, "prospective_ci_ceiling_bytes": 384 * 1024**2, "qualifies_original_256MiB_plan": False, "scientific_qualification": False}, sort_keys=True))
           PY
       - name: "Check fixed-view ERP uncertainty reference source"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1225,7 +1277,7 @@ jobs:
           print(json.dumps({"fixed_view_uncertainty_reference_ci": "passed", "tests": 14, "skipped": 0, "scientific_qualification": False}, sort_keys=True))
           PY
       - name: "Check full32 ERP uncertainty adapter portable source"
-        if: "matrix.group == 'stdlib-b'"
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1254,7 +1306,7 @@ jobs:
           print(json.dumps({"fixed_view_uncertainty_adapter_ci": "passed", "tests": 21, "passed": 19, "allowed_platform_skips": 2, "sandbox_qualified": False, "scientific_qualification": False}, sort_keys=True))
           PY
       - name: Check PAPER-FIND-036 finite collection clock controls
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         env:
           OPENBLAS_NUM_THREADS: "1"
@@ -1284,7 +1336,7 @@ jobs:
           print(json.dumps({'task': 'PAPER-FIND-036', 'tests_run': result.testsRun, 'skipped': len(result.skipped), 'generated_controls_only': True, 'scientific_qualification': False}, sort_keys=True))
           PY
       - name: Check NEURAL-018 original target count domain
-        if: matrix.group == 'numpy'
+        if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
         env:
           OPENBLAS_NUM_THREADS: "1"
@@ -1314,7 +1366,7 @@ jobs:
           print(json.dumps({'task': 'NEURAL-018', 'tests_run': result.testsRun, 'skipped': len(result.skipped), 'generated_controls_only': True, 'scientific_qualification': False}, sort_keys=True))
           PY
       - name: Check SMC protected grading declaration binding
-        if: matrix.group == 'stdlib-b'
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1337,7 +1389,7 @@ jobs:
           print(json.dumps({"task": "PAPER-SMC-RNN-2024", "suite": "declaration-binding", "tests": 5, "skips": 0, "generated_controls_only": True, "scientific_qualification": False}, sort_keys=True))
           PY
       - name: Check ABR nested-response classification and producer compatibility
-        if: matrix.group == 'stdlib-b'
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1363,9 +1415,9 @@ jobs:
         run: |
           set -euo pipefail
           umask 077
-          timeout --signal=TERM --kill-after=5s 190s python -I -S -B scripts/maintenance/run_parallel_source_controls.py --manifest benchmarks/integrity/parallel-source-controls.v1.json --group "$PARALLEL_CONTROL_GROUP" --prepare-fixtures --fixtures "${RUNNER_TEMP}/parallel-fixtures-${PARALLEL_CONTROL_GROUP}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          timeout --signal=TERM --kill-after=5s 190s python -I -S -B scripts/maintenance/run_parallel_source_controls.py --manifest benchmarks/integrity/parallel-source-controls.v1.json --group "$PARALLEL_CONTROL_GROUP" --prepare-fixtures --fixtures "${RUNNER_TEMP}/parallel-fixtures-${PARALLEL_CONTROL_GROUP}-${PARALLEL_CONTROL_SHARD}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
       - name: Check complete language plan serialization
-        if: matrix.group == 'language-rootfs'
+        if: (matrix.group == 'language-rootfs') && matrix.shard == 0
         shell: bash
         run: |
           set -euo pipefail
@@ -1393,19 +1445,19 @@ jobs:
         run: |
           set -euo pipefail
           umask 077
-          timeout --signal=TERM --kill-after=5s 1200s python -I -B scripts/maintenance/run_parallel_source_controls.py --manifest benchmarks/integrity/parallel-source-controls.v1.json --group "$PARALLEL_CONTROL_GROUP" --fixtures "${RUNNER_TEMP}/parallel-fixtures-${PARALLEL_CONTROL_GROUP}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" --output "${RUNNER_TEMP}/parallel-source-${PARALLEL_CONTROL_GROUP}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          timeout --signal=TERM --kill-after=5s 1200s python -I -B scripts/maintenance/run_parallel_source_controls.py --manifest benchmarks/integrity/parallel-source-controls.v1.json --group "$PARALLEL_CONTROL_GROUP" --shard-index "$PARALLEL_CONTROL_SHARD" --shard-count "$PARALLEL_CONTROL_SHARDS" --fixtures "${RUNNER_TEMP}/parallel-fixtures-${PARALLEL_CONTROL_GROUP}-${PARALLEL_CONTROL_SHARD}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" --output "${RUNNER_TEMP}/parallel-source-${PARALLEL_CONTROL_GROUP}-${PARALLEL_CONTROL_SHARD}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
       - name: Preserve generated-control results and acquisition accounting
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: parallel-source-${{ matrix.group }}-${{ github.run_id }}-${{ github.run_attempt }}
+          name: parallel-source-${{ matrix.group }}-${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 7
           if-no-files-found: error
           overwrite: false
           include-hidden-files: false
           path: |
-            ${{ runner.temp }}/parallel-source-${{ matrix.group }}-${{ github.run_id }}-${{ github.run_attempt }}/
-            ${{ runner.temp }}/parallel-fixtures-${{ matrix.group }}-${{ github.run_id }}-${{ github.run_attempt }}/acquisition-receipt.json
+            ${{ runner.temp }}/parallel-source-${{ matrix.group }}-${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}/
+            ${{ runner.temp }}/parallel-fixtures-${{ matrix.group }}-${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}/acquisition-receipt.json
             ${{ runner.temp }}/language-serialization-${{ github.run_id }}-${{ github.run_attempt }}/RESULT.json
             ${{ runner.temp }}/language-serialization-${{ github.run_id }}-${{ github.run_attempt }}/TEST_LOG.txt
       - name: Preserve Meg generated fixtures
@@ -1422,7 +1474,7 @@ jobs:
         if: always() && matrix.group == 'stdlib-b'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
-          name: alpha-public-modes-${{ github.run_id }}-${{ github.run_attempt }}
+          name: alpha-public-modes-${{ matrix.shard }}-${{ github.run_id }}-${{ github.run_attempt }}
           retention-days: 7
           if-no-files-found: warn
           overwrite: false

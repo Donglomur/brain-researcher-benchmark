@@ -23,6 +23,7 @@ import urllib.request
 MAX_MANIFEST_BYTES = 2 * 1024 * 1024
 MAX_LOG_BYTES = 4 * 1024 * 1024
 MAX_COMMANDS = 744
+MAX_SHARDS = 4
 MAX_SECONDS = 180
 ARTIFACT_TOKEN = '${ARTIFACT_DIR}'
 THREAD_ENV = ('OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'MKL_NUM_THREADS',
@@ -66,13 +67,16 @@ def fingerprint(info):
             info.st_mtime_ns,info.st_ctime_ns)
 
 
-def bounded_json(path, limit=MAX_MANIFEST_BYTES):
+def bounded_json(path, limit=MAX_MANIFEST_BYTES, *, with_identity=False):
     before = path.stat()
     need(stat.S_ISREG(before.st_mode) and before.st_size <= limit, 'bounded JSON required')
     with path.open('rb') as stream:
         raw = stream.read(before.st_size + 1)
     need(len(raw) == before.st_size and fingerprint(path.stat()) == fingerprint(before), 'JSON changed during read')
-    return json.loads(raw)
+    document = json.loads(raw)
+    if with_identity:
+        return document, {'bytes':len(raw), 'sha256':hashlib.sha256(raw).hexdigest()}
+    return document
 
 
 def pinned_read(path, pin):
@@ -209,6 +213,39 @@ def validate_document(document, group):
     return groups[group], selected
 
 
+def shard_commands(commands, shard_index=0, shard_count=1):
+    """Partition whole task units, preserving each shard's manifest order.
+
+    Expected test counts are only a deterministic initial load proxy. Every
+    command still runs intact under its original environment and result guard.
+    """
+    need(type(shard_count) is int and 1 <= shard_count <= MAX_SHARDS,
+         'bounded shard count required')
+    need(type(shard_index) is int and 0 <= shard_index < shard_count,
+         'valid shard index required')
+    need(type(commands) is list and bool(commands), 'nonempty command group required')
+    if shard_count == 1:
+        return list(commands)
+    units = {}
+    for row in commands:
+        task = row.get('task_id')
+        need(task is None or type(task) is str, 'string or null task identity required')
+        # A maintenance command with no task identity is its own complete unit.
+        key = (task is None, row['id'] if task is None else task)
+        units.setdefault(key, []).append(row)
+    bins = [[] for _ in range(shard_count)]
+    weights = [0] * shard_count
+    ordered = sorted(units.items(),
+                     key=lambda item: (-sum(row['expected_tests'] for row in item[1]), item[0]))
+    for _, rows in ordered:
+        index = min(range(shard_count), key=lambda i: (weights[i], len(bins[i]), i))
+        bins[index].extend(row['id'] for row in rows)
+        weights[index] += sum(row['expected_tests'] for row in rows)
+    need(all(bins), 'empty command shard refused')
+    assigned = set(bins[shard_index])
+    return [row for row in commands if row['id'] in assigned]
+
+
 def bind_fixtures(document, selected, fixtures):
     specs = document.get('fixtures', {})
     paths = {}
@@ -244,10 +281,14 @@ def bind_fixtures(document, selected, fixtures):
     return paths
 
 
-def run(root, manifest, group, output, fixtures=None):
+def run(root, manifest, group, output, fixtures=None, *, shard_index=0, shard_count=1):
     root = root.resolve()
-    document = bounded_json(manifest)
+    document, manifest_identity = bounded_json(manifest, with_identity=True)
     profile, selected = validate_document(document, group)
+    assigned = shard_commands(selected, shard_index, shard_count)
+    shard = {'index':shard_index, 'count':shard_count, 'group_commands':len(selected),
+             'assigned_ids':[row['id'] for row in assigned],
+             'expected_tests':sum(row['expected_tests'] for row in assigned)}
     need(sys.version.split()[0] == profile['python'], 'exact CI interpreter mismatch')
     expected = profile.get('packages', {})
     actual = {name: importlib.metadata.version(name) for name in expected}
@@ -267,6 +308,9 @@ def run(root, manifest, group, output, fixtures=None):
             need('${' not in value or value == '${PYTHON}' or value in fixture_paths or value == ARTIFACT_TOKEN,
                  'unresolved command placeholder: ' + value)
         working_directories[row['id']] = local(root,row['cwd'],directory=True)
+    # Authenticate the complete environment above, including unassigned commands.
+    # Partitioning changes execution placement, never the admission boundary.
+    selected = assigned
     for parent in (output, *output.parents):
         need(not parent.is_symlink(), 'symlink in output path')
     output.mkdir(mode=0o700, parents=True)
@@ -318,6 +362,7 @@ def run(root, manifest, group, output, fixtures=None):
         status = 'failed' if failures else ('passed' if attempted == len(selected) else 'running')
         (output/'results.json').write_text(json.dumps({'scope':'generated_software_controls_only',
             'scientific_qualification':False,'group':group,'status':status,
+            'manifest':manifest_identity,'shard':shard,
             'attempted':attempted,'completed':results,'failed':failures},indent=2)+'\n')
         print(json.dumps(record),flush=True)
     need(not failures, '%d of %d authenticated commands failed; see results.json' % (len(failures),len(selected)))
@@ -534,6 +579,8 @@ def main():
     parser.add_argument('--root',type=Path,default=Path(__file__).resolve().parents[2])
     parser.add_argument('--manifest',type=Path,required=True)
     parser.add_argument('--group',required=True)
+    parser.add_argument('--shard-index',type=int,default=0)
+    parser.add_argument('--shard-count',type=int,default=1)
     parser.add_argument('--output',type=Path)
     parser.add_argument('--fixtures',type=Path)
     parser.add_argument('--prepare-fixtures',action='store_true')
@@ -542,11 +589,13 @@ def main():
         if args.prepare_fixtures:
             need(args.fixtures is not None, 'fixture destination required')
             document = bounded_json(args.manifest)
-            validate_document(document,args.group)
+            _, selected = validate_document(document,args.group)
+            shard_commands(selected,args.shard_index,args.shard_count)
             prepare_fixtures(args.root,document,args.group,args.fixtures)
         else:
             need(args.output is not None, 'output destination required')
-            run(args.root,args.manifest,args.group,args.output,args.fixtures)
+            run(args.root,args.manifest,args.group,args.output,args.fixtures,
+                shard_index=args.shard_index,shard_count=args.shard_count)
     except (ValueError,OSError,KeyError,TypeError,json.JSONDecodeError) as error:
         print('parallel controls refused: '+str(error),file=sys.stderr)
         return 1
