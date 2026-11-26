@@ -548,13 +548,101 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-011/implementations/complete-lopo-evaluator-v1/tests/test_lopo.py -v
-      - name: Check PER public preflight
+      - name: Check PER public preflight and joint comparison
         if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         working-directory: benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2
         run: |
           set -euo pipefail
-          timeout --signal=TERM --kill-after=5s 30s python -E -S -B test_preflight.py
+          umask 077
+          N013_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural013-joint-generated.XXXXXX")"
+          trap 'rm -rf -- "$N013_SCRATCH"' EXIT
+          export TMPDIR="$N013_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B - "$GITHUB_WORKSPACE" "$N013_SCRATCH" <<'PY_N013_JOINT'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+          import tempfile
+          import unittest
+
+
+          def require(ok, message):
+              if not ok:
+                  raise AssertionError(message)
+
+
+          root = Path(sys.argv[1]).resolve(strict=True)
+          scratch = Path(sys.argv[2]).resolve(strict=True)
+          require(root.is_dir() and scratch.is_dir() and not scratch.is_relative_to(root), 'external generated scratch required')
+          require(os.environ.get('TMPDIR') == str(scratch) and Path(tempfile.gettempdir()).resolve() == scratch, 'N013 generated scratch contract required')
+          pins = [{'bytes': 1768, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/QUALIFICATION.json', 'sha256': 'dba8006749a16d235aa5de893e8fd75bff95a6df3000bb0106ba8607c165e3f3'}, {'bytes': 9126, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/README.md', 'sha256': '3463711a38d7f6640a4e74c51545c5696510ce1d80c85f1a60dafd987ec4d654'}, {'bytes': 4295, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/SEQUENCE_PRIOR.md', 'sha256': 'ef68a9967214bbcfda9cdf2f7a73a6e08739fc7d98635a9ad697a6dce881da32'}, {'bytes': 2509, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/SEQUENCE_PRIOR_SOURCE.json', 'sha256': 'bcbd072cd9de884f2bd3193a2d02d1156871a560f2a4da1a3c715f9eb9de3e3e'}, {'bytes': 1660, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/SEQUENCE_PRIOR_VALIDATION.json', 'sha256': 'f22e9442c2b840271324ad03630d97f1639343a2f83ad5ee80e65e358730e571'}, {'bytes': 1753, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/SOURCE_PINS.json', 'sha256': 'dcfceffd6f8eec0d7763aa774d11a9c3daf8905b2ae19320fba026afbcb477cb'}, {'bytes': 14480, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/core.py', 'sha256': 'e27d42b243f6121aeea878a4a1d031ac068ef4ba7dea7e3482e223b697f99c1d'}, {'bytes': 2470, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/preflight.py', 'sha256': '16e02bc8854f43295347a1bf3a231efa770e7ecaeaacdf73d4d2196c6fd28a3a'}, {'bytes': 2296, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/safe_io.py', 'sha256': 'eb2ef018b16dc6563b6afbc8577c410f881daa30bd3a46e2fd7cca436cfef753'}, {'bytes': 2695, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/score.py', 'sha256': '5555b588896f6e021d2fad23c2b5722ff971c7986ef4480645673f7fa955c2cf'}, {'bytes': 6216, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/sequence_prior.py', 'sha256': '4654f7118fa5dfb497540ea5dc82e14f20f95a836e778ff43f86e4c2c3d37f88'}, {'bytes': 6158, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/split_policy.json', 'sha256': '3f43447e95819d0d8c3a8b865f6e67450dcc88aca59d28eecae13bf6593bb944'}, {'bytes': 14882, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/test_comparison.py', 'sha256': '0ac1746ba3639c7c82dfe8ec57ca180e05f13da3c2cf5cf00e38addcd607aeb2'}, {'bytes': 11224, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/test_evaluator.py', 'sha256': 'f97ae4546d16c6802c9efa38a686cb1ed07d9f699e15f5e3fa7de9779e4b1b12'}, {'bytes': 5327, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/test_preflight.py', 'sha256': '44f9e52cd81e40197ac9a1e279597664220c952f107b3ed39d49c5dcf6ce4938'}, {'bytes': 7764, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/test_sequence_prior.py', 'sha256': 'aaf69fe9595ee77e096b237464cbfaa4c6f888ac080490856bd7cd4f4eec8859'}, {'bytes': 1596, 'path': 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2/tokens.json', 'sha256': '7a954b257f98c03e0a96e8a8250bf4ba3ad65c342d67523f6db8189efdfa3ecc'}]
+          for pin in pins:
+              path = root / pin['path']
+              require(not path.is_symlink() and all(not parent.is_symlink() for parent in path.parents if parent.is_relative_to(root)), pin['path'])
+              before = path.lstat()
+              require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == pin['bytes'], pin['path'])
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  raw = stream.read(pin['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              final = path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              require(all(getattr(before, f) == getattr(opened, f) == getattr(after, f) == getattr(final, f) for f in fields), pin['path'])
+              require(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'], pin['path'])
+
+          require(sys.implementation.name == 'cpython' and sys.version_info[:3] == (3, 11, 18), 'existing CPython profile required')
+          expected = ['test_preflight.PreflightTests.test_bad_support_or_vocabulary_rejected', 'test_preflight.PreflightTests.test_complete_empty_outputs_and_token_formatting', 'test_preflight.PreflightTests.test_complete_output_is_unscored', 'test_preflight.PreflightTests.test_fresh_cli_needs_no_features_labels_or_targets', 'test_preflight.PreflightTests.test_invalid_public_stops_before_submission', 'test_preflight.PreflightTests.test_invalid_submission_is_not_an_operator_error', 'test_preflight.PreflightTests.test_only_public_and_submission_are_opened', 'test_comparison.ComparisonTests.test_admitted_predictions_and_identities_are_snapshotted_before_callback', 'test_comparison.ComparisonTests.test_both_complete_operands_admitted_before_private', 'test_comparison.ComparisonTests.test_cli_combined_complexity_refusal_is_null_and_sanitized', 'test_comparison.ComparisonTests.test_comparison_cli_valid_and_sanitized_refusals', 'test_comparison.ComparisonTests.test_empty_repeated_boundary_tokens_insertion_and_tie_order', 'test_comparison.ComparisonTests.test_existing_train_only_prior_uses_same_complete_endpoint', 'test_comparison.ComparisonTests.test_invalid_private_packet_never_reaches_edit_distance', 'test_comparison.ComparisonTests.test_nine_unequal_sessions_preserve_absolute_grades_and_signed_differences', 'test_comparison.ComparisonTests.test_one_shared_target_capture_and_private_identity', 'test_comparison.ComparisonTests.test_positive_negative_and_zero_macro_are_not_clipped', 'test_comparison.ComparisonTests.test_sum_budget_refuses_before_either_kernel_and_boundary_is_inclusive']
+          package = root / 'benchmarks/neural/NEURAL-013/implementations/per-evaluator-v2'
+          sys.path.insert(0, str(package))
+          loader = unittest.TestLoader()
+          suite = loader.loadTestsFromNames(['test_preflight', 'test_comparison'])
+          require(not loader.errors, 'N013 test loading error')
+          for name in ('test_preflight', 'test_comparison', 'test_evaluator', 'core', 'score', 'preflight', 'sequence_prior', 'safe_io'):
+              module = sys.modules.get(name)
+              require(module is not None and Path(module.__file__).resolve() == package / (name + '.py'), 'unexpected N013 module: ' + name)
+
+
+          def flatten(suite):
+              if isinstance(suite, unittest.TestSuite):
+                  return [identifier for child in suite for identifier in flatten(child)]
+              return [suite.id()]
+
+
+          discovered = flatten(suite)
+          require(discovered == expected and len(discovered) == len(set(discovered)) == suite.countTestCases() == 18, 'exact eighteen unique IDs required')
+
+
+          class CompleteResult(unittest.TextTestResult):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  self.started, self.stopped, self.succeeded = [], [], []
+
+              def startTest(self, test):
+                  self.started.append(test.id())
+                  super().startTest(test)
+
+              def stopTest(self, test):
+                  self.stopped.append(test.id())
+                  super().stopTest(test)
+
+              def addSuccess(self, test):
+                  self.succeeded.append(test.id())
+                  super().addSuccess(test)
+
+
+          result = unittest.TextTestRunner(verbosity=2, resultclass=CompleteResult).run(suite)
+          require(result.testsRun == 18 and result.started == result.stopped == result.succeeded == expected, 'exact execution rosters required')
+          require(result.wasSuccessful() and not any([result.failures, result.errors, result.skipped, result.expectedFailures, result.unexpectedSuccesses]), 'all eighteen outcomes must succeed without skips')
+          print(json.dumps({'task': 'NEURAL-013', 'suite': 'public-preflight-and-joint-PER',
+                            'tests_run': result.testsRun, 'discovered_ids': discovered, 'started_ids': result.started,
+                            'stopped_ids': result.stopped, 'successful_ids': result.succeeded,
+                            'failures': len(result.failures), 'errors': len(result.errors), 'skips': len(result.skipped),
+                            'expected_failures': len(result.expectedFailures), 'unexpected_successes': len(result.unexpectedSuccesses),
+                            'generated_only': True, 'scientific_qualification': False}, sort_keys=True))
+          PY_N013_JOINT
       - name: Check calcium opaque-query preflight
         if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash

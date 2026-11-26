@@ -166,10 +166,8 @@ def edit_counts(reference, prediction):
     return {'distance': d, 'substitutions': s, 'deletions': deletion, 'insertions': insertion}
 
 
-def score(public, submission, load_private):
-    """Validate complete public output before the single private callback."""
-    queries, predictions = validate_submission(public, submission)
-    private = load_private()
+def _private_targets(public, queries, private):
+    """Validate one complete operator target packet; never discard a query."""
     need(type(private) is dict and set(private) == {'schema', 'packet_id', 'targets'} and
          private['schema'] == 'neural013-targets-v1' and private['packet_id'] == public['packet_id'],
          'private/public packet binding')
@@ -184,11 +182,15 @@ def score(public, submission, load_private):
         need(target, 'empty target is unsupported; never silently drop a trial')
         targets[key] = target
     need(set(targets) == set(queries), 'complete private IDs')
-    cells = sum((len(targets[k]) + 1) * (len(predictions[k]) + 1) for k in queries)
-    if cells > MAX_DP_CELLS:
-        return {'status': 'unsupported_complexity', 'score': None,
-                'packet_id': public['packet_id'],
-                'reason': 'complete panel exceeds declared DP cell budget', 'cells': cells}
+    return targets
+
+
+def _dp_cells(queries, predictions, targets):
+    return sum((len(targets[k]) + 1) * (len(predictions[k]) + 1) for k in queries)
+
+
+def _score_admitted(public, queries, predictions, targets):
+    """Original absolute calculation, after complete admission and DP preflight."""
     sessions = {}
     for key, session in sorted(queries.items()):
         out = sessions.setdefault(session, dict(trials=0, exact_matches=0,
@@ -221,3 +223,62 @@ def score(public, submission, load_private):
             'complete_manifest_query_coverage': True,
             'source_panel_authentication': 'not_established_by_scoring',
             'scientific_success': None, 'performance_threshold': None}
+
+
+def score(public, submission, load_private):
+    """Validate complete public output before the single private callback."""
+    queries, predictions = validate_submission(public, submission)
+    targets = _private_targets(public, queries, load_private())
+    cells = _dp_cells(queries, predictions, targets)
+    if cells > MAX_DP_CELLS:
+        return {'status': 'unsupported_complexity', 'score': None,
+                'packet_id': public['packet_id'],
+                'reason': 'complete panel exceeds declared DP cell budget', 'cells': cells}
+    return _score_admitted(public, queries, predictions, targets)
+
+
+def compare(public, candidate, comparator, load_private):
+    """Operator-only paired PER from two complete outputs and one target capture.
+
+    The existing absolute grades remain unchanged. Canonical operand fingerprints
+    belong only to this private report; they do not authenticate source data,
+    comparator selection, freeze chronology or execution. No participant feedback
+    or observation transport is provided here.
+    """
+    queries, candidate_predictions = validate_submission(public, candidate)
+    _, comparator_predictions = validate_submission(public, comparator)
+    # Snapshot admitted inputs before the protected callback. The normalized
+    # prediction lists are already detached by validate_submission.
+    bound_public = {'packet_id': public['packet_id']}
+    identities = {
+        'candidate_submission_canonical_sha256': digest(candidate),
+        'comparator_submission_canonical_sha256': digest(comparator),
+    }
+    private = load_private()
+    targets = _private_targets(bound_public, queries, private)
+    cells = (_dp_cells(queries, candidate_predictions, targets) +
+             _dp_cells(queries, comparator_predictions, targets))
+    result = {
+        'schema': 'neural013-joint-per-comparison-v1',
+        'status': 'unsupported_complexity', 'packet_id': bound_public['packet_id'],
+        **identities, 'private_targets_canonical_sha256': digest(private),
+        'candidate_grade': None, 'comparator_grade': None,
+        'session_PER_differences': None, 'macro_PER_difference': None,
+        'difference_direction': 'comparator_minus_candidate',
+        'comparison_available': False, 'cells': cells, 'participant_count': 1,
+        'scientific_success': None, 'confidence_intervals': None, 'p_values': None,
+    }
+    # The whole pair shares the original one-panel cell ceiling. Preflight the
+    # sum before either DP calculation; no partial grade or selected sessions.
+    if cells > MAX_DP_CELLS:
+        result['reason'] = 'complete pair exceeds declared DP cell budget'
+        return result
+    a = _score_admitted(bound_public, queries, candidate_predictions, targets)
+    b = _score_admitted(bound_public, queries, comparator_predictions, targets)
+    differences = {s: b['sessions'][s]['PER'] - a['sessions'][s]['PER']
+                   for s in a['sessions']}
+    result.update(status='scored', candidate_grade=a, comparator_grade=b,
+                  session_PER_differences=differences,
+                  macro_PER_difference=math.fsum(differences.values()) / len(differences),
+                  comparison_available=True)
+    return result

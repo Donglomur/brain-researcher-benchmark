@@ -32,8 +32,15 @@ python3 -B sequence_prior.py predict --public /operator/public/manifest.json \
 Prediction opens only the manifest and frozen model, never feature arrays,
 allowed-label files, private targets or source HDF5 files. All nine query
 sessions and every manifest query remain required by the existing evaluator.
-Neither output may already exist. The resulting standard submission is scored
-separately with `score.py`; no query-time metric feedback is provided here.
+Neither output may already exist. The resulting standard submission can be
+scored alone with `score.py`, or supplied by the operator as
+`--comparator-submission` alongside a candidate submission to produce a joint
+comparison on one captured target packet. Both original grades and all nine
+paired session PER differences remain private operator evidence, including the
+target-content fingerprint; no query-time metric feedback is provided here.
+The joint operation checks both complete operands before targets and preflights
+the combined DP work under the unchanged 128-million-cell ceiling. This does not
+authenticate the prior fit or establish a neural/native capability claim.
 
 The model fingerprint binds supplied bytes. The operator must independently
 establish the freeze chronology and authentic packet; self-consistent hashes do
