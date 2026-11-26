@@ -92,13 +92,67 @@ def score_native(binding, native):
             "scope": "one_method_numeric_scores_not_reproduction_or_improvement_admission"}
 
 
+def compare_native(binding, pairing, author, candidate):
+    """Compare one declared matched pair, without scientific admission/inference.
+
+    Both exports must pass binding and run/role checks before either is scored.
+    Source ROC-AUC stays in each run's native class orientation. No seed pooling,
+    word pooling, uncertainty estimator or stronger-than-paper claim is supplied.
+    """
+    bound = b.bind_pair(binding, pairing, author, candidate)
+    scores = {"author": score_native(binding, author["native"]),
+              "candidate": score_native(binding, candidate["native"])}
+    indexed = {role: {(row["subject"], row["electrode_count"]): row
+                      for row in report["per_subject_count"]} for role, report in scores.items()}
+    per_run, by_count = [], {count: [] for count in b.COUNTS}
+    for subject in b.TRIALS:
+        for count in b.COUNTS:
+            key = (subject, count)
+            source_auc = indexed["author"][key]["roc_auc"]
+            candidate_auc = indexed["candidate"][key]["roc_auc"]
+            difference = candidate_auc - source_auc
+            provenance = pairing["runs"][f"{subject}/{count}"]
+            per_run.append({"subject": subject, "electrode_count": count,
+                            "pair_id": provenance["pair_id"], "seed": provenance["seed"],
+                            "author_roc_auc": source_auc, "candidate_roc_auc": candidate_auc,
+                            "candidate_minus_author_roc_auc": difference})
+            by_count[count].append(difference)
+    return {"task_id": b.TASK, "profile": "original-volume-native-pair-score-v1",
+            "source_revision": b.REVISION, **bound,
+            "methods": json.loads(json.dumps(pairing["methods"])),
+            "author_comparator": pairing["author_comparator"],
+            "method_scores": scores, "per_subject_count": per_run,
+            "by_electrode_count": [{"electrode_count": count, "n_subjects": len(b.TRIALS),
+                "subject_mean_candidate_minus_author_roc_auc": math.fsum(by_count[count]) / len(b.TRIALS)}
+                for count in b.COUNTS],
+            "primary_electrode_count": 90,
+            "aggregation": "equal_subject_mean_of_paired_auc_differences_no_word_or_seed_pooling",
+            "scientific_qualification": "unknown", "full_control_panel_qualified": False,
+            "reproduction_qualified": False, "improvement_qualified": False,
+            "unresolved": ["historical_rows_splits_channels_features_checkpoints_and_native_authenticity",
+                           "independent_freeze_timing_and_declared_method_run_provenance",
+                           "complete_original_method_control_panel_and_numeric_source_references",
+                           "source_seed_protocol_and_repeated_seed_effects",
+                           "meaningful_effect_and_shared_movie_temporal_joint_uncertainty",
+                           "source_baseline_qualification_and_fixed_episode_budgets"],
+            "scope": "one_declared_matched_pair_numeric_contrasts_not_scientific_admission"}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("binding", help="operator-only binding from binding.py prepare")
     parser.add_argument("native", help="complete native-runs JSON consumed by binding.py bind-native")
     parser.add_argument("output", help="numeric summary JSON; keep operator-controlled")
+    parser.add_argument("--pairing", help="independently frozen operator pairing JSON; native is then the author envelope")
+    parser.add_argument("--candidate", help="candidate paired-export envelope; requires --pairing")
     args = parser.parse_args()
-    result = score_native(b.read_json(args.binding)[0], b.read_json(args.native)[0])
+    if (args.pairing is None) != (args.candidate is None):
+        parser.error("--pairing and --candidate must be supplied together")
+    if args.pairing is None:
+        result = score_native(b.read_json(args.binding)[0], b.read_json(args.native)[0])
+    else:
+        result = compare_native(b.read_json(args.binding)[0], b.read_json(args.pairing)[0],
+                                b.read_json(args.native)[0], b.read_json(args.candidate)[0])
     Path(args.output).write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
 
 

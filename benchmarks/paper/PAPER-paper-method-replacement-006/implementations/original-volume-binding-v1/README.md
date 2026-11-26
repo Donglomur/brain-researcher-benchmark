@@ -170,7 +170,7 @@ specify subject SEM, but the historical estimator and seed treatment remain
 unverified. The output flags that limitation. This SEM is neither a confidence
 interval nor a reproduction tolerance.
 
-This CLI scores one method at a time. It is not an admission interface for the
+The original CLI invocation scores one method at a time. It is not an admission interface for the
 complete paper method/control panel, does not select checkpoints, and does not
 calculate a paired improvement decision. The four BrainBERT methods, other
 required controls, authentic runtime exports, historical identities and scientific
@@ -180,3 +180,71 @@ exercise ranks/ties, native orientation, tiny probabilities, unequal subject
 sizes, sample-SEM arithmetic, complete coverage, inherited identity rejection,
 and strict JSON CLI reading. They establish arithmetic and interface behavior,
 not a source-paper result.
+
+## Declared matched author/candidate comparison
+
+`compare_native(binding, pairing, author, candidate)` adds a numeric comparison
+on the same original random-row protocol. Both complete native exports must pass
+row/channel/class binding and explicit run/role checks before either is scored.
+It retains both unchanged 49-run score reports and returns 49
+candidate-minus-author ROC-AUC differences, plus their equal-subject mean at each
+of the seven original electrode counts. The 90-channel primary remains distinct;
+there is no word pooling, seed averaging, new metric or uncertainty estimate.
+
+The operator independently freezes a pairing before final access. Its exact
+fields are:
+
+- `schema`: `original-volume-pairing/v1`;
+- `binding_sha256`: the one complete operator binding shared by both methods;
+- `protocol_sha256`: the operator's frozen protocol artifact digest, covering
+  feature/checkpoint access, channel selection, training resources and seed policy;
+- `author_comparator`: `pretrained_popt_brainbert`, never the weaker linear control;
+- `methods`: exactly `author` and `candidate`, each with a distinct `method_id`
+  and an `implementation_sha256`;
+- `runs`: all 49 `subject/count` keys, each with a unique `pair_id`, one declared
+  nonnegative integer `seed`, and `run_ids` naming the `author` and `candidate`
+  runs. All 98 run IDs must be distinct. Seed values need not differ between cells.
+
+Each paired export has exactly `schema: original-volume-paired-export/v1`,
+`pairing_sha256` (canonical digest of the complete operator pairing), the same
+`protocol_sha256`, its fixed `role`, `method_id`, `implementation_sha256`,
+`run_provenance`, and `native`. The `native` value is the existing complete
+one-method export. Each of the 49 `run_provenance` records has exactly `pair_id`,
+`seed`, and `run_id`, matching the operator's declaration for that cell and role.
+The author export cannot select the candidate role or change the operator plan.
+Different valid native class orientations are allowed; probabilities are never
+inverted or rounded for the paired ROC-AUC comparison.
+
+```sh
+python3 -B score_native.py operator-binding.json author-paired-export.json paired-scores.json \
+  --pairing operator-pairing.json --candidate candidate-paired-export.json
+python3 -B test_compare_native.py
+```
+
+Both flags are required together. Without them, the original API, arguments and
+one-method output are unchanged. The pairing CLI uses the same strict duplicate
+JSON-key reading as the original operation. All inputs and reports remain
+operator-controlled.
+
+This is one declared matched run pair per cell. It does not reconstruct native
+run provenance, authenticate a claimed method, verify freeze timing, establish
+equivalent effective randomization from matching integer seeds, or implement a
+repeated-seed analysis. A protocol digest is a content commitment, not inspection
+of the protocol's scientific validity. The operator must separately authenticate
+those claims. Renaming a linear model as pretrained PopT cannot be detected from
+these declarations alone.
+
+Full original method/control-panel, reproduction and improvement qualification
+remain false; scientific qualification remains unknown. The other source curves,
+historical rows/splits/features/checkpoints, native runtime evidence, reference
+values, budgets, minimum effect, shared-movie/temporal dependence and joint
+uncertainty remain unresolved. No binary outcome or generic finite-panel
+admission decision is produced. The generic panel comparator consumes aggregate
+measurements and qualified contracts; this component supplies source-native
+pairing and numeric contrasts only.
+
+Generated pairing checks cover a pairwise AUC oracle on unequal subject sizes,
+all 49 contrasts and seven means, operator roles and frozen declaration drift,
+missing/extra cells, row/channel mismatches, matched run provenance, both class
+orientations, tiny probabilities, ties and CLI argument/JSON behavior. They are
+engineering checks and cannot qualify a paper result.

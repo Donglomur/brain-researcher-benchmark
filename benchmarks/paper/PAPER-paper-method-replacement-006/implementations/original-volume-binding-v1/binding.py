@@ -225,6 +225,79 @@ def bind_native(binding, native):
             "scope": "identity_bound_native_outputs_not_scientific_reproduction_or_improvement"}
 
 
+def bind_pair(binding, pairing, author, candidate):
+    """Validate one operator-selected matched run pair on all original cells.
+
+    The pairing must be independently frozen by the operator before final access.
+    Digests bind declarations; they prove neither freeze timing nor model origin.
+    Each export wraps the unchanged one-method native format.
+    """
+    def fields(value, expected, name):
+        require(type(value) is dict and set(value) == set(expected), name + ": exact fields required")
+
+    def text(value, name):
+        require(type(value) is str and bool(value.strip()), name + ": nonempty string required")
+
+    def sha(value, name):
+        require(type(value) is str and len(value) == 64 and
+                all(c in "0123456789abcdef" for c in value), name + ": SHA-256 required")
+
+    validate_binding(binding)
+    fields(pairing, {"schema", "binding_sha256", "protocol_sha256", "author_comparator",
+                     "methods", "runs"}, "operator pairing")
+    require(pairing["schema"] == "original-volume-pairing/v1", "wrong operator pairing schema")
+    require(pairing["binding_sha256"] == binding["binding_sha256"], "operator pairing binding differs")
+    sha(pairing["protocol_sha256"], "operator protocol")
+    require(pairing["author_comparator"] == "pretrained_popt_brainbert",
+            "author role requires the declared pretrained PopT+BrainBERT comparator")
+    fields(pairing["methods"], {"author", "candidate"}, "operator methods")
+    for role, method in pairing["methods"].items():
+        fields(method, {"method_id", "implementation_sha256"}, role + " method")
+        text(method["method_id"], role + " method_id")
+        sha(method["implementation_sha256"], role + " implementation")
+    require(pairing["methods"]["author"]["method_id"] != pairing["methods"]["candidate"]["method_id"],
+            "author/candidate method IDs must differ")
+    wanted = {f"{subject}/{count}" for subject in TRIALS for count in COUNTS}
+    fields(pairing["runs"], wanted, "operator run panel")
+    pair_ids, run_ids = set(), set()
+    for cell, row in pairing["runs"].items():
+        fields(row, {"pair_id", "seed", "run_ids"}, "operator run " + cell)
+        text(row["pair_id"], "pair_id")
+        require(row["pair_id"] not in pair_ids, "duplicate pair_id")
+        pair_ids.add(row["pair_id"])
+        require(type(row["seed"]) is int and row["seed"] >= 0, "declared matched seed must be nonnegative integer")
+        fields(row["run_ids"], {"author", "candidate"}, "operator run IDs")
+        for run_id in row["run_ids"].values():
+            text(run_id, "run_id")
+            require(run_id not in run_ids, "duplicate run_id")
+            run_ids.add(run_id)
+    pairing_sha = canonical_sha(pairing)
+    exports = {"author": author, "candidate": candidate}
+    for role, export in exports.items():
+        fields(export, {"schema", "pairing_sha256", "protocol_sha256", "role", "method_id",
+                        "implementation_sha256", "run_provenance", "native"}, role + " export")
+        require(export["schema"] == "original-volume-paired-export/v1", "wrong paired export schema")
+        require(export["pairing_sha256"] == pairing_sha and
+                export["protocol_sha256"] == pairing["protocol_sha256"], "export pairing/protocol differs")
+        require(export["role"] == role, "export role differs from operator argument")
+        require(all(export[key] == pairing["methods"][role][key]
+                    for key in ("method_id", "implementation_sha256")), "export method differs from operator role")
+        fields(export["run_provenance"], wanted, role + " run provenance")
+        for cell, row in export["run_provenance"].items():
+            fields(row, {"pair_id", "seed", "run_id"}, role + " run " + cell)
+            expected = pairing["runs"][cell]
+            require(type(row["seed"]) is int and row == {
+                "pair_id": expected["pair_id"], "seed": expected["seed"],
+                "run_id": expected["run_ids"][role]}, "export matched run declaration differs")
+    # Validate both complete native supports before any numeric comparison.
+    bound = {role: bind_native(binding, export["native"]) for role, export in exports.items()}
+    return {"pairing_sha256": pairing_sha, "binding_sha256": binding["binding_sha256"],
+            "protocol_sha256": pairing["protocol_sha256"],
+            "export_sha256": {role: canonical_sha(export) for role, export in exports.items()},
+            "native_content_sha256": {role: row["native_content_sha256"] for role, row in bound.items()},
+            "scope": "declared_matched_pair_not_freeze_or_model_authentication"}
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
