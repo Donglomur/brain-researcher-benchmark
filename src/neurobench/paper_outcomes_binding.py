@@ -433,7 +433,8 @@ def project_task(previous, row, improvement, scope_entry=None, *, reproduction_v
     need(type(previous) is dict and type(row) is dict and type(improvement) is dict,
          "Paper projection requires metadata objects")
     identifier = row["id"]
-    need(reproduction_version in REPRODUCTION_FILES, "Unsupported reproduction projection version")
+    need(type(reproduction_version) is str and reproduction_version in REPRODUCTION_FILES,
+         "Unsupported reproduction projection version")
     reproduction_file = REPRODUCTION_FILES[reproduction_version]
     need(row.get("track") == "paper" and improvement.get("task_id") == identifier,
          "Paper projection task identity mismatch")
@@ -606,12 +607,13 @@ class PreviousRows(dict):
 
 def read_reproduction(member_pin, home, read_pin):
     """Admit only a fixed filename whose declared schema version agrees."""
-    need(type(member_pin) is dict and member_pin.get("path") in
+    need(type(member_pin) is dict and type(member_pin.get("path")) is str and member_pin["path"] in
          {home + "/" + filename for filename in REPRODUCTION_FILES.values()},
          "Expected an explicit versioned reproduction filename")
     require_pin(member_pin, member_pin["path"], "reproduction contract")
     document = read_pin(member_pin, "Reproduction contract")
-    need(type(document) is dict and document.get("schema_version") in REPRODUCTION_FILES,
+    need(type(document) is dict and type(document.get("schema_version")) is str
+         and document["schema_version"] in REPRODUCTION_FILES,
          "Unsupported reproduction contract version")
     need(member_pin["path"] == home + "/" + REPRODUCTION_FILES[document["schema_version"]],
          "Reproduction filename must match its declared schema version")
