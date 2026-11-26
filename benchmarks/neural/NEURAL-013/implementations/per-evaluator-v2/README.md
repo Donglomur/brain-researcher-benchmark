@@ -32,6 +32,41 @@ python3 -B score.py --public /operator/public/manifest.json \
   --output /operator/new-score.json
 ```
 
+To compare an operator-selected complete comparator on the same protected targets,
+add `--comparator-submission /operator/comparator.json` to that existing command.
+Both submissions must pass the unchanged complete-query validator before the
+private file is opened. `compare(public, candidate, comparator, load_private)`
+loads targets once, validates the full target packet, and scores both admitted
+outputs with the same absolute calculation. The old single-submission command
+and its grade fields remain unchanged.
+
+The joint `neural013-joint-per-comparison-v1` report retains both original grades,
+the nine session PER differences (comparator minus candidate), and their equal-
+session mean. Positive means lower candidate error. Both operands use exactly the
+same retained queries and each session's summed reference-token denominator;
+pooled PER remains secondary. These are descriptive repeated measures in one
+participant, with no confidence intervals, p-values or scientific-success claim.
+A comparator name or file does not establish independence, neural competence,
+training chronology or native interpretation.
+
+The complete pair shares the existing 128-million-cell DP ceiling: the sum for
+both operands is checked before either edit-distance calculation. Exceeding it
+returns `unsupported_complexity`, with both grades and all differences null.
+Missing, duplicate or invalid predictions prevent comparison; no session is
+selected or dropped to produce a partial metric. Existing JSON, sequence and
+case bounds remain unchanged. The combined operation has extra input/capture
+work; these source checks do not qualify an authentic full-packet host runtime.
+
+The **whole joint report**, including canonical submission and target-content
+fingerprints, is private operator evidence. Keep it outside participant/public
+trees and public Git; do not return it as participant preflight or query feedback.
+Fingerprints bind the supplied parsed objects, not raw file byte identity,
+authentic provenance, freeze chronology or process isolation. An independent
+operator must select the comparator and establish target/source provenance.
+`test_comparison.py` exercises only invented complete panels and CLI operands;
+no authentic target, output fingerprint or performance result is distributed.
+Historical source/qualification records retain their original scope.
+
 The output must not exist. Exit codes are 0 for a complete score, 2 for invalid
 candidate output or unsupported complexity, and 3 for an invalid operator packet.
 The CLI reports invalid operator packets separately from candidate failures and
