@@ -653,7 +653,94 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          timeout --signal=TERM --kill-after=5s 180s python -B benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/test_candidate_preflight.py -v
+          umask 077
+          DPAD_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/dpad-output-generated.XXXXXX")"
+          trap 'rm -rf -- "$DPAD_SCRATCH"' EXIT
+          export DPAD_CONTROL_ROOT="$DPAD_SCRATCH" TMPDIR="$DPAD_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B - "$GITHUB_WORKSPACE" "$DPAD_SCRATCH" <<'PY_DPAD_OUTPUT'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+          import unittest
+
+
+          def require(ok, message):
+              if not ok:
+                  raise AssertionError(message)
+
+
+          root = Path(sys.argv[1]).resolve(strict=True)
+          scratch = Path(sys.argv[2]).resolve(strict=True)
+          require(root.is_dir() and scratch.is_dir() and not scratch.is_relative_to(root), 'external generated scratch required')
+          require(os.environ.get('DPAD_CONTROL_ROOT') == str(scratch) and os.environ.get('TMPDIR') == str(scratch), 'DPAD generated scratch contract required')
+          pins = [{'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/evaluator.py', 'bytes': 23034, 'sha256': '719931616b93504815b0becc0135278d4e55d41ce689b681f241bf79d7a6d3f3'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/initial-evaluator-v1/generated_control.py', 'bytes': 3465, 'sha256': '5810f8b503eec9952f83dbd4b2e9ddba8d245d2567b1363d2a9973dc71568320'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v2/paired.py', 'bytes': 16495, 'sha256': 'a16df76e033e6112371a457fda58fe02952e799fcac3fe88761f4b826dbd5c42'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v2/test_paired.py', 'bytes': 10938, 'sha256': '39ae91ffd80eb7d36c42b7f1d1870e6af2367504ee2512eb414a6a8e30fe7210'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/README.md', 'bytes': 8078, 'sha256': '8646360de9f5c52fd14d966ffaf6be059a5e06ceb761edffc079004dfc247e72'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/SOURCE_BINDING.v1.json', 'bytes': 3143, 'sha256': 'd84761e9fad414388928a9f6b24d588cdb7459f2fc42308edfc6aa648ae13940'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/paired.py', 'bytes': 24324, 'sha256': '5704c9d2be7e3a72572e81075d5d077b5992c4376fc57541437e526955980d9f'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/provenance.json', 'bytes': 1766, 'sha256': 'a5ce96a273610d8dc3a81f6734909f69ba8df10a6920f4845020bd6c4b1521a5'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/test_authenticated_dependency.py', 'bytes': 3450, 'sha256': '63522f27b02805487d1c89390d13f12e609925f0d4c761f72c56927a07c67103'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/test_candidate_preflight.py', 'bytes': 7146, 'sha256': '314fd1c8cb601aa657690e29d01d4adf98a294aee5e6029023cbe53509ba1c85'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/test_output_preservation.py', 'bytes': 14604, 'sha256': '8b808632b940cd6944eb1a5a00e59abdebeee20edd87a1a2fde786f7f204ae4e'}, {'path': 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3/test_stable_pearson.py', 'bytes': 9262, 'sha256': '932801c8d4a598de9b62210a0dd7945252afd25e7841a70e628db2c55c94486b'}]
+          for pin in pins:
+              path = root / pin['path']
+              require(not path.is_symlink() and all(not parent.is_symlink() for parent in path.parents if parent.is_relative_to(root)), pin['path'])
+              before = path.lstat()
+              require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == pin['bytes'], pin['path'])
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  raw = stream.read(pin['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              final = path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              require(all(getattr(before, f) == getattr(opened, f) == getattr(after, f) == getattr(final, f) for f in fields), pin['path'])
+              require(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'], pin['path'])
+
+          require(sys.implementation.name == 'cpython' and sys.version_info[:3] == (3, 11, 18), 'existing CPython profile required')
+          expected = ['test_candidate_preflight.CandidatePreflight.test_cli_reads_only_plan_and_predictions', 'test_candidate_preflight.CandidatePreflight.test_compare_retains_independent_target_protocol_type_validation', 'test_candidate_preflight.CandidatePreflight.test_complete_candidate_preflight_never_calls_scoring', 'test_candidate_preflight.CandidatePreflight.test_constant_predictions_are_structural_not_correlation_acceptance', 'test_candidate_preflight.CandidatePreflight.test_rejects_candidate_and_configuration_identity_changes', 'test_candidate_preflight.CandidatePreflight.test_rejects_incomplete_duplicate_or_unknown_grid', 'test_candidate_preflight.CandidatePreflight.test_rejects_rehashed_invalid_plan', 'test_candidate_preflight.CandidatePreflight.test_rejects_row_channel_shape_and_finite_value_changes', 'test_output_preservation.FullComparisonPreservation.test_complete_generated_grid_and_real_compare_cli', 'test_output_preservation.FullComparisonPreservation.test_undefined_and_nonfinite_candidates_still_reject', 'test_output_preservation.FullComparisonPreservation.test_wrong_frozen_hashes_and_incomplete_grid_still_reject', 'test_output_preservation.OutputPreservation.test_all_four_commands_preserve_direct_and_normalized_input_aliases', 'test_output_preservation.OutputPreservation.test_all_four_commands_preserve_symlink_and_hardlink_input_aliases', 'test_output_preservation.OutputPreservation.test_all_four_fresh_cli_results_publish_before_success_receipt', 'test_output_preservation.OutputPreservation.test_cleanup_failure_keeps_publication_outcome_truthful', 'test_output_preservation.OutputPreservation.test_dangling_destination_created_after_preflight_is_preserved', 'test_output_preservation.OutputPreservation.test_existing_destination_created_after_preflight_is_preserved', 'test_output_preservation.OutputPreservation.test_existing_output_dangling_link_directory_and_fifo_refused', 'test_output_preservation.OutputPreservation.test_missing_output_parent_rejects_before_payload_read', 'test_output_preservation.OutputPreservation.test_publication_failure_prints_no_success_and_keeps_competing_file', 'test_output_preservation.OutputPreservation.test_serialization_failure_creates_no_output_or_pending', 'test_output_preservation.OutputPreservation.test_write_short_write_flush_fsync_and_link_failures_have_no_final']
+          package = root / 'benchmarks/paper/PAPER-CANDIDATE-20261114-DPAD/implementations/paired-candidate-v3'
+          sys.path.insert(0, str(package))
+          loader = unittest.TestLoader()
+          suite = loader.loadTestsFromNames(['test_candidate_preflight', 'test_output_preservation'])
+          require(not loader.errors, 'DPAD test loading error')
+          for name in ('paired', 'test_candidate_preflight', 'test_output_preservation', 'test_stable_pearson'):
+              module = sys.modules.get(name)
+              require(module is not None and Path(module.__file__).resolve() == package / (name + '.py'), 'unexpected DPAD module: ' + name)
+
+
+          def flatten(suite):
+              if isinstance(suite, unittest.TestSuite):
+                  return [identifier for child in suite for identifier in flatten(child)]
+              return [suite.id()]
+
+
+          discovered = flatten(suite)
+          require(discovered == expected and len(discovered) == len(set(discovered)) == suite.countTestCases() == 22, 'exact twenty-two unique IDs required')
+
+
+          class CompleteResult(unittest.TextTestResult):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  self.started, self.stopped, self.succeeded = [], [], []
+
+              def startTest(self, test):
+                  self.started.append(test.id())
+                  super().startTest(test)
+
+              def stopTest(self, test):
+                  self.stopped.append(test.id())
+                  super().stopTest(test)
+
+              def addSuccess(self, test):
+                  self.succeeded.append(test.id())
+                  super().addSuccess(test)
+
+
+          result = unittest.TextTestRunner(verbosity=2, resultclass=CompleteResult).run(suite)
+          require(result.testsRun == 22 and result.started == result.stopped == result.succeeded == expected, 'exact execution rosters required')
+          require(result.wasSuccessful() and not any([result.failures, result.errors, result.skipped, result.expectedFailures, result.unexpectedSuccesses]), 'all twenty-two outcomes must succeed without skips')
+          print(json.dumps({'task': 'PAPER-CANDIDATE-20261114-DPAD', 'suite': 'paired-candidate-v3-preflight-and-output',
+                            'tests_run': result.testsRun, 'discovered_ids': discovered, 'started_ids': result.started,
+                            'stopped_ids': result.stopped, 'successful_ids': result.succeeded,
+                            'failures': len(result.failures), 'errors': len(result.errors), 'skips': len(result.skipped),
+                            'expected_failures': len(result.expectedFailures), 'unexpected_successes': len(result.unexpectedSuccesses),
+                            'generated_only': True, 'scientific_qualification': False}, sort_keys=True))
+          PY_DPAD_OUTPUT
       - name: Check PAPER-CANDIDATE-20261114-DUNL generated interfaces
         if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash

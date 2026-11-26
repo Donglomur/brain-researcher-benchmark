@@ -113,7 +113,8 @@ class CandidatePreflight(unittest.TestCase):
         argv = ["paired.py", "preflight", "--plan", "candidate-plan.json", "--predictions",
                 "candidate-predictions.json", "--plan-sha256", p.e.digest(self.plan), "--output", "check.json"]
         with patch("sys.argv", argv), patch.object(p.e, "read_json", side_effect=inputs.__getitem__) as read, \
-                patch.object(p.Path, "write_text", side_effect=lambda value: written.append(value)), \
+                patch.object(p, "_new_output_path", return_value=p.Path("check.json")), \
+                patch.object(p, "_publish_output", side_effect=lambda path, value: written.append(value)), \
                 patch("sys.stdout", new_callable=StringIO) as output:
             p.main()
         self.assertEqual([call.args[0] for call in read.call_args_list], list(inputs))

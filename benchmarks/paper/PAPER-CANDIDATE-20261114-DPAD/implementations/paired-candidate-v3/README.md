@@ -92,3 +92,41 @@ after authentication. The unchanged predecessor pin and numerical policy still
 govern the calculation. `python3 -B -m unittest -v test_authenticated_dependency`
 checks valid loading, source refusal, an unrelated cache and a file replacement
 using generated source fixtures only.
+
+## Preserve inputs and earlier outputs
+
+All four current CLI commands require a **new output pathname**. Immediately
+after argument parsing, before reading any operator input payload or starting
+selection/scoring, the CLI refuses an existing destination or a missing output
+parent. Refusal covers direct and normalized input aliases, hard links, symlinks,
+dangling symlinks, directories and earlier result files. Reviewed dependency
+source loading still occurs when the module starts; it does not read operator
+training, prediction, target, plan or reference payloads.
+
+The complete result and its unchanged canonical digest are computed before
+publication. The CLI writes and flushes the serialized result to an owned pending
+file in the destination directory, then creates the final pathname through an
+exclusive hard link. A destination created after the early check is preserved;
+no existing input or output is truncated or removed. The success digest is
+printed only after complete publication. Filesystems without the required
+same-directory hard-link operation fail without an overwrite fallback.
+
+Failed serialization, writing, flushing or publication produces no new complete
+final result. Cleanup touches only the owned pending file and never the final
+destination. A cleanup failure may leave a private `.dpad-result-*.pending` file;
+it does not hide an earlier publication failure or turn an already complete
+publication into failure. A pending file is not a result. These are safeguards
+for trusted operator paths, not isolation against hostile concurrent filesystem
+changes or an operating-system resource supervisor.
+
+Result schemas, scientific functions, selection rules, Pearson equations,
+canonical result digests, full 35-fold/280-candidate/245-author comparison and all
+scientific limitations are unchanged. The initial evaluator and v2 predecessor
+remain byte-preserved. Historical provenance records are retained.
+
+Run `python3 -B -m unittest -v test_output_preservation` for generated alias,
+exclusive-publication, failure/race and complete-comparison controls. The existing
+preflight CLI test now observes the exclusive publisher instead of mocking the
+removed unrestricted write. `DPAD_CONTROL_ROOT` optionally retains generated
+fixtures; absent that setting, temporary fixture directories are cleaned up.
+No authentic recordings, model fits or scientific results are created.
