@@ -157,6 +157,45 @@ def close_fixture(temp, extra_writes, launches, complete_setup):
 class EpisodeClockTests(unittest.TestCase):
     """Pure metadata controls call the production admission guard directly."""
 
+    def test_cli_selects_complete_ordered_roster_and_accounting_only(self):
+        def identifiers(suite):
+            if isinstance(suite, unittest.TestSuite):
+                return [identifier for child in suite for identifier in identifiers(child)]
+            return [suite.id()]
+
+        module = sys.modules[__name__]
+        loader = unittest.TestLoader()
+        discovered = loader.loadTestsFromModule(module)
+        expected = sorted(identifiers(discovered))
+        self.assertEqual(loader.errors, [])
+        self.assertEqual(len(expected), 27)
+        self.assertEqual(len(set(expected)), discovered.countTestCases())
+        accounting = [__name__ + '.FixtureAccountingTests.test_setup_failure_is_accounted_before_cleanup']
+        captured = []
+
+        class CaptureRunner:
+            def __init__(self, **kwargs):
+                pass
+
+            def run(self, suite):
+                captured.append((identifiers(suite), suite.countTestCases()))
+                return unittest.TestResult()
+
+        scratch_before, argv_before, runner_before = SCRATCH, sys.argv, unittest.TextTestRunner
+        with tempfile.TemporaryDirectory(prefix='generated-cli-roster-', dir=scratch_before) as temporary:
+            with patch.object(module, 'SCRATCH', scratch_before), \
+                    patch.object(unittest, 'TextTestRunner', CaptureRunner):
+                for flags, selected in (([], expected), (['--accounting-only'], accounting)):
+                    with self.subTest(flags=flags), patch.object(
+                            sys, 'argv', [__file__, '--scratch-root', str(Path(temporary).resolve()), *flags]):
+                        self.assertEqual(main(), 0)
+                        self.assertEqual(captured[-1], (selected, len(selected)))
+        self.assertEqual(len(captured), 2)
+        self.assertIs(SCRATCH, scratch_before)
+        self.assertIs(sys.argv, argv_before)
+        self.assertIs(unittest.TextTestRunner, runner_before)
+        self.assertFalse(Path(temporary).exists())
+
     def check_clock(self, started=63.9, deadline=None, finished=None, config_deadline=None):
         deadline = started + 6 if deadline is None else deadline
         end = {'started': started, 'deadline': deadline,
@@ -547,9 +586,11 @@ def main():
     c.need(SCRATCH.is_dir() and not SCRATCH.is_relative_to(c.HERE.parents[4]), 'external_generated_scratch')
     with patch.object(socket, 'socket', blocked), patch.object(socket, 'create_connection', blocked), \
             patch.object(socket, 'getaddrinfo', blocked):
-        suite = unittest.defaultTestLoader.loadTestsFromTestCase(FixtureAccountingTests)
+        suite = unittest.TestSuite()
         if not args.accounting_only:
             suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(EpisodeClockTests))
+        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(FixtureAccountingTests))
+        if not args.accounting_only:
             suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(ProviderTests))
         result = unittest.TextTestRunner(verbosity=2).run(suite)
     return 0 if result.wasSuccessful() else 1
