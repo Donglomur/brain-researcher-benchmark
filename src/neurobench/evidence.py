@@ -403,6 +403,11 @@ def historical_records(doc, source):
         if task == 'NEURAL-023':
             require('rtt-program-controls' in identifiers, 'historical controls must belong to selected profile evidence')
             fields = by_id['rtt-program-controls']['selected_fields']
+            for pointer in fields:
+                if pointer == '/controls' or pointer.startswith('/controls/'):
+                    parts = pointer.split('/', 3)
+                    require(len(parts) == 4 and parts[2] in {'0', '1', '2', '3'}
+                            and bool(parts[3]), 'unsupported historical control pointer')
             controls = []
             for control_index in range(4):
                 prefix = '/controls/' + str(control_index) + '/'
