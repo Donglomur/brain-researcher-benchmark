@@ -47,6 +47,7 @@ def run_command(task_id, condition, program, output, root=ROOT, *, review=None, 
     if task_id not in canonical:
         raise ValueError('Unknown canonical task')
     base.require_paper_role(canonical[task_id], calibration=False)
+    base.require_neural_role(canonical[task_id], calibration=False, root=root)
     runtime = base.runtime_manifests(root)
     if task_id not in runtime:
         raise ValueError('No local program runner is implemented for ' + task_id)

@@ -72,6 +72,43 @@ class ConditionTests(unittest.TestCase):
         self.assertEqual(command, module.base.run_command(
             'NEURAL-095', f.program, f.output, f.root, review=review, other_reserve_bytes=102000000)[0])
 
+    def test_current_neural_target_refuses_before_runtime_and_candidate_reads(self):
+        f = self.fixture
+        f.registry['tasks'][0]['specification_revision'] = {'version': 'neural-understanding/v1'}
+        f.save()
+        for fidelity in ('different_target', 'no_target_evaluator', 'unresolved'):
+            for condition in ('features', 'raw'):
+                contract = {'implementation': {'target_fidelity': fidelity}}
+                with self.subTest(fidelity=fidelity, condition=condition):
+                    with patch.object(module.base, 'neural_contract', return_value=contract) as current, \
+                            patch.object(module.base, 'runtime_manifests', side_effect=AssertionError('runtime read before target guard')) as runtime, \
+                            patch.object(module.subprocess, 'run', side_effect=AssertionError('candidate execution')) as execute, \
+                            self.assertRaisesRegex(ValueError, '--calibration'):
+                        module.run_command('NEURAL-095', condition, f.root / 'missing-program.py', f.output, f.root)
+                    current.assert_called_once_with('NEURAL-095', f.root)
+                    runtime.assert_not_called()
+                    execute.assert_not_called()
+        self.assertFalse(f.output.exists())
+
+    def test_accepted_current_neural_targets_preserve_condition_routing(self):
+        f = self.fixture
+        f.registry['tasks'][0]['specification_revision'] = {'version': 'neural-understanding/v1'}
+        f.save()
+        for fidelity in ('full_target', 'scoped_target'):
+            contract = {'implementation': {'target_fidelity': fidelity}}
+            with self.subTest(fidelity=fidelity), \
+                    patch.object(module.base, 'neural_contract', return_value=contract) as current, \
+                    patch.object(module.subprocess, 'run', side_effect=AssertionError('candidate execution')) as execute:
+                for condition, wrapper in (('features', f.wrapper), ('raw', self.alternate)):
+                    command, cwd = self.run_condition(condition)
+                    self.assertEqual(command, [module.sys.executable, str(wrapper), '--program',
+                                               str(f.program), '--out', str(f.output)])
+                    self.assertEqual(cwd, f.root)
+                self.assertEqual(current.call_count, 2)
+                current.assert_called_with('NEURAL-095', f.root)
+                execute.assert_not_called()
+        self.assertFalse(f.output.exists())
+
 
 if __name__ == '__main__':
     unittest.main()
