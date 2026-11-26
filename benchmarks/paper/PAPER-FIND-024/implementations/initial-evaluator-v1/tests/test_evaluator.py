@@ -49,6 +49,81 @@ def fixture(amplitudes=None):
 
 
 class CorrelationTests(unittest.TestCase):
+    def test_large_common_offsets_preserve_known_half_correlation(self):
+        baseline = float(2**53)
+        x = np.array([baseline, baseline + 2., baseline + 4.])
+        y = np.array([baseline, baseline + 4., baseline + 2.])
+        # Exact centered shapes [-2,0,2] and [-2,2,0] have dot4 and norms sqrt8.
+        for sign_x in (-1., 1.):
+            for sign_y in (-1., 1.):
+                with self.subTest(sign_x=sign_x, sign_y=sign_y):
+                    self.assertAlmostEqual(e._pearson(sign_x * x, sign_y * y),
+                                           sign_x * sign_y * .5, places=15)
+
+    def test_near_maximum_same_sign_spread_preserves_known_half(self):
+        maximum = np.finfo(float).max
+        step = maximum - np.nextafter(maximum, 0.)
+        x = np.array([maximum - 2 * step, maximum - step, maximum])
+        y = x[[0, 2, 1]]
+        for sign in (-1., 1.):
+            with self.subTest(sign=sign), np.errstate(over="raise", invalid="raise", divide="raise"):
+                self.assertAlmostEqual(e._pearson(sign * x, sign * y), .5, places=15)
+
+    def test_opposite_sign_extremes_remain_finite_and_signed(self):
+        maximum = np.finfo(float).max
+        x = np.array([-maximum, 0., maximum])
+        y = np.array([-maximum, maximum, 0.])
+        with np.errstate(over="raise", invalid="raise", divide="raise"):
+            self.assertEqual(e._pearson(x, x), 1.)
+            self.assertEqual(e._pearson(x, -x), -1.)
+            self.assertAlmostEqual(e._pearson(x, y), .5, places=15)
+
+    def test_subnormal_spread_and_offset_constants_preserve_domain(self):
+        tiny = float.fromhex("0x0.0000000000001p-1022")
+        for sign in (-1., 1.):
+            with self.subTest(sign=sign):
+                self.assertAlmostEqual(e._pearson([sign * tiny, sign * 2 * tiny, sign * 3 * tiny],
+                                                 [sign * tiny, sign * 3 * tiny, sign * 2 * tiny]), .5, places=15)
+        for value in (0., tiny, -tiny, float(2**53), -float(2**53), np.finfo(float).max):
+            with self.subTest(constant=value):
+                self.assertIsNone(e._pearson([value] * 3, [-1., 0., 1.]))
+                self.assertIsNone(e._pearson([-1., 0., 1.], [value] * 3))
+
+    def test_complete_large_offset_evaluation_matches_independent_oracles(self):
+        baseline = float(2**53)
+        x = [baseline, baseline + 2., baseline + 4.]
+        y = [baseline, baseline + 4., baseline + 2.]
+        for mode, ceiling, ccc, normalized in (("across_contexts", 1., .5, .5),
+                                                ("across_repetitions", .5, .75, 1.5)):
+            manifest, arrays = fixture()
+            for si, epoch in enumerate(manifest["participants"][0]["epochs"]):
+                segment = int(epoch["segment_id"].replace("segment", ""))
+                for repeat in range(2):
+                    use_y = epoch["context_id"] == "random" if mode == "across_contexts" else repeat == 1
+                    arrays["p1"]["D"][:, si, 0, repeat] = (y if use_y else x)[segment]
+            result = e.evaluate(manifest, arrays)
+            with self.subTest(mode=mode):
+                self.assertEqual(len(result["rows"]), 4)
+                self.assertEqual(len(result["population_summary"]), 4)
+                self.assertEqual({row["lag_sec"] for row in result["rows"]}, {0., 1.})
+                self.assertEqual({row["speech_rate"] < 1 for row in result["rows"]}, {False, True})
+                for row in result["rows"]:
+                    self.assertEqual((row["n_segments"], row["n_contexts"], row["same_context_pair_count"],
+                                      row["different_context_pair_count"]), (3, 2, 2, 4))
+                    self.assertEqual(row["status"], "ok")
+                    self.assertAlmostEqual(row["same_context"], ceiling, places=15)
+                    self.assertAlmostEqual(row["diff_context"], ccc, places=15)
+                    self.assertAlmostEqual(row["normalized_ccc"], normalized, places=15)
+                for summary in result["population_summary"]:
+                    self.assertEqual((summary["n_participants"], summary["n_electrodes"]), (1, 1))
+                    self.assertAlmostEqual(summary["participant_balanced_ceiling"], ceiling, places=15)
+                    self.assertAlmostEqual(summary["participant_balanced_ccc"], ccc, places=15)
+                    self.assertAlmostEqual(summary["ratio_of_participant_balanced_means"], normalized, places=15)
+                self.assertFalse(result["native_parity_verified"])
+                self.assertEqual(result["scientific_qualification"], "unknown")
+                self.assertEqual(result["holds"], e.HOLDS)
+                json.dumps(result, allow_nan=False)
+
     def test_extreme_finite_pearson_and_orthogonal_reference(self):
         self.assertAlmostEqual(e._pearson([1e308, 8e307, 6e307], [1e308, 8e307, 6e307]), 1.)
         self.assertAlmostEqual(e._pearson([-1, -1, 1, 1], [-1, 1, -1, 1]), 0.)
