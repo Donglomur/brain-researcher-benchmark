@@ -7,22 +7,46 @@ integration branch is `publish/neuroscience-200`. The preserved `master` branch
 retains the original upstream history. Work in this fork does not change
 `brain-researcher/brain-researcher-benchmark` without a separate upstream PR.
 
+Before using an existing clone, inspect `git remote -v` and confirm which remote
+points to this fork; some authoring checkouts use `origin` for upstream. Confirm
+the PR's base repository and branch explicitly. The example below creates a fresh
+clone whose `origin` is the owned fork, then starts one change from its current
+integration branch.
+
 ```sh
 git clone --branch publish/neuroscience-200 --single-branch https://github.com/Donglomur/brain-researcher-benchmark.git
 cd brain-researcher-benchmark
-git switch -c feature/describe-the-change
-# Edit the relevant source and run its checks.
+git fetch origin
+git switch -c feature/describe-the-change origin/publish/neuroscience-200
+# Edit one complete change, including its tests and required current bindings.
+# Run the affected checks and review the staged diff before committing.
 git add path/to/changed-file
+git diff --cached
 git commit -m "Describe the resulting behavior"
 git push -u origin HEAD
 gh pr create --repo Donglomur/brain-researcher-benchmark \
   --base publish/neuroscience-200 --head feature/describe-the-change
 ```
 
-Verify the remote URL in existing clones: some authoring checkouts use `origin`
-for upstream. Review the exact diff and complete CI before merging. The fork
-automatically deletes merged feature branches; local branches can be removed
-once their work is merged and no worktree or unfinished work depends on them.
+Keep the change in one commit and one PR, including its coupled tests,
+documentation and current source bindings. Describe the concrete problem and
+result, validation actually run, and remaining limitations using the
+[PR template](../.github/PULL_REQUEST_TEMPLATE.md).
+
+Before merging, review the exact diff and confirm all required checks pass for the
+current PR revision. Complete the required review, then use **Create a merge
+commit** for a normal merge. Do not bypass a failed check or weaken a scientific
+contract to make it pass; preserve relevant failures as well as successful results.
+
+Confirm the merge landed on `publish/neuroscience-200` and its required post-merge
+checks pass before publishing the next independent change. Refresh the fork remote
+and start that change from the latest integration branch. Independent work may be
+prepared in parallel, but publication and merges are serial. Do not recreate
+already merged work or split dependent changes to increase the number of PRs.
+
+The fork automatically deletes merged feature branches; local branches can be
+removed once their work is merged and no worktree or unfinished work depends on
+them.
 
 ## Task and implementation ownership
 
