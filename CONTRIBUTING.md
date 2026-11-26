@@ -5,6 +5,20 @@ Contributions develop the paper-research and neural-data tracks in
 Open PRs against **`publish/neuroscience-200`**. The [development guide](docs/DEVELOPMENT.md)
 explains branches, review and source maintenance.
 
+## One change per pull request
+
+Keep one complete, independent change in one commit and one PR. Include the
+regression tests, documentation and current source bindings needed for that change
+to work and be reviewed. Separate unrelated work, but keep coupled fixes together;
+do not split a complete change or repeat merged work just to increase PR counts.
+
+Independent work can be prepared in parallel. Publish it serially: verify the fork
+and base, complete the required checks and review, then use a normal merge before
+publishing the next change from the refreshed base. Follow the
+[fork workflow](docs/DEVELOPMENT.md#branches-and-pull-requests) and use the
+[PR template](.github/PULL_REQUEST_TEMPLATE.md) to describe the problem, result,
+validation actually run and remaining limitations.
+
 ## Scientific contribution
 
 A task should state its scientific question, paper/data/code provenance, complete
