@@ -285,7 +285,7 @@ def loads_contract(text):
         result = {}
         for key, value in items:
             if key in result:
-                raise ValueError(f"duplicate JSON key: {key}")
+                raise ValueError(f"duplicate JSON key: {key!a}")
             result[key] = value
         return result
 
@@ -435,11 +435,17 @@ def validate_contract(document, task_id=None, *, expected_task_id=None):
     return contract_validate(document, task_id if task_id is not None else expected_task_id)
 
 
+def _summary_document(document):
+    # Rejection diagnostics are safe, but raw malformed metadata is not. Keep
+    # the summary encodable without inventing a repaired identity or value.
+    return document if type(document) is dict and not _json_errors(document) else {}
+
+
 def summary(document):
     """Small catalog-safe metadata summary; no paper victory or SOTA inferred."""
     errors = contract_validate(document)
     valid = not errors
-    safe = document if type(document) is dict else {}
+    safe = _summary_document(document)
     comparison = safe.get("comparison") if type(safe.get("comparison")) is dict else {}
     return {"task_id": safe.get("task_id"), "objective": safe.get("objective"),
             "disposition": safe.get("disposition"), "disposition_reason": safe.get("disposition_reason"),
@@ -1042,7 +1048,8 @@ def summary(document, *, source_contract=None):
     if type(document) is not dict or document.get("schema_version") != RERUN_VERSION:
         return _v1_summary(document)
     errors = contract_validate(document, source_contract=source_contract)
-    return {"task_id": document.get("task_id"), "claim": RERUN_CLAIM, "valid": not errors,
+    safe = _summary_document(document)
+    return {"task_id": safe.get("task_id"), "claim": RERUN_CLAIM, "valid": not errors,
         "branch_metadata_ready": not errors and document.get("disposition") == "metadata_ready",
         "improvement_ready": False, "paper_win": None, "scientific_outcome": "unknown",
         "current_sota": "not_assessed", "errors": errors, "assurance": ASSURANCE}

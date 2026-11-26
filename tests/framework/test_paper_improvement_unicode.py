@@ -48,6 +48,59 @@ class UnicodeAdmissionTests(unittest.TestCase):
             self.assertIs(type(caught.exception), ValueError)
             str(caught.exception).encode("utf-8", errors="strict")
 
+    def test_duplicate_json_key_diagnostics_are_utf8_safe(self):
+        keys = ("\ud800", "\udfff", "ordinary", "\u03b1", "\U0001f9e0")
+        for key in keys:
+            encoded_key = json.dumps(key, ensure_ascii=True)
+            duplicate = "{" + encoded_key + ":1," + encoded_key + ":2}"
+            for text in (duplicate, '{"nested":' + duplicate + "}"):
+                with self.subTest(key=ascii(key), text=text):
+                    with self.assertRaises(ValueError) as caught:
+                        paper.loads_contract(text)
+                    self.assertIs(type(caught.exception), ValueError)
+                    diagnostic = str(caught.exception)
+                    self.assertIn("duplicate JSON key", diagnostic)
+                    diagnostic.encode("utf-8", errors="strict")
+
+    def test_rejected_summaries_do_not_echo_invalid_unicode(self):
+        edits = [
+            lambda c: c.update(task_id="PAPER-\ud800"),
+            lambda c: c.update(objective="invalid\udfff"),
+            lambda c: c.update(disposition_reason="invalid\ud800"),
+            lambda c: c["comparison"].update(primary_metric="invalid\udfff"),
+            lambda c: c.update(blocking_issues=["invalid\ud800"]),
+        ]
+        documents = []
+        for edit in edits:
+            c, _ = fixture_module.fixture(); edit(c); documents.append(c)
+        for version in ("paper-improvement/v1", "paper-improvement/v2"):
+            documents.append({"schema_version": version, "task_id": "PAPER-\ud800"})
+        for index, document in enumerate(documents):
+            for summarize in (paper.summary, paper.contract_summary):
+                with self.subTest(index=index, api=summarize.__name__):
+                    out = summarize(document)
+                    self.assertFalse(out["valid"])
+                    self.assertFalse(out["improvement_ready"])
+                    self.assertIsNone(out["task_id"])
+                    self.assert_safe_errors(out["errors"])
+                    if document["schema_version"] == "paper-improvement/v2":
+                        self.assertIsNone(out["paper_win"])
+                        self.assertEqual(out["scientific_outcome"], "unknown")
+                        self.assertFalse(out["branch_metadata_ready"])
+                    else:
+                        self.assertIs(out["paper_win"], False)
+                    json.dumps(out, ensure_ascii=False, allow_nan=False).encode("utf-8", errors="strict")
+        c, _ = fixture_module.fixture()
+        c.update(task_id="PAPER-神経-\U0001f9e0", disposition_reason="e\u0301 and \u00e9 stay distinct")
+        for summarize in (paper.summary, paper.contract_summary):
+            out = summarize(c)
+            self.assertTrue(out["valid"])
+            self.assertTrue(out["improvement_ready"])
+            self.assertEqual(out["task_id"], c["task_id"])
+            self.assertEqual(out["disposition_reason"], c["disposition_reason"])
+            self.assertEqual(out["contract_digest"], paper.contract_digest(c))
+            json.dumps(out, ensure_ascii=False, allow_nan=False).encode("utf-8", errors="strict")
+
     def test_compare_rejects_invalid_contract_without_digest_crash(self):
         c, r = fixture_module.fixture()
         c["source_paper"]["title"] = "invalid\ud800"
