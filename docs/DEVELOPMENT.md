@@ -33,8 +33,8 @@ documentation and current source bindings. Describe the concrete problem and
 result, validation actually run, and remaining limitations using the
 [PR template](../.github/PULL_REQUEST_TEMPLATE.md).
 
-For the explicitly selected NEURAL-031 numerical-observation and NEURAL-077
-adaptive image-interval source capabilities, use two ordinary commits in the same
+For the explicitly selected NEURAL-031 numerical-observation and direct-provider
+capabilities and the NEURAL-077 adaptive image-interval source capability, use two ordinary commits in the same
 complete PR to give the new package truthful provenance. The package snapshot's
 parent is the actual preceding default; the registration commit's parent is that
 snapshot. The second commit leaves every referenced package byte unchanged and
