@@ -26,7 +26,8 @@ EXP003_CONTROL_WORKFLOW = ".github/workflows/exp003-generated-r-controls.yml"
 EXP003_CONTROL_SOURCES = (EXP003_CONTROL_MANIFEST,
                          "scripts/maintenance/run_exp003_generated_r.py",
                          "tests/maintenance/test_exp003_generated_r.py")
-WORKFLOW_SYNTAX_SOURCES = ("scripts/maintenance/check_workflow_syntax.py",)
+WORKFLOW_SYNTAX_SOURCES = ("scripts/maintenance/check_workflow_syntax.py",
+                           "tests/maintenance/test_workflow_syntax.py")
 CANONICAL_PER_TRACK = 100
 MAX_FILE_BYTES = 8 * 1024 * 1024
 # Finite allowance for the reviewed November 17 source enrollment.

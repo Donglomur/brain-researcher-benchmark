@@ -248,7 +248,7 @@ class RepositoryChecksTests(unittest.TestCase):
         self.assertEqual(result["artifacts"], 2)
         self.assertEqual(result["artifact_files"], 2)
         self.assertEqual(result["current_binding_files"], 2)
-        self.assertEqual(result["source_files"], 12)
+        self.assertEqual(result["source_files"], 13)
         self.assertFalse(result["scientific_qualification"])
         self.assertEqual(self.check()["source_check"], "passed")
         runtime = self.root / ".neurobench"
@@ -477,7 +477,7 @@ class RepositoryChecksTests(unittest.TestCase):
     def test_versioned_paper_metadata_is_owned_and_preserves_historical_bytes(self):
         row = self.revise_paper()
         result = self.build()
-        self.assertEqual(result["source_files"], 14)
+        self.assertEqual(result["source_files"], 15)
         self.assertFalse(result["scientific_qualification"])
         self.assertEqual(self.check()["source_check"], "passed")
         inventory = json.loads((self.root / checks.INVENTORY).read_text())
@@ -597,7 +597,7 @@ class RepositoryChecksTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "requires every paper revision"):
             self.build()
         self.revise_paper(1)
-        self.assertEqual(self.build()["source_files"], 17)
+        self.assertEqual(self.build()["source_files"], 18)
         self.assertEqual(self.check()["source_check"], "passed")
         inventory = json.loads((self.root / checks.INVENTORY).read_text())
         self.assertIn(snapshot_path, {item["path"] for item in inventory["files"]})

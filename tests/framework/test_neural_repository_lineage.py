@@ -97,6 +97,7 @@ class NeuralRepositoryLineageTests(unittest.TestCase):
         }
         expected_members = maintenance_members | {
             "scripts/maintenance/check_workflow_syntax.py",
+            "tests/maintenance/test_workflow_syntax.py",
             "benchmarks/paper/PAPER-001/task.json",
             "benchmarks/paper/PAPER-002/task.json",
             "benchmarks/neural/NEURAL-001/task.json",
