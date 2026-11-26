@@ -17,5 +17,12 @@ change to scientific scope or qualification. A short scope statement is enough
 for a documentation-only change. -->
 
 Follow the [contribution workflow](https://github.com/Donglomur/brain-researcher-benchmark/blob/publish/neuroscience-200/CONTRIBUTING.md#one-change-per-pull-request):
-verify the fork and base, complete required checks and review, and normally merge
-this PR before publishing the next independent change.
+verify the fork and base and complete required checks and review. Keep only one
+open, unmerged PR in this serial delivery queue; unrelated contributors' PRs are
+outside this limit. The next queued PR may start after this normal merge and its
+immediate identity verification. Ordinary queued merges require the preceding
+full post-merge gate plus their own checks, review and identity verification.
+A failed default that needs a source change requires the separately selected
+repair procedure in the fork workflow; ordinary queued changes resume only after
+the repaired default's full
+post-merge gate passes.

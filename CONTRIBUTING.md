@@ -12,9 +12,15 @@ regression tests, documentation and current source bindings needed for that chan
 to work and be reviewed. Separate unrelated work, but keep coupled fixes together;
 do not split a complete change or repeat merged work just to increase PR counts.
 
-Independent work can be prepared in parallel. Publish it serially: verify the fork
-and base, complete the required checks and review, then use a normal merge before
-publishing the next change from the refreshed base. Follow the
+Independent work can be prepared in parallel. In this serial delivery queue, keep
+only one open, unmerged PR at a time; this limit does not restrict unrelated
+contributors' PRs. After a normal merge and immediate verification of the actual
+default commit, tree and parents, the next branch and PR may start while the
+preceding merge's post-merge checks run. An ordinary queued change must wait to
+merge until those checks and its own required checks and review pass. A failed
+default may advance only through the separately selected, independently reviewed
+repair procedure in the fork workflow; ordinary queued changes resume only after
+the repaired default passes its complete post-merge gate. Follow the
 [fork workflow](docs/DEVELOPMENT.md#branches-and-pull-requests) and use the
 [PR template](.github/PULL_REQUEST_TEMPLATE.md) to describe the problem, result,
 validation actually run and remaining limitations.

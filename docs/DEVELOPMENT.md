@@ -33,16 +33,69 @@ documentation and current source bindings. Describe the concrete problem and
 result, validation actually run, and remaining limitations using the
 [PR template](../.github/PULL_REQUEST_TEMPLATE.md).
 
-Before merging, review the exact diff and confirm all required checks pass for the
-current PR revision. Complete the required review, then use **Create a merge
-commit** for a normal merge. Do not bypass a failed check or weaken a scientific
-contract to make it pass; preserve relevant failures as well as successful results.
+Keep only one open, unmerged PR at a time within this serial delivery queue; this
+limit does not restrict unrelated contributors' PRs. Advance the default branch
+only through one normal merge at a time. After a merge, immediately verify that
+`publish/neuroscience-200` points to the actual merge commit, its tree matches the
+reviewed and tested tree, and its ordered parents are the preceding default commit
+and the reviewed PR head. Once these identities match, refresh the fork remote and
+start the next single branch and PR from that actual merge commit. Its checks may
+run while the preceding merge's post-merge checks are still running. Use a unique
+branch and keep its published head unchanged while its checks are running.
 
-Confirm the merge landed on `publish/neuroscience-200` and its required post-merge
-checks pass before publishing the next independent change. Refresh the fork remote
-and start that change from the latest integration branch. Independent work may be
-prepared in parallel, but publication and merges are serial. Do not recreate
-already merged work or split dependent changes to increase the number of PRs.
+Before merging an ordinary independent change in this delivery queue, require
+both the complete preceding post-merge checks and the next PR's required head and
+branch-push checks to pass. Review the exact diff and complete the required review
+for the current PR revision. Refresh the live
+fork default and verify that it is still the actual commit used as the PR's base.
+Confirm that the successfully tested checkout and prospective merge have the same
+tree and ordered parents: live default first, reviewed PR head second. Then use
+**Create a merge commit** for a normal merge. An ordinary queued change must not
+create the next default-branch push before the preceding post-merge checks pass.
+
+A failed, missing or cancelled preceding post-merge check blocks ordinary queued
+merges, even if the next PR is green. Preserve the evidence and diagnose the cause
+before selecting a specific repair or individually justified recovery. This
+workflow does not authorize automatic retries or recovery. Do not cancel, retry
+or skip runs to accelerate publication, or weaken coverage.
+
+If a diagnosed default failure requires a source change, a separately selected
+repair PR may advance that failed default without requiring its failed gate to
+turn green. This is a narrow exception for resolving that failure, not for an
+ordinary queued change. Wait for every existing queued or running predecessor
+run or check to finish. Reconcile the full expected post-merge roster and preserve
+any explicitly diagnosed missing entries, the diagnosis and original failed runs.
+If an ordinary queued PR is
+already open, let its active checks finish and close it before opening the repair
+PR. Keep the repair focused and obtain an independent review of its connection to
+the failure and its evidence.
+Require all repair-head and branch-push checks to pass, including focused evidence
+that the fix works on the successfully tested prospective merge tree. Refresh the
+live default and prove that the tested checkout and prospective merge have the
+same tree and ordered parents: the current failed default first, the reviewed
+repair head second. If either identity changes, rebuild and repeat validation.
+
+Only after that review and validation may the repair be normally merged. Verify
+its actual default commit, tree and ordered parents immediately, then require the
+repaired default's complete post-merge gate to pass before ordinary queued changes
+resume. The predecessor's failed run remains failed; a successful repair does not
+rewrite it as a pass. No required repair or ordinary-PR check may be bypassed, and
+no scientific contract may be weakened to make a check pass. Preserve relevant
+failures as well as successful results.
+
+If the default changes, pause the pending merge. Wait for active checks to finish,
+then rebase or rebuild the candidate on the latest verified default and repeat
+its required checks, review and tree/parent verification. Use a fresh branch
+instead of force-pushing; close the stale PR before opening its replacement or a
+separately selected repair PR. The latest default's complete post-merge gate must
+also pass before an ordinary dependent candidate merges. Retain the original
+failed runs and superseded PR history.
+
+Independent work may be prepared in parallel; within this delivery queue, only the
+preceding post-merge checks and the next PR's checks may overlap. Shared runner
+capacity can reduce or erase any speedup, so this workflow promises no delivery
+rate. Do not recreate already
+merged work or split dependent changes to increase the number of PRs.
 
 The fork automatically deletes merged feature branches; local branches can be
 removed once their work is merged and no worktree or unfinished work depends on
