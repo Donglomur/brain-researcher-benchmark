@@ -113,6 +113,7 @@ def replay(document, candidate=None):
         groups = cell.get("groups")
         require(isinstance(groups, list) and bool(groups), "missing decoder groups")
         expected_groups = {name: [] for name in variables}
+        trial_support = {name: set() for name in variables}
         for group in groups:
             require(isinstance(group, dict), "group must be an object")
             variable = group.get("variable")
@@ -129,6 +130,9 @@ def replay(document, candidate=None):
             expected_groups[variable].append(values)
             trial_indices = indices(group.get("selected_experiment_trial_indices"),
                                     "group trial indices", len(selected), allow_empty=unfitted)
+            require(trial_support[variable].isdisjoint(trial_indices),
+                    "overlapping source trials across decoded-value subgroups")
+            trial_support[variable].update(trial_indices)
             target = vector(group.get("target"), "target", allow_empty=unfitted)
             weights = vector(group.get("trial_weights"), "trial weights", allow_empty=unfitted)
             require(len(target) == len(weights) == len(trial_indices), "group trial lengths differ")
