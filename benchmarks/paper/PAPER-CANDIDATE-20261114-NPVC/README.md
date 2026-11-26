@@ -86,7 +86,7 @@ Package-local task IDs do not override this registered definition; ownership lin
 ## Public source citations
 
 - [Code](https://github.com/houman1359/Triplets)
-- [Data](https://dataverse.harvard.edu/dataset.xhtml%3FpersistentId=doi:10.7910/DVN/NL1CAQ)
+- [Data](https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/NL1CAQ)
 - [Paper](https://www.nature.com/articles/s41593-025-02095-x)
 
 Citations come from the specification; their availability was not rechecked when generating this page.

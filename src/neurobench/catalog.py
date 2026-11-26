@@ -2019,7 +2019,7 @@ def render_tracks(catalog):
             text += '\n## Public source citations\n\n'
             if row['external_links']:
                 for link in row['external_links']:
-                    url = quote(link['url'], safe=":/%.-_~!$&'*,;=@+")
+                    url = quote(link['url'], safe=":/?%.-_~!$&'*,;=@+")
                     text += '- [' + markdown_text(link['kind'].title()) + '](' + url + ')\n'
                 text += '\nCitations come from the specification; their availability was not rechecked when generating this page.\n'
             else:

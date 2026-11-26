@@ -2,6 +2,8 @@
 import copy
 import importlib.util
 from pathlib import Path
+import re
+from urllib.parse import urlsplit
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -12,6 +14,27 @@ spec.loader.exec_module(catalog)
 
 def pairs(doc):
     return {(row['kind'], row['url']) for row in catalog.external_links(doc)}
+
+
+def rendered_citations(doc):
+    """Render a minimal metadata-only task without reading any task files."""
+    identifier, track = doc['id'], doc['track']
+    task = catalog.task_directory(identifier, track)
+    row = catalog.task_row(identifier, 'Generated citation fixture', track,
+                           {'path': task + '/task.json', 'bytes': 0, 'sha256': '0' * 64},
+                           'specification_only', None, doc)
+    row.update(registration_class='canonical', implementation_ids=[],
+               related_implementation_ids=[])
+    tasks = [row]
+    rendered = catalog.render_tracks({
+        'tasks': tasks, 'implementations': [],
+        'paper_improvement_counts': catalog.improvement_counts(tasks),
+        'paper_outcome_counts': catalog.paper_outcome_counts(tasks),
+        'neural_understanding_counts': catalog.understanding_counts(tasks),
+    })
+    page = rendered[task + '/README.md'].decode('utf-8')
+    citations = page.split('## Public source citations\n\n', 1)[1]
+    return re.findall(r'^- \[([^]]+)\]\(([^)]+)\)$', citations, flags=re.M)
 
 
 class SourceCitationTests(unittest.TestCase):
@@ -65,6 +88,12 @@ class SourceCitationTests(unittest.TestCase):
             doc = {'id': identifier, 'track': 'paper', 'paper_identity': {'url': url}}
             with self.subTest(identifier=identifier):
                 self.assertEqual(pairs(doc), {('paper', url)})
+                rendered = rendered_citations(doc)
+                self.assertEqual(len(rendered), 1)
+                self.assertEqual(rendered[0][0], 'Paper')
+                # Parse the emitted URL without unquoting it: decoding the whole
+                # destination would hide a query delimiter encoded into its path.
+                self.assertEqual(urlsplit(rendered[0][1]), urlsplit(url))
                 for rejected in (url + '&token=secret', url + '#fragment',
                                  url.replace('https://', 'https://name:password@'),
                                  url.replace('https://', 'https://wrong-host.invalid/'),
@@ -73,6 +102,15 @@ class SourceCitationTests(unittest.TestCase):
                 self.assertEqual(pairs({**doc, 'id': 'UNREVIEWED'}), set())
                 self.assertEqual(pairs({**doc, 'track': 'neural'}), set())
                 self.assertEqual(pairs({**doc, 'paper_identity': {}, 'data': {'url': url}}), set())
+        for url, expected in (
+            ('https://example.org/article', 'https://example.org/article'),
+            ('https://example.org/article(v1)', 'https://example.org/article%28v1%29'),
+            ('https://example.org/article%3Fidentifier', 'https://example.org/article%3Fidentifier'),
+        ):
+            with self.subTest(plain_url=url):
+                doc = {'id': 'PAPER-CITATION-FIXTURE', 'track': 'paper',
+                       'paper_identity': {'url': url}}
+                self.assertEqual(rendered_citations(doc), [('Paper', expected)])
 
     def test_npvc_public_dataset_identifier_query_is_data_only(self):
         url = 'https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/NL1CAQ'

@@ -86,7 +86,7 @@ Package-local task IDs do not override this registered definition; ownership lin
 - [Code](https://raw.githubusercontent.com/iinnpp/isttc/e78cfd2b2ea79b7a7e707db7b79e218212497e43/LICENSE)
 - [Code](https://raw.githubusercontent.com/iinnpp/isttc/e78cfd2b2ea79b7a7e707db7b79e218212497e43/README.md)
 - [Data](https://portal.brain-map.org/explore/circuits/visual-coding-neuropixels)
-- [Paper](https://journals.plos.org/ploscompbiol/article%3Fid=10.1371/journal.pcbi.1013385)
+- [Paper](https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1013385)
 
 Citations come from the specification; their availability was not rechecked when generating this page.
 
