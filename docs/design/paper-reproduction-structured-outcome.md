@@ -167,6 +167,8 @@ the only supplied-information difference. Candidate code, runtime, static
 invocation, reference and comparator-program hashes may coincide across genuinely
 independent runs. Run/trace/exposure/execution/freeze/evaluation and scientific
 comparison receipts may not be reused across the two conditions.
+Changing a lifecycle role label does not create a new raw receipt identity.
+A single wrapper may still cover multiple lifecycle roles within one condition.
 
 Reproduction with author code may legitimately include executing that code;
 success does not imply invention of the method. Both conditions receive the

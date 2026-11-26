@@ -183,6 +183,8 @@ evaluation, analysis-execution and output-verification receipts identify the
 independent condition executions. Candidate, runtime and static invocation
 artifact hashes need not differ: independently recreating the same algorithm is
 valid, and an AI in the +code condition may use the supplied author code.
+A lifecycle report retains the same raw identity if its role label changes;
+reusing it across conditions is rejected even under a different lifecycle role.
 
 An unavailable author-code manifest is represented as null. This leaves the
 paper+data condition available when otherwise specified, but prevents admission

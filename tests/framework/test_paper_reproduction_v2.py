@@ -133,8 +133,8 @@ def reseal(reproduction, improvement, outcomes, receipt):
 class VersionAndDesignTests(unittest.TestCase):
     def test_v1_files_and_schema_dictionaries_remain_unchanged(self):
         self.assertEqual((v1.CONTRACT_SCHEMA, v1.RESULT_SCHEMA, v1.RECEIPT_SCHEMA), V1_SCHEMAS_BEFORE)
-        frozen = {"src/neurobench/paper_reproduction.py": "79a1db69ddb2ec4d8cd3bcb1645bbfd684bc5a72a9de9ae93715c52da0581b1f",
-                  "tests/framework/test_paper_reproduction.py": "41c7ab20df53de0c03facf66a9c9ae4a098cac39499ab66a5bef9f63caabf45c"}
+        frozen = {"src/neurobench/paper_reproduction.py": "f819b4477ded1db9c2395866c75a06c40a797ff05a6d076c8592540b6657f754",
+                  "tests/framework/test_paper_reproduction.py": "0facf9f2ac93420a64f3a3f8b3824c26f065f4f6e61751720ac715cf20415833"}
         for name, digest in frozen.items():
             self.assertEqual(hashlib.sha256((ROOT / name).read_bytes()).hexdigest(), digest)
         self.assertEqual(v1.CONTRACT_SCHEMA["properties"]["schema_version"], {"const": "paper-reproduction/v1"})
@@ -431,6 +431,38 @@ class AdmissionTests(unittest.TestCase):
         report = paper.summary(o, r, i, [original, code])
         self.assertEqual(report["errors"], [], report)
         self.assertTrue(report["paired_metadata_admitted"]["reproduction"], report)
+
+    def test_cross_role_lifecycle_receipt_reuse_is_rejected(self):
+        r, i, o, original = fixture()
+        code = legacy.receipt_for(o, original["result"], condition="paper_data_author_code")
+        code.update(schema_version=paper.RECEIPT_VERSION,
+                    scientific_comparisons=copy.deepcopy(original["scientific_comparisons"]))
+        code["output_verification"]["finished_at"] = "2026-11-16T10:45:00Z"
+        code["scientific_comparisons"][0]["execution_id"] = code["analysis_execution"]["execution_id"]
+        code["scientific_comparisons"][0]["decision_manifest_sha256"] = "0" * 64
+        code["evidence"].append({**original["evidence"][-1], "sha256": "0" * 64})
+        # Multiple lifecycle roles may share a wrapper within one condition.
+        report = paper.summary(o, r, i, [original, code])
+        self.assertEqual(report["errors"], [], report)
+        self.assertTrue(report["paired_metadata_admitted"]["reproduction"], report)
+        for item in code["evidence"]:
+            if item["kind"] in ("evaluation", "analysis_execution"):
+                item["sha256"] = "f" * 64
+            elif item["kind"] in ("freeze", "output_verification"):
+                item["sha256"] = "d" * 64
+        for receipt in (original, code):
+            admission = paper.admit_outcome(o, r, i, receipt)
+            self.assertTrue(admission["metadata_admitted"], admission)
+            self.assertIs(admission["criterion_satisfied"], True)
+        report = paper.summary(o, r, i, [original, code])
+        self.assertTrue(report["errors"], report)
+        self.assertFalse(report["paired_metadata_admitted"]["reproduction"])
+        for cell in report["cells"]:
+            self.assertEqual(cell["scientific_outcome"], "unknown")
+            if cell["receipt"] is not None:
+                self.assertFalse(cell["receipt"]["metadata_admitted"])
+                self.assertIsNone(cell["receipt"]["criterion_satisfied"])
+                self.assertEqual(cell["receipt"]["finding_matches"], {})
 
     def test_metadata_admission_never_opens_artifacts_or_executes_programs(self):
         r, i, o, receipt = fixture()
