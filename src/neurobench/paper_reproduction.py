@@ -601,7 +601,8 @@ def summary(outcomes, reproduction_contract, improvement_contract, receipts=()):
         by_cell[cell] = admission
         # A single run/evaluation cannot become two independent condition runs,
         # even when task inputs and evaluator are deliberately matched.
-        evaluation_hashes = {(item["kind"], item["sha256"]) for item in receipt["evidence"]
+        # Changing a lifecycle role does not create independent receipt bytes.
+        evaluation_hashes = {("execution_receipt", item["sha256"]) for item in receipt["evidence"]
                              if item["kind"] in ("evaluation", "freeze", "analysis_execution", "output_verification")}
         tokens = {("run_id", receipt["run_id"]), ("trace", receipt["ai_run"]["trace_sha256"]),
                   ("exposure", receipt["delivery"]["exposure_manifest_sha256"]),

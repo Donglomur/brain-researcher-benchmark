@@ -448,6 +448,35 @@ class PairTests(unittest.TestCase):
         self.assertEqual(report["task_count"], 1)
         self.assertTrue(all(cell["scientific_outcome"] == "unknown" for cell in report["cells"]))
 
+    def test_cross_role_lifecycle_receipt_reuse_is_rejected(self):
+        reproduction, improvement, outcomes, result, _ = fixture()
+        one = receipt_for(outcomes, result)
+        two = receipt_for(outcomes, result, condition="paper_data_author_code")
+        # Each condition may use one wrapper for multiple lifecycle roles, and
+        # independent runs may produce identical candidate/runtime artifacts.
+        report = paper.summary(outcomes, reproduction, improvement, [one, two])
+        self.assertEqual(report["errors"], [], report)
+        self.assertTrue(report["paired_metadata_admitted"]["reproduction"], report)
+        for item in two["evidence"]:
+            if item["kind"] in ("evaluation", "analysis_execution"):
+                item["sha256"] = "f" * 64
+            elif item["kind"] in ("freeze", "output_verification"):
+                item["sha256"] = "d" * 64
+        # Standalone admission has no other condition with which to compare.
+        for receipt in (one, two):
+            admission = paper.admit_outcome(outcomes, reproduction, improvement, receipt)
+            self.assertTrue(admission["metadata_admitted"], admission)
+            self.assertIs(admission["criterion_satisfied"], True)
+        report = paper.summary(outcomes, reproduction, improvement, [one, two])
+        self.assertTrue(report["errors"], report)
+        self.assertFalse(report["paired_metadata_admitted"]["reproduction"])
+        for cell in report["cells"]:
+            self.assertEqual(cell["scientific_outcome"], "unknown")
+            if cell["receipt"] is not None:
+                self.assertFalse(cell["receipt"]["metadata_admitted"])
+                self.assertIsNone(cell["receipt"]["criterion_satisfied"])
+                self.assertEqual(cell["receipt"]["finding_matches"], {})
+
     def test_duplicate_cell_and_condition_provenance_reuse_rejected(self):
         for field in ("run_id", "trace", "exposure", "evaluation", "freeze", "duplicate-cell"):
             reproduction, improvement, outcomes, result, _ = fixture()
