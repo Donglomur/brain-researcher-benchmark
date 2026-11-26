@@ -46,8 +46,12 @@ and run-aggregation gaps.
   selected `materials_identity` and exactly 1,803 opaque events. Each event has
   one class 0–3 or four finite scores; duplicate, missing, extra and malformed
   rows fail. Additional collection reads debit the original provider allowance.
-- `restore_private` authenticates the collected result and calls the existing
-  private inverse-ID restoration. It reads no target labels and calls no scorer.
+- `restore_private` captures the collected result once, authenticates those bytes
+  against `collected.result_pin`, and passes that exact immutable snapshot into
+  the shared private inverse-ID restoration kernel. It never reopens the result
+  pathname after authentication. Replacing or removing that pathname after the
+  completed capture cannot substitute new predictions. It reads no target labels
+  and calls no scorer.
   A future admitted operator must budget and supervise this private continuation;
   it is not an alternative execution-authorization path.
 
@@ -63,7 +67,7 @@ The implementation reuses the complete seven-file package at
 Its source manifest is pinned to
 `93df92be5b388f4b2896805c8e02f0c41f301d1c86e6b06709444c1075ade0e4`;
 every member is authenticated before import. The original material module is
-pinned to `2c5bb6c48d90db6d811ccd072787e6cb35329ebd05e28af75a0de0484480f429`.
+pinned to `42aa46b557155e1977cc614c617552738a93a63f3de39ff0d2b2569d6e27015f`.
 
 That provider requires Linux `pidfd` signaling and `/proc` process identity. It
 uses an existing immutable local image, no image pull, nonroot execution,
@@ -107,6 +111,7 @@ From this directory:
 
 ```sh
 python3 -I -B tests/test_adapter.py
+python3 -I -B tests/test_captured_restore.py
 ```
 
 Thirty-eight methods exercise full 9,837-event metadata, exact paired requests, access
@@ -122,3 +127,16 @@ was corrected and the affected full observation/restoration method passed.
 Unchanged passing methods were retained; later metadata, read-budget and
 independent-review fixes are covered by focused controls. Generated write accounting preserves
 the first failure rather than erasing it.
+
+The ten captured-restoration controls cover all 1,803 generated event IDs with
+class and distinct score outputs, exact parity with the path API, replacement or
+removal after the original capture context has closed, malformed/bounded JSON,
+wrong pins, identity and membership refusals, and the unchanged closed runtime
+entrypoints. They use no arrays, targets, models or provider dispatch. The current
+release-restoration component retains its separate context and postflight checks;
+this repair maintains the documented standalone helper rather than replacing it.
+
+`SOURCE.json` and its original control history retain their construction-cutoff
+identities. Current executable pins and CI bind this maintenance revision;
+no earlier evidence is relabeled as validation of these changed bytes. These
+controls establish source behavior, not hostile-host isolation or model quality.

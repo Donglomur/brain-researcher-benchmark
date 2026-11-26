@@ -12,7 +12,7 @@ from types import ModuleType
 
 HERE = Path(__file__).resolve().parent
 PREDECESSOR = HERE.parent / 'opaque-submission-v1/adapter.py'
-PREDECESSOR_SHA = '5e57a4de3f5a0d0015f04e576a78d8a13fe18f5df475864e0f0f62a82c6b4bcf'
+PREDECESSOR_SHA = 'b69ff59cd7fb164833b816821b14d86b1f2f2a5e556a2842b9c70f9360a00faf'
 FLAT = 131584
 COUNTS = {'train': 6300, 'val': 1734, 'test': 1803}
 STAGES = ({'name': 'lp', 'epochs': 20, 'warmup_epochs': 5, 'patience': 5},

@@ -146,6 +146,18 @@ python3 materials.py restore \
   --output "$PRIVATE_RESTORED_PREDICTIONS"
 ```
 
+The existing `restore_predictions` path API keeps the same private mapping,
+strict parsing and complete event/value restoration. The companion
+`restore_prediction_bytes` API applies that same kernel to a captured immutable
+`bytes` payload. Callers authenticate that payload before passing it; the helper
+does not read a prediction pathname or independently establish producer custody.
+Both routes reject duplicate JSON keys, malformed/nonfinite values, incomplete
+or repeated prediction IDs, mismatched selected identities and existing outputs.
+
+`SOURCE.json` retains the original construction-cutoff source/evidence record.
+Current executable dependencies and CI bind current source bytes separately;
+this maintenance change does not rewrite historical validation or qualification.
+
 Private maps and restored predictions are created with mode0600 and cannot
 overwrite existing files. The map cannot be placed in the source signal tree;
 restored predictions cannot be written into participant materials. Restoration

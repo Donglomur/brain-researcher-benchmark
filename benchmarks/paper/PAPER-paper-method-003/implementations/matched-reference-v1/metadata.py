@@ -21,9 +21,9 @@ HERE = Path(__file__).resolve().parent
 MAX_JSON_BYTES = 8 * 1024 * 1024
 SOURCES = {
     "recipe": (HERE / "recipe.py",
-               "83a85f43997b83839e2462470778af36558beda0e9c7707db060395b4323b470"),
+               "0d515204b447d343b10dc9687d5d63e901f46b77e5dad69f1a2daebae9d88b0a"),
     "adapter": (HERE.parent / "opaque-submission-v1/adapter.py",
-                "5e57a4de3f5a0d0015f04e576a78d8a13fe18f5df475864e0f0f62a82c6b4bcf"),
+                "b69ff59cd7fb164833b816821b14d86b1f2f2a5e556a2842b9c70f9360a00faf"),
 }
 
 
