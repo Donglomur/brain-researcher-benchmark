@@ -1781,6 +1781,12 @@ def umbrae_reference_records(doc, source, narrative):
             require(set(diag['keyed_float32_accuracy']) == set(thresholds)
                     and accuracy[0] == accuracy[1] == accuracy[2] == keyed32,
                     'reported UMBRAE accuracy agreement contradicts panels')
+            # Allow one binary64 serialization step at the rational ceiling,
+            # not a scientific success tolerance or an additional correct answer.
+            maximum_accuracy = math.nextafter((count - invalid) / count, math.inf)
+            require(all(value <= maximum_accuracy for values in (*accuracy, keyed32)
+                        for value in values.values()),
+                    'UMBRAE accuracy exceeds the nonempty-answer denominator')
             bounded_public_metric(diag['keyed_float32_mean_iou'])
             statuses = obj(diag['keyed_prediction_status_counts'])
             require(set(statuses) <= {'valid', 'empty_extraction'} and 'valid' in statuses
