@@ -10,6 +10,7 @@ from contextlib import redirect_stdout
 import http.client
 import io
 import json
+import math
 import os
 from pathlib import Path
 import shutil
@@ -151,6 +152,109 @@ def close_fixture(temp, extra_writes, launches, complete_setup):
             raise AssertionError('Generated artifact allocation exceeded')
     finally:
         temp.cleanup()
+
+
+class EpisodeClockTests(unittest.TestCase):
+    """Pure metadata controls call the production admission guard directly."""
+
+    def test_cli_selects_complete_ordered_roster_and_accounting_only(self):
+        def identifiers(suite):
+            if isinstance(suite, unittest.TestSuite):
+                return [identifier for child in suite for identifier in identifiers(child)]
+            return [suite.id()]
+
+        module = sys.modules[__name__]
+        loader = unittest.TestLoader()
+        discovered = loader.loadTestsFromModule(module)
+        expected = sorted(identifiers(discovered))
+        self.assertEqual(loader.errors, [])
+        self.assertEqual(len(expected), 27)
+        self.assertEqual(len(set(expected)), discovered.countTestCases())
+        accounting = [__name__ + '.FixtureAccountingTests.test_setup_failure_is_accounted_before_cleanup']
+        captured = []
+
+        class CaptureRunner:
+            def __init__(self, **kwargs):
+                pass
+
+            def run(self, suite):
+                captured.append((identifiers(suite), suite.countTestCases()))
+                return unittest.TestResult()
+
+        scratch_before, argv_before, runner_before = SCRATCH, sys.argv, unittest.TextTestRunner
+        with tempfile.TemporaryDirectory(prefix='generated-cli-roster-', dir=scratch_before) as temporary:
+            with patch.object(module, 'SCRATCH', scratch_before), \
+                    patch.object(unittest, 'TextTestRunner', CaptureRunner):
+                for flags, selected in (([], expected), (['--accounting-only'], accounting)):
+                    with self.subTest(flags=flags), patch.object(
+                            sys, 'argv', [__file__, '--scratch-root', str(Path(temporary).resolve()), *flags]):
+                        self.assertEqual(main(), 0)
+                        self.assertEqual(captured[-1], (selected, len(selected)))
+        self.assertEqual(len(captured), 2)
+        self.assertIs(SCRATCH, scratch_before)
+        self.assertIs(sys.argv, argv_before)
+        self.assertIs(unittest.TextTestRunner, runner_before)
+        self.assertFalse(Path(temporary).exists())
+
+    def check_clock(self, started=63.9, deadline=None, finished=None, config_deadline=None):
+        deadline = started + 6 if deadline is None else deadline
+        end = {'started': started, 'deadline': deadline,
+               'finished': started if finished is None else finished}
+        config = {'deadline': deadline if config_deadline is None else config_deadline}
+        p.admit_episode_clock(end, config, {'episode_seconds': 6, 'cleanup_seconds': 1})
+
+    def test_producer_bound_across_binary_exponents(self):
+        for started in (63.9, 127.3):
+            with self.subTest(started=started):
+                deadline = started + 6
+                self.assertGreater(deadline - started, 6)
+                self.check_clock(started, deadline, deadline)
+
+    def test_ordinary_exact_and_shorter_positive_bounds(self):
+        for started, deadline in ((0, 6), (64.0, 70.0), (100.0, 105.0),
+                                  (63.9, 65.0), (63.9, math.nextafter(63.9, math.inf))):
+            with self.subTest(started=started, deadline=deadline):
+                self.check_clock(started, deadline, deadline)
+
+    def test_one_tick_beyond_producer_bound_refused(self):
+        for started in (63.9, 127.3, 100.0):
+            with self.subTest(started=started), self.assertRaisesRegex(ValueError, '^owned_episode_clock$'):
+                self.check_clock(started, math.nextafter(started + 6, math.inf))
+
+    def test_zero_and_negative_span_refused(self):
+        for deadline in (63.9, math.nextafter(63.9, -math.inf), 62.9):
+            with self.subTest(deadline=deadline), self.assertRaisesRegex(ValueError, '^owned_episode_clock$'):
+                self.check_clock(deadline=deadline)
+
+    def test_bad_nonfinite_bool_and_missing_times_refused(self):
+        for field in ('started', 'finished', 'deadline'):
+            for bad in (None, '63.9', True, False, float('nan'), float('inf'), -float('inf'), [], {}):
+                end = {'started': 63.9, 'finished': 64.0, 'deadline': 69.9}
+                end[field] = bad
+                with self.subTest(field=field, bad=bad), self.assertRaisesRegex(ValueError, '^owned_episode_clock$'):
+                    p.admit_episode_clock(end, {'deadline': 69.9}, {'episode_seconds': 6, 'cleanup_seconds': 1})
+            end = {'started': 63.9, 'finished': 64.0, 'deadline': 69.9}
+            del end[field]
+            with self.subTest(missing=field), self.assertRaisesRegex(ValueError, '^owned_episode_clock$'):
+                p.admit_episode_clock(end, {'deadline': 69.9}, {'episode_seconds': 6, 'cleanup_seconds': 1})
+
+    def test_configuration_deadline_mismatch_refused(self):
+        for deadline in (math.nextafter(69.9, -math.inf), math.nextafter(69.9, math.inf)):
+            with self.subTest(config_deadline=deadline), self.assertRaisesRegex(ValueError, '^owned_episode_clock$'):
+                self.check_clock(config_deadline=deadline)
+
+    def test_finished_before_start_refused(self):
+        with self.assertRaisesRegex(ValueError, '^owned_episode_clock$'):
+            self.check_clock(finished=math.nextafter(63.9, -math.inf))
+
+    def test_cleanup_bound_inclusive_but_next_tick_refused(self):
+        for started in (63.9, 127.3, 100.0):
+            deadline = started + 6
+            cleanup_end = deadline + 1
+            with self.subTest(started=started):
+                self.check_clock(started, deadline, cleanup_end)
+                with self.assertRaisesRegex(ValueError, '^owned_episode_clock$'):
+                    self.check_clock(started, deadline, math.nextafter(cleanup_end, math.inf))
 
 
 class FixtureAccountingTests(unittest.TestCase):
@@ -482,7 +586,10 @@ def main():
     c.need(SCRATCH.is_dir() and not SCRATCH.is_relative_to(c.HERE.parents[4]), 'external_generated_scratch')
     with patch.object(socket, 'socket', blocked), patch.object(socket, 'create_connection', blocked), \
             patch.object(socket, 'getaddrinfo', blocked):
-        suite = unittest.defaultTestLoader.loadTestsFromTestCase(FixtureAccountingTests)
+        suite = unittest.TestSuite()
+        if not args.accounting_only:
+            suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(EpisodeClockTests))
+        suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(FixtureAccountingTests))
         if not args.accounting_only:
             suite.addTests(unittest.defaultTestLoader.loadTestsFromTestCase(ProviderTests))
         result = unittest.TextTestRunner(verbosity=2).run(suite)
