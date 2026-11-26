@@ -44,7 +44,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-028](NEURAL-028/README.md) | Reward-free versus rewarded cortical learning | 3 | not linked |
 | [NEURAL-029](NEURAL-029/README.md) | Registered granule-cell reward-delay trajectory transfer | 4 | [manifest](NEURAL-029/implementations/registered-runtime/manifest.json) |
 | [NEURAL-030](NEURAL-030/README.md) | Cerebellar decoding of planned-delay lick-contact counts | 6 | [manifest](NEURAL-030/implementations/registered-runtime/manifest.json) |
-| [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction beyond baseline morphology | 7 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
+| [NEURAL-031](NEURAL-031/README.md) | Spine structural-change prediction beyond baseline morphology | 8 | [manifest](NEURAL-031/implementations/registered-runtime/manifest.json) |
 | [NEURAL-032](NEURAL-032/README.md) | Coactivity and compartment investigation from measured spine plasticity | 3 | [manifest](NEURAL-032/implementations/registered-runtime/manifest.json) |
 | [NEURAL-033](NEURAL-033/README.md) | Kir and compartment interaction investigation with measured-data checks | 2 | [manifest](NEURAL-033/implementations/registered-runtime/manifest.json) |
 | [NEURAL-034](NEURAL-034/README.md) | Held-mouse recall-context decoding from processed astrocytic calcium | 14 | [manifest](NEURAL-034/implementations/registered-runtime/manifest.json) |
