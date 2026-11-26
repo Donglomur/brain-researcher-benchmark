@@ -667,6 +667,158 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B benchmarks/neural/NEURAL-026/implementations/matched-ablation-grading-v1/test_compare.py
+      - name: Check NEURAL-029 constant-source normalization controls
+        if: (matrix.group == 'numpy226') && matrix.shard == 0
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          N029_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural029-source-normalization.XXXXXX")"
+          export TMPDIR="$N029_SCRATCH" PYTHONDONTWRITEBYTECODE=1 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1
+          timeout --signal=TERM --kill-after=5s 180s python -I -B - "$GITHUB_WORKSPACE" "$N029_SCRATCH" <<'PY_N029_NORMALIZATION' 2>&1 | tee "$N029_SCRATCH/TEST_LOG.txt"
+          import hashlib
+          import importlib.metadata
+          import json
+          import os
+          from pathlib import Path
+          import shutil
+          import sys
+          import unittest
+
+          root = Path(sys.argv[1]).resolve(strict=True)
+          output = Path(sys.argv[2]).resolve(strict=True)
+          package = root / 'benchmarks/neural/NEURAL-029/implementations/registered-runtime'
+          # Current CI roster: 41 unchanged accepted members, three EOF/current-pin successors, and the selected current task metadata successor.
+          # The original 45-member source freeze and full12 result remain historical, unchanged receipts.
+          pins = [{'path': 'benchmarks/neural/NEURAL-029/implementations/neural029-programme/SOURCE_MANIFEST.json', 'bytes': 3310, 'sha256': '4279ce5482833fa1ac26b859a12b0b9bfde8c048fbbf6f1c2918ca38e3957384'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/neural029-programme/core.py', 'bytes': 9137, 'sha256': 'cfa13c3d1e43e7705221c74c6fe5ba1000934e3a743a014f4682b8445b3f3ed1'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/neural029-programme/executor.py', 'bytes': 24334, 'sha256': '3be8e108707ed395cb6a3f2dfbfef11594832bd5dba0aa4fa6d0524ae9d77163'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/neural029-programme/grade.py', 'bytes': 2251, 'sha256': '0615bdabd0aa402e588c4f1a075dbb0af987965c0a9e9b54a6b17e69313e5774'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/neural029-programme/io_utils.py', 'bytes': 2996, 'sha256': '2f0ac23b3456432933c96e6579708b949b1e093659f99ebc6bfce5ae3f222f7e'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/neural029-programme/source_identity_join.py', 'bytes': 15773, 'sha256': '9abd80cfea2e92a48e59d24af2672e6988faaf45b2397a18c74c57923ab328b3'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/neural029-programme/test_numeric_rms.py', 'bytes': 7827, 'sha256': '18b9ce61e606e54bcf49903da14bb322ccade3363973f74d893f3f9c2c996c5f'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/neural029-programme/tests.py', 'bytes': 16056, 'sha256': 'd0284aa199de1c062b46322a440e2f613a653bce85149dee485485d784be3d3c'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/CURRENT_MAINTENANCE.json', 'bytes': 6741, 'sha256': '042634b5433beb7eda5378656374c6a137d35c61198976e87618f25693a54cf6'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/CURRENT_SPECIFICATION.json', 'bytes': 5895, 'sha256': '9f3dc43085dc837ecf5b89129dde455329c9feb3e2bfb705e5aa4037dae761f9'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/OPERATOR_CONTRACT.json', 'bytes': 3730, 'sha256': '35d2603e119556bc598e13b386406ee084dca62ff959b4030b0dd2c13902a69a'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/PUBLIC_PROVENANCE.json', 'bytes': 15492, 'sha256': '430b102c4818f5b19f4e60ba92876813398a9c246e78e56ac74e09c0d976fb47'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/QUALIFICATION_GATES.json', 'bytes': 4383, 'sha256': '466a52af8ceffa9f719439d3b026281c4db31e831842e64642d4459f55af65a7'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/README.md', 'bytes': 3285, 'sha256': '79577f055dda650f6b306d781ef143e072fc55f25ed7c1401dce7b66fdbd43d6'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/REQUEST_SCHEMAS.json', 'bytes': 2123, 'sha256': '0ddbe2e683a6bd4c8eb76b4719fc6ed541fe5f817044c1ad782c5d39acf1ff58'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/SOURCE_FREEZE.json', 'bytes': 12150, 'sha256': 'f0a49f7c2bb30523c299045cfd48f0770843c6482fe0400f8378e52f14714f7b'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/THIRD_PARTY_NOTICES.md', 'bytes': 2242, 'sha256': '1dd4e9b358ac1369806fc6757387a3b7b8af640b0cfbc8672944a0b3de2e51f2'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/central_operator.py', 'bytes': 12256, 'sha256': '12170734c769ba89ada4f94165af700da69aecfb5bd11c7b5b96e37475139b18'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/manifest.json', 'bytes': 5760, 'sha256': '9889d0dd3445f2b978e7436d582c8600078b54de824abd4568809c0672180d37'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/INERT_CHECKS.json', 'bytes': 1363, 'sha256': '63d820d225d3fa5258339302dbe7371d23322a654cb484cb571abc0aa5365798'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/PROTOCOL.json', 'bytes': 7485, 'sha256': '568b737bc25df5a8efb36981c2861669cf3e4a9147bcac9468a311839b9cc759'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/PROVISION.md', 'bytes': 4174, 'sha256': 'd02cf5639e1a72bf9cdddf040958740c99bb1dd22f2d75f8a9cc62b045065e02'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/README.md', 'bytes': 2097, 'sha256': '4e683bac5e82582745251bf7fa8844abf0f443da984c166284db1d3219cb35e8'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/SOURCE_IDENTITY.json', 'bytes': 4010, 'sha256': 'c845514a3203e1517df2a35e8a2dd2dcce1dc4619bda19a3bf8eaf2038de9593'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/TASK.md', 'bytes': 6654, 'sha256': '09498655a18f73bcf4566686c193f098ab20e5bb51399f70aafe71a1a13378d2'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/binding.schema.json', 'bytes': 1641, 'sha256': '1bc65e0f4f83ab6239a88bf18e8ca6ff34d47aad593e127a57cc21768f7090f8'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/checks.py', 'bytes': 3869, 'sha256': '67d514c35c04c6fa096842df0f1bf7e9e21394eb19a7079b7ebe7e8d0fae53cc'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/core.py', 'bytes': 7275, 'sha256': '69257f2b7d7931100834f1b36812a3b3652829caa4dbeadf963ccb85e4803550'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/dependencies.json', 'bytes': 619, 'sha256': 'becf11fc64ae9e1e9cdf7b05ad2f63d94c40e4990708e41d975b60cbdcc85866'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/export_source.m', 'bytes': 6533, 'sha256': '5b1846c3429dd83c4827e31ef96685f1fc4c384a6191e114340165c642e65d5e'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/grade.py', 'bytes': 2251, 'sha256': '0615bdabd0aa402e588c4f1a075dbb0af987965c0a9e9b54a6b17e69313e5774'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/grade.schema.json', 'bytes': 2485, 'sha256': '57276e3e57caba10dc7526d3a68f22fac7abba756e9ec0ea7f3abefab150bc99'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/inert_checks.py', 'bytes': 9289, 'sha256': 'cf6128ce7623645b243e087ae9b5a25affb996af0e5fd68e9ae3de34cac40e26'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/io_utils.py', 'bytes': 2996, 'sha256': '2f0ac23b3456432933c96e6579708b949b1e093659f99ebc6bfce5ae3f222f7e'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/load_public.py', 'bytes': 1947, 'sha256': 'baf2ed5b256603305f8b9572f8472eea176ee39f60b92b2e3d84b725a54d5d06'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/prepare.py', 'bytes': 8056, 'sha256': '9bfc4472c85b855af300f68b12cb4e1963e88173e96f8fdd2c09eb63a79d2f6d'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/private.schema.json', 'bytes': 1676, 'sha256': 'a7bd34e005f82fae68930a97838a10008b7ab271162a5e90615bc88d5937c3c8'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/public.schema.json', 'bytes': 3207, 'sha256': 'ecc2dae7c73a8cc7be5c38ada5601aa71d748d07553b0b2aa9694085ae13d495'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/source/MainData.m', 'bytes': 97669, 'sha256': 'afbe95ee8a769d553518585673796436a93d6e71eb67f0887f0ccb66d45d6fa6'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/source/README.md', 'bytes': 8740, 'sha256': 'ddc4ab3195f904100094a93d647fe7e2153760c336933089f64361905b313679'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/source_identity_join.py', 'bytes': 15773, 'sha256': '9abd80cfea2e92a48e59d24af2672e6988faaf45b2397a18c74c57923ab328b3'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/submission.schema.json', 'bytes': 1037, 'sha256': '20cc22e53f23d6885574ba260042cb2f5616105f1d0cdfe49ecdacd88e1f1171'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/runtime/source/timing.py', 'bytes': 1716, 'sha256': 'ed785193c6f7ee8cc0fab349d413f14e24d667e17ce80ee5e0af4b267510e95a'}, {'path': 'benchmarks/neural/NEURAL-029/implementations/registered-runtime/test_source_normalization.py', 'bytes': 16773, 'sha256': '23e04ed1d30a24496ac6677a2d4a4ac61067dcc6926257dcbaf39d447bd3abfd'}, {'path': 'benchmarks/neural/NEURAL-029/task.json', 'bytes': 22883, 'sha256': '77f47a55f7c21a7a776ce2559226349248025129dfbaef692bd5e7e57719f4a5'}]
+          expected = ['test_source_normalization.SourceNormalizationControls.test_between_trial_differences_are_not_constant', 'test_source_normalization.SourceNormalizationControls.test_current_operator_authenticates_complete_source_inventory', 'test_source_normalization.SourceNormalizationControls.test_distinct_constant_cells_keep_zero_within_cell_variance', 'test_source_normalization.SourceNormalizationControls.test_final_source_trial_remains_in_variance', 'test_source_normalization.SourceNormalizationControls.test_inert_source_controls_retain_all_previous_nonvariance_checks', 'test_source_normalization.SourceNormalizationControls.test_mixed_cells_retain_constant_cell_weight', 'test_source_normalization.SourceNormalizationControls.test_nonfinite_source_is_refused_before_normalization', 'test_source_normalization.SourceNormalizationControls.test_old_constant_roundoff_is_observed_and_corrected', 'test_source_normalization.SourceNormalizationControls.test_prepare_constant_source_to_grade_withholds_complete_primary', 'test_source_normalization.SourceNormalizationControls.test_prepare_nonconstant_source_to_grade_preserves_comparators_and_weights', 'test_source_normalization.SourceNormalizationControls.test_small_nonconstant_variance_is_not_thresholded', 'test_source_normalization.SourceNormalizationControls.test_within_trial_variation_preserves_original_arithmetic']
+          expected_cli = {'test_source_normalization.SourceNormalizationControls.test_between_trial_differences_are_not_constant': [], 'test_source_normalization.SourceNormalizationControls.test_current_operator_authenticates_complete_source_inventory': [{'script': 'central_operator.py', 'exit': 0, 'suffix': ['inspect']}], 'test_source_normalization.SourceNormalizationControls.test_distinct_constant_cells_keep_zero_within_cell_variance': [], 'test_source_normalization.SourceNormalizationControls.test_final_source_trial_remains_in_variance': [], 'test_source_normalization.SourceNormalizationControls.test_inert_source_controls_retain_all_previous_nonvariance_checks': [{'script': 'runtime/source/inert_checks.py', 'exit': 0, 'suffix': []}], 'test_source_normalization.SourceNormalizationControls.test_mixed_cells_retain_constant_cell_weight': [], 'test_source_normalization.SourceNormalizationControls.test_nonfinite_source_is_refused_before_normalization': [{'script': 'runtime/source/prepare.py', 'exit': 1}], 'test_source_normalization.SourceNormalizationControls.test_old_constant_roundoff_is_observed_and_corrected': [], 'test_source_normalization.SourceNormalizationControls.test_prepare_constant_source_to_grade_withholds_complete_primary': [{'script': 'runtime/source/prepare.py', 'exit': 0}, {'script': '../neural029-programme/grade.py', 'exit': 0}], 'test_source_normalization.SourceNormalizationControls.test_prepare_nonconstant_source_to_grade_preserves_comparators_and_weights': [{'script': 'runtime/source/prepare.py', 'exit': 0}, {'script': '../neural029-programme/grade.py', 'exit': 0}], 'test_source_normalization.SourceNormalizationControls.test_small_nonconstant_variance_is_not_thresholded': [], 'test_source_normalization.SourceNormalizationControls.test_within_trial_variation_preserves_original_arithmetic': []}
+          report = {'schema': 'neural029-source-normalization-hosted-v1', 'status': 'incomplete',
+                    'planning_RAM_bytes': 536870912, 'planning_artifact_bytes': 134217728,
+                    'planning_read_bytes': 268435456, 'OS_resource_limit_claim': False,
+                    'scientific_execution_qualified': False, 'submission_ready': False}
+          module = None
+          result = None
+
+          def require(condition, message):
+              if not condition:
+                  raise RuntimeError(message)
+
+          def authenticate_sources():
+              for pin in pins:
+                  path = root / pin['path']
+                  require(path.is_file() and not path.is_symlink(), 'ordinary source required: ' + pin['path'])
+                  body = path.read_bytes()
+                  require(len(body) == pin['bytes'] and hashlib.sha256(body).hexdigest() == pin['sha256'],
+                          'source identity mismatch: ' + pin['path'])
+
+          def flatten(suite):
+              for item in suite:
+                  if isinstance(item, unittest.TestSuite):
+                      yield from flatten(item)
+                  else:
+                      yield item
+
+          try:
+              require(root.is_dir() and output.is_dir() and not output.is_relative_to(root),
+                      'external generated output directory required')
+              require(all(not path.is_symlink() for path in (output, *output.parents)),
+                      'ordinary generated output ancestry required')
+              require(os.environ.get('TMPDIR') == str(output), 'exact generated temporary directory required')
+              require(shutil.disk_usage(output).free >= 134217728, '128 MiB available generated-output disk required')
+              require(sys.version_info[:3] == (3, 11, 18), 'Python 3.11.18 required')
+              require(importlib.metadata.version('numpy') == '2.2.6', 'installed NumPy 2.2.6 required')
+              require(len(pins) == 45 and len({pin['path'] for pin in pins}) == 45, 'exact 45 source identities required')
+              authenticate_sources()
+              import numpy as np
+              require(np.__version__ == '2.2.6', 'loaded NumPy 2.2.6 required')
+              report['runtime'] = {'python': sys.version.split()[0], 'numpy': np.__version__,
+                                   'numpy_origin': str(Path(np.__file__).resolve()), 'executable': sys.executable}
+              suite = unittest.defaultTestLoader.discover(str(package), pattern='test_source_normalization.py')
+              loaded = [test.id() for test in flatten(suite)]
+              report['discovered_ids'] = loaded
+              require(len(expected) == 12 and len(set(expected)) == 12 and loaded == expected,
+                      'exact nonempty ordered 12-method discovery required')
+              module = sys.modules['test_source_normalization']
+              require(Path(module.__file__).resolve() == (package / 'test_source_normalization.py').resolve(),
+                      'exact accepted test module required')
+              require(module.CLI_EVENTS == [], 'no child CLI may precede the selected test methods')
+              require(set(expected_cli) == set(expected), 'all methods require an explicit child-CLI expectation')
+
+              class StrictResult(unittest.TextTestResult):
+                  def __init__(self, *args, **kwargs):
+                      super().__init__(*args, **kwargs)
+                      self.started_ids = []
+                      self.stopped_ids = []
+                      self.successful_ids = []
+                      self.method_cli = []
+                      self.cli_start = None
+
+                  def startTest(self, test):
+                      self.started_ids.append(test.id())
+                      self.cli_start = len(module.CLI_EVENTS)
+                      super().startTest(test)
+
+                  def stopTest(self, test):
+                      self.method_cli.append({'id': test.id(), 'events': list(module.CLI_EVENTS[self.cli_start:])})
+                      self.stopped_ids.append(test.id())
+                      super().stopTest(test)
+
+                  def addSuccess(self, test):
+                      self.successful_ids.append(test.id())
+                      super().addSuccess(test)
+
+              result = unittest.TextTestRunner(verbosity=2, failfast=True, resultclass=StrictResult).run(suite)
+              require(result.testsRun == 12 and result.started_ids == expected
+                      and result.stopped_ids == expected and result.successful_ids == expected,
+                      'all 12 selected methods must start, stop and succeed exactly once in order')
+              require(not result.errors and not result.failures and not result.skipped
+                      and not result.expectedFailures and not result.unexpectedSuccesses
+                      and result.wasSuccessful(), 'zero skips or exceptional test outcomes required')
+              require([row['id'] for row in result.method_cli] == expected, 'exact method-bound child accounting required')
+              all_events = []
+              child_summary = []
+              for row in result.method_cli:
+                  wanted = expected_cli[row['id']]
+                  require(len(row['events']) == len(wanted), 'child CLI count differs for ' + row['id'])
+                  for event, child in zip(row['events'], wanted):
+                      require(set(event) == {'argv', 'returncode', 'stdout', 'stderr'}, 'closed native child event required')
+                      argv = event['argv']
+                      require(type(argv) is list and len(argv) >= 4 and all(type(value) is str for value in argv)
+                              and argv[:3] == [sys.executable, '-I', '-B'], 'native isolated child interpreter required')
+                      require(Path(argv[3]).resolve() == (package / child['script']).resolve(),
+                              'method-bound canonical child script required')
+                      require(type(event['returncode']) is int and event['returncode'] == child['exit'],
+                              'method-bound canonical child exit required')
+                      if 'suffix' in child:
+                          require(argv[4:] == child['suffix'], 'exact inspect/inert child arguments required')
+                      all_events.append(event)
+                      child_summary.append({'id': row['id'], 'script': child['script'], 'exit': event['returncode']})
+              require(len(all_events) == 7 and all_events == module.CLI_EVENTS,
+                      'exactly seven accounted native CLI calls and no unassigned calls required')
+              require([row['exit'] for row in child_summary] == [0, 0, 1, 0, 0, 0, 0],
+                      'accepted child exit sequence required; the nonfinite child failure is expected')
+              authenticate_sources()
+              report['source_files_authenticated_before_and_after'] = 45
+              report['canonical_method_bound_cli'] = child_summary
+              report['status'] = 'passed'
+          except BaseException as error:
+              report['error'] = {'type': type(error).__name__, 'message': str(error)}
+              raise
+          finally:
+              if result is not None:
+                  report['tests'] = {'testsRun': result.testsRun, 'started_ids': result.started_ids,
+                                     'stopped_ids': result.stopped_ids, 'successful_ids': result.successful_ids,
+                                     'errors': len(result.errors), 'failures': len(result.failures),
+                                     'skipped': len(result.skipped), 'expectedFailures': len(result.expectedFailures),
+                                     'unexpectedSuccesses': len(result.unexpectedSuccesses)}
+                  report['method_cli'] = result.method_cli
+              if module is not None:
+                  report['CLI_EVENTS'] = module.CLI_EVENTS
+                  report['GENERATED_OBSERVATIONS'] = module.GENERATED_OBSERVATIONS
+              (output / 'OUTCOME.json').write_text(json.dumps(report, indent=2, sort_keys=True, allow_nan=False) + '\n')
+              print(json.dumps({'status': report['status'], 'retained_output': str(output)}, sort_keys=True))
+          PY_N029_NORMALIZATION
       - name: Check NEURAL-029 generated source controls
         if: (matrix.group == 'numpy226') && matrix.shard == 0
         shell: bash
@@ -2876,6 +3028,7 @@ jobs:
             ${{ runner.temp }}/language-serialization-${{ github.run_id }}-${{ github.run_attempt }}/TEST_LOG.txt
             ${{ runner.temp }}/nomad-candidate-generated.*/
             ${{ runner.temp }}/neural010-paired-generated.*/
+            ${{ runner.temp }}/neural029-source-normalization.*/
       - name: Preserve Meg generated fixtures
         if: always() && matrix.group == 'torch-cpu'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
