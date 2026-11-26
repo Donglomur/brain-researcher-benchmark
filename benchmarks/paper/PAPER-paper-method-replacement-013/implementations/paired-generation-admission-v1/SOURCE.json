@@ -2,9 +2,9 @@
   "schema": "neuroformer-paired-generation-admission-source/v1",
   "task_id": "PAPER-paper-method-replacement-013",
   "component": "paired-generation-admission-v1",
-  "source_base_commit": "c41df9037da0c2831b7657e114cecdafa3802ce4",
+  "source_base_commit": "d8de92184ed0c300f22f35c3717c311e41b4f893",
   "author_revision": "36ed94084628c253098d448048c980d3dea0050d",
-  "scope": "Complete selected protected/source-amended neural-generation run roster to unchanged source-token-window diagnostics; not Figure6 metric selection or historical reproduction.",
+  "scope": "Complete selected protected/source-amended neural-generation roster to unchanged source-token-window diagnostics, with exact prediction-present support equality required for scikit deltas; not Figure6 metric selection or historical reproduction.",
   "dependencies": [
     {
       "path": "benchmarks/paper/PAPER-paper-method-replacement-013/implementations/native-behavior-truth-v1/behavior_truth.py",
@@ -50,22 +50,22 @@
   "implementation_members": [
     {
       "path": "generation_roster.py",
-      "bytes": 13653,
-      "sha256": "324237b02d9d760583bb984b758466a3ac4df9c101a824492bcd4bfb88e28094"
+      "bytes": 14666,
+      "sha256": "3c3d4242319aebfad8305ea3f9a9f0dba81cac78b1de19af57cc071b912868aa"
     },
     {
       "path": "test_generation_roster.py",
-      "bytes": 12584,
-      "sha256": "b06de3bfb3a480fe4094aefaac2e43981137a5c2c0719a6b43225170f462ab27"
+      "bytes": 19258,
+      "sha256": "544828dd44aaf79dccdab0c31970c08d3f0e14d1f51e0a1cc1a39aac1b68640b"
     },
     {
       "path": "README.md",
-      "bytes": 7691,
-      "sha256": "e0f60bde3c9d06ff9cdf99b27cad5332a9bd1be2fd659d74ea9de91378930b08"
+      "bytes": 9212,
+      "sha256": "d760abf5e1c7bbccc1ab23c859665192a3f62dd2510b2bf50d7b6b880078e478"
     }
   ],
   "validation": {
-    "distinct_generated_methods": 16,
+    "distinct_generated_methods": 21,
     "attempts": [
       {
         "methods": 15,
@@ -79,6 +79,18 @@
         "child_peak_rss_bytes": 35307520,
         "result": "passed",
         "reason": "one new historical-neural-support refusal and two affected controls after scope correction"
+      },
+      {
+        "methods": 21,
+        "wall_seconds": 0.409869,
+        "child_peak_rss_bytes": 38158336,
+        "result": "passed",
+        "reason": "exact effective-window comparison correction: all16 retained methods plus5 new generated controls",
+        "pool_run_id": "neuroformer-effective-window-20261126-v1",
+        "user_cpu_seconds": 0.353477,
+        "system_cpu_seconds": 0.023869,
+        "declared_max_working_ram_bytes": 268435456,
+        "timeout_seconds": 90
       }
     ],
     "controls_use": "Actual captured source functions with explicit DataFrame/NumPy/weighted-PRF doubles; no numerical-library parity established.",
@@ -93,5 +105,13 @@
   "paper_win": null,
   "selected_paper_figure6_metric": null,
   "source_complete": false,
-  "scientifically_qualified": false
+  "scientifically_qualified": false,
+  "effective_window_comparison": {
+    "report_schema": "neuroformer_generation_roster_report_v1",
+    "metadata": "additive effective_window_support.compute_scores_scikit",
+    "equality": "exact (Interval, Trial) sets from admitted frozen prediction tuples",
+    "mismatch": "retain diagnostics; null precision/recall/F1 scikit deltas; preserve admission and true-present branch",
+    "empty_sets": "equal support does not define an empty source branch",
+    "caller_search": "exact schema/component tokens in same task and scripts at source_base_commit; no closed schema consumer found; other consumers uninspected"
+  }
 }

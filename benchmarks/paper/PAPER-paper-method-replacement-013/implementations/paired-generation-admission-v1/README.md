@@ -82,6 +82,25 @@ paired effect fields are null, not fabricated zeros. Candidate-minus-reference
 precision/recall/F1 are descriptive effects only. There is no aggregate across
 recordings, seeds, arms or branches, no significance test and no SOTA claim.
 
+The scikit comparison additionally requires **equal exact predicted-present
+`(Interval, Trial)` window sets**, derived from the already frozen prediction
+events. Equal counts alone do not establish equality. When the sets differ, both
+original diagnostic dictionaries are retained unchanged, but all three scikit
+`candidate_minus_reference` values are null. Predictions remain admitted and the
+true-present branch's existing numerical behavior is unchanged. Omitting a
+window can change a raw source diagnostic; that change is not reported as a
+same-support scikit effect.
+
+Each comparison adds `effective_window_support.compute_scores_scikit` with
+`equal`, `source_reference_count`, `candidate_count`, and `reason` set to
+`same_predicted_present_windows` or `different_predicted_present_windows`.
+This metadata concerns prediction support only and contains no private target
+values. Equal empty sets still have empty source dictionaries and null effects;
+support equality does not make an undefined metric defined. The report remains
+`neuroformer_generation_roster_report_v1`: existing keys and raw diagnostics are
+preserved, with additive comparison metadata and corrected undefined deltas.
+Consumers should tolerate additional report fields and existing nullable effects.
+
 The new report always retains `paper_win: null`,
 `selected_paper_figure6_metric: null`, and false scientific/source/isolation
 qualification fields. Complete support means **the declared selected roster**,
@@ -107,7 +126,10 @@ The generated controls use the actual pinned source functions with explicitly
 named small DataFrame, NumPy and weighted-binary metric doubles. They establish
 admission/order/support/immutability behavior and preserve the source branch
 quirks; they do not establish pandas/NumPy/scikit-learn numerical parity. No
-authentic observations, weights, fits or model calls were used.
+authentic observations, weights, fits or model calls were used. Controls cover
+equal-count/different-window sets, difficult-window omission with unchanged raw
+diagnostics, equal sets with reordered and repeated events, both/one empty
+prediction streams, and the retained admission and target-access barriers.
 
 Run the focused public tests from this component's directory through the shared
 two-slot generated-test pool, with child command:

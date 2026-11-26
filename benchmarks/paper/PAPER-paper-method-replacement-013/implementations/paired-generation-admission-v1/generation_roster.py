@@ -236,13 +236,27 @@ def assess(packets, study, truth_loader, runtime_factory):
         for pair in study["pairs"]:
             left = reports[pair["source_reference"]]["diagnostics"]["branches"]
             right = reports[pair["candidate"]]["diagnostics"]["branches"]
+            # The scikit helper deduplicates prediction-present (Interval, Trial)
+            # windows. Equal declared support or counts do not establish the
+            # same effective support; compare the already frozen identities.
+            reference_windows, candidate_windows = (
+                {(interval, trial) for _, _, trial, interval in frozen[pair[role]]}
+                for role in ROLES)
+            scikit_support_equal = reference_windows == candidate_windows
             deltas = {}
             for branch in BRANCHES:
                 deltas[branch] = {}
                 for metric in METRICS:
                     a, b = left[branch].get(metric), right[branch].get(metric)
-                    deltas[branch][metric] = b - a if a is not None and b is not None else None
+                    support_equal = branch != "compute_scores_scikit" or scikit_support_equal
+                    deltas[branch][metric] = b - a if support_equal and a is not None and b is not None else None
             comparisons.append({**pair, "candidate_minus_reference": deltas,
+                "effective_window_support": {"compute_scores_scikit": {
+                    "equal": scikit_support_equal,
+                    "source_reference_count": len(reference_windows),
+                    "candidate_count": len(candidate_windows),
+                    "reason": "same_predicted_present_windows" if scikit_support_equal
+                              else "different_predicted_present_windows"}},
                 "paired_truth_equal": True, "paper_win": None, "scientifically_qualified": False})
         return {"schema": "neuroformer_generation_roster_report_v1", "study_sha256": digest(canonical(study)),
             "study_identity": study["study_identity"], "runs": [reports[run["run_id"]] for run in study["runs"]],
