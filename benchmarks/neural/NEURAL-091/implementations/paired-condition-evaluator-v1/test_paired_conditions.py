@@ -1,4 +1,5 @@
 """Generated paired software controls; no authentic neural observations."""
+import argparse
 import copy
 import json
 import math
@@ -8,6 +9,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 import paired_conditions as e
 
@@ -254,6 +256,121 @@ class PairedControls(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             output = e.v1.read_json(root / "output.json")
             self.assertEqual(output["paired_overall"]["status"], "finite")
+
+
+class PathRoleControls(unittest.TestCase):
+    ROLES = ("public", "private", "restricted", "program", "output")
+    ALIASES = ("same", "normalized", "relative", "symlink", "hardlink")
+
+    def _paths(self, root):
+        return {role: root / (role + ".json") for role in self.ROLES}
+
+    def _argv(self, paths):
+        argv = [str(Path(e.__file__))]
+        for role, path in paths.items():
+            argv.extend(("--" + role, str(path)))
+        return argv + ["--bootstrap-seed", "17", "--bootstrap-replicates", "100"]
+
+    def _alias(self, root, target, kind):
+        if kind == "same":
+            return target
+        if kind == "normalized":
+            (root / "nested").mkdir()
+            return root / "nested" / ".." / target.name
+        if kind == "relative":
+            return Path(os.path.relpath(target, Path.cwd()))
+        alias = root / "alias.json"
+        if kind == "symlink":
+            alias.symlink_to(target)
+        else:
+            os.link(target, alias)
+        return alias
+
+    def _reject_alias(self, role, other, kind):
+        with tempfile.TemporaryDirectory(dir=os.environ.get("NEURAL091_TEST_TMPDIR")) as directory:
+            root = Path(directory)
+            paths = self._paths(root)
+            sentinels = {path: (name + " sentinel: payload must remain unopened").encode()
+                         for name, path in paths.items()}
+            for path, body in sentinels.items():
+                path.write_bytes(body)
+            paths[role] = self._alias(root, paths[other], kind)
+            with mock.patch.object(sys, "argv", self._argv(paths)), \
+                 mock.patch.object(e.v1, "read_json", side_effect=AssertionError("payload read")) as read, \
+                 mock.patch.object(e.v1, "write_json", side_effect=AssertionError("payload write")) as write:
+                with self.assertRaisesRegex(ValueError, "role alias"):
+                    e.main()
+                read.assert_not_called()
+                write.assert_not_called()
+            for path, body in sentinels.items():
+                self.assertEqual(path.read_bytes(), body)
+
+    def test_private_aliases_fail_before_any_payload_io(self):
+        for role in ("public", "restricted", "program"):
+            for kind in self.ALIASES:
+                with self.subTest(role=role, alias=kind):
+                    self._reject_alias("private", role, kind)
+
+    def test_output_aliases_fail_before_any_payload_io(self):
+        for role in ("public", "private", "restricted", "program"):
+            for kind in self.ALIASES:
+                with self.subTest(role=role, alias=kind):
+                    self._reject_alias("output", role, kind)
+
+    def test_missing_private_still_follows_public_submission_admission(self):
+        public, _ = fixture()
+        with tempfile.TemporaryDirectory(dir=os.environ.get("NEURAL091_TEST_TMPDIR")) as directory:
+            paths = self._paths(Path(directory))
+            restricted = submission(public, "restricted_observation", 1)
+            restricted["predictions"].pop()
+            payloads = {"public": public, "restricted": restricted,
+                        "program": submission(public, "frozen_program", 2)}
+            for role, value in payloads.items():
+                e.v1.write_json(paths[role], value)
+            original_read = e.v1.read_json
+
+            def public_only(path):
+                self.assertNotEqual(Path(path), paths["private"], "protected read before admission")
+                return original_read(path)
+
+            with mock.patch.object(sys, "argv", self._argv(paths)), \
+                 mock.patch.object(e.v1, "read_json", side_effect=public_only) as read, \
+                 mock.patch.object(e.v1, "write_json", side_effect=AssertionError("payload write")) as write:
+                with self.assertRaisesRegex(ValueError, "exactly cover"):
+                    e.main()
+                self.assertEqual(read.call_count, 3)
+                write.assert_not_called()
+            self.assertFalse(paths["private"].exists())
+            self.assertFalse(paths["output"].exists())
+
+    def test_shared_prediction_path_is_not_rejected_by_metadata_guard(self):
+        with tempfile.TemporaryDirectory(dir=os.environ.get("NEURAL091_TEST_TMPDIR")) as directory:
+            paths = self._paths(Path(directory))
+            paths["restricted"].write_bytes(b"payload policy is checked separately")
+            paths["program"] = paths["restricted"]
+            with mock.patch.object(e.v1, "read_json", side_effect=AssertionError("payload read")), \
+                 mock.patch.object(e.v1, "write_json", side_effect=AssertionError("payload write")):
+                e.validate_role_paths(argparse.Namespace(**paths))
+
+    def test_distinct_cli_paths_preserve_complete_scoring_and_input_bytes(self):
+        public, private = fixture()
+        expected = comparison(public, private)
+        with tempfile.TemporaryDirectory(dir=os.environ.get("NEURAL091_TEST_TMPDIR")) as directory:
+            paths = self._paths(Path(directory))
+            payloads = {"public": public, "private": private,
+                        "restricted": submission(public, "restricted_observation", 1),
+                        "program": submission(public, "frozen_program", 2)}
+            for role, value in payloads.items():
+                e.v1.write_json(paths[role], value)
+            before = {role: paths[role].read_bytes() for role in payloads}
+            with mock.patch.object(sys, "argv", self._argv(paths)), \
+                 mock.patch.object(e.v1, "read_json", wraps=e.v1.read_json) as read:
+                e.main()
+                self.assertEqual([Path(call.args[0]) for call in read.call_args_list],
+                                 [paths[role] for role in ("public", "restricted", "program", "private")])
+            self.assertEqual(e.v1.read_json(paths["output"]), expected)
+            for role, body in before.items():
+                self.assertEqual(paths[role].read_bytes(), body)
 
 
 if __name__ == "__main__":

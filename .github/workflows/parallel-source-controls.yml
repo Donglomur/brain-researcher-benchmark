@@ -121,7 +121,7 @@ jobs:
         run: |
           python3 -I -S -B - <<'PY'
           import hashlib, os, stat
-          pins = [{'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 29993, 'sha256': 'c60f2db58bfd156a9a83c72eb35a8959d67763af70932f833ef98a2083b38e36'}, {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 51098, 'sha256': '073f920a233d8853ceb1e2143c63a2a07692bae242937a1eafa743fbd8ce3141'}, {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 639901, 'sha256': 'dcb9d20ca9ea6e72d4a7958f0e4f1c5065b8edba101f8758f2d6d7ff193b7af6'}]
+          pins = [{'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 29993, 'sha256': 'c60f2db58bfd156a9a83c72eb35a8959d67763af70932f833ef98a2083b38e36'}, {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 51098, 'sha256': '073f920a233d8853ceb1e2143c63a2a07692bae242937a1eafa743fbd8ce3141'}, {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 639901, 'sha256': 'b804fc90a7dc1000a385af744ef880dcfb03548620abdb8369124d75c426e53c'}]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
               with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), "rb") as stream:
@@ -1062,7 +1062,89 @@ jobs:
           N91_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural91-generated.XXXXXX")"
           trap 'rm -rf -- "$N91_SCRATCH"' EXIT
           export NEURAL091_TEST_TMPDIR="$N91_SCRATCH"
-          timeout --signal=TERM --kill-after=5s 120s python -I -S -B -m unittest discover -s benchmarks/neural/NEURAL-091/implementations/paired-condition-evaluator-v1 -p test_paired_conditions.py -v
+          timeout --signal=TERM --kill-after=5s 120s python -I -S -B - "$GITHUB_WORKSPACE" "$N91_SCRATCH" <<'PY_N091_ROLE'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+          import unittest
+
+
+          def require(ok, message):
+              if not ok:
+                  raise AssertionError(message)
+
+
+          root = Path(sys.argv[1]).resolve(strict=True)
+          scratch = Path(sys.argv[2]).resolve(strict=True)
+          require(root.is_dir() and scratch.is_dir() and not scratch.is_relative_to(root), 'external generated scratch required')
+          require(os.environ.get('NEURAL091_TEST_TMPDIR') == str(scratch), 'existing N091 scratch contract required')
+          pins = [{'path': 'benchmarks/neural/NEURAL-091/implementations/paired-condition-evaluator-v1/paired_conditions.py', 'bytes': 7938, 'sha256': 'b6d8f8c2ab5877e7ce638487489cf13b7ce7481338fc2cf277a89adc632e3842'}, {'path': 'benchmarks/neural/NEURAL-091/implementations/paired-condition-evaluator-v1/test_paired_conditions.py', 'bytes': 20437, 'sha256': '730f05040244187682501b418ac5752206d273ad389f04a63011de1556f6730a'}, {'path': 'benchmarks/neural/NEURAL-091/implementations/paired-condition-evaluator-v1/README.md', 'bytes': 6512, 'sha256': '40552fb3130cf67bd757b12eded129d8cd4e4e8ed1d88e80de29874102fe7474'}, {'path': 'benchmarks/neural/NEURAL-091/implementations/initial-evaluator-v1/evaluator.py', 'bytes': 25385, 'sha256': '16606e98d575cce41cf18c0b8b20b3f6b313bccf1ec94bcfd52286c7d56153d4'}, {'path': 'benchmarks/neural/NEURAL-091/implementations/complete-roster-evaluator-v2/complete_roster.py', 'bytes': 13894, 'sha256': '98a742511ecc4b96260573737405accf234abda0974b8f7557793ac913eaaac6'}]
+          for pin in pins:
+              path = root / pin['path']
+              require(not path.is_symlink() and all(not parent.is_symlink() for parent in path.parents if parent.is_relative_to(root)), pin['path'])
+              before = path.lstat()
+              require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == pin['bytes'], pin['path'])
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  raw = stream.read(pin['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              final = path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              require(all(getattr(before, f) == getattr(opened, f) == getattr(after, f) == getattr(final, f) for f in fields), pin['path'])
+              require(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'], pin['path'])
+
+          require(sys.implementation.name == 'cpython' and sys.version_info[:3] == (3, 11, 18), 'existing CPython profile required')
+          expected = ['test_paired_conditions.PairedControls.test_both_complete_submissions_admitted_before_protected_access', 'test_paired_conditions.PairedControls.test_cli_admission_before_private_file_read_and_success', 'test_paired_conditions.PairedControls.test_declared_roster_omission_still_rejected', 'test_paired_conditions.PairedControls.test_equal_query_keys_with_different_calibration_do_not_match', 'test_paired_conditions.PairedControls.test_finite_full_packet_mean_and_bootstrap_survive_sum_overflow', 'test_paired_conditions.PairedControls.test_finite_per_mouse_likelihood_ratio_survives_gain_sum_overflow', 'test_paired_conditions.PairedControls.test_hand_calculated_mouse_macro_is_not_spike_pooled', 'test_paired_conditions.PairedControls.test_identical_predictions_and_reordered_rows_have_zero_paired_interval', 'test_paired_conditions.PairedControls.test_opposed_finite_differences_have_finite_paired_quantiles', 'test_paired_conditions.PairedControls.test_opposite_infinities_across_mice_are_not_silently_dropped', 'test_paired_conditions.PairedControls.test_original_undefined_endpoints_remain_undefined', 'test_paired_conditions.PairedControls.test_single_mouse_has_no_bootstrap_interval', 'test_paired_conditions.PairedControls.test_zero_rate_infinities_and_indeterminate_difference_are_explicit', 'test_paired_conditions.PathRoleControls.test_distinct_cli_paths_preserve_complete_scoring_and_input_bytes', 'test_paired_conditions.PathRoleControls.test_missing_private_still_follows_public_submission_admission', 'test_paired_conditions.PathRoleControls.test_output_aliases_fail_before_any_payload_io', 'test_paired_conditions.PathRoleControls.test_private_aliases_fail_before_any_payload_io', 'test_paired_conditions.PathRoleControls.test_shared_prediction_path_is_not_rejected_by_metadata_guard']
+          package = root / 'benchmarks/neural/NEURAL-091/implementations/paired-condition-evaluator-v1'
+          loader = unittest.TestLoader()
+          suite = loader.discover(str(package), pattern='test_paired_conditions.py')
+          require(not loader.errors, 'N091 discovery error')
+          for name in ('paired_conditions', 'test_paired_conditions'):
+              module = sys.modules.get(name)
+              require(module is not None and Path(module.__file__).resolve() == package / (name + '.py'), 'unexpected N091 module: ' + name)
+
+
+          def flatten(suite):
+              if isinstance(suite, unittest.TestSuite):
+                  return [identifier for child in suite for identifier in flatten(child)]
+              return [suite.id()]
+
+
+          discovered = flatten(suite)
+          require(discovered == expected and len(discovered) == len(set(discovered)) == suite.countTestCases() == 18, 'exact eighteen unique IDs required')
+
+
+          class CompleteResult(unittest.TextTestResult):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  self.started, self.stopped, self.succeeded = [], [], []
+
+              def startTest(self, test):
+                  self.started.append(test.id())
+                  super().startTest(test)
+
+              def stopTest(self, test):
+                  self.stopped.append(test.id())
+                  super().stopTest(test)
+
+              def addSuccess(self, test):
+                  self.succeeded.append(test.id())
+                  super().addSuccess(test)
+
+
+          result = unittest.TextTestRunner(verbosity=2, resultclass=CompleteResult).run(suite)
+          require(result.testsRun == 18 and result.started == result.stopped == result.succeeded == expected, 'exact execution rosters required')
+          require(result.wasSuccessful() and not any([result.failures, result.errors, result.skipped, result.expectedFailures, result.unexpectedSuccesses]), 'all eighteen outcomes must succeed without skips')
+          print(json.dumps({'task': 'NEURAL-091', 'suite': 'paired-condition-evaluator-v1', 'tests_run': result.testsRun,
+                            'discovered_ids': discovered, 'started_ids': result.started, 'stopped_ids': result.stopped,
+                            'successful_ids': result.succeeded, 'failures': len(result.failures), 'errors': len(result.errors),
+                            'skips': len(result.skipped), 'expected_failures': len(result.expectedFailures),
+                            'unexpected_successes': len(result.unexpectedSuccesses),
+                            'generated_only': True, 'scientific_qualification': False}, sort_keys=True))
+          PY_N091_ROLE
       - name: "Check NEURAL-092 generated paired or observation controls"
         if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash

@@ -6,6 +6,7 @@ assessment, not evidence that either access condition was actually enforced.
 import argparse
 import importlib.util
 import math
+import os
 from pathlib import Path
 import random
 
@@ -112,6 +113,30 @@ def compare(public, private, restricted, program, bootstrap_seed=0, bootstrap_re
                 for family in public["heldout_families"]}}
 
 
+def validate_role_paths(args):
+    """Reject protected-input/output aliases before reading any payload.
+
+    Paths must remain stable under the trusted operator during this invocation;
+    these metadata checks do not isolate hostile concurrent filesystem changes.
+    """
+    inputs = ("public", "restricted", "program", "private")
+    paths = {role: Path(getattr(args, role)) for role in (*inputs, "output")}
+    resolved = {role: path.resolve() for role, path in paths.items()}
+
+    def aliases(left, right):
+        if resolved[left] == resolved[right]:
+            return True
+        try:
+            return os.path.samefile(paths[left], paths[right])
+        except FileNotFoundError:
+            return False
+
+    for role in inputs[:-1]:
+        v1.require(not aliases("private", role), f"Input role alias: private and {role}")
+    for role in inputs:
+        v1.require(not aliases("output", role), f"Output role alias: output and {role}")
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ("public", "private", "restricted", "program", "output"):
@@ -119,6 +144,7 @@ def main():
     parser.add_argument("--bootstrap-seed", type=int, default=0)
     parser.add_argument("--bootstrap-replicates", type=int, default=1000)
     args = parser.parse_args()
+    validate_role_paths(args)
     # In the CLI, complete public-only admission occurs before private-file I/O.
     public = v1.read_json(args.public)
     restricted, program = v1.read_json(args.restricted), v1.read_json(args.program)
