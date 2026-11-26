@@ -1744,6 +1744,141 @@ jobs:
                             'declared_ram_bytes': 268435456, 'ram_limit_enforced': False,
                             'generated_only': True, 'scientific_qualification': False}, sort_keys=True))
           PY_N031_PROVIDER
+      - name: Check complete ICNet probability custody controls
+        if: (matrix.group == 'numpy') && matrix.shard == 0
+        timeout-minutes: 2
+        shell: bash
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          VECLIB_MAXIMUM_THREADS: '1'
+          NUMEXPR_NUM_THREADS: '1'
+          BLIS_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch=$(mktemp -d "${RUNNER_TEMP}/icnet-probability-custody.XXXXXX")
+          trap 'rm -rf -- "$scratch"' EXIT
+          timeout --signal=TERM --kill-after=5s 60s python -I -B - "$GITHUB_WORKSPACE" "$scratch/fixtures" <<'PY_ICNET_CUSTODY'
+          import hashlib
+          import importlib.metadata
+          import json
+          import os
+          from pathlib import Path
+          import resource
+          import stat
+          import sys
+          import unittest
+
+
+          def require(ok, message):
+              if not ok:
+                  raise AssertionError(message)
+
+
+          root = Path(sys.argv[1]).resolve(strict=True)
+          fixture = Path(sys.argv[2])
+          require(root.is_dir() and fixture.is_absolute() and '..' not in fixture.parts, 'absolute fixture path required')
+          require(not fixture.exists() and not fixture.is_symlink(), 'fixture path must initially be absent')
+          require(fixture.parent.is_dir() and fixture.parent.resolve() == fixture.parent, 'ordinary existing fixture parent required')
+          require(not fixture.parent.is_relative_to(root), 'generated fixtures must be outside source checkout')
+          pins = [{'path': 'benchmarks/paper/PAPER-paper-signal-add-007/implementations/probability-custody-v1/README.md', 'bytes': 6974, 'sha256': '05f66935407d35af1a80ca9bc67a407f79118cde6ab533a17ff280b8787c9070'}, {'path': 'benchmarks/paper/PAPER-paper-signal-add-007/implementations/probability-custody-v1/SOURCE.json', 'bytes': 1471, 'sha256': 'dc0e7734085587cf928eb98123208fa5cfdc67444f4d024a2d409ccfa62cbd0b'}, {'path': 'benchmarks/paper/PAPER-paper-signal-add-007/implementations/probability-custody-v1/TESTING.json', 'bytes': 3590, 'sha256': 'c92e3dba0961db62dd3d8699971bd59453d485b24fdfb973141a7de9740be3dd'}, {'path': 'benchmarks/paper/PAPER-paper-signal-add-007/implementations/probability-custody-v1/custody.py', 'bytes': 18998, 'sha256': 'f83273e48f08561486b6260bccf6a0b1aefa07dd51f10d453dc5f048a52b8263'}, {'path': 'benchmarks/paper/PAPER-paper-signal-add-007/implementations/probability-custody-v1/test_custody.py', 'bytes': 14387, 'sha256': '6ba1472675d8ad225be94ea3a6a4c4963b97bcaed39653d7a7a31c72d8ea0ba7'}, {'path': 'benchmarks/paper/PAPER-paper-signal-add-007/implementations/original-inputs-v1/source.py', 'bytes': 15944, 'sha256': '9533cb8fc55f0185a80522081af258122f4788fb973fee7011551efd43b3284c'}, {'path': 'benchmarks/paper/PAPER-paper-signal-add-007/implementations/original-inputs-v1/predictions.py', 'bytes': 13981, 'sha256': '84b0215d549c282f0d8a7683b49214c5b146d1ebab0d3d8395ea2571cb468b94'}, {'path': 'benchmarks/paper/PAPER-paper-signal-add-007/implementations/original-inputs-v1/grade.py', 'bytes': 10835, 'sha256': '63aed8d64d3670567234873cc5d11233a587f5edab344151228e84066b426778'}, {'path': 'benchmarks/paper/PAPER-paper-signal-add-007/implementations/source-equations-v1/scorer.py', 'bytes': 16868, 'sha256': 'c2643973762868391ea1d32b9c7ed54f546740f615db65bb2c920bc4ca9a493a'}]
+          for pin in pins:
+              path = root / pin['path']
+              require(not path.is_symlink() and all(not parent.is_symlink() for parent in path.parents if parent.is_relative_to(root)), pin['path'])
+              before = path.lstat()
+              require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == pin['bytes'], pin['path'])
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  raw = stream.read(pin['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              final = path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              require(all(getattr(before, f) == getattr(opened, f) == getattr(after, f) == getattr(final, f) for f in fields), pin['path'])
+              require(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'], pin['path'])
+
+          # All five package files and four unchanged runtime dependencies precede imports.
+          require(sys.platform == 'linux' and sys.implementation.name == 'cpython' and sys.version_info[:3] == (3, 11, 18), 'exact Linux CPython profile required')
+          require(importlib.metadata.version('numpy') == '2.4.6', 'exact NumPy distribution required')
+          import numpy as np
+          require(np.__version__ == '2.4.6', 'exact imported NumPy required')
+          expected = ['test_custody.CustodyControls.test_01_full_capture_and_original_bytes', 'test_custody.CustodyControls.test_02_exact_existing_grader', 'test_custody.CustodyControls.test_03_count_only_refused', 'test_custody.CustodyControls.test_04_missing_and_reordered_streams', 'test_custody.CustodyControls.test_05_raw_byte_tamper', 'test_custody.CustodyControls.test_06_missing_raw_chunk', 'test_custody.CustodyControls.test_07_reordered_or_missing_receipts_even_with_new_hash', 'test_custody.CustodyControls.test_08_stale_derived_outputs_with_updated_hashes', 'test_custody.CustodyControls.test_09_malformed_probabilities_even_with_updated_hashes', 'test_custody.CustodyControls.test_10_preflight_budget_and_disk_before_predictor', 'test_custody.CustodyControls.test_11_interrupted_capture_retained_no_retry', 'test_custody.CustodyControls.test_12_metadata_identity_controls', 'test_custody.CustodyControls.test_13_replacement_after_verification_rejected_before_grading', 'test_custody.CustodyControls.test_14_receipt_replaced_after_initial_hash']
+          package = root / 'benchmarks/paper/PAPER-paper-signal-add-007/implementations/probability-custody-v1'
+          # The accepted CLI consumes its positional fixture argument into this attribute.
+          # Its setUpClass creates the initially absent directory; it is not a precreated root.
+          require(not hasattr(sys, 'argv_fixture_root'), 'unexpected fixture argument state')
+          sys.argv_fixture_root = str(fixture)
+          loader = unittest.TestLoader()
+          discovered_suite = loader.discover(str(package), pattern='test_custody.py')
+          require(not loader.errors, 'ICNet discovery error')
+          module = sys.modules.get('test_custody')
+          require(module is not None and Path(module.__file__).resolve() == package / 'test_custody.py', 'unexpected test module')
+          require(Path(module.c.__file__).resolve() == package / 'custody.py', 'unexpected custody module')
+
+
+          def flatten(suite):
+              if isinstance(suite, unittest.TestSuite):
+                  return [identifier for child in suite for identifier in flatten(child)]
+              return [suite.id()]
+
+
+          discovered = flatten(discovered_suite)
+          require(discovered == expected and len(discovered) == len(set(discovered)) == discovered_suite.countTestCases() == 14, 'exact fourteen unique discovered IDs required')
+
+
+          class CompleteResult(unittest.TextTestResult):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  self.started, self.stopped, self.succeeded = [], [], []
+
+              def startTest(self, case):
+                  self.started.append(case.id())
+                  super().startTest(case)
+
+              def stopTest(self, case):
+                  self.stopped.append(case.id())
+                  super().stopTest(case)
+
+              def addSuccess(self, case):
+                  self.succeeded.append(case.id())
+                  super().addSuccess(case)
+
+
+          outer_results = []
+
+
+          class CompleteRunner(unittest.TextTestRunner):
+              def __init__(self, *args, **kwargs):
+                  require('resultclass' not in kwargs, 'unexpected runner override')
+                  super().__init__(*args, resultclass=CompleteResult, **kwargs)
+
+              def run(self, selected):
+                  require(not outer_results and flatten(selected) == expected and selected.countTestCases() == 14, 'one complete selected suite required')
+                  result = super().run(selected)
+                  require(result.testsRun == 14 and result.started == result.stopped == result.succeeded == expected, 'exact start/stop/success rosters required')
+                  require(result.wasSuccessful() and not any([result.failures, result.errors, result.skipped, result.expectedFailures, result.unexpectedSuccesses]), 'all fourteen outcomes must succeed without skips')
+                  outer_results.append(result)
+                  return result
+
+
+          # Preserve the source entrypoint's unittest.main selection and positional-fixture
+          # semantics, with the authenticated module explicit and result guards added.
+          program = unittest.main(module=module, argv=[str(package / 'test_custody.py')],
+                                  testRunner=CompleteRunner, verbosity=2, exit=False)
+          require(len(outer_results) == 1 and program.result is outer_results[0], 'exactly one complete run required')
+          result = program.result
+          print(json.dumps({'task': 'PAPER-paper-signal-add-007', 'suite': 'probability-custody-v1',
+                            'tests_run': result.testsRun, 'discovered_ids': discovered,
+                            'started_ids': result.started, 'stopped_ids': result.stopped, 'successful_ids': result.succeeded,
+                            'failures': len(result.failures), 'errors': len(result.errors), 'skips': len(result.skipped),
+                            'expected_failures': len(result.expectedFailures), 'unexpected_successes': len(result.unexpectedSuccesses),
+                            'fixture_cleanup': 'external scratch removed by shell EXIT trap',
+                            'peak_parent_process_rss_bytes': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+                            'peak_child_process_rss_bytes': resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss * 1024,
+                            'declared_ram_bytes': 268435456, 'ram_limit_enforced': False,
+                            'generated_only': True, 'scientific_qualification': False}, sort_keys=True))
+          PY_ICNET_CUSTODY
       - name: Run every required generated control with zero skips
         shell: bash
         run: |
