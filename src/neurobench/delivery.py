@@ -257,12 +257,18 @@ def assemble(root, value, source_pin, output, *, visibility="all", max_bytes=DEF
         item = by_target[record["target"]]
         verify_file(root, item, unlinked(folder, item["target"]))
         exported.append({k: item[k] for k in ("target", "visibility", "role", "bytes", "sha256")})
-    if visibility == "public":
-        components = {k: {"status": "included" if any(t.startswith("public/") for t in v["targets"]) else "not_in_public_export",
-                           "targets": [t for t in v["targets"] if t.startswith("public/")]}
-                      for k, v in value["components"].items()}
-    else:
-        components = value["components"]
+    exported_targets = {item["target"] for item in exported}
+    components = {}
+    for name, component in value["components"].items():
+        targets = [target for target in component["targets"] if target in exported_targets]
+        if visibility == "public":
+            components[name] = {"status": "included" if targets else "not_in_public_export", "targets": targets}
+        else:
+            omitted = [target for target in component["targets"] if target not in exported_targets]
+            components[name] = {**component, "targets": targets,
+                "blockers": [*component["blockers"], *("Not exported: " + target for target in omitted)]}
+            if omitted and component["status"] == "complete":
+                components[name]["status"] = "partial"
     metadata = {"schema": "neurobench_delivery_export_v1", "task_ids": value["task_ids"],
         "visibility": visibility, "package_built": result["package_buildable"], "files": exported,
         "components": components, "file_issues": result["file_issues"],
