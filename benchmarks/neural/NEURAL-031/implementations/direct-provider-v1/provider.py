@@ -251,6 +251,15 @@ def episode(prompt, value, output, modules, budget, credential):
     return end
 
 
+def admit_episode_clock(end, config, limits):
+    """Validate recorded times against the same absolute bound used by episode."""
+    c.need(all(type(end.get(k)) in (int, float) and math.isfinite(end[k]) for k in ('started', 'finished', 'deadline')) and
+           end['started'] <= end['finished'] <= end['deadline'] + limits['cleanup_seconds'] and
+           end['deadline'] == config['deadline'] and
+           end['started'] < end['deadline'] <= end['started'] + limits['episode_seconds'],
+           'owned_episode_clock')
+
+
 def admit_episode(prompt, value, root, expected_end, modules, budget):
     root = c.ordinary(root)
     c.need({p.name for p in root.iterdir()} == EPISODE_FILES and
@@ -283,10 +292,7 @@ def admit_episode(prompt, value, root, expected_end, modules, budget):
            'owned_closure_required')
     for field, name in (('config', 'CONFIG.json'), ('input', 'INPUT.bin'), ('output', 'OUTPUT.bin'), ('stderr', 'STDERR.bin')):
         c.need(end.get(field) == c.pin(capture[name]), 'captured_episode_identity')
-    c.need(all(type(end.get(k)) in (int, float) and math.isfinite(end[k]) for k in ('started', 'finished', 'deadline')) and
-           end['started'] <= end['finished'] <= end['deadline'] + value['limits']['cleanup_seconds'] and
-           end['deadline'] == config['deadline'] and 0 < end['deadline'] - end['started'] <= value['limits']['episode_seconds'],
-           'owned_episode_clock')
+    admit_episode_clock(end, config, value['limits'])
     http = c.decode(capture['HTTP.json'])
     c.need(type(http) is dict and set(http) == {'schema', 'config_pin', 'endpoint', 'request', 'response',
            'status_code', 'request_complete', 'response_complete', 'body_overflow', 'requests_attempted',
