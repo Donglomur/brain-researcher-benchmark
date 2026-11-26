@@ -33,6 +33,18 @@ documentation and current source bindings. Describe the concrete problem and
 result, validation actually run, and remaining limitations using the
 [PR template](../.github/PULL_REQUEST_TEMPLATE.md).
 
+For the explicitly selected NEURAL-031 numerical-observation and NEURAL-077
+adaptive image-interval source capabilities, use two ordinary commits in the same
+complete PR to give the new package truthful provenance. The package snapshot's
+parent is the actual preceding default; the registration commit's parent is that
+snapshot. The second commit leaves every referenced package byte unchanged and
+uses the snapshot's real commit in `source_commit` and linked evidence. Review
+those containing-file identities and the ordered two-commit history with the
+complete diff before pushing both commits once. Do not open an intermediate PR
+or dispatch CI for an incomplete snapshot. All normal preceding-default, own-head,
+prospective-merge and actual-merge gates below still apply; other selected changes
+retain the ordinary one-commit rule.
+
 Keep only one open, unmerged PR at a time within this serial delivery queue; this
 limit does not restrict unrelated contributors' PRs. Advance the default branch
 only through one normal merge at a time. After a merge, immediately verify that

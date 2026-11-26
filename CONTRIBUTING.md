@@ -12,6 +12,16 @@ regression tests, documentation and current source bindings needed for that chan
 to work and be reviewed. Separate unrelated work, but keep coupled fixes together;
 do not split a complete change or repeat merged work just to increase PR counts.
 
+A separately selected source-package capability may use two ordinary commits in
+its one PR when registration needs a commit that already contains the package.
+The first commit records the reviewed immutable package; the second adds its
+complete registration, CI and documentation, with `source_commit` and linked
+evidence naming that real first commit. Keep both commits private until the
+complete change is reviewed, then push them together. This selected exception
+currently covers the NEURAL-031 numerical-observation and NEURAL-077 adaptive
+image-interval reference additions; it does not permit an intermediate PR or
+relax any serial review, identity or check gate.
+
 Independent work can be prepared in parallel. In this serial delivery queue, keep
 only one open, unmerged PR at a time; this limit does not restrict unrelated
 contributors' PRs. After a normal merge and immediate verification of the actual

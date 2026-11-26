@@ -1440,6 +1440,117 @@ jobs:
           assert report["expected_source_checks"] == len(report["source_checks"]) == 4
           assert report["runner_failure"] is None and not report["log_truncated"] and not report["timeout"]
           PY
+      - name: Check complete NEURAL-031 direct numerical observations
+        if: (matrix.group == 'numpy') && matrix.shard == 0
+        timeout-minutes: 2
+        shell: bash
+        env:
+          OPENBLAS_NUM_THREADS: '1'
+          OMP_NUM_THREADS: '1'
+          MKL_NUM_THREADS: '1'
+          VECLIB_MAXIMUM_THREADS: '1'
+          NUMEXPR_NUM_THREADS: '1'
+          BLIS_NUM_THREADS: '1'
+        run: |
+          set -euo pipefail
+          umask 077
+          scratch=$(mktemp -d "${RUNNER_TEMP}/neural031-numerical-observation.XXXXXX")
+          trap 'rm -rf -- "$scratch"' EXIT
+          timeout --signal=TERM --kill-after=5s 60s python -I -B - "$GITHUB_WORKSPACE" "$scratch" <<'PY_N031'
+          import hashlib
+          import importlib.metadata
+          import json
+          import os
+          from pathlib import Path
+          import resource
+          import stat
+          import sys
+          import unittest
+
+
+          def require(ok, message):
+              if not ok:
+                  raise AssertionError(message)
+
+
+          root = Path(sys.argv[1]).resolve(strict=True)
+          scratch = Path(sys.argv[2]).resolve(strict=True)
+          require(root.is_dir() and scratch.is_dir() and not scratch.is_relative_to(root), 'dedicated external scratch required')
+          pins = [{'path': 'benchmarks/neural/NEURAL-031/implementations/numerical-observation-v1/README.md', 'bytes': 10009, 'sha256': 'b03e00498f5be12e644e26b5904a985eeca3a8d636bd1cd1351331a5cd1297d1'}, {'path': 'benchmarks/neural/NEURAL-031/implementations/numerical-observation-v1/SOURCE.json', 'bytes': 1122, 'sha256': '3afbfa676bf59964e588c50d1ffb507389ee3138545f28088d346af400cd5c5a'}, {'path': 'benchmarks/neural/NEURAL-031/implementations/numerical-observation-v1/observation.py', 'bytes': 22774, 'sha256': '71ed0f1752039840e58f892ccc7ce4b253c99afc35f1836627eb0c67c7bc1ea5'}, {'path': 'benchmarks/neural/NEURAL-031/implementations/numerical-observation-v1/test_observation.py', 'bytes': 22817, 'sha256': '8aa1dd93c1d21a6397ff0513c5ac01316324ee8dd7366bd8bf746330f96ab3bf'}, {'path': 'benchmarks/neural/NEURAL-031/implementations/paired-delivery-v1/io031.py', 'bytes': 4145, 'sha256': '41f1b0b696584307c16988e1e5c6e0e771084b7fe6a71fcd6afdf465c9ebd844'}, {'path': 'benchmarks/neural/NEURAL-031/implementations/paired-delivery-v1/SOURCE_INPUTS.json', 'bytes': 19442, 'sha256': '399d6bf289710f0041cdde25b8613ed87d692e0eff9a3a3ad7b77e909664c63f'}, {'path': 'benchmarks/neural/NEURAL-031/implementations/ratio-scoring-v1/endpoint.py', 'bytes': 13073, 'sha256': 'c297b57480238d03603413833a9e808f1c7326a39ea11670428abf80e51219fc'}]
+          for pin in pins:
+              path = root / pin['path']
+              require(not path.is_symlink() and all(not parent.is_symlink() for parent in path.parents if parent.is_relative_to(root)), pin['path'])
+              before = path.lstat()
+              require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == pin['bytes'], pin['path'])
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  raw = stream.read(pin['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              require(all(getattr(before, field) == getattr(opened, field) == getattr(after, field) == getattr(path.lstat(), field) for field in fields), pin['path'])
+              require(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'], pin['path'])
+
+          # All selected public source bytes are authenticated before candidate discovery/import.
+          require(sys.implementation.name == 'cpython' and sys.version_info[:3] == (3, 11, 18), 'exact CPython version required')
+          require(importlib.metadata.version('numpy') == '2.4.6', 'exact NumPy distribution required')
+          import numpy as np
+          require(np.__version__ == '2.4.6', 'exact imported NumPy version required')
+          expected = ['test_observation.ObservationTests.test_cli_routes_complete_collection_and_rejects_unselected_source', 'test_observation.ObservationTests.test_complete_collection_rejects_missing_extra_and_changed_contexts', 'test_observation.ObservationTests.test_complete_forty_context_roundtrip_and_original_submission_validation', 'test_observation.ObservationTests.test_consistent_replacement_cannot_borrow_selected_capture_inventory', 'test_observation.ObservationTests.test_cross_context_and_invalid_response_rows_are_retained_failures', 'test_observation.ObservationTests.test_finite_extremes_signed_zero_and_missing_values_roundtrip', 'test_observation.ObservationTests.test_inventory_must_be_complete_ordered_and_externally_selected', 'test_observation.ObservationTests.test_malformed_first_response_is_retained_and_cannot_be_replaced', 'test_observation.ObservationTests.test_one_context_presentation_reads_only_its_two_public_files', 'test_observation.ObservationTests.test_physical_view_semantics_refuse_added_targets_and_changed_missingness', 'test_observation.ObservationTests.test_selected_source_and_presentation_pins_are_required', 'test_observation.ObservationTests.test_wrong_input_pins_and_cross_context_refuse_before_decode']
+          package = root / 'benchmarks/neural/NEURAL-031/implementations/numerical-observation-v1'
+          loader = unittest.TestLoader()
+          suite = loader.discover(str(package), pattern='test_observation.py')
+          require(not loader.errors, 'test discovery failed')
+          module = sys.modules.get('test_observation')
+          require(module is not None and Path(module.__file__).resolve() == package / 'test_observation.py', 'unexpected test module')
+          module.SCRATCH = scratch
+
+
+          def flatten(item):
+              if isinstance(item, unittest.TestSuite):
+                  return [identifier for child in item for identifier in flatten(child)]
+              return [item.id()]
+
+
+          observed = flatten(suite)
+          require(len(observed) == len(set(observed)) == suite.countTestCases() == 12, 'exact unique discovery count required')
+          require(sorted(observed) == expected, 'test identity roster changed')
+
+
+          class CompleteResult(unittest.TextTestResult):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  self.starts = []
+                  self.stops = []
+                  self.successes = []
+
+              def startTest(self, test):
+                  self.starts.append(test.id())
+                  super().startTest(test)
+
+              def stopTest(self, test):
+                  self.stops.append(test.id())
+                  super().stopTest(test)
+
+              def addSuccess(self, test):
+                  self.successes.append(test.id())
+                  super().addSuccess(test)
+
+
+          result = unittest.TextTestRunner(verbosity=2, resultclass=CompleteResult).run(suite)
+          require(result.testsRun == 12 and result.wasSuccessful(), 'complete successful execution required')
+          for name in ('starts', 'stops', 'successes'):
+              roster = getattr(result, name)
+              require(len(roster) == len(set(roster)) == 12 and sorted(roster) == expected, 'incomplete or duplicate ' + name)
+          for name in ('failures', 'errors', 'skipped', 'expectedFailures', 'unexpectedSuccesses'):
+              require(not getattr(result, name), 'nonzero ' + name)
+          print(json.dumps({'task': 'NEURAL-031', 'suite': 'numerical-observation-v1', 'tests': result.testsRun,
+                            'test_ids': expected, 'failures': 0, 'errors': 0, 'skips': 0,
+                            'expected_failures': 0, 'unexpected_successes': 0,
+                            'fixture_bytes_written': module.WRITTEN,
+                            'peak_process_rss_bytes': resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024,
+                            'declared_ram_bytes': 268435456, 'ram_limit_enforced': False,
+                            'generated_only': True, 'scientific_qualification': False}, sort_keys=True))
+          PY_N031
       - name: Run every required generated control with zero skips
         shell: bash
         run: |
