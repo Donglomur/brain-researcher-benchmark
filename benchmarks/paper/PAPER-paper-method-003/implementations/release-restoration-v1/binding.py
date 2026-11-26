@@ -12,8 +12,8 @@ import stat
 from types import ModuleType
 
 HERE = Path(__file__).resolve().parent
-BOUNDARY_SHA = '075c3a205c8218b5ea9b58a5943ea031dfd98f737da1b97b60a4f13fa4000b23'
-ADAPTER_SHA = '5e57a4de3f5a0d0015f04e576a78d8a13fe18f5df475864e0f0f62a82c6b4bcf'
+BOUNDARY_SHA = 'b097287c39bb175613d74b48671df75c600dfb9391a0b2cf509124a9abb31562'
+ADAPTER_SHA = 'b69ff59cd7fb164833b816821b14d86b1f2f2a5e556a2842b9c70f9360a00faf'
 MAX_METADATA = 4 * 1024**2
 MAX_RESULT = 1024**2
 PROFILES = ('original-like-no-target-calibration-v1', 'frozen-program-full-test-context-v1')

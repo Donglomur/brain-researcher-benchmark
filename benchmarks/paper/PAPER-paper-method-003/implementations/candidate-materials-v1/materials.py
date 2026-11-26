@@ -104,6 +104,13 @@ def read_json(path):
     with regular(path, MAX_JSON_BYTES) as (handle, size):
         body = handle.read(MAX_JSON_BYTES + 1)
         require(len(body) == size, "JSON source length changed")
+    return _parse_json(body)
+
+
+def _parse_json(body):
+    """Parse one captured bounded JSON object without reopening its source."""
+    require(type(body) is bytes and 0 < len(body) <= MAX_JSON_BYTES,
+            "captured JSON must be nonempty bounded bytes")
     try:
         value = json.loads(body, object_pairs_hook=_unique,
                            parse_constant=lambda _: (_ for _ in ()).throw(MaterialError("nonfinite JSON")))
@@ -581,6 +588,29 @@ def export(panel_path, targets_path, paper_path, output, *, condition, expected_
 def restore_predictions(panel_path, mapping_path, materials_path, predictions_path, output, *,
                         expected_panel_identity, expected_mapping_identity, expected_materials_identity):
     """Restore every opaque test ID to the original scorer interface, privately."""
+    return _restore_predictions(panel_path, mapping_path, materials_path,
+        lambda: read_json(predictions_path), output,
+        expected_panel_identity=expected_panel_identity,
+        expected_mapping_identity=expected_mapping_identity,
+        expected_materials_identity=expected_materials_identity)
+
+
+def restore_prediction_bytes(panel_path, mapping_path, materials_path, prediction_body, output, *,
+                             expected_panel_identity, expected_mapping_identity, expected_materials_identity):
+    """Restore captured prediction bytes; the caller authenticates their custody.
+
+    The same strict parser, private mapping and restoration kernel serve the path
+    API. This seam accepts no prediction pathname and cannot reopen one.
+    """
+    return _restore_predictions(panel_path, mapping_path, materials_path,
+        lambda: _parse_json(prediction_body), output,
+        expected_panel_identity=expected_panel_identity,
+        expected_mapping_identity=expected_mapping_identity,
+        expected_materials_identity=expected_materials_identity)
+
+
+def _restore_predictions(panel_path, mapping_path, materials_path, load_predictions, output, *,
+                         expected_panel_identity, expected_mapping_identity, expected_materials_identity):
     panel = _selected_panel(panel_path, expected_panel_identity)
     mapping = load_mapping(mapping_path, panel, expected_mapping_identity)
     manifest = read_json(materials_path)
@@ -601,7 +631,7 @@ def restore_predictions(panel_path, mapping_path, materials_path, predictions_pa
     require([{k: v for k, v in row.items() if k != "sha256"} for row in observed_rows] == expected_rows and
             all(isinstance(row.get("sha256"), str) and HEX.fullmatch(row["sha256"]) for row in observed_rows),
             "participant test support differs from exact private mapping")
-    submission = read_json(predictions_path)
+    submission = load_predictions()
     require(submission.get("schema") == "reve-candidate-predictions-v1" and
             submission.get("materials_identity") == claimed, "candidate prediction/material identity mismatch")
     predictions = submission.get("predictions")

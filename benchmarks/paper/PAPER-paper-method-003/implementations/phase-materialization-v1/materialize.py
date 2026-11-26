@@ -17,7 +17,7 @@ import time
 from types import ModuleType
 
 HERE = Path(__file__).resolve().parent
-VIEWS_SHA = '724d8fdd287236513c861a0a8e0483621739c4f072ecd519ec3093040dc165f3'
+VIEWS_SHA = 'aa882a39181eab1745be70edb18f0924b7ef7608018ec5b43006783797708d48'
 CHUNK = 65536
 MANIFEST_CAP = 4 * 1024**2
 MAX_IO = 64 * 1024**3

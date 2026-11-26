@@ -26,7 +26,7 @@ HERE = Path(__file__).resolve().parent
 PINS = {
     'run.py': 'ace54d034e1d0183fa19a491bd801900f2214f421a66c70d2e27745ddb9bc040',
     'native.py': '97bc837cd49fb4f76394bd553258aa7b8d93ac8b1abbe9205ec25f03b3709fc1',
-    'recipe.py': '83a85f43997b83839e2462470778af36558beda0e9c7707db060395b4323b470',
+    'recipe.py': '0d515204b447d343b10dc9687d5d63e901f46b77e5dad69f1a2daebae9d88b0a',
 }
 PHASES = {
     'operation', 'construct', 'begin_stage', 'train_batch', 'train_epoch',

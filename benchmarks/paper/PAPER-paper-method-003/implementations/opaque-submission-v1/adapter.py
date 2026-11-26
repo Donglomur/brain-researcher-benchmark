@@ -18,7 +18,7 @@ from types import ModuleType
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[4]
 MATERIALS = HERE.parent / 'candidate-materials-v1/materials.py'
-MATERIALS_SHA = '2c5bb6c48d90db6d811ccd072787e6cb35329ebd05e28af75a0de0484480f429'
+MATERIALS_SHA = '42aa46b557155e1977cc614c617552738a93a63f3de39ff0d2b2569d6e27015f'
 TRANSPORT = REPO / 'benchmarks/neural/NEURAL-007/implementations/whole-night-programme/program/vendor_transport'
 TRANSPORT_SHA = '93df92be5b388f4b2896805c8e02f0c41f301d1c86e6b06709444c1075ade0e4'
 ENCODER = {'bytes': 276773456, 'sha256': '8ecc650619598748286c2457f81f5c6bd12e8bb59db44f7b02af1955c44de8fe'}
@@ -320,12 +320,15 @@ def _compose_owned_phase(provider, bundle, original_deadline, journal, info):
 
 def restore_private(collected, *, panel_path, mapping_path, materials_path, output,
                     expected_panel_identity, expected_mapping_identity, expected_materials_identity):
-    """Trusted operator continuation only; never calls the scorer or reads targets."""
+    """Restore the authenticated snapshot without reopening its prediction path.
+
+    Trusted operator continuation only; never calls the scorer or reads targets.
+    """
     m = materials_module()
     with m.regular(collected['result_path'],RESULT_CAP) as (stream,size):
         raw = stream.read(RESULT_CAP+1); need(len(raw) == size, 'bounded collected result required')
     need(pin(raw) == collected['result_pin'] and collected['private_restoration_pending'] is True, 'collected output changed')
-    return m.restore_predictions(panel_path,mapping_path,materials_path,collected['result_path'],output,
+    return m.restore_prediction_bytes(panel_path,mapping_path,materials_path,raw,output,
         expected_panel_identity=expected_panel_identity,expected_mapping_identity=expected_mapping_identity,
         expected_materials_identity=expected_materials_identity)
 
