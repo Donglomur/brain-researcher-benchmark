@@ -794,13 +794,101 @@ jobs:
         run: |
           set -euo pipefail
           timeout --signal=TERM --kill-after=5s 90s python -I -B test_decoder_comparators.py -v
-      - name: Check PAPER-paper-method-replacement-006 generated source controls
+      - name: Check PopT native scoring and paired comparison
         if: (matrix.group == 'stdlib-a') && matrix.shard == 0
         shell: bash
         working-directory: benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1
         run: |
           set -euo pipefail
-          timeout --signal=TERM --kill-after=5s 90s python -S -B -m unittest -v test_score_native
+          umask 077
+          POPT_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/popt-paired-generated.XXXXXX")"
+          trap 'rm -rf -- "$POPT_SCRATCH"' EXIT
+          export TMPDIR="$POPT_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 90s python -I -S -B - "$GITHUB_WORKSPACE" "$POPT_SCRATCH" <<'PY_POPT_PAIRED'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import stat
+          import sys
+          import tempfile
+          import unittest
+
+
+          def require(ok, message):
+              if not ok:
+                  raise AssertionError(message)
+
+
+          root = Path(sys.argv[1]).resolve(strict=True)
+          scratch = Path(sys.argv[2]).resolve(strict=True)
+          require(root.is_dir() and scratch.is_dir() and not scratch.is_relative_to(root), 'external generated scratch required')
+          require(os.environ.get('TMPDIR') == str(scratch) and Path(tempfile.gettempdir()).resolve() == scratch, 'POPT generated scratch contract required')
+          pins = [{'path': 'benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1/README.md', 'bytes': 15120, 'sha256': 'd957d7bdc45cf693887d8c3a096416b8466c3094da9858b4b194f135201f3c30'}, {'path': 'benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1/SOURCES.json', 'bytes': 7039, 'sha256': '30b9485fa4aa7b8a309dacaa913f43c9171552badfde781bf212bb9210ccf80d'}, {'path': 'benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1/binding.py', 'bytes': 18712, 'sha256': 'c263e48e65bc6de971b1d97d6ae2bf5acab37e3c620d15c87e2697a6f01ac2ea'}, {'path': 'benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1/score_native.py', 'bytes': 8500, 'sha256': '9c7c98f929e76e62ea9e525a2b9d966f9d105a39eee7ab99dcedd8d8b214f103'}, {'path': 'benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1/test_binding.py', 'bytes': 8560, 'sha256': 'adf440ab1db85696648eb4ee60c64c134888515e144f3320f6429e6128c7a41f'}, {'path': 'benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1/test_compare_native.py', 'bytes': 10873, 'sha256': 'fcb01ad0a4af6fb1dff267b0cdc49b0c4ed8928cf5c8e78a38c9bb6e5c098b03'}, {'path': 'benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1/test_score_native.py', 'bytes': 7137, 'sha256': '55a5d79b3093136d842864151cf8e6b7eabd8321106c33afc8a652e263b7b0db'}]
+          for pin in pins:
+              path = root / pin['path']
+              require(not path.is_symlink() and all(not parent.is_symlink() for parent in path.parents if parent.is_relative_to(root)), pin['path'])
+              before = path.lstat()
+              require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == pin['bytes'], pin['path'])
+              with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                  opened = os.fstat(stream.fileno())
+                  raw = stream.read(pin['bytes'] + 1)
+                  after = os.fstat(stream.fileno())
+              final = path.lstat()
+              fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+              require(all(getattr(before, f) == getattr(opened, f) == getattr(after, f) == getattr(final, f) for f in fields), pin['path'])
+              require(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'], pin['path'])
+
+          require(sys.implementation.name == 'cpython' and sys.version_info[:3] == (3, 11, 18), 'existing CPython profile required')
+          expected = ['test_score_native.NativeScoringControls.test_auc_against_pairwise_oracle_and_both_orientations', 'test_score_native.NativeScoringControls.test_cli_roundtrip_and_duplicate_json_rejection', 'test_score_native.NativeScoringControls.test_equal_subject_mean_and_explicit_sample_sem', 'test_score_native.NativeScoringControls.test_full_original_panel_and_tiny_probabilities', 'test_score_native.NativeScoringControls.test_invalid_binary_inputs', 'test_score_native.NativeScoringControls.test_original_binding_rejections_reach_scorer', 'test_score_native.NativeScoringControls.test_rank_ties_and_native_half_threshold', 'test_compare_native.PairedScoringControls.test_cli_pair_roundtrip_flags_and_duplicate_json', 'test_compare_native.PairedScoringControls.test_complete_panel_oracle_and_equal_subject_contrasts', 'test_compare_native.PairedScoringControls.test_equality_and_reversing_predictions_reverse_contrasts', 'test_compare_native.PairedScoringControls.test_matched_run_provenance_rejected_before_scoring', 'test_compare_native.PairedScoringControls.test_native_orientations_tiny_probabilities_and_ties', 'test_compare_native.PairedScoringControls.test_native_support_rejected_before_either_method_is_scored', 'test_compare_native.PairedScoringControls.test_operator_roles_protocol_and_identity_rejected_before_scoring']
+          package = root / 'benchmarks/paper/PAPER-paper-method-replacement-006/implementations/original-volume-binding-v1'
+          sys.path.insert(0, str(package))
+          loader = unittest.TestLoader()
+          suite = loader.loadTestsFromNames(['test_score_native', 'test_compare_native'])
+          require(not loader.errors, 'POPT test loading error')
+          for name in ('test_score_native', 'test_compare_native', 'score_native', 'binding'):
+              module = sys.modules.get(name)
+              require(module is not None and Path(module.__file__).resolve() == package / (name + '.py'), 'unexpected POPT module: ' + name)
+
+
+          def flatten(suite):
+              if isinstance(suite, unittest.TestSuite):
+                  return [identifier for child in suite for identifier in flatten(child)]
+              return [suite.id()]
+
+
+          discovered = flatten(suite)
+          require(discovered == expected and len(discovered) == len(set(discovered)) == suite.countTestCases() == 14, 'exact fourteen unique IDs required')
+
+
+          class CompleteResult(unittest.TextTestResult):
+              def __init__(self, *args, **kwargs):
+                  super().__init__(*args, **kwargs)
+                  self.started, self.stopped, self.succeeded = [], [], []
+
+              def startTest(self, test):
+                  self.started.append(test.id())
+                  super().startTest(test)
+
+              def stopTest(self, test):
+                  self.stopped.append(test.id())
+                  super().stopTest(test)
+
+              def addSuccess(self, test):
+                  self.succeeded.append(test.id())
+                  super().addSuccess(test)
+
+
+          result = unittest.TextTestRunner(verbosity=2, resultclass=CompleteResult).run(suite)
+          require(result.testsRun == 14 and result.started == result.stopped == result.succeeded == expected, 'exact execution rosters required')
+          require(result.wasSuccessful() and not any([result.failures, result.errors, result.skipped, result.expectedFailures, result.unexpectedSuccesses]), 'all fourteen outcomes must succeed without skips')
+          print(json.dumps({'task': 'PAPER-paper-method-replacement-006', 'suite': 'native-scoring-and-paired-comparison',
+                            'tests_run': result.testsRun, 'discovered_ids': discovered, 'started_ids': result.started,
+                            'stopped_ids': result.stopped, 'successful_ids': result.succeeded,
+                            'failures': len(result.failures), 'errors': len(result.errors), 'skips': len(result.skipped),
+                            'expected_failures': len(result.expectedFailures), 'unexpected_successes': len(result.unexpectedSuccesses),
+                            'generated_only': True, 'scientific_qualification': False}, sort_keys=True))
+          PY_POPT_PAIRED
       - name: Check PAPER-paper-method-replacement-008 generated source controls
         if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
