@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import sys
+from time import perf_counter_ns as _perf_counter_ns
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -24,6 +25,28 @@ def emit(value, prefix=""):
     if len(body) + len(prefix.encode()) + 1 >= REPORT_LIMIT:
         raise ValueError("framework report exceeds 256 KiB")
     print(prefix + body.decode(), flush=True)
+
+
+def clock_ns(clock):
+    """Optional telemetry must not interrupt the control suite."""
+    try:
+        value = clock()
+        return value if type(value) is int and value >= 0 else None
+    except Exception:
+        return None
+
+
+def emit_result(value, timing):
+    """Drop optional telemetry before sacrificing any original result field."""
+    prefix = "FRAMEWORK_SHARD_RESULT "
+    for detail in (timing, {"schema": "framework-shard-timing/v1",
+                            "complete": False, "reason": "report_limit"}):
+        candidate = dict(value, timing=detail)
+        if len(encoded(candidate)) + len(prefix) + 1 < REPORT_LIMIT:
+            emit(candidate, prefix)
+            return
+    print("framework timing unavailable: report limit", file=sys.stderr)
+    emit(value, prefix)
 
 
 def make_plan(suite, expected_count):
@@ -80,14 +103,53 @@ class RecordedResult(unittest.TextTestResult):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.started, self.stopped = [], []
+        self._clock = _perf_counter_ns
+        self._pending_timing = None
+        self._test_elapsed_ns = []
+        self._timing_valid = True
 
     def startTest(self, test):
+        now = clock_ns(self._clock)
         self.started.append(test.id())
+        if self._pending_timing is not None or now is None:
+            self._timing_valid = False
+        self._pending_timing = (self.started[-1], now)
         super().startTest(test)
 
     def stopTest(self, test):
+        now = clock_ns(self._clock)
         self.stopped.append(test.id())
+        pending = self._pending_timing
+        if (pending is None or pending[0] != self.stopped[-1]
+                or pending[1] is None or now is None or now < pending[1]):
+            self._timing_valid = False
+        else:
+            self._test_elapsed_ns.append(now - pending[1])
+        self._pending_timing = None
         super().stopTest(test)
+
+    def timing(self, assigned, run_started_ns, run_stopped_ns):
+        incomplete = {"schema": "framework-shard-timing/v1", "complete": False,
+                      "reason": "incomplete_callbacks_or_clock"}
+        if (not self._timing_valid or self._pending_timing is not None
+                or self.started != assigned or self.stopped != assigned
+                or len(self._test_elapsed_ns) != len(assigned)
+                or run_started_ns is None or run_stopped_ns is None
+                or run_stopped_ns < run_started_ns):
+            return incomplete
+        run_elapsed_ns = run_stopped_ns - run_started_ns
+        unattributed = run_elapsed_ns - sum(self._test_elapsed_ns)
+        if unattributed < 0:
+            return incomplete
+        return {"schema": "framework-shard-timing/v1", "complete": True,
+                "clock": "perf_counter_ns", "unit": "nanoseconds",
+                "scope": "TextTestRunner.run; test_elapsed_ns aligns with assigned_ids "
+                         "and includes per-test setup/teardown/cleanup. Unattributed time "
+                         "includes class/module fixtures and runner/output gaps. "
+                         "Discovery and outer JSON emission are excluded.",
+                "test_elapsed_ns": list(self._test_elapsed_ns),
+                "run_elapsed_ns": run_elapsed_ns,
+                "unattributed_run_elapsed_ns": unattributed}
 
 
 def run_shard(tests, plan, shard):
@@ -105,12 +167,16 @@ def run_shard(tests, plan, shard):
     emit({"shard": shard, "full_count": plan["full_count"],
           "census_sha256": plan["census_sha256"], "assigned_ids": assigned},
          "FRAMEWORK_SHARD_PLAN ")
-    result = unittest.TextTestRunner(verbosity=2, failfast=False, buffer=False,
-                                    warnings="default", resultclass=RecordedResult).run(
-                                        unittest.TestSuite(selected))
+    test_runner = unittest.TextTestRunner(verbosity=2, failfast=False, buffer=False,
+                                         warnings="default", resultclass=RecordedResult)
+    suite = unittest.TestSuite(selected)
+    clock = _perf_counter_ns
+    run_started_ns = clock_ns(clock)
+    result = test_runner.run(suite)
+    run_stopped_ns = clock_ns(clock)
     complete = result.started == assigned and result.stopped == assigned and result.testsRun == len(assigned)
     successful = result.wasSuccessful() and complete
-    emit({"schema": "framework-shard-result/v1", "shard": shard,
+    emit_result({"schema": "framework-shard-result/v1", "shard": shard,
           "census_sha256": plan["census_sha256"], "full_count": plan["full_count"],
           "assigned_ids": assigned, "started_ids": result.started, "stopped_ids": result.stopped,
           "testsRun": result.testsRun, "complete": complete, "successful": successful,
@@ -119,7 +185,7 @@ def run_shard(tests, plan, shard):
           "skipped": [{"id": test.id(), "reason": reason} for test, reason in result.skipped],
           "expectedFailures": [test.id() for test, _ in result.expectedFailures],
           "unexpectedSuccesses": [test.id() for test in result.unexpectedSuccesses]},
-         "FRAMEWORK_SHARD_RESULT ")
+         result.timing(assigned, run_started_ns, run_stopped_ns))
     return 0 if successful else 1
 
 
