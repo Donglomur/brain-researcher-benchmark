@@ -2414,6 +2414,155 @@ jobs:
           set -euo pipefail
           umask 077
           timeout --signal=TERM --kill-after=5s 1200s python -I -B scripts/maintenance/run_parallel_source_controls.py --manifest benchmarks/integrity/parallel-source-controls.v1.json --group "$PARALLEL_CONTROL_GROUP" --shard-index "$PARALLEL_CONTROL_SHARD" --shard-count "$PARALLEL_CONTROL_SHARDS" --fixtures "${RUNNER_TEMP}/parallel-fixtures-${PARALLEL_CONTROL_GROUP}-${PARALLEL_CONTROL_SHARD}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" --output "${RUNNER_TEMP}/parallel-source-${PARALLEL_CONTROL_GROUP}-${PARALLEL_CONTROL_SHARD}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+      - name: Check NEURAL-010 paired-condition comparison
+        if: (matrix.group == 'stdlib-b') && matrix.shard == 0
+        shell: bash
+        run: |
+          set -euo pipefail
+          umask 077
+          N010_SCRATCH="$(mktemp -d "${RUNNER_TEMP}/neural010-paired-generated.XXXXXX")"
+          export NEURAL010_PAIRED_TEST_ROOT="$N010_SCRATCH/retained" TMPDIR="$N010_SCRATCH"
+          timeout --signal=TERM --kill-after=5s 180s python -I -S -B - "$GITHUB_WORKSPACE" "$N010_SCRATCH" <<'PY_N010_PAIRED' 2>&1 | tee "$N010_SCRATCH/TEST_LOG.txt"
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          import shutil
+          import stat
+          import sys
+          import time
+          import types
+          import unittest
+
+
+          def require(ok, message):
+              if not ok:
+                  raise AssertionError(message)
+
+
+          root = Path(sys.argv[1]).resolve(strict=True)
+          parent = Path(sys.argv[2]).resolve(strict=True)
+          child = parent / 'retained'
+          require(root.is_dir() and parent.is_dir() and not parent.is_relative_to(root), 'external generated parent required')
+          require(all(not p.is_symlink() for p in (parent, *parent.parents)), 'ordinary parent ancestry required')
+          require(not os.path.lexists(child) and len(str(child).encode()) <= 512, 'nonexistent bounded child required; wrapper must not create it')
+          require(os.environ.get('NEURAL010_PAIRED_TEST_ROOT') == str(child) and os.environ.get('TMPDIR') == str(parent), 'exact selected parent/child environment required')
+          package = root / 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1'
+          pins = [{'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/entry.py', 'bytes': 8121, 'sha256': '31a680ef0eb28e31a6b8d3442a2fc73726b8978348a6ebcad3604461cae3cac1'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/captured_replay.py', 'bytes': 10559, 'sha256': '3b252b51b445b92c388324913d400f1803fa07867de9af5411f72149cb83ef94'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/paired_conditions.py', 'bytes': 19100, 'sha256': '1315940bac0677d6c2fdff8dd24f220f1987fc81c37214cf69ce4ad3ab5b9c46'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/vendor/event-campaign-v1/SOURCE_MANIFEST.json', 'bytes': 1540, 'sha256': 'd6456b5cece5ce18d97181bd8e62a9e05d5d088b373cc7acca3a46798b8101d7'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/vendor/event-campaign-v1/entry.py', 'bytes': 10139, 'sha256': 'a4db3a377fd1f258839df85dfe4bfffe993c7c2a2eac36a32155abc926939c2e'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/vendor/event-campaign-v1/common.py', 'bytes': 5494, 'sha256': '7d1a3e17603661e37617979505e9514ed7a3aa87215cfa50157d216f91186f40'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/vendor/event-campaign-v1/compatibility.py', 'bytes': 37378, 'sha256': '34729c850f5c81879cbb588cd4f7400bb414d62c4b7cc99973262698910a9c09'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/vendor/event-campaign-v1/provider.py', 'bytes': 11033, 'sha256': 'bfe885866c5c23bd9d5ba5342a1200a7f043766598d649270ae229fcd5d06261'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/vendor/event-campaign-v1/exchange.py', 'bytes': 2339, 'sha256': 'fd33421fe63fc4029634044c8f1e52bf60ee3a256aaff2801c68386db15322a9'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/vendor/event-campaign-v1/campaign.py', 'bytes': 34961, 'sha256': 'f8324fe0043b40795f4e32b8a05e82049e4596215f21ba77be97b01079056dcf'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/vendor/event-campaign-v1/vendor/detection-interface-v1/interface.py', 'bytes': 20531, 'sha256': '76ef4eaa8ff13e382f6a308192f16da5fb67f0221a86ec44bf9cee1cfb237b66'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/vendor/event-campaign-v1/vendor/scientific-scorer-v2/scorer.py', 'bytes': 13273, 'sha256': 'e72a814446744f1ca5ecb7b581c702c671983b4280ee876347d36016d8edd0c5'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/vendor/event-campaign-v1/vendor/programme-source/implementation-v1/program/public/event_protocol.py', 'bytes': 3258, 'sha256': '462afe5bb002df77567bda53c232607b86552a658f99515c283774635956599c'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/SOURCE_MANIFEST.json', 'bytes': 2396, 'sha256': '69157d5fc08329f1b81c7fee2de65a5703c1fc6d05f58d04c2e4703504d0cb95'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/README.md', 'bytes': 8732, 'sha256': '4d9e445716c1d61404371d541383177b6a56bb9a3b0ecedd9da931181303dcba'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/tests/CHBMIT_RECORDS.txt', 'bytes': 13056, 'sha256': '72b640d6a3fef4b40de255933d1403823d1655c56f93d69761105a653798fc08'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/tests/fixture_builder.py', 'bytes': 22708, 'sha256': 'd8db8bec68e16c6c5e014aa3a13c0081c59640005d9fb60820938af10436c4a1'}, {'path': 'benchmarks/neural/NEURAL-010/implementations/paired-condition-comparison-v1/tests/test_paired_conditions.py', 'bytes': 23166, 'sha256': 'b4940a6f574db11a703f936f887f7e72e45d7ebf4ecc0b61426301bf008d17ae'}]
+          expected = ['test_paired_conditions.PairedConditionTests.test_caller_container_mutation_cannot_redirect_snapshotted_selection', 'test_paired_conditions.PairedConditionTests.test_capture_budget_exhaustion_refuses_without_target_read', 'test_paired_conditions.PairedConditionTests.test_changed_assessment_selection_refuses_before_target', 'test_paired_conditions.PairedConditionTests.test_changed_frozen_support_refuses_before_target', 'test_paired_conditions.PairedConditionTests.test_changed_learning_policy_refuses_before_target', 'test_paired_conditions.PairedConditionTests.test_changed_references_refuse_before_target', 'test_paired_conditions.PairedConditionTests.test_complete_pair_preserves_original_results_and_one_target_capture', 'test_paired_conditions.PairedConditionTests.test_cross_condition_exchange_overlap_is_rejected', 'test_paired_conditions.PairedConditionTests.test_false_alarm_direction_uses_all_observed_seconds', 'test_paired_conditions.PairedConditionTests.test_identical_decisions_have_zero_paired_differences', 'test_paired_conditions.PairedConditionTests.test_isolated_entry_cli_uses_exact_pins_and_retains_reservation', 'test_paired_conditions.PairedConditionTests.test_missing_second_campaign_record_refuses_before_target', 'test_paired_conditions.PairedConditionTests.test_names_journal_stat_and_capture_replay_have_no_filesystem_fallback', 'test_paired_conditions.PairedConditionTests.test_other22_training_refuses_zero_training_pair_before_target', 'test_paired_conditions.PairedConditionTests.test_post_admission_operand_mutation_replays_captured_bytes', 'test_paired_conditions.PairedConditionTests.test_reference_dictionary_order_does_not_change_scoring', 'test_paired_conditions.PairedConditionTests.test_reused_context_ids_refuse_before_target', 'test_paired_conditions.PairedConditionTests.test_reversing_conditions_reverses_signed_differences', 'test_paired_conditions.PairedConditionTests.test_uncaptured_or_reordered_replay_access_is_refused', 'test_paired_conditions.PairedConditionTests.test_undefined_metrics_retain_all_people_and_withhold_partial_mean']
+          require(len(pins) == len({p['path'] for p in pins}) == 18 and sum(p['bytes'] for p in pins) == 247784, 'exact18 source closure required')
+          started, stopped, successful = [], [], []
+          authenticated, postauthenticated = [], []
+          result = None
+          stage = 'preflight'
+          origin = time.monotonic()
+          outcome = {'schema': 'neural010-hosted-strict20-outcome-v1', 'expected_count': 20, 'source_file_count': 18,
+                     'execution_success': False, 'scientific_qualification': False, 'native_understanding_established': False}
+
+
+          def authenticate(destination):
+              bodies = {}
+              for pin in pins:
+                  path = root / pin['path']
+                  require(not path.is_symlink() and all(not p.is_symlink() for p in path.parents if p.is_relative_to(root)), pin['path'])
+                  before = path.lstat()
+                  require(stat.S_ISREG(before.st_mode) and before.st_nlink == 1 and before.st_size == pin['bytes'], pin['path'])
+                  with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK), 'rb') as stream:
+                      opened = os.fstat(stream.fileno())
+                      raw = stream.read(pin['bytes'] + 1)
+                      after = os.fstat(stream.fileno())
+                  final = path.lstat()
+                  fields = ('st_dev', 'st_ino', 'st_mode', 'st_nlink', 'st_size', 'st_mtime_ns', 'st_ctime_ns')
+                  require(all(getattr(before, f) == getattr(opened, f) == getattr(after, f) == getattr(final, f) for f in fields), pin['path'])
+                  require(len(raw) == pin['bytes'] and hashlib.sha256(raw).hexdigest() == pin['sha256'], pin['path'])
+                  bodies[path.relative_to(package).as_posix()] = raw
+                  destination.append(pin['path'])
+              actual_members = set()
+              for directory, dirs, names in os.walk(package, followlinks=False):
+                  for name in dirs:
+                      p = Path(directory) / name
+                      require(not p.is_symlink() and stat.S_ISDIR(p.lstat().st_mode), 'ordinary package directory required')
+                  actual_members.update((Path(directory) / name).relative_to(root).as_posix() for name in names)
+              require(actual_members == {p['path'] for p in pins}, 'exact18-member package namespace required')
+              return bodies
+
+
+          def flatten(suite):
+              if isinstance(suite, unittest.TestSuite):
+                  return [identifier for child_suite in suite for identifier in flatten(child_suite)]
+              return [suite.id()]
+
+
+          class CompleteResult(unittest.TextTestResult):
+              def startTest(self, test):
+                  started.append(test.id())
+                  super().startTest(test)
+
+              def stopTest(self, test):
+                  stopped.append(test.id())
+                  super().stopTest(test)
+
+              def addSuccess(self, test):
+                  successful.append(test.id())
+                  super().addSuccess(test)
+
+              def addSkip(self, test, reason):
+                  super().addSkip(test, reason)
+                  self.stop()
+
+              def addExpectedFailure(self, test, error):
+                  super().addExpectedFailure(test, error)
+                  self.stop()
+
+
+          try:
+              require(sys.implementation.name == 'cpython' and sys.version_info[:3] == (3, 11, 18), 'existing CPython3.11.18 stdlib profile required')
+              require(sys.flags.isolated and sys.flags.no_site and sys.dont_write_bytecode, 'isolated stdlib bootstrap required')
+              available = shutil.disk_usage(parent).free
+              outcome['available_disk_bytes_before_generation'] = available
+              outcome['required_artifact_bytes'] = 201326592
+              require(available >= 201326592, 'at least192MiB available disk required before case generation')
+              bodies = authenticate(authenticated)
+              # Reuse the accepted full20 command's captured-byte stdlib module bootstrap.
+              # Only the test harness creates the previously nonexistent retained child.
+              for module_name, relative in (('fixture_builder', 'tests/fixture_builder.py'), ('test_paired_conditions', 'tests/test_paired_conditions.py')):
+                  require(module_name not in sys.modules, 'fresh exact test module name required')
+                  module = types.ModuleType(module_name)
+                  module.__file__, module.__package__ = str(package / relative), ''
+                  sys.modules[module_name] = module
+                  exec(compile(bodies[relative], module.__file__, 'exec'), module.__dict__)
+              stage = 'roster'
+              loader = unittest.TestLoader()
+              suite = loader.loadTestsFromModule(sys.modules['test_paired_conditions'])
+              discovered = flatten(suite)
+              require(not loader.errors and discovered == expected and len(discovered) == len(set(discovered)) == suite.countTestCases() == 20, 'exact20 ordered unique IDs required; empty discovery forbidden')
+              outcome['discovered_ids'] = discovered
+              stage = 'tests'
+              result = unittest.TextTestRunner(stream=sys.stderr, verbosity=2, failfast=True, resultclass=CompleteResult).run(suite)
+              stage = 'postauthentication'
+              authenticate(postauthenticated)
+              require(result.testsRun == 20 and started == stopped == successful == expected, 'all20 ordered IDs must start, stop and succeed')
+              require(result.wasSuccessful() and not any([result.failures, result.errors, result.skipped, result.expectedFailures, result.unexpectedSuccesses]), 'zero failures/errors/skips/expected failures/unexpected successes required')
+              outcome['execution_success'] = True
+              stage = 'complete'
+          except BaseException as error:
+              outcome['exception_type'] = type(error).__name__
+              outcome['exception_message'] = str(error)[:1024]
+          finally:
+              outcome.update({'stage': stage, 'started_ids': started, 'stopped_ids': stopped, 'successful_ids': successful,
+                              'authenticated_paths': authenticated, 'postauthenticated_paths': postauthenticated,
+                              'elapsed_seconds': time.monotonic() - origin, 'tests_run': result.testsRun if result is not None else 0,
+                              'failures': len(result.failures) if result is not None else 0,
+                              'errors': len(result.errors) if result is not None else 0,
+                              'skips': len(result.skipped) if result is not None else 0,
+                              'expected_failures': len(result.expectedFailures) if result is not None else 0,
+                              'unexpected_successes': len(result.unexpectedSuccesses) if result is not None else 0})
+              serialized = json.dumps(outcome, sort_keys=True, allow_nan=False) + '\n'
+              with (parent / 'CI_OUTCOME.json').open('x', encoding='utf-8') as stream:
+                  stream.write(serialized)
+              print(serialized, end='', flush=True)
+          sys.exit(0 if outcome['execution_success'] else 2)
+          PY_N010_PAIRED
       - name: Check NoMAD candidate-role generated comparisons
         if: (matrix.group == 'numpy') && matrix.shard == 0
         shell: bash
@@ -2726,6 +2875,7 @@ jobs:
             ${{ runner.temp }}/language-serialization-${{ github.run_id }}-${{ github.run_attempt }}/RESULT.json
             ${{ runner.temp }}/language-serialization-${{ github.run_id }}-${{ github.run_attempt }}/TEST_LOG.txt
             ${{ runner.temp }}/nomad-candidate-generated.*/
+            ${{ runner.temp }}/neural010-paired-generated.*/
       - name: Preserve Meg generated fixtures
         if: always() && matrix.group == 'torch-cpu'
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02

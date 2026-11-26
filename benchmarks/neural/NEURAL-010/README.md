@@ -48,6 +48,8 @@ No legacy runtime declaration is linked to this registered ID. The current imple
   Scope: Reviewed event detection, preparation and finite event-campaign source. The accepted finite implementation and current task amendment remain distinct from optional interfaces, participant/model execution, admission and scientific outcomes.
 - [Event campaign v1](implementations/event-campaign-v1) — Reviewed source component.
   Scope: Reviewed event detection, preparation and finite event-campaign source. The accepted finite implementation and current task amendment remain distinct from optional interfaces, participant/model execution, admission and scientific outcomes.
+- [Paired condition comparison v1](implementations/paired-condition-comparison-v1) — Reviewed source component.
+  Scope: Operator-only descriptive paired comparison of completed zero-training typed-viewer and frozen-program campaigns over the same 686 records and 23 biological people. Preserves the original nine-file runtime closure, absolute outcomes, per-person signed contrasts and undefined support. Pixel versus numerical representation and tool-policy differences remain confounded; no isolated causal tools effect, participant/model execution, clinical validity, superiority, runtime admission or scientific qualification is established.
 - [Preparation compatibility v1](implementations/preparation-compatibility-v1) — Reviewed source component.
   Scope: Reviewed event detection, preparation and finite event-campaign source. The accepted finite implementation and current task amendment remain distinct from optional interfaces, participant/model execution, admission and scientific outcomes.
 - [Single record control v1](implementations/single-record-control-v1) — Reviewed source component.

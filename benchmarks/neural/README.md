@@ -23,7 +23,7 @@ Each task folder contains its authoritative `task.json` and explicitly assigned 
 | [NEURAL-007](NEURAL-007/README.md) | Whole-night five-stage sleep scoring | 19 | [manifest](NEURAL-007/implementations/registered-runtime/manifest.json) |
 | [NEURAL-008](NEURAL-008/README.md) | EOG information beyond EEG and sleep timing | 6 | [manifest](NEURAL-008/implementations/registered-runtime/manifest.json) |
 | [NEURAL-009](NEURAL-009/README.md) | Pediatric continuous seizure-event detection | 7 | not linked |
-| [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 7 | not linked |
+| [NEURAL-010](NEURAL-010/README.md) | Seizure false alarms and montage confounding | 8 | not linked |
 | [NEURAL-011](NEURAL-011/README.md) | Adult clinical seizure-event detection | 3 | not linked |
 | [NEURAL-012](NEURAL-012/README.md) | Cross-cohort seizure robustness | 3 | [manifest](NEURAL-012/implementations/registered-runtime/manifest.json) |
 | [NEURAL-013](NEURAL-013/README.md) | Attempted-speech phoneme-sequence decoding | 2 | [manifest](NEURAL-013/implementations/registered-runtime/manifest.json) |
