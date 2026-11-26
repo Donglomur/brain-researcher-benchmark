@@ -159,6 +159,46 @@ class PairedReportTests(unittest.TestCase):
         p = plan(); row = attempt(p["tasks"][0], REPORT.ARMS[0]); row["improvement"]["candidate"] = 0
         with self.assertRaises(ValueError): REPORT.summarize(p, records(p, [row]))
 
+    def summarize_candidate_values(self, values, direction):
+        p = plan(); task = p["tasks"][0]
+        task.update(direction=direction, replicates=[f"seed{i}" for i in range(len(values))])
+        rows = []
+        for replicate, value in zip(task["replicates"], values):
+            rows.extend([attempt(task, REPORT.ARMS[0], candidate=0.0, baseline=0.0, replicate=replicate),
+                         attempt(task, REPORT.ARMS[1], candidate=value, baseline=0.0, replicate=replicate)])
+        report = REPORT.summarize(p, records(p, rows))
+        self.assertEqual(report["assigned_pairs"], len(values))
+        self.assertEqual(report["records_present"], 2 * len(values))
+        result = report["tasks"][0]
+        self.assertEqual(result["improvement_pairs_scored"], len(values))
+        self.assertEqual(len(result["assigned_pair_records"]), len(values))
+        sign = 1 if direction == "maximize" else -1
+        self.assertEqual([pair["code_minus_no_code_gain"] for pair in result["improvement_pairs"]],
+                         [sign * value for value in values])
+        return result["conditional_mean_code_minus_no_code_gain"]
+
+    def test_complete_pair_mean_preserves_identical_finite_extremes(self):
+        minimum = float.fromhex("0x0.0000000000001p-1022")
+        maximum = float.fromhex("0x1.fffffffffffffp+1023")
+        for value, repeated_count in ((minimum, 2), (maximum, 3)):
+            for count in (1, repeated_count):
+                for direction, sign in (("maximize", 1), ("minimize", -1)):
+                    with self.subTest(value=value, count=count, direction=direction):
+                        mean = self.summarize_candidate_values([value] * count, direction)
+                        self.assertEqual(mean, sign * value)
+
+    def test_complete_pair_mean_preserves_cancellation_and_ordinary_orientation(self):
+        minimum = float.fromhex("0x0.0000000000001p-1022")
+        maximum = float.fromhex("0x1.fffffffffffffp+1023")
+        cases = (([maximum, 1.0, -maximum], 1.0 / 3.0),
+                 ([maximum, minimum, -maximum, minimum, minimum], minimum),
+                 ([-2.0, 0.0, 5.0], 1.0))
+        for values, expected in cases:
+            for direction, sign in (("maximize", 1), ("minimize", -1)):
+                with self.subTest(values=values, direction=direction):
+                    mean = self.summarize_candidate_values(values, direction)
+                    self.assertEqual(mean, sign * expected)
+
     def test_empty_or_duplicate_roster_rejected(self):
         p = plan(); p["tasks"] = []
         with self.assertRaises(ValueError): REPORT.summarize(p, records(p, []))
