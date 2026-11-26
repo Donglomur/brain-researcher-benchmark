@@ -18,8 +18,8 @@ The first commit records the reviewed immutable package; the second adds its
 complete registration, CI and documentation, with `source_commit` and linked
 evidence naming that real first commit. Keep both commits private until the
 complete change is reviewed, then push them together. This selected exception
-currently covers the NEURAL-031 numerical-observation and NEURAL-077 adaptive
-image-interval reference additions; it does not permit an intermediate PR or
+currently covers the NEURAL-031 numerical-observation and direct-provider
+capabilities and the NEURAL-077 adaptive image-interval reference addition; it does not permit an intermediate PR or
 relax any serial review, identity or check gate.
 
 Independent work can be prepared in parallel. In this serial delivery queue, keep
