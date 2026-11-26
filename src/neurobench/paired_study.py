@@ -9,6 +9,7 @@ from collections import Counter
 import json
 import math
 from pathlib import Path
+import statistics
 import sys
 
 ARMS = ("paper_and_data", "paper_data_official_code")
@@ -50,8 +51,8 @@ def number(value):
 
 def mean(values):
     require(bool(values), "Cannot average an empty set")
-    # Dividing first avoids overflow from a finite mean of large values.
-    return number(math.fsum(value / len(values) for value in values))
+    # Accumulate exactly before rounding to retain representable finite means.
+    return number(statistics.mean(values))
 
 
 def parse_json(body):
