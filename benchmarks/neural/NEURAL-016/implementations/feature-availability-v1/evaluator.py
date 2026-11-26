@@ -39,7 +39,8 @@ def validate_availability(protocol, raw: bytes, expected_sha256: str):
 
     support_seconds and available_after_seconds are relative to the feature's
     anchor; feature_lags_seconds offsets that anchor from each protocol row time.
-    Support is a conservative envelope over ALL fitting and evaluation rows.
+    Every declared row must be held out exactly once, including rows also used
+    for fitting other folds. Support conservatively covers every declared row.
     Actual extractor conformance remains an independent operator obligation.
     """
     bound.sha256(expected_sha256, "operator feature manifest")
@@ -57,6 +58,10 @@ def validate_availability(protocol, raw: bytes, expected_sha256: str):
     require(manifest["coverage"] == "all_declared_fit_and_evaluation_rows",
             "feature envelope must cover every declared row")
     context = bound.base.validate_protocol(protocol)
+    # The canonical task scores every declared row and included recording.
+    # Fit coverage alone must not hide a recording, block or electrode from scoring.
+    require(context["evaluation_ids"] == set(context["rows"]),
+            "every declared row must be evaluated; fit-only inclusion is forbidden")
     roles = {}
     for role, names in context["recipe"]["nuisance_features"].items():
         roles.update((name, role) for name in names)
@@ -134,7 +139,8 @@ def main():
         validate_availability(protocol, raw["operator_feature_manifest"], args.expected_feature_manifest_sha256)
         raw["operator_nuisance"] = args.operator_nuisance.read_bytes()
         bound.bound_nuisance(raw["operator_nuisance"], args.expected_nuisance_sha256)
-        # Reject feature support and comparator substitution before private targets.
+        # Reject incomplete evaluation/feature support and comparator substitution
+        # before private targets. Support validation also precedes candidate reads.
         raw["candidate"] = args.candidate.read_bytes()
         raw["private_targets"] = args.private_targets.read_bytes()
         result = evaluate(protocol, bound.strict_json(raw["private_targets"]), bound.strict_json(raw["candidate"]),

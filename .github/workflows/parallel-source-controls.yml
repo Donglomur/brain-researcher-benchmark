@@ -121,7 +121,7 @@ jobs:
         run: |
           python3 -I -S -B - <<'PY'
           import hashlib, os, stat
-          pins = [{'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 29993, 'sha256': 'c60f2db58bfd156a9a83c72eb35a8959d67763af70932f833ef98a2083b38e36'}, {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 51098, 'sha256': '073f920a233d8853ceb1e2143c63a2a07692bae242937a1eafa743fbd8ce3141'}, {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 640216, 'sha256': '11e39f428dff0586c4884aa544cec61f48870c9c63d7d75dc2070bcf95542c1e'}]
+          pins = [{'path': 'scripts/maintenance/run_parallel_source_controls.py', 'bytes': 29993, 'sha256': 'c60f2db58bfd156a9a83c72eb35a8959d67763af70932f833ef98a2083b38e36'}, {'path': 'tests/maintenance/test_parallel_source_controls.py', 'bytes': 51098, 'sha256': '073f920a233d8853ceb1e2143c63a2a07692bae242937a1eafa743fbd8ce3141'}, {'path': 'benchmarks/integrity/parallel-source-controls.v1.json', 'bytes': 640216, 'sha256': 'e4fb7f964d6ef9666ae5ec4cf1076b8068469f884614e17b3afe1a9f24e68489'}]
           for pin in pins:
               path, size, digest = pin['path'], pin['bytes'], pin['sha256']
               with os.fdopen(os.open(path, os.O_RDONLY | os.O_NOFOLLOW), "rb") as stream:
