@@ -130,7 +130,12 @@ Each command preserves `operator.json`, the exact dispatch, stdout/stderr and th
 native adapter's source capture, submission capture, result and stage/cleanup
 receipts under `native/`. Preserve failed runs and use a new destination for every
 attempt. Exit 0 indicates completed operation, 2 a native-rejected submission and
-3 an operator/source/input/runtime/scoring failure. Outputs can contain private
+3 an operator/source/input/runtime/scoring failure. After a child returns,
+`operator.json` records its exact `child_returncode`, including negative signal
+codes. Nonzero prepare/programme/sleep-audit exits map to 3; validate/grade retain
+native 0/2/3 and map unexpected exits to 3. A missing or invalid native result can
+still make the operation fail with 3 regardless of the child return code.
+Outputs can contain private
 aggregate scores and operator paths: retain them outside public Git and participant
 access. Filesystem permissions prevent accidental exposure/overwrite; they are not
 a security boundary against the trusted host owner.
