@@ -4,6 +4,7 @@ import importlib.util
 import io
 import json
 import os
+import re
 from pathlib import Path
 import sys
 import signal
@@ -376,6 +377,234 @@ class AggregateControls(unittest.TestCase):
                     launcher.run(root,manifest,'stdlib',output)
                 self.assertEqual(execute.call_count,1)
                 self.assertFalse((output/'results.json').exists())
+
+
+class ShardControls(unittest.TestCase):
+    """Static inventory checks and generated controls with inert command execution."""
+
+    def fixture(self, root):
+        directory = root/'benchmarks/integrity'
+        directory.mkdir(parents=True)
+        rows, pins = [], []
+        for index, task in enumerate(('task-a', 'task-a', 'task-b', 'task-c', None, None)):
+            name = 'control%d.py' % index
+            raw = b'raise AssertionError("generated command must be mocked")\n'
+            (root/name).write_bytes(raw)
+            pins.append({'path':name, 'bytes':len(raw), 'sha256':hashlib.sha256(raw).hexdigest()})
+            rows.append({'id':'control%d' % index, 'task_id':task, 'group':'stdlib',
+                         'runner':'unittest', 'expected_tests':1, 'expected_skips':0,
+                         'argv':['${PYTHON}', '-I', '-S', '-B', name], 'cwd':'.',
+                         'test_paths':[name], 'fixtures':[], 'timeout_seconds':5})
+        document = {'schema':'parallel-source-controls/v1',
+                    'groups':{'stdlib':{'python':sys.version.split()[0], 'packages':{}}},
+                    'commands':rows, 'fixtures':{}}
+        manifest = directory/'commands.json'
+        manifest.write_text(json.dumps(document))
+        (directory/'source-ownership.json').write_text(json.dumps({'files':pins}))
+        return manifest, document
+
+    def execute(self, argv, cwd, environment, log, timeout):
+        # No benchmark or generated command is imported or spawned by this class.
+        text = 'Ran 1 test in 0.001s\n\nOK\n'
+        log.write_text(text)
+        return text, 0.001
+
+    def test_default_selection_is_complete_and_does_not_mutate_document(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp); root=base/'repo'; root.mkdir()
+            manifest, document=self.fixture(root)
+            before=json.dumps(document, sort_keys=True)
+            self.assertEqual(launcher.shard_commands(document['commands']), document['commands'])
+            with patch.object(launcher,'run_command',side_effect=self.execute) as execute:
+                completed=launcher.run(root,manifest,'stdlib',base/'results')
+            self.assertEqual(execute.call_count,6)
+            self.assertEqual([r['id'] for r in completed],[r['id'] for r in document['commands']])
+            self.assertEqual(json.dumps(document,sort_keys=True),before)
+            receipt=json.loads((base/'results/results.json').read_text())
+            self.assertEqual(receipt['shard']['index'],0)
+            self.assertEqual(receipt['shard']['count'],1)
+            self.assertEqual(receipt['shard']['assigned_ids'],[r['id'] for r in completed])
+
+    def test_task_units_null_tasks_and_original_order_are_preserved(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); _,document=self.fixture(root); rows=document['commands']
+            left=launcher.shard_commands(rows,0,2); right=launcher.shard_commands(rows,1,2)
+            self.assertEqual([r['id'] for r in left],['control0','control1','control4'])
+            self.assertEqual([r['id'] for r in right],['control2','control3','control5'])
+            for index in range(2):
+                self.assertEqual(launcher.shard_commands(rows,index,2),
+                                 launcher.shard_commands(json.loads(json.dumps(rows)),index,2))
+
+    def test_current_matrix_is_exhaustive_disjoint_and_uses_exact_interpreters(self):
+        document=json.loads((ROOT/'benchmarks/integrity/parallel-source-controls.v1.json').read_text())
+        before=json.dumps(document,sort_keys=True)
+        workflow=(ROOT/'.github/workflows/parallel-source-controls.yml').read_text()
+        section=workflow.split('        include:\n',1)[1].split('    env:\n',1)[0]
+        pattern=(r"          - group: ([a-z0-9-]+)\n"
+                 r"            python: '([0-9.]+)'\n"
+                 r"            shard: ([0-9]+)\n"
+                 r"            shards: ([0-9]+)\n")
+        matches=list(re.finditer(pattern,section))
+        self.assertEqual(''.join(m.group(0) for m in matches),section)
+        matrix=[(m[1],m[2],int(m[3]),int(m[4])) for m in matches]
+        self.assertEqual(len(matrix),20)
+        self.assertEqual({g for g,_,_,_ in matrix},set(document['groups']))
+        all_ids=[]; total_tests=0
+        for group,profile in document['groups'].items():
+            rows=[r for r in document['commands'] if r['group']==group]
+            count={'stdlib-a':2,'stdlib-b':2,'numpy':4}.get(group,1)
+            group_matrix=[(python,index,n) for g,python,index,n in matrix if g==group]
+            self.assertEqual(group_matrix,[(profile['python'],index,count) for index in range(count)])
+            seen=[]; tasks={}
+            for index in range(count):
+                selected=launcher.shard_commands(rows,index,count)
+                self.assertTrue(selected)
+                ids=[r['id'] for r in selected]
+                self.assertEqual(ids,[r['id'] for r in rows if r['id'] in ids])
+                for row in selected:
+                    key=('task',row['task_id']) if row.get('task_id') is not None else ('command',row['id'])
+                    self.assertEqual(tasks.setdefault(key,index),index)
+                seen.extend(ids)
+                total_tests+=sum(r['expected_tests'] for r in selected)
+            self.assertEqual(len(seen),len(set(seen)))
+            self.assertEqual(set(seen),{r['id'] for r in rows})
+            all_ids.extend(seen)
+        self.assertEqual(len(all_ids),len(set(all_ids)))
+        self.assertEqual(set(all_ids),{r['id'] for r in document['commands']})
+        self.assertEqual(total_tests,sum(r['expected_tests'] for r in document['commands']))
+        self.assertEqual(json.dumps(document,sort_keys=True),before)
+
+    def test_standalone_checks_are_shard_zero_and_artifacts_have_unique_names(self):
+        workflow=(ROOT/'.github/workflows/parallel-source-controls.yml').read_text()
+        blocks=re.split(r'(?=^      - (?:name:|uses:))',workflow,flags=re.M)
+        direct=[b for b in blocks if re.match(r'      - name: [\" ]*(?:Check |Verify launcher)',b)]
+        self.assertGreater(len(direct),100)
+        for block in direct:
+            with self.subTest(step=block.splitlines()[0]):
+                condition=next(line for line in block.splitlines() if line.startswith('        if:'))
+                self.assertTrue(condition.endswith(' && matrix.shard == 0'))
+        self.assertIn('name: parallel-source-${{ matrix.group }}-${{ matrix.shard }}-',workflow)
+        self.assertIn('name: alpha-public-modes-${{ matrix.shard }}-',workflow)
+        self.assertIn('if: always() && matrix.group == \'stdlib-b\'',workflow)
+        self.assertIn('parallel-source-${{ matrix.group }}-${{ matrix.shard }}-',workflow)
+        self.assertIn('parallel-fixtures-${{ matrix.group }}-${{ matrix.shard }}-',workflow)
+
+    def test_invalid_shard_coordinates_refuse_before_launch_or_output(self):
+        bad=((0,0),(0,5),(-1,2),(2,2),(True,2),(0,True),(0,2.0),('0',2))
+        for index,count in bad:
+            with self.subTest(index=index,count=count), tempfile.TemporaryDirectory() as tmp:
+                base=Path(tmp); root=base/'repo'; root.mkdir(); manifest,_=self.fixture(root)
+                with patch.object(launcher,'run_command') as execute, self.assertRaises(ValueError):
+                    launcher.run(root,manifest,'stdlib',base/'results',shard_index=index,shard_count=count)
+                execute.assert_not_called(); self.assertFalse((base/'results').exists())
+
+    def test_empty_shard_refuses_every_index_before_launch(self):
+        for index in (0,1):
+            with self.subTest(index=index), tempfile.TemporaryDirectory() as tmp:
+                base=Path(tmp); root=base/'repo'; root.mkdir(); manifest,document=self.fixture(root)
+                for row in document['commands']: row['task_id']='one-indivisible-task'
+                manifest.write_text(json.dumps(document))
+                with patch.object(launcher,'run_command') as execute, self.assertRaisesRegex(ValueError,'empty command shard'):
+                    launcher.run(root,manifest,'stdlib',base/'results',shard_index=index,shard_count=2)
+                execute.assert_not_called(); self.assertFalse((base/'results').exists())
+
+    def test_bad_unassigned_source_pin_refuses_every_launch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp); root=base/'repo'; root.mkdir(); manifest,document=self.fixture(root)
+            self.assertNotIn('control2',[r['id'] for r in launcher.shard_commands(document['commands'],0,2)])
+            (root/'control2.py').write_text('changed source')
+            with patch.object(launcher,'run_command') as execute, self.assertRaisesRegex(ValueError,'source (size|pin) mismatch'):
+                launcher.run(root,manifest,'stdlib',base/'results',shard_index=0,shard_count=2)
+            execute.assert_not_called(); self.assertFalse((base/'results').exists())
+
+    def test_unassigned_validation_cwd_and_placeholder_still_refuse(self):
+        for defect in ('skip','environment','cwd','placeholder'):
+            with self.subTest(defect=defect), tempfile.TemporaryDirectory() as tmp:
+                base=Path(tmp); root=base/'repo'; root.mkdir(); manifest,document=self.fixture(root)
+                row=document['commands'][2]
+                if defect=='skip': row['expected_skips']=1
+                elif defect=='environment': row['environment']={'OPENBLAS_NUM_THREADS':'2'}
+                elif defect=='cwd': row['cwd']='absent'
+                else: row['argv'].append('${UNDECLARED}')
+                manifest.write_text(json.dumps(document))
+                with patch.object(launcher,'run_command') as execute, self.assertRaises(ValueError):
+                    launcher.run(root,manifest,'stdlib',base/'results',shard_index=0,shard_count=2)
+                execute.assert_not_called(); self.assertFalse((base/'results').exists())
+
+    def test_unassigned_fixture_remains_authenticated(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp); root=base/'repo'; root.mkdir(); manifest,document=self.fixture(root)
+            document['fixtures']['source']={'filename':'source.py','bytes':4,'sha256':hashlib.sha256(b'good').hexdigest()}
+            document['commands'][2]['fixtures']=['source']
+            document['commands'][2]['argv'].append('${FIXTURE:source}')
+            manifest.write_text(json.dumps(document)); fixtures=base/'fixtures'; fixtures.mkdir()
+            (fixtures/'source.py').write_bytes(b'evil')
+            with patch.object(launcher,'run_command') as execute, self.assertRaisesRegex(ValueError,'source pin mismatch'):
+                launcher.run(root,manifest,'stdlib',base/'results',fixtures,shard_index=0,shard_count=2)
+            execute.assert_not_called(); self.assertFalse((base/'results').exists())
+            (fixtures/'source.py').write_bytes(b'good')
+            with patch.object(launcher,'run_command',side_effect=self.execute) as execute:
+                launcher.run(root,manifest,'stdlib',base/'valid',fixtures,shard_index=0,shard_count=2)
+            self.assertEqual(execute.call_count,3)
+
+    def test_failed_skipped_and_wrong_count_commands_keep_later_results(self):
+        failures=(launcher.ControlFailure('process exit 4'),
+                  'Ran 1 test in 0s\nOK (skipped=1)\n', 'Ran 2 tests in 0s\nOK\n')
+        for problem in failures:
+            with self.subTest(problem=str(problem)), tempfile.TemporaryDirectory() as tmp:
+                base=Path(tmp); root=base/'repo'; root.mkdir(); manifest,document=self.fixture(root)
+                calls=[]
+                def execute(argv,cwd,environment,log,timeout):
+                    calls.append(log.stem)
+                    if log.stem=='control0':
+                        log.write_text(str(problem))
+                        if isinstance(problem,Exception): raise problem
+                        return problem,0.001
+                    return self.execute(argv,cwd,environment,log,timeout)
+                with patch.object(launcher,'run_command',side_effect=execute), self.assertRaisesRegex(ValueError,'1 of 3'):
+                    launcher.run(root,manifest,'stdlib',base/'results',shard_index=0,shard_count=2)
+                receipt=json.loads((base/'results/results.json').read_text())
+                self.assertEqual(calls,['control0','control1','control4'])
+                self.assertEqual(receipt['attempted'],3); self.assertEqual(receipt['status'],'failed')
+                self.assertEqual([r['id'] for r in receipt['failed']],['control0'])
+                self.assertEqual([r['id'] for r in receipt['completed']],['control1','control4'])
+                self.assertEqual(sorted(r['id'] for r in receipt['failed']+receipt['completed']),sorted(calls))
+                self.assertEqual(len(list((base/'results').glob('*.log'))),3)
+
+    def test_shard_receipts_bind_consumed_manifest_and_artifact_substitution(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            base=Path(tmp); root=base/'repo'; root.mkdir(); manifest,document=self.fixture(root)
+            document['commands'][4]['argv'].append('${ARTIFACT_DIR}')
+            document['commands'][4]['environment']={'CONTROL_OUTPUT':'${ARTIFACT_DIR}'}
+            manifest.write_text(json.dumps(document)); raw=manifest.read_bytes(); seen=[]
+            def execute(argv,cwd,environment,log,timeout):
+                if log.stem=='control4':
+                    expected=str((log.parent/'control4.artifacts').resolve())
+                    self.assertEqual(argv[-1],expected); self.assertEqual(environment['CONTROL_OUTPUT'],expected)
+                    Path(expected).mkdir()
+                seen.append(log.stem)
+                return self.execute(argv,cwd,environment,log,timeout)
+            for index in range(2):
+                output=base/('results-%d' % index)
+                with patch.object(launcher,'run_command',side_effect=execute):
+                    launcher.run(root,manifest,'stdlib',output,shard_index=index,shard_count=2)
+                receipt=json.loads((output/'results.json').read_text())
+                self.assertEqual(receipt['manifest'],{'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()})
+                self.assertEqual(receipt['shard']['index'],index); self.assertEqual(receipt['shard']['count'],2)
+                self.assertEqual(receipt['shard']['group_commands'],6)
+                self.assertEqual(receipt['shard']['expected_tests'],3)
+                self.assertEqual(receipt['shard']['assigned_ids'],[r['id'] for r in receipt['completed']])
+                self.assertEqual(receipt['failed'],[])
+            self.assertEqual(len(seen),len(set(seen))); self.assertEqual(set(seen),{r['id'] for r in document['commands']})
+
+    def test_invalid_prepare_coordinates_refuse_before_acquisition(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); manifest,_=self.fixture(root)
+            args=['launcher','--root',str(root),'--manifest',str(manifest),'--group','stdlib',
+                  '--prepare-fixtures','--fixtures',str(root.parent/'unused'),'--shard-count','0']
+            with patch.object(sys,'argv',args), patch.object(launcher,'prepare_fixtures') as acquire, patch.object(sys,'stderr',io.StringIO()):
+                self.assertEqual(launcher.main(),1)
+            acquire.assert_not_called()
 
 
 class Response:
