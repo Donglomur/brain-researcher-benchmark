@@ -6,8 +6,8 @@
   "change": "Replace eager full-population pixel/feature materialization with identity-aligned individual NPY reads, one image and sixteen feature rows at a time; preserve all subject distractors and all eight metric outputs.",
   "predecessor": {
     "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/evaluator.py",
-    "sha256": "4b2cccbcc23f0a28bdacf57dc9cf039a523c47130e69cc826dc21a1080a52615",
-    "role": "Retained imported arithmetic and protocol validation; no historical file edits."
+    "sha256": "7f4410802708613e27afd20fb0ccb4f18bcbd696ce3b1628eb32071110d41eaa",
+    "role": "Current imported arithmetic and protocol validation; prior source binding is retained in correlation_normalization_repair."
   },
   "source": {
     "paper": "https://www.ecva.net/papers/eccv_2024/papers_ECCV/papers/06746.pdf",
@@ -135,5 +135,16 @@
     },
     "review": "One ordinary read-only review accepted after normalization-layout and bounded-lifetime repairs; reviewer did not rerun tests.",
     "limits": "Strict ties and all-distractor arithmetic only. No source-data score, historical native numerical equivalence, native runtime or scientific qualification is established. Row-wise products add at most one feature-block temporary and may change runtime; full-population timing is unmeasured."
+  },
+  "correlation_normalization_repair": {
+    "previous_predecessor": {
+      "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/evaluator.py",
+      "sha256": "4b2cccbcc23f0a28bdacf57dc9cf039a523c47130e69cc826dc21a1080a52615",
+      "role": "Retained imported arithmetic and protocol validation; no historical file edits."
+    },
+    "defect": "Scaling raw large-offset features before centering can distort Pearson correlation and award success to equivalent-feature distractors.",
+    "repair": "Subtract each row anchor before scaling and centering. Only rows whose finite extremes overflow subtraction use common half-differences. Constant rows still fail; strict comparison and full distractor support are unchanged.",
+    "regression_path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/tests/test_stable_normalization.py",
+    "scope": "Generated numeric controls for shared arithmetic and bounded identification; no native score, historical numerical parity, author reproduction or improvement qualification."
   }
 }
