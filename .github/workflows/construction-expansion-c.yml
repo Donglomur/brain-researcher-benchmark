@@ -539,8 +539,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 14211,
-                  "sha256": "4b2cccbcc23f0a28bdacf57dc9cf039a523c47130e69cc826dc21a1080a52615"
+                  "bytes": 14728,
+                  "sha256": "7f4410802708613e27afd20fb0ccb4f18bcbd696ce3b1628eb32071110d41eaa"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/provenance.json",
@@ -656,6 +656,16 @@ jobs:
                   "path": "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1/tests/test_evaluator.py",
                   "bytes": 8981,
                   "sha256": "32067ef8b92bc29bc73d02f50ec423c8e73af3b2f31b6c5750957320c9eccf6b"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/tests/test_stable_normalization.py",
+                  "bytes": 4292,
+                  "sha256": "939710becc2fc91105d9d687bd7e08490b05a4328c0e321e97d5fd568fef400c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/bounded-panel-v2/evaluator.py",
+                  "bytes": 14308,
+                  "sha256": "071a9bd39fe3b9467317b9e6ba3e4ef19da353e4c1710e9b4d9d15b5c1e2d77f"
               }
           ]
           packages = [
@@ -668,8 +678,8 @@ jobs:
               "benchmarks/paper/PAPER-paper-method-replacement-011/implementations/initial-evaluator-v1",
               "benchmarks/paper/PAPER-paper-signal-add-012/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 55 > 0
-          assert sum(row['bytes'] for row in rows) == 878486 <= 33554432
+          assert len(rows) == 57 > 0
+          assert sum(row['bytes'] for row in rows) == 897603 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -712,7 +722,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 878486,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 897603,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -2764,8 +2774,8 @@ jobs:
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/evaluator.py",
-                  "bytes": 14211,
-                  "sha256": "4b2cccbcc23f0a28bdacf57dc9cf039a523c47130e69cc826dc21a1080a52615"
+                  "bytes": 14728,
+                  "sha256": "7f4410802708613e27afd20fb0ccb4f18bcbd696ce3b1628eb32071110d41eaa"
               },
               {
                   "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/provenance.json",
@@ -2781,13 +2791,23 @@ jobs:
                   "path": "benchmarks/paper/PAPER-paper-method-043/historical/task.pre-improvement.v1.json",
                   "bytes": 39845,
                   "sha256": "02f3c335df986b9276f0026fff9ffcd1d16a410be55372299a19ca93e87468af"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1/tests/test_stable_normalization.py",
+                  "bytes": 4292,
+                  "sha256": "939710becc2fc91105d9d687bd7e08490b05a4328c0e321e97d5fd568fef400c"
+              },
+              {
+                  "path": "benchmarks/paper/PAPER-paper-method-043/implementations/bounded-panel-v2/evaluator.py",
+                  "bytes": 14308,
+                  "sha256": "071a9bd39fe3b9467317b9e6ba3e4ef19da353e4c1710e9b4d9d15b5c1e2d77f"
               }
           ]
           packages = [
               "benchmarks/paper/PAPER-paper-method-043/implementations/initial-evaluator-v1"
           ]
-          assert len(rows) == 6 > 0
-          assert sum(row['bytes'] for row in rows) == 76816 <= 33554432
+          assert len(rows) == 8 > 0
+          assert sum(row['bytes'] for row in rows) == 95933 <= 33554432
           expected = {}
           def path_for(relative, *, directory=False):
               p = PurePosixPath(relative)
@@ -2830,7 +2850,7 @@ jobs:
                       path_for(relative)
                       observed.add(relative)
               assert observed == {p for p in expected if p.startswith(package + '/')}, package
-          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 76816,
+          print(json.dumps({'verified_source_files': len(expected), 'verified_bytes': 95933,
                             'complete_new_packages': len(packages), 'generated_controls_only': True,
                             'authentic_data_read': False, 'scientific_qualification': False}))
           PY
@@ -2876,10 +2896,10 @@ jobs:
                       yield case
           collected = list(flatten(suite))
           case_ids = [case.id() for case in collected]
-          assert len(case_ids) == len(set(case_ids)) == 14 > 0, case_ids
-          assert suite.countTestCases() == 14
+          assert len(case_ids) == len(set(case_ids)) == 19 > 0, case_ids
+          assert suite.countTestCases() == 19
           result = unittest.TextTestRunner(verbosity=2).run(suite)
-          assert result.testsRun == 14, result.testsRun
+          assert result.testsRun == 19, result.testsRun
           assert not result.skipped, result.skipped
           assert not result.expectedFailures, result.expectedFailures
           assert not result.unexpectedSuccesses, result.unexpectedSuccesses

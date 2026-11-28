@@ -55,9 +55,18 @@ def _numeric(x, name):
 def _unit_rows(x):
     a = _numeric(x, 'features')
     _require(a.ndim == 2 and a.shape[0] >= 1 and a.shape[1] >= 2, 'features need [N,D>=2]')
-    # Scale before centering to avoid overflow for finite but large magnitudes.
-    scale = np.max(np.abs(a), axis=1, keepdims=True)
-    a = a / np.where(scale == 0, 1, scale)
+    # Remove a row offset before scaling: scaling raw large values can round
+    # away representable variation and turn equal Pearson features into wins.
+    # Nearby finite values subtract accurately, including subnormal spreads.
+    with np.errstate(over='ignore'):
+        shifted = a - a[:, :1]
+    overflow = ~np.isfinite(shifted).all(axis=1)
+    if np.any(overflow):
+        # Only rows spanning opposite finite extremes need this fallback.
+        # A common positive factor cancels from Pearson correlation.
+        shifted[overflow] = a[overflow] * .5 - a[overflow, :1] * .5
+    scale = np.max(np.abs(shifted), axis=1, keepdims=True)
+    a = shifted / np.where(scale == 0, 1, scale)
     a = a - a.mean(axis=1, keepdims=True)
     norm = np.linalg.norm(a, axis=1, keepdims=True)
     _require(np.all(norm > 0), 'constant row: Pearson correlation is undefined')
